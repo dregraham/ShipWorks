@@ -82,7 +82,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates a Walmart Order Item Entity
         /// </summary>
-        /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
 
         /// <summary>
@@ -102,13 +101,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates the add store wizard online update action control for Walmart
         /// </summary>
-        /// <returns></returns>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() => new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() => 
+            new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
 
         /// <summary>
         /// Create the online update instance commands for Walmart
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-            => onlineUpdateInstanceCommandsFactory(walmartStore).CreateCommands();
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() => 
+            onlineUpdateInstanceCommandsFactory(walmartStore).CreateCommands();
     }
 }

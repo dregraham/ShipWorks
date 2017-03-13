@@ -12,6 +12,10 @@ using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
 {
+    /// <summary>
+    /// Shipment upload task for Walmart
+    /// </summary>
+    /// <seealso cref="ShipWorks.Actions.Tasks.Common.StoreInstanceTaskBase" />
     [ActionTask("Upload shipment details", "WalmartShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class WalmartShipmentUploadTask : StoreInstanceTaskBase
     {

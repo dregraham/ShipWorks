@@ -2,6 +2,10 @@
 
 namespace Interapptive.Shared.Net
 {
+    /// <summary>
+    /// HttpVariableRequestSubmitter where variables are sent via XML.
+    /// </summary>
+    /// <seealso cref="Interapptive.Shared.Net.HttpVariableRequestSubmitter" />
     public class HttpXmlVariableRequestSubmitter : HttpVariableRequestSubmitter
     {
         private const string ResponseFormat = "application/xml";

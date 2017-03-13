@@ -43,15 +43,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 throw new WalmartException("Attempted to create Walmart instance commands for a non Walmart store");
             }
 
-            List<MenuCommand> commands = new List<MenuCommand>
+            return new List<MenuCommand>
             {
                 new MenuCommand("Upload Shipment Details", OnUploadShipmentDetails)
                 {
                     BreakAfter = true
                 }
             };
-
-            return commands;
         }
 
         /// <summary>
