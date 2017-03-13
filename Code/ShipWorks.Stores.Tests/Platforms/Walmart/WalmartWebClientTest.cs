@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OrdersResponse);
             requestSubmitter.SetupGet(r => r.Headers).Returns(webHeaderCollection);
-            
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void GetOrders_SetsUriWithNextCursor()
         {
             var requestSubmitter = SetupHttpVariableRequestSubmitter(OrdersResponse);
-            
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue");
@@ -169,7 +169,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             DateTime start = DateTime.UtcNow.AddDays(-3);
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OrdersResponse);
-            
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             testObject.GetOrders(new WalmartStoreEntity(), start);
@@ -188,6 +188,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.GetOrders(new WalmartStoreEntity(), start);
 
             requestSubmitter.VerifySet(r => r.Verb = HttpVerb.Get);
+        }
+
+        [Fact]
+        public void GetOrder_SetsUriWithPurchaseOrderId()
+        {
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(Order);
+            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            testObject.GetOrder(new WalmartStoreEntity(), "12345678");
+
+            requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders/12345678"));
         }
 
         public void Dispose()
