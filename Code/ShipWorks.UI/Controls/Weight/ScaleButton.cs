@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +12,6 @@ using System.Windows.Controls.Primitives;
 using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
-using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -175,7 +174,8 @@ namespace ShipWorks.UI.Controls.Weight
                     .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
                     .ObserveOn(DispatcherScheduler.Current)
                     .Where(_ => AcceptApplyWeightKeyboardShortcut && Focusable && scaleButton.IsEnabled)
-                    .Subscribe(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey));
+                    .SelectMany(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
+                    .Subscribe();
             }
         }
 
@@ -226,7 +226,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
-            ApplyWeight(ShipWorks.UI.Controls.WeightControl.ButtonTelemetryKey);
+            await ApplyWeight(ShipWorks.UI.Controls.WeightControl.ButtonTelemetryKey);
         }
 
         /// <summary>
