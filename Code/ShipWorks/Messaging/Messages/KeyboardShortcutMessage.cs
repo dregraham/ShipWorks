@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
