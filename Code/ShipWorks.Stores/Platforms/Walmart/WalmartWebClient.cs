@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
             submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
             submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-            
+
             requestSigner.Sign(submitter, store);
 
             try

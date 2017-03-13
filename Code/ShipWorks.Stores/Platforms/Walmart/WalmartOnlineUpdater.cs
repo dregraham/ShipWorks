@@ -20,16 +20,20 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartWebClient webClient;
         private readonly WalmartStoreEntity store;
         private readonly IOrderRepository orderRepository;
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartOnlineUpdater"/> class.
         /// </summary>
-        public WalmartOnlineUpdater(IWalmartWebClient webClient,
-            WalmartStoreEntity store,
-            IOrderRepository orderRepository)
+        /// <param name="orderManager"></param>
+        public WalmartOnlineUpdater(IWalmartWebClient webClient, 
+		            WalmartStoreEntity store,
+					IOrderManager orderManager,
+					IOrderRepository orderRepository)
         {
             this.webClient = webClient;
             this.store = store;
+            this.orderManager = orderManager;
             this.orderRepository = orderRepository;
         }
 
@@ -40,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             foreach (long orderKey in orderKeys)
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
+                ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderKey);
 
                 // Check to see if shipment exists
                 if (shipment == null)
@@ -57,8 +61,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
-
             if (!shipment.Order.IsManual)
             {
                 orderShipment orderShipment = CreateShipment(shipment);

@@ -294,6 +294,7 @@
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommandsFactory.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />

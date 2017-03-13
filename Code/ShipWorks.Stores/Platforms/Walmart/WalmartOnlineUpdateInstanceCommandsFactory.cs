@@ -5,15 +5,14 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.SparkPay;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
     /// <summary>
     /// Factory for creating the online update instance commands for Walmart
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class WalmartOnlineUpdateInstanceCommandsFactory
+    [Component]
+    public class WalmartOnlineUpdateInstanceCommandsFactory : IWalmartOnlineUpdateInstanceCommandsFactory
     {
         private readonly WalmartStoreEntity store;
         private readonly WalmartOnlineUpdater onlineUpdater;

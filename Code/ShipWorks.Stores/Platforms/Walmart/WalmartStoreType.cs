@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
-        private readonly Func<WalmartStoreEntity, WalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
+        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
         private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
         public WalmartStoreType(StoreEntity store,
             IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
-            Func<WalmartStoreEntity, WalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory)
+            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;

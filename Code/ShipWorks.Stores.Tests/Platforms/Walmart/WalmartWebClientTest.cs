@@ -164,6 +164,40 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             acknowledgeRequestSubmitter.Verify(r => r.GetResponse(), Times.Exactly(3));
         }
 
+        [Fact]
+        public void UpdateShipmentDetails_UsesCorrectUri()
+        {
+            DateTime start = DateTime.UtcNow.AddDays(-3);
+            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
+            responseReader.Setup(r => r.ReadResult()).Returns(OrdersResponse);
+
+            Mock<IHttpXmlVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpXmlVariableRequestSubmitter>();
+            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
+
+            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+
+            testObject.GetOrders(new WalmartStoreEntity(), start);
+
+            requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders"));
+        }
+
+        [Fact]
+        public void UpdateShipmentDetails_UsesCorrectHttpVerb()
+        {
+            DateTime start = DateTime.UtcNow.AddDays(-3);
+            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
+            responseReader.Setup(r => r.ReadResult()).Returns(OrdersResponse);
+
+            Mock<IHttpXmlVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpXmlVariableRequestSubmitter>();
+            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
+
+            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+
+            testObject.GetOrders(new WalmartStoreEntity(), start);
+
+            requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders"));
+        }
+
         public void Dispose()
         {
             mock.Dispose();
