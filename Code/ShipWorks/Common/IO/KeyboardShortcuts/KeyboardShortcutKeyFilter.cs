@@ -89,11 +89,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         private bool HandleActionKeyDown(VirtualKeys key)
         {
-            IEnumerable<KeyboardShortcutCommand> commands = shortcutTranslator.GetCommands(key, modifiers);
-            messenger.Send(new KeyboardShortcutMessage(this, commands));
+            KeyboardShortcutCommand? command = shortcutTranslator.GetCommand(key, modifiers);
 
-            if (commands.Any())
+            if (command.HasValue)
             {
+                messenger.Send(new KeyboardShortcutMessage(this, command.Value));
+
                 pressedActionKeys.Add(key);
                 return true;
             }

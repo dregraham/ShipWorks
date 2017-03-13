@@ -23,22 +23,20 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
 
         [Theory]
         [InlineData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.W, Ctrl)]
-        public void GetCommands_ReturnsCommands_ForDefaultShortcuts(
+        public void GetCommand_ReturnsCommands_ForDefaultShortcuts(
             KeyboardShortcutCommand expected, VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
-            var commands = testObject.GetCommands(actionKey, modifiers);
-            var message = commands.Single();
-            Assert.Equal(expected, message);
+            var command = testObject.GetCommand(actionKey, modifiers);
+            Assert.Equal(expected, command);
         }
 
         [Fact]
-        public void GetCommands_ReturnsApplyWeightMessage_ForCtrlW()
+        public void GetCommand_ReturnsApplyWeightCommand_ForCtrlW()
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
-            var commands = testObject.GetCommands(VirtualKeys.W, Ctrl);
-            var message = commands.Single();
-            Assert.Equal(KeyboardShortcutCommand.ApplyWeight, message);
+            var command = testObject.GetCommand(VirtualKeys.W, Ctrl);
+            Assert.Equal(KeyboardShortcutCommand.ApplyWeight, command);
         }
 
         [Theory]
@@ -46,19 +44,19 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         [InlineData(Ctrl | Alt | Shift)]
         [InlineData(Alt)]
         [InlineData(None)]
-        public void GetCommands_ReturnsEmptyCollection_WhenModifierIsNotExact(KeyboardShortcutModifiers modifiers)
+        public void GetCommand_ReturnsEmptyCollection_WhenModifierIsNotExact(KeyboardShortcutModifiers modifiers)
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
-            var commands = testObject.GetCommands(VirtualKeys.W, modifiers);
-            Assert.Empty(commands);
+            var command = testObject.GetCommand(VirtualKeys.W, modifiers);
+            Assert.Null(command);
         }
 
         [Theory]
         [InlineData(KeyboardShortcutCommand.ApplyWeight, "Ctrl+W")]
-        public void GetShortcuts_ReturnsText_ForDefaultShortcuts(KeyboardShortcutCommand command, string expected)
+        public void GetShortcut_ReturnsText_ForDefaultShortcuts(KeyboardShortcutCommand command, string expected)
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
-            var shortcut = testObject.GetShortcuts(command).Shortcuts.Single();
+            var shortcut = testObject.GetShortcut(command);
             Assert.Equal(expected, shortcut);
         }
 

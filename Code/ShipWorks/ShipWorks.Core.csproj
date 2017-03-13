@@ -958,7 +958,6 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutData.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
-    <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutCommandSummary.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />

@@ -13,16 +13,16 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
     [KeyedComponent(typeof(IShipWorksMessage), KeyboardShortcutCommand.ApplyWeight)]
     public class KeyboardShortcutMessage : IShipWorksMessage
     {
-        private readonly ImmutableHashSet<KeyboardShortcutCommand> commands;
+        private readonly KeyboardShortcutCommand command;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyboardShortcutMessage(object sender, IEnumerable<KeyboardShortcutCommand> commands)
+        public KeyboardShortcutMessage(object sender, KeyboardShortcutCommand command)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
-            this.commands = commands.ToImmutableHashSet();
+            this.command = command;
         }
 
         /// <summary>
@@ -38,7 +38,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Checks whether this message applies to the given command
         /// </summary>
-        public bool AppliesTo(KeyboardShortcutCommand command) =>
-            commands.Contains(command);
+        public bool AppliesTo(KeyboardShortcutCommand command) => this.command == command;
     }
 }

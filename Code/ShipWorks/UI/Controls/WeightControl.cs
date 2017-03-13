@@ -51,7 +51,7 @@ namespace ShipWorks.UI.Controls
 
         private bool showShortcutInfo = false;
         private IKeyboardShortcutTranslator keyboardShortcutTranslator = null;
-        private KeyboardShortcutCommandSummary autoWeighShortcuts;
+        private string autoWeighShortcut;
         private string applyWeightShortcutText = string.Empty;
         private IDisposable keyboardShortcutSubscription;
 
@@ -81,7 +81,7 @@ namespace ShipWorks.UI.Controls
             }
 
             keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
-            autoWeighShortcuts = keyboardShortcutTranslator.GetShortcuts(KeyboardShortcutCommand.ApplyWeight);
+            autoWeighShortcut = keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight);
 
             liveWeight.Visible = false;
             UpdateUiWithAutoWeighShortcuts();
@@ -118,24 +118,14 @@ namespace ShipWorks.UI.Controls
             if (AutoWeighShortCutsAllowed)
             {
                 // Only display the first shortcut.  The rest will be in a tool tip.
-                applyWeightShortcutText = autoWeighShortcuts.Shortcuts.Any() ? $"({autoWeighShortcuts.DefaultShortcut})" : string.Empty;
-
-                ToolTip autoWeighShortcutsToolTip = new ToolTip
-                {
-                    ToolTipIcon = ToolTipIcon.Info,
-                    ShowAlways = true,
-                    ToolTipTitle = $"{autoWeighShortcuts.Description}:"
-                };
-                autoWeighShortcutsToolTip.SetToolTip(liveWeight, autoWeighShortcuts.FormattedShortcutList);
-
-                weighButton.ToolTipText = autoWeighShortcuts.FormattedShortcutList;
+                applyWeightShortcutText = autoWeighShortcut;
             }
         }
 
         /// <summary>
         /// Should we concern ourselves with autoweigh shortcuts
         /// </summary>
-        private bool AutoWeighShortCutsAllowed => autoWeighShortcuts?.HasShortcuts == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
+        private bool AutoWeighShortCutsAllowed => !string.IsNullOrEmpty(autoWeighShortcut) && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
 
         /// <summary>
         /// Get \ set the total weight

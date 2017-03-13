@@ -12,11 +12,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of commands for the given keys
         /// </summary>
-        IEnumerable<KeyboardShortcutCommand> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers);
+        KeyboardShortcutCommand? GetCommand(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers);
 
         /// <summary>
         /// Get a list of shortcuts for the given command
         /// </summary>
-        KeyboardShortcutCommandSummary GetShortcuts(KeyboardShortcutCommand command);
+        string GetShortcut(KeyboardShortcutCommand command);
     }
 }
