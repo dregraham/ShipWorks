@@ -50,7 +50,8 @@
             <ui:WeightControl Grid.Row="1" Grid.Column="1"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                        ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+                TelemetrySource="ShippingPanel" />
 
             <Grid Grid.Row="2" Grid.ColumnSpan="2"
               Visibility="{Binding SupportsDimensions,Converter={StaticResource BooleanToVisibility}}">

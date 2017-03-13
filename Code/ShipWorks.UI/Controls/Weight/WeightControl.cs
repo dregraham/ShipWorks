@@ -35,6 +35,11 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(WeightControl),
                 new PropertyMetadata(string.Empty));
 
+        public static readonly DependencyProperty TelemetrySourceProperty =
+            DependencyProperty.Register("TelemetrySource",
+                typeof(string),
+                typeof(WeightControl));
+
         private ScaleButton scaleButton;
 
         /// <summary>
@@ -85,6 +90,15 @@ namespace ShipWorks.UI.Controls.Weight
         {
             get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
             set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
+        }
+
+        /// <summary>
+        /// Source of the weight for telemetry
+        /// </summary>
+        public string TelemetrySource
+        {
+            get { return (string) GetValue(TelemetrySourceProperty); }
+            set { SetValue(TelemetrySourceProperty, value); }
         }
 
         /// <summary>

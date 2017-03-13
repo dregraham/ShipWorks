@@ -154,40 +154,40 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
                         if (!double.TryParse(result.Substring(0, 2), out pounds))
                         {
-                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.", ScaleType.Serial);
                         }
 
                         if (!double.TryParse(result.Substring(2, 2), out ouncesWhole))
                         {
-                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.", ScaleType.Serial);
                         }
 
                         if (!double.TryParse(result.Substring(4, 1), out ouncesDecimal))
                         {
-                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.", ScaleType.Serial);
                         }
 
                         // Extract ounces
                         double ounces = ouncesWhole + ouncesDecimal / 10.0;
 
                         // Parse the weight part of the result
-                        return ScaleReadResult.Success(pounds + ounces / 16.0);
+                        return ScaleReadResult.Success(pounds + ounces / 16.0, ScaleType.Serial);
                     }
                     else
                     {
                         double grams = Convert.ToDouble(result);
 
-                        return ScaleReadResult.Success(grams * 2.20462262 / 1000.0);
+                        return ScaleReadResult.Success(grams * 2.20462262 / 1000.0, ScaleType.Serial);
                     }
                 }
             }
             catch (InvalidOperationException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (TimeoutException ex)
             {
@@ -223,7 +223,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                     double weight;
                     if (stripped.Length < 7 || !double.TryParse(stripped.Substring(0, 7), out weight))
                     {
-                        return ScaleReadResult.ReadError("Unknown data read from Fairbanks scale.");
+                        return ScaleReadResult.ReadError("Unknown data read from Fairbanks scale.", ScaleType.Serial);
                     }
 
                     // If its in kilograms, do the conversion
@@ -232,16 +232,16 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                         weight *= 2.20462262;
                     }
 
-                    return ScaleReadResult.Success(weight);
+                    return ScaleReadResult.Success(weight, ScaleType.Serial);
                 }
             }
             catch (InvalidOperationException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (TimeoutException ex)
             {
@@ -295,7 +295,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                                         lockedBaud = buadTry;
                                         lockedParity = parityTry;
 
-                                        return ScaleReadResult.Success(weight);
+                                        return ScaleReadResult.Success(weight, ScaleType.Serial);
                                     }
                                 }
                             }
@@ -350,16 +350,16 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                     double value = 0;
                     double.TryParse(newResult, out value);
 
-                    return ScaleReadResult.Success(value);
+                    return ScaleReadResult.Success(value, ScaleType.Serial);
                 }
             }
             catch (InvalidOperationException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return ScaleReadResult.ReadError(ex.Message);
+                return ScaleReadResult.ReadError(ex.Message, ScaleType.Serial);
             }
             catch (TimeoutException ex)
             {

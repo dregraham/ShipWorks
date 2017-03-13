@@ -61,6 +61,7 @@
                 HorizontalAlignment="Left"
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
+                TelemetrySource="ShippingPanel"
                 Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                     ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
 
