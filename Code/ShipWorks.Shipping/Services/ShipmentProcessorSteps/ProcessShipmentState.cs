@@ -13,20 +13,27 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentState(Exception exception)
+        public ProcessShipmentState(int index, Exception exception)
         {
             Exception = exception;
+            Index = index;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentState(ShipmentEntity shipment, IDictionary<long, Exception> licenseCheckCache, RateResult chosenRate)
+        public ProcessShipmentState(int index, ShipmentEntity shipment, IDictionary<long, Exception> licenseCheckCache, RateResult chosenRate)
         {
             ChosenRate = chosenRate;
             OriginalShipment = shipment;
             LicenseCheckCache = licenseCheckCache;
+            Index = index;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Rate that was chosen for processing

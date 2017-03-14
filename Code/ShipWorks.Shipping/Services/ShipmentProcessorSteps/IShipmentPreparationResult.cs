@@ -10,6 +10,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     public interface IShipmentPreparationResult
     {
         /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        int Index { get; }
+
+        /// <summary>
         /// Was processing canceled
         /// </summary>
         bool Canceled { get; }

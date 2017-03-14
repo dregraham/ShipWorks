@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         public ShipmentPreparationResult(IDisposable entityLock, ProcessShipmentState state, bool canceled)
         {
+            Index = state.Index;
             OriginalShipment = state.OriginalShipment;
             EntityLock = entityLock;
             Canceled = canceled;
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         public ShipmentPreparationResult(IDisposable entityLock, ProcessShipmentState state, Exception exception)
         {
+            Index = state.Index;
             OriginalShipment = state.OriginalShipment;
             EntityLock = entityLock;
             Exception = exception as ShippingException ?? new ShippingException(exception.Message, exception);
@@ -37,11 +39,17 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IEnumerable<ShipmentEntity> shipmentsToTryToProcess,
             StoreEntity store)
         {
+            Index = state.Index;
             OriginalShipment = state.OriginalShipment;
             EntityLock = entityLock;
             Shipments = shipmentsToTryToProcess.ToReadOnly();
             Store = store;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Was processing canceled

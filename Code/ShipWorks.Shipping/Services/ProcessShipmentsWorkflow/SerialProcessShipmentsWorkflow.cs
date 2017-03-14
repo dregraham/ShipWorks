@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private void ProcessShipment(ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder)
         {
             ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
-            ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
+            ProcessShipmentState initial = new ProcessShipmentState(0, shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
 
             IShipmentPreparationResult prepareShipmentResult = null;
             ILabelResultLogResult completeLabelResult = null;

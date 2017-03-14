@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ShipmentPreparationStep>();
             shipment = Create.Shipment(new OrderEntity()).AsBestRate().Set(x => x.ShipmentID = 2031).Build();
-            defaultInput = new ProcessShipmentState(shipment, new Dictionary<long, Exception>(), null);
+            defaultInput = new ProcessShipmentState(0, shipment, new Dictionary<long, Exception>(), null);
 
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(It.IsAny<StoreEntity>(), It.IsAny<IDictionary<long, Exception>>()))
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
         {
-            var input = new ProcessShipmentState(new ShippingException());
+            var input = new ProcessShipmentState(0, new ShippingException());
 
             var result = testObject.PrepareShipment(input);
 
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             RateResult rate = new RateResult("Foo", "1");
             Action callback = () => { };
 
-            ProcessShipmentState state = new ProcessShipmentState(shipment, new Dictionary<long, Exception>(), rate);
+            ProcessShipmentState state = new ProcessShipmentState(0, shipment, new Dictionary<long, Exception>(), rate);
             testObject.CounterRateCarrierConfiguredWhileProcessing = callback;
 
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>();

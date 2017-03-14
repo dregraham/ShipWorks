@@ -9,6 +9,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     public interface ILabelPersistenceResult
     {
         /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        int Index { get; }
+
+        /// <summary>
         /// Entity lock for the current shipment
         /// </summary>
         IDisposable EntityLock { get; }
