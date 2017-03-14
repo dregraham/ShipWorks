@@ -1,4 +1,8 @@
-﻿using log4net;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using log4net;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
@@ -6,13 +10,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 {
+    [SuppressMessage("SonarLint", "S2259: value is null on at least one execution path",
+        Justification = "Any instance where the value is null is a failed test, so it's ok here")]
     public class ThreeDCartDownloaderTest
     {
         private readonly ThreeDCartRestDownloader testObject;

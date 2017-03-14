@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -13,13 +15,18 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public WalmartStoreType(StoreEntity store)
+        /// <param name="downloaderFactory"></param>
+        public WalmartStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
             : base(store)
         {
+            this.downloaderFactory = downloaderFactory;
         }
 
         /// <summary>
@@ -39,6 +46,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             store.PrivateKey = "";
             store.ChannelType = "";
             store.StoreName = "My Walmart Store";
+            store.DownloadModifiedNumberOfDaysBack = 7;
 
             return store;
         }
@@ -48,16 +56,20 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            throw new System.NotImplementedException();
+            return new OrderNumberIdentifier(order.OrderNumber);
         }
 
         /// <summary>
         /// Create the downloader instance that is used to retrieve data from the store.
         /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
+
+        /// <summary>
+        /// Creates a Walmart Order Entity
+        /// </summary>
+        protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();
+
+        public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
 
         /// <summary>
         /// This is a string that uniquely identifies the store.

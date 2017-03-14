@@ -22,32 +22,41 @@ namespace ShipWorks.SingleScan
     public class SingleScanShipmentConfirmationService : ISingleScanShipmentConfirmationService
     {
         private readonly IOrderLoader orderLoader;
-        private readonly Func<ISecurityContext> securityContextRetriever;
+        private readonly Func<ISecurityContext> securityContext;
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
+        private readonly IAutoPrintSettings autoPrintSettings;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
-        public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
+        private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
+        public const string CannotProcessNoneMessage = "The resulting shipment has a carrier of \"None\".\r\n The carrier \"None\" does not support processing.";
+
+        private const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
 
         /// <summary>
         /// Constructor
         /// </summary>
         public SingleScanShipmentConfirmationService(IOrderLoader orderLoader,
-            Func<ISecurityContext> securityContextRetriever,
+            Func<ISecurityContext> securityContext,
             IAutoPrintConfirmationDlgFactory dlgFactory,
             IShipmentFactory shipmentFactory,
             IMessageHelper messageHelper,
-            Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
+            Func<string, ITrackedDurationEvent> trackedDurationEventFactory,
+            IAutoPrintSettings autoPrintSettings,
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.orderLoader = orderLoader;
-            this.securityContextRetriever = securityContextRetriever;
+            this.securityContext = securityContext;
             this.dlgFactory = dlgFactory;
             this.shipmentFactory = shipmentFactory;
             this.messageHelper = messageHelper;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
+            this.autoPrintSettings = autoPrintSettings;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
         }
 
         /// <summary>
@@ -55,7 +64,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public async Task<IEnumerable<ShipmentEntity>> GetShipments(long orderId, string scannedBarcode)
         {
-            if (!securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
+            if (!securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
             {
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
@@ -76,8 +85,18 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Gets the confirmed shipments.
+        /// Gets Confirmed Shipments
         /// </summary>
+        /// <remarks>
+        /// If the order has no shipments we create and return a shipment
+        /// If the order has a single unprocessed shipment, we return that shipment
+        /// If the order already has a processed shipment or there are multiple unprocessed shipments we prompt
+        /// the user to see if they want to proceed and only return shipments if they do.
+        /// If AutoWeigh is on and the above rules result in multiple packages being
+        /// processed, we prompt the user to see if they want to proceed and only return shipments if they do.
+        /// After this method is called, we send the returned shipments to the AutoWeighService. The AutoWeighService
+        /// sets the weigh of each shipment and each package to the weight of the scale if that setting is turned on.
+        /// </remarks>
         private ShipmentEntity[] GetConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
         {
             ShipmentEntity[] confirmedShipments = new ShipmentEntity[0];
@@ -106,9 +125,45 @@ namespace ShipWorks.SingleScan
                         confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
                     }
                 }
+
+                if (autoPrintSettings.IsAutoWeighEnabled() && confirmedShipments.IsCountEqualTo(1))
+                {
+                    ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
+                    int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdapters().Count();
+
+                    if (packageCount > 1 && !ShouldPrintAndProcessShipmentWithMultiplePackages(packageCount, scannedBarcode))
+                    {
+                        confirmedShipments = new ShipmentEntity[0];
+                    }
+                }
             }
 
             return confirmedShipments;
+        }
+
+        private bool ShouldPrintAndProcessShipmentWithMultiplePackages(int packageCount, string scannedBarcode)
+        {
+            string buttonText = $"Print {packageCount} Labels";
+
+            MessagingText messaging = new MessagingText()
+            {
+                Title = "Multiple Packages",
+                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), "package"),
+                Continue = buttonText
+            };
+
+            using (ITrackedDurationEvent telemetryEvent =
+                trackedDurationEventFactory("SingleScan.AutoPrint.Confirmation.MultiplePackages"))
+            {
+                DialogResult result = messageHelper.ShowDialog(() => dlgFactory.Create(scannedBarcode, messaging));
+
+                bool shouldPrint = result == DialogResult.OK;
+
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultiplePackages.Total", packageCount);
+                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultiplePackages.Action", shouldPrint ? "Continue" : "Cancel");
+
+                return shouldPrint;
+            }
         }
 
         /// <summary>
@@ -162,10 +217,16 @@ namespace ShipWorks.SingleScan
             string labels = shipments.Where(s => !s.Processed).IsCountGreaterThan(1) ? "Labels" : "Label";
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
+            string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
+            if (autoPrintSettings.IsAutoWeighEnabled())
+            {
+                multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
+            }
+
             return new MessagingText
             {
                 Title = "Multiple Shipments",
-                Body = string.Format(MultipleShipmentsMessage, buttonText),
+                Body = multipleShipmentsMessage,
                 Continue = buttonText
             };
         }

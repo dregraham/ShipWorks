@@ -25,7 +25,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         readonly AutoMock mock;
         readonly TestMessenger messenger;
         Mock<IShippingRibbonActions> actions;
-        Mock<Func<ISecurityContext>> getSecurityContext;
         Mock<ISecurityContext> securityContext;
 
         public ShippingRibbonServiceTest()
@@ -37,12 +36,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             securityContext = mock.Mock<ISecurityContext>();
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
 
-            getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
+            var getSecurityContext = mock.MockRepository.Create<Func<ISecurityContext>>();
             getSecurityContext.Setup(sc => sc()).Returns(securityContext.Object);
             mock.Provide<Func<ISecurityContext>>(getSecurityContext.Object);
 
             actions = mock.CreateMock<IShippingRibbonActions>();
-            actions.SetupAllProperties();
         }
 
         [Fact]
@@ -68,6 +66,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleOrderSelectionChanged_DisablesCreateLabel_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.CreateLabel).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = !expected;
@@ -124,6 +123,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleShipmentsProcessedMessage_SetsEnabledOnCreateLabel_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.CreateLabel).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.CreateLabel.Enabled = !expected;
@@ -228,6 +228,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesVoid_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.Void).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = !expected;
@@ -367,6 +368,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleLabelVoidedMessage_SetsEnabledOnVoid_WhenSingleProcessedShipmentIsLoaded(bool isProcessed, bool voided, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.Void).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Void.Enabled = !expected;
@@ -401,6 +403,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.Return).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Return.Enabled = !expected;
@@ -527,6 +530,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesReprint_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReprinted, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.Reprint).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.Reprint.Enabled = !expected;
@@ -652,6 +656,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false, false)]
         public void HandleOrderSelectionChanged_DisablesShipAgain_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isVoided, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.ShipAgain).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ShipAgain.Enabled = !expected;
@@ -783,6 +788,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleOrderSelectionChanged_DisablesApplyProfile_WhenLoadedShipmentIsProcessed(bool isProcessed, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.ApplyProfile).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = !expected;
@@ -839,6 +845,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false, false, false)]
         public void HandleShipmentsProcessedMessage_SetsEnabledOnApplyProfile_WhenSingleUnprocessedShipmentIsLoaded(bool isProcessed, bool expected, bool hasPermission)
         {
+            actions.SetupGet(x => x.ApplyProfile).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             actions.Object.ApplyProfile.Enabled = !expected;
@@ -958,6 +965,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(false)]
         public void ManageProfiles_IsEnabled_WhenEitherProcessedOrNotSingleShipmentIsLoaded(bool processed)
         {
+            actions.SetupGet(x => x.ManageProfiles).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(true);
 
             IShipWorksMessage message = null;
@@ -1000,6 +1008,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [Fact]
         public void ManageProfiles_IsEnabled_WhenMultipleShipmentsAreLoaded()
         {
+            actions.SetupGet(x => x.ManageProfiles).Returns(CreateMockedRibbonButton());
             var testObject = mock.Create<ShippingRibbonService>();
             testObject.Register(actions.Object);
 
@@ -1044,6 +1053,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             Assert.Null(message);
         }
 
+        /// <summary>
+        /// Set selection changed message with loaded order selection
+        /// </summary>
         private void SendOrderSelectionChangedMessageWithLoadedOrderSelection(params ICarrierShipmentAdapter[] shipments)
         {
             messenger.Send(new OrderSelectionChangedMessage(this, new List<IOrderSelection> {
@@ -1053,12 +1065,22 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             }));
         }
 
+        /// <summary>
+        /// Create a shipment adapter with the given configuration
+        /// </summary>
         private ICarrierShipmentAdapter CreateShipmentAdapter(Action<ShipmentEntity> configure)
         {
             var shipment = new ShipmentEntity();
             configure(shipment);
             return mock.CreateMock<ICarrierShipmentAdapter>(x => x.Setup(c => c.Shipment).Returns(shipment)).Object;
         }
+
+        /// <summary>
+        /// Create a mocked ribbon button
+        /// </summary>
+        /// <returns></returns>
+        private IRibbonButton CreateMockedRibbonButton() =>
+            mock.CreateMock<IRibbonButton>(x => x.SetupAllProperties()).Object;
 
         public void Dispose()
         {

@@ -107,7 +107,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
             {
                 IsWhitespace = true;
             }
-            else {
+            else
+            {
                 IsWhitespace = false;
                 if (Lastchar == 0xd)
                 {
@@ -133,12 +134,14 @@ namespace Interapptive.Shared.IO.Text.Sgml
             {
                 this.Error("Unresolvable entity '{0}'", this.Name);
             }
-            else {
+            else
+            {
                 if (baseUri != null)
                 {
                     this.resolvedUri = new Uri(baseUri, this.Uri);
                 }
-                else {
+                else
+                {
                     this.resolvedUri = new Uri(this.Uri);
                 }
 
@@ -247,7 +250,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
                 {
                     sb.Append(ch);
                 }
-                else {
+                else
+                {
                     throw new Exception(
                         String.Format("Invalid name character '{0}'", ch));
                 }
@@ -271,13 +275,15 @@ namespace Interapptive.Shared.IO.Text.Sgml
                         sb.Append(charent);
                         ch = this.Lastchar;
                     }
-                    else {
+                    else
+                    {
                         sb.Append('&');
                         sb.Append(ch);
                         ch = ReadChar();
                     }
                 }
-                else {
+                else
+                {
                     sb.Append(ch);
                     ch = ReadChar();
                 }
@@ -330,7 +336,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
                                 newstate = i + 1;
                             }
                         }
-                        else {
+                        else
+                        {
                             i--;
                         }
                     }
@@ -347,7 +354,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
                     state = newstate;
                     next = terminators[newstate];
                 }
-                else {
+                else
+                {
                     if (sb != null) sb.Append(ch);
                 }
                 ch = ReadChar();
@@ -380,21 +388,24 @@ namespace Interapptive.Shared.IO.Text.Sgml
                     {
                         p = (int) (ch - 'A') + 10;
                     }
-                    else {
+                    else
+                    {
                         break;//we must be done!
                         //Error("Hex digit out of range '{0}'", (int)ch);
                     }
                     v = (v * 16) + p;
                 }
             }
-            else {
+            else
+            {
                 for (; ch != Entity.EOF && ch != ';'; ch = ReadChar())
                 {
                     if (ch >= '0' && ch <= '9')
                     {
                         v = (v * 10) + (int) (ch - '0');
                     }
-                    else {
+                    else
+                    {
                         break; // we must be done!
                         //Error("Decimal digit out of range '{0}'", (int)ch);
                     }
@@ -409,7 +420,7 @@ namespace Interapptive.Shared.IO.Text.Sgml
                 ReadChar();
             }
             // HACK ALERT: IE and Netscape map the unicode characters
-            if (this.Html && v >= 0x80 & v <= 0x9F)
+            if (this.Html && v >= 0x80 && v <= 0x9F)
             {
                 // This range of control characters is mapped to Windows-1252!
                 int size = CtrlMap.Length;
@@ -459,7 +470,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
                 {
                     msg = String.Format("\nReferenced on line {0}, position {1} of internal entity '{2}'", p.Line, p.LinePosition, p.Name);
                 }
-                else {
+                else
+                {
                     msg = String.Format("\nReferenced on line {0}, position {1} of '{2}' entity at [{3}]", p.Line, p.LinePosition, p.Name, p.ResolvedUri.AbsolutePath);
                 }
                 sb.Append(msg);
@@ -743,7 +755,8 @@ namespace Interapptive.Shared.IO.Text.Sgml
                     i++;
                     if (i == n) break;
                 }
-                else {
+                else
+                {
                     i = 0; // reset.
                 }
                 ch = ReadChar();
@@ -1064,12 +1077,14 @@ namespace Interapptive.Shared.IO.Text.Sgml
                     chars[j] = UnicodeToUTF16(code);
                     j++;
                 }
-                else {
+                else
+                {
                     if (code >= 0xD800 && code <= 0xDFFF)
                     {
                         throw new Exception("Invalid character 0x" + code.ToString("x") + " in encoding");
                     }
-                    else {
+                    else
+                    {
                         chars[j] = (char) code;
                     }
                 }
@@ -1100,12 +1115,14 @@ namespace Interapptive.Shared.IO.Text.Sgml
                     chars[j] = UnicodeToUTF16(code);
                     j++;
                 }
-                else {
+                else
+                {
                     if (code >= 0xD800 && code <= 0xDFFF)
                     {
                         throw new Exception("Invalid character 0x" + code.ToString("x") + " in encoding");
                     }
-                    else {
+                    else
+                    {
                         chars[j] = (char) code;
                     }
                 }

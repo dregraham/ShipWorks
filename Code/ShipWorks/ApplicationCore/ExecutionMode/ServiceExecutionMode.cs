@@ -216,7 +216,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             Host.HandleServiceCrash(RecoveryAttempts);
 
-            return TaskEx.FromResult(true);
+            return Task.FromResult(true);
         }
 
         /// <summary>

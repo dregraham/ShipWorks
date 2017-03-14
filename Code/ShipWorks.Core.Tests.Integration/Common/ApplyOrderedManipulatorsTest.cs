@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Common;
@@ -7,6 +8,8 @@ using Xunit;
 
 namespace ShipWorks.Core.Tests.Integration.Common
 {
+    [SuppressMessage("ShipWorks", "SW0002",
+        Justification = "Tests aren't obfuscated, so we don't need to worry about this")]
     [Trait("Category", "ContinuousIntegration")]
     public class ApplyOrderedManipulatorsTest : IDisposable
     {
@@ -15,8 +18,8 @@ namespace ShipWorks.Core.Tests.Integration.Common
         public ApplyOrderedManipulatorsTest()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<AddFive>().OrderBy(1).AsImplementedInterfaces();
-            builder.RegisterType<MultiplyFive>().OrderBy(2).AsImplementedInterfaces();
+            builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
+            builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
 
             container = ContainerInitializer.BuildRegistrations(builder.Build());
         }
@@ -44,8 +47,8 @@ namespace ShipWorks.Core.Tests.Integration.Common
         public void Apply_WithManipulators_AppliesManipulatorsInCorrectOrderWhenReveresed(int input, int expected)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<AddFive>().OrderBy(2).AsImplementedInterfaces();
-            builder.RegisterType<MultiplyFive>().OrderBy(1).AsImplementedInterfaces();
+            builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
+            builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
 
             using (var container2 = ContainerInitializer.BuildRegistrations(builder.Build()))
             {

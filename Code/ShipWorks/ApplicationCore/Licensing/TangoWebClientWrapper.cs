@@ -5,7 +5,6 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -82,26 +81,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual void SendAccountUsername(string email, string username)
         {
             TangoWebClient.SendAccountUsername(email, username);
-        }
-
-        /// <summary>
-        /// Sends Postal balances for postal services.
-        /// </summary>
-        public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
-        {
-            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds
-            // depending on the number of stores. May want to look into caching this information, but that could result
-            // in stale license data. Since customers aren't buying postage all the time, the additional overhead to ensure
-            // accuracy may not be that big of a deal.
-            List<StoreEntity> stores = StoreManager.GetAllStores();
-            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
-
-            // We only need to send up one license for each distinct customer ID
-            IEnumerable<ILicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
-            foreach (ILicenseAccountDetail license in licensesForLogging)
-            {
-                TangoWebClient.LogPostageEvent(license, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
-            }
         }
 
         /// <summary>

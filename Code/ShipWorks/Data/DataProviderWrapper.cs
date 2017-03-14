@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,6 +12,7 @@ namespace ShipWorks.Data
     /// <summary>
     /// Central location for obtaining singleton entity cache objects
     /// </summary>
+    [Component]
     public class DataProviderWrapper : IDataProvider, IInitializeForCurrentDatabase, IDisposable
     {
         /// <summary>

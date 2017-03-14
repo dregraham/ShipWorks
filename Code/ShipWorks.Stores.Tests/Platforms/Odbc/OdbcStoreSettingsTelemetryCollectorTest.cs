@@ -1,4 +1,6 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -9,7 +11,6 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
-using System;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -65,6 +66,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void CollectTelemetry_AddsErrorProperty_WhenExceptionOccurs()
         {
             // Throw an exception when the import driver property is added
@@ -190,7 +193,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource)]
         public void CollectTelemetry_UploadStrategyTypeSetFromOdbcStore(OdbcShipmentUploadStrategy sourceType)
         {
-            odbcStore.UploadStrategy = (int)sourceType;
+            odbcStore.UploadStrategy = (int) sourceType;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
@@ -219,7 +222,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             odbcStore.UploadStrategy = (int) strategy;
 
-            odbcStore.UploadColumnSourceType = (int)sourceType;
+            odbcStore.UploadColumnSourceType = (int) sourceType;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
@@ -253,7 +256,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             importFieldMapMock.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "OrderNumber"), true))
                 .Returns(() => new[] { orderNumberFieldMapEntryMock.Object });
             importFieldMapMock.Setup(m => m.RecordIdentifierSource).Returns(() => mapRecordIdentifierSource);
-            importFieldMapMock.Setup(m=>m.Entries).Returns(() => new[] { orderNumberFieldMapEntryMock.Object });
+            importFieldMapMock.Setup(m => m.Entries).Returns(() => new[] { orderNumberFieldMapEntryMock.Object });
 
 
             fieldMapFactory = mock.MockRepository.Create<IOdbcFieldMapFactory>();

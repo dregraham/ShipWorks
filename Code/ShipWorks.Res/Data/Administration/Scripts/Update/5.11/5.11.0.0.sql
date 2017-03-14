@@ -1,18 +1,10 @@
-﻿PRINT N'Creating [dbo].[WalmartStore]'
+﻿SET NUMERIC_ROUNDABORT OFF
 GO
-CREATE TABLE [dbo].[WalmartStore]
-(
-    [StoreID] [bigint] NOT NULL,
-    [ConsumerID] [nvarchar](50) NOT NULL,
-    [PrivateKey] [nvarchar](2000) NOT NULL,
-    [ChannelType] [nvarchar](50) NOT NULL,
-)
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Creating primary key [PK_WalmartStore] on [dbo].[WalmartStore]'
-GO
-ALTER TABLE [dbo].WalmartStore ADD CONSTRAINT [PK_WalmartStore] PRIMARY KEY CLUSTERED  ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[WalmartStore]'
-GO
-ALTER TABLE [dbo].WalmartStore ADD CONSTRAINT [FK_WalmartStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
+PRINT N'Adding [AutoWeigh] to [dbo].[UserSettings]'
+IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name= N'AutoWeigh' AND Object_ID = Object_ID(N'UserSettings'))
+BEGIN
+   	ALTER TABLE [dbo].[UserSettings]	ADD [AutoWeigh] [bit] NOT NULL	CONSTRAINT [DF_AutoWeigh] DEFAULT 0
+	ALTER TABLE [dbo].[UserSettings]	DROP CONSTRAINT [DF_AutoWeigh]
+END

@@ -547,30 +547,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Sends Postal balances for postal services.
-        /// </summary>
-        public static void LogPostageEvent(ILicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
-        {
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-
-            postRequest.Variables.Add("action", "logpostagebalance");
-            postRequest.Variables.Add("license", license.Key);
-            postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("accountidentifier", accountIdentifier);
-
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
-
-            // Check for error
-            XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
-            if (errorNode != null)
-            {
-                throw new TangoException(errorNode.InnerText);
-            }
-        }
-
-        /// <summary>
         /// Sends USPS contract type to Tango.
         /// </summary>
         public static void LogStampsAccount(ILicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
@@ -1366,7 +1342,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             string error = XPathUtility.Evaluate(navigator, "//Error", string.Empty);
 
-            if (!error.Equals(string.Empty))
+            if (!string.IsNullOrEmpty(error))
             {
                 throw new TangoException(error);
             }

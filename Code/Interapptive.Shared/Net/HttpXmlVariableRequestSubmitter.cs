@@ -2,7 +2,7 @@
 
 namespace Interapptive.Shared.Net
 {
-    public class HttpXmlVariableRequestSubmitter : HttpVariableRequestSubmitter
+    public class HttpXmlVariableRequestSubmitter : HttpVariableRequestSubmitter, IHttpXmlVariableRequestSubmitter
     {
         private const string ResponseFormat = "application/xml";
 

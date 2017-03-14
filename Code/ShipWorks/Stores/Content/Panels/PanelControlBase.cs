@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.UI.Utility;
-using ShipWorks.Filters;
-using Divelements.SandGrid;
-using ShipWorks.UI.Controls.SandGrid;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Model;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Divelements.SandGrid;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model;
+using ShipWorks.Filters;
+using ShipWorks.UI.Controls.SandGrid;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
         public virtual Task ReloadContent()
@@ -163,6 +163,11 @@ namespace ShipWorks.Stores.Content.Panels
         {
 
         }
+
+        /// <summary>
+        /// Extra space at the bottom that can be used for other controls
+        /// </summary>
+        protected virtual int ExtraBottomSpace => 0;
 
         /// <summary>
         /// Utility method to reload the content with the given key
@@ -214,7 +219,7 @@ namespace ShipWorks.Stores.Content.Panels
         protected virtual void UpdateLayout()
         {
             int columnHeight = entityGrid.Columns.DisplayColumns.Length > 0 ? entityGrid.Columns.DisplayColumns[0].Bounds.Height : 20;
-            int addHeight = ShowFooterControls ? 10 + addLink.Height : 0;
+            int addHeight = (ShowFooterControls ? 10 + addLink.Height : 0) + ExtraBottomSpace;
             int gridHeight = Math.Max(columnHeight, Math.Min(entityGrid.MinimumNoScrollSize.Height, Height - addHeight));
 
             entityGrid.Height = gridHeight;
@@ -232,7 +237,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected virtual void UpdateIdealSize()
         {
-            int idealHeight = entityGrid.MinimumNoScrollSize.Height + addLink.Height + 10;
+            int idealHeight = entityGrid.MinimumNoScrollSize.Height + addLink.Height + ExtraBottomSpace + 10;
 
             // We add 10 here for a hacky reason.  When a grid column is resized, if there isn't some extra space, then it flashes a
             // scrollbar real quick before the parent container can make this ChildDetailControlBase big enough.  But if its got 10 extra
@@ -243,10 +248,7 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 idealSize = new Size(idealWidth, idealHeight);
 
-                if (IdealSizeChanged != null)
-                {
-                    IdealSizeChanged(this, EventArgs.Empty);
-                }
+                IdealSizeChanged?.Invoke(this, EventArgs.Empty);
 
                 Invalidate();
             }

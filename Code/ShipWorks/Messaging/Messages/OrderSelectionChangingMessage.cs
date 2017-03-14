@@ -22,6 +22,10 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <remarks>
+        /// Currently, MapPanel (and possibly other consumers of this message) expect this message to 
+        /// be sent on the UI thread.
+        /// </remarks>
         public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList, IEntityGridRowSelector shipmentSelector)
         {
             Sender = sender;

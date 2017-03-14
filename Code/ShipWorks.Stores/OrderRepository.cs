@@ -33,5 +33,11 @@ namespace ShipWorks.Stores
             }
             return false;
         }
+
+        /// <summary>
+        /// Populates the order, order items, order charges, and order item attribute for the given order.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        public void PopulateOrderDetails(OrderEntity order) => OrderUtility.PopulateOrderDetails(order);
     }
 }

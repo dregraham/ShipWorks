@@ -11,7 +11,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Http post request that posts name\value pairs.
     /// </summary>
-    public class HttpVariableRequestSubmitter : HttpRequestSubmitter
+    public class HttpVariableRequestSubmitter : HttpRequestSubmitter, IHttpVariableRequestSubmitter
     {
         // The variables to be posted
         HttpVariableCollection variables = new HttpVariableCollection();

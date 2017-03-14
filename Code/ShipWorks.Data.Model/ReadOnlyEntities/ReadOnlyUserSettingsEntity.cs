@@ -53,6 +53,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomerFilterExpandedFolders = source.CustomerFilterExpandedFolders;
             NextGlobalPostNotificationDate = source.NextGlobalPostNotificationDate;
             SingleScanSettings = source.SingleScanSettings;
+            AutoWeigh = source.AutoWeigh;
             
             User = source.User?.AsReadOnly(objectMap);
             
@@ -164,6 +165,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 SingleScanSettings { get; }
+        /// <summary> The AutoWeigh property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."AutoWeigh"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AutoWeigh { get; }
         
         public IUserEntity User { get; }
         

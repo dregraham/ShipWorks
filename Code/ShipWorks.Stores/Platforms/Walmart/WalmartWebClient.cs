@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Globalization;
-using System.Net;
-using System.Text;
+using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -21,19 +19,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
+        private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly Func<IHttpXmlVariableRequestSubmitter> requestSubmitterFactory;
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
+        private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
+        private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
+        private const int DownloadOrderCountLimit = 200;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
-        /// <param name="encryptionProviderFactory">The encryption provider factory.</param>
-        /// <param name="apiLogEntryFactory"></param>
-        public WalmartWebClient(IEncryptionProviderFactory encryptionProviderFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        public WalmartWebClient(IWalmartRequestSigner requestSigner, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<IHttpXmlVariableRequestSubmitter> requestSubmitterFactory)
         {
+            this.requestSubmitterFactory = requestSubmitterFactory;
+            this.requestSigner = requestSigner;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
         }
 
         /// <summary>
@@ -41,58 +43,25 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void TestConnection(WalmartStoreEntity store)
         {
-            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow) * 1000).ToString(CultureInfo.InvariantCulture);
-            string signature = GetSignature(store.ConsumerID, store.PrivateKey, TestConnectionUrl, "GET", epoch);
-
-            HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();
+            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
             requestSubmitter.Uri = new Uri(TestConnectionUrl);
             requestSubmitter.Verb = HttpVerb.Get;
 
-            requestSubmitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
-            requestSubmitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
-            requestSubmitter.Headers.Add("WM_SEC.TIMESTAMP", epoch);
-            requestSubmitter.Headers.Add("WM_SEC.AUTH_SIGNATURE", signature);
-            requestSubmitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
-            requestSubmitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-            ProcessRequest(requestSubmitter, "TestConnection");
-        }
-
-        /// <summary>
-        /// Get the Walmart auth signature
-        /// </summary>
-        private string GetSignature(string consumerId, string privateKey, string requestUrl, string requestMethod, string epoch)
-        {
-            string message = $"{consumerId}\n{requestUrl}\n{requestMethod.ToUpper()}\n{epoch}\n";
-
-            RsaKeyParameters rsaKeyParameter;
-            try
-            {
-                byte[] keyBytes = Convert.FromBase64String(encryptionProvider.Decrypt(privateKey));
-                AsymmetricKeyParameter asymmetricKeyParameter = PrivateKeyFactory.CreateKey(keyBytes);
-                rsaKeyParameter = (RsaKeyParameters)asymmetricKeyParameter;
-            }
-            catch (Exception)
-            {
-                throw new WalmartException("Unable to load Walmart private key");
-            }
-
-            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-
-            ISigner signer = SignerUtilities.GetSigner("SHA256withRSA");
-            signer.Init(true, rsaKeyParameter);
-            signer.BlockUpdate(messageBytes, 0, messageBytes.Length);
-
-            byte[] signed = signer.GenerateSignature();
-
-            return Convert.ToBase64String(signed);
+            ProcessRequest(store, requestSubmitter, "TestConnection");
         }
 
         /// <summary>
         /// Executes a request
         /// </summary>
-        private void ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private string ProcessRequest(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
+            submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
+            submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
+            submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
+            submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+            
+            requestSigner.Sign(submitter, store);
+
             try
             {
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
@@ -102,11 +71,86 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "xml");
+                    return responseData;
                 }
             }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(WalmartException));
+            }
+        }
+
+        /// <summary>
+        /// Process the request and deserialize the response
+        /// </summary>
+        private T ProcessRequest<T>(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
+        {
+            try
+            {
+                string response = ProcessRequest(store, submitter, action);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                XmlReader reader = XmlReader.Create(new StringReader(response));
+                return (T)serializer.Deserialize(reader);
+            }
+            catch (Exception ex) when (ex.GetType() != typeof(WalmartException))
+            {
+                throw new WalmartException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get orders from the given start date
+        /// </summary>
+        public ordersListType GetOrders(WalmartStoreEntity store, DateTime start)
+        {
+            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            requestSubmitter.Uri = new Uri(GetOrdersUrl);
+            requestSubmitter.Variables.Add("createdStartDate", start.ToString("s"));
+            requestSubmitter.Variables.Add("limit", DownloadOrderCountLimit.ToString());
+
+            return GetOrders(store, requestSubmitter);
+        }
+
+        /// <summary>
+        /// Get orders using the next cursor token
+        /// </summary>
+        public ordersListType GetOrders(WalmartStoreEntity store, string nextCursor)
+        {
+            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            requestSubmitter.Uri = new Uri($"{GetOrdersUrl}{nextCursor}");
+
+            return GetOrders(store, requestSubmitter);
+        }
+
+        /// <summary>
+        /// Gets orders using the given request submitter
+        /// </summary>
+        private ordersListType GetOrders(WalmartStoreEntity store, IHttpXmlVariableRequestSubmitter requestSubmitter)
+        {
+            requestSubmitter.Verb = HttpVerb.Get;
+
+            ordersListType ordersResponse = ProcessRequest<ordersListType>(store, requestSubmitter, "GetOrders");
+            AcknowledgeOrders(store, ordersResponse);
+
+            return ordersResponse;
+        }
+
+        /// <summary>
+        /// Acknowledge the given purchase order
+        /// </summary>
+        private void AcknowledgeOrders(WalmartStoreEntity store, ordersListType ordersResponse)
+        {
+            IEnumerable<Order> ordersToAcknowledge = ordersResponse.elements
+                .Where(o => o.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)));
+
+            foreach (Order order in ordersToAcknowledge)
+            {
+                IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+                requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
+                requestSubmitter.Verb = HttpVerb.Post;
+
+                ProcessRequest(store, requestSubmitter, "AcknowledgeOrder");
             }
         }
     }

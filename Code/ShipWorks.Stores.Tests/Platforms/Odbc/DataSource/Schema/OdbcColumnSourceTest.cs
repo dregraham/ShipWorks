@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -128,6 +129,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void Load_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsGeneralException()
         {
             Exception ex = new Exception("Something went wrong");
@@ -196,6 +199,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void LoadWithProviderFactory_RethrowsShipWorksOdbcException_WhenDbConnectionThrowsGeneralException()
         {
             Exception ex = new Exception("Something went wrong");

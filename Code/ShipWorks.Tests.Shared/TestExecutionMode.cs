@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shared
         /// </summary>
         public override Task HandleException(Exception exception, bool guiThread, string userEmail)
         {
-            return TaskEx.FromResult(true);
+            return Task.FromResult(true);
         }
     }
 }

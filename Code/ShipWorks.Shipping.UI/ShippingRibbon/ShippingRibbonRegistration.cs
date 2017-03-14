@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI.SandRibbon;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -14,6 +15,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     /// <summary>
     /// Register the shipping ribbon
     /// </summary>
+    [Component]
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
         readonly ComponentResourceManager resources;

@@ -1,19 +1,18 @@
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using Interapptive.Shared;
-using ShipWorks.UI.Controls.Html.Tables;
-using ShipWorks.UI.Controls.Html.Glyphs;
-using ShipWorks.UI.Controls.Html.UndoRedo;
-using ShipWorks.UI.Controls.Html.Core;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Win32;
+using ShipWorks.UI.Controls.Html.Core;
+using ShipWorks.UI.Controls.Html.Glyphs;
+using ShipWorks.UI.Controls.Html.Tables;
+using ShipWorks.UI.Controls.Html.UndoRedo;
 
 namespace ShipWorks.UI.Controls.Html
 {
@@ -30,16 +29,16 @@ namespace ShipWorks.UI.Controls.Html
     /// </summary>
     [Designer(typeof(HtmlControl.HtmlControlDesigner)), ComVisible(true)]
     [NDependIgnoreLongTypes]
-    public class HtmlControl : Control, IDisposable 
+    public class HtmlControl : Control, IDisposable
     {
         #region Designer to manage how the Control displays in Vs.net etc.
 
-        protected internal class HtmlControlDesigner : System.Windows.Forms.Design.ControlDesigner 
+        protected internal class HtmlControlDesigner : System.Windows.Forms.Design.ControlDesigner
         {
-            protected override void PostFilterProperties(System.Collections.IDictionary properties) 
+            protected override void PostFilterProperties(System.Collections.IDictionary properties)
             {
                 properties.Remove("Font");
-                base.PostFilterProperties (properties);
+                base.PostFilterProperties(properties);
             }
         }
 
@@ -223,13 +222,13 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Constructor
         /// </summary>
-        public HtmlControl() 
+        public HtmlControl()
         {
             // Double buffer redraws.
             SetStyle(ControlStyles.DoubleBuffer, true);
-            				
+
             // Force creation of handle, needed to host mshtml
-            CreateControl(); 
+            CreateControl();
 
             // Create the undomanager
             undoManager = new UndoManager(this);
@@ -245,9 +244,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Sets up the wndProc for the native window that the theDocument is based on.
         /// </summary>
-        internal void SetupWndProc(IntPtr Hwnd) 
+        internal void SetupWndProc(IntPtr Hwnd)
         {
-            if (nativeDocWindow != null) 
+            if (nativeDocWindow != null)
             {
                 nativeDocWindow.ReleaseHandle();
             }
@@ -259,9 +258,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Cleans up the WndProc for the native window that the theDocument is based on.
         /// </summary>
-        internal void ReleaseWndProc() 
+        internal void ReleaseWndProc()
         {
-            if (nativeDocWindow != null) 
+            if (nativeDocWindow != null)
             {
                 nativeDocWindow.ReleaseHandle();
                 nativeDocWindow = null;
@@ -271,7 +270,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Reinitializes the control
         /// </summary>
-        private void ReloadMshtml() 
+        private void ReloadMshtml()
         {
             CleanupControl();
             InitMshtml();
@@ -280,9 +279,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Cleans up the control completely.
         /// </summary>
-        private void CleanupControl() 
+        private void CleanupControl()
         {
-            if (IsCreated) 
+            if (IsCreated)
             {
                 htmlSite.Dispose();
                 htmlSite = null;
@@ -294,16 +293,16 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Initializes the control correctly
         /// </summary>
-        private void InitMshtml() 
+        private void InitMshtml()
         {
             //don't create in design mode or if the control is already created.
-            if (DesignMode || IsCreated) 
+            if (DesignMode || IsCreated)
             {
                 return;
             }
 
             // force creating Host handle since we need it to parent MSHTML
-            if (!IsHandleCreated) 
+            if (!IsHandleCreated)
             {
                 IntPtr hostHandle = Handle;
             }
@@ -313,7 +312,7 @@ namespace ShipWorks.UI.Controls.Html
 
             htmlSite.ElementMoving += new ElementSnapRectEventHandler(OnElementMoving);
             htmlSite.ElementSizing += new ElementSnapRectEventHandler(OnElementSizing);
-			
+
             if (Visible)
             {
                 htmlSite.ShowDocument();
@@ -322,23 +321,23 @@ namespace ShipWorks.UI.Controls.Html
             // Save the document
             htmlDocumentClass = (HtmlApi.HTMLDocument) htmlSite.Document;
 
-            if (editMode) 
+            if (editMode)
             {
                 HtmlDocument.DesignMode = "On";
             }
 
             // Load the initial URL
-            if (desiredUrl != "") 
+            if (desiredUrl != "")
             {
                 LoadUrl(desiredUrl);
-            } 
+            }
             else if (desiredContent != "")
             {
-                LoadDocument(desiredContent); 
+                LoadDocument(desiredContent);
             }
             else
             {
-                if (editMode) 
+                if (editMode)
                 {
                     LoadDocument(DefaultHtmlContent);
                 }
@@ -351,7 +350,7 @@ namespace ShipWorks.UI.Controls.Html
             desiredUrl = "";
             desiredContent = "";
 
-            if (htmlSite != null) 
+            if (htmlSite != null)
             {
                 htmlSite.ResizeSite();
             }
@@ -360,11 +359,11 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Invoke the ReadyStateChanged event
         /// </summary>
-        internal void OnReadyStateChanged() 
+        internal void OnReadyStateChanged()
         {
             //defensive - I've known this to be called
             //after doc was deactivated
-            if (htmlDocumentClass == null) 
+            if (htmlDocumentClass == null)
             {
                 return;
             }
@@ -373,15 +372,15 @@ namespace ShipWorks.UI.Controls.Html
             lastReadyState = ReadyState;
 
             //if changed to "COMPLETE", set edit designer
-            if (lastReadyState == HtmlReadyState.Complete) 
+            if (lastReadyState == HtmlReadyState.Complete)
             {
-                if (editMode) 
+                if (editMode)
                 {
                     //Sets up the Designer
                     HtmlDocument.DesignMode = "On";
 
                     //Make sure everything is shown correctly.
-                    if (htmlSite != null) 
+                    if (htmlSite != null)
                     {
                         htmlSite.ResizeSite();
                     }
@@ -391,14 +390,14 @@ namespace ShipWorks.UI.Controls.Html
                     IComServiceProvider isp = (IComServiceProvider) htmlDocumentClass;
                     HtmlApi.IHTMLEditServices es;
                     System.Guid IHtmlEditServicesGuid = new System.Guid("3050f663-98b5-11cf-bb82-00aa00bdce0b");
-                    System.Guid SHtmlEditServicesGuid = new System.Guid(0x3050f7f9,0x98b5,0x11cf,0xbb,0x82,0x00,0xaa,0x00,0xbd,0xce,0x0b);
+                    System.Guid SHtmlEditServicesGuid = new System.Guid(0x3050f7f9, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b);
                     IntPtr ppv;
-                    HtmlApi.IHTMLEditDesigner ds = (HtmlApi.IHTMLEditDesigner)htmlSite;
-                    if (isp != null) 
+                    HtmlApi.IHTMLEditDesigner ds = (HtmlApi.IHTMLEditDesigner) htmlSite;
+                    if (isp != null)
                     {
-                        isp.QueryService(ref SHtmlEditServicesGuid,ref IHtmlEditServicesGuid,out ppv);
-                        es = (HtmlApi.IHTMLEditServices)Marshal.GetObjectForIUnknown(ppv);
-                        int retval = es.AddDesigner(ds); 
+                        isp.QueryService(ref SHtmlEditServicesGuid, ref IHtmlEditServicesGuid, out ppv);
+                        es = (HtmlApi.IHTMLEditServices) Marshal.GetObjectForIUnknown(ppv);
+                        int retval = es.AddDesigner(ds);
                         Marshal.Release(ppv);
                     }
 
@@ -421,14 +420,14 @@ namespace ShipWorks.UI.Controls.Html
                     changeSink.MarkupChanged += new MarkupChangedHandler(OnMarkupChanged);*/
                 }
 
-                if (Focused && htmlSite != null) 
+                if (Focused && htmlSite != null)
                 {
                     htmlSite.ActivateDocument();
                 }
             }
 
-            if (ReadyStateChanged != null) 
-            {			
+            if (ReadyStateChanged != null)
+            {
                 ReadyStateChanged(this, new ReadyStateChangedEventArgs(lastReadyState));
             }
         }
@@ -436,9 +435,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing ) 
+        protected override void Dispose(bool disposing)
         {
-            if (disposing) 
+            if (disposing)
             {
                 IntPtr ptr = Marshal.GetIDispatchForObject(this);
 
@@ -462,11 +461,11 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Invokes the UpdateUI event
         /// </summary>
-        internal void OnUpdateUI() 
+        internal void OnUpdateUI()
         {
             UpdateCurrentElement();
 
-            if (UpdateUI != null) 
+            if (UpdateUI != null)
             {
                 UpdateUI(this, EventArgs.Empty);
             }
@@ -496,10 +495,10 @@ namespace ShipWorks.UI.Controls.Html
             // Raise our own event
             //if (MarkupChanged != null)
             {
-              //  MarkupChanged(this, elements);
+                //  MarkupChanged(this, elements);
             }
         }
-          
+
         /// <summary>
         /// An element is being moved at design time
         /// </summary>
@@ -525,7 +524,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Invokes the Navigate event 
         /// </summary>
-        public void OnNavigate(string target) 
+        public void OnNavigate(string target)
         {
             if (Navigate != null) Navigate(this, new NavigatedEventArgs(target));
         }
@@ -533,7 +532,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Fires the BeforeNavigateEvent
         /// </summary>
-        public void OnBeforeNavigate(NavigatingEventArgs e) 
+        public void OnBeforeNavigate(NavigatingEventArgs e)
         {
             if (BeforeNavigate != null) BeforeNavigate(this, e);
         }
@@ -548,10 +547,10 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Appearance")]
         [Description("Gets/Sets the default font that the editor will use.")]
         [DefaultValue(typeof(System.Drawing.Font), "Arial, 10pt")]
-        public new Font DefaultFont 
+        public new Font DefaultFont
         {
-            get {return defaultFont;}
-            set 
+            get { return defaultFont; }
+            set
             {
                 defaultFont = value;
 
@@ -565,13 +564,13 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Appearance")]
         [Description("Get/Sets the default ForeColor that will be used for the editor.")]
         [DefaultValue(typeof(System.Drawing.Color), "Black")]
-        public new Color DefaultForeColor 
+        public new Color DefaultForeColor
         {
-            get {return defaultForeColor;}
-            set 
+            get { return defaultForeColor; }
+            set
             {
                 defaultForeColor = value;
-		
+
                 SetComposeSettings();
             }
         }
@@ -582,13 +581,13 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Appearance")]
         [Description("Get/Sets the default BackColor that will be used for the editor.")]
         [DefaultValue(typeof(System.Drawing.Color), "White")]
-        public new Color DefaultBackColor 
+        public new Color DefaultBackColor
         {
-            get {return defaultBackColor;}
-            set 
+            get { return defaultBackColor; }
+            set
             {
                 defaultBackColor = value;
-				
+
                 SetComposeSettings();
             }
         }
@@ -599,12 +598,12 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Behavior")]
         [Description("Gets/Sets if Images will be loaded in the editor.")]
         [DefaultValue(true)]
-        public bool ShowImages 
+        public bool ShowImages
         {
-            get {return showImages;}
-            set 
+            get { return showImages; }
+            set
             {
-                if (showImages == value) 
+                if (showImages == value)
                 {
                     return;
                 }
@@ -614,7 +613,7 @@ namespace ShipWorks.UI.Controls.Html
                 desiredContent = this.Html;
                 this.Html = DefaultHtmlContent;
 
-                if (IsCreated) 
+                if (IsCreated)
                 {
                     ReloadMshtml();
                 }
@@ -627,10 +626,10 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Appearance")]
         [Description("Gets/Sets the style of border that will be displayed around the editor.")]
         [DefaultValue(BorderStyle.Fixed3D)]
-        public BorderStyle BorderStyle 
+        public BorderStyle BorderStyle
         {
-            get {return borderStyle;}
-            set 
+            get { return borderStyle; }
+            set
             {
                 if (value == borderStyle) return;
                 borderStyle = value;
@@ -649,26 +648,26 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Behavior")]
         [Description("Gets/Sets if the control is in edit mode.")]
         [DefaultValue(false)]
-        public bool EditMode 
+        public bool EditMode
         {
-            get {return editMode;}
-            set 
+            get { return editMode; }
+            set
             {
                 editMode = value;
 
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
                 htmlSite.ResizeSite();
 
-                if (editMode) 
+                if (editMode)
                 {
                     HtmlDocument.DesignMode = "On";
                     LoadDocument(DefaultHtmlContent);
-                } 
-                else 
+                }
+                else
                 {
                     HtmlDocument.DesignMode = "Off";
                 }
@@ -681,10 +680,10 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Behavior")]
         [Description("Gets/Sets if the context menu on right clicks will be displayed.")]
         [DefaultValue(true)]
-        public bool AllowContextMenu 
+        public bool AllowContextMenu
         {
-            get {return allowContextMenu;}
-            set {allowContextMenu = value;}
+            get { return allowContextMenu; }
+            set { allowContextMenu = value; }
         }
 
         /// <summary>
@@ -694,10 +693,10 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Behavior")]
         [Description("Gets/Sets if Active Content (Scripts etc.) are enabled in the control.")]
         [DefaultValue(true)]
-        public bool AllowActiveContent 
+        public bool AllowActiveContent
         {
-            get {return allowActiveContent;}
-            set {allowActiveContent = value;}
+            get { return allowActiveContent; }
+            set { allowActiveContent = value; }
         }
 
         /// <summary>
@@ -743,10 +742,10 @@ namespace ShipWorks.UI.Controls.Html
         [Category("Behavior")]
         [Description("Gets/Sets if links that are clicked on in the editor will be opened in the editor or launch your default browser.")]
         [DefaultValue(false)]
-        public bool OpenLinksInNewWindow 
+        public bool OpenLinksInNewWindow
         {
-            get {return openLinksNewWindow;}
-            set {openLinksNewWindow = value;}
+            get { return openLinksNewWindow; }
+            set { openLinksNewWindow = value; }
         }
 
         /// <summary>
@@ -769,16 +768,16 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets the Current State of the HtmlDocument.
         /// </summary>
         [Browsable(false)]
-        public HtmlReadyState ReadyState 
+        public HtmlReadyState ReadyState
         {
-            get 
+            get
             {
-                if (!IsCreated || htmlDocumentClass == null) 
+                if (!IsCreated || htmlDocumentClass == null)
                 {
                     return HtmlReadyState.UnInitialized;
                 }
 
-                switch (HtmlDocument.ReadyState) 
+                switch (HtmlDocument.ReadyState)
                 {
                     case "uninitialized":
                         return HtmlReadyState.UnInitialized;
@@ -817,16 +816,16 @@ namespace ShipWorks.UI.Controls.Html
         /// The IHTMLDocument3 instance
         /// </summary>
         [Browsable(false)]
-        public HtmlApi.IHTMLDocument3 HtmlDocument 
+        public HtmlApi.IHTMLDocument3 HtmlDocument
         {
             [DebuggerStepThrough]
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return null;
-                } 
-                else 
+                }
+                else
                 {
                     return (HtmlApi.IHTMLDocument3) htmlSite.Document;
                 }
@@ -873,11 +872,11 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the Selection's Bold State.
         /// </summary>
         [Browsable(false)]
-        public bool SelectionBold 
+        public bool SelectionBold
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return false;
                 }
@@ -886,18 +885,18 @@ namespace ShipWorks.UI.Controls.Html
                 {
                     return Convert.ToBoolean(HtmlDocument.QueryCommandValue("bold"));
                 }
-                catch 
+                catch
                 {
                     return false;
                 }
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
- 
+
                 if (value != SelectionBold)
                 {
                     HtmlDocument.ExecCommand("bold", false, null);
@@ -909,11 +908,11 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the Selection's Italic State.
         /// </summary>
         [Browsable(false)]
-        public bool SelectionItalic 
+        public bool SelectionItalic
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return false;
                 }
@@ -922,14 +921,14 @@ namespace ShipWorks.UI.Controls.Html
                 {
                     return Convert.ToBoolean(HtmlDocument.QueryCommandValue("italic"));
                 }
-                catch 
+                catch
                 {
                     return false;
                 }
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
@@ -945,11 +944,11 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the Selection's Italic State.
         /// </summary>
         [Browsable(false)]
-        public bool SelectionUnderline 
+        public bool SelectionUnderline
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return false;
                 }
@@ -958,14 +957,14 @@ namespace ShipWorks.UI.Controls.Html
                 {
                     return Convert.ToBoolean(HtmlDocument.QueryCommandValue("underline"));
                 }
-                catch 
+                catch
                 {
                     return false;
                 }
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
@@ -981,29 +980,29 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the current selection's back color.
         /// </summary>
         [Browsable(false)]
-        public Color SelectionBackColor 
+        public Color SelectionBackColor
         {
-            get 
-            { 
-                if (!IsCreated) 
-                {
-                    return Color.Empty;
-                } 
-
-                object result = HtmlDocument.QueryCommandValue("BackColor");
-
-                try 
-                {
-                    return ColorTranslator.FromHtml(result.ToString());
-                } 
-                catch 
+            get
+            {
+                if (!IsCreated)
                 {
                     return Color.Empty;
                 }
-            } 
-            set 
+
+                object result = HtmlDocument.QueryCommandValue("BackColor");
+
+                try
+                {
+                    return ColorTranslator.FromHtml(result.ToString());
+                }
+                catch
+                {
+                    return Color.Empty;
+                }
+            }
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
@@ -1012,7 +1011,7 @@ namespace ShipWorks.UI.Controls.Html
                 ExecCommand(HtmlApi.IDM_BACKCOLOR, GetCsColor(value), false, true);
 
                 // Have seen where these changes dont get a change on their own
-                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[]{this.CurrentElement});
+                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[] { this.CurrentElement });
             }
         }
 
@@ -1020,38 +1019,38 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the color for the selected text.
         /// </summary>
         [Browsable(false)]
-        public Color SelectionForeColor	
+        public Color SelectionForeColor
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return Color.Empty;
                 }
 
                 object result = HtmlDocument.QueryCommandValue("ForeColor");
 
-                try 
+                try
                 {
                     return ColorTranslator.FromHtml(result.ToString());
-                } 
-                catch 
+                }
+                catch
                 {
                     return Color.Empty;
                 }
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
                 // need to send a COLORREF value
-                ExecCommand(HtmlApi.IDM_FORECOLOR, GetCsColor(value),false,true);
+                ExecCommand(HtmlApi.IDM_FORECOLOR, GetCsColor(value), false, true);
 
                 // Have seen where these changes dont get a change on their own
-                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[]{this.CurrentElement});
+                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[] { this.CurrentElement });
             }
         }
 
@@ -1059,17 +1058,17 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/sets the font for the selected text
         /// </summary>
         [Browsable(false)]
-        public Font SelectionFont 
+        public Font SelectionFont
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return null;
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return null;
                 }
@@ -1084,7 +1083,7 @@ namespace ShipWorks.UI.Controls.Html
                 // Size
                 int fontSize = 8;
 
-                switch(Convert.ToInt32(HtmlDocument.QueryCommandValue("FontSize"))) 
+                switch (Convert.ToInt32(HtmlDocument.QueryCommandValue("FontSize")))
                 {
                     case 1: fontSize = 8; break;
                     case 2: fontSize = 10; break;
@@ -1102,15 +1101,15 @@ namespace ShipWorks.UI.Controls.Html
                 return new Font(fontName, fontSize, fontStyle);
             }
 
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return;
                 }
@@ -1132,7 +1131,7 @@ namespace ShipWorks.UI.Controls.Html
                 SelectionUnderline = Font.Underline;
 
                 // Have seen where these changes dont get a change on their own
-                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[]{this.CurrentElement});
+                this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[] { this.CurrentElement });
             }
         }
 
@@ -1142,7 +1141,7 @@ namespace ShipWorks.UI.Controls.Html
         [Browsable(false)]
         public string SelectionFontName
         {
-            get 
+            get
             {
                 string fontName = "Times New Roman";
 
@@ -1152,7 +1151,7 @@ namespace ShipWorks.UI.Controls.Html
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return fontName;
                 }
@@ -1174,28 +1173,28 @@ namespace ShipWorks.UI.Controls.Html
                 }
             }
 
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return;
                 }
 
-                try 
-                { 
+                try
+                {
                     // Set the name
                     HtmlDocument.ExecCommand("FontName", false, value);
 
                     // Have seen where these changes dont get a change on their own
-                    this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[]{this.CurrentElement});
-                } 
-                catch {}
+                    this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[] { this.CurrentElement });
+                }
+                catch { }
             }
         }
 
@@ -1203,24 +1202,24 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/sets the font for the selected text
         /// </summary>
         [Browsable(false)]
-        public int SelectionFontSize 
+        public int SelectionFontSize
         {
-            get 
+            get
             {
                 int defaultSize = 2;
 
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return defaultSize;
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return defaultSize;
                 }
 
-                try 
+                try
                 {
                     object queryValue = HtmlDocument.QueryCommandValue("FontSize");
 
@@ -1230,35 +1229,35 @@ namespace ShipWorks.UI.Controls.Html
                     }
 
                     return Convert.ToInt32(queryValue);
-                } 
-                catch 
+                }
+                catch
                 {
                     return 2;
                 }
             }
 
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
                 //This is here because of hosting issues on a UserControl 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return;
                 }
 
-                try 
+                try
                 {
                     // Set the size
                     HtmlDocument.ExecCommand("FontSize", false, value);
 
                     // Have seen where these changes dont get a change on their own
-                    this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[]{this.CurrentElement});
-                } 
-                catch {}
+                    this.OnMarkupChanged(this, new HtmlApi.IHTMLElement[] { this.CurrentElement });
+                }
+                catch { }
             }
         }
 
@@ -1266,36 +1265,36 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets the alignment of the selected text.
         /// </summary>
         [Browsable(false)]
-        public HorizontalAlignment SelectionAlignment 
+        public HorizontalAlignment SelectionAlignment
         {
-            get 
+            get
             {
-                if (!IsCreated) 
-                { 
+                if (!IsCreated)
+                {
                     return HorizontalAlignment.Left;
                 }
- 
-                if (Convert.ToBoolean(HtmlDocument.QueryCommandValue("JustifyRight"))) 
+
+                if (Convert.ToBoolean(HtmlDocument.QueryCommandValue("JustifyRight")))
                 {
                     return HorizontalAlignment.Right;
-                } 
-                else if (Convert.ToBoolean(HtmlDocument.QueryCommandValue("JustifyCenter"))) 
+                }
+                else if (Convert.ToBoolean(HtmlDocument.QueryCommandValue("JustifyCenter")))
                 {
                     return HorizontalAlignment.Center;
-                } 
-                else 
+                }
+                else
                 {
                     return HorizontalAlignment.Left;
                 }
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
-                        return;
+                    return;
                 }
 
-                switch (value) 
+                switch (value)
                 {
                     case HorizontalAlignment.Left:
                         HtmlDocument.ExecCommand("JustifyLeft", false, null);
@@ -1314,20 +1313,20 @@ namespace ShipWorks.UI.Controls.Html
         /// Get/Sets if numbering is on for the selected text.
         /// </summary>
         [Browsable(false)]
-        public bool SelectionNumbering 
+        public bool SelectionNumbering
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return false;
                 }
 
                 return Convert.ToBoolean(HtmlDocument.QueryCommandValue("InsertOrderedList"));
-            } 
-            set 
+            }
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
@@ -1343,25 +1342,25 @@ namespace ShipWorks.UI.Controls.Html
         /// Gets/Sets if bullets are on or off for the selected text.
         /// </summary>
         [Browsable(false)]
-        public bool SelectionBullets 
+        public bool SelectionBullets
         {
-            get 
+            get
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return false;
                 }
 
                 return Convert.ToBoolean(HtmlDocument.QueryCommandValue("InsertUnorderedList"));
             }
-            set 
+            set
             {
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
 
-                if (SelectionBullets != value) 
+                if (SelectionBullets != value)
                 {
                     HtmlDocument.ExecCommand("InsertUnorderedList", false, null);
                 }
@@ -1613,7 +1612,7 @@ namespace ShipWorks.UI.Controls.Html
             {
                 showBorderGuides = value;
 
-                if (!IsCreated) 
+                if (!IsCreated)
                 {
                     return;
                 }
@@ -1622,7 +1621,7 @@ namespace ShipWorks.UI.Controls.Html
                 {
                     return;
                 }
-                
+
                 ExecCommand(HtmlApi.IDM_SHOWZEROBORDERATDESIGNTIME, showBorderGuides, false, false);
             }
         }
@@ -1645,7 +1644,7 @@ namespace ShipWorks.UI.Controls.Html
                 {
                     return;
                 }
-                
+
                 UpdateGlyphs();
             }
         }
@@ -1655,10 +1654,10 @@ namespace ShipWorks.UI.Controls.Html
         /// </summary>
         [Browsable(false)]
         [DebuggerHidden]
-        public string Html 
+        public string Html
         {
             [DebuggerStepThrough]
-            get 
+            get
             {
                 if (IsCreated)
                 {
@@ -1670,21 +1669,21 @@ namespace ShipWorks.UI.Controls.Html
                 }
             }
             [DebuggerStepThrough]
-            set 
+            set
             {
-                try 
+                try
                 {
-                    if (value == null || value == "") 
+                    if (value == null || value == "")
                     {
                         LoadDocument(DefaultHtmlContent);
-                    } 
+                    }
                     else
                     {
                         LoadDocument(value);
                     }
 
-                } 
-                catch {}
+                }
+                catch { }
             }
         }
 
@@ -1786,7 +1785,7 @@ namespace ShipWorks.UI.Controls.Html
 
             return bitmap;
         }
-        
+
         /// <summary>
         /// Update the glyph display
         /// </summary>
@@ -1808,25 +1807,25 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Converts the HTML into plain text.
         /// </summary>
-        public void SelectionRemoveFormat() 
+        public void SelectionRemoveFormat()
         {
-            try 
+            try
             {
                 HtmlDocument.ExecCommand("RemoveFormat", false, null);
-            } 
-            catch {}
+            }
+            catch { }
         }
-	
+
         /// <summary>
         /// Inserts an image at the selection point.
         /// </summary>
-        public bool InsertImage() 
+        public bool InsertImage()
         {
-            try 
+            try
             {
                 return HtmlDocument.ExecCommand("InsertImage", true, null);
-            } 
-            catch 
+            }
+            catch
             {
                 MessageBox.Show(this, "The image file was invalid.");
                 return false;
@@ -1836,13 +1835,13 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Inserts a hyperlink at the selection point.
         /// </summary>
-        public bool InsertHyperlink() 
+        public bool InsertHyperlink()
         {
-            try 
+            try
             {
                 return HtmlDocument.ExecCommand("CreateLink", true, null);
-            } 
-            catch 
+            }
+            catch
             {
                 return false;
             }
@@ -1851,13 +1850,13 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Inserts a HR at the selection point.
         /// </summary>
-        public bool InsertHr() 
+        public bool InsertHr()
         {
-            try 
+            try
             {
                 return HtmlDocument.ExecCommand("InsertHorizontalRule", true, null);
-            } 
-            catch 
+            }
+            catch
             {
                 return false;
             }
@@ -1866,13 +1865,13 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Inserts the specified image at the selection point.
         /// </summary>
-        public bool InsertImage(string fileName) 
+        public bool InsertImage(string fileName)
         {
-            try 
+            try
             {
                 return HtmlDocument.ExecCommand("InsertImage", true, fileName);
-            } 
-            catch 
+            }
+            catch
             {
                 MessageBox.Show(this, "The image file was invalid.");
                 return false;
@@ -1882,20 +1881,20 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Select the entire theDocument
         /// </summary>
-        public bool SelectAll() 
+        public bool SelectAll()
         {
-            if (!IsCreated) 
+            if (!IsCreated)
             {
                 return false;
             }
 
-            return ExecCommand(HtmlApi.IDM_SELECTALL,null,false,true);
+            return ExecCommand(HtmlApi.IDM_SELECTALL, null, false, true);
         }
 
         /// <summary>
         /// Loads the string passed as the theDocument to be displayed.
         /// </summary>
-        public void LoadDocument(string htmlContents) 
+        public void LoadDocument(string htmlContents)
         {
             if (!IsCreated)
             {
@@ -1906,7 +1905,7 @@ namespace ShipWorks.UI.Controls.Html
             }
 
             InternalLoadUrl("about:blank");
-           // WaitForDocumentComplete();
+            // WaitForDocumentComplete();
 
             HtmlApi.IHTMLDocument2 document2 = HtmlDocument;
 
@@ -1918,9 +1917,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Loads the URL passed into the HTML Control
         /// </summary>
-        public void LoadUrl(string url) 
-        {			
-            if (!IsCreated) 
+        public void LoadUrl(string url)
+        {
+            if (!IsCreated)
             {
                 desiredUrl = url;
                 desiredContent = "";
@@ -1934,11 +1933,11 @@ namespace ShipWorks.UI.Controls.Html
 
             InternalLoadUrl(url);
 
-            if (this.FindForm() != null) 
+            if (this.FindForm() != null)
             {
                 //Get the focus back to where it belongs.
                 Control activeControl = FindActiveControl(this.FindForm());
-                if (activeControl != null) 
+                if (activeControl != null)
                 {
                     activeControl.Focus();
                 }
@@ -1948,41 +1947,41 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Copies the currently selected elements.
         /// </summary>
-        public bool Copy() 
-        {
-            if (!IsCreated) 
-            {
-                return false;
-            }
-
-            return ExecCommand(HtmlApi.IDM_COPY,null,false,true);
-        }
-
-        /// <summary>
-        /// Pastes the contents of the clipboard at the current selection.
-        /// </summary>
-        public bool Paste() 
+        public bool Copy()
         {
             if (!IsCreated)
             {
                 return false;
             }
-            
-            return ExecCommand(HtmlApi.IDM_PASTE,null,false,true);
+
+            return ExecCommand(HtmlApi.IDM_COPY, null, false, true);
+        }
+
+        /// <summary>
+        /// Pastes the contents of the clipboard at the current selection.
+        /// </summary>
+        public bool Paste()
+        {
+            if (!IsCreated)
+            {
+                return false;
+            }
+
+            return ExecCommand(HtmlApi.IDM_PASTE, null, false, true);
         }
 
         /// <summary>
         /// Cuts the selection and places it in the clipboard.
         /// </summary>
         /// <returns>True if successfull, false otherwise.</returns>
-        public bool Cut() 
+        public bool Cut()
         {
-            if (!IsCreated) 
+            if (!IsCreated)
             {
                 return false;
             }
 
-            return ExecCommand(HtmlApi.IDM_CUT,null,false,true);
+            return ExecCommand(HtmlApi.IDM_CUT, null, false, true);
         }
 
         /// <summary>
@@ -2001,7 +2000,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Saves the current document prompting the user.
         /// </summary>
-        public bool SaveAs(string defaultPath) 
+        public bool SaveAs(string defaultPath)
         {
             return SaveAs(defaultPath, true);
         }
@@ -2010,7 +2009,7 @@ namespace ShipWorks.UI.Controls.Html
         /// Saves the current theDocument by prompting the user.
         /// </summary>
         /// <returns>True if successfull, false otherwise.</returns>
-        public bool SaveAs() 
+        public bool SaveAs()
         {
             return SaveAs(null);
         }
@@ -2018,9 +2017,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Saves the current theDocument using the DefaultPath as the file name or prompting the user with the default filename.
         /// </summary>
-        public bool SaveAs(string defaultPath, bool showDialog) 
+        public bool SaveAs(string defaultPath, bool showDialog)
         {
-            if (!IsCreated) 
+            if (!IsCreated)
             {
                 return false;
             }
@@ -2031,22 +2030,22 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Clears the formatting of the current selection.
         /// </summary>
-        public bool ClearSelectionFormatting() 
+        public bool ClearSelectionFormatting()
         {
-            if (!IsCreated) 
+            if (!IsCreated)
             {
                 return false;
             }
 
-            return ExecCommand(HtmlApi.IDM_REMOVEFORMAT,null,false,true);
+            return ExecCommand(HtmlApi.IDM_REMOVEFORMAT, null, false, true);
         }
 
         /// <summary>
         /// Creates a table with the parameters specified.
         /// </summary>
-        public void InsertTable() 
+        public void InsertTable()
         {
-            if (!IsCreated) 
+            if (!IsCreated)
             {
                 return;
             }
@@ -2061,7 +2060,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Indents the selection
         /// </summary>
-        public bool Indent() 
+        public bool Indent()
         {
             if (!IsCreated) return false;
 
@@ -2071,7 +2070,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Outdents the selection
         /// </summary>
-        public bool Unindent() 
+        public bool Unindent()
         {
             if (!IsCreated) return false;
 
@@ -2117,7 +2116,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Determine if the given command is available
         /// </summary>
-        public bool IsCommandEnabled(int command) 
+        public bool IsCommandEnabled(int command)
         {
             if (ReadyState != HtmlReadyState.Complete)
             {
@@ -2126,7 +2125,7 @@ namespace ShipWorks.UI.Controls.Html
 
             HtmlCommandStatus cs = this.GetCommandInfo(command);
 
-            return ((cs == HtmlCommandStatus.Enabled) | (cs == HtmlCommandStatus.EnabledAndToggledOn));
+            return ((cs == HtmlCommandStatus.Enabled) || (cs == HtmlCommandStatus.EnabledAndToggledOn));
         }
 
         /// <summary>
@@ -2147,7 +2146,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Prints the current document
         /// </summary>
-        public void Print() 
+        public void Print()
         {
             Print(string.Empty);
         }
@@ -2163,7 +2162,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Prints the current theDocument using a template.
         /// </summary>
-        public void Print(string printTemplate) 
+        public void Print(string printTemplate)
         {
             if (string.IsNullOrEmpty(printTemplate))
             {
@@ -2323,9 +2322,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// A key has been pressed, check for shortcuts
         /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e) 
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown (e);
+            base.OnKeyDown(e);
 
             if (e.Control)
             {
@@ -2345,16 +2344,16 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Intercept messages
         /// </summary>
-        protected override void WndProc(ref Message m) 
+        protected override void WndProc(ref Message m)
         {
             // This is here if you want your arrow keys to work right.
-            if (m.Msg == NativeMethods.WM_GETDLGCODE) 
+            if (m.Msg == NativeMethods.WM_GETDLGCODE)
             {
                 m.Result = (IntPtr) NativeMethods.DLGC_WANTALLKEYS;
                 return;
-            } 
+            }
 
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE) 
+            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE)
             {
                 Focus();
             }
@@ -2362,15 +2361,15 @@ namespace ShipWorks.UI.Controls.Html
             // Call the base
             base.WndProc(ref m);
 
-            if (htmlSite != null) 
+            if (htmlSite != null)
             {
                 // Only fire these on SetFocus because it's done automatically on mouse clicking in it.
-                if (m.Msg == NativeMethods.WM_SETFOCUS) 
-                { 
+                if (m.Msg == NativeMethods.WM_SETFOCUS)
+                {
                     htmlSite.DeactivateDocument();
                     htmlSite.ActivateDocument();
-                } 
-                else if (m.Msg == NativeMethods.WM_KILLFOCUS) 
+                }
+                else if (m.Msg == NativeMethods.WM_KILLFOCUS)
                 {
                     htmlSite.DeactivateDocument();
                 }
@@ -2380,28 +2379,28 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// When the handle of this control is created, initialize the mshtml
         /// </summary>
-        protected override void OnHandleCreated(EventArgs e) 
+        protected override void OnHandleCreated(EventArgs e)
         {
-            if (constructed) 
+            if (constructed)
             {
-                InitMshtml();			
+                InitMshtml();
             }
         }
 
         /// <summary>
         /// Hide and show the htmlSite as visibility changes
         /// </summary>
-        protected override void OnVisibleChanged(EventArgs e) 
+        protected override void OnVisibleChanged(EventArgs e)
         {
-            base.OnVisibleChanged (e);
+            base.OnVisibleChanged(e);
 
-            if (IsCreated) 
+            if (IsCreated)
             {
-                if (this.Visible) 
+                if (this.Visible)
                 {
                     htmlSite.ShowDocument();
-                } 
-                else 
+                }
+                else
                 {
                     htmlSite.HideDocument();
                 }
@@ -2411,7 +2410,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// When the handle of the control is destroyed, shutdown mshtml
         /// </summary>
-        protected override void OnHandleDestroyed(EventArgs e) 
+        protected override void OnHandleDestroyed(EventArgs e)
         {
             CleanupControl();
 
@@ -2421,9 +2420,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Listen for parent changes
         /// </summary>
-        protected override void OnParentChanged(System.EventArgs e) 
+        protected override void OnParentChanged(System.EventArgs e)
         {
-            if (htmlSite == null) 
+            if (htmlSite == null)
             {
                 InitMshtml();
             }
@@ -2434,7 +2433,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Ensure we are redrawn when we are resized.
         /// </summary>
-        protected override void OnResize(EventArgs e) 
+        protected override void OnResize(EventArgs e)
         {
             if (htmlSite != null)
             {
@@ -2447,35 +2446,35 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Draw the border around the control
         /// </summary>
-        protected override void OnPaint(PaintEventArgs pevent) 
+        protected override void OnPaint(PaintEventArgs pevent)
         {
             Rectangle rect = Rectangle.Empty;
-			
-			if (ClientRectangle.Width -1 > 0) 
+
+            if (ClientRectangle.Width - 1 > 0)
             {
-                rect = new Rectangle(ClientRectangle.X, ClientRectangle.Top, ClientRectangle.Width -1, ClientRectangle.Height);				
-            } 
-            else 
+                rect = new Rectangle(ClientRectangle.X, ClientRectangle.Top, ClientRectangle.Width - 1, ClientRectangle.Height);
+            }
+            else
             {
                 rect = ClientRectangle;
             }
 
-            if (borderStyle == BorderStyle.Fixed3D) 
+            if (borderStyle == BorderStyle.Fixed3D)
             {
                 ControlPaint.DrawBorder3D(pevent.Graphics, rect, Border3DStyle.Sunken, Border3DSide.All);
-            } 
-            else if (borderStyle == BorderStyle.FixedSingle) 
+            }
+            else if (borderStyle == BorderStyle.FixedSingle)
             {
                 ControlPaint.DrawBorder(pevent.Graphics, rect, Color.Black, ButtonBorderStyle.Solid);
             }
 
-            if (DesignMode) 
+            if (DesignMode)
             {
-                if (borderStyle != BorderStyle.None && rect.X + 2 <= rect.Right && rect.Y + 2 < rect.Bottom) 
+                if (borderStyle != BorderStyle.None && rect.X + 2 <= rect.Right && rect.Y + 2 < rect.Bottom)
                     rect.Inflate(-2, -2);
 
                 //Draw over the control.
-                pevent.Graphics.FillRectangle(Brushes.White, rect); 
+                pevent.Graphics.FillRectangle(Brushes.White, rect);
             }
 
             base.OnPaint(pevent);
@@ -2493,12 +2492,12 @@ namespace ShipWorks.UI.Controls.Html
 
             IMoniker moniker;
             OleApi.CreateURLMoniker(null, url, out moniker);
-	
+
             IBindCtx bindContext;
             OleApi.CreateBindCtx(0, out bindContext);
-	
+
             persistMoniker.Load(0, moniker, bindContext, OleApi.STGM_READ);
-			
+
             if (bindContext != null)
                 Marshal.ReleaseComObject(bindContext);
 
@@ -2528,7 +2527,7 @@ namespace ShipWorks.UI.Controls.Html
                     // otherwise the ReadyState never gets set to Complete
                     Application.DoEvents();
                 }
-                
+
                 Thread.Sleep(loopMsWaitTime);
                 totalMsWaited += loopMsWaitTime;
             }
@@ -2590,7 +2589,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Returns a color as an integer value
         /// </summary>
-        private static uint GetCsColor(Color color) 
+        private static uint GetCsColor(Color color)
         {
             return (uint) (color.R + (color.G * 256) + (color.B * 65536));
         }
@@ -2598,9 +2597,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Set the default font, forecolore, and backcolor to use
         /// </summary>
-        private void SetComposeSettings() 
+        private void SetComposeSettings()
         {
-            if (!IsCreated || ReadyState != HtmlReadyState.Complete) 
+            if (!IsCreated || ReadyState != HtmlReadyState.Complete)
             {
                 return;
             }
@@ -2610,7 +2609,7 @@ namespace ShipWorks.UI.Controls.Html
                 return;
             }
 
-            if (!ExecCommand(HtmlApi.IDM_HTMLEDITMODE,true,false,false))
+            if (!ExecCommand(HtmlApi.IDM_HTMLEDITMODE, true, false, false))
             {
                 return;
             }
@@ -2619,7 +2618,7 @@ namespace ShipWorks.UI.Controls.Html
 
             // Setup basic properties
             sb.Append(defaultFont.Bold ? "1," : "0,");
-		    sb.Append(defaultFont.Italic ? "1," : "0,");
+            sb.Append(defaultFont.Italic ? "1," : "0,");
             sb.Append(defaultFont.Underline ? "1," : "0,");
 
             // Set size
@@ -2656,17 +2655,17 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Font the active control
         /// </summary>
-        private Control FindActiveControl(Control Parent) 
+        private Control FindActiveControl(Control Parent)
         {
-            if (Parent is Form && ((Form) Parent).ActiveControl != null) 
+            if (Parent is Form && ((Form) Parent).ActiveControl != null)
             {
                 return FindActiveControl(((Form) Parent).ActiveControl);
-            } 
-            else if (Parent is ContainerControl && ((ContainerControl) Parent).ActiveControl != null) 
+            }
+            else if (Parent is ContainerControl && ((ContainerControl) Parent).ActiveControl != null)
             {
                 return FindActiveControl(((ContainerControl) Parent).ActiveControl);
-            } 
-            else 
+            }
+            else
             {
                 return Parent;
             }
@@ -2675,11 +2674,11 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Execute the given MSHTML command
         /// </summary>
-        public bool ExecCommand(int iCommand, object argument, bool promptUser, bool checkReadystate) 
+        public bool ExecCommand(int iCommand, object argument, bool promptUser, bool checkReadystate)
         {
             if (htmlDocumentClass == null)
                 return false;
-				
+
             //get the command target
             IOleCommandTarget ct = (IOleCommandTarget) htmlDocumentClass;
 
@@ -2690,24 +2689,24 @@ namespace ShipWorks.UI.Controls.Html
 
             //exec the command
             System.Guid pguidCmdGroup = new Guid("DE4BA900-59CA-11CF-9592-444553540000");
-			
+
             Object[] pvaOut = null;
             int iRetval;
 
-            int promptUserValue = promptUser ? 
+            int promptUserValue = promptUser ?
                 (int) OleApi.OLECMDEXECOPT.PROMPTUSER :
                 (int) OleApi.OLECMDEXECOPT.DONTPROMPTUSER;
-			
+
             object[] args = new object[] { argument };
             iRetval = ct.Exec(ref pguidCmdGroup, iCommand, promptUserValue, args, pvaOut);
-		
+
             return (iRetval == 0);
         }
 
         /// <summary>
         /// Queries the status of the specified command
         /// </summary>
-        private HtmlCommandStatus GetCommandInfo(int command) 
+        private HtmlCommandStatus GetCommandInfo(int command)
         {
             //get the command target
             IOleCommandTarget ct = (IOleCommandTarget) HtmlDocument;
@@ -2716,9 +2715,9 @@ namespace ShipWorks.UI.Controls.Html
             {
                 throw new Exception("Cannot get COM command target");
             }
-			
+
             System.Guid pguidCmdGroup = new Guid("DE4BA900-59CA-11CF-9592-444553540000");
-			
+
             //Query the command target for the command status
             OleApi.OLECMD oleCommand = new OleApi.OLECMD();
             oleCommand.cmdID = command;
@@ -2726,9 +2725,9 @@ namespace ShipWorks.UI.Controls.Html
 
             OleApi.OLECMDTEXT olecmdtext1 = new OleApi.OLECMDTEXT();
             olecmdtext1.cwActual = 0;
- 
+
             int hr = ct.QueryStatus(ref pguidCmdGroup, 1, array, olecmdtext1);
-			
+
             if (hr != NativeMethods.S_OK)
             {
                 return HtmlCommandStatus.Unknown;
@@ -2737,19 +2736,19 @@ namespace ShipWorks.UI.Controls.Html
             // Necessary due to boxing - the original is not changed
             oleCommand = array[0];
 
-            if ((oleCommand.cmdf & (int) OleApi.OLECMDF.LATCHED) == (int) OleApi.OLECMDF.LATCHED) 
+            if ((oleCommand.cmdf & (int) OleApi.OLECMDF.LATCHED) == (int) OleApi.OLECMDF.LATCHED)
             {
                 return HtmlCommandStatus.EnabledAndToggledOn;
             }
-            else if ((oleCommand.cmdf & (int) OleApi.OLECMDF.ENABLED) == (int) OleApi.OLECMDF.ENABLED) 
+            else if ((oleCommand.cmdf & (int) OleApi.OLECMDF.ENABLED) == (int) OleApi.OLECMDF.ENABLED)
             {
                 return HtmlCommandStatus.Enabled;
             }
-            else if ((oleCommand.cmdf & (int) OleApi.OLECMDF.SUPPORTED) == (int) OleApi.OLECMDF.SUPPORTED) 
+            else if ((oleCommand.cmdf & (int) OleApi.OLECMDF.SUPPORTED) == (int) OleApi.OLECMDF.SUPPORTED)
             {
                 return HtmlCommandStatus.Disabled;
-            } 
-            else 
+            }
+            else
             {
                 return HtmlCommandStatus.Unsupported;
             }
@@ -2758,9 +2757,9 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Returns if the control has been properly created.
         /// </summary>
-        internal bool IsCreated 
+        internal bool IsCreated
         {
-            get {return (htmlSite != null) && (htmlSite.Document != null);}
+            get { return (htmlSite != null) && (htmlSite.Document != null); }
         }
 
         /// <summary>
@@ -2768,9 +2767,9 @@ namespace ShipWorks.UI.Controls.Html
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        internal void DoShortCut(Keys key) 
+        internal void DoShortCut(Keys key)
         {
-            switch (key) 
+            switch (key)
             {
                 case Keys.A:
                     SelectAll();
@@ -2790,9 +2789,9 @@ namespace ShipWorks.UI.Controls.Html
             }
 
             // The following are only for edit mode
-            if (editMode) 
+            if (editMode)
             {
-                switch(key) 
+                switch (key)
                 {
                     case Keys.D1:
                         HtmlDocument.ExecCommand("FontSize", false, 1);
@@ -2823,7 +2822,7 @@ namespace ShipWorks.UI.Controls.Html
                         break;
 
                     case Keys.OemOpenBrackets:
-                        Unindent();;
+                        Unindent(); ;
                         break;
 
                     case Keys.OemCloseBrackets:
@@ -2879,43 +2878,43 @@ namespace ShipWorks.UI.Controls.Html
 
         #region Interal Functions Called from other classes
 
-        internal void InvokeOnMouseDown(MouseEventArgs e) 
+        internal void InvokeOnMouseDown(MouseEventArgs e)
         {
             this.OnMouseDown(e);
         }
 
-        internal void InvokeOnDoubleClick() 
+        internal void InvokeOnDoubleClick()
         {
             this.OnDoubleClick(EventArgs.Empty);
         }
 
-        internal void InvokeOnClick() 
+        internal void InvokeOnClick()
         {
             this.OnClick(EventArgs.Empty);
         }
 
-        internal void InvokeWndProc(ref Message msg) 
+        internal void InvokeWndProc(ref Message msg)
         {
             Message message = Message.Create(this.Handle, msg.Msg, msg.WParam, msg.LParam);
             this.WndProc(ref message);
         }
 
-        internal void InvokeMouseLeave() 
+        internal void InvokeMouseLeave()
         {
             this.OnMouseLeave(EventArgs.Empty);
         }
 
-        internal void InvokeMouseHover() 
+        internal void InvokeMouseHover()
         {
             this.OnMouseHover(EventArgs.Empty);
         }
-		
-        internal void InvokeMouseEnter() 
+
+        internal void InvokeMouseEnter()
         {
             this.OnMouseEnter(EventArgs.Empty);
         }
 
-        internal void InvokeTab() 
+        internal void InvokeTab()
         {
             this.OnKeyDown(new KeyEventArgs(Keys.Tab));
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
@@ -179,7 +180,7 @@ namespace ShipWorks.Users
             lifetimeScope?.Dispose();
             lifetimeScope = IoC.BeginLifetimeScope();
 
-            foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+            foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IOrderedEnumerable<IInitializeForCurrentSession>>())
             {
                 service.InitializeForCurrentSession();
             }

@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Loading
                     }
                     else
                     {
-                        return new ShipmentsLoadedEventArgs(new Exception("Could not load order. Please try again"), false, null, new List<ShipmentEntity>());
+                        return new ShipmentsLoadedEventArgs(new ArgumentException("Could not load order. Please try again"), false, null, new List<ShipmentEntity>());
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Loading
                 Task<bool> validateTask = shipmentsLoaderValidator
                     .StartTask(progressProvider, globalShipments, shipmentsToValidate);
 
-                return await TaskEx.WhenAll(loadShipmentsTask, validateTask)
+                return await Task.WhenAll(loadShipmentsTask, validateTask)
                     .ContinueWith(task => task.Result.Any(x => x));
             }
         }

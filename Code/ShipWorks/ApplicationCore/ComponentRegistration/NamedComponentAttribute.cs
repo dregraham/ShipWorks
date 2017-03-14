@@ -36,7 +36,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
+        internal static void Register(ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
+            params Assembly[] assemblies)
         {
             var namedComponents = assemblies.SelectMany(x => x.GetTypes())
                 .Select(x => new
@@ -50,7 +52,8 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (NamedComponentAttribute attribute in item.Attributes)
                 {
-                    builder.RegisterType(item.Component).Named(attribute.ComponentName, attribute.ComponentType);
+                    ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache)
+                        .Named(attribute.ComponentName, attribute.ComponentType);
                 }
             }
         }

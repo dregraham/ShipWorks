@@ -167,7 +167,7 @@ namespace ShipWorks.Filters
             }
 
             // Save the new max
-            maxTimestamp = filterCountList.Select(x => x.RowVersion).Concat(new[] {maxTimestamp}).Max();
+            maxTimestamp = filterCountList.Select(x => x.RowVersion).Concat(new[] { maxTimestamp }).Max();
 
             return true;
         }
@@ -363,7 +363,7 @@ namespace ShipWorks.Filters
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InitiateCalculationThread),
-                new object[] {initial, operationToken});
+                new object[] { initial, operationToken });
 
             // Wait for it to finish.  It's ok if it doesnt.
             calculatingEvent.WaitOne(wait, false);
@@ -374,9 +374,9 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void InitiateCalculationThread(object state)
         {
-            object[] castedState = (object[])state;
-            bool initial = (bool)castedState[0];
-            ApplicationBusyToken token = (ApplicationBusyToken)castedState[1];
+            object[] castedState = (object[]) state;
+            bool initial = (bool) castedState[0];
+            ApplicationBusyToken token = (ApplicationBusyToken) castedState[1];
 
             using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-6))
             {
@@ -496,7 +496,7 @@ namespace ShipWorks.Filters
         /// started at the same time as the deletion process handles that well.</remarks>
         public static void DeleteAbandonedFilterCounts()
         {
-            TaskEx.Run(() => DeleteAbandonedFilterCountsInternal());
+            Task.Run(() => DeleteAbandonedFilterCountsInternal());
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public static void QueueSingleScanFilterUpdateCompleteMessageAsync(long filterNodeContentID, IMessenger messenger, object sender)
         {
-            TaskEx.Run(() =>
+            Task.Run(() =>
             {
                 QueueSingleScanFilterUpdateCompleteMessage(filterNodeContentID, messenger, sender);
             });

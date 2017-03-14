@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ShipWorks.Res</RootNamespace>
     <AssemblyName>ShipWorks.Res</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -395,6 +395,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.1.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

@@ -11,7 +11,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// Let customers know that same day shipping was requested but that same day rates are not available
     /// </summary>
     [Component(RegistrationType.Self)]
-    [ResolveWithAttributes]
     public class AmazonSameDayNotAvailableFootnoteFactory : IRateFootnoteFactory
     {
         public const string ControlKey = "AmazonSameDayNotAvailableFootnoteControl";

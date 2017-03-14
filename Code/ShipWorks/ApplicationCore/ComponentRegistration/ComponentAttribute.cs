@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Builder;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -27,31 +28,58 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public RegistrationType RegisterAs { get; set; }
 
         /// <summary>
-        /// Register all components that use this attribute
+        /// Get a registration, either from cache or by creating a new one
         /// </summary>
-        internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
+        public static IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> GetRegistrationBuilder(
+            Type component,
+            ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache)
         {
-            builder.RegisterAssemblyTypes(assemblies)
-                .Where(IsComponent(RegistrationType.ImplementedInterfaces))
-                .AsImplementedInterfaces();
+            if (registrationCache.ContainsKey(component))
+            {
+                return registrationCache[component];
+            }
 
-            builder.RegisterAssemblyTypes(assemblies)
-                .Where(IsComponent(RegistrationType.Self))
-                .AsSelf();
+            var registration = builder.RegisterType(component);
+            registrationCache.Add(component, registration);
+            return registration;
         }
 
         /// <summary>
-        /// Is the given type marked as a component
+        /// Register all components that use this attribute
         /// </summary>
-        private static Func<Type, bool> IsComponent(RegistrationType registerAs)
+        internal static void Register(ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
+            params Assembly[] assemblies)
         {
-            return type => GetAttribute(type)?.Any(x => x.RegisterAs.HasFlag(registerAs)) ?? false;
+            var components = assemblies.SelectMany(x => x.GetTypes())
+                .Select(x => new
+                {
+                    Component = x,
+                    Attributes = GetAttributes(x),
+                })
+                .Where(x => x.Attributes.Any());
+
+            foreach (var item in components)
+            {
+                var registration = GetRegistrationBuilder(item.Component, builder, registrationCache);
+
+                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.ImplementedInterfaces))
+                {
+                    registration.AsImplementedInterfaces();
+                }
+
+                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.Self))
+                {
+                    registration.AsSelf();
+                }
+            }
         }
 
         /// <summary>
         /// Get a component attribute from the type
         /// </summary>
-        private static IEnumerable<ComponentAttribute> GetAttribute(Type type) =>
+        private static IEnumerable<ComponentAttribute> GetAttributes(Type type) =>
             type.GetCustomAttributes(false).OfType<ComponentAttribute>();
     }
 }

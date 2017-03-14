@@ -1,5 +1,10 @@
-﻿using Autofac.Features.Indexed;
-using GalaSoft.MvvmLight.Command;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Autofac.Features.Indexed;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
@@ -9,11 +14,6 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -181,9 +181,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             fieldMap.Load(store.ImportMap);
             MapName = fieldMap.Name;
 
-            DownloadStrategyIsLastModified = store.ImportStrategy == (int)OdbcImportStrategy.ByModifiedTime;
+            DownloadStrategyIsLastModified = store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime;
 
-            ColumnSourceIsTable = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table;
+            ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
 
             importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
         }

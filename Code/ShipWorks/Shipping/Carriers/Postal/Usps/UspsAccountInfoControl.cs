@@ -6,7 +6,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -40,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             account = uspsAccount;
             accountName.Text = uspsAccount.Description;
 
-            contractType.Text = EnumHelper.GetDescription((UspsAccountContractType)uspsAccount.ContractType);
+            contractType.Text = EnumHelper.GetDescription((UspsAccountContractType) uspsAccount.ContractType);
 
             HideUspsControlsIfExpress1();
 
@@ -121,11 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-                        balance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient).Value;
-                    }
+                    balance = new PostageBalance(new UspsPostageWebClient(account)).Value;
                     postage.Text = balance.Value.FormatFriendlyCurrency();
 
                     purchase.Left = postage.Right;
@@ -165,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void HideUspsControlsIfExpress1()
         {
-            bool isExpress1 = account.UspsReseller == (int)UspsResellerType.Express1;
+            bool isExpress1 = account.UspsReseller == (int) UspsResellerType.Express1;
 
             if (!isExpress1)
             {

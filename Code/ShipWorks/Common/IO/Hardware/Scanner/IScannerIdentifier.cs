@@ -16,12 +16,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         GenericResult<string> Save(IntPtr deviceHandle);
 
         /// <summary>
-        /// Removes the current scanner
-        /// </summary>
-        /// <returns></returns>
-        GenericResult<string> RemoveCurrentScanner();
-
-        /// <summary>
         /// Is the specified handle the current scanner?
         /// </summary>
         bool IsRegisteredScanner(IntPtr deviceHandle);

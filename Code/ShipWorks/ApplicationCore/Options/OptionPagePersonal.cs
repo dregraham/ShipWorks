@@ -26,7 +26,6 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly ShipWorksOptionsData data;
         private readonly IWin32Window owner;
         private readonly IScannerConfigurationRepository scannerRepo;
-        private readonly IScannerIdentifier scannerIdentifier;
         private SingleScanSettings singleScanSettingsOnLoad;
 
         /// <summary>
@@ -40,9 +39,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.owner = owner;
 
             scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
-            scannerIdentifier = scope.Resolve<IScannerIdentifier>();
-
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -86,6 +82,7 @@ namespace ShipWorks.ApplicationCore.Options
                 // Load single scan settings and update ui
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
+                autoWeigh.Checked = settings.AutoWeigh;
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings)settings.SingleScanSettings;
@@ -138,6 +135,8 @@ namespace ShipWorks.ApplicationCore.Options
                     settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
                 }
 
+                settings.AutoWeigh = autoWeigh.Checked;
+
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.SaveAndRefetch(settings);
@@ -173,15 +172,26 @@ namespace ShipWorks.ApplicationCore.Options
             {
                 autoPrint.Checked = false;
                 autoPrint.Enabled = false;
+                autoWeigh.Checked = false;
+                autoWeigh.Enabled = false;
                 registerScannerLabel.Visible = false;
             }
             else
             {
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
-            }
 
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
+                // Only allow auto weigh to be checked when auto print is enabled
+                if (!autoPrint.Checked)
+                {
+                    autoWeigh.Checked = false;
+                    autoWeigh.Enabled = false;
+                }
+                else
+                {
+                    autoWeigh.Enabled = true;
+                }
+            }
         }
 
         /// <summary>
@@ -216,15 +226,6 @@ namespace ShipWorks.ApplicationCore.Options
 
                 UpdateSingleScanSettingsUI();
             }
-        }
-
-        /// <summary>
-        /// Called when [click unregister scanner].
-        /// </summary>
-        private void OnClickUnregisterScanner(object sender, EventArgs e)
-        {
-            scannerIdentifier.RemoveCurrentScanner();
-            UpdateSingleScanSettingsUI();
         }
     }
 }

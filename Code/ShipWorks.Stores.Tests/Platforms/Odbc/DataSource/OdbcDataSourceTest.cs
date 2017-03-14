@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -200,7 +201,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             {
                 OdbcDataSource testObject = mock.Create<OdbcDataSource>();
 
-                testObject.ChangeConnection("dsn","username","password");
+                testObject.ChangeConnection("dsn", "username", "password");
 
                 Assert.False(testObject.IsCustom);
             }
@@ -266,6 +267,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void TestConnection_ReturnsMessage_WhenConnectionOpenThrows()
         {
             using (var mock = AutoMock.GetLoose())

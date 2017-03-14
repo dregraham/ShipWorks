@@ -1,16 +1,16 @@
-﻿using Autofac.Features.Indexed;
-using GalaSoft.MvvmLight.Command;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Autofac.Features.Indexed;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 {
@@ -126,8 +126,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         public override void SaveMapSettings(OdbcStoreEntity store)
         {
             store.UploadColumnSourceType = ColumnSourceIsTable ?
-                (int)OdbcColumnSourceType.Table :
-                (int)OdbcColumnSourceType.CustomQuery;
+                (int) OdbcColumnSourceType.Table :
+                (int) OdbcColumnSourceType.CustomQuery;
 
             store.UploadColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :
@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             fieldMap.Load(store.UploadMap);
             MapName = fieldMap.Name;
 
-            ColumnSourceIsTable = store.UploadColumnSourceType == (int)OdbcColumnSourceType.Table;
+            ColumnSourceIsTable = store.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
         }
 
         /// <summary>

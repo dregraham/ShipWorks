@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -202,7 +203,7 @@ namespace ShipWorks.Shipping.Editing
 
             menuCreateNewShipment.Available = newShipmentButton.Available;
             menuDeleteShipment.Available = deleteShipmentButton.Available;
-            menuSep1.Available = newShipmentButton.Available | deleteShipmentButton.Available;
+            menuSep1.Available = newShipmentButton.Available || deleteShipmentButton.Available;
         }
 
         /// <summary>
@@ -344,11 +345,13 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Add the given shipments to the grid.  Their order will be preserved as a secondary sort to any grid sort column.
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is only used for exception messages")]
         public void AddShipments(IEnumerable<ShipmentEntity> shipments)
         {
             if (shipments == null)
             {
-                throw new ArgumentNullException("shipments");
+                throw new ArgumentNullException(nameof(shipments));
             }
 
             long lastOrderID = -1;
@@ -469,11 +472,13 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Select the given shipments
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is only used for exception messages")]
         public void SelectShipments(List<ShipmentEntity> shipments)
         {
             if (shipments == null)
             {
-                throw new ArgumentNullException("shipments");
+                throw new ArgumentNullException(nameof(shipments));
             }
 
             // first make sure they all exist

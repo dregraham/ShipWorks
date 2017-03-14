@@ -28,11 +28,6 @@
         <option>library</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
       </inputassembly>
-      <inputassembly refid="ad5fe300-b18d-4cf1-9d0f-767248018fa4">
-        <option>honoroas</option>
-        <option>library</option>
-        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Adapter.dll" />
-      </inputassembly>
       <inputassembly refid="0034febc-3a6b-4538-add5-799e66b68ec1">
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.dll" />
@@ -109,6 +104,7 @@
       <namespace name="ShipWorks\.Stores\.Platforms\.LemonStand\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Magento\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.Walmart\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks.UI.Controls.Weight" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
@@ -168,9 +164,6 @@
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Core.dll" />
-      </assembly>
-      <assembly>
-        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Adapter.dll" />
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />

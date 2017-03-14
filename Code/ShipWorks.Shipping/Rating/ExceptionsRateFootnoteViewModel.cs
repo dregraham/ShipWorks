@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Editing.Rating;
 

@@ -187,6 +187,8 @@ namespace ShipWorks.Data.Model.Custom
 				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
 				case "VersionSignoffEntity": return EntityType.VersionSignoffEntity;
 				case "VolusionStoreEntity": return EntityType.VolusionStoreEntity;
+				case "WalmartOrderEntity": return EntityType.WalmartOrderEntity;
+				case "WalmartOrderItemEntity": return EntityType.WalmartOrderItemEntity;
 				case "WalmartStoreEntity": return EntityType.WalmartStoreEntity;
 				case "WorldShipGoodsEntity": return EntityType.WorldShipGoodsEntity;
 				case "WorldShipPackageEntity": return EntityType.WorldShipPackageEntity;
@@ -304,6 +306,8 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.ThreeDCartOrderItemEntity: return new ThreeDCartOrderItemRelations();
 				case EntityType.ThreeDCartStoreEntity: return new ThreeDCartStoreRelations();
 				case EntityType.VolusionStoreEntity: return new VolusionStoreRelations();
+				case EntityType.WalmartOrderEntity: return new WalmartOrderRelations();
+				case EntityType.WalmartOrderItemEntity: return new WalmartOrderItemRelations();
 				case EntityType.WalmartStoreEntity: return new WalmartStoreRelations();
 				case EntityType.YahooOrderEntity: return new YahooOrderRelations();
 				case EntityType.YahooOrderItemEntity: return new YahooOrderItemRelations();

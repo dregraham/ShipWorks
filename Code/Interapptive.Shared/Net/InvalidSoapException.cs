@@ -8,8 +8,8 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using System.Runtime.Serialization;
 using System.Globalization;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using System.Net;
+using HtmlAgilityPack;
 
 namespace Interapptive.Shared.Net
 {
@@ -135,8 +135,8 @@ namespace Interapptive.Shared.Net
         {
             string title = "";
             string body = "";
-
-            HtmlAgilityDocument agilityDoc = new HtmlAgilityDocument();
+            
+            HtmlDocument agilityDoc = new HtmlDocument();
             agilityDoc.LoadHtml(responseText);
 
             HtmlNode titleNode = agilityDoc.DocumentNode.SelectSingleNode("/html/head/title");
