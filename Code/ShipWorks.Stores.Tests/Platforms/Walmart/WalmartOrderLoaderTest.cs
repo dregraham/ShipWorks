@@ -3,6 +3,7 @@ using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Linq;
+using Interapptive.Shared.Business;
 using Moq;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using Xunit;
@@ -33,12 +34,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12),
                 postalAddress = new postalAddressType
                 {
-                    name = "foo",
+                    name = "foo bar",
                     address1 = "bar",
                     address2 = "baz",
                     state = "MO",
                     postalCode = "63040",
-                    country = "US"
+                    country = "USA"
                 }
             };
         }
@@ -65,6 +66,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderDto.customerOrderId, orderEntity.CustomerOrderID);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsAddressesFromWalmartOrder()
+        {
+            orderEntity.IsNew = true;
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.shippingInfo.postalAddress.name, orderEntity.BillUnparsedName);
+            Assert.Equal("foo", orderEntity.BillFirstName);
+            Assert.Equal("MO", orderEntity.BillStateProvCode);
+            Assert.Equal("US", orderEntity.BillCountryCode);
+        }
+
+        [Fact]
+        public void LoadOrder_ShippingAndBillingAddressMatch()
+        {
+            orderEntity.IsNew = true;
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            var billingAddress = new AddressAdapter(orderEntity, "Bill");
+            var shippingAddress = new AddressAdapter(orderEntity, "Ship");
+
+            Assert.Equal(billingAddress, shippingAddress);
         }
 
         [Fact]
