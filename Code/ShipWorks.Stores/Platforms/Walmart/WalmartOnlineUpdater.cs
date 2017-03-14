@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -57,9 +58,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Upload carrier and tracking information for the given shipment 
         /// </summary>
         /// <remarks>
-        /// Only uploads if there is at least one line that has an OnlineStatus = Acknowledged
-        /// and has a positive Quantity. If Walmart returns an error, we download the order again, 
-        /// save it and try again if there is still an acknowledged line with a positive quantity.
+        /// Only uploads if there is at least one line that has an OnlineStatus = Acknowledged. 
+        /// If Walmart returns an error, we download the order again, save it and try again if 
+        /// there is still an acknowledged line.
         /// </remarks>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
@@ -99,12 +100,19 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </remarks>
         private void InternalUpdateShipmentDetails(ShipmentEntity shipment, string purchaseOrderID)
         {
-            orderShipment orderShipment = CreateShipment(shipment);
-            if (orderShipment.orderLines.Length > 0)
+            try
             {
-                Order updatedOrder = webClient.UpdateShipmentDetails(store, orderShipment, purchaseOrderID);
-                orderLoader.LoadOrder(updatedOrder, (WalmartOrderEntity) shipment.Order);
-                orderRepository.Save(shipment.Order);
+                orderShipment orderShipment = CreateShipment(shipment);
+                if (orderShipment.orderLines.Length > 0)
+                {
+                    Order updatedOrder = webClient.UpdateShipmentDetails(store, orderShipment, purchaseOrderID);
+                    orderLoader.LoadOrder(updatedOrder, (WalmartOrderEntity) shipment.Order);
+                    orderRepository.Save(shipment.Order);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new WalmartException(ex.Message, ex);
             }
         }
 
@@ -133,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Determines whether [is line shippable] [the specified item].
         /// </summary>
         private static bool IsLineShippable(WalmartOrderItemEntity item) => 
-            item.OnlineStatus == orderLineStatusValueType.Acknowledged.ToString() && item.Quantity > 0;
+            item.OnlineStatus == orderLineStatusValueType.Acknowledged.ToString();
 
         /// <summary>
         /// Create a new Shipping Line Type.
