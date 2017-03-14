@@ -112,6 +112,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(string.Format(GetOrderUrl, purchaseOrderId));
+            requestSubmitter.Verb = HttpVerb.Get;
 
             return ProcessRequest<Order>(store, requestSubmitter, $"GetOrder {purchaseOrderId}");
         }
@@ -156,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
+        public Order UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
         {
             string serializedShipment = SerializationUtility.SerializeToXml(shipment, true);
 
@@ -166,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             requestSubmitter.Uri = new Uri(string.Format(UpdateShipmentUrl, purchaseOrderID));
             requestSubmitter.Verb = HttpVerb.Post;
 
-            ProcessRequest(store, requestSubmitter, "UploadShipmentDetails");
+            return ProcessRequest<Order>(store, requestSubmitter, "UploadShipmentDetails");
         }
 
         /// <summary>
@@ -174,16 +175,18 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void AcknowledgeOrders(WalmartStoreEntity store, ordersListType ordersResponse)
         {
-            IEnumerable<Order> ordersToAcknowledge = ordersResponse.elements
-                .Where(o => o.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)));
-
-            foreach (Order order in ordersToAcknowledge)
+            for (int i = 0; i < ordersResponse.elements.Length; i++)
             {
-                IHttpRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter(string.Empty, "application/xml");
-                requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
-                requestSubmitter.Verb = HttpVerb.Post;
+                Order order = ordersResponse.elements[i];
+                if (order.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)))
+                {
+                    IHttpRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter(string.Empty, "application/xml");
+                    requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
+                    requestSubmitter.Verb = HttpVerb.Post;
 
-                ProcessRequest(store, requestSubmitter, "AcknowledgeOrder");
+                    Order acknowledgedOrder = ProcessRequest<Order>(store, requestSubmitter, "AcknowledgeOrder");
+                    ordersResponse.elements[i] = acknowledgedOrder;
+                }
             }
         }
     }

@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID);
+        Order UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID);
 
         /// <summary>
         /// Get the order with the given purchaseOrderId

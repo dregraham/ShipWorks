@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,21 +20,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartWebClient webClient;
         private readonly WalmartStoreEntity store;
         private readonly IOrderRepository orderRepository;
+        private readonly IWalmartOrderLoader orderLoader;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartOnlineUpdater"/> class.
         /// </summary>
-        /// <param name="orderManager"></param>
         public WalmartOnlineUpdater(IWalmartWebClient webClient, 
 		            WalmartStoreEntity store,
 					IOrderManager orderManager,
-					IOrderRepository orderRepository)
+					IOrderRepository orderRepository,
+                    IWalmartOrderLoader orderLoader)
         {
             this.webClient = webClient;
             this.store = store;
             this.orderManager = orderManager;
             this.orderRepository = orderRepository;
+            this.orderLoader = orderLoader;
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderKey);
 
-            // Check to see if shipment exists
+            // Check to see if shipment exists and order has shippable line item
             if (shipment != null)
             {
                 UpdateShipmentDetails(shipment);
@@ -52,16 +54,57 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
-        /// Upload carrier and tracking information for the given shipment
+        /// Upload carrier and tracking information for the given shipment 
         /// </summary>
+        /// <remarks>
+        /// Only uploads if there is at least one line that has an OnlineStatus = Acknowledged
+        /// and has a positive Quantity. If Walmart returns an error, we download the order again, 
+        /// save it and try again if there is still an acknowledged line with a positive quantity.
+        /// </remarks>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
+            orderRepository.PopulateOrderDetails(shipment.Order);
+
             if (!shipment.Order.IsManual)
             {
-                orderShipment orderShipment = CreateShipment(shipment);
                 string purchaseOrderID = ((WalmartOrderEntity) shipment.Order).PurchaseOrderID;
 
-                webClient.UpdateShipmentDetails(store, orderShipment, purchaseOrderID);
+                try
+                {
+                    InternalUpdateShipmentDetails(shipment, purchaseOrderID);
+                }
+                catch (WalmartException e) 
+                {
+                    HttpStatusCode? httpStatusCode = ((e.InnerException as WebException)?.Response as HttpWebResponse)?.StatusCode;
+                    if (!httpStatusCode.HasValue || httpStatusCode.Value != HttpStatusCode.BadRequest)
+                    {
+                        throw;
+                    }
+
+                    Order order = webClient.GetOrder(store, purchaseOrderID);
+
+                    orderLoader.LoadOrder(order, (WalmartOrderEntity) shipment.Order);
+                    orderRepository.Save(shipment.Order);
+                    
+                    InternalUpdateShipmentDetails(shipment, purchaseOrderID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Internals the update shipment details.
+        /// </summary>
+        /// <remarks>
+        /// If no lines are shippable, does nothing.
+        /// </remarks>
+        private void InternalUpdateShipmentDetails(ShipmentEntity shipment, string purchaseOrderID)
+        {
+            orderShipment orderShipment = CreateShipment(shipment);
+            if (orderShipment.orderLines.Length > 0)
+            {
+                Order updatedOrder = webClient.UpdateShipmentDetails(store, orderShipment, purchaseOrderID);
+                orderLoader.LoadOrder(updatedOrder, (WalmartOrderEntity) shipment.Order);
+                orderRepository.Save(shipment.Order);
             }
         }
 
@@ -71,8 +114,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private orderShipment CreateShipment(ShipmentEntity shipment)
         {
             WalmartOrderEntity order = shipment.Order as WalmartOrderEntity;
-            orderRepository.PopulateOrderDetails(order);
-
+            
             shippingMethodCodeType methodCode =
                 (shippingMethodCodeType)
                     Enum.Parse(typeof(shippingMethodCodeType), order.RequestedShippingMethodCode, true);
@@ -80,11 +122,18 @@ namespace ShipWorks.Stores.Platforms.Walmart
             orderShipment orderShipment = new orderShipment
             {
                 orderLines = shipment.Order.OrderItems.Cast<WalmartOrderItemEntity>()
+                    .Where(IsLineShippable)
                     .Select(item => CreateShippingLineType(shipment, item, methodCode)).ToArray()
             };
 
             return orderShipment;
         }
+
+        /// <summary>
+        /// Determines whether [is line shippable] [the specified item].
+        /// </summary>
+        private static bool IsLineShippable(WalmartOrderItemEntity item) => 
+            item.OnlineStatus == orderLineStatusValueType.Acknowledged.ToString() && item.Quantity > 0;
 
         /// <summary>
         /// Create a new Shipping Line Type.
