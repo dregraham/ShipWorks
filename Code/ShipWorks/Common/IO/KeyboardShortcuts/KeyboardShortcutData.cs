@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
@@ -8,6 +9,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// <summary>
     /// Container for shortcut data
     /// </summary>
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     internal class KeyboardShortcutData
     {
         /// <summary>

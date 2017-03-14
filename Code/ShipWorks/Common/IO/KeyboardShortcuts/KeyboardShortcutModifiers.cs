@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {
@@ -6,6 +7,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// Keyboard shortcut modifiers
     /// </summary>
     [Flags]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum KeyboardShortcutModifiers
     {
         /// <summary>

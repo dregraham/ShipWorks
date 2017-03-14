@@ -6,7 +6,7 @@ namespace ShipWorks.Shared.IO.KeyboardShortcuts
     /// <summary>
     /// List of keyboard shortcut commands
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum KeyboardShortcutCommand
     {
         /// <summary>
