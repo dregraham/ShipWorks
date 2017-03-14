@@ -18,6 +18,7 @@ namespace ShipWorks.UI.Controls
         public static readonly DependencyProperty ShortcutCommandProperty =
             DependencyProperty.Register("ShortcutCommand", typeof(KeyboardShortcutCommand), typeof(KeyboardShortcutDisplay));
 
+        [Obfuscation(Exclude = true)]
         public static readonly DependencyProperty ShortcutTextProperty =
             DependencyProperty.Register("ShortcutText", typeof(string), typeof(KeyboardShortcutDisplay));
 
