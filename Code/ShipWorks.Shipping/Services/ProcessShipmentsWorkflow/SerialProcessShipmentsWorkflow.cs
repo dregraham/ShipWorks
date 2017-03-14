@@ -45,6 +45,11 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         }
 
         /// <summary>
+        /// Get the name of the workflow
+        /// </summary>
+        public string Name => "Serial";
+
+        /// <summary>
         /// Process the shipments
         /// </summary>
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,

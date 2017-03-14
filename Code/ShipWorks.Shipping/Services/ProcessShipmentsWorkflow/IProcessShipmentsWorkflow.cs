@@ -12,6 +12,11 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     public interface IProcessShipmentsWorkflow
     {
         /// <summary>
+        /// Get the name of the workflow
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Process the shipments
         /// </summary>
         Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
