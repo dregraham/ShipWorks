@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             mock.Mock<IWalmartWebClient>()
                 .SetupSequence(o => o.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()))
-                .Throws(new WalmartException(string.Empty, new WebException(string.Empty, new Exception(), WebExceptionStatus.CacheEntryNotFound, badRequest.Object)))
+                .Throws(new WalmartException(string.Empty, new WebException(string.Empty, null, WebExceptionStatus.CacheEntryNotFound, badRequest.Object)))
                 .Returns(order);
 
             var testObject = mock.Create<WalmartOnlineUpdater>(new TypedParameter(typeof(WalmartStoreEntity), new WalmartStoreEntity()));
