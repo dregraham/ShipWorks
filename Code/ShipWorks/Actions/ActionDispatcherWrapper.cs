@@ -15,8 +15,8 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called when a batch of shipments has finished processing
         /// </summary>
-        public void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startingTime, int shipmentCount, int errorCount) =>
-            ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorCount);
+        public void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startingTime, int shipmentCount, int errorCount, string workflowName) =>
+            ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorCount, workflowName);
 
         /// <summary>
         /// Called each time a shipment has been successfully processed

@@ -119,13 +119,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called when a batch of shipments has finished processing
         /// </summary>
-        public static void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startDate, int shipmentCount, int shipmentErrorCount)
+        public static void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startDate, int shipmentCount, int shipmentErrorCount, string workflowName)
         {
             ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0).FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
 
             if (action != null)
             {
-                DispatchAction(action, null, adapter, FinishProcessingBatchTask.CreateExtraData(startDate, shipmentCount, shipmentErrorCount));
+                DispatchAction(action, null, adapter, FinishProcessingBatchTask.CreateExtraData(startDate, shipmentCount, shipmentErrorCount, workflowName));
             }
 
             // Ensure the action processor is working

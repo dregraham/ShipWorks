@@ -45,6 +45,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 eventTelemetry.Metrics.Add(Telemetry.TotalShipmentsKey, data.ShipmentCount);
                 eventTelemetry.Metrics.Add(Telemetry.TotalSuccessfulShipmentsKey,
                     Math.Max(data.ShipmentCount - data.ShipmentErrorCount, 0));
+                eventTelemetry.Properties.Add("Shipping.Printing.Labels.Workflow", data.WorkflowName);
                 Telemetry.TrackEvent(eventTelemetry);
             }
             catch (Exception)
@@ -61,13 +62,14 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Create extra data that is serialized
         /// </summary>
-        public static string CreateExtraData(DateTime startTime, int count, int errorCount)
+        public static string CreateExtraData(DateTime startTime, int count, int errorCount, string workflowName)
         {
             return SerializationUtility.SerializeToXml(new ExtraData
             {
                 StartingTime = startTime,
                 ShipmentCount = count,
                 ShipmentErrorCount = errorCount,
+                WorkflowName = workflowName
             });
         }
 
@@ -90,6 +92,11 @@ namespace ShipWorks.Actions.Tasks.Common
             /// How many shipments had errors
             /// </summary>
             public int ShipmentErrorCount { get; set; }
+
+            /// <summary>
+            /// Name of the workflow used to process the shipment batch
+            /// </summary>
+            public string WorkflowName { get; set; }
         }
     }
 }

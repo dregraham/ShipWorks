@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Services
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                actionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
+                actionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount(), workflow.Name);
             }
 
             ShowPostProcessingMessage(clonedShipments);
