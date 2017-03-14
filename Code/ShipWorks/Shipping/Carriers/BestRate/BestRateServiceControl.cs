@@ -1,12 +1,12 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Initializes a new instance of the <see cref="BestRateServiceControl"/> class.
         /// </summary>
         public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
-            : base (shipmentTypeCode, rateControl)
+            : base(shipmentTypeCode, rateControl)
         {
             InitializeComponent();
             SetupRateControl();
@@ -46,6 +46,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             dimensionsControl.Initialize();
 
             EnumHelper.BindComboBox<ServiceLevelType>(serviceLevel);
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 0);
+            };
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             RecipientDestinationChanged += OnRecipientDestinationChanged;
             originControl.DestinationChanged += OnOriginDestinationChanged;
-            
+
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
 
@@ -121,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                serviceLevel.ReadMultiValue(v => shipment.BestRate.ServiceLevel = (int)v);
+                serviceLevel.ReadMultiValue(v => shipment.BestRate.ServiceLevel = (int) v);
             }
 
             ResumeRateCriteriaChangeEvent();
@@ -172,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             RaiseShipSenseFieldChanged();
         }
-        
+
         /// <summary>
         /// Event raised when the origin address has changed
         /// </summary>
@@ -255,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Always select the first rate since all the rates already take the service 
                 // level and the other fields into account when compiling the list of rates
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault();
-                
+
                 cachedRate = matchingRate;
                 RateControl.SelectRate(matchingRate);
             }

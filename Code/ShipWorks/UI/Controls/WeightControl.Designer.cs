@@ -138,9 +138,9 @@
             this.liveWeight.ForeColor = System.Drawing.SystemColors.GrayText;
             this.liveWeight.Location = new System.Drawing.Point(315, 3);
             this.liveWeight.Name = "liveWeight";
-            this.liveWeight.Size = new System.Drawing.Size(61, 13);
+            this.liveWeight.Size = new System.Drawing.Size(103, 13);
             this.liveWeight.TabIndex = 2;
-            this.liveWeight.Text = "(12 lb 2 oz) <Ctrl-Shft-Alt-W>";
+            this.liveWeight.Text = "12 lb 2 oz <Ctrl-W>";
             // 
             // WeightControl
             // 

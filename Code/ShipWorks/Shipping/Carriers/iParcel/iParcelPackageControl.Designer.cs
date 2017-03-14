@@ -2,12 +2,12 @@
 {
     partial class iParcelPackageControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -43,9 +43,9 @@
             this.packageCountCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.panelPackage.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // labelDimensions
-            // 
+            //
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
             this.labelDimensions.Location = new System.Drawing.Point(36, 38);
@@ -53,9 +53,9 @@
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 3;
             this.labelDimensions.Text = "Dimensions:";
-            // 
+            //
             // labelPackages
-            // 
+            //
             this.labelPackages.AutoSize = true;
             this.labelPackages.BackColor = System.Drawing.Color.Transparent;
             this.labelPackages.Location = new System.Drawing.Point(46, 7);
@@ -63,9 +63,9 @@
             this.labelPackages.Size = new System.Drawing.Size(56, 13);
             this.labelPackages.TabIndex = 0;
             this.labelPackages.Text = "Packages:";
-            // 
+            //
             // labelWeight
-            // 
+            //
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
             this.labelWeight.Location = new System.Drawing.Point(55, 9);
@@ -73,9 +73,9 @@
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 0;
             this.labelWeight.Text = "Weight:";
-            // 
+            //
             // packagesGrid
-            // 
+            //
             this.packagesGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.packagesGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumn});
@@ -90,17 +90,17 @@
             this.packagesGrid.Size = new System.Drawing.Size(207, 60);
             this.packagesGrid.TabIndex = 2;
             this.packagesGrid.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
-            // 
+            //
             // gridColumn
-            // 
+            //
             this.gridColumn.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumn.Clickable = false;
             this.gridColumn.HeaderText = "Packages (Select to Edit)";
             this.gridColumn.Width = 203;
-            // 
+            //
             // panelPackage
-            // 
-            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackage.BackColor = System.Drawing.Color.White;
             this.panelPackage.Controls.Add(this.skuAndQuantity);
@@ -114,9 +114,9 @@
             this.panelPackage.Name = "panelPackage";
             this.panelPackage.Size = new System.Drawing.Size(412, 212);
             this.panelPackage.TabIndex = 3;
-            // 
+            //
             // skuAndQuantity
-            // 
+            //
             this.skuAndQuantity.Location = new System.Drawing.Point(106, 170);
             this.skuAndQuantity.MaxLength = 32767;
             this.skuAndQuantity.Name = "skuAndQuantity";
@@ -125,9 +125,9 @@
             this.skuAndQuantity.TokenUsage = ShipWorks.Templates.Tokens.TokenUsage.ShippingReference;
             this.skuAndQuantity.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.skuAndQuantity.TextChanged += OnShipSenseFieldChanged;
-            // 
+            //
             // labelSkuAndQuantity
-            // 
+            //
             this.labelSkuAndQuantity.AutoSize = true;
             this.labelSkuAndQuantity.BackColor = System.Drawing.Color.Transparent;
             this.labelSkuAndQuantity.Location = new System.Drawing.Point(1, 174);
@@ -135,9 +135,9 @@
             this.labelSkuAndQuantity.Size = new System.Drawing.Size(96, 13);
             this.labelSkuAndQuantity.TabIndex = 79;
             this.labelSkuAndQuantity.Text = "SKU and Quantity:";
-            // 
+            //
             // insuranceControl
-            // 
+            //
             this.insuranceControl.BackColor = System.Drawing.Color.White;
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(38, 111);
@@ -145,24 +145,24 @@
             this.insuranceControl.Size = new System.Drawing.Size(416, 46);
             this.insuranceControl.TabIndex = 8;
             this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
+            //
             // weight
-            // 
+            //
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(106, 6);
             this.weight.Name = "weight";
             this.weight.RangeMax = 2000D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(218, 21);
+            this.weight.Size = new System.Drawing.Size(238, 21);
             this.weight.TabIndex = 2;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             this.weight.ShowShortcutInfo = true;
-            // 
+            //
             // dimensionsControl
-            // 
+            //
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
             this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -172,9 +172,9 @@
             this.dimensionsControl.TabIndex = 4;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
-            // 
+            //
             // packageCountCombo
-            // 
+            //
             this.packageCountCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.packageCountCombo.FormattingEnabled = true;
             this.packageCountCombo.Items.AddRange(new object[] {
@@ -193,9 +193,9 @@
             this.packageCountCombo.PromptText = "(Multiple Values)";
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);
             this.packageCountCombo.TabIndex = 1;
-            // 
+            //
             // iParcelPackageControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

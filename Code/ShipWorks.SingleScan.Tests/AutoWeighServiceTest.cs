@@ -35,32 +35,32 @@ namespace ShipWorks.SingleScan.Tests
 
             var uspsShipmentEntity = Create.Shipment().AsPostal(x => x.AsUsps()).Build();
 
-            var shipments = new List<ShipmentEntity>() {uspsShipmentEntity};
+            var shipments = new List<ShipmentEntity>() { uspsShipmentEntity };
 
             testObject.ApplyWeight(shipments, trackedDurationEvent);
 
             mock.Mock<IScaleReader>()
-                .Verify(s=>s.ReadScale(), Times.Never);
+                .Verify(s => s.ReadScale(), Times.Never);
         }
 
         [Fact]
         public void AutoWeighService_SetsWeightOnAllPackages_WhenMultiplePackages_AndMultipleShipments()
         {
             var shipment = Create.Shipment().Build();
-            var shipments = new List<ShipmentEntity>() {shipment, shipment};
+            var shipments = new List<ShipmentEntity>() { shipment, shipment };
 
             var packageAdapter = mock.Mock<IPackageAdapter>();
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(a => a.GetPackageAdapters())
-                .Returns(new List<IPackageAdapter> {packageAdapter.Object, packageAdapter.Object});
+                .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentAdapter.Object);
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.Success(42));
+                .ReturnsAsync(ScaleReadResult.Success(42, ScaleType.Usb));
 
             testObject.ApplyWeight(shipments, trackedDurationEvent);
 
@@ -85,7 +85,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.Success(42.00625));
+                .ReturnsAsync(ScaleReadResult.Success(42.00625, ScaleType.Usb));
 
             testObject.ApplyWeight(shipments, trackedDurationEvent);
 
@@ -109,7 +109,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.Success(42));
+                .ReturnsAsync(ScaleReadResult.Success(42, ScaleType.Usb));
 
             bool returnValue = testObject.ApplyWeight(shipments, trackedDurationEvent);
 
@@ -134,7 +134,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.Success(.002));
+                .ReturnsAsync(ScaleReadResult.Success(.002, ScaleType.Usb));
 
             testObject.ApplyWeight(shipments, trackedDurationEvent);
 
@@ -158,7 +158,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.ReadError("blah"));
+                .ReturnsAsync(ScaleReadResult.ReadError("blah", ScaleType.Usb));
 
             bool returnValue = testObject.ApplyWeight(shipments, trackedDurationEvent);
 
@@ -182,7 +182,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IScaleReader>()
                 .Setup(s => s.ReadScale())
-                .ReturnsAsync(ScaleReadResult.Success(42));
+                .ReturnsAsync(ScaleReadResult.Success(42, ScaleType.Usb));
 
             testObject.ApplyWeight(shipments, trackedDurationEvent);
 

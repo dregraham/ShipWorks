@@ -115,6 +115,7 @@
             <ui:WeightControl Grid.Column="1"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 AcceptApplyWeightKeyboardShortcut="True"
+                TelemetrySource="ShippingPanel"
                 Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </Grid>

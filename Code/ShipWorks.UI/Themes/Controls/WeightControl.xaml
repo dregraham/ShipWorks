@@ -28,7 +28,8 @@
                         </weight:WeightInput>
                         <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
                                             AcceptApplyWeightKeyboardShortcut="{Binding AcceptApplyWeightKeyboardShortcut,RelativeSource={RelativeSource TemplatedParent}}"
-                                            Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource,NotifyOnSourceUpdated=True}"/>
+                                            Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource,NotifyOnSourceUpdated=True}"
+                                            TelemetrySource="{Binding TelemetrySource,RelativeSource={RelativeSource TemplatedParent}}"/>
                         <Image Grid.Column="2"
                                Margin="4,0,0,0"
                                ToolTip="{Binding Path=ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"

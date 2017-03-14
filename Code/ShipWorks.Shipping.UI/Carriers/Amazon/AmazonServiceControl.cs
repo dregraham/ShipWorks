@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -58,6 +59,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
             dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             weight.WeightChanged += OnShipSenseFieldChanged;
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 0);
+            };
         }
 
         /// <summary>

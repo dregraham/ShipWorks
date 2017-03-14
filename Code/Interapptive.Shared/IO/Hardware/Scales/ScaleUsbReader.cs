@@ -17,11 +17,11 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         // 2 and 4 are stable, 3 is moving
         readonly IDictionary<int, ScaleReadResult> errorResults = new Dictionary<int, ScaleReadResult>
         {
-            { 1, ScaleReadResult.ReadError("An internal scale fault has occurred.") },
-            { 5, ScaleReadResult.ReadError("Weight measured less than zero.") },
-            { 6, ScaleReadResult.ReadError("Weight exceeds scale capacity.") },
-            { 7, ScaleReadResult.ReadError("The scale must be calibrated.") },
-            { 8, ScaleReadResult.ReadError("The scale must be zeroed.") }
+            { 1, ScaleReadResult.ReadError("An internal scale fault has occurred.", ScaleType.Usb) },
+            { 5, ScaleReadResult.ReadError("Weight measured less than zero.", ScaleType.Usb) },
+            { 6, ScaleReadResult.ReadError("Weight exceeds scale capacity.", ScaleType.Usb) },
+            { 7, ScaleReadResult.ReadError("The scale must be calibrated.", ScaleType.Usb) },
+            { 8, ScaleReadResult.ReadError("The scale must be zeroed.", ScaleType.Usb) }
         };
 
         readonly IDictionary<int, Func<double, double>> conversions = new Dictionary<int, Func<double, double>>
@@ -111,8 +111,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 // Now we need to convert based on units.  These come from the USB POS spec.  The spec does not explicitly state these numbers
                 // but lists them in the correct numerical order.
                 return conversions.ContainsKey(weightUnit) ?
-                    ScaleReadResult.Success(conversions[weightUnit](unitValue)) :
-                    ScaleReadResult.ReadError($"Invalid unit reported by scale ({weightUnit}).");
+                    ScaleReadResult.Success(conversions[weightUnit](unitValue), ScaleType.Usb) :
+                    ScaleReadResult.ReadError($"Invalid unit reported by scale ({weightUnit}).", ScaleType.Usb);
             }
             catch (HidException ex)
             {
