@@ -11,19 +11,24 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class ProcessShipmentsWorkflowFactory : IProcessShipmentsWorkflowFactory
     {
-        readonly Func<SerialProcessShipmentsWorkflow> createSerialWorkflow;
+        private readonly Func<SerialProcessShipmentsWorkflow> createSerialWorkflow;
+        private readonly Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentsWorkflowFactory(Func<SerialProcessShipmentsWorkflow> createSerialWorkflow)
+        public ProcessShipmentsWorkflowFactory(
+            Func<SerialProcessShipmentsWorkflow> createSerialWorkflow,
+            Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow)
         {
+            this.createParallelWorkflow = createParallelWorkflow;
             this.createSerialWorkflow = createSerialWorkflow;
         }
 
         /// <summary>
         /// Create the correct workflow
         /// </summary>
-        public IProcessShipmentsWorkflow Create() => createSerialWorkflow();
+        public IProcessShipmentsWorkflow Create(int shipmentCount) =>
+            shipmentCount == 1 ? (IProcessShipmentsWorkflow) createSerialWorkflow() : createParallelWorkflow();
     }
 }

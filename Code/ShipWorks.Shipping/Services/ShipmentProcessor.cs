@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Services
             // Check for shipment type process shipment nudges
             ShowShipmentTypeProcessingNudges(clonedShipments);
 
-            IProcessShipmentsWorkflow workflow = workflowFactory.Create();
+            IProcessShipmentsWorkflow workflow = workflowFactory.Create(clonedShipments.Count);
             IProcessShipmentsWorkflowResult result = await workflow.Process(clonedShipments, chosenRateResult, counterRateCarrierConfiguredWhileProcessingAction);
 
             HandleProcessingException(result);
