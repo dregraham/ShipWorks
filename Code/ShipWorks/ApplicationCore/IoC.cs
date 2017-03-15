@@ -220,8 +220,8 @@ namespace ShipWorks.ApplicationCore
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
-            builder.RegisterType<HttpXmlVariableRequestSubmitter>()
-                .As<IHttpXmlVariableRequestSubmitter>();
+            builder.RegisterType<HttpRequestSubmitterFactory>()
+                .As<IHttpRequestSubmitterFactory>();
 				
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);

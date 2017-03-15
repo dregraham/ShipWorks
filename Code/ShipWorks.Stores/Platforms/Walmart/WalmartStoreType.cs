@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -16,17 +20,24 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
+        private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
         /// <param name="downloaderFactory"></param>
+        /// <param name="onlineUpdateInstanceCommandsFactory"></param>
         public WalmartStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
+            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
+            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
+
+            walmartStore = store as WalmartStoreEntity;
         }
 
         /// <summary>
@@ -69,12 +80,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();
 
+        /// <summary>
+        /// Creates a Walmart Order Item Entity
+        /// </summary>
         public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
 
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => ((WalmartStoreEntity) Store).ConsumerID;
+        protected override string InternalLicenseIdentifier => walmartStore.ConsumerID;
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
@@ -84,5 +98,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             return new List<string>() {"Created", "Acknowledged", "Shipped", "Cancelled", "Refund"};
         }
+
+        /// <summary>
+        /// Creates the add store wizard online update action control for Walmart
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
+
+        /// <summary>
+        /// Create the online update instance commands for Walmart
+        /// </summary>
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            onlineUpdateInstanceCommandsFactory(walmartStore).Create().ToList();
     }
 }

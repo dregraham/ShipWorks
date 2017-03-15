@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         {
             RunSuccessfullGetRates();
 
-            mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
+            mockedLogger.Verify(x => x.LogRequest(It.IsAny<IHttpRequestSubmitter>()), Times.Once());
         }
 
         [Fact]

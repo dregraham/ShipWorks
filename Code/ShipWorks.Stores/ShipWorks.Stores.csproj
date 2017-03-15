@@ -42,6 +42,15 @@
   <PropertyGroup>
     <DelaySign>true</DelaySign>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
@@ -280,17 +289,21 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />

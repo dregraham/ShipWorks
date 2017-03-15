@@ -14,17 +14,19 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Get an HttpBinaryPostRequestSubmitter
         /// </summary>
-        public HttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData)
-        {
-            return new HttpBinaryPostRequestSubmitter(postData);
-        }
+        public IHttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData) =>
+            new HttpBinaryPostRequestSubmitter(postData);
 
         /// <summary>
         /// Gets an HttpTextPostRequestSubmitter
         /// </summary>
-        public HttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType)
-        {
-            return new HttpTextPostRequestSubmitter(text, contentType);
-        }
+        public IHttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType) => 
+            new HttpTextPostRequestSubmitter(text, contentType);
+
+        /// <summary>
+        /// Gets the HTTP variable request submitter.
+        /// </summary>
+        public IHttpVariableRequestSubmitter GetHttpVariableRequestSubmitter() => 
+            new HttpVariableRequestSubmitter();
     }
 }

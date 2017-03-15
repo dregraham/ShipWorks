@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -21,21 +22,26 @@ namespace ShipWorks.Stores.Platforms.Walmart
     {
         private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly Func<IHttpXmlVariableRequestSubmitter> requestSubmitterFactory;
+        private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
+        private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
         private const int DownloadOrderCountLimit = 200;
+        private const string UpdateShipmentUrl =
+            "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
-        public WalmartWebClient(IWalmartRequestSigner requestSigner, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<IHttpXmlVariableRequestSubmitter> requestSubmitterFactory)
+        public WalmartWebClient(IWalmartRequestSigner requestSigner,
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+           IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
         {
-            this.requestSubmitterFactory = requestSubmitterFactory;
             this.requestSigner = requestSigner;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
         }
 
         /// <summary>
@@ -43,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void TestConnection(WalmartStoreEntity store)
         {
-            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            IHttpRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(TestConnectionUrl);
             requestSubmitter.Verb = HttpVerb.Get;
 
@@ -59,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
             submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
             submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-            
+
             requestSigner.Sign(submitter, store);
 
             try
@@ -91,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 XmlReader reader = XmlReader.Create(new StringReader(response));
-                return (T)serializer.Deserialize(reader);
+                return (T) serializer.Deserialize(reader);
             }
             catch (Exception ex) when (ex.GetType() != typeof(WalmartException))
             {
@@ -100,11 +106,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
+        /// Get the given PurchaseOrderId
+        /// </summary>
+        public Order GetOrder(WalmartStoreEntity store, string purchaseOrderId)
+        {
+            IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
+            requestSubmitter.Uri = new Uri(string.Format(GetOrderUrl, purchaseOrderId));
+            requestSubmitter.Verb = HttpVerb.Get;
+
+            return ProcessRequest<Order>(store, requestSubmitter, $"GetOrder {purchaseOrderId}");
+        }
+
+        /// <summary>
         /// Get orders from the given start date
         /// </summary>
         public ordersListType GetOrders(WalmartStoreEntity store, DateTime start)
         {
-            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(GetOrdersUrl);
             requestSubmitter.Variables.Add("createdStartDate", start.ToString("s"));
             requestSubmitter.Variables.Add("limit", DownloadOrderCountLimit.ToString());
@@ -117,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public ordersListType GetOrders(WalmartStoreEntity store, string nextCursor)
         {
-            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri($"{GetOrdersUrl}{nextCursor}");
 
             return GetOrders(store, requestSubmitter);
@@ -126,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Gets orders using the given request submitter
         /// </summary>
-        private ordersListType GetOrders(WalmartStoreEntity store, IHttpXmlVariableRequestSubmitter requestSubmitter)
+        private ordersListType GetOrders(WalmartStoreEntity store, IHttpRequestSubmitter requestSubmitter)
         {
             requestSubmitter.Verb = HttpVerb.Get;
 
@@ -137,20 +155,38 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        public Order UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
+        {
+            string serializedShipment = SerializationUtility.SerializeToXml(shipment, true);
+
+            IHttpRequestSubmitter requestSubmitter =
+                httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter(serializedShipment, @"application/xml");
+
+            requestSubmitter.Uri = new Uri(string.Format(UpdateShipmentUrl, purchaseOrderID));
+            requestSubmitter.Verb = HttpVerb.Post;
+
+            return ProcessRequest<Order>(store, requestSubmitter, "UploadShipmentDetails");
+        }
+
+        /// <summary>
         /// Acknowledge the given purchase order
         /// </summary>
         private void AcknowledgeOrders(WalmartStoreEntity store, ordersListType ordersResponse)
         {
-            IEnumerable<Order> ordersToAcknowledge = ordersResponse.elements
-                .Where(o => o.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)));
-
-            foreach (Order order in ordersToAcknowledge)
+            for (int i = 0; i < ordersResponse.elements.Length; i++)
             {
-                IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
-                requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
-                requestSubmitter.Verb = HttpVerb.Post;
+                Order order = ordersResponse.elements[i];
+                if (order.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)))
+                {
+                    IHttpRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter(string.Empty, "application/xml");
+                    requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
+                    requestSubmitter.Verb = HttpVerb.Post;
 
-                ProcessRequest(store, requestSubmitter, "AcknowledgeOrder");
+                    Order acknowledgedOrder = ProcessRequest<Order>(store, requestSubmitter, "AcknowledgeOrder");
+                    ordersResponse.elements[i] = acknowledgedOrder;
+                }
             }
         }
     }

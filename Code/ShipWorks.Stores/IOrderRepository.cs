@@ -18,5 +18,10 @@ namespace ShipWorks.Stores
         /// </summary>
         /// <param name="order">The order.</param>
         void PopulateOrderDetails(OrderEntity order);
+
+        /// <summary>
+        /// Saves the specified order.
+        /// </summary>
+        void Save(OrderEntity order);
     }
 }

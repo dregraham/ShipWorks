@@ -27,6 +27,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String LineNumber { get; }
+        /// <summary> The OnlineStatus property of the Entity WalmartOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartOrderItem"."OnlineStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String OnlineStatus { get; }
         
         
         

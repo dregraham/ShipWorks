@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal(orderDto.orderLines.First().lineNumber, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().LineNumber);
             Assert.Equal(orderDto.orderLines.First().item.productName, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Name);
             Assert.Equal(orderDto.orderLines.First().item.sku, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().SKU);
-            Assert.Equal(orderDto.orderLines.First().orderLineStatuses.First().status.ToString(), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().LocalStatus);
+            Assert.Equal(orderDto.orderLines.First().orderLineStatuses.First().status.ToString(), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().OnlineStatus);
             Assert.Equal(double.Parse(orderDto.orderLines.First().orderLineQuantity.amount), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Quantity);
             Assert.Equal(orderDto.orderLines.First().charges.First().chargeAmount.amount, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().UnitPrice);
         }
