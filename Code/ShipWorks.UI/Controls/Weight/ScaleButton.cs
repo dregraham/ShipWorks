@@ -9,15 +9,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Forms.Integration;
+using System.Windows.Interop;
 using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
+using WinForms = System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -59,6 +63,7 @@ namespace ShipWorks.UI.Controls.Weight
         TextBlock display;
         private readonly IKeyboardShortcutTranslator keyboardShortcutTranslator;
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
+        private IntPtr ownerHandle;
 
         /// <summary>
         /// Static constructor
@@ -83,6 +88,43 @@ namespace ShipWorks.UI.Controls.Weight
 
             keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
+
+            Loaded += OnScaleButtonLoaded;
+        }
+
+        /// <summary>
+        /// The button has been loaded
+        /// </summary>
+        private void OnScaleButtonLoaded(object sender, RoutedEventArgs e)
+        {
+            ownerHandle = (GetOwnerWindow() ?? GetOwnerForm()).GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Get the owner Window, if there is one
+        /// </summary>
+        private IntPtr? GetOwnerWindow()
+        {
+            Window owner = Window.GetWindow(this);
+            return owner == null ? (IntPtr?) null : new WindowInteropHelper(owner).Handle;
+        }
+
+        /// <summary>
+        /// Get the owner Form, if there is one
+        /// </summary>
+        private IntPtr? GetOwnerForm()
+        {
+            HwndSource wpfHandle = PresentationSource.FromVisual(this) as HwndSource;
+
+            //the WPF control is hosted if the wpfHandle is not null
+            if (wpfHandle != null)
+            {
+                WinForms.Control host = WinForms.Control.FromChildHandle(wpfHandle.Handle);
+
+                return host?.FindForm()?.Handle;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -173,7 +215,10 @@ namespace ShipWorks.UI.Controls.Weight
                 applyWeightSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
                     .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
                     .ObserveOn(DispatcherScheduler.Current)
-                    .Where(_ => AcceptApplyWeightKeyboardShortcut && Focusable && scaleButton.IsEnabled)
+                    .Where(_ => AcceptApplyWeightKeyboardShortcut &&
+                        Focusable &&
+                        scaleButton.IsEnabled &&
+                        ownerHandle == NativeMethods.GetActiveWindow())
                     .SelectMany(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
                     .Subscribe();
             }

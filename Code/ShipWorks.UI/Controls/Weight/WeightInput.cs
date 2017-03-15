@@ -54,14 +54,6 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public WeightInput()
-        {
-            AddHandler(ScaleButton.ScaleReadEvent, new RoutedEventHandler(OnScaleRead));
-        }
-
-        /// <summary>
         /// Textual representation of the weight
         /// </summary>
         [Bindable(true)]
@@ -174,15 +166,6 @@ namespace ShipWorks.UI.Controls.Weight
             {
                 input.entry.Text = WeightConverter.Current.FormatWeight(weight);
             }
-        }
-
-        /// <summary>
-        /// Handle the scale read event
-        /// </summary>
-        private void OnScaleRead(object sender, RoutedEventArgs e)
-        {
-            entry.Focus();
-            entry.Select(entry.Text.Length, 0);
         }
     }
 }
