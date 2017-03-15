@@ -9,6 +9,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -110,5 +111,30 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() =>
             onlineUpdateInstanceCommandsFactory(walmartStore).Create().ToList();
+
+        /// <summary>
+        /// Generate the walmart node for the order template
+        /// </summary>
+        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
+        {
+            Lazy<WalmartOrderEntity> order = new Lazy<WalmartOrderEntity>(() => (WalmartOrderEntity)orderSource());
+
+            ElementOutline outline = container.AddElement("Walmart");
+            outline.AddElement("CustomerOrderID", () => order.Value.CustomerOrderID);
+            outline.AddElement("PurchaseOrderID", () => order.Value.PurchaseOrderID);
+            outline.AddElement("EstimatedDeliveryDate", () => order.Value.EstimatedDeliveryDate);
+            outline.AddElement("EstimatedShipDate", () => order.Value.EstimatedShipDate);
+        }
+
+        /// <summary>
+        /// Generate the walmart node for the order item template
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            Lazy<WalmartOrderItemEntity> item = new Lazy<WalmartOrderItemEntity>(() => (WalmartOrderItemEntity)itemSource());
+
+            ElementOutline outline = container.AddElement("Walmart");
+            outline.AddElement("OnlineStatus", () => item.Value.OnlineStatus);
+        }
     }
 }

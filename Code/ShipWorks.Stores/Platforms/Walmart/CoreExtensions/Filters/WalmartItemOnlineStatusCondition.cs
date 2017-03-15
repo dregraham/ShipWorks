@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Filters
         {
             using (SqlGenerationScope scope = context.PushScope(OrderItemFields.OrderItemID, WalmartOrderItemFields.OrderItemID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(WalmartOrderItemFields.LocalStatus), context));
+                return scope.Adorn(GenerateSql(context.GetColumnReference(WalmartOrderItemFields.OnlineStatus), context));
             }
         }
     }
