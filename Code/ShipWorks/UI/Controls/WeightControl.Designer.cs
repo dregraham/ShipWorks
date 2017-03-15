@@ -27,7 +27,7 @@
             this.menuSep = new System.Windows.Forms.ToolStripSeparator();
             this.menuFractionalPounds = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPoundsOunces = new System.Windows.Forms.ToolStripMenuItem();
-            this.liveWeight = new System.Windows.Forms.Label();
+            this.weightInfo = new System.Windows.Forms.Label();
             this.weighToolbar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.contextMenu.SuspendLayout();
@@ -133,14 +133,14 @@
             // 
             // liveWeight
             // 
-            this.liveWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.liveWeight.AutoSize = true;
-            this.liveWeight.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.liveWeight.Location = new System.Drawing.Point(315, 3);
-            this.liveWeight.Name = "liveWeight";
-            this.liveWeight.Size = new System.Drawing.Size(103, 13);
-            this.liveWeight.TabIndex = 2;
-            this.liveWeight.Text = "12 lb 2 oz <Ctrl-W>";
+            this.weightInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.weightInfo.AutoSize = true;
+            this.weightInfo.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.weightInfo.Location = new System.Drawing.Point(315, 3);
+            this.weightInfo.Name = "liveWeight";
+            this.weightInfo.Size = new System.Drawing.Size(103, 13);
+            this.weightInfo.TabIndex = 2;
+            this.weightInfo.Text = "12 lb 2 oz <Ctrl-W>";
             // 
             // WeightControl
             // 
@@ -149,7 +149,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.liveWeight);
+            this.Controls.Add(this.weightInfo);
             this.Controls.Add(this.weighToolbar);
             this.Controls.Add(this.textBox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -178,7 +178,7 @@
         private System.Windows.Forms.ToolStripSeparator menuSep;
         private System.Windows.Forms.ToolStripMenuItem menuFractionalPounds;
         private System.Windows.Forms.ToolStripMenuItem menuPoundsOunces;
-        private System.Windows.Forms.Label liveWeight;
+        private System.Windows.Forms.Label weightInfo;
 
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.IO.KeyboardShortcuts;
@@ -93,8 +94,11 @@ namespace ShipWorks.UI.Controls
             autoWeighShortcut = "(" + keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) + ")";
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
-            liveWeight.Visible = false;
+            weightInfo.Visible = ShowWeighButton;
+
             UpdateUiWithAutoWeighShortcuts();
+
+            weightInfo.Text = applyWeightShortcutText;
 
             scaleSubscription?.Dispose();
 
@@ -122,8 +126,15 @@ namespace ShipWorks.UI.Controls
             // If we have shortcuts, display them
             if (AutoWeighShortCutsAllowed)
             {
+                bool wasBlank = applyWeightShortcutText.IsNullOrWhiteSpace();
+                
                 // Only display the first shortcut.  The rest will be in a tool tip.
                 applyWeightShortcutText = autoWeighShortcut;
+
+                if (wasBlank || TopLevelControl == null || !TopLevelControl.Visible)
+                {
+                    weightInfo.Text = applyWeightShortcutText;
+                }
             }
         }
 
@@ -243,7 +254,7 @@ namespace ShipWorks.UI.Controls
 
                 showWeighButton = value;
 
-                liveWeight.Visible = showWeighButton;
+                weightInfo.Visible = showWeighButton;
                 weighToolbar.Visible = showWeighButton;
 
                 if (!showWeighButton)
@@ -612,20 +623,16 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = $@"{WeightConverter.Current.FormatWeight(weight.Value)}  {applyWeightShortcutText}";
-                    liveWeight.Visible = true;
+                    weightInfo.Text = $@"{WeightConverter.Current.FormatWeight(weight.Value)}  {applyWeightShortcutText}";
+                    weightInfo.Visible = true;
 
                     // Make sure the error is clear
                     ClearError();
                 }
-                else
-                {
-                    liveWeight.Visible = false;
-                }
             }
             else
             {
-                liveWeight.Visible = false;
+                weightInfo.Visible = false;
             }
 
             return true;
@@ -639,9 +646,9 @@ namespace ShipWorks.UI.Controls
             errorProvider.BlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
             errorProvider.SetIconPadding(weighToolbar, 3);
             errorProvider.SetError(weighToolbar, error);
-
-            // Make sure live weight is not visible
-            liveWeight.Visible = false;
+            
+            // Position the live weight/shortcut to the side of the error provider.
+            weightInfo.Left = weighToolbar.Right + 21;
         }
 
         /// <summary>
@@ -649,7 +656,13 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void ClearError()
         {
-            errorProvider.SetError(weighToolbar, null);
+            if (!errorProvider.GetError(weighToolbar).IsNullOrWhiteSpace())
+            {
+                errorProvider.SetError(weighToolbar, null);
+
+                // Position the live weight/shortcut back where it belongs.
+                weightInfo.Left = weighToolbar.Right;
+            }
         }
 
         /// <summary>
