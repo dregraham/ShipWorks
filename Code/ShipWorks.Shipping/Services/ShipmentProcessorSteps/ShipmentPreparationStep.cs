@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Interapptive.Shared;
 using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         {
             ShipmentEntity shipment = state.OriginalShipment;
 
-            if (!state.Success)
+            if (!state.Success || state.CancellationSource.IsCancellationRequested)
             {
                 return new ShipmentPreparationResult(null, state, state.Exception);
             }
@@ -92,14 +93,20 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 return new ShipmentPreparationResult(entityLock, state, exception);
             }
 
-            return RunPreProcessor(entityLock, state, shipment, store);
+            ShipmentPreparationResult result = RunPreProcessor(entityLock, state, shipment, store, state.CancellationSource);
+            if (!result.Success)
+            {
+                entityLock.Dispose();
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Run the preprocessor
         /// </summary>
         private ShipmentPreparationResult RunPreProcessor(IDisposable entityLock, ProcessShipmentState state,
-            ShipmentEntity shipment, StoreEntity store)
+            ShipmentEntity shipment, StoreEntity store, CancellationTokenSource cancellationSource)
         {
             IEnumerable<ShipmentEntity> shipmentsToTryToProcess;
 
@@ -108,7 +115,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             try
             {
                 shipmentsToTryToProcess =
-                preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
+                    preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
             }
             catch (ShippingException ex)
             {
@@ -119,6 +126,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
             if (shipmentsToTryToProcess == null)
             {
+                cancellationSource.Cancel();
                 return new ShipmentPreparationResult(entityLock, state, new ShippingException("Processing was canceled"));
             }
 

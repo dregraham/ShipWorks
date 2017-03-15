@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
@@ -13,6 +15,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -110,8 +113,24 @@ namespace ShipWorks.Shipping.Services
             // Check for shipment type process shipment nudges
             ShowShipmentTypeProcessingNudges(clonedShipments);
 
+            IProcessShipmentsWorkflowResult result;
             IProcessShipmentsWorkflow workflow = workflowFactory.Create(clonedShipments.Count);
-            IProcessShipmentsWorkflowResult result = await workflow.Process(clonedShipments, chosenRateResult, counterRateCarrierConfiguredWhileProcessingAction);
+
+            using (CancellationTokenSource cancellationSource = new CancellationTokenSource())
+            {
+                IProgressProvider progressProvider = new CancellationTokenProgressProvider(cancellationSource);
+
+                // Progress Item
+                IProgressReporter workProgress = new ProgressItem("Processing Shipments");
+                progressProvider.ProgressItems.Add(workProgress);
+
+                using (messageHelper.ShowProgressDialog("Processing Shipments",
+                    "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
+                {
+                    result = await workflow.Process(clonedShipments, chosenRateResult, workProgress,
+                        cancellationSource, counterRateCarrierConfiguredWhileProcessingAction);
+                }
+            }
 
             HandleProcessingException(result);
 
@@ -127,7 +146,7 @@ namespace ShipWorks.Shipping.Services
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                actionDispatcher.DispatchProcessingBatchFinished(adapter, 
+                actionDispatcher.DispatchProcessingBatchFinished(adapter,
                     FinishProcessingBatchTask.CreateExtraData(startingTime, shipmentCount, errorManager.ShipmentCount(), workflow.Name, workflow.ConcurrencyCount));
             }
 

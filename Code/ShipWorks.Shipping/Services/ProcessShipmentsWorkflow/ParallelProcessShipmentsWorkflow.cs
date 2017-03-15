@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Interapptive.Shared;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -28,7 +27,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private readonly LabelPersistenceStep saveLabelTask;
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
-        private readonly IMessageHelper messageHelper;
         private int? concurrencyCount;
 
         /// <summary>
@@ -40,10 +38,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             LabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
             LabelResultLogStep completeLabelTask,
-            IShippingManager shippingManager,
-            IMessageHelper messageHelper)
+            IShippingManager shippingManager)
         {
-            this.messageHelper = messageHelper;
             this.shippingManager = shippingManager;
             this.completeLabelTask = completeLabelTask;
             this.saveLabelTask = saveLabelTask;
@@ -76,49 +72,47 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// Process the shipments
         /// </summary>
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
-            RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction)
+            RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
+            Action counterRateCarrierConfiguredWhileProcessingAction)
         {
-            IProgressProvider progressProvider = new ProgressProvider();
+            prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
-            // Progress Item
-            IProgressReporter workProgress = new ProgressItem("Processing Shipments");
-            progressProvider.ProgressItems.Add(workProgress);
+            DataFlow<ProcessShipmentState, ILabelResultLogResult> dataflow = CreateDataFlow(cancellationSource);
 
-            using (messageHelper.ShowProgressDialog("Processing Shipments",
-                "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
+            int shipmentCount = shipments.Count();
+            var results = Consume(
+                x => workProgress.PercentComplete = (100 * x) / shipmentCount,
+                new ShipmentProcessorExecutionState(chosenRateResult),
+                dataflow);
+
+            IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+            foreach (var shipment in input)
             {
-                prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
-
-                DataFlow<ProcessShipmentState, ILabelResultLogResult> dataflow = CreateDataFlow();
-
-                int shipmentCount = shipments.Count();
-                var results = Consume(
-                    x => workProgress.PercentComplete = (100 * x) / shipmentCount,
-                    new ShipmentProcessorExecutionState(chosenRateResult),
-                    dataflow);
-
-                IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult);
-                foreach (var shipment in input)
+                if (cancellationSource.IsCancellationRequested)
                 {
-                    workProgress.Detail = $"Shipment {shipment.Index + 1} of {shipmentCount}";
-                    await dataflow.SendAsync(shipment);
+                    break;
                 }
 
-                dataflow.Complete();
-
-                return await results;
+                workProgress.Detail = $"Shipment {shipment.Index + 1} of {shipmentCount}";
+                await dataflow.SendAsync(shipment);
             }
+
+            dataflow.Complete();
+
+            return await results;
         }
 
         /// <summary>
         /// Create the data flow
         /// </summary>
-        private DataFlow<ProcessShipmentState, ILabelResultLogResult> CreateDataFlow()
+        /// <remarks>
+        /// We only handle canceling in the first step because once we're past that, we need to finish the rest</remarks>
+        private DataFlow<ProcessShipmentState, ILabelResultLogResult> CreateDataFlow(CancellationTokenSource cancellationSource)
         {
             int taskCount = ConcurrencyCount;
 
             var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(x => prepareShipmentTask.PrepareShipment(x),
-                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 8 });
+                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 1, CancellationToken = cancellationSource.Token });
             var getLabelBlock = new TransformBlock<IShipmentPreparationResult, ILabelRetrievalResult>(x => getLabelTask.GetLabel(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
             var saveLabelBlock = new TransformBlock<ILabelRetrievalResult, ILabelPersistenceResult>(x => saveLabelTask.SaveLabel(x),
@@ -136,7 +130,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Create processing input from each shipment that will be used by the processor
         /// </summary>
-        private async Task<IEnumerable<ProcessShipmentState>> CreateShipmentProcessorInput(IEnumerable<ShipmentEntity> shipments, RateResult chosenRateResult)
+        private async Task<IEnumerable<ProcessShipmentState>> CreateShipmentProcessorInput(
+            IEnumerable<ShipmentEntity> shipments, RateResult chosenRateResult, CancellationTokenSource cancellationSource)
         {
             IDictionary<long, Exception> licenseCheckCache = new Dictionary<long, Exception>();
 
@@ -147,14 +142,18 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             return shipments.Select((shipment, i) =>
             {
                 return concurrencyErrors.ContainsKey(shipment) ?
-                    new ProcessShipmentState(i, concurrencyErrors[shipment]) :
-                    new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult);
+                    new ProcessShipmentState(i, concurrencyErrors[shipment], cancellationSource) :
+                    new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
             });
         }
 
         /// <summary>
         /// Consume the results of processing
         /// </summary>
+        /// <remarks>
+        /// We don't handle cancellation here because anything that's in flight needs to finish,
+        /// regardless of whether a cancel was requested or not
+        /// </remarks>
         private static async Task<ShipmentProcessorExecutionState> Consume(
             Action<int> logProgress,
             ShipmentProcessorExecutionState accumulator,
