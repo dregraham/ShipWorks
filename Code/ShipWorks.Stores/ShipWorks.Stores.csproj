@@ -291,6 +291,7 @@
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartItemOnlineStatusCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartPurchaseOrderIDCondition.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
