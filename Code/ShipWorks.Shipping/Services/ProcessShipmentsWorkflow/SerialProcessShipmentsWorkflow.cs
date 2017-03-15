@@ -50,6 +50,11 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         public string Name => "Serial";
 
         /// <summary>
+        /// Concurrent number of tasks used for processing shipments
+        /// </summary>
+        public int ConcurrencyCount => 1;
+
+        /// <summary>
         /// Process the shipments
         /// </summary>
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,

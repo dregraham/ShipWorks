@@ -13,7 +13,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called when a batch of shipments has finished processing
         /// </summary>
-        void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startingTime, int shipmentCount, int errorCount, string workflowName);
+        void DispatchProcessingBatchFinished(ISqlAdapter adapter, string extraTelementryData);
 
         /// <summary>
         /// Called each time a shipment has been successfully processed

@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
+        private int? concurrencyCount;
 
         /// <summary>
         /// Constructor
@@ -54,6 +55,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// Get the name of the workflow
         /// </summary>
         public string Name => "Parallel";
+
+        /// <summary>
+        /// Concurrent number of tasks used for processing shipments
+        /// </summary>
+        public int ConcurrencyCount
+        {
+            get
+            {
+                if (!concurrencyCount.HasValue)
+                {
+                    concurrencyCount = GetConcurrencyCount("requests", 4, 64);
+                }
+
+                return concurrencyCount.Value;
+            }
+        }
 
         /// <summary>
         /// Process the shipments
@@ -98,7 +115,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         private DataFlow<ProcessShipmentState, ILabelResultLogResult> CreateDataFlow()
         {
-            int taskCount = GetConcurrencyCount("requests", 4, 64);
+            int taskCount = ConcurrencyCount;
 
             var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(x => prepareShipmentTask.PrepareShipment(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 8 });

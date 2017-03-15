@@ -8,6 +8,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -126,7 +127,8 @@ namespace ShipWorks.Shipping.Services
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                actionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount(), workflow.Name);
+                actionDispatcher.DispatchProcessingBatchFinished(adapter, 
+                    FinishProcessingBatchTask.CreateExtraData(startingTime, shipmentCount, errorManager.ShipmentCount(), workflow.Name, workflow.ConcurrencyCount));
             }
 
             ShowPostProcessingMessage(clonedShipments);

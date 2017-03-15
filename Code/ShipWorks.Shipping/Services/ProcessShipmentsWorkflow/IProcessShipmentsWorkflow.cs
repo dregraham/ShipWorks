@@ -21,5 +21,10 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
             RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction);
+
+        /// <summary>
+        /// Concurrent number of tasks used for processing shipments
+        /// </summary>
+        int ConcurrencyCount { get; }
     }
 }
