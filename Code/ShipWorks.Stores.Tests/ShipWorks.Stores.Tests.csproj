@@ -246,6 +246,7 @@
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSignerTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreTypeTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />

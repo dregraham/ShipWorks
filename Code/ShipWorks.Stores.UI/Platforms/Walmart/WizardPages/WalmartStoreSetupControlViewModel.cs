@@ -108,10 +108,8 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Validates the credentials entered by the user and saves them if they are valid.
         /// </summary>
-        public bool Save(WalmartStoreEntity store)
+        public void Save(WalmartStoreEntity store)
         {
-            bool validCredentials = false;
-
             if (EnsureRequiredFieldsHaveValue())
             {
                 store.ConsumerID = ConsumerID.Trim();
@@ -122,18 +120,14 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
                     store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.Trim());
                 }
 
+                // Throws if credentials are not valid
                 webClient.TestConnection(store);
-
-                // If test connection didn't throw, credentials were valid
-                validCredentials = true;
 
                 if (!IsNewStore)
                 {
                     UpdatingPrivateKey = false;
                 }
             }
-
-            return validCredentials;
         }
 
         /// <summary>
@@ -163,14 +157,14 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
                 invalidFields.Add("Consumer ID");
             }
 
-            if (string.IsNullOrWhiteSpace(PrivateKey) && IsNewStore)
-            {
-                invalidFields.Add("Private key");
-            }
-
             if (string.IsNullOrWhiteSpace(ChannelType))
             {
                 invalidFields.Add("Channel type");
+            }
+
+            if (string.IsNullOrWhiteSpace(PrivateKey) && IsNewStore)
+            {
+                invalidFields.Add("Private key");
             }
 
             if (invalidFields.Any())

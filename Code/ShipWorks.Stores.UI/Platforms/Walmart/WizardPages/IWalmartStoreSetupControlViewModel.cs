@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Saves the store credentials
         /// </summary>
-        bool Save(WalmartStoreEntity store);
+        void Save(WalmartStoreEntity store);
 
         /// <summary>
         /// Loads the credentials for the given store.

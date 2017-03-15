@@ -45,7 +45,8 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart
             bool success = false;
             try
             {
-                success = viewModel.Save(store as WalmartStoreEntity);
+                viewModel.Save(store as WalmartStoreEntity);
+                success = true;
             }
             catch (WalmartException ex)
             {

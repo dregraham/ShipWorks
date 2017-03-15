@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,10 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart
             this.messageHelper = messageHelper;
             InitializeComponent();
 
-            for (int i = 1; i < 31; i++)
-            {
-                downloadModifiedOrdersNumberOfDays.Items.Add(i);
-            }
+            downloadModifiedOrdersNumberOfDays.Items.AddRange(Enumerable.Range(1, 30).Cast<object>().ToArray());
         }
 
         /// <summary>

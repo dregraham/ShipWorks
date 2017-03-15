@@ -36,7 +36,8 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
 
             try
             {
-                canMoveNext = viewModel.Save(GetStore<WalmartStoreEntity>());
+                viewModel.Save(GetStore<WalmartStoreEntity>());
+                canMoveNext = true;
             }
             catch (WalmartException ex)
             {
