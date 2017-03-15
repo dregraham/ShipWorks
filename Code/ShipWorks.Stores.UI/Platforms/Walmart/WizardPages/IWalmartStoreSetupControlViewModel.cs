@@ -21,10 +21,15 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// Channel Type issued by Walmart
         /// </summary>
         string ChannelType { get; set; }
-        
+
         /// <summary>
         /// Saves the store credentials
         /// </summary>
         bool Save(WalmartStoreEntity store);
+
+        /// <summary>
+        /// Loads the credentials for the given store.
+        /// </summary>
+        void Load(WalmartStoreEntity store);
     }
 }

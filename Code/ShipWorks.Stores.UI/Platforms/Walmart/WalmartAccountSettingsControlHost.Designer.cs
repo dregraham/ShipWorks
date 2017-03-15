@@ -1,6 +1,8 @@
-﻿namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
+﻿using ShipWorks.Stores.UI.Platforms.Walmart.WizardPages;
+
+namespace ShipWorks.Stores.UI.Platforms.Walmart
 {
-    partial class WalmartStoreSetupControlHost
+    partial class WalmartAccountSettingsControlHost
     {
         /// <summary>
         /// Required designer variable.
@@ -40,16 +42,14 @@
             this.elementHost1.Size = new System.Drawing.Size(150, 150);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.storeSetupControl;
+            this.elementHost1.Child = storeSetupControl;
             //
-            // WalmartStoreSetupControlHost
+            // WalmartAccountSettingsControlHost
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost1);
-            this.Name = "WalmartStoreSetupControlHost";
-            this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
-            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
+            this.Name = "WalmartAccountSettingsControlHost";
             this.ResumeLayout(false);
 
         }
@@ -58,6 +58,5 @@
 
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private WalmartStoreSetupControl storeSetupControl;
-
     }
 }

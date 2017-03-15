@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -16,27 +18,41 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.UI.Platforms.Walmart.WizardPages.IWalmartStoreSetupControlViewModel" />
     [Component]
-    public class WalmartStoreSetupControlViewModel : IWalmartStoreSetupControlViewModel
+    public class WalmartStoreSetupControlViewModel : IWalmartStoreSetupControlViewModel, INotifyPropertyChanged
     {
         private readonly IWalmartWebClient webClient;
-        private readonly IMessageHelper messageHelper;
         private readonly IEncryptionProvider encryptionProvider;
         private string consumerID;
         private string privateKey;
         private string channelType;
         private readonly PropertyChangedHandler handler;
+        private bool updatingPrivateKey;
+        private ICommand updatePrivateKeyCommand;
+        private bool isNewStore;
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreSetupControlViewModel"/> class.
         /// </summary>
-        public WalmartStoreSetupControlViewModel(IWalmartWebClient webClient, IMessageHelper messageHelper, 
+        public WalmartStoreSetupControlViewModel(IWalmartWebClient webClient,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.webClient = webClient;
-            this.messageHelper = messageHelper;
             encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
+            IsNewStore = true;
+            UpdatePrivateKeyCommand = new RelayCommand(OnUpdatePrivateKey);
+        }
+
+        /// <summary>
+        /// Whether or not the store is being setup for the first time
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsNewStore
+        {
+            get { return isNewStore; }
+            set { handler.Set(nameof(IsNewStore), ref isNewStore, value); }
         }
 
         /// <summary>
@@ -70,11 +86,76 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         }
 
         /// <summary>
+        /// Whether or not the private key is being updated.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool UpdatingPrivateKey
+        {
+            get { return updatingPrivateKey; }
+            set { handler.Set(nameof(UpdatingPrivateKey), ref updatingPrivateKey, value); }
+        }
+
+        /// <summary>
+        /// Command to run when updating the private key.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand UpdatePrivateKeyCommand
+        {
+            get { return updatePrivateKeyCommand; }
+            set { handler.Set(nameof(UpdatePrivateKeyCommand), ref updatePrivateKeyCommand, value); }
+        }
+
+        /// <summary>
         /// Validates the credentials entered by the user and saves them if they are valid.
         /// </summary>
         public bool Save(WalmartStoreEntity store)
         {
             bool validCredentials = false;
+
+            if (EnsureRequiredFieldsHaveValue())
+            {
+                store.ConsumerID = ConsumerID.Trim();
+                store.ChannelType = ChannelType.Trim();
+
+                if (!string.IsNullOrWhiteSpace(PrivateKey))
+                {
+                    store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.Trim());
+                }
+
+                webClient.TestConnection(store);
+
+                // If test connection didn't throw, credentials were valid
+                validCredentials = true;
+
+                if (!IsNewStore)
+                {
+                    UpdatingPrivateKey = false;
+                }
+            }
+
+            return validCredentials;
+        }
+
+        /// <summary>
+        /// Loads the credentials for the given store.
+        /// </summary>
+        public void Load(WalmartStoreEntity store)
+        {
+            ConsumerID = store.ConsumerID;
+            ChannelType = store.ChannelType;
+
+            IsNewStore = string.IsNullOrWhiteSpace(store.ConsumerID);
+            if (IsNewStore)
+            {
+                UpdatingPrivateKey = true;
+            }
+        }
+
+        /// <summary>
+        /// Ensures the required fields have a value.
+        /// </summary>
+        private bool EnsureRequiredFieldsHaveValue()
+        {
             List<string> invalidFields = new List<string>();
 
             if (string.IsNullOrWhiteSpace(ConsumerID))
@@ -82,7 +163,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
                 invalidFields.Add("Consumer ID");
             }
 
-            if (string.IsNullOrWhiteSpace(PrivateKey))
+            if (string.IsNullOrWhiteSpace(PrivateKey) && IsNewStore)
             {
                 invalidFields.Add("Private key");
             }
@@ -94,26 +175,18 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
 
             if (invalidFields.Any())
             {
-                messageHelper.ShowError($"Please enter your{string.Join("\n\t-", invalidFields)}");
+                throw new WalmartException($"Please enter your\n\t-{string.Join("\n\t-", invalidFields)}");
             }
 
-            store.ConsumerID = ConsumerID.Trim();
-            store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.Trim());
-            store.ChannelType = ChannelType.Trim();
+            return !invalidFields.Any();
+        }
 
-            try
-            {
-                webClient.TestConnection(store);
-
-                // If test connection didn't throw, credentials were valid
-                validCredentials = true;
-            }
-            catch (WalmartException ex)
-            {
-                messageHelper.ShowError($"Error connecting to Walmart: {ex.Message}");
-            }
-
-            return validCredentials;
+        /// <summary>
+        /// Called when [update private key].
+        /// </summary>
+        private void OnUpdatePrivateKey()
+        {
+            UpdatingPrivateKey = true;
         }
     }
 }
