@@ -14,7 +14,7 @@
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="weight:ScaleButton.ScaleRead">
                             <BeginStoryboard Name="Flash">
-                                <Storyboard RepeatBehavior="7x">
+                                <Storyboard RepeatBehavior="3x">
                                     <ColorAnimationUsingKeyFrames Duration="0:0:0.5"
                                             Storyboard.TargetName="PART_Entry"
                                             Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">

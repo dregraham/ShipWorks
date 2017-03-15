@@ -110,13 +110,7 @@ namespace ShipWorks.UI.Controls
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
                             Visible &&
                             AutoWeighShortCutsAllowed)
-                .Subscribe(async _ =>
-                {
-                    if (await ApplyWeightFromScaleAsync(KeyboardShortcutTelemetryKey))
-                    {
-                        textBox.FlashBackground(250, Color.LightGray, 7);
-                    }
-                });
+                .Subscribe(async _ => await ApplyWeightFromScaleAsync(KeyboardShortcutTelemetryKey));
         }
 
         /// <summary>
@@ -485,6 +479,8 @@ namespace ShipWorks.UI.Controls
                         SetCurrentWeight(newWeight);
                         ClearError();
                         appliedWeight = true;
+
+                        textBox.FlashBackground(250, Color.LightGray, 3);
                     }
                     else
                     {
