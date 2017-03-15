@@ -109,6 +109,7 @@ namespace ShipWorks.UI.Controls
             keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
                             Visible &&
+                            Enabled &&
                             AutoWeighShortCutsAllowed)
                 .Subscribe(async _ => await ApplyWeightFromScaleAsync(KeyboardShortcutTelemetryKey));
         }
