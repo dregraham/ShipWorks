@@ -93,6 +93,9 @@
         <Condition identifier="Amazon.EarliestExpectedDeliveryDate" displayAs="Amazon Earliest Delivery" />
         <Condition identifier="Amazon.LatestExpectedDeliveryDate" displayAs="Amazon Latest Delivery" />
         <Condition identifier="LemonStand.LemonStandOrderID" displayAs="LemonStand OrderID" />
+        <Condition identifier="Walmart.PurchaseOrderID" displayAs="Walmart Purchase OrderID" />
+        <Condition identifier="Walmart.EstimatedDeliveryDate" displayAs="Walmart Estimated Delivery Date" />
+        <Condition identifier="Walmart.EstimatedShipDate" displayAs="Walmart Estimated Ship Date" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
         <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />
@@ -219,6 +222,7 @@
       <Condition identifier="BigCommerceOrderItem.EventDate" />
       <Condition identifier="BigCommerceOrderItem.EventName" />
       <Condition identifier="BuyDotComOrderItem.ListingID" />
+      <Condition identifier="WalmartItem.OnlineStatus" />
       <Condition identifier="ChannelAdvisorOrderItem.SiteName" />
       <Condition identifier="ChannelAdvisorOrderItem.MarketplaceStoreName" />
       <Condition identifier="ChannelAdvisorOrderItem.BuyerID" />
@@ -305,7 +309,7 @@
       <Condition identifier="Shipment.Insurance" />
       <Separator/>
       <Group name="ShipWorks Insurance">
-        <Condition identifier="Shipment.InsuranceClaimFiled" />  
+        <Condition identifier="Shipment.InsuranceClaimFiled" />
       </Group>
       <Separator/>
       <Condition identifier="Shipment.Status" />

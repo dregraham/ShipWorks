@@ -73,6 +73,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             columnMaskTableMap[EntityType.InsurancePolicyEntity] = FilterNodeColumnMaskTable.InsurancePolicy;
             columnMaskTableMap[EntityType.GrouponOrderEntity] = FilterNodeColumnMaskTable.GrouponOrder;
             columnMaskTableMap[EntityType.LemonStandOrderEntity] = FilterNodeColumnMaskTable.LemonStandOrder;
+            columnMaskTableMap[EntityType.WalmartOrderEntity] = FilterNodeColumnMaskTable.WalmartOrder;
+            columnMaskTableMap[EntityType.WalmartOrderItemEntity] = FilterNodeColumnMaskTable.WalmartOrderItem;
 
             // Make sure we've mapped each table
             if (columnMaskTableMap.Keys.Count != Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length)
