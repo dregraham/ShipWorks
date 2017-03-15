@@ -92,6 +92,7 @@
         <Condition identifier="Amazon.IsPrime" displayAs="Amazon Prime" />
         <Condition identifier="Amazon.EarliestExpectedDeliveryDate" displayAs="Amazon Earliest Delivery" />
         <Condition identifier="Amazon.LatestExpectedDeliveryDate" displayAs="Amazon Latest Delivery" />
+        <Condition identifier="LemonStand.LemonStandOrderID" displayAs="LemonStand OrderID" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
         <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />

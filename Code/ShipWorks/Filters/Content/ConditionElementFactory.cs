@@ -63,14 +63,24 @@ namespace ShipWorks.Filters.Content
         }
 
         /// <summary>
-        /// Load all the condition element descriptors present in the assembly
+        /// Load condition descriptors from core and stores assemblies
         /// </summary>
         private static void LoadDescriptors()
         {
             elementDescriptors = new Dictionary<string, ConditionElementDescriptor>();
 
+            LoadDescriptorsFromAssembly(Assembly.GetExecutingAssembly());
+            LoadDescriptorsFromAssembly(Assembly.Load("ShipWorks.Stores"));
+
+        }
+
+        /// <summary>
+        /// Load all the condition element descriptors present in the assembly
+        /// </summary>
+        private static void LoadDescriptorsFromAssembly(Assembly assembly)
+        {
             // Look for the ConditionAttribute on each type in the assembly
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (Type type in assembly.GetTypes())
             {
                 if (Attribute.IsDefined(type, typeof(ConditionElementAttribute)))
                 {
