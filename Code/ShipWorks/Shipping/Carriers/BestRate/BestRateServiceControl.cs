@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
-                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 1);
             };
         }
 
