@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetUpsShipmentClassCode(ShipmentEntity shipment)
         {
-            UpsServiceType upsServiceType = (UpsServiceType)shipment.Ups.Service;
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
 
             // Sears has a special value we have to send for surepost
             if (UpsUtility.IsUpsSurePostService(upsServiceType) && IsSearsMarketplaceOrder(shipment))
