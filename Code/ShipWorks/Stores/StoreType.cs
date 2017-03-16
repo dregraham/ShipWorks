@@ -354,6 +354,11 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual StoreSettingsControlBase CreateStoreSettingsControl()
         {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<StoreSettingsControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreSettingsControlBase>(TypeCode);
+            }
+
             return null;
         }
 

@@ -5,75 +5,103 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:wizardPages="clr-namespace:ShipWorks.Stores.UI.Platforms.Walmart.WizardPages"
-             Background="{x:Static SystemColors.ControlBrush}"
+             Background="Transparent"
              FontFamily="Tahoma"
              FontSize="11"
              d:DataContext="{d:DesignInstance wizardPages:WalmartStoreSetupControlViewModel}"
              d:DesignHeight="500"
              d:DesignWidth="500"
              mc:Ignorable="d">
-    <Grid Margin="20 10 10 10">
-        <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
+    <StackPanel Margin="20 10 10 10">
+        <StackPanel.Resources>
+            <Style>
+                <Style.TargetType>
+                    <x:Type TypeName="TextBlock" />
+                </Style.TargetType>
                 <Setter Property="Margin" Value="3" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
-            <Style TargetType="{x:Type TextBox}">
+            <Style>
+                <Style.TargetType>
+                    <x:Type TypeName="TextBox" />
+                </Style.TargetType>
                 <Setter Property="Margin" Value="3" />
                 <Setter Property="Padding" Value="2" />
             </Style>
-        </Grid.Resources>
-        <StackPanel>
-            <TextBlock FontWeight="Bold" Text="Account Credentials" />
-            <TextBlock Margin="22 4 0 4" Text="Enter your Walmart-issued credentials:" />
-            <Grid Margin="35 0 0 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           HorizontalAlignment="Right"
-                           Text="Consumer ID:" />
-                <TextBox Grid.Row="0"
-                         Grid.Column="1"
-                         Text="{Binding ConsumerID,
-                                        UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Grid.Row="1"
-                           Grid.Column="0"
-                           HorizontalAlignment="Right"
-                           Text="Channel Type:" />
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         Text="{Binding ChannelType,
-                                        UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Grid.Row="2"
-                           Grid.Column="0"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Top"
-                           Text="Private Key:" />
-                <TextBox Grid.Row="2"
-                         Grid.Column="1"
-                         MinLines="10"
-                         MaxLines="10"
-                         AcceptsReturn="True"
-                         TextWrapping="Wrap"
-                         Text="{Binding PrivateKey,
-                                        UpdateSourceTrigger=PropertyChanged}"/>
-                
-                <TextBlock Grid.Row="3"
-                           Grid.Column="1"
-                           Margin="3 0 3 3">
-                    <Run>For help adding your Walmart store,</Run>
-                    <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000098182-adding-walmart-to-shipworks" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
-                </TextBlock>
-            </Grid>
-        </StackPanel>
-    </Grid>
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibility" Invert="True" />
+        </StackPanel.Resources>
+        <TextBlock FontWeight="Bold" Text="Account Credentials" />
+        <TextBlock Margin="22 4 0 4" Text="Enter your Walmart-issued credentials:" />
+        <Grid Margin="35 0 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       HorizontalAlignment="Right"
+                       Text="Consumer ID:" />
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     Text="{Binding ConsumerID,
+                                    UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       HorizontalAlignment="Right"
+                       Text="Channel Type:" />
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding ChannelType,
+                                    UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Margin="3 6 3 3"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       Text="Private Key:" />
+            <TextBox Grid.Row="2"
+                     Grid.Column="1"
+                     AcceptsReturn="True"
+                     MaxLines="10"
+                     MinLines="10"
+                     Text="{Binding PrivateKey,
+                                    UpdateSourceTrigger=PropertyChanged}"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Visibility="{Binding UpdatingPrivateKey,
+                                          Converter={StaticResource BooleanToVisibility},
+                                          UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Row="2"
+                    Grid.Column="1"
+                    Width="120"
+                    Height="19"
+                    Margin="3"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Command="{Binding UpdatePrivateKeyCommand,
+                                      UpdateSourceTrigger=PropertyChanged}"
+                    Content="Update Private Key"
+                    Visibility="{Binding UpdatingPrivateKey,
+                                         Converter={StaticResource InverseBooleanToVisibility},
+                                         UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="3"
+                       Grid.Column="1"
+                       Margin="3 0 3 3"
+                       IsEnabled="{Binding IsNewStore,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                       Visibility="{Binding IsNewStore,
+                                            Converter={StaticResource BooleanToVisibility},
+                                            UpdateSourceTrigger=PropertyChanged}">
+                <Run>For help adding your Walmart store,</Run>
+                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000098182-adding-walmart-to-shipworks" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            </TextBlock>
+        </Grid>
+    </StackPanel>
 </UserControl>
