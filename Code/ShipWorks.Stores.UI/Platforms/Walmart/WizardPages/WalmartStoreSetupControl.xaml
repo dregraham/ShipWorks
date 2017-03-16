@@ -94,6 +94,8 @@
             <TextBlock Grid.Row="3"
                        Grid.Column="1"
                        Margin="3 0 3 3"
+                       IsEnabled="{Binding IsNewStore,
+                                           UpdateSourceTrigger=PropertyChanged}"
                        Visibility="{Binding IsNewStore,
                                             Converter={StaticResource BooleanToVisibility},
                                             UpdateSourceTrigger=PropertyChanged}">
