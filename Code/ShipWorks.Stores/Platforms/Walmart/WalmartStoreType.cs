@@ -10,6 +10,11 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Filters;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -92,15 +97,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         protected override string InternalLicenseIdentifier => walmartStore.ConsumerID;
 
         /// <summary>
-        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
-        /// Online Status filter.
-        /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices()
-        {
-            return new List<string>() {"Created", "Acknowledged", "Shipped", "Cancelled", "Refund"};
-        }
-
-        /// <summary>
         /// Creates the add store wizard online update action control for Walmart
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
@@ -135,6 +131,108 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
             ElementOutline outline = container.AddElement("Walmart");
             outline.AddElement("OnlineStatus", () => item.Value.OnlineStatus);
+        }
+
+        /// <summary>
+        /// Create the initial filters
+        /// </summary>
+        /// <returns></returns>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            List<FilterEntity> filters = new List<FilterEntity>
+            {
+                CreateItemStatusFilter("Ready To Ship", "Acknowledged"),
+                CreateItemStatusFilter("Shipped", "Shipped"),
+                CreateItemStatusFilter("Cancelled", "Cancelled"),
+                CreatePartialItemStatusFilter("Partially Acknowledged", "Acknowledged"),
+                CreatePartialItemStatusFilter("Partially Shipped", "Shipped"),
+                CreatePartialItemStatusFilter("Partially Cancelled", "Cancelled")
+            };
+
+            return filters;
+        }
+
+        /// <summary>
+        /// Create a filter for any item of the given status but not all the same status
+        /// </summary>
+        private FilterEntity CreatePartialItemStatusFilter(string filterName, string status)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+            // [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // For any item
+            ForAnyItemCondition anyItem = new ForAnyItemCondition();
+            definition.RootContainer.FirstGroup.Conditions.Add(anyItem);
+
+            WalmartItemOnlineStatusCondition itemStatusCondition = new WalmartItemOnlineStatusCondition();
+            itemStatusCondition.Operator = StringOperator.Equals;
+            itemStatusCondition.TargetValue = status;
+
+            anyItem.Container.FirstGroup.Conditions.Add(itemStatusCondition);
+
+            // For any item
+            ForAnyItemCondition notAnyItem = new ForAnyItemCondition();
+            definition.RootContainer.FirstGroup.Conditions.Add(notAnyItem);
+
+            WalmartItemOnlineStatusCondition notItemStatusCondition = new WalmartItemOnlineStatusCondition();
+            notItemStatusCondition.Operator = StringOperator.NotEqual;
+            notItemStatusCondition.TargetValue = status;
+
+            notAnyItem.Container.FirstGroup.Conditions.Add(notItemStatusCondition);
+
+            ConditionGroupContainer secondContainer = new ConditionGroupContainer();
+            secondContainer.FirstGroup = new ConditionGroup();
+            secondContainer.FirstGroup.JoinType = ConditionJoinType.All;
+            secondContainer.FirstGroup.Conditions.Add(notAnyItem);
+
+            definition.RootContainer.SecondGroup = secondContainer;
+
+
+            return new FilterEntity
+            {
+                Name = filterName,
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
+        /// <summary>
+        /// Create a filter for all items of the given status
+        /// </summary>
+        private FilterEntity CreateItemStatusFilter(string filterName, string status)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+            // [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            ForEveryItemCondition everyItem = new ForEveryItemCondition();
+            definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
+
+            WalmartItemOnlineStatusCondition itemStatusCondition = new WalmartItemOnlineStatusCondition();
+            itemStatusCondition.Operator = StringOperator.Equals;
+            itemStatusCondition.TargetValue = status;
+
+            everyItem.Container.FirstGroup.Conditions.Add(itemStatusCondition);
+
+            return new FilterEntity
+            {
+                Name = filterName,
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
         }
     }
 }
