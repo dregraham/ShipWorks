@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldnt currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendRateCriteriaEvent = 0;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public event EventHandler RateCriteriaChanged;
 
-        // Indiciates if the event shouldnt currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendShipSenseFieldEvent = 0;
 
         /// <summary>
@@ -85,6 +85,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
 
             LoadPackagingTypes(new List<ShipmentEntity>());
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey,
+                    loadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey,
+                    selectedRows.Select(x => x.Tag).OfType<List<UpsPackageEntity>>().SelectMany(x => x).Count());
+            };
         }
 
         /// <summary>
@@ -111,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             this.loadedShipments = shipments;
 
-            // Enable all the controlsk (except the grid, which you can always select from) based on the enabled state
+            // Enable all the controls (except the grid, which you can always select from) based on the enabled state
             foreach (Control control in Controls)
             {
                 if (control != packagesGrid)

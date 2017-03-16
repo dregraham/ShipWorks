@@ -58,6 +58,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
             confirmation.ValueMember = "Value";
 
             UpdateAvailablePackageTypes(Enumerable.Empty<ShipmentEntity>());
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 1);
+            };
         }
 
         /// <summary>

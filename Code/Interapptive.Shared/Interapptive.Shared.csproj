@@ -63,6 +63,15 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.93.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.93.0\lib\net46\Apitron.PDF.Rasterizer.dll</HintPath>
@@ -161,6 +170,7 @@
     <Compile Include="Messaging\TrackedObservable\SelectManyImplementation.cs" />
     <Compile Include="Messaging\TrackedObservable\ConcatImplementation.cs" />
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
+    <Compile Include="Metrics\DummyTrackedDurationEvent.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />

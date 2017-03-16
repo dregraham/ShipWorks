@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls.Design;
 
@@ -109,12 +108,6 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_Entry is not available in the template");
             }
 
-            Binding textBinding = new Binding();
-            textBinding.Source = this;
-            textBinding.Path = new PropertyPath(nameof(Text));
-            textBinding.Mode = BindingMode.TwoWay;
-            entry.SetBinding(TextBox.TextProperty, textBinding);
-
             if (!DesignModeDetector.IsDesignerHosted())
             {
                 SetEntryWeightValue(this, 0D);
@@ -155,7 +148,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private static void OnMaxWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            double existingWeight = (double) d.GetValue(WeightProperty); ;
+            double existingWeight = (double) d.GetValue(WeightProperty);
             double newValue = (double) e.NewValue;
 
             if (newValue < existingWeight)

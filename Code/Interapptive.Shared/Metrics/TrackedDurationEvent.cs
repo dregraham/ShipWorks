@@ -25,6 +25,11 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Get a dummy tracked duration event for situations where an event should not be tracked
+        /// </summary>
+        public static ITrackedDurationEvent Dummy => new DummyTrackedDurationEvent();
+
+        /// <summary>
         /// Add a metric value to the event
         /// </summary>
         public void AddMetric(string metricName, double metricValue)

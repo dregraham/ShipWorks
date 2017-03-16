@@ -11,10 +11,40 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type weight:WeightInput}">
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="weight:ScaleButton.ScaleRead">
+                            <BeginStoryboard Name="Flash">
+                                <Storyboard RepeatBehavior="3x">
+                                    <ColorAnimationUsingKeyFrames Duration="0:0:0.5"
+                                            Storyboard.TargetName="PART_Entry"
+                                            Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
+                                        <DiscreteColorKeyFrame KeyTime="0:0:0" Value="LightGray" />
+                                        <DiscreteColorKeyFrame KeyTime="0:0:0.25" Value="White" />
+                                    </ColorAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+
                     <TextBox Name="PART_Entry"
+                             Text="{Binding Path=Text,RelativeSource={RelativeSource TemplatedParent},NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}"
                              Style="{StaticResource Grid.TextBox.Number}"
+                             Background="White"
                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                             VerticalContentAlignment="Center" />
+                             VerticalContentAlignment="Center">
+                        <TextBox.Triggers>
+                            <EventTrigger RoutedEvent="TextBoxBase.TextChanged">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="PART_Entry"
+                                                Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
+                                            <DiscreteColorKeyFrame KeyTime="0:0:0" Value="White" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </TextBox.Triggers>
+                    </TextBox>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
