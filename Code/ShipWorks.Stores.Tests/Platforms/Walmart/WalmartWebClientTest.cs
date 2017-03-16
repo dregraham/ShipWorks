@@ -80,13 +80,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.ConsumerID = "blah blah consumer id";
-            store.ChannelType = "channel type foo bar baz";
 
             testObject.GetOrders(store, start);
 
             Assert.Equal("Walmart Marketplace", webHeaderCollection.GetValues("WM_SVC.NAME").First());
             Assert.Equal(store.ConsumerID, webHeaderCollection.GetValues("WM_CONSUMER.ID").First());
-            Assert.Equal(store.ChannelType, webHeaderCollection.GetValues("WM_CONSUMER.CHANNEL.TYPE").First());
             Assert.NotEmpty(webHeaderCollection.GetValues("WM_QOS.CORRELATION_ID"));
         }
 
@@ -145,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void GetOrders_WithNextCursor_AcknowledgesEachOrder()
         {
             SetupHttpVariableRequestSubmitter(OrdersResponse);
-            
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             testObject.GetOrders(new WalmartStoreEntity(), "");
@@ -206,7 +204,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void UpdateShipmentDetails_ReturnsOrder()
         {
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
-            
+
             var order = testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
             var expectedOrder =
                 SerializationUtility.DeserializeFromXml<Order>(GetOrderText(orderLineStatusValueType.Acknowledged));

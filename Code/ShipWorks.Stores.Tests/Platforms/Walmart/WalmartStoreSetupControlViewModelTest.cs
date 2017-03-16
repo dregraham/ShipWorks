@@ -22,7 +22,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void Save_ThrowsWalmartException_WhenConsumerIDIsEmpty()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "12345";
 
             Assert.Throws<WalmartException>(() => testObject.Save(new WalmartStoreEntity()));
@@ -43,7 +42,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.IsNewStore = true;
 
             Assert.Throws<WalmartException>(() => testObject.Save(new WalmartStoreEntity()));
@@ -54,7 +52,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.IsNewStore = false;
 
             testObject.Save(new WalmartStoreEntity());
@@ -65,7 +62,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "12345";
 
             testObject.Save(new WalmartStoreEntity());
@@ -76,7 +72,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "   ConsumerID     ";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "12345";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -87,26 +82,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Save_SavesTrimmedChannelType()
-        {
-            var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "  channel     ";
-            testObject.PrivateKey = "12345";
-
-            WalmartStoreEntity store = new WalmartStoreEntity();
-
-            testObject.Save(store);
-
-            Assert.Equal("channel", store.ChannelType);
-        }
-
-        [Fact]
         public void Save_DoesNotSaveTrimmedPrivateKey_WhenPrivateKeyIsEmpty()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "";
             testObject.IsNewStore = false;
 
@@ -126,7 +105,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -147,7 +125,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -164,7 +141,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -179,7 +155,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "NEW KEY";
             testObject.IsNewStore = false;
             testObject.UpdatingPrivateKey = true;
@@ -193,7 +168,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
             testObject.ConsumerID = "ConsumerID";
-            testObject.ChannelType = "channel";
             testObject.PrivateKey = "NEW KEY";
             testObject.IsNewStore = false;
             testObject.UpdatingPrivateKey = true;
@@ -211,19 +185,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.Load(store);
 
             Assert.Equal("ConsumerID", testObject.ConsumerID);
-        }
-
-        [Fact]
-        public void Load_SetsChannelTypeToStoresChannelType()
-        {
-            var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-
-            WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ChannelType = "channel";
-
-            testObject.Load(store);
-
-            Assert.Equal("channel", testObject.ChannelType);
         }
 
         [Fact]
