@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
-        private const string ChannelType = "0f3e4dd4-0514-4346-b39d-af0e00ea066d";
+        private const string ChannelType = "a7a7db08-682f-488a-a005-921af89d7e9b";
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
         private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
