@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
     public class WalmartStoreSetupControlViewModelTest : IDisposable
     {
-        private AutoMock mock;
+        private readonly AutoMock mock;
 
         public WalmartStoreSetupControlViewModelTest()
         {
