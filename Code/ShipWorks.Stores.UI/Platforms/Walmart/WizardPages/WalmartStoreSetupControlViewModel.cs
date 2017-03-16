@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         private readonly IEncryptionProvider encryptionProvider;
         private string consumerID;
         private string privateKey;
-        private string channelType;
         private readonly PropertyChangedHandler handler;
         private bool updatingPrivateKey;
         private ICommand updatePrivateKeyCommand;
@@ -76,16 +75,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         }
 
         /// <summary>
-        /// Channel Type issued by Walmart
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ChannelType
-        {
-            get { return channelType; }
-            set { handler.Set(nameof(ChannelType), ref channelType, value); }
-        }
-
-        /// <summary>
         /// Whether or not the private key is being updated.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -113,7 +102,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
             if (EnsureRequiredFieldsHaveValue())
             {
                 store.ConsumerID = ConsumerID.Trim();
-                store.ChannelType = ChannelType.Trim();
 
                 if (!string.IsNullOrWhiteSpace(PrivateKey))
                 {
@@ -136,7 +124,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         public void Load(WalmartStoreEntity store)
         {
             ConsumerID = store.ConsumerID;
-            ChannelType = store.ChannelType;
 
             IsNewStore = string.IsNullOrWhiteSpace(store.ConsumerID);
             if (IsNewStore)
@@ -155,11 +142,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
             if (string.IsNullOrWhiteSpace(ConsumerID))
             {
                 invalidFields.Add("Consumer ID");
-            }
-
-            if (string.IsNullOrWhiteSpace(ChannelType))
-            {
-                invalidFields.Add("Channel type");
             }
 
             if (string.IsNullOrWhiteSpace(PrivateKey) && IsNewStore)

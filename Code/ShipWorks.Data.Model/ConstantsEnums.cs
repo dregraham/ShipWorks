@@ -10084,8 +10084,6 @@ namespace ShipWorks.Data.Model
 		ConsumerID,
 		///<summary>PrivateKey. </summary>
 		PrivateKey,
-		///<summary>ChannelType. </summary>
-		ChannelType,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
 		/// <summary></summary>

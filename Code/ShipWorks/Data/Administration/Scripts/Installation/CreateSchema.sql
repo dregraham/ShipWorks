@@ -1,3 +1,4 @@
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -5893,7 +5894,6 @@ CREATE TABLE [dbo].[WalmartStore]
 [StoreID] [bigint] NOT NULL,
 [ConsumerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PrivateKey] [nvarchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ChannelType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DownloadModifiedNumberOfDaysBack] [int] NOT NULL
 )
 GO

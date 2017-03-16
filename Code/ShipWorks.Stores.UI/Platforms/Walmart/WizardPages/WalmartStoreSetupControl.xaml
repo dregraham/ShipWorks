@@ -44,22 +44,15 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       HorizontalAlignment="Right"
-                       Text="Consumer ID:" />
-            <TextBox Grid.Row="0"
-                     Grid.Column="1"
-                     Text="{Binding ConsumerID,
-                                    UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        HorizontalAlignment="Right"
-                       Text="Channel Type:" />
+                       Text="Consumer ID:" />
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding ChannelType,
+                     Text="{Binding ConsumerID,
                                     UpdateSourceTrigger=PropertyChanged}" />
+
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
                        Margin="3 6 3 3"

@@ -18,11 +18,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         string PrivateKey { get; set; }
 
         /// <summary>
-        /// Channel Type issued by Walmart
-        /// </summary>
-        string ChannelType { get; set; }
-
-        /// <summary>
         /// Saves the store credentials
         /// </summary>
         void Save(WalmartStoreEntity store);

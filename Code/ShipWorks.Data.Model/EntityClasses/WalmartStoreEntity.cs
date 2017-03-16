@@ -334,8 +334,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PrivateKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ChannelType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
 		}
 		#endregion
@@ -408,16 +406,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.PrivateKey, true); }
 			set	{ SetValue((int)WalmartStoreFieldIndex.PrivateKey, value); }
-		}
-
-		/// <summary> The ChannelType property of the Entity WalmartStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "WalmartStore"."ChannelType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ChannelType
-		{
-			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ChannelType, true); }
-			set	{ SetValue((int)WalmartStoreFieldIndex.ChannelType, value); }
 		}
 
 		/// <summary> The DownloadModifiedNumberOfDaysBack property of the Entity WalmartStore<br/><br/></summary>
