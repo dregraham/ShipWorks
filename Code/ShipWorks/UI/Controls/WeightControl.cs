@@ -111,10 +111,10 @@ namespace ShipWorks.UI.Controls
             keyboardShortcutSubscription?.Dispose();
 
             keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
-                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
+                .Where(m => AutoWeighShortCutsAllowed &&
+                            m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
                             Visible &&
-                            Enabled &&
-                            AutoWeighShortCutsAllowed)
+                            Enabled)
                 .Subscribe(async _ => await ApplyWeightFromScaleAsync(KeyboardShortcutTelemetryKey));
         }
 
@@ -127,7 +127,7 @@ namespace ShipWorks.UI.Controls
             if (AutoWeighShortCutsAllowed)
             {
                 bool wasBlank = applyWeightShortcutText.IsNullOrWhiteSpace();
-                
+
                 // Only display the first shortcut.  The rest will be in a tool tip.
                 applyWeightShortcutText = autoWeighShortcut;
 
@@ -646,7 +646,7 @@ namespace ShipWorks.UI.Controls
             errorProvider.BlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
             errorProvider.SetIconPadding(weighToolbar, 3);
             errorProvider.SetError(weighToolbar, error);
-            
+
             // Position the live weight/shortcut to the side of the error provider.
             weightInfo.Left = weighToolbar.Right + 21;
         }
