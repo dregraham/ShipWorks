@@ -28,16 +28,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Save_ThrowsWalmartException_WhenChannelTypeIsEmpty()
-        {
-            var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "12345";
-
-            Assert.Throws<WalmartException>(() => testObject.Save(new WalmartStoreEntity()));
-        }
-
-        [Fact]
         public void Save_ThrowsWalmartException_WhenPrivateKeyIsEmptyAndStoreIsNew()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
