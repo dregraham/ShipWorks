@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using System;
@@ -294,12 +295,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetUpsShipmentClassCode(ShipmentEntity shipment)
         {
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
+
+            // Sears has a special value we have to send for surepost
+            if (UpsUtility.IsUpsSurePostService(upsServiceType) && IsSearsMarketplaceOrder(shipment))
+            {
+                return "SurePost";
+            }
+
             Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = GetUpsServiceTypeClassCodesMap();
 
-            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
             return upsServiceTypeClassCodes.ContainsKey(upsServiceType)
                 ? upsServiceTypeClassCodes[upsServiceType]
                 : "NONE";
+        }
+
+        /// <summary>
+        /// If the shipment belongs to and order which originated on the sears marketplace
+        /// </summary>
+        private static bool IsSearsMarketplaceOrder(ShipmentEntity shipment)
+        {
+            ChannelAdvisorOrderEntity caOrder = shipment.Order as ChannelAdvisorOrderEntity;
+            return caOrder?.MarketplaceNames.Contains("sears", StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
 
         /// <summary>
