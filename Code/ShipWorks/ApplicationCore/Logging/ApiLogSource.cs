@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		Fortune3,
         OpenCart,
         CloudConversion,
-		
+
         [ApiPrivateLogSource]
         DialAZip,
 
@@ -99,10 +99,10 @@ namespace ShipWorks.ApplicationCore.Logging
         SureDone,
         nopCommerce,
 		LimeLightCRM,
-		
+
 		[ApiPrivateLogSource]
         InsureShip,
-		
+
         SellerExpress,
         PowersportsSupport,
         CsCart,
@@ -123,6 +123,7 @@ namespace ShipWorks.ApplicationCore.Logging
         FedExFims,
         Odbc,
         SellerCloud,
-        InfiPlex
+        InfiPlex,
+        SellerActive
     }
 }

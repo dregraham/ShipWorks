@@ -374,6 +374,11 @@ namespace ShipWorks.Stores
         [Description("InfiPlex")]
         [StoreTypeIdentity("INFIPLEX", "IPX")]
         [StoreTypeIcon("infiplex")]
-        InfiPlex = 74
+        InfiPlex = 74,
+
+        [Description("SellerActive")]
+        [StoreTypeIdentity("SELLERACTIVE", "SEA")]
+        [StoreTypeIcon("selleractive")]
+        SellerActive = 75
     }
 }

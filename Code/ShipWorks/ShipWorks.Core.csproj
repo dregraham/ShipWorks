@@ -10756,6 +10756,7 @@
     <None Include="Resources\odbc.png" />
     <Resource Include="Resources\printer_redo_16_16.png" />
     <None Include="Resources\sellercloud.png" />
+    <None Include="Resources\selleractive.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
