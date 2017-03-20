@@ -40,21 +40,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Gets a UpsPromo
         /// </summary>
-        public IUpsPromo Get(UpsAccountEntity account)
+        public IUpsPromo Get(UpsAccountEntity account, bool existingAccount)
         {
-            return new TelemetricUpsPromo(telemetryEvent, GetUpsPromo(account));
+            return new TelemetricUpsPromo(telemetryEvent, GetUpsPromo(account), existingAccount);
         }
 
         /// <summary>
         /// Gets the footnote factory.
         /// </summary>
-        public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account)
+        public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account, bool existingAccount)
         {
             IUpsPromo promo = GetUpsPromo(account);
 
             if (upsPromoPolicy.IsEligible(promo))
             {
-                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo);
+                // At this point if we are shoing a footnote we know its for an existing account
+                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo, existingAccount);
 
                 // Create promo footnote factory
                 UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);

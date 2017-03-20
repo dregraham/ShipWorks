@@ -15,26 +15,46 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     {
         readonly ITrackedEvent telemetryEvent;
         readonly IUpsPromo upsPromo;
+        readonly bool existingAccount;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricUpsPromo(ITrackedEvent telemetryEvent, IUpsPromo upsPromo)
+        public TelemetricUpsPromo(ITrackedEvent telemetryEvent, IUpsPromo upsPromo, bool existingAccount)
         {
+            this.existingAccount = existingAccount;
             this.upsPromo = upsPromo;
             this.telemetryEvent = telemetryEvent;
         }
 
+        /// <summary>
+        /// The Access License Number
+        /// </summary>
         public string AccessLicenseNumber => upsPromo.AccessLicenseNumber;
 
+        /// <summary>
+        /// Gets the account identifier.
+        /// </summary>
         public long AccountId => upsPromo.AccountId;
 
+        /// <summary>
+        /// The UPS Account Number
+        /// </summary>
         public string AccountNumber => upsPromo.AccountNumber;
 
+        /// <summary>
+        /// The Country Code of the UPS Account
+        /// </summary>
         public string CountryCode => upsPromo.CountryCode;
 
+        /// <summary>
+        /// The UPS Accounts Password
+        /// </summary>
         public string Password => upsPromo.Password;
 
+        /// <summary>
+        /// Gets the promo code
+        /// </summary>
         public string PromoCode => upsPromo.PromoCode;
 
         /// <summary>
@@ -42,14 +62,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public PromoAcceptanceTerms Terms => upsPromo.Terms;
 
+        /// <summary>
+        /// The UPS Accounts UserId
+        /// </summary>
         public string Username => upsPromo.Username;
 
         /// <summary>
         /// Activates the Promo Code
         /// </summary>
-        public void Apply(bool existingAccount)
+        public void Apply()
         {
-            upsPromo.Apply(existingAccount);
+            upsPromo.Apply();
             LogResult("Applied", existingAccount, upsPromo);
         }
 

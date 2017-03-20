@@ -11,11 +11,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Gets a UpsPromo
         /// </summary>
-        IUpsPromo Get(UpsAccountEntity account);
+        IUpsPromo Get(UpsAccountEntity account, bool existingAccount);
 
         /// <summary>
         /// Creates the footnote factory for the account
         /// </summary>
-        UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account);
+        UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account, bool existingAccount);
     }
 }

@@ -46,7 +46,7 @@ namespace Interapptive.Shared.Metrics
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public virtual void Dispose()
+        public override void Dispose()
         {
             if (disposed == false)
             {

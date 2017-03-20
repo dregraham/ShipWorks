@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             {
                 // Apply the promo
                 promo.Terms.AcceptTerms();
-                promo.Apply(true);
+                promo.Apply();
             }
             catch (UpsPromoException)
             {

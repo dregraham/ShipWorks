@@ -1132,7 +1132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount);
+                promo = upsPromoFactory.Get(upsAccount, true);
 
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;
@@ -1155,7 +1155,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (promoYes.Checked)
                 {
                     promo.Terms.AcceptTerms();
-                    promo.Apply(false);
+                    promo.Apply();
                 }
                 else
                 {
