@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public void Apply(bool existingAccount)
         {
             upsPromo.Apply();
-            LogResult("Applied", existingAccount, upsPromo.AccountNumber);
+            LogResult("Applied", existingAccount, upsPromo);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public void Decline()
         {
             upsPromo.Decline();
-            LogResult("Declined", false);
+            LogResult("Declined");
         }
 
         /// <summary>
@@ -53,24 +53,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public void RemindMe()
         {
             upsPromo.RemindMe();
-            LogResult("Remind Later", false);
+            LogResult("Remind Later");
         }
 
         /// <summary>
         /// Log the results to telemetry
         /// </summary>
-        private void LogResult(string result, bool existingAccount, string accountNumber = "N/A")
+        private void LogResult(string result, bool existingAccount = false, IUpsPromo promo = null)
         {
             telemetryEvent.AddProperty("Ups.Promo.Result", result);
-            telemetryEvent.AddProperty("Ups.Promo.AccountNumber", accountNumber);
 
-            if (existingAccount)
+            if (existingAccount && promo != null)
             {
                 telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", "true");
+                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", promo.AccountNumber);
             }
             else
             {
                 telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", "N/A");
+                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", "N/A");
             }
         }
     }
