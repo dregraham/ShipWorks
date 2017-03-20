@@ -10,7 +10,7 @@ namespace Interapptive.Shared.Metrics
     public class TrackedEvent : ITrackedEvent
     {
         private readonly EventTelemetry eventTelemetry;
-        private bool disposed = false;
+        protected bool disposed = false;
 
         /// <summary>
         /// Constructor
@@ -48,6 +48,14 @@ namespace Interapptive.Shared.Metrics
             {
                 eventTelemetry.Properties.Add(propertyName, propertyValue);
             }
+        }
+
+        /// <summary>
+        /// Changes the name used to identify this specific event.
+        /// </summary>
+        protected void ChangeName(string name)
+        {
+            eventTelemetry.Name = name;
         }
 
         /// <summary>
