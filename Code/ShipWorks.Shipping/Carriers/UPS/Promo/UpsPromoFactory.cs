@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Gets a UpsPromo
         /// </summary>
-        public TelemetricUpsPromo Get(UpsAccountEntity account)
+        public IUpsPromo Get(UpsAccountEntity account)
         {
             return new TelemetricUpsPromo(telemetryEvent, GetUpsPromo(account));
         }
@@ -50,11 +50,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account)
         {
-            UpsPromo promo = GetUpsPromo(account);
+            IUpsPromo promo = GetUpsPromo(account);
 
             if (upsPromoPolicy.IsEligible(promo))
             {
-                TelemetricUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo);
+                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo);
 
                 // Create promo footnote factory
                 UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Get a UpsPromo
         /// </summary>
-        private UpsPromo GetUpsPromo(UpsAccountEntity account)
+        private IUpsPromo GetUpsPromo(UpsAccountEntity account)
         {
             return new UpsPromo(account, settingsRepository, accountRepository, promoClientFactory, upsPromoPolicy);
         }

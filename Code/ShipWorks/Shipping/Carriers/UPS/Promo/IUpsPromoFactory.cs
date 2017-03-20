@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Gets a UpsPromo
         /// </summary>
-        TelemetricUpsPromo Get(UpsAccountEntity account);
+        IUpsPromo Get(UpsAccountEntity account);
 
         /// <summary>
         /// Creates the footnote factory for the account

@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
         private DateTime? smartPickupNotifyTime;
-        private TelemetricUpsPromo promo;
+        private IUpsPromo promo;
 
         private string upsLicense;
 

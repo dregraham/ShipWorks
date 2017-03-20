@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// The UPS promo.
         /// </summary>
-        public TelemetricUpsPromo UpsPromo { get; set; }
+        public IUpsPromo UpsPromo { get; set; }
 
         /// <summary>
         /// Shipment adapter associated with the current rates

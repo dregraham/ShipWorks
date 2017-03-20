@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         {
             testObject.Apply(true);
 
-            upsPromo.Verify(p => p.Apply());
+            upsPromo.Verify(p => p.Apply(true));
         }
 
         [Fact]

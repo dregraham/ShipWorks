@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Applies the Promo Code
         /// </summary>
-        public void Apply()
+        public void Apply(bool existingAccount)
         {
             // Check to see if the terms have been accepted
             if (Terms.IsAccepted == false)

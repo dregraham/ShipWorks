@@ -12,12 +12,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
     /// <seealso cref="ShipWorks.Shipping.Editing.Rating.IRateFootnoteFactory" />
     public class UpsPromoFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly TelemetricUpsPromo promo;
+        private readonly IUpsPromo promo;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoFootnoteFactory(TelemetricUpsPromo promo, UpsAccountEntity account)
+        public UpsPromoFootnoteFactory(IUpsPromo promo, UpsAccountEntity account)
         {
             this.promo = promo;
             ShipmentTypeCode = account.ShipmentType;

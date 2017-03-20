@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 var testObject = CreateUpsPromo(mock, client);
 
-                Assert.Throws<UpsPromoException>(() => testObject.Apply());
+                Assert.Throws<UpsPromoException>(() => testObject.Apply(true));
             }
         }
 
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var testObject = CreateUpsPromo(mock, client);
                 testObject.Terms.AcceptTerms();
 
-                testObject.Apply();
+                testObject.Apply(true);
 
                 client.Verify(c => c.Activate(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             }
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
-                testObject.Apply();
+                testObject.Apply(true);
 
                 Assert.Equal(UpsPromoStatus.Applied, (UpsPromoStatus) upsAccount.PromoStatus);
             }
@@ -235,7 +235,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
-                testObject.Apply();
+                testObject.Apply(true);
 
                 accountRepo.Verify(r => r.Save(It.IsAny<UpsAccountEntity>()), Times.Once);
             }
@@ -267,7 +267,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
-                Assert.Throws<UpsPromoException>(() => testObject.Apply());
+                Assert.Throws<UpsPromoException>(() => testObject.Apply(true));
             }
         }
 
