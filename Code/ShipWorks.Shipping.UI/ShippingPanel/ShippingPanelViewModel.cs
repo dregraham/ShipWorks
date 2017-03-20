@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 LoadShipment(GetShipmentToLoad());
             }
-            if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)
+            else if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)
             {
                 // We need to set this so that we can open the dialog from the "Ship Orders" button,
                 // since it expects the current shipment to be non-null
