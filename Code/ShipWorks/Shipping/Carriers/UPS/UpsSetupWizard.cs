@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
         private DateTime? smartPickupNotifyTime;
-        private UpsPromo promo;
+        private TelemetricUpsPromo promo;
 
         private string upsLicense;
 
@@ -1155,7 +1155,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (promoYes.Checked)
                 {
                     promo.Terms.AcceptTerms();
-                    promo.Apply();
+                    promo.Apply(false);
                 }
                 else
                 {

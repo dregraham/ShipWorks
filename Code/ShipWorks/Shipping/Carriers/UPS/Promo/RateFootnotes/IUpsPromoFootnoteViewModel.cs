@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// <summary>
         /// The UPS promo.
         /// </summary>
-        IUpsPromo UpsPromo { get; set; }
+        TelemetricUpsPromo UpsPromo { get; set; }
 
         /// <summary>
         /// Shipment adapter associated with the current rates

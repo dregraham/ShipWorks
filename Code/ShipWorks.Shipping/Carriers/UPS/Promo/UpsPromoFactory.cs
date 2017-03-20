@@ -1,8 +1,11 @@
 ﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
@@ -15,12 +18,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private readonly IPromoClientFactory promoClientFactory;
         private readonly IUpsPromoPolicy upsPromoPolicy;
         readonly ICarrierSettingsRepository settingsRepository;
+        readonly ITrackedEvent telemetryEvent;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoFactory(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, IPromoClientFactory promoClientFactory, IUpsPromoPolicy upsPromoPolicy)
+        public UpsPromoFactory(
+            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            IPromoClientFactory promoClientFactory,
+            IUpsPromoPolicy upsPromoPolicy,
+            Func<string, ITrackedEvent> telemetryEvent)
         {
+            this.telemetryEvent = telemetryEvent("Ups.Promo");
             this.accountRepository = accountRepository;
             this.promoClientFactory = promoClientFactory;
             this.upsPromoPolicy = upsPromoPolicy;
@@ -30,7 +40,36 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Gets a UpsPromo
         /// </summary>
-        public UpsPromo Get(UpsAccountEntity account)
+        public TelemetricUpsPromo Get(UpsAccountEntity account)
+        {
+            return new TelemetricUpsPromo(telemetryEvent, GetUpsPromo(account));
+        }
+
+        /// <summary>
+        /// Gets the footnote factory.
+        /// </summary>
+        public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account)
+        {
+            UpsPromo promo = GetUpsPromo(account);
+
+            if (upsPromoPolicy.IsEligible(promo))
+            {
+                TelemetricUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo);
+
+                // Create promo footnote factory
+                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);
+
+                // Add factory to the final group rate group
+                return promoFootNoteFactory;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get a UpsPromo
+        /// </summary>
+        private UpsPromo GetUpsPromo(UpsAccountEntity account)
         {
             return new UpsPromo(account, settingsRepository, accountRepository, promoClientFactory, upsPromoPolicy);
         }

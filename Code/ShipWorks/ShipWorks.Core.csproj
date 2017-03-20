@@ -1249,6 +1249,7 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />

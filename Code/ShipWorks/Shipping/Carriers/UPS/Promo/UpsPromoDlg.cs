@@ -7,14 +7,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     public partial class UpsPromoDlg : Form
     {
-        private readonly IUpsPromo promo;
+        private readonly TelemetricUpsPromo promo;
         private PromoAcceptanceTerms terms;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="promo"></param>
-        public UpsPromoDlg(IUpsPromo promo)
+        public UpsPromoDlg(TelemetricUpsPromo promo)
         {
             this.promo = promo;
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             {
                 // Apply the promo
                 promo.Terms.AcceptTerms();
-                promo.Apply();
+                promo.Apply(true);
             }
             catch (UpsPromoException)
             {
