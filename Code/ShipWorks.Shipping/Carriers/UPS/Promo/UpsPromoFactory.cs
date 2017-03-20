@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private readonly IPromoClientFactory promoClientFactory;
         private readonly IUpsPromoPolicy upsPromoPolicy;
         readonly ICarrierSettingsRepository settingsRepository;
-        readonly ITrackedEvent telemetryEvent;
+        readonly Func<string, ITrackedEvent> telemetryEventFunc;
 
         /// <summary>
         /// Constructor
@@ -28,9 +28,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             IPromoClientFactory promoClientFactory,
             IUpsPromoPolicy upsPromoPolicy,
-            Func<string, ITrackedEvent> telemetryEvent)
+            Func<string, ITrackedEvent> telemetryEventFunc)
         {
-            this.telemetryEvent = telemetryEvent("Ups.Promo");
+            this.telemetryEventFunc = telemetryEventFunc;
             this.accountRepository = accountRepository;
             this.promoClientFactory = promoClientFactory;
             this.upsPromoPolicy = upsPromoPolicy;
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public IUpsPromo Get(UpsAccountEntity account, bool existingAccount)
         {
-            return new TelemetricUpsPromo(telemetryEvent, GetUpsPromo(account), existingAccount);
+            return new TelemetricUpsPromo(telemetryEventFunc("Ups.Promo"), GetUpsPromo(account), existingAccount);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             if (upsPromoPolicy.IsEligible(promo))
             {
                 // At this point if we are shoing a footnote we know its for an existing account
-                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEvent, promo, existingAccount);
+                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEventFunc("Ups.Promo"), promo, existingAccount);
 
                 // Create promo footnote factory
                 UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);
