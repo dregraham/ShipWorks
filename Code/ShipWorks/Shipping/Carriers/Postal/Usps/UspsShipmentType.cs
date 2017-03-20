@@ -535,12 +535,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             switch (shipment.Postal.Service)
             {
-                case (int) PostalServiceType.GlobalPostSmartSaverEconomy:
-                case (int) PostalServiceType.GlobalPostEconomy:
+                case (int) PostalServiceType.GlobalPostSmartSaverEconomyIntl:
+                case (int) PostalServiceType.GlobalPostEconomyIntl:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
 
-                case (int) PostalServiceType.GlobalPostPriority:
-                case (int) PostalServiceType.GlobalPostSmartSaverPriority:
+                case (int) PostalServiceType.GlobalPostStandardIntl:
+                case (int) PostalServiceType.GlobalPostSmartSaverStandardIntl:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
 
                 default:
