@@ -14,7 +14,8 @@ namespace ShipWorks.Stores.Platforms.SellerActive
         /// <summary>
         /// Constructor
         /// </summary>
-        public SellerActiveStoreType(StoreEntity store) : base(store)
+        public SellerActiveStoreType(StoreEntity store)
+            : base(store)
         {
         }
 
