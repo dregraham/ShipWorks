@@ -1,6 +1,4 @@
 ﻿using System;
-using Autofac;
-using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -22,8 +20,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public ITangoWebClient CreateWebClient()
         {
-            ITangoWebClient webClient = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<ITangoWebClient>>().Value;
-
             if (InterapptiveOnly.IsInterapptiveUser)
             {
                 // Check to see if the TangoWebClient key exists and try to use the
@@ -36,14 +32,14 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                     if (type != null)
                     {
-                        webClient = Activator.CreateInstance(type) as ITangoWebClient;
+                        return Activator.CreateInstance(type) as ITangoWebClient;
                     }
                 }
             }
 
             // Fall back to the TangoWebClientWrapper in case we tried to create a customized web client
             // that could not be resolved by the Activator
-            return webClient ?? new TangoWebClientWrapper();
+            return new TangoWebClientWrapper();
         }
     }
 }

@@ -347,9 +347,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<TangoWebClientWrapper>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces()
                 .UsingConstructor();

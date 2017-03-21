@@ -214,7 +214,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the license capabilities.
         /// </summary>
-        public ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
+        public virtual ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
             return TangoWebClient.GetLicenseCapabilities(license);
         }
@@ -222,7 +222,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the active stores from Tango.
         /// </summary>
-        public IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        public virtual IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
         {
             return TangoWebClient.GetActiveStores(license);
         }
