@@ -31,16 +31,8 @@ namespace Interapptive.Shared.Metrics
         /// </summary>
         private void Stop()
         {
-            try
-            {
-                stopwatch.Stop();
-                AddMetric(DurationMetricKey, stopwatch.ElapsedMilliseconds);
-            }
-            catch
-            {
-                // If for some reason the code throws, we don't want to stop the user from
-                // doing their work, so igoring all exceptions here.
-            }
+            stopwatch.Stop();
+            AddMetric(DurationMetricKey, stopwatch.ElapsedMilliseconds);
         }
 
         /// <summary>

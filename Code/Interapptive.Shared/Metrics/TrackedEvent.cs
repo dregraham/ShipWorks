@@ -65,7 +65,15 @@ namespace Interapptive.Shared.Metrics
         {
             if (disposed == false)
             {
-                Telemetry.TrackEvent(eventTelemetry);
+                try
+                {
+                    Telemetry.TrackEvent(eventTelemetry);
+                } catch
+                {
+                    // If for some reason the code throws, we don't want to stop the user from
+                    // doing their work, so ignoring all exceptions here.
+                }
+
                 disposed = true;
             }
         }
