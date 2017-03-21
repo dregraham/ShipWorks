@@ -488,6 +488,7 @@
           <Field Name="CustomerUpdateShipping" Type="bool" FieldIndex="7" />
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Customer" ObjectID="49c26834-7e51-4f06-be28-976aea3976f1">
@@ -3601,7 +3602,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-02-21T20:41:02.3719018Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4045,6 +4046,7 @@
                     <Field Name="AuditNewOrders" Ordinal="11" DbType="2" />
                     <Field Name="AuditDeletedOrders" Ordinal="12" DbType="2" />
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
+                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -9196,6 +9198,7 @@
             <FieldMapping FieldName="CustomerUpdateShipping" TargetFieldName="CustomerUpdateShipping" />
             <FieldMapping FieldName="LogOnMethod" TargetFieldName="LogOnMethod" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="UseParallelActionQueue" TargetFieldName="UseParallelActionQueue" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Customer" TargetName="ShipWorksLocal:dbo:Customer">
