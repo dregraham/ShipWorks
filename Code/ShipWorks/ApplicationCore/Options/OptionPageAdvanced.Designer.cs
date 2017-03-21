@@ -66,6 +66,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.label7 = new System.Windows.Forms.Label();
             this.shipmentEditLimit = new System.Windows.Forms.ComboBox();
             this.infoTip1 = new ShipWorks.UI.Controls.InfoTip();
+            this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
+            this.useParallelActionProcessing = new System.Windows.Forms.CheckBox();
+            this.printingPriorityInfoTip = new ShipWorks.UI.Controls.InfoTip();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -448,12 +451,45 @@ namespace ShipWorks.ApplicationCore.Options
             this.infoTip1.TabIndex = 54;
             this.infoTip1.Title = "Maximum Batch Size";
             // 
+            // sectionTitle1
+            // 
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle1.Location = new System.Drawing.Point(10, 979);
+            this.sectionTitle1.Name = "sectionTitle1";
+            this.sectionTitle1.Size = new System.Drawing.Size(481, 22);
+            this.sectionTitle1.TabIndex = 55;
+            this.sectionTitle1.Text = "Shipment Processing";
+            // 
+            // useParallelActionProcessing
+            // 
+            this.useParallelActionProcessing.AutoSize = true;
+            this.useParallelActionProcessing.Location = new System.Drawing.Point(35, 1009);
+            this.useParallelActionProcessing.Name = "useParallelActionProcessing";
+            this.useParallelActionProcessing.Size = new System.Drawing.Size(226, 17);
+            this.useParallelActionProcessing.TabIndex = 56;
+            this.useParallelActionProcessing.Text = "Give priority to default label printing tasks";
+            this.useParallelActionProcessing.UseVisualStyleBackColor = true;
+            // 
+            // printingPriorityInfoTip
+            // 
+            this.printingPriorityInfoTip.Caption = "This option will give priority to default label printing tasks over other tasks l" +
+    "ike uploading shipment details.";
+            this.printingPriorityInfoTip.Location = new System.Drawing.Point(260, 1011);
+            this.printingPriorityInfoTip.Name = "printingPriorityInfoTip";
+            this.printingPriorityInfoTip.Size = new System.Drawing.Size(12, 12);
+            this.printingPriorityInfoTip.TabIndex = 58;
+            this.printingPriorityInfoTip.Title = "Default Label Printing Priority";
+            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.printingPriorityInfoTip);
+            this.Controls.Add(this.useParallelActionProcessing);
+            this.Controls.Add(this.sectionTitle1);
             this.Controls.Add(this.infoTip1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.shipmentEditLimit);
@@ -494,7 +530,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.logOnMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(505, 981);
+            this.Size = new System.Drawing.Size(505, 1035);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -541,5 +577,8 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox shipmentEditLimit;
         private UI.Controls.InfoTip infoTip1;
+        private UI.Controls.SectionTitle sectionTitle1;
+        private System.Windows.Forms.CheckBox useParallelActionProcessing;
+        private UI.Controls.InfoTip printingPriorityInfoTip;
     }
 }
