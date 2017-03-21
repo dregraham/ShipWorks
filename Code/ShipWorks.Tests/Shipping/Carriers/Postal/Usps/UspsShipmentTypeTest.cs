@@ -90,10 +90,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Theory]
-        [InlineData(PostalServiceType.GlobalPostSmartSaverEconomy, "USPS GlobalPost SmartSaver Economy")]
-        [InlineData(PostalServiceType.GlobalPostEconomy, "USPS GlobalPost Economy")]
-        [InlineData(PostalServiceType.GlobalPostSmartSaverPriority, "USPS GlobalPost SmartSaver Priority")]
-        [InlineData(PostalServiceType.GlobalPostPriority, "USPS GlobalPost Priority")]
+        [InlineData(PostalServiceType.GlobalPostSmartSaverEconomyIntl, "USPS GlobalPost SmartSaver Economy Intl")]
+        [InlineData(PostalServiceType.GlobalPostEconomyIntl, "USPS GlobalPost Economy Intl")]
+        [InlineData(PostalServiceType.GlobalPostSmartSaverStandardIntl, "USPS GlobalPost SmartSaver Standard Intl")]
+        [InlineData(PostalServiceType.GlobalPostStandardIntl, "USPS GlobalPost Standard Intl")]
         [InlineData(PostalServiceType.InternationalFirst, "USPS International First")]
         [InlineData(PostalServiceType.InternationalPriority, "USPS International Priority")]
         [InlineData(PostalServiceType.FirstClass, "USPS First Class")]
