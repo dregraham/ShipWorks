@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
         {
-            UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFactory.GetFootnoteFactory(account, true);
+            UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFactory.GetFootnoteFactory(account);
 
             if (upsPromoFootnoteFactory != null)
             {

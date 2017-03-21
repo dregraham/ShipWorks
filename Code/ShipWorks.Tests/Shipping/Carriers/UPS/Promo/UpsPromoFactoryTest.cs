@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
             UpsPromoFactory testObject = mock.Create<UpsPromoFactory>();
 
-            Assert.Null(testObject.GetFootnoteFactory(new UpsAccountEntity(), true));
+            Assert.Null(testObject.GetFootnoteFactory(new UpsAccountEntity()));
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
             UpsPromoFactory testObject = mock.Create<UpsPromoFactory>();
 
-            Assert.IsAssignableFrom<UpsPromoFootnoteFactory>(testObject.GetFootnoteFactory(new UpsAccountEntity(), true));
+            Assert.IsAssignableFrom<UpsPromoFootnoteFactory>(testObject.GetFootnoteFactory(new UpsAccountEntity()));
         }
 
     }
