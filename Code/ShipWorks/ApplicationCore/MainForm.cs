@@ -844,15 +844,15 @@ namespace ShipWorks
 
             try
             {
-                values.Union(SqlServerInfo.Fetch())
+                return values.Union(SqlServerInfo.Fetch())
                     .Union(ShippingSettings.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
-            catch
+            catch(Exception ex)
             {
+                log.Error("Error collecting ShipWorks telemetry data.", ex);
+                return values;
             }
-
-            return values;
         }
 
         /// <summary>

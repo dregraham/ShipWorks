@@ -189,8 +189,6 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public static IDictionary<string, string> GetTelemetryData()
         {
-            Dictionary<string, string> shippingSettingsTelemetry = new Dictionary<string, string>();
-
             IShippingSettingsEntity settings = FetchReadOnly();
             StringBuilder activatedTypes = new StringBuilder(string.Join(",", settings.ActivatedTypes.Where(t => t != ShipmentTypeCode.Express1Endicia && t != ShipmentTypeCode.Express1Usps).Select(t => EnumHelper.GetDescription(t))));
 
@@ -203,6 +201,8 @@ namespace ShipWorks.Shipping.Settings
             {
                 activatedTypes.Append(",Express1 (Endicia)");
             }
+
+            Dictionary<string, string> shippingSettingsTelemetry = new Dictionary<string, string>();
 
             shippingSettingsTelemetry.Add("Shipping.ActiveProviders", activatedTypes.ToString());
             shippingSettingsTelemetry.Add("Shipping.DefaultProvider", EnumHelper.GetDescription(settings.DefaultShipmentTypeCode));
