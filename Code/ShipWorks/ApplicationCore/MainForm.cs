@@ -819,7 +819,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(GetTelemetryData());
+            Telemetry.TrackStartShipworks(GetStartupTelemetryData());
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -838,7 +838,7 @@ namespace ShipWorks
         /// Get telemetry data for ShipWorks
         /// </summary>
         /// <returns></returns>
-        private static IDictionary<string, string> GetTelemetryData()
+        private static IDictionary<string, string> GetStartupTelemetryData()
         {
             Dictionary<string, string> values = new Dictionary<string, string>();
 
