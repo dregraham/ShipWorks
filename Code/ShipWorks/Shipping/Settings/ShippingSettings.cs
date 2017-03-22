@@ -202,12 +202,11 @@ namespace ShipWorks.Shipping.Settings
                 activatedTypes.Append(",Express1 (Endicia)");
             }
 
-            Dictionary<string, string> shippingSettingsTelemetry = new Dictionary<string, string>();
-
-            shippingSettingsTelemetry.Add("Shipping.ActiveProviders", activatedTypes.ToString());
-            shippingSettingsTelemetry.Add("Shipping.DefaultProvider", EnumHelper.GetDescription(settings.DefaultShipmentTypeCode));
-
-            return shippingSettingsTelemetry;
+            return new Dictionary<string, string>
+            {
+                {"Shipping.ActiveProviders", activatedTypes.ToString() },
+                {"Shipping.DefaultProvider", EnumHelper.GetDescription(settings.DefaultShipmentTypeCode) }
+            };
         }
 
         /// <summary>
