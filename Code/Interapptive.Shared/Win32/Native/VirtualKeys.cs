@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Interapptive.Shared.Win32.Native
 {
@@ -6,6 +7,7 @@ namespace Interapptive.Shared.Win32.Native
     /// Enumeration for virtual keys.
     /// </summary>
     [CLSCompliant(false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum VirtualKeys : ushort
     {
         /// <summary></summary>

@@ -936,6 +936,7 @@ namespace ShipWorks.Shipping
             else
             {
                 oldServiceControl.UnloadShipments();
+                oldServiceControl.Enabled = false;
                 UnhookEvents(oldServiceControl);
             }
 
@@ -975,6 +976,7 @@ namespace ShipWorks.Shipping
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
             rateControl.ReloadRatesRequired += OnRateReloadRequired;
 
+            newServiceControl.Enabled = true;
             newServiceControl.Dock = DockStyle.Fill;
             serviceControlArea.Controls.Clear();
             serviceControlArea.Controls.Add(newServiceControl);

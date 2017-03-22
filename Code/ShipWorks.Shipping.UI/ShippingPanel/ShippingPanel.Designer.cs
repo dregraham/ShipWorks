@@ -19,6 +19,8 @@
                 {
                     components.Dispose();
                 }
+
+                visibilitySubscription?.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -66,6 +66,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             packageCountCombo.DataSource = packageCountData;
 
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey,
+                    loadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey,
+                    selectedRows.Select(x => x.Tag).OfType<List<IParcelPackageEntity>>().SelectMany(x => x).Count());
+            };
         }
 
         /// <summary>

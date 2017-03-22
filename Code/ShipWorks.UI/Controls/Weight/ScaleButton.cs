@@ -1,11 +1,27 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Forms.Integration;
+using System.Windows.Interop;
+using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
+using WinForms = System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -16,6 +32,11 @@ namespace ShipWorks.UI.Controls.Weight
     [TemplatePart(Name = "PART_Display", Type = typeof(TextBlock))]
     public class ScaleButton : Control
     {
+        public const bool AcceptApplyWeightKeyboardShortcutDefault = false;
+
+        public static readonly RoutedEvent ScaleReadEvent = EventManager.RegisterRoutedEvent(
+            "ScaleRead", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ScaleButton));
+
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight",
                 typeof(double),
@@ -27,9 +48,22 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(ScaleButton),
                 new PropertyMetadata(WeightDisplayFormat.FractionalPounds));
 
+        public static readonly DependencyProperty TelemetrySourceProperty =
+            DependencyProperty.Register("TelemetrySource",
+                typeof(string),
+                typeof(ScaleButton));
+
+        public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
+            DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(ScaleButton),
+                new FrameworkPropertyMetadata(AcceptApplyWeightKeyboardShortcutDefault));
+
         IDisposable weightSubscription;
+        IDisposable applyWeightSubscription;
         ButtonBase scaleButton;
         TextBlock display;
+        private readonly IKeyboardShortcutTranslator keyboardShortcutTranslator;
+        private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
+        private IntPtr ownerHandle;
 
         /// <summary>
         /// Static constructor
@@ -46,6 +80,51 @@ namespace ShipWorks.UI.Controls.Weight
         public ScaleButton()
         {
             IsVisibleChanged += OnIsVisibleChanged;
+
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
+            keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
+            startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
+
+            Loaded += OnScaleButtonLoaded;
+        }
+
+        /// <summary>
+        /// The button has been loaded
+        /// </summary>
+        private void OnScaleButtonLoaded(object sender, RoutedEventArgs e)
+        {
+            ownerHandle = (GetOwnerWindow() ?? GetOwnerForm()).GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Get the owner Window, if there is one
+        /// </summary>
+        private IntPtr? GetOwnerWindow()
+        {
+            Window owner = Window.GetWindow(this);
+            return owner == null ? (IntPtr?) null : new WindowInteropHelper(owner).Handle;
+        }
+
+        /// <summary>
+        /// Get the owner Form, if there is one
+        /// </summary>
+        private IntPtr? GetOwnerForm()
+        {
+            HwndSource wpfHandle = PresentationSource.FromVisual(this) as HwndSource;
+
+            //the WPF control is hosted if the wpfHandle is not null
+            if (wpfHandle != null)
+            {
+                WinForms.Control host = WinForms.Control.FromChildHandle(wpfHandle.Handle);
+
+                return host?.FindForm()?.Handle;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -58,12 +137,38 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Will this control accept the apply weight keyboard shortcut
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public bool AcceptApplyWeightKeyboardShortcut
+        {
+            get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
+            set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
+        }
+
+        /// <summary>
+        /// Source of the weight for telemetry
+        /// </summary>
+        public string TelemetrySource
+        {
+            get { return (string) GetValue(TelemetrySourceProperty); }
+            set { SetValue(TelemetrySourceProperty, value); }
+        }
+
+        /// <summary>
+        /// The scale was read
+        /// </summary>
+        public event RoutedEventHandler ScaleRead
+        {
+            add { AddHandler(ScaleReadEvent, value); }
+            remove { RemoveHandler(ScaleReadEvent, value); }
+        }
+
+        /// <summary>
         /// Most recent error message
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return (string) GetValue(WeightControl.ErrorMessageProperty); }
-        }
+        public string ErrorMessage => (string) GetValue(WeightControl.ErrorMessageProperty);
 
         /// <summary>
         /// Apply the template
@@ -101,6 +206,21 @@ namespace ShipWorks.UI.Controls.Weight
                 weightSubscription = ScaleReader.ReadEvents
                     .ObserveOn(DispatcherScheduler.Current)
                     .Subscribe(DisplayWeight);
+            }
+
+            applyWeightSubscription?.Dispose();
+
+            if (visible)
+            {
+                applyWeightSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
+                    .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
+                    .ObserveOn(DispatcherScheduler.Current)
+                    .Where(_ => AcceptApplyWeightKeyboardShortcut &&
+                        Focusable &&
+                        scaleButton.IsEnabled &&
+                        ownerHandle == NativeMethods.GetActiveWindow())
+                    .SelectMany(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
+                    .Subscribe();
             }
         }
 
@@ -151,20 +271,61 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
+            await ApplyWeight(ShipWorks.UI.Controls.WeightControl.ButtonTelemetryKey);
+        }
+
+        /// <summary>
+        /// Apply the weight from the scale
+        /// </summary>
+        private async Task ApplyWeight(string invocationMethod)
+        {
             SetValue(WeightControl.ErrorMessageProperty, string.Empty);
             scaleButton.IsEnabled = false;
 
-            ScaleReadResult result = await ScaleReader.ReadScale();
-
-            scaleButton.IsEnabled = true;
-
-            if (result.Status != ScaleReadStatus.Success)
+            using (ITrackedDurationEvent durationEvent = StartTrackingApplyWeight())
             {
-                SetValue(WeightControl.ErrorMessageProperty, result.Message);
-                return;
-            }
+                ScaleReadResult result = await ScaleReader.ReadScale();
+                SetTelemetryProperties(durationEvent, result, invocationMethod);
 
-            SetCurrentValue(WeightProperty, result.Weight);
+                scaleButton.IsEnabled = true;
+
+                if (result.Status != ScaleReadStatus.Success)
+                {
+                    SetValue(WeightControl.ErrorMessageProperty, result.Message);
+                    return;
+                }
+
+                SetCurrentValue(WeightProperty, result.Weight);
+
+                RaiseEvent(new RoutedEventArgs(ScaleReadEvent, this));
+            }
+        }
+
+        /// <summary>
+        /// Start tracking the apply weight command
+        /// </summary>
+        private ITrackedDurationEvent StartTrackingApplyWeight()
+        {
+            return string.IsNullOrEmpty(TelemetrySource) ?
+                TrackedDurationEvent.Dummy :
+                startDurationEvent("Shipment.Scale.Weight.Applied");
+        }
+
+        /// <summary>
+        /// Set telemetry properties when applying weight
+        /// </summary>
+        private void SetTelemetryProperties(ITrackedDurationEvent telemetryEvent, ScaleReadResult result, string invocationMethod)
+        {
+            telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.Source", TelemetrySource);
+            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.ShipmentQuantityTelemetryKey, 1);
+            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.PackageQuantityTelemetryKey, 1);
+            telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
+            telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
+            telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
+                invocationMethod == ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey ?
+                    keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) :
+                    "N/A");
+            telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
         }
 
         /// <summary>

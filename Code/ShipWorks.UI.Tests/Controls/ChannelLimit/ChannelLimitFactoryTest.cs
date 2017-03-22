@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Autofac;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
@@ -10,7 +9,6 @@ using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelLimit;
 using Xunit;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace ShipWorks.UI.Tests.Controls.ChannelLimit
 {

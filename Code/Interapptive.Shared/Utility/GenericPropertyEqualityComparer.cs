@@ -35,4 +35,18 @@ namespace Interapptive.Shared.Utility
             return propertyAccessor(obj).GetHashCode();
         }
     }
+
+    /// <summary>
+    /// Generic equality comparer that uses a property accessor to test for equality
+    /// </summary>
+    public static class GenericPropertyEqualityComparer
+    {
+        /// <summary>
+        /// Create a generic property equality comparer, without specifying types
+        /// </summary>
+        public static GenericPropertyEqualityComparer<T, TProp> Create<T, TProp>(Func<T, TProp> propertyAccessor) where T : class
+        {
+            return new GenericPropertyEqualityComparer<T, TProp>(propertyAccessor);
+        }
+    }
 }

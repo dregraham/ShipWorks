@@ -73,6 +73,9 @@
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -175,6 +178,7 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
     </Compile>
@@ -339,6 +343,10 @@
     <Page Include="Styles\Controls\DataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\KeyboardShortcutDisplay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Controls\NotificationBorder.xaml">
       <SubType>Designer</SubType>

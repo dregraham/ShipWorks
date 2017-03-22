@@ -114,6 +114,8 @@
                        Style="{StaticResource Grid.TextBlock.Label}">Weight:</TextBlock>
             <ui:WeightControl Grid.Column="1"
                 ErrorMessage="{Binding WeightErrorMessage}"
+                AcceptApplyWeightKeyboardShortcut="True"
+                TelemetrySource="ShippingPanel"
                 Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                         ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
         </Grid>

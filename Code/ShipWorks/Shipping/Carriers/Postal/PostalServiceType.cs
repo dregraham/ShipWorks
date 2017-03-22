@@ -172,16 +172,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("RRD Generic")]
         RrdGeneric = 226,
 
-        [Description("GlobalPost Economy")]
-        GlobalPostEconomy = 227,
+        [Description("GlobalPost Economy Intl")]
+        GlobalPostEconomyIntl = 227,
 
-        [Description("GlobalPost Priority")]
-        GlobalPostPriority = 228,
+        [Description("GlobalPost Standard Intl")]
+        GlobalPostStandardIntl = 228,
 
-        [Description("GlobalPost SmartSaver Economy")]
-        GlobalPostSmartSaverEconomy = 229,
+        [Description("GlobalPost SmartSaver Economy Intl")]
+        GlobalPostSmartSaverEconomyIntl = 229,
 
-        [Description("GlobalPost SmartSaver Priority")]
-        GlobalPostSmartSaverPriority = 230,
+        [Description("GlobalPost SmartSaver Standard Intl")]
+        GlobalPostSmartSaverStandardIntl = 230,
     }
 }

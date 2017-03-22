@@ -456,7 +456,10 @@ namespace ShipWorks.Shipping.Editing
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage) v, shipment));
+                if (sectionLabelOptions.Visible)
+                {
+                    labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
+                }
 
                 // Residential
                 if (shipmentType.IsResidentialStatusRequired(shipment))

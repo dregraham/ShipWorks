@@ -32,6 +32,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         protected override void Initialize()
         {
             originControl.Initialize(ShipmentTypeCode.Other);
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 1);
+            };
         }
 
         /// <summary>
