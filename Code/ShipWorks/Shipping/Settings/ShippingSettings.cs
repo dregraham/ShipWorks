@@ -11,6 +11,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
+using System.Text;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -180,6 +182,32 @@ namespace ShipWorks.Shipping.Settings
             {
                 settings.DefaultType = (int) shipmentTypeCode;
             }
+        }
+
+        /// <summary>
+        /// Collect Shipping Settings related telemetry
+        /// </summary>
+        public static IDictionary<string, string> GetTelemetryData()
+        {
+            Dictionary<string, string> shippingSettingsTelemetry = new Dictionary<string, string>();
+
+            IShippingSettingsEntity settings = FetchReadOnly();
+            StringBuilder activatedTypes = new StringBuilder(string.Join(",", settings.ActivatedTypes.Where(t => t != ShipmentTypeCode.Express1Endicia && t != ShipmentTypeCode.Express1Usps).Select(t => EnumHelper.GetDescription(t))));
+
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Usps))
+            {
+                activatedTypes.Append(",Express1 (Stamps.com)");
+            }
+
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Endicia))
+            {
+                activatedTypes.Append(",Express1 (Endicia)");
+            }
+
+            shippingSettingsTelemetry.Add("Shipping.ActiveProviders", activatedTypes.ToString());
+            shippingSettingsTelemetry.Add("Shipping.DefaultProvider", EnumHelper.GetDescription(settings.DefaultShipmentTypeCode));
+
+            return shippingSettingsTelemetry;
         }
 
         /// <summary>

@@ -819,7 +819,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(SqlServerInfo.Fetch());
+            Telemetry.TrackStartShipworks(GetTelemetryData());
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -832,6 +832,27 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
+        }
+
+        /// <summary>
+        /// Get telemetry data for ShipWorks
+        /// </summary>
+        /// <returns></returns>
+        private static IDictionary<string, string> GetTelemetryData()
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+
+            try
+            {
+                values.Union(SqlServerInfo.Fetch())
+                    .Union(ShippingSettings.GetTelemetryData())
+                    .ToDictionary(k => k.Key, v => v.Value);
+            }
+            catch
+            {
+            }
+
+            return values;
         }
 
         /// <summary>
