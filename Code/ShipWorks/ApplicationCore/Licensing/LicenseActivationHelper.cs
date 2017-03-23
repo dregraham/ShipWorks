@@ -149,7 +149,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ILicenseAccountDetail accountDetail;
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    lifetimeScope.Resolve<ITangoWebClient>();
                     accountDetail = lifetimeScope.Resolve<ITangoWebClient>().GetLicenseStatus(store.License, store);
                 }
 
