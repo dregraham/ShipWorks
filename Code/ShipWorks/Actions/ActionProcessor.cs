@@ -5,8 +5,10 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared.Data;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
@@ -104,9 +106,12 @@ namespace ShipWorks.Actions
                     return;
                 }
 
-                log.InfoFormat("Starting action processor");
-                ActionProcessor processor = new ActionProcessor(new ActionQueueGatewayStandard());
-                processor.ProcessQueues();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    log.InfoFormat("Starting action processor");
+                    ActionProcessor actionProcessor = lifetimeScope.Resolve<IActionProcessorFactory>().CreateStandard();
+                    actionProcessor.ProcessQueues();
+                }
             }
             finally
             {
