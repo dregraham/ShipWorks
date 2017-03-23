@@ -1,10 +1,12 @@
 ﻿using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 
 namespace ShipWorks.Actions
 {
     /// <summary>
     /// Manages and provides access to the actions in the system
     /// </summary>
+    [Order(typeof(IInitializeForCurrentSession), 1)]
     public class ActionManagerWrapper : IActionManager, IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         /// <summary>

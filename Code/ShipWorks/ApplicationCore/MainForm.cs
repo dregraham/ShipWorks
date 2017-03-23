@@ -43,6 +43,7 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -237,6 +238,8 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
@@ -2886,16 +2889,23 @@ namespace ShipWorks
         #region View
 
         /// <summary>
+        /// Show the specified panel
+        /// </summary>
+        public void ShowPanel(DockControl dockControl)
+        {
+            dockControl.Open(WindowOpenMethod.OnScreenActivate);
+
+            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
+        }
+
+        /// <summary>
         /// A panel should be shown
         /// </summary>
         private void OnShowPanel(object sender, EventArgs e)
         {
             SandMenuItem item = (SandMenuItem) sender;
-            DockControl dockControl = (DockControl) item.Tag;
 
-            dockControl.Open(WindowOpenMethod.OnScreenActivate);
-
-            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
+            ShowPanel((DockControl) item.Tag);
         }
 
         /// <summary>
@@ -2913,12 +2923,13 @@ namespace ShipWorks
         {
             if (UserSession.IsLoggedOn)
             {
-                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
+                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid && dockableWindowCustomerFilters.DockSituation != DockSituation.None)
                 {
                     customerFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Customers);
                     gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
                 }
-                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
+
+                if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid && dockableWindowOrderFilters.DockSituation != DockSituation.None)
                 {
                     orderFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Orders);
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;

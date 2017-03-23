@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ListSQLSvr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Printer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

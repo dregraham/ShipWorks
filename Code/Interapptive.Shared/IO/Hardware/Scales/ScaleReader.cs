@@ -13,35 +13,33 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     public static class ScaleReader
     {
-        const int MaxScaleConnectionAttempts = 20;
+        private const int MaxScaleConnectionAttempts = 20;
 
-        static readonly ILog log = LogManager.GetLogger(typeof(ScaleReader));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ScaleReader));
 
-        static readonly ScaleReadResult unknownNotFoundResult = ScaleReadResult.NotFound(string.Empty);
-        static readonly ScaleReadResult serialScalesNotPolledResult =
+        private static readonly ScaleReadResult UnknownNotFoundResult = ScaleReadResult.NotFound(string.Empty);
+        private static readonly ScaleReadResult SerialScalesNotPolledResult =
             ScaleReadResult.NotFound("Serial scales are not read during polling.");
-        static readonly ScaleReadResult notFoundResult = ScaleReadResult.NotFound(
+        private static readonly ScaleReadResult NotFoundResult = ScaleReadResult.NotFound(
             "Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
 
-        static ScaleUsbReader usbReader;
-        static ScaleSerialPortReader serialReader;
+        private static ScaleUsbReader usbReader;
+        private static ScaleSerialPortReader serialReader;
 
-        static ScaleReadResult lastResult = notFoundResult;
-
-        static object threadLock = new object();
+        private static readonly object ThreadLock = new object();
         static readonly DeviceListener DeviceListener = new DeviceListener();
         private static IObserver<bool> scaleObserver;
 
         public static IObservable<ScaleReadResult> ReadEvents { get; }
 
         /// <summary>
-        /// Static constructor
+        /// Constructor
         /// </summary>
         static ScaleReader()
         {
             DeviceListener.DeviceChanged += OnDeviceListenerDeviceChanged;
 
-            TaskEx.Run(() =>
+            Task.Run(() =>
             {
                 SetUsbScale();
                 DeviceListener.Start();
@@ -60,6 +58,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         }
 
         /// <summary>
+        /// Call Initialize to explicitly trigger static constructor
+        /// </summary>
+        public static void Initialize()
+        {
+            Log.Info("ScaleReader.Initialize called to explicitly trigger static constructor");
+        }
+
+        /// <summary>
         /// Attempt to set up a usb scale after a device was attached or configuration was changed
         /// </summary>
         private static void OnDeviceListenerDeviceChanged(object sender, EventArgs e) => SetUsbScale();
@@ -69,7 +75,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static void SetUsbScale()
         {
-            log.InfoFormat("Device attached or changed");
+            Log.InfoFormat("Device attached or changed");
 
             // Don't bother setting up the scale if we already have one
             if (usbReader != null)
@@ -77,7 +83,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 return;
             }
 
-            lock (threadLock)
+            lock (ThreadLock)
             {
                 // If the scale was already set up, just bail
                 if (usbReader != null)
@@ -107,7 +113,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                     }
                 }
 
-                log.DebugFormat("Scale {0} after {1} attempts",
+                Log.DebugFormat("Scale {0} after {1} attempts",
                     usbReader == null ? "could not be attached" : "attached successfully",
                     currentAttempt);
             }
@@ -116,7 +122,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Read from any attached scale that can be found
         /// </summary>
-        public static Task<ScaleReadResult> ReadScale() => TaskEx.Run(() => ReadScale(false));
+        public static Task<ScaleReadResult> ReadScale() => Task.Run(() => ReadScale(false));
 
         /// <summary>
         /// Read from any attached scale that can be found
@@ -125,9 +131,16 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             // We can lock here because even if there were a deadlock, the UI won't hang since this is being called
             // in a task. If it were to lock indefinitely, we couldn't use the scale anyway
-            lock (threadLock)
+            lock (ThreadLock)
             {
-                return InternalReadScale(isPolling);
+                ScaleReadResult result = InternalReadScale(isPolling);
+
+                if (result.Status == ScaleReadStatus.Success && result.Weight < 0)
+                {
+                    return ScaleReadResult.ReadError($"Weight measured less than zero ({result.Weight} lbs).", result.ScaleType);
+                }
+
+                return result;
             }
         }
 
@@ -139,7 +152,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             // We may be in a situation where both scales are plugged in, so we should still poll the USB scale
             if (isPolling && serialReader != null && usbReader == null)
             {
-                return serialScalesNotPolledResult;
+                return SerialScalesNotPolledResult;
             }
 
             ScaleReadResult existingResult = ReadExisting();
@@ -173,7 +186,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             serialReader = new ScaleSerialPortReader();
             ScaleReadResult serialResult = (!isPolling) ?
                 serialReader.ReadScale() :
-                serialScalesNotPolledResult;
+                SerialScalesNotPolledResult;
 
             // Success, return result now
             if (serialResult.Status != ScaleReadStatus.NotFound)
@@ -187,7 +200,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
 
             // If we get here, we did not find a valid scale from which to read the weight
-            return notFoundResult;
+            return NotFoundResult;
         }
 
         /// <summary>
@@ -197,7 +210,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             return usbReader?.ReadScale() ??
                 serialReader?.ReadScale() ??
-                unknownNotFoundResult;
+                UnknownNotFoundResult;
         }
     }
 }

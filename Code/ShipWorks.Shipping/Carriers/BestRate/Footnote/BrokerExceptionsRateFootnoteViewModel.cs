@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {

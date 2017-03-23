@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common.Enums;
 using log4net;
-using ShipWorks.Templates;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
+using ShipWorks.Templates.Emailing;
+using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -67,7 +65,7 @@ namespace ShipWorks.Actions.Tasks.Common
         }
 
         /// <summary>
-        /// The number of units to delay.  Only has meaning relative to delay type. 
+        /// The number of units to delay.  Only has meaning relative to delay type.
         /// </summary>
         public int DelayQuantity
         {
@@ -138,9 +136,9 @@ namespace ShipWorks.Actions.Tasks.Common
                 if (date != null)
                 {
                     date = date.Value.Date + DelayTimeOfDay;
-                }
 
-                e.DelayUntilDate = date.Value.ToUniversalTime();
+                    e.DelayUntilDate = date.Value.ToUniversalTime();
+                }
             }
 
             // Minutes

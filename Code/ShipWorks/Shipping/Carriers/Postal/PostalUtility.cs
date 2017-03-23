@@ -586,8 +586,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public static bool IsGlobalPost(PostalServiceType serviceType)
         {
             PostalServiceType[] postalServiceTypes = {
-                PostalServiceType.GlobalPostEconomy, PostalServiceType.GlobalPostPriority,
-                PostalServiceType.GlobalPostSmartSaverEconomy, PostalServiceType.GlobalPostSmartSaverPriority
+                PostalServiceType.GlobalPostEconomyIntl, PostalServiceType.GlobalPostStandardIntl,
+                PostalServiceType.GlobalPostSmartSaverEconomyIntl, PostalServiceType.GlobalPostSmartSaverStandardIntl
             };
 
             return postalServiceTypes.Contains(serviceType);

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
         private long? lastSelectedShipmentID;
+        private bool isSaving;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -160,12 +161,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return;
             }
 
+            isSaving = true;
+
             CommitBindings?.Invoke();
 
             Save();
 
             IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
             DisplayError(errors);
+
+            isSaving = false;
         }
 
         /// <summary>
@@ -211,6 +216,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
                 LoadShipment(GetShipmentToLoad());
+            }
+            else if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)
+            {
+                // We need to set this so that we can open the dialog from the "Ship Orders" button,
+                // since it expects the current shipment to be non-null
+                ShipmentAdapter = GetShipmentToLoad();
             }
             else
             {
@@ -319,7 +330,20 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Merge(ShipmentViewModel.PropertyChangeStream)
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
-                .Do(_ => Save())
+                .Do(x =>
+                {
+                    // Since the content weight can be set from a keyboard shortcut, 
+                    // it may get changed without getting focus. So we'll force a save to ensure the
+                    // change makes it to the DB
+                    if (x == "ContentWeight" && !isSaving)
+                    {
+                        SaveToDatabase();
+                    }
+                    else
+                    {
+                        Save();
+                    }
+                })
                 .CatchAndContinue((NullReferenceException ex) => log.Error("Error occurred while handling property changed", ex))
                 .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)));
 

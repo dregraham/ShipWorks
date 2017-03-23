@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Extras.Attributed;
+using Autofac.Builder;
 using Interapptive.Shared;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
@@ -26,7 +28,6 @@ using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.SqlServerSetup;
-using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
@@ -41,6 +42,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -92,8 +94,6 @@ namespace ShipWorks.ApplicationCore
         {
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
-
-            builder.RegisterModule<AttributedMetadataModule>();
 
             builder.RegisterSource(new OrderedRegistrationSource());
 
@@ -192,14 +192,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(allAssemblies)
-                .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
-                    x.IsAssignableTo<ICheckForChangesNeeded>() ||
-                    x.IsAssignableTo<IInitializeForCurrentDatabase>() ||
-                    x.IsAssignableTo<IMainFormElementRegistration>())
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ConfigurationDataWrapper>()
                 .As<IConfigurationData>();
 
@@ -213,17 +205,27 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(CompositeValidator<,>))
                 .As(typeof(ICompositeValidator<,>));
 
-            ComponentAttribute.Register(builder, allAssemblies);
-            ServiceAttribute.Register(builder, allAssemblies);
-            KeyedComponentAttribute.Register(builder, allAssemblies);
-            ResolveWithAttributesAttribute.Register(builder, allAssemblies);
-            NamedComponentAttribute.Register(builder, allAssemblies);
+            builder.RegisterType<ScaleReaderWrapper>()
+                .As<IScaleReader>();
+
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
+                new Dictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>>();
+
+            ComponentAttribute.Register(builder, registrationCache, allAssemblies);
+            ServiceAttribute.Register(builder, registrationCache, allAssemblies);
+            KeyedComponentAttribute.Register(builder, registrationCache, allAssemblies);
+            NamedComponentAttribute.Register(builder, registrationCache, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
+            builder.RegisterType<HttpRequestSubmitterFactory>()
+                .As<IHttpRequestSubmitterFactory>();
+				
+#pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return container;
         }
@@ -349,8 +351,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<TangoWebClientWrapper>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces()
+                .UsingConstructor();
 
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()

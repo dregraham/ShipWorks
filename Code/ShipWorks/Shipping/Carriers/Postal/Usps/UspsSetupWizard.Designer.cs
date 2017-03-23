@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.uspsAccountInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uspsAccountInfo.Location = new System.Drawing.Point(23, 10);
             this.uspsAccountInfo.Name = "uspsAccountInfo";
-            this.uspsAccountInfo.Size = new System.Drawing.Size(487, 143);
+            this.uspsAccountInfo.Size = new System.Drawing.Size(487, 160);
             this.uspsAccountInfo.TabIndex = 0;
             // 
             // wizardPageOptions

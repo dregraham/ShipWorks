@@ -10,9 +10,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
     /// </summary>
     public enum SqlServerEditionType
     {
-        // SQL Server 2008 R2 SP2 Express 
-        Express2008R2Sp2 = 0,
-
         // SQL Server 2014 Express
         Express2014 = 1,
 

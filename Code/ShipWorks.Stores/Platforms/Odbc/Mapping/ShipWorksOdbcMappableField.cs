@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -229,6 +230,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Gets the field.
         /// </summary>
         [Obfuscation(Exclude = false)]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception should most likely be changed to something else")]
         private static IEntityField2 GetField(string containingObjectName, string fieldName, OdbcFieldValueResolutionStrategy resolutionStrategy)
         {
             if (resolutionStrategy != OdbcFieldValueResolutionStrategy.Default)

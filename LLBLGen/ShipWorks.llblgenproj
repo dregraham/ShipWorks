@@ -92,7 +92,7 @@
         <DestinationRootFolder Value="..\Code\ShipWorks.Data.Model" />
         <FrameworkName Value="LLBLGen Pro Runtime Framework" />
         <LanguageName Value="C#" />
-        <PlatformName Value=".NET 4.0" />
+        <PlatformName Value=".NET 4.6" />
         <PresetName Value="SD.Presets.Adapter.ShipWorks" />
         <RootNamespace Value="ShipWorks.Data.Model" />
         <TemplateGroup Value="Adapter" />
@@ -100,7 +100,7 @@
           <Binding Name="SD.TemplateBindings.SharedTemplates" />
           <Binding Name="SD.TemplateBindings.SqlServerSpecific" />
           <Binding Name="ShipWorks" />
-          <Binding Name="SD.TemplateBindings.SharedTemplates.NET40" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.NET45x" />
           <Binding Name="SD.TemplateBindings.SharedTemplates.Deprecated" />
           <Binding Name="SD.TemplateBindings.General" />
         </TemplateBindings>
@@ -2622,6 +2622,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
+          <Field Name="AutoWeigh" Type="bool" FieldIndex="17" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
           <Field Name="DisplayColorScheme" Type="int" FieldIndex="1" />
@@ -2742,6 +2743,28 @@
           <Field Name="StoreUrl" Type="string" MaxLength="255" FieldIndex="0" />
           <Field Name="WebPassword" Type="string" MaxLength="70" FieldIndex="2" />
           <Field Name="WebUserName" Type="string" MaxLength="50" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="WalmartOrder" ObjectID="bbf110b8-a01e-4fff-a8bc-4e134beed74c" InheritanceType="2">
+        <Fields>
+          <Field Name="CustomerOrderID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="EstimatedDeliveryDate" Type="datetime" FieldIndex="2" />
+          <Field Name="EstimatedShipDate" Type="datetime" FieldIndex="3" />
+          <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+          <Field Name="RequestedShippingMethodCode" Type="string" MaxLength="12" FieldIndex="4" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="WalmartOrderItem" ObjectID="491bc8d2-7731-459c-99d4-240b98f2b58f" InheritanceType="2">
+        <Fields>
+          <Field Name="LineNumber" Type="string" MaxLength="20" FieldIndex="0" />
+          <Field Name="OnlineStatus" Type="string" MaxLength="20" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="WalmartStore" ObjectID="066c7cc9-cbb0-4190-95cb-2f1203e59c92" InheritanceType="2">
+        <Fields>
+          <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="PrivateKey" Type="string" MaxLength="2000" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="WorldShipGoods" ObjectID="8954f73c-1db2-46af-9da2-1388a7a46e40">
@@ -3533,6 +3556,9 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":ThreeDCartOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ThreeDCartStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":VolusionStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":WalmartOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":WalmartOrderItem" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":WalmartStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":YahooOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":YahooOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":YahooStore" />
@@ -3573,7 +3599,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-13T20:48:59.4929014Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7551,6 +7577,7 @@
                     <Field Name="CustomerFilterExpandedFolders" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="NextGlobalPostNotificationDate" Ordinal="16" DbType="4" />
                     <Field Name="SingleScanSettings" Ordinal="17" DbType="8" Precision="10" />
+                    <Field Name="AutoWeigh" Ordinal="18" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -7674,6 +7701,35 @@
                     <Field Name="DownloadOrderStatuses" Ordinal="8" DbType="24" Length="255" />
                     <Field Name="ServerTimeZone" Ordinal="9" DbType="24" Length="30" />
                     <Field Name="ServerTimeZoneDST" Ordinal="10" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="WalmartOrder">
+                  <PkConstraintName Name="PK_WalmartOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PurchaseOrderID" Ordinal="2" DbType="24" Length="32" />
+                    <Field Name="CustomerOrderID" Ordinal="3" DbType="24" Length="50" />
+                    <Field Name="EstimatedDeliveryDate" Ordinal="4" DbType="4" />
+                    <Field Name="EstimatedShipDate" Ordinal="5" DbType="4" />
+                    <Field Name="RequestedShippingMethodCode" Ordinal="6" DbType="12" Length="12" />
+                  </Fields>
+                </Table>
+                <Table Name="WalmartOrderItem">
+                  <PkConstraintName Name="PK_WalmartOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="LineNumber" Ordinal="2" DbType="12" Length="20" />
+                    <Field Name="OnlineStatus" Ordinal="3" DbType="12" Length="20" />
+                  </Fields>
+                </Table>
+                <Table Name="WalmartStore">
+                  <PkConstraintName Name="PK_WalmartStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2000" />
+                    <Field Name="ChannelType" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">
@@ -8716,6 +8772,21 @@
             <ForeignKeyConstraint Name="dbo:VolusionStore:FK_VolusionStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:VolusionStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartOrder:FK_WalmartOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:WalmartOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartOrderItem:FK_WalmartOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:WalmartOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartStore:FK_WalmartStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:WalmartStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:WorldShipGoods:FK_WorldShipGoods_WorldShipShipment" DeleteRuleAction="1">
@@ -11294,6 +11365,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UserSettings" TargetName="ShipWorksLocal:dbo:UserSettings">
           <FieldMappings>
+            <FieldMapping FieldName="AutoWeigh" TargetFieldName="AutoWeigh" />
             <FieldMapping FieldName="CustomerFilterExpandedFolders" TargetFieldName="CustomerFilterExpandedFolders" />
             <FieldMapping FieldName="CustomerFilterLastActive" TargetFieldName="CustomerFilterLastActive" />
             <FieldMapping FieldName="DisplayColorScheme" TargetFieldName="DisplayColorScheme" />
@@ -11415,6 +11487,31 @@
             <FieldMapping FieldName="StoreUrl" TargetFieldName="StoreUrl" />
             <FieldMapping FieldName="WebPassword" TargetFieldName="WebPassword" />
             <FieldMapping FieldName="WebUserName" TargetFieldName="WebUserName" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartOrder" TargetName="ShipWorksLocal:dbo:WalmartOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="CustomerOrderID" TargetFieldName="CustomerOrderID" />
+            <FieldMapping FieldName="EstimatedDeliveryDate" TargetFieldName="EstimatedDeliveryDate" />
+            <FieldMapping FieldName="EstimatedShipDate" TargetFieldName="EstimatedShipDate" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />
+            <FieldMapping FieldName="RequestedShippingMethodCode" TargetFieldName="RequestedShippingMethodCode" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartOrderItem" TargetName="ShipWorksLocal:dbo:WalmartOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="LineNumber" TargetFieldName="LineNumber" />
+            <FieldMapping FieldName="OnlineStatus" TargetFieldName="OnlineStatus" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartStore" TargetName="ShipWorksLocal:dbo:WalmartStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
+            <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
+            <FieldMapping FieldName="PrivateKey" TargetFieldName="PrivateKey" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":WorldShipGoods" TargetName="ShipWorksLocal:dbo:WorldShipGoods">

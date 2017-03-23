@@ -48,12 +48,14 @@ namespace ShipWorks.ApplicationCore.Options
             this.filterInitialSort = new System.Windows.Forms.ComboBox();
             this.infotipWeightFormat = new ShipWorks.UI.Controls.InfoTip();
             this.infotipMinimizeRibbon = new ShipWorks.UI.Controls.InfoTip();
-            this.sectionTitleSingleScan = new ShipWorks.UI.Controls.SectionTitle();
             this.singleScan = new System.Windows.Forms.CheckBox();
             this.autoPrint = new System.Windows.Forms.CheckBox();
             this.registerScannerButton = new System.Windows.Forms.Button();
-            this.unregisterScannerButton = new System.Windows.Forms.Button();
             this.registerScannerLabel = new System.Windows.Forms.Label();
+            this.autoWeigh = new System.Windows.Forms.CheckBox();
+            this.infoTipAutoWeigh = new ShipWorks.UI.Controls.InfoTip();
+            this.infoTipAutoPrint = new ShipWorks.UI.Controls.InfoTip();
+            this.infoTipSingleScan = new ShipWorks.UI.Controls.InfoTip();
             this.panelInitialFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -243,7 +245,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infotipWeightFormat.Caption = "Regardless of the format the weight is displayed as, you can enter the weight in " +
     "any format.";
-            this.infotipWeightFormat.Location = new System.Drawing.Point(364, 356);
+            this.infotipWeightFormat.Location = new System.Drawing.Point(363, 350);
             this.infotipWeightFormat.Name = "infotipWeightFormat";
             this.infotipWeightFormat.Size = new System.Drawing.Size(12, 12);
             this.infotipWeightFormat.TabIndex = 20;
@@ -259,20 +261,10 @@ namespace ShipWorks.ApplicationCore.Options
             this.infotipMinimizeRibbon.TabIndex = 21;
             this.infotipMinimizeRibbon.Title = "Minimize the Ribbon";
             // 
-            // sectionTitleSingleScan
-            // 
-            this.sectionTitleSingleScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleSingleScan.Location = new System.Drawing.Point(10, 381);
-            this.sectionTitleSingleScan.Name = "sectionTitleSingleScan";
-            this.sectionTitleSingleScan.Size = new System.Drawing.Size(530, 22);
-            this.sectionTitleSingleScan.TabIndex = 13;
-            this.sectionTitleSingleScan.Text = "Single Scan";
-            // 
             // singleScan
             // 
             this.singleScan.AutoSize = true;
-            this.singleScan.Location = new System.Drawing.Point(28, 409);
+            this.singleScan.Location = new System.Drawing.Point(28, 377);
             this.singleScan.Name = "singleScan";
             this.singleScan.Size = new System.Drawing.Size(175, 17);
             this.singleScan.TabIndex = 22;
@@ -283,43 +275,73 @@ namespace ShipWorks.ApplicationCore.Options
             // autoPrint
             // 
             this.autoPrint.AutoSize = true;
-            this.autoPrint.Location = new System.Drawing.Point(50, 432);
+            this.autoPrint.Location = new System.Drawing.Point(47, 402);
             this.autoPrint.Name = "autoPrint";
             this.autoPrint.Size = new System.Drawing.Size(227, 17);
             this.autoPrint.TabIndex = 23;
             this.autoPrint.Text = "Automatically print labels on barcode scan";
             this.autoPrint.UseVisualStyleBackColor = true;
+            this.autoPrint.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(27, 455);
+            this.registerScannerButton.Location = new System.Drawing.Point(258, 373);
             this.registerScannerButton.Name = "registerScannerButton";
-            this.registerScannerButton.Size = new System.Drawing.Size(108, 23);
+            this.registerScannerButton.Size = new System.Drawing.Size(100, 23);
             this.registerScannerButton.TabIndex = 26;
-            this.registerScannerButton.Text = "Register Scanner";
+            this.registerScannerButton.Text = "Pair Scanner...";
             this.registerScannerButton.UseVisualStyleBackColor = true;
             this.registerScannerButton.Click += new System.EventHandler(this.OnClickRegisterScanner);
-            // 
-            // unregisterScannerButton
-            // 
-            this.unregisterScannerButton.Enabled = false;
-            this.unregisterScannerButton.Location = new System.Drawing.Point(141, 455);
-            this.unregisterScannerButton.Name = "unregisterScannerButton";
-            this.unregisterScannerButton.Size = new System.Drawing.Size(108, 23);
-            this.unregisterScannerButton.TabIndex = 27;
-            this.unregisterScannerButton.Text = "Unregister Scanner";
-            this.unregisterScannerButton.UseVisualStyleBackColor = true;
-            this.unregisterScannerButton.Click += new System.EventHandler(this.OnClickUnregisterScanner);
             // 
             // registerScannerLabel
             // 
             this.registerScannerLabel.AutoSize = true;
             this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(255, 460);
+            this.registerScannerLabel.Location = new System.Drawing.Point(360, 378);
             this.registerScannerLabel.Name = "registerScannerLabel";
-            this.registerScannerLabel.Size = new System.Drawing.Size(263, 13);
+            this.registerScannerLabel.Size = new System.Drawing.Size(98, 13);
             this.registerScannerLabel.TabIndex = 28;
-            this.registerScannerLabel.Text = "Register a barcode scanner to start using Single Scan";
+            this.registerScannerLabel.Text = "Scanner not paired";
+            // 
+            // autoWeigh
+            // 
+            this.autoWeigh.AutoSize = true;
+            this.autoWeigh.Location = new System.Drawing.Point(66, 425);
+            this.autoWeigh.Name = "autoWeigh";
+            this.autoWeigh.Size = new System.Drawing.Size(251, 17);
+            this.autoWeigh.TabIndex = 29;
+            this.autoWeigh.Text = "Automatically weigh packages on barcode scan";
+            this.autoWeigh.UseVisualStyleBackColor = true;
+            // 
+            // infoTipAutoWeigh
+            // 
+            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically on a barcode scan.\r\n\r\nThe weight " +
+    "is imported if the scale registers a weight greater than 0.";
+            this.infoTipAutoWeigh.Location = new System.Drawing.Point(316, 427);
+            this.infoTipAutoWeigh.Name = "infoTipAutoWeigh";
+            this.infoTipAutoWeigh.Size = new System.Drawing.Size(13, 12);
+            this.infoTipAutoWeigh.TabIndex = 30;
+            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages on Barcode Scan";
+            // 
+            // infoTipAutoPrint
+            // 
+            this.infoTipAutoPrint.Caption = "Labels print automatically when a barcode is scanned.\r\n\r\nLabels are generated usi" +
+    "ng the currently configured shipping rules.";
+            this.infoTipAutoPrint.Location = new System.Drawing.Point(273, 404);
+            this.infoTipAutoPrint.Name = "infoTipAutoPrint";
+            this.infoTipAutoPrint.Size = new System.Drawing.Size(12, 12);
+            this.infoTipAutoPrint.TabIndex = 31;
+            this.infoTipAutoPrint.Title = "Automatically Print Labels on Barcode Scan";
+            // 
+            // infoTipSingleScan
+            // 
+            this.infoTipSingleScan.Caption = "Quickly locate orders by scanning a barcode.\r\n\r\nClick the \'Pair Scanner\' button t" +
+    "o get started.";
+            this.infoTipSingleScan.Location = new System.Drawing.Point(202, 379);
+            this.infoTipSingleScan.Name = "infoTipSingleScan";
+            this.infoTipSingleScan.Size = new System.Drawing.Size(12, 12);
+            this.infoTipSingleScan.TabIndex = 32;
+            this.infoTipSingleScan.Title = "Search Orders by Barcode Scan";
             // 
             // OptionPagePersonal
             // 
@@ -328,12 +350,14 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(0, 15);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.infoTipSingleScan);
+            this.Controls.Add(this.infoTipAutoPrint);
+            this.Controls.Add(this.infoTipAutoWeigh);
+            this.Controls.Add(this.autoWeigh);
             this.Controls.Add(this.registerScannerLabel);
-            this.Controls.Add(this.unregisterScannerButton);
             this.Controls.Add(this.registerScannerButton);
             this.Controls.Add(this.autoPrint);
             this.Controls.Add(this.singleScan);
-            this.Controls.Add(this.sectionTitleSingleScan);
             this.Controls.Add(this.infotipMinimizeRibbon);
             this.Controls.Add(this.infotipWeightFormat);
             this.Controls.Add(this.filterInitialSort);
@@ -384,11 +408,13 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.ComboBox filterInitialSort;
         private UI.Controls.InfoTip infotipWeightFormat;
         private UI.Controls.InfoTip infotipMinimizeRibbon;
-        private UI.Controls.SectionTitle sectionTitleSingleScan;
         private System.Windows.Forms.CheckBox singleScan;
         private System.Windows.Forms.CheckBox autoPrint;
         private System.Windows.Forms.Button registerScannerButton;
-        private System.Windows.Forms.Button unregisterScannerButton;
         private System.Windows.Forms.Label registerScannerLabel;
+        private System.Windows.Forms.CheckBox autoWeigh;
+        private UI.Controls.InfoTip infoTipAutoWeigh;
+        private UI.Controls.InfoTip infoTipAutoPrint;
+        private UI.Controls.InfoTip infoTipSingleScan;
     }
 }

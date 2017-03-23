@@ -394,8 +394,17 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             {
                                 StoreTypeCode = StoreTypeCode.LemonStand
                             },
-                        
+
                 #endregion
+
+                #region Walmart
+                        new GridColumnDefinition("{3B8C89AF-2113-4308-94FA-4DC3615E2344}", true,
+                            new GridTextDisplayType(), "Walmart Online Status", "Shipped",
+                            WalmartOrderItemFields.OnlineStatus)
+                            {
+                                StoreTypeCode = StoreTypeCode.Walmart
+                            },
+                #endregion Walmart
 
                 new GridColumnDefinition("{5D0135AC-ECE9-47e5-AB02-D91FAF91EA84}", true,
                             new GridActionDisplayType(o => UserSession.Security.HasPermission(PermissionType.OrdersModify, (long) o) ? "Edit" : "", GridLinkAction.Edit), "Edit", "Edit",

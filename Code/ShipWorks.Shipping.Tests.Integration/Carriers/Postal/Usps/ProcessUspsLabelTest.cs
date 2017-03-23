@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     mock.Provide(webServiceFactory.Object);
                     mock.Override<IDataResourceManager>();
                     mock.Override<IActionDispatcher>();
+                    mock.Override<ITangoWebClient>();
                 });
 
             context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>

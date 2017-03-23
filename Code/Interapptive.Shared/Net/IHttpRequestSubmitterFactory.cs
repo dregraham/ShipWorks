@@ -8,11 +8,16 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Get an HttpBinaryPostRequestSubmitter
         /// </summary>
-        HttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData);
+        IHttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData);
 
         /// <summary>
         /// Gets an HttpTextPostRequestSubmitter
         /// </summary>
-        HttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType);
+        IHttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType);
+
+        /// <summary>
+        /// Gets the HTTP variable request submitter.
+        /// </summary>
+        IHttpVariableRequestSubmitter GetHttpVariableRequestSubmitter();
     }
 }

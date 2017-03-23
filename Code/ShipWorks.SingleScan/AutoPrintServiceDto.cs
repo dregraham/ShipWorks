@@ -14,18 +14,29 @@ namespace ShipWorks.SingleScan
         public AutoPrintServiceDto(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
             ScanMessage scanMessage)
         {
-            SingleScanFilterUpdateCompleteMessage = singleScanFilterUpdateCompleteMessage;
-            ScanMessage = scanMessage;
+            MatchedOrderCount = singleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
+            ScannedBarcode = scanMessage.ScannedText;
+
+            bool orderNotFound = singleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
+                                     singleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
+                                     singleScanFilterUpdateCompleteMessage.OrderId == null;
+
+            OrderID = orderNotFound ? (long?) null : singleScanFilterUpdateCompleteMessage.OrderId.Value;
         }
 
         /// <summary>
-        /// Gets the filter counts updated message.
+        /// The number of orders matching the scanned barcode
         /// </summary>
-        public SingleScanFilterUpdateCompleteMessage SingleScanFilterUpdateCompleteMessage { get; }
+        public int MatchedOrderCount { get; set; }
 
         /// <summary>
-        /// Gets the scan message.
+        /// The scanned barcode.
         /// </summary>
-        public ScanMessage ScanMessage { get; }
+        public string ScannedBarcode { get; set; }
+
+        /// <summary>
+        /// Get the order ID of the order we intend to process
+        /// </summary>
+        public long? OrderID { get; set; }
     }
 }

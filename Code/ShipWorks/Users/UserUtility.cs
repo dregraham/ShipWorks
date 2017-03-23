@@ -216,7 +216,8 @@ namespace ShipWorks.Users
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
                 NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value,
-                SingleScanSettings = (int) SingleScanSettings.Disabled
+                SingleScanSettings = (int) SingleScanSettings.Disabled,
+                AutoWeigh = false
             };
 
             adapter.SaveAndRefetch(settings);

@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldnt currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendRateCriteriaEvent = 0;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public event EventHandler RateCriteriaChanged;
 
-        // Indiciates if the event shouldnt currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendShipSenseFieldEvent = 0;
 
         /// <summary>
@@ -76,6 +76,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packageCountCombo.DataSource = packageCountData;
 
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
+
+            weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
+            {
+                telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey,
+                    loadedShipments?.Count ?? 0);
+                telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey,
+                    selectedRows.Select(x => x.Tag).OfType<List<FedExPackageEntity>>().SelectMany(x => x).Count());
+            };
         }
 
         /// <summary>
@@ -152,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
 
-            // The only way there wouldnt be any packages is if there was no selection
+            // The only way there wouldn't be any packages is if there was no selection
             if (packagesGrid.Rows.Count > 0)
             {
                 packagesGrid.Rows[0].Selected = true;
@@ -192,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Update the display t ext of the given GridRow, which is dependant on how many packages it has
+        /// Update the display t ext of the given GridRow, which is dependent on how many packages it has
         /// </summary>
         private void UpdateRowText(GridRow gridRow)
         {
@@ -240,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Have to reload the UI
             LoadShipments(loadedShipments, packageCountCombo.Enabled);
 
-            // Raise the rate critiera changed event
+            // Raise the rate criteria changed event
             RaiseRateCriteriaChanged();
 
             // Raise the ShipSense changed event
@@ -347,7 +355,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Something affecting rate critiera has changed
+        /// Something affecting rate criteria has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {

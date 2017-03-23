@@ -19,6 +19,7 @@ using Xunit;
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "IoCRegistration")]
     public class CarrierAccountRepositoryRegistrationTest : IDisposable
     {
         private readonly IContainer container;

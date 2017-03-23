@@ -108,6 +108,14 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
+        /// Log the contents of the given HttpRequestSubmitter
+        /// </summary>
+        public void LogRequest(IHttpRequestSubmitter request)
+        {
+            LogRequest(request as HttpRequestSubmitter);
+        }
+
+        /// <summary>
         /// Log the specified Binary Post request
         /// </summary>
         private void LogHttpPostRequest(HttpRequestSubmitter request)

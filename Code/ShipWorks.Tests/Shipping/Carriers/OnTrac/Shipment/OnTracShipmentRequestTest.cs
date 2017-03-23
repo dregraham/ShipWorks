@@ -1,4 +1,7 @@
+using System;
+using System.Text;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
@@ -17,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
 
         Mock<IApiLogEntry> mockedLogger;
 
-        Mock<HttpVariableRequestSubmitter> mockedSubmitter;
+        Mock<IHttpRequestSubmitter> mockedSubmitter;
 
         OnTracShipmentRequest testObject;
         
@@ -32,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
 
             //Setup mock Request Submitter
-            mockedSubmitter = new Mock<HttpVariableRequestSubmitter>();
+            mockedSubmitter = new Mock<IHttpRequestSubmitter>();
             mockedSubmitter.Setup(f => f.GetResponse()).Returns(mockedHttpResponseReader.Object);
 
             //Setup mock HttpRequestSubmitterFactory
@@ -70,17 +73,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             RunSuccessfullGetNewShipment();
 
             //Validate URI was in correct format given the parameters
-            Assert.Equal(
-                "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/37/shipments?pw=testpass",
-                mockedSubmitter.Object.Uri.ToString());
+            string expectedUri = "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/37/shipments?pw=testpass";
+            mockedSubmitter.VerifySet(s=>s.Uri = new Uri(expectedUri));
         }
 
         [Fact]
-        public void GetNewShipment_RequestVerbIsPost_WhenParametersAndResultsAreValid()
+        public void GetNewShipment_HttpBinaryPostRequestSubmitterReqested_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullGetNewShipment();
 
-            Assert.Equal(HttpVerb.Post, mockedSubmitter.Object.Verb);
+            mockedHttpRequestSubmitterFactory.Verify(f=>f.GetHttpBinaryPostRequestSubmitter(It.IsAny<byte[]>()));
         }
 
         [Fact]
@@ -88,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         {
             RunSuccessfullGetNewShipment();
 
-            mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
+            mockedLogger.Verify(x => x.LogRequest(It.IsAny<IHttpRequestSubmitter>()), Times.Once());
         }
 
         [Fact]

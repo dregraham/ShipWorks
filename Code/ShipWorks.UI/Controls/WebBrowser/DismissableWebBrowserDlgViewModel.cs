@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.Net;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.UI.Controls.WebBrowser
 {

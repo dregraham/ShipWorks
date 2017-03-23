@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -176,8 +175,8 @@ namespace ShipWorks.AddressValidation
 
                 ConcurrentQueue<T> queue = new ConcurrentQueue<T>(pendingOrders);
 
-                await TaskEx.WhenAll(Enumerable.Range(1, taskCount)
-                    .Select(x => TaskEx.Run(() => ValidateAddressesTask(queue), cancellationToken)));
+                await Task.WhenAll(Enumerable.Range(1, taskCount)
+                    .Select(x => Task.Run(() => ValidateAddressesTask(queue), cancellationToken)));
 
                 stopwatch.Stop();
 

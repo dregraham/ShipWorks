@@ -370,6 +370,7 @@
             this.weight.Size = new System.Drawing.Size(254, 20);
             this.weight.TabIndex = 9;
             this.weight.Weight = 0D;
+            this.weight.ShowShortcutInfo = true;
             // 
             // cost
             // 

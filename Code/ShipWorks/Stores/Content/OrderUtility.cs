@@ -364,10 +364,10 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
-        /// Populates the order, order items, and order item attribute for the given order.
+        /// Populates the order, order items, order charges, and order item attribute for the given order.
         /// </summary>
         /// <param name="order">The order.</param>
-        private static void PopulateOrderDetails(OrderEntity order)
+        public static void PopulateOrderDetails(OrderEntity order)
         {
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {

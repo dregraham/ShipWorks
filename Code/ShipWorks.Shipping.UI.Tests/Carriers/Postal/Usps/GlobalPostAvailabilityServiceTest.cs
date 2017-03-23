@@ -48,11 +48,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.Refresh();
 
-            Assert.Contains(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]
@@ -81,11 +81,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.Refresh();
 
-            Assert.Contains(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]
@@ -114,11 +114,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.Refresh();
 
-            Assert.DoesNotContain(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.DoesNotContain(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]
@@ -176,11 +176,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.InitializeForCurrentSession();
 
-            Assert.Contains(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]
@@ -209,11 +209,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.InitializeForCurrentSession();
 
-            Assert.Contains(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]
@@ -242,11 +242,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
             testObject.InitializeForCurrentSession();
 
-            Assert.DoesNotContain(PostalServiceType.GlobalPostPriority, testObject.Services);
-            Assert.DoesNotContain(PostalServiceType.GlobalPostEconomy, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostStandardIntl, testObject.Services);
+            Assert.DoesNotContain(PostalServiceType.GlobalPostEconomyIntl, testObject.Services);
 
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
-            Assert.Contains(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomyIntl, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverStandardIntl, testObject.Services);
         }
 
         [Fact]

@@ -6,7 +6,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -19,9 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsAccountInfoControl : UserControl
     {
-        UspsAccountEntity account;
+        private UspsAccountEntity account;
         private decimal? balance;
-        bool postagePurchased;
 
         /// <summary>
         /// Constructor
@@ -43,46 +41,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             contractType.Text = EnumHelper.GetDescription((UspsAccountContractType) uspsAccount.ContractType);
 
-            HideUspsControlsIfExpress1(uspsAccount);
+            HideUspsControlsIfExpress1();
 
-            UpdatePostageBalance(uspsAccount);
+            UpdatePostageBalance();
         }
 
         /// <summary>
         /// Indicates if postage has been purchased for the account
         /// </summary>
-        public bool PostagePurchased
-        {
-            get { return postagePurchased; }
-        }
+        public bool PostagePurchased { get; private set; }
 
         /// <summary>
         /// Open the account settings page
         /// </summary>
-        private void OnLinkAccountSettings(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                WebHelper.OpenUrl(new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, (UspsResellerType) account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
-            }
-            catch (UspsException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-            }
-        }
+        private void OnAccountSettingsLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.AccountSettingsPage);
 
         /// <summary>
         /// Open the online reports page
         /// </summary>
-        private void OnLinkOnlineReports(object sender, EventArgs e)
+        private void OnOnlineReportsLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportsPage);
+
+        /// <summary>
+        /// Opens the OnlineReportingHistory page
+        /// </summary>
+        private void OnShipmentHistoryLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportingHistory);
+
+        /// <summary>
+        /// Retrieves URL from UPS and opens it in a browser
+        /// </summary>
+        private void OpenUrl(UrlType urlType)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                WebHelper.OpenUrl(new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, (UspsResellerType) account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, (UspsResellerType) account.UspsReseller).GetUrl(account, urlType), this);
             }
             catch (UspsException ex)
             {
@@ -106,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     {
                         Initialize(account);
 
-                        postagePurchased = true;
+                        PostagePurchased = true;
                     }
                 }
             }
@@ -119,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the postage balance of the account
         /// </summary>
-        private void UpdatePostageBalance(UspsAccountEntity uspsAccount)
+        private void UpdatePostageBalance()
         {
             int tries = 5;
 
@@ -127,12 +120,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-                        balance = new PostageBalance(new UspsPostageWebClient(uspsAccount), tangoWebClient).Value;
-                    }
-                    postage.Text = StringUtility.FormatFriendlyCurrency(balance.Value);
+                    balance = new PostageBalance(new UspsPostageWebClient(account)).Value;
+                    postage.Text = balance.Value.FormatFriendlyCurrency();
 
                     purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
@@ -147,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", UspsAccountManager.GetResellerName((UspsResellerType) uspsAccount.UspsReseller));
+                        message = $"Your {UspsAccountManager.GetResellerName((UspsResellerType) account.UspsReseller)} account is not ready yet.";
                         keepTrying = true;
                     }
 
@@ -169,9 +158,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Hide the Usps controls if the account is Express 1
         /// </summary>
-        private void HideUspsControlsIfExpress1(UspsAccountEntity uspsAccount)
+        private void HideUspsControlsIfExpress1()
         {
-            bool isExpress1 = uspsAccount.UspsReseller == (int) UspsResellerType.Express1;
+            bool isExpress1 = account.UspsReseller == (int) UspsResellerType.Express1;
 
             if (!isExpress1)
             {

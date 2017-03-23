@@ -36,36 +36,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
                 sqlInstallers.Add(
                     new SqlInstallerInfo()
                     {
-                        Edition = SqlServerEditionType.Express2008R2Sp2,
-                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x86_ENU.exe"),
-                        Checksum = "bONPV6E+De2VyvRAX60TPoWa3jA=",
-                        FileSize = 115763632,
-                        IsLocalDB = false,
-                        MinDotNetVersion = new Version(3, 5, 0, 0),
-                        MinOsVersion = new Version(5, 1, 0, 0),
-                        Is64Bit = false,
-                        LocalFileName = "SQLEXPR_x86_ENU.exe"
-                    }
-                );
-
-                sqlInstallers.Add(
-                    new SqlInstallerInfo()
-                    {
-                        Edition = SqlServerEditionType.Express2008R2Sp2,
-                        DownloadUri = new Uri(@"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x64_ENU.exe"),
-                        Checksum = "52ijtw4/O1lu/6n1fYEvlcCgUGs=",
-                        FileSize = 128331696,
-                        IsLocalDB = false,
-                        MinDotNetVersion = new Version(3, 5, 0, 0),
-                        MinOsVersion = new Version(5, 1, 0, 0),
-                        Is64Bit = true,
-                        LocalFileName = "SQLEXPR_x64_ENU.exe"
-                    }
-                );
-
-                sqlInstallers.Add(
-                    new SqlInstallerInfo()
-                    {
                         Edition = SqlServerEditionType.Express2014,
                         DownloadUri = new Uri(@"http://www.interapptive.com/download/components/newinstallersql42016/sqlserver2014/express/SQLEXPR_x86_ENU.exe"),
                         Checksum = "QwRailFjurfxA0EcTX+b63C+0iU=",
