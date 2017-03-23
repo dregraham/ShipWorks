@@ -403,6 +403,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.10\5.10.0.0.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.10\5.10.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.1.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
