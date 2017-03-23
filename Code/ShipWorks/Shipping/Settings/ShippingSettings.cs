@@ -211,8 +211,7 @@ namespace ShipWorks.Shipping.Settings
 
             return new Dictionary<string, string>
             {
-                {"Shipping.ActiveProviders", activatedTypes.ToString() },
-                {"Shipping.DefaultProvider", EnumHelper.GetDescription(settings.DefaultShipmentTypeCode) }
+                {"Shipping.ActiveProviders", activatedTypes.ToString() }
             };
         }
 
