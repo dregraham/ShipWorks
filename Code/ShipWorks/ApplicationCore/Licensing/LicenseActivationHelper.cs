@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -145,7 +146,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                ILicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
+                ILicenseAccountDetail accountDetail;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    accountDetail = lifetimeScope.Resolve<ITangoWebClient>().GetLicenseStatus(store.License, store);
+                }
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active ||
                     accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
