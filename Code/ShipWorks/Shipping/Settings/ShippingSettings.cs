@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Settings
 
             return new Dictionary<string, string>
             {
-                {"Shipping.ActiveProviders", string.Join(",", shipmentTypeDescriptions) }
+                {"Shipping.ActiveProviders", string.Join(",", shipmentTypeDescriptions.Any() ? string.Join(",", shipmentTypeDescriptions) : "N/A") }
             };
         }
 
