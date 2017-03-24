@@ -190,36 +190,26 @@ namespace ShipWorks.Shipping.Settings
         public static IDictionary<string, string> GetTelemetryData()
         {
             IShippingSettingsEntity settings = FetchReadOnly();
-            IEnumerable<ShipmentTypeCode> activeShipmentTypes = settings.ActivatedTypes.Except(settings.ExcludedTypes);
 
             // Grab the ShipmentTypeCodes description excluding express 1 because we need a more explicit description
-            IEnumerable<string> shipmentTypeDescriptions = activeShipmentTypes
+            List<string> shipmentTypeDescriptions = settings.ActivatedTypes.Except(settings.ExcludedTypes)
                 .Where(t => t != ShipmentTypeCode.Express1Endicia && t != ShipmentTypeCode.Express1Usps)
-                .Select(t => EnumHelper.GetDescription(t));
+                .Select(t => EnumHelper.GetDescription(t))
+                .ToList();
 
-            StringBuilder activatedTypes = new StringBuilder(string.Join(",", shipmentTypeDescriptions));
-
-            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Usps))
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Usps) && !settings.ExcludedTypes.Contains(ShipmentTypeCode.Express1Usps))
             {
-                if (activatedTypes.Length > 0)
-                {
-                    activatedTypes.Append(",");
-                }
-                activatedTypes.Append("Express1 (Stamps.com)");
+                shipmentTypeDescriptions.Add("Express1 (Stamps.com)");
             }
 
-            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Endicia))
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Endicia) && !settings.ExcludedTypes.Contains(ShipmentTypeCode.Express1Endicia))
             {
-                if (activatedTypes.Length > 0)
-                {
-                    activatedTypes.Append(",");
-                }
-                activatedTypes.Append("Express1 (Endicia)");
+                shipmentTypeDescriptions.Add("Express1 (Endicia)");
             }
 
             return new Dictionary<string, string>
             {
-                {"Shipping.ActiveProviders", activatedTypes.ToString() }
+                {"Shipping.ActiveProviders", string.Join(",", shipmentTypeDescriptions) }
             };
         }
 
