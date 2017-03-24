@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data;
 
 namespace ShipWorks.Actions
 {
@@ -13,14 +10,35 @@ namespace ShipWorks.Actions
     [Component]
     public class ActionProcessorFactory : IActionProcessorFactory
     {
+        private readonly IConfigurationData configurationData;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ActionProcessorFactory(IConfigurationData configurationData)
+        {
+            this.configurationData = configurationData;
+        }
+
         /// <summary>
         /// Create a Standard ActionProcessor
         /// </summary>
-        public ActionProcessor CreateStandard()
+        public IEnumerable<ActionProcessor> CreateStandard()
         {
-            ActionQueueGateway gateway = new ActionQueueGatewayStandard();
+            List<ActionProcessor> actionProcessors = new List<ActionProcessor>();
 
-            return new ActionProcessor(gateway);
+            bool defaultPrint = configurationData.FetchReadOnly().UseParallelActionQueue;
+
+            // Always add the standard gateway
+            actionProcessors.Add(new ActionProcessor(new ActionQueueGatewayStandard(configurationData)));
+
+            // If default print is enabled, add the default print gateway.
+            if (defaultPrint)
+            {
+                actionProcessors.Add(new ActionProcessor(new ActionQueueGatewayDefaultPrint()));
+            }
+
+            return actionProcessors;
         }
 
         /// <summary>

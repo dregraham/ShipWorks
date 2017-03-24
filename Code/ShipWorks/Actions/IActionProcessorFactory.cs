@@ -8,9 +8,9 @@ namespace ShipWorks.Actions
     public interface IActionProcessorFactory
     {
         /// <summary>
-        /// Create a Standard ActionProcessor
+        /// Creates a list a Standard ActionProcessors
         /// </summary>
-        ActionProcessor CreateStandard();
+        IEnumerable<ActionProcessor> CreateStandard();
 
         /// <summary>
         /// Create an Error ActionProcessor

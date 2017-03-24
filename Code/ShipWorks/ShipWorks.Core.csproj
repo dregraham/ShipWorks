@@ -430,7 +430,9 @@
     <Compile Include="Actions\ActionProcessorFactory.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
     <Compile Include="Actions\ActionQueueGatewayErrorList.cs" />
+    <Compile Include="Actions\ActionQueueGatewayDefaultPrint.cs" />
     <Compile Include="Actions\ActionQueueGatewayStandard.cs" />
+    <Compile Include="Actions\ActionQueueGatewayType.cs" />
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
