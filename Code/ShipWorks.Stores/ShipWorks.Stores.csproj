@@ -254,6 +254,7 @@
     <Compile Include="Platforms\Odbc\Download\OdbcTableDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
+    <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />

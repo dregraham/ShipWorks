@@ -125,6 +125,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		Amosoft,
         SellerCloud,
         InfiPlex,
-        Walmart
+        Walmart,
+		SellerActive
     }
 }
