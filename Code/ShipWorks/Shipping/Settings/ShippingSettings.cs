@@ -201,12 +201,20 @@ namespace ShipWorks.Shipping.Settings
 
             if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Usps))
             {
-                activatedTypes.Append(",Express1 (Stamps.com)");
+                if (activatedTypes.Length > 0)
+                {
+                    activatedTypes.Append(",");
+                }
+                activatedTypes.Append("Express1 (Stamps.com)");
             }
 
             if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Endicia))
             {
-                activatedTypes.Append(",Express1 (Endicia)");
+                if (activatedTypes.Length > 0)
+                {
+                    activatedTypes.Append(",");
+                }
+                activatedTypes.Append("Express1 (Endicia)");
             }
 
             return new Dictionary<string, string>
