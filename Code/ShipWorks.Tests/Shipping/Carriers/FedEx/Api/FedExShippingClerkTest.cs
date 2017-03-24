@@ -1125,7 +1125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            Assert.Equal("11 (Wednesday)", rates.Rates.First().Days);
+            Assert.StartsWith("11", rates.Rates.First().Days);
         }
 
         [Fact]
