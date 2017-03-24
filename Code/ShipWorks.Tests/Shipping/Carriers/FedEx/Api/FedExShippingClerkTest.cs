@@ -1100,20 +1100,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_AssignsTransitTime_WhenDeliveryTimeStampSpecifiedIsTrue()
         {
+            DateTime shipDate = DateTime.Now;
+
             // Setup the delivery date to be four days from now
-            shipmentEntity.ShipDate = DateTime.Now;
+            shipmentEntity.ShipDate = shipDate;
 
             nativeRateReply.RateReplyDetails[0].DeliveryTimestampSpecified = true;
-            nativeRateReply.RateReplyDetails[0].DeliveryTimestamp = DateTime.Now.AddDays(4);
+            nativeRateReply.RateReplyDetails[0].DeliveryTimestamp = shipDate.AddDays(4);
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            Assert.Equal("4", rates.Rates.First().Days);
+            Assert.Equal($"4 ({shipDate.AddDays(4).ToString("dddd h:mm tt")})", rates.Rates.First().Days);
         }
 
         [Fact]
         public void GetRates_AssignsTransitTime_WhenDeliveryTimeStampSpecifiedIsFalse_AndTransitTimeSpecifiedIsTrue()
         {
+            shipmentEntity.ShipDate = new DateTime(2017, 3, 21);
+
             // Setup the transit time to be eleven days
             nativeRateReply.RateReplyDetails[0].DeliveryTimestampSpecified = false;
             nativeRateReply.RateReplyDetails[0].TransitTime = TransitTimeType.ELEVEN_DAYS;
@@ -1121,7 +1125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            Assert.Equal("11", rates.Rates.First().Days);
+            Assert.Equal("11 (Wednesday)", rates.Rates.First().Days);
         }
 
         [Fact]
