@@ -193,7 +193,7 @@ namespace ShipWorks.Shipping.Settings
 
             // Grab the ShipmentTypeCodes description excluding express 1 because we need a more explicit description
             List<string> shipmentTypeDescriptions = settings.ActivatedTypes.Except(settings.ExcludedTypes)
-                .Where(t => t != ShipmentTypeCode.Express1Endicia || t != ShipmentTypeCode.Express1Usps)
+                .Where(t => t != ShipmentTypeCode.Express1Endicia && t != ShipmentTypeCode.Express1Usps)
                 .Select(t => EnumHelper.GetDescription(t))
                 .ToList();
 
