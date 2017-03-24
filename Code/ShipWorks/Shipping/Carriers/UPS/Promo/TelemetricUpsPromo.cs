@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public void Apply()
         {
             upsPromo.Apply();
-            LogResult("Applied", existingAccount, upsPromo);
+            LogResult("Applied");
         }
 
         /// <summary>
@@ -102,14 +102,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Log the results to telemetry
         /// </summary>
-        private void LogResult(string result, bool existingAccount = false, IUpsPromo promo = null)
+        private void LogResult(string result)
         {
             telemetryEvent.AddProperty("Ups.Promo.Result", result);
 
-            if (existingAccount && promo != null)
+            if (existingAccount)
             {
                 telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", "true");
-                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", promo.AccountNumber);
+                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
             }
             else
             {
