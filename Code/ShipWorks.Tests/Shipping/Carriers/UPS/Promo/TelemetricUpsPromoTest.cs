@@ -78,8 +78,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
             testObject.Decline();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Declined"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "N/A"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "N/A"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "upsaccountnumber"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "true"));
         }
 
         [Fact]
@@ -98,8 +98,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
             testObject.RemindMe();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Remind Later"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "N/A"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "N/A"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "upsaccountnumber"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "true"));
         }
     }
 }
