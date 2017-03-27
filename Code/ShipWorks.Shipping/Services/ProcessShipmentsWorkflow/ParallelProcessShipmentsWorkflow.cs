@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             {
                 if (!concurrencyCount.HasValue)
                 {
-                    concurrencyCount = GetConcurrencyCount("requests", 4, 64);
+                    concurrencyCount = GetConcurrencyCount("requests", 3, 64);
                 }
 
                 return concurrencyCount.Value;
