@@ -459,23 +459,23 @@ namespace ShipWorks.ApplicationCore.Options
             this.sectionTitle1.Name = "sectionTitle1";
             this.sectionTitle1.Size = new System.Drawing.Size(481, 22);
             this.sectionTitle1.TabIndex = 55;
-            this.sectionTitle1.Text = "Shipment Processing";
+            this.sectionTitle1.Text = "Printing";
             // 
             // useParallelActionProcessing
             // 
             this.useParallelActionProcessing.AutoSize = true;
             this.useParallelActionProcessing.Location = new System.Drawing.Point(35, 1009);
             this.useParallelActionProcessing.Name = "useParallelActionProcessing";
-            this.useParallelActionProcessing.Size = new System.Drawing.Size(226, 17);
+            this.useParallelActionProcessing.Size = new System.Drawing.Size(201, 17);
             this.useParallelActionProcessing.TabIndex = 56;
-            this.useParallelActionProcessing.Text = "Give priority to default label printing tasks";
+            this.useParallelActionProcessing.Text = "Give priority to default printing tasks";
             this.useParallelActionProcessing.UseVisualStyleBackColor = true;
             // 
             // printingPriorityInfoTip
             // 
-            this.printingPriorityInfoTip.Caption = "This option will give priority to default label printing tasks over other tasks l" +
-    "ike uploading shipment details.";
-            this.printingPriorityInfoTip.Location = new System.Drawing.Point(260, 1011);
+            this.printingPriorityInfoTip.Caption = "This option will give priority to default printing tasks over other tasks like up" +
+    "loading shipment details.";
+            this.printingPriorityInfoTip.Location = new System.Drawing.Point(237, 1011);
             this.printingPriorityInfoTip.Name = "printingPriorityInfoTip";
             this.printingPriorityInfoTip.Size = new System.Drawing.Size(12, 12);
             this.printingPriorityInfoTip.TabIndex = 58;
