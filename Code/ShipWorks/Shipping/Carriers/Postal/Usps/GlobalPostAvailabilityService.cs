@@ -82,14 +82,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.GlobalPost))
             {
-                AddToServices(PostalServiceType.GlobalPostEconomy);
-                AddToServices(PostalServiceType.GlobalPostPriority);
+                AddToServices(PostalServiceType.GlobalPostEconomyIntl);
+                AddToServices(PostalServiceType.GlobalPostStandardIntl);
             }
 
             if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.SmartSaver))
             {
-                AddToServices(PostalServiceType.GlobalPostSmartSaverEconomy);
-                AddToServices(PostalServiceType.GlobalPostSmartSaverPriority);
+                AddToServices(PostalServiceType.GlobalPostSmartSaverEconomyIntl);
+                AddToServices(PostalServiceType.GlobalPostSmartSaverStandardIntl);
             }
         }
 

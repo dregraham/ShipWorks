@@ -59,10 +59,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.DHLBPMG, PostalServiceType.DhlBpmGround},
             {ServiceType.DHLMPE, PostalServiceType.DhlMarketingExpedited},
             {ServiceType.DHLMPG, PostalServiceType.DhlMarketingGround},
-            {ServiceType.SCGPE, PostalServiceType.GlobalPostEconomy},
-            {ServiceType.SCGPP, PostalServiceType.GlobalPostPriority},
-            {ServiceType.SCGPESS, PostalServiceType.GlobalPostSmartSaverEconomy},
-            {ServiceType.SCGPPSS, PostalServiceType.GlobalPostSmartSaverPriority}
+            {ServiceType.SCGPE, PostalServiceType.GlobalPostEconomyIntl},
+            {ServiceType.SCGPP, PostalServiceType.GlobalPostStandardIntl},
+            {ServiceType.SCGPESS, PostalServiceType.GlobalPostSmartSaverEconomyIntl},
+            {ServiceType.SCGPPSS, PostalServiceType.GlobalPostSmartSaverStandardIntl}
         };
 
         /// <summary>

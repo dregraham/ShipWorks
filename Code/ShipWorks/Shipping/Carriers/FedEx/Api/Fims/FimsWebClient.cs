@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         private string Submit(string soapRequest)
         {
-            HttpRequestSubmitter requestSubmitter = requestSubmitterFactory.GetHttpTextPostRequestSubmitter(soapRequest, "");
+            IHttpRequestSubmitter requestSubmitter = requestSubmitterFactory.GetHttpTextPostRequestSubmitter(soapRequest, "");
             requestSubmitter.Uri = productionUri;
 
             IApiLogEntry logger = apiLogEntryFactory(ApiLogSource.FedExFims, "Ship");

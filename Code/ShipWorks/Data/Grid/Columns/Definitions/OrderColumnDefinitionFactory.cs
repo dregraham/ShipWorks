@@ -682,6 +682,29 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             StoreTypeCode = StoreTypeCode.OrderMotion
                         },
+
+                    new GridColumnDefinition("{77C19022-29EF-4BE0-B283-4C87F5A50DBF}",
+                        new GridTextDisplayType(), "Purchase Order ID", "1234567890123",
+                        WalmartOrderFields.PurchaseOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.Walmart
+                        },
+
+                    new GridColumnDefinition("{F88755FB-D27B-4233-98B3-F28E9CF6AC73}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Estimated Delivery", DateTimeUtility.ParseEnUS("03/04/2017 1:30 PM").ToUniversalTime(),
+                        WalmartOrderFields.EstimatedDeliveryDate)
+                        {
+                            StoreTypeCode = StoreTypeCode.Walmart
+                        },
+
+                    new GridColumnDefinition("{6257254B-F197-4D25-8038-D8BBAB7B3CB8}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Estimated Ship", DateTimeUtility.ParseEnUS("03/04/2017 1:30 PM").ToUniversalTime(),
+                        WalmartOrderFields.EstimatedShipDate)
+                        {
+                            StoreTypeCode = StoreTypeCode.Walmart
+                        }
                 };
 
             return definitions;

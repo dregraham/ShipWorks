@@ -76,6 +76,10 @@ public partial class StoredProcedures
                     INNER JOIN #AuditPurgeBatch b ON
                         b.AuditID = ac.AuditID;
 
+                    DELETE ObjectLabel
+                    FROM AuditChange ac INNER JOIN #AuditPurgeBatch b ON b.AuditID = ac.AuditID
+					INNER JOIN ObjectLabel ol ON ac.ObjectID = ol.ObjectID AND ol.IsDeleted = 1
+
                     DELETE AuditChange
                     FROM AuditChange ac
                     INNER JOIN #AuditPurgeBatch b ON

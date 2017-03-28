@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostPriority;
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostStandardIntl;
 
             shipmentEntity.Postal = postalShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverPriority;
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverStandardIntl;
 
             shipmentEntity.Postal = postalShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;

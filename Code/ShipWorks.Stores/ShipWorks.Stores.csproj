@@ -42,9 +42,22 @@
   <PropertyGroup>
     <DelaySign>true</DelaySign>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -241,6 +254,7 @@
     <Compile Include="Platforms\Odbc\Download\OdbcTableDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
+    <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
@@ -276,6 +290,28 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartItemOnlineStatusCondition.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartPurchaseOrderIDCondition.cs" />
+    <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
+    <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
+    <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
+    <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
+    <Compile Include="Platforms\Walmart\WalmartException.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
+    <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
+    <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
+    <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
@@ -305,9 +341,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
@@ -327,6 +360,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

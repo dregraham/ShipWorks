@@ -42,6 +42,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -219,6 +220,9 @@ namespace ShipWorks.ApplicationCore
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
+            builder.RegisterType<HttpRequestSubmitterFactory>()
+                .As<IHttpRequestSubmitterFactory>();
+				
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -346,9 +350,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.RegisterType<TangoWebClientWrapper>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces()

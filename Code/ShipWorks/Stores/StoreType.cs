@@ -187,7 +187,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Get the store-specifc OrderIdentifier that can be used to identify the specified order.
+        /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
         public abstract OrderIdentifier CreateOrderIdentifier(OrderEntity order);
 
@@ -354,6 +354,11 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual StoreSettingsControlBase CreateStoreSettingsControl()
         {
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<StoreSettingsControlBase>(TypeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreSettingsControlBase>(TypeCode);
+            }
+
             return null;
         }
 

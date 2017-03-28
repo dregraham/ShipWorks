@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,6 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
+        private const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
         ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>
@@ -78,28 +78,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((UspsResellerType) account.UspsReseller));
         }
 
-
-        string UpsRestriction = @"
-            <Feature>
-				<Type>BestRateUpsRestriction</Type>
-				<Config>False</Config>
-			</Feature>";
-        private static string QtyRestriction = @"
-            <Feature>
-				<Type>RateResultCount</Type>
-				<Config>5</Config>
-			</Feature>";
-
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
         public override ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
-            ShipWorksLicense license = new ShipWorksLicense(licenseKey);
-            string rawXml = GetLicenseXmlFromFile("C:\\Temp\\License.xml", GenerateDummyLicenseXml());
-
-            XmlDocument licenseXml = new XmlDocument();
-            licenseXml.LoadXml(string.Format(rawXml, license.Key, StoreTypeManager.GetType(store).LicenseIdentifier));
+            XmlDocument licenseXml = GetXmlDocumentFromFile("License.xml",
+                new ShipWorksLicense(licenseKey).Key,
+                StoreTypeManager.GetType(store).LicenseIdentifier);
 
             return new LicenseAccountDetail(licenseXml, store);
         }
@@ -109,116 +95,71 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public override TrialDetail GetTrial(StoreEntity store)
         {
-            string rawXml = GetLicenseXmlFromFile("C:\\Temp\\Trial.xml", GenerateDummyTrialLicenseXml());
-
-            XmlDocument trialXml = new XmlDocument();
-            trialXml.LoadXml(string.Format(rawXml, store.License));
+            XmlDocument trialXml = GetXmlDocumentFromFile("Trial.xml", store.License);
 
             return new TrialDetail(trialXml, store);
         }
 
         /// <summary>
-        /// Reads a file from the given file path for a license information.
+        /// Gets the license capabilities.
         /// </summary>
-        /// <param name="path">The file path to read from.</param>
-        /// <param name="defaultXml">The XML to use if there is a problem reading from the given file path.</param>
-        /// <returns>The contents of the file.</returns>
-        private static string GetLicenseXmlFromFile(string path, string defaultXml)
+        public override ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
         {
-            string rawXml = string.Empty;
+            XmlDocument xmlResponse = GetXmlDocumentFromFile("LicenseCapabilities.xml", string.Empty);
 
             try
             {
-                using (StreamReader licenseFile = new StreamReader(path))
+                return new LicenseCapabilities(xmlResponse);
+            }
+            catch (ShipWorksLicenseException ex)
+            {
+                throw new TangoException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the active stores from Tango.
+        /// </summary>
+        public override IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            XmlDocument xmlResponse = GetXmlDocumentFromFile("ActiveStores.xml", string.Empty);
+
+            return new GetActiveStoresResponse(xmlResponse).ActiveStores;
+        }
+
+        /// <summary>
+        /// Get an xml document from the given file
+        /// </summary>
+        private static XmlDocument GetXmlDocumentFromFile(string fileName, params object[] args)
+        {
+            string rawXml = GetXmlStringFromFile(fileName);
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(string.Format(rawXml, args));
+            return document;
+        }
+
+        /// <summary>
+        /// Get an xml string from the given file
+        /// </summary>
+        private static string GetXmlStringFromFile(string fileName)
+        {
+            string filePath = InterapptiveOnly.Registry.GetValue(CustomizedTangoFilesKeyName, @"C:\Temp");
+            string fullFileName = Path.Combine(filePath, fileName);
+
+            try
+            {
+                using (StreamReader licenseFile = new StreamReader(fullFileName))
                 {
-                    rawXml = licenseFile.ReadToEnd();
-                    licenseFile.Close();
+                    return licenseFile.ReadToEnd();
                 }
             }
             catch (IOException)
             {
                 // Fall back to the hard-coded values if there is a problem reading from the
                 // license.xml file
-                rawXml = defaultXml;
+                return null;
             }
-
-            return rawXml;
-        }
-
-        /// <summary>
-        /// Generates dummy license XML that can be used in the event that the
-        /// License.xml file cannot be read from.
-        /// </summary>
-        /// <returns>Fake license information.</returns>
-        private string GenerateDummyLicenseXml()
-        {
-            return @"<License>
-	<Key>{0}</Key>
-	<Machine>{1}</Machine>
-	<Active>true</Active>
-	<Cancelled>false</Cancelled>
-	<DisabledReason/>
-	<Valid>true</Valid>
-	<StoreID>12024</StoreID>
-	<CustomerID>54</CustomerID>
-	<Version>Checked</Version>
-	<AlphaBeta>true</AlphaBeta>
-	<EndiciaDhlEnabled status='1'/>
-	<EndiciaInsuranceEnabled status='1'/>
-	<UpsSurePostEnabled status='1'/>
-	<EndiciaConsolidator status='1'>APC</EndiciaConsolidator>
-	<EndiciaScanBasedReturns status='1'/>
-    <ShipmentTypeFunctionality>
-        <ShipmentType TypeCode='14'>
-            <Restriction>Disabled</Restriction>
-            " + UpsRestriction + @"
-	        " + QtyRestriction + @"
-		</ShipmentType>
-        <!-- This is the USPS shipment type. Testing to confirm that the feature settings are ignored. -->
-		<ShipmentType TypeCode='15'>
-			<Feature>
-				<Type>BestRateUpsRestriction</Type>
-				<Config>False</Config>
-			</Feature>
-			<Feature>
-				<Type>RateResultCount</Type>
-				<Config>5</Config>
-			</Feature>
-		</ShipmentType>
-	</ShipmentTypeFunctionality>
-</License>";
-        }
-
-        /// <summary>
-        /// Generates the dummy trial license XML in the event that the Trial.xml file cannot be read from.
-        /// </summary>
-        /// <returns>Fake license info for a trial store.</returns>
-        private static string GenerateDummyTrialLicenseXml()
-        {
-            return @"<License>
-	<Key>{0}</Key>
-	<Created>2012-11-02 14:53:09</Created>
-	<Expires>2014-03-27 12:43:44</Expires>
-	<Converted>true</Converted>
-	<CanExtend>false</CanExtend>
-	<ServerTime>2015-01-22 20:36:15</ServerTime>
-	<Edition/>
-	<ShipmentTypeFunctionality>
-		<ShipmentType TypeCode='2'>
-			<Restriction>AccountRegistration</Restriction>
-		</ShipmentType>
-		<ShipmentType TypeCode='14'>
-            <Feature>
-				<Type>BestRateUpsRestriction</Type>
-				<Config>False</Config>
-			</Feature>
-			<Feature>
-				<Type>RateResultCount</Type>
-				<Config>5</Config>
-			</Feature>
-		</ShipmentType>
-	</ShipmentTypeFunctionality>
-</License>";
         }
     }
 }

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -26,11 +25,20 @@ namespace ShipWorks.UI.Controls.Weight
             DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightControl),
                 new FrameworkPropertyMetadata(WeightInput.MaxWeightDefault));
 
+        public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
+            DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(WeightControl),
+                new FrameworkPropertyMetadata(ScaleButton.AcceptApplyWeightKeyboardShortcutDefault));
+
         public static readonly DependencyProperty ErrorMessageProperty =
             DependencyProperty.Register("ErrorMessage",
                 typeof(string),
                 typeof(WeightControl),
                 new PropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty TelemetrySourceProperty =
+            DependencyProperty.Register("TelemetrySource",
+                typeof(string),
+                typeof(WeightControl));
 
         private ScaleButton scaleButton;
 
@@ -74,6 +82,26 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Maximum weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public bool AcceptApplyWeightKeyboardShortcut
+        {
+            get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
+            set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
+        }
+
+        /// <summary>
+        /// Source of the weight for telemetry
+        /// </summary>
+        public string TelemetrySource
+        {
+            get { return (string) GetValue(TelemetrySourceProperty); }
+            set { SetValue(TelemetrySourceProperty, value); }
+        }
+
+        /// <summary>
         /// Apply the template
         /// </summary>
         public override void OnApplyTemplate()
@@ -93,15 +121,19 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_ScaleButton is not available in the template");
             }
 
-            Binding textBinding = new Binding();
-            textBinding.Source = this;
-            textBinding.Path = new PropertyPath(nameof(Weight));
-            textBinding.Mode = BindingMode.TwoWay;
-            entry.SetBinding(WeightInput.WeightProperty, textBinding);
+            // Remove any existing handlers before adding another
+            scaleButton.ScaleRead -= OnScaleButtonScaleRead;
+            scaleButton.ScaleRead += OnScaleButtonScaleRead;
 
             AddErrorMessageValueChangedHandler(scaleButton);
             AddErrorMessageValueChangedHandler(entry);
         }
+
+        /// <summary>
+        /// The scale was read
+        /// </summary>
+        private void OnScaleButtonScaleRead(object sender, RoutedEventArgs e) =>
+            entry.RaiseEvent(e);
 
         /// <summary>
         /// Add an error message value changed handler for a control
@@ -109,7 +141,7 @@ namespace ShipWorks.UI.Controls.Weight
         private void AddErrorMessageValueChangedHandler(DependencyObject control)
         {
             DependencyPropertyDescriptor descriptor =
-                                DependencyPropertyDescriptor.FromProperty(ErrorMessageProperty, control.GetType());
+                DependencyPropertyDescriptor.FromProperty(ErrorMessageProperty, control.GetType());
             descriptor.AddValueChanged(control, new EventHandler(OnErrorChanged));
         }
 

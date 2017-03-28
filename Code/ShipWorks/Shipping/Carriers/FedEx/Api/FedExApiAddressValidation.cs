@@ -1,15 +1,15 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Services.Protocols;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation;
 using ShipWorks.Shipping.Settings;
-using System;
-using System.Collections.Generic;
-using System.Web.Services.Protocols;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -73,6 +73,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </exception>
         private static bool ProcessResponse(AddressValidationReply reply)
         {
+            if (reply == null)
+            {
+                throw new FedExException("FedEx returned zero results for residential check.");
+            }
+
             if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
                 throw new FedExApiException(reply.Notifications);

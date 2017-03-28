@@ -561,8 +561,8 @@ namespace ShipWorks.Shipping.Insurance
             else
             {
                 if (postalService == PostalServiceType.InternationalPriority ||
-                    postalService == PostalServiceType.GlobalPostPriority ||
-                    postalService == PostalServiceType.GlobalPostSmartSaverPriority)
+                    postalService == PostalServiceType.GlobalPostStandardIntl ||
+                    postalService == PostalServiceType.GlobalPostSmartSaverStandardIntl)
                 {
                     // Get how many increments of $50
                     int quantity = (int) Math.Ceiling(declaredValue / 50m);

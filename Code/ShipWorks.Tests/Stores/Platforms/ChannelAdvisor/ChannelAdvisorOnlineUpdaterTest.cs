@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostEconomy;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostEconomyIntl;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverEconomy;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverEconomyIntl;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostPriority;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostStandardIntl;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverPriority;
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverStandardIntl;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 

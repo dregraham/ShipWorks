@@ -43,6 +43,7 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -237,6 +238,8 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>
@@ -819,7 +822,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(SqlServerInfo.Fetch());
+            Telemetry.TrackStartShipworks(GetStartupTelemetryData());
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -832,6 +835,27 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
+        }
+
+        /// <summary>
+        /// Get telemetry data for ShipWorks
+        /// </summary>
+        /// <returns></returns>
+        private static IDictionary<string, string> GetStartupTelemetryData()
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+
+            try
+            {
+                return values.Union(SqlServerInfo.Fetch())
+                    .Union(ShippingSettings.GetTelemetryData())
+                    .ToDictionary(k => k.Key, v => v.Value);
+            }
+            catch(Exception ex)
+            {
+                log.Error("Error collecting ShipWorks telemetry data.", ex);
+                return values;
+            }
         }
 
         /// <summary>

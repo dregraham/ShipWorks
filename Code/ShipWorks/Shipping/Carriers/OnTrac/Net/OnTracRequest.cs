@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// </summary>
         /// <typeparam name="T">Return Type to serialize the response to</typeparam>
         /// <param name="request">The request to serialize and send to OnTrac</param>
-        protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request)
+        protected T ExecuteLoggedRequest<T>(IHttpRequestSubmitter request)
         {
             if (request == null)
             {

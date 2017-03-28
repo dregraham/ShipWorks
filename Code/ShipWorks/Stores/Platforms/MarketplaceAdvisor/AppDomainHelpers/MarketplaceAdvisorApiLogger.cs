@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
         /// <param name="action"></param>
         public MarketplaceAdvisorApiLogger(string action)
         {
-            logger = new ApiLogEntry(ApiLogSource.MarketplaceAdvisor, action);    
+            logger = new ApiLogEntry(ApiLogSource.MarketplaceAdvisor, action);
         }
 
         public ApiLogEncryption Encryption { get; set; }
@@ -54,6 +54,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
         }
 
         public void LogRequest(HttpRequestSubmitter request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogRequest(IHttpRequestSubmitter request)
         {
             throw new NotImplementedException();
         }

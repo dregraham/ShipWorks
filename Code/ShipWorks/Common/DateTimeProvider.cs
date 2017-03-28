@@ -21,6 +21,11 @@ namespace ShipWorks.Common
         public DateTime UtcNow => DateTime.UtcNow;
 
         /// <summary>
+        /// Gets the current Epoc in seconds
+        /// </summary>
+        public double Epoc => DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow);
+
+        /// <summary>
         /// Gets the current UTC date and time
         /// </summary>
         public DateTime GetUtcNow() => DateTime.UtcNow;

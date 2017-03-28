@@ -20,7 +20,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
     /// Specifies a registration order of a component
     /// </summary>
     [MetadataAttribute]
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class OrderAttribute : Attribute
     {
         /// <summary>

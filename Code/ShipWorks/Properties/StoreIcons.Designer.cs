@@ -583,6 +583,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap selleractive {
+            get {
+                object obj = ResourceManager.GetObject("selleractive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sellercloud {
             get {
                 object obj = ResourceManager.GetObject("sellercloud", resourceCulture);
@@ -716,6 +726,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap volusion {
             get {
                 object obj = ResourceManager.GetObject("volusion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap walmart {
+            get {
+                object obj = ResourceManager.GetObject("walmart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

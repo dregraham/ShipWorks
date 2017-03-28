@@ -43,6 +43,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         BigCommerceOrderItem = 30,
         InsurancePolicy = 31,
         GrouponOrder = 32,
-        LemonStandOrder = 33
+        LemonStandOrder = 33,
+        WalmartOrder = 34,
+        WalmartOrderItem = 35
     }
 }

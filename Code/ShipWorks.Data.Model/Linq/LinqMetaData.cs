@@ -563,6 +563,15 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.VolusionStoreEntity:
 					toReturn = this.VolusionStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderEntity:
+					toReturn = this.WalmartOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderItemEntity:
+					toReturn = this.WalmartOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.WalmartStoreEntity:
+					toReturn = this.WalmartStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity:
 					toReturn = this.WorldShipGoods;
 					break;
@@ -1603,6 +1612,24 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<VolusionStoreEntity> VolusionStore
 		{
 			get { return new DataSource2<VolusionStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting WalmartOrderEntity instances in the database.</summary>
+		public DataSource2<WalmartOrderEntity> WalmartOrder
+		{
+			get { return new DataSource2<WalmartOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting WalmartOrderItemEntity instances in the database.</summary>
+		public DataSource2<WalmartOrderItemEntity> WalmartOrderItem
+		{
+			get { return new DataSource2<WalmartOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting WalmartStoreEntity instances in the database.</summary>
+		public DataSource2<WalmartStoreEntity> WalmartStore
+		{
+			get { return new DataSource2<WalmartStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting WorldShipGoodsEntity instances in the database.</summary>

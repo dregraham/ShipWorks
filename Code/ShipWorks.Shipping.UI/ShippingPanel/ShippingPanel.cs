@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -11,6 +13,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
+using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -22,6 +25,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         ShippingPanelControl shippingPanelControl;
         ShippingPanelViewModel viewModel;
+        IDisposable visibilitySubscription;
         readonly IMessenger messenger;
 
         /// <summary>
@@ -56,6 +60,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             shippingPanelControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
             shippingPanelControl.LostFocus += OnShippingPanelControlLostFocus;
+
+            visibilitySubscription = CreateWPFVisibilityPropagationSubscriptions();
         }
 
         /// <summary>
@@ -168,6 +174,27 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private void CommitBindings(IInputElement element)
         {
             element?.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent, element));
+        }
+
+        /// <summary>
+        /// Propagate visibility changes to the WPF host
+        /// </summary>
+        /// <remarks>
+        /// When this panel is shown or hidden, the WPF host doesn't know about it. So, all its controls
+        /// think they are visible. This makes it difficult to write logic based on whether a control
+        /// is visible or not.
+        /// </remarks>
+        private IDisposable CreateWPFVisibilityPropagationSubscriptions()
+        {
+            return new CompositeDisposable(
+                Messenger.Current.OfType<PanelShownMessage>().Select(x => x.Panel)
+                    .Where(DockPanelIdentifiers.IsShippingPanel)
+                    .Subscribe(_ => shippingPanelControl.Visibility = Visibility.Visible),
+
+                Messenger.Current.OfType<PanelHiddenMessage>().Select(x => x.Panel)
+                    .Where(DockPanelIdentifiers.IsShippingPanel)
+                    .Subscribe(_ => shippingPanelControl.Visibility = Visibility.Hidden)
+            );
         }
     }
 }

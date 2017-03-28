@@ -42,6 +42,15 @@
   <PropertyGroup>
     <DelaySign>true</DelaySign>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
@@ -290,6 +299,29 @@
     </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
+    <Compile Include="Platforms\Walmart\WalmartAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WalmartAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>WalmartAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WalmartStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WalmartStoreSettingsControl.Designer.cs">
+      <DependentUpon>WalmartStoreSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\IWalmartStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml.cs">
+      <DependentUpon>WalmartStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.Designer.cs">
+      <DependentUpon>WalmartStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>
@@ -380,6 +412,15 @@
     <EmbeddedResource Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.resx">
       <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Walmart\WalmartAccountSettingsControlHost.resx">
+      <DependentUpon>WalmartAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Walmart\WalmartStoreSettingsControl.resx">
+      <DependentUpon>WalmartStoreSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.resx">
+      <DependentUpon>WalmartStoreSetupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>
     </EmbeddedResource>
@@ -449,6 +490,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -49,13 +49,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobalPost()
         {
-            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostEconomy));
+            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostEconomyIntl));
         }
 
         [Fact]
         public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobalPostSaverEconomy()
         {
-            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostSmartSaverEconomy));
+            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostSmartSaverEconomyIntl));
         }
 
         [Fact]

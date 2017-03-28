@@ -798,7 +798,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Add the shipworks rate object
                 results.Add(new RateResult(
                     EnumHelper.GetDescription(serviceType),
-                    transitDays == 0 ? string.Empty : transitDays.ToString(),
+                    GetTransitDaysDescription(transitDays, deliveryDate),
                     cost,
                     GetCurrencyCode(currency),
                     new FedExRateSelection(serviceType))
@@ -810,6 +810,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 });
             }
             return results;
+        }
+
+        /// <summary>
+        /// Gets the transit days and delivery timestamp (if given) to be displayed for rating
+        /// </summary>
+        private string GetTransitDaysDescription(int transitDays, DateTime? deliveryDate)
+        {
+            string transitDaysDescription = string.Empty;
+
+            if (transitDays != 0)
+            {
+                if (deliveryDate.HasValue)
+                {
+                    if (deliveryDate.Value.Hour == 0 && deliveryDate.Value.Minute == 0)
+                    {
+                        // Ground and Home delivery give a delivery day but not a time
+                        transitDaysDescription = $"{transitDays} ({deliveryDate.Value.ToString("dddd")})";
+                    }
+                    else
+                    {
+                        // Display delivery time stamp along side number of days
+                        transitDaysDescription = $"{transitDays} ({deliveryDate.Value.ToString("dddd h:mm tt")})";
+                    }
+                }
+                else
+                {
+                    // If no delivery date, just show transit days
+                    transitDaysDescription = transitDays.ToString();
+                }
+            }
+
+            return transitDaysDescription;
         }
 
         /// <summary>
