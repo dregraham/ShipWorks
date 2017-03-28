@@ -58,8 +58,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
             testObject.Apply();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Applied"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "N/A"));
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "N/A"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "upsaccountnumber"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "false"));
         }
 
         [Fact]
