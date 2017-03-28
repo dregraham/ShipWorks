@@ -85,10 +85,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             LogResult("Declined");
         }
 
-        public UpsPromoStatus GetStatus()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Get the promo status
+        /// </summary>
+        /// <returns></returns>
+        public UpsPromoStatus GetStatus() => upsPromo.GetStatus();
 
         /// <summary>
         /// Remind the user of the paromo later
@@ -105,17 +106,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private void LogResult(string result)
         {
             telemetryEvent.AddProperty("Ups.Promo.Result", result);
+            telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", existingAccount ? "true" : "false");
+            telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
 
-            if (existingAccount)
-            {
-                telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", "true");
-                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
-            }
-            else
-            {
-                telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", "N/A");
-                telemetryEvent.AddProperty("Ups.Promo.AccountNumber", "N/A");
-            }
+            telemetryEvent.Dispose();
         }
     }
 }
