@@ -338,34 +338,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void GetFootnoteFactory_ReturnsNull_WhenPromoPolicyIsNotEligible()
-        {
-            using (var mock = GetLooseThatReturnsMocks())
-            {
-                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                var promoPolicy = mock.Mock<IUpsPromoPolicy>();
-                promoPolicy.Setup(p => p.IsEligible(It.IsAny<UpsPromo>())).Returns(false);
-                var testObject = CreateUpsPromo(mock, client);
-
-                Assert.Null(testObject.GetFootnoteFactory());
-            }
-        }
-
-        [Fact]
-        public void GetFootnoteFactory_ReturnsUpsPromoFootnoteFactory_WhenPromoPolicyIsEligible()
-        {
-            using (var mock = GetLooseThatReturnsMocks())
-            {
-                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                var promoPolicy = mock.Mock<IUpsPromoPolicy>();
-                promoPolicy.Setup(p => p.IsEligible(It.IsAny<UpsPromo>())).Returns(true);
-                var testObject = CreateUpsPromo(mock, client);
-
-                Assert.IsAssignableFrom<UpsPromoFootnoteFactory>(testObject.GetFootnoteFactory());
-            }
-        }
-
-        [Fact]
         public void Decline_SetsPromoStatusToDeclined()
         {
             using (var mock = GetLooseThatReturnsMocks())

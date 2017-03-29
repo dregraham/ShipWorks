@@ -171,8 +171,10 @@
     <Compile Include="Messaging\TrackedObservable\ConcatImplementation.cs" />
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
     <Compile Include="Metrics\DummyTrackedDurationEvent.cs" />
+    <Compile Include="Metrics\ITrackedEvent.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
+    <Compile Include="Metrics\TrackedEvent.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />

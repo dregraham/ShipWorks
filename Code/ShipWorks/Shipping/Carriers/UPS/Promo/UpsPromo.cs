@@ -154,22 +154,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         {
             return (UpsPromoStatus)account.PromoStatus;
         }
-
-        /// <summary>
-        /// Gets the footnote factory.
-        /// </summary>
-        public UpsPromoFootnoteFactory GetFootnoteFactory()
-        {
-            if (promoPolicy.IsEligible(this))
-            {
-                // Create promo footnote factory
-                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this, account);
-
-                // Add factory to the final group rate group
-                return promoFootNoteFactory;
-            }
-
-            return null;
-        }
     }
 }

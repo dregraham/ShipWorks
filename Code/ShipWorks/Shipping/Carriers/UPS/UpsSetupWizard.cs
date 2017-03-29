@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
         private DateTime? smartPickupNotifyTime;
-        private UpsPromo promo;
+        private IUpsPromo promo;
 
         private string upsLicense;
 
@@ -1132,7 +1132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount);
+                promo = upsPromoFactory.Get(upsAccount, false);
 
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;
