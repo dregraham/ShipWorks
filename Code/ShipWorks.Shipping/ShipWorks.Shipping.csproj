@@ -131,6 +131,9 @@
       <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Dataflow.4.7.0\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -250,10 +253,12 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\DataFlow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Services\LabelPrintingService.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\ParallelProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\RatesRetriever.cs" />

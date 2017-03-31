@@ -8,6 +8,6 @@
         /// <summary>
         /// Create the correct workflow
         /// </summary>
-        IProcessShipmentsWorkflow Create();
+        IProcessShipmentsWorkflow Create(int shipmentCount);
     }
 }

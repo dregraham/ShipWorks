@@ -13,6 +13,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         public LabelPersistenceResult(ILabelRetrievalResult result)
         {
+            Index = result.Index;
             EntityLock = result.EntityLock;
             Exception = result.Exception;
             Canceled = result.Canceled;
@@ -25,8 +26,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         public LabelPersistenceResult(ILabelRetrievalResult result, Exception exception) : this(result)
         {
+            Index = result.Index;
             Exception = exception;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Entity lock for the current shipment
