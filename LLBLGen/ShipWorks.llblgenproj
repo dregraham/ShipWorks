@@ -2262,6 +2262,8 @@
       </EntityDefinition>
       <EntityDefinition Name="ShopifyStore" ObjectID="b487fe76-68db-4c54-a4ef-61fd84f96a38" InheritanceType="2">
         <Fields>
+          <Field Name="ApiKey" Type="string" MaxLength="100" FieldIndex="4" />
+          <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="ShopifyAccessToken" Type="string" MaxLength="255" FieldIndex="2" />
           <Field Name="ShopifyRequestedShippingOption" Type="int" FieldIndex="3" />
           <Field Name="ShopifyShopDisplayName" Type="string" MaxLength="100" FieldIndex="1" />
@@ -3599,7 +3601,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-13T20:48:59.4929014Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7055,6 +7057,8 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="ShopifyRequestedShippingOption" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="ApiKey" Ordinal="6" DbType="12" Length="100" />
+                    <Field Name="Password" Ordinal="7" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ShopSiteStore">
@@ -7728,8 +7732,7 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2000" />
-                    <Field Name="ChannelType" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="4" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">
@@ -10999,6 +11002,8 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShopifyStore" TargetName="ShipWorksLocal:dbo:ShopifyStore">
           <FieldMappings>
+            <FieldMapping FieldName="ApiKey" TargetFieldName="ApiKey" />
+            <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="ShopifyAccessToken" TargetFieldName="ShopifyAccessToken" />
             <FieldMapping FieldName="ShopifyRequestedShippingOption" TargetFieldName="ShopifyRequestedShippingOption" />
             <FieldMapping FieldName="ShopifyShopDisplayName" TargetFieldName="ShopifyShopDisplayName" />
