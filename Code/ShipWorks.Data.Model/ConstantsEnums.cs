@@ -8464,6 +8464,10 @@ namespace ShipWorks.Data.Model
 		ShopifyAccessToken,
 		///<summary>ShopifyRequestedShippingOption. </summary>
 		ShopifyRequestedShippingOption,
+		///<summary>ApiKey. </summary>
+		ApiKey,
+		///<summary>Password. </summary>
+		Password,
 		/// <summary></summary>
 		AmountOfFields
 	}

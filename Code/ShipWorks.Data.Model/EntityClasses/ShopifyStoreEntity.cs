@@ -337,6 +337,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShopifyAccessToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShopifyRequestedShippingOption", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ApiKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Password", fieldHashtable);
 		}
 		#endregion
 
@@ -428,6 +432,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, true); }
 			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, value); }
+		}
+
+		/// <summary> The ApiKey property of the Entity ShopifyStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopifyStore"."ApiKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ApiKey
+		{
+			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ApiKey, true); }
+			set	{ SetValue((int)ShopifyStoreFieldIndex.ApiKey, value); }
+		}
+
+		/// <summary> The Password property of the Entity ShopifyStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopifyStore"."Password"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Password
+		{
+			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.Password, true); }
+			set	{ SetValue((int)ShopifyStoreFieldIndex.Password, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
