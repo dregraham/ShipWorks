@@ -936,6 +936,11 @@ namespace ShipWorks.Shipping
         /// <param name="storeEntity">The store entity.</param>
         private static void CheckLicense(StoreEntity storeEntity)
         {
+            if (!storeEntity.Enabled)
+            {
+                throw new ShippingException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+            }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = scope.Resolve<ILicenseService>();

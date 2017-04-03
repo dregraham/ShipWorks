@@ -545,6 +545,11 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void CheckLicense(StoreEntity store)
         {
+            if (!store.Enabled)
+            {
+                throw new ShipWorksLicenseException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+            }
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
