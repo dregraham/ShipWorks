@@ -41,9 +41,14 @@ namespace ShipWorks.Stores.Platforms.OpenSky
         /// </summary>
         public override string GetOnlineCarrierName(ShipmentEntity shipment)
         {
-            if (shipment.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+            if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
             {
-                return "DHL ECOMMERCE";
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
+                if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                {
+                    return "DHL ECOMMERCE";
+                }
             }
 
             return base.GetOnlineCarrierName(shipment);
