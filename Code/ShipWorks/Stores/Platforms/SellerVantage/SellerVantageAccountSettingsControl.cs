@@ -64,10 +64,10 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
                 return false;
             }
 
-            genericStore.ModuleUsername = username.Text;
-            genericStore.ModulePassword = SecureText.Encrypt(password.Text, username.Text);
-            genericStore.ModuleOnlineStoreCode = clientTextBox.Text;
-            genericStore.ModuleUrl = url.Text;
+            genericStore.ModuleUsername = username.Text.Trim();
+            genericStore.ModulePassword = SecureText.Encrypt(password.Text, username.Text).Trim();
+            genericStore.ModuleOnlineStoreCode = clientTextBox.Text.Trim();
+            genericStore.ModuleUrl = url.Text.Trim();
 
             // see if we need to test the settings because they changed in some way
             if (genericStore.Fields[(int) GenericModuleStoreFieldIndex.ModuleUsername].IsChanged ||
