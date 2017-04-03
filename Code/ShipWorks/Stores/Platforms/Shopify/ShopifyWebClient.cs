@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
+using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -486,10 +487,27 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         private IHttpResponseReader ProcessAuthenticatedRequestReader(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
-            // Add our authentication header
-            request.Headers.Add("X-Shopify-Access-Token", store.ShopifyAccessToken);
+            AddAuthHeaderToRequest(request);
 
             return ProcessRequestReader(request, action, progressReporter);
+        }
+
+        /// <summary>
+        /// Add the auth header info to the request
+        /// </summary>
+        private void AddAuthHeaderToRequest(HttpRequestSubmitter request)
+        {
+            if (string.IsNullOrWhiteSpace(store.ApiKey) || string.IsNullOrWhiteSpace(store.Password))
+            {
+                request.Headers.Add("X-Shopify-Access-Token", store.ShopifyAccessToken);
+            }
+            else
+            {
+                string authInfo = string.Format("{0}:{1}", store.ApiKey, store.Password);
+                string encodedAuthInfo = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
+
+                request.Headers.Add("Authorization", "Basic " + encodedAuthInfo);
+            }
         }
 
         /// <summary>
