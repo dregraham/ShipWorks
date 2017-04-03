@@ -33,6 +33,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -679,6 +680,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public virtual string GetOnlineOrderIdentifier(OrderEntity order)
         {
             return order.OrderNumberComplete.ToString();
+        }
+
+        /// <summary>
+        /// Gets the online store's carrier name
+        /// </summary>
+        public virtual string GetOnlineCarrierName(ShipmentEntity shipment)
+        {
+            return ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType);
         }
 
         /// <summary>

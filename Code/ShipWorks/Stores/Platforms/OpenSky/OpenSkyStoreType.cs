@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.OpenSky
@@ -33,5 +35,18 @@ namespace ShipWorks.Stores.Platforms.OpenSky
         /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000062791";
+
+        /// <summary>
+        /// Gets the online store's carrier name
+        /// </summary>
+        public override string GetOnlineCarrierName(ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+            {
+                return "DHL ECOMMERCE";
+            }
+
+            return base.GetOnlineCarrierName(shipment);
+        }
     }
 }
