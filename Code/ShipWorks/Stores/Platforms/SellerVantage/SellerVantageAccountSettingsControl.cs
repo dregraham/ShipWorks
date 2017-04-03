@@ -38,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
             username.Text = genericStore.ModuleUsername;
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
             clientTextBox.Text = genericStore.ModuleOnlineStoreCode;
+            url.Text = genericStore.ModuleUrl;
         }
 
         /// <summary>
@@ -57,9 +58,16 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
                 return false;
             }
 
+            if (url.Text.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Enter your SellerVantage URL.");
+                return false;
+            }
+
             genericStore.ModuleUsername = username.Text;
             genericStore.ModulePassword = SecureText.Encrypt(password.Text, username.Text);
             genericStore.ModuleOnlineStoreCode = clientTextBox.Text;
+            genericStore.ModuleUrl = url.Text;
 
             // see if we need to test the settings because they changed in some way
             if (genericStore.Fields[(int) GenericModuleStoreFieldIndex.ModuleUsername].IsChanged ||
