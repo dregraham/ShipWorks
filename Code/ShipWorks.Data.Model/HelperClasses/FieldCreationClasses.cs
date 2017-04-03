@@ -19762,6 +19762,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyRequestedShippingOption);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ApiKey field instance</summary>
+		public static EntityField2 ApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ApiKey);}
+		}
+		/// <summary>Creates a new ShopifyStoreEntity.Password field instance</summary>
+		public static EntityField2 Password
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.Password);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopSiteStoreEntity</summary>
