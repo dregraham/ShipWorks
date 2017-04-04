@@ -1,71 +1,41 @@
 ﻿<UserControl x:Class="ShipWorks.Shipping.UI.Carriers.Ups.UpsLocalRatingControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             FontFamily="Tahoma"
+             FontSize="11"
+             d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
+             mc:Ignorable="d">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CheckBox
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="20 10 0 0">
-            Enable local rating
-        </CheckBox>
-
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="40 10 10 5">
+        <CheckBox Grid.Row="0" VerticalContentAlignment="Center">Enable local rating</CheckBox>
+        <TextBlock Grid.Row="1"
+                   Margin="21 10 0 10"
+                   TextWrapping="Wrap">
             To display UPS rates with Best Rate in ShipWorks, please complete the following steps:
         </TextBlock>
-
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="60 0 0 0">
-            1. Download the <Hyperlink Command="{Binding DownloadSampleFile}">sample rate file</Hyperlink>.
-        </TextBlock>
-
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="60 0 0 0">
-            2. Modify the file to specify your rates.
-        </TextBlock>
-
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="60 0 0 0">
-            3. Click Browse below to upload the modified rate file.
-        </TextBlock>
-
-        <Button
-            Grid.Row="5"
-            Grid.Column="1"
-            Width="60"
-            HorizontalAlignment="Right"
-            Margin="0 0 10 10"
-            Command="{Binding UploadRatingFile}">
+        <StackPanel Grid.Row="2" Margin="41 0 0 10">
+            <TextBlock>
+                1. Download the
+                <Hyperlink Command="{Binding DownloadSampleFile}">sample rate file</Hyperlink>.
+            </TextBlock>
+            <TextBlock>2. Modify the file to specify your rates.</TextBlock>
+            <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
+        </StackPanel>
+        <Button Grid.Row="3"
+                Width="73"
+                Height="21"
+                Margin="0 0 0 10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding UploadRatingFile}">
             Browse...
         </Button>
     </Grid>

@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -40,6 +45,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             description.PromptText = UpsAccountManager.GetDefaultDescription(account);
 
             upsRateTypeControl.Initialize(account, false);
+
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                UserControl localRatesControl = scope.Resolve<IUpsLocalRatingControl>() as UserControl;
+                localRatesControl.DataContext = scope.Resolve<IUpsLocalRatingViewModel>();
+                LocalRateControlHost.Child = localRatesControl;
+            }
         }
 
         /// <summary>
