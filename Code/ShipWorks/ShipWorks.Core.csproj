@@ -955,6 +955,7 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutKeyFilter.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
+    <Compile Include="Common\IProcess.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
@@ -964,6 +965,7 @@
     <Compile Include="Common\IManipulator.cs" />
     <Compile Include="Common\ICompositeValidatorResult.cs" />
     <Compile Include="Common\IValidator.cs" />
+    <Compile Include="Common\ProcessWrapper.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\CancellationTokenProgressProvider.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />

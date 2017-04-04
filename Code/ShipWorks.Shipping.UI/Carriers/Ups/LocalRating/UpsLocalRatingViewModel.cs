@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
@@ -24,7 +21,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     public class UpsLocalRatingViewModel : IUpsLocalRatingViewModel
     {
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
-        private const string SampleFileResourceName = "ShipWorks.Shipping.UpsLocalRatesSample.xlsx";
+        private readonly IProcess process;
+        public const string SampleFileResourceName = "ShipWorks.Shipping.UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
@@ -32,9 +30,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(IIndex<FileDialogType, IFileDialog> fileDialogFactory)
+        public UpsLocalRatingViewModel(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IProcess process)
         {
             this.fileDialogFactory = fileDialogFactory;
+            this.process = process;
             DownloadSampleFile = new RelayCommand(DownloadSampleFileCommand);
             UploadRatingFile = new RelayCommand(UploadRatingFileCommand, () => LocalRatingEnabled);
         }
@@ -50,8 +49,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool LocalRatingEnabled { get; set; }
-
-
+        
         /// <summary>
         /// Gets the upload rating file.
         /// </summary>
@@ -97,10 +95,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             using (Stream selectedFileStream = fileDialog.CreateFileStream())
             {
                 resourceStream.CopyTo(selectedFileStream);
-                resourceStream.Close();
             }
 
-            System.Diagnostics.Process.Start(fileDialog.SelectedFileName);
+            process.Start(fileDialog.SelectedFileName);
         }
 
         /// <summary>
