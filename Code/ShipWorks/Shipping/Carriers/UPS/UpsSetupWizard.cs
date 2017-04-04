@@ -887,7 +887,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000098802-creating-a-new-ups-account-in-shipworks", this);
         }
 
         /// <summary>
