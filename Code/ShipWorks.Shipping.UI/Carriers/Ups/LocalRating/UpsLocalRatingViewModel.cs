@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
@@ -18,13 +23,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     [Component]
     public class UpsLocalRatingViewModel : IUpsLocalRatingViewModel
     {
+        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private const string SampleFileResourceName = "ShipWorks.Shipping.UpsLocalRatesSample.xlsx";
+        private const string Extension = ".xlsx";
+        private const string Filter = "Excel File (*.xlsx)|*.xlsx";
+        private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel()
+        public UpsLocalRatingViewModel(IIndex<FileDialogType, IFileDialog> fileDialogFactory)
         {
-            DownloadSampleFile = new RelayCommand(DownloadSampleFileAccount);
-            UploadRatingFile = new RelayCommand(UploadRatingFileCommand);
+            this.fileDialogFactory = fileDialogFactory;
+            DownloadSampleFile = new RelayCommand(DownloadSampleFileCommand);
+            UploadRatingFile = new RelayCommand(UploadRatingFileCommand, () => LocalRatingEnabled);
         }
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity upsAccount)
         {
-            throw new NotImplementedException();
+            LocalRatingEnabled = upsAccount.LocalRatingEnabled;
         }
 
         /// <summary>
@@ -59,7 +71,36 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         public bool Save(UpsAccountEntity upsAccount)
         {
-            throw new NotImplementedException();
+            upsAccount.LocalRatingEnabled = LocalRatingEnabled;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Downloads the sample file.
+        /// </summary>
+        private void DownloadSampleFileCommand()
+        {
+            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
+            fileDialog.DefaultExt = Extension;
+            fileDialog.Filter = Filter;
+            fileDialog.DefaultFileName = DefaultFileName;
+
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLabelService));
+
+            using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleFileResourceName))
+            using (Stream selectedFileStream = fileDialog.CreateFileStream())
+            {
+                resourceStream.CopyTo(selectedFileStream);
+                resourceStream.Close();
+            }
+
+            System.Diagnostics.Process.Start(fileDialog.SelectedFileName);
         }
 
         /// <summary>
@@ -68,14 +109,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private void UploadRatingFileCommand()
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Downloads the sample file account.
-        /// </summary>
-        private void DownloadSampleFileAccount()
-        {
-            
         }
     }
 }

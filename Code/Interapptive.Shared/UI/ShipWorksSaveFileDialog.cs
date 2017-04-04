@@ -10,8 +10,7 @@ namespace Interapptive.Shared.UI
     public class ShipWorksSaveFileDialog : IFileDialog
     {
         private readonly Control owner;
-        private string selectedFileName;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksSaveFileDialog"/> class.
         /// </summary>
@@ -37,6 +36,11 @@ namespace Interapptive.Shared.UI
         public string DefaultFileName { private get; set; }
 
         /// <summary>
+        /// Gets the name of the selected file.
+        /// </summary>
+        public string SelectedFileName { get; private set; }
+
+        /// <summary>
         /// Shows the save file Dialog box
         /// </summary>
         public DialogResult ShowDialog()
@@ -52,7 +56,7 @@ namespace Interapptive.Shared.UI
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    selectedFileName = saveFileDialog.FileName;
+                    SelectedFileName = saveFileDialog.FileName;
                 }
 
                 return dialogResult;
@@ -65,7 +69,7 @@ namespace Interapptive.Shared.UI
         /// <exception cref="UnauthorizedAccessException"></exception>
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
+            return string.IsNullOrEmpty(SelectedFileName) ? null : File.Open(SelectedFileName, FileMode.Create);
         }
     }
 }
