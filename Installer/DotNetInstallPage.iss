@@ -78,7 +78,7 @@ begin
 		        'Setup Error',
 		        'Could not install the .NET Framework.',
 			    failReason + '.' + #13 + #13 + 'You can download the .NET Framework directly from the following link.',
-			    'https://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe');
+			    GetDotNetDownloadURL());
 		end;
 
     finally
