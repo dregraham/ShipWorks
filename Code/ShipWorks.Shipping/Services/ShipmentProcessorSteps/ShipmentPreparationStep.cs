@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
             if (!store.Enabled)
             {
-                throw new ShippingException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+                return new ShippingException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
             }
 
             // Validate that the license is valid
