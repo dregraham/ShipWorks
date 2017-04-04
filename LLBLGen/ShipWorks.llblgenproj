@@ -2439,6 +2439,7 @@
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="InvoiceAuth" Type="bool" FieldIndex="7" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="10" />
+          <Field Name="LocalRatingEnabled" Type="bool" FieldIndex="23" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="9" />
           <Field Name="Password" Type="string" MaxLength="25" FieldIndex="5" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="19" />
@@ -3601,7 +3602,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-04T17:24:35.6829356Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7273,6 +7274,7 @@
                     <Field Name="Email" Ordinal="21" DbType="12" Length="100" />
                     <Field Name="Website" Ordinal="22" DbType="12" Length="50" />
                     <Field Name="PromoStatus" Ordinal="23" DbType="22" Precision="3" />
+                    <Field Name="LocalRatingEnabled" Ordinal="24" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UpsPackage">
@@ -11185,6 +11187,7 @@
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
             <FieldMapping FieldName="InvoiceAuth" TargetFieldName="InvoiceAuth" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="LocalRatingEnabled" TargetFieldName="LocalRatingEnabled" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
