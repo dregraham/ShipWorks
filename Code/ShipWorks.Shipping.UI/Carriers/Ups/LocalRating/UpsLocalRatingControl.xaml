@@ -19,13 +19,54 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="20 10 0 0">Enable local rating</CheckBox>
-        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="40 10 10 5">To display UPS rates with Best Rate in ShipWorks, please complete the following steps: </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="60 0 0 0">1. Download the <Hyperlink Command="{Binding DownloadSampleFile}">sample rate file</Hyperlink>.</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="60 0 0 0">2. Modify the file to specify your rates.</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="60 0 0 0">3. Click Browse below to upload the modified rate file.</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right"></TextBlock>
-        <Button Grid.Row="5" Grid.Column="1" Width="60" HorizontalAlignment="Right" Margin="0 0 10 10">Browse...</Button>
+        <CheckBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="20 10 0 0">
+            Enable local rating
+        </CheckBox>
 
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="40 10 10 5">
+            To display UPS rates with Best Rate in ShipWorks, please complete the following steps:
+        </TextBlock>
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="60 0 0 0">
+            1. Download the <Hyperlink Command="{Binding DownloadSampleFile}">sample rate file</Hyperlink>.
+        </TextBlock>
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="60 0 0 0">
+            2. Modify the file to specify your rates.
+        </TextBlock>
+
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="60 0 0 0">
+            3. Click Browse below to upload the modified rate file.
+        </TextBlock>
+
+        <Button
+            Grid.Row="5"
+            Grid.Column="1"
+            Width="60"
+            HorizontalAlignment="Right"
+            Margin="0 0 10 10"
+            Command="{Binding UploadRatingFile}">
+            Browse...
+        </Button>
     </Grid>
 </UserControl>
