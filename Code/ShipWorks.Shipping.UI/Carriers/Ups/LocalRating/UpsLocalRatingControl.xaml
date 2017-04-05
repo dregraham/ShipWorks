@@ -24,7 +24,7 @@
         <StackPanel Grid.Row="2" Margin="41 0 0 10">
             <TextBlock>
                 1. Download the
-                <Hyperlink Command="{Binding DownloadSampleFile}">sample rate file</Hyperlink>.
+                <Hyperlink Command="{Binding DownloadSampleFileCommand}">sample rate file</Hyperlink>.
             </TextBlock>
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
@@ -35,7 +35,7 @@
                 Margin="0 0 0 10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Command="{Binding UploadRatingFile}">
+                Command="{Binding UploadRatingFileCommand}">
             Browse...
         </Button>
     </Grid>

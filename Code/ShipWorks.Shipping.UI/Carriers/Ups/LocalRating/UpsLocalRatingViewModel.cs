@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             this.fileDialogFactory = fileDialogFactory;
             DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
-            UploadRatingFileCommand = new RelayCommand(UploadRatingFile, () => LocalRatingEnabled);
+            UploadRatingFileCommand = new RelayCommand(UploadRatingFile);
         }
 
         /// <summary>
