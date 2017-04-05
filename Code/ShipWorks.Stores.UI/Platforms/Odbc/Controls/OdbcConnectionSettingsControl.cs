@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
     public partial class OdbcConnectionSettingsControl : AccountSettingsControlBase
     {
         private readonly IOdbcFieldMapFactory odbcFieldMapFactory;
-        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly Func<ISaveFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly IOdbcSettingsFile uploadSettingsFile;
         private OdbcStoreEntity store;
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         public OdbcConnectionSettingsControl(
             IOdbcFieldMapFactory odbcFieldMapFactory,
-            IIndex<FileDialogType, IFileDialog> fileDialogFactory,
+            Func<ISaveFileDialog> fileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
             IOdbcSettingsFile uploadSettingsFile)
         {
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
             fieldMap.Load(store.ImportMap);
 
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
+            ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
             fileDialog.Filter = importSettingsFile.Filter;
             fileDialog.DefaultFileName = fieldMap.Name;
@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
             fieldMap.Load(store.UploadMap);
 
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
+            ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = uploadSettingsFile.Extension;
             fileDialog.Filter = uploadSettingsFile.Filter;
             fileDialog.DefaultFileName = fieldMap.Name;

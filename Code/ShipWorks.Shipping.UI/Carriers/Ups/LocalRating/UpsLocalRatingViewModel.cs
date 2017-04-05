@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     [Component]
     public class UpsLocalRatingViewModel : IUpsLocalRatingViewModel
     {
-        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly Func<ISaveFileDialog> fileDialogFactory;
         private readonly IProcess process;
         public const string SampleFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(IIndex<FileDialogType, IFileDialog> fileDialogFactory, IProcess process)
+        public UpsLocalRatingViewModel(Func<ISaveFileDialog> fileDialogFactory, IProcess process)
         {
             this.fileDialogFactory = fileDialogFactory;
             this.process = process;
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void DownloadSampleFile()
         {
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
+            ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
             fileDialog.DefaultFileName = DefaultFileName;

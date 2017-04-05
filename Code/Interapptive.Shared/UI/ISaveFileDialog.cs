@@ -4,9 +4,9 @@ using System.Windows.Forms;
 namespace Interapptive.Shared.UI
 {
     /// <summary>
-    /// Interface to get a file name from the user
+    /// Interface to allow a user to Save a file
     /// </summary>
-    public interface IFileDialog
+    public interface ISaveFileDialog
     {
         /// <summary>
         /// Gets or sets the current file name filter string, which determines the choices that appear in the 

@@ -123,18 +123,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             }
         }
 
-        private Mock<IFileDialog> MockSaveDialog(DialogResult result, Stream stream = null)
+        private Mock<ISaveFileDialog> MockSaveDialog(DialogResult result, Stream stream = null)
         {
-            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
-            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
+            var fileDialogMock = mock.MockRepository.Create<ISaveFileDialog>();
+            mock.MockFunc(fileDialogMock);
 
             fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
             fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
-
-            dialogIndex.Setup(i => i[FileDialogType.Save]).Returns(fileDialogMock.Object);
-
-            mock.Provide(dialogIndex.Object);
-
+            
             return fileDialogMock;
         }
 

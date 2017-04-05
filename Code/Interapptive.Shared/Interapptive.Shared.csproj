@@ -247,11 +247,11 @@
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
-    <Compile Include="UI\FileDialogType.cs" />
     <Compile Include="UI\IForm.cs" />
+    <Compile Include="UI\ISaveFileDialog.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
-    <Compile Include="UI\IFileDialog.cs" />
+    <Compile Include="UI\IOpenFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
