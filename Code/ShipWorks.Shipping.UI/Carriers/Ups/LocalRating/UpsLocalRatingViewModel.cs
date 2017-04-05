@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.fileDialogFactory = fileDialogFactory;
             this.process = process;
             DownloadSampleFile = new RelayCommand(DownloadSampleFileCommand);
-            UploadRatingFile = new RelayCommand(UploadRatingFileCommand, () => LocalRatingEnabled);
+            UploadRatingFile = new RelayCommand(UploadRatingFileCommand);
         }
 
         /// <summary>
@@ -95,6 +95,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             using (Stream selectedFileStream = fileDialog.CreateFileStream())
             {
                 resourceStream.CopyTo(selectedFileStream);
+                selectedFileStream.Close();
             }
 
             process.Start(fileDialog.SelectedFileName);
