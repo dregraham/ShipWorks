@@ -15,6 +15,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
         /// <summary>
         /// Saves view model information to the UpsAccount
         /// </summary>
-        bool Save(UpsAccountEntity upsAccount);
+        void Save(UpsAccountEntity upsAccount);
     }
 }

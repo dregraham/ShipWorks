@@ -60,10 +60,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             var dialog = MockSaveDialog(DialogResult.Cancel);
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            
-            testObject.DownloadSampleFile.Execute(null);
 
-            dialog.Verify(d=>d.CreateFileStream(), Times.Never);
+            testObject.DownloadSampleFileCommand.Execute(null);
+
+            dialog.Verify(d => d.CreateFileStream(), Times.Never);
         }
 
         [Fact]
@@ -75,10 +75,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 saveDialog.SetupGet(x => x.SelectedFileName).Returns("blah");
 
                 var testObject = mock.Create<UpsLocalRatingViewModel>();
-                
-                testObject.DownloadSampleFile.Execute(null);
-                
-                mock.Mock<IProcess>().Verify(p=>p.Start("blah"), Times.Once);
+
+                testObject.DownloadSampleFileCommand.Execute(null);
+
+                mock.Mock<IProcess>().Verify(p => p.Start("blah"), Times.Once);
             }
         }
 

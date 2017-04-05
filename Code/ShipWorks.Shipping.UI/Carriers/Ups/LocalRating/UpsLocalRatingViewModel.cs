@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     {
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IProcess process;
-        public const string SampleFileResourceName = "ShipWorks.Shipping.UpsLocalRatesSample.xlsx";
+        public const string SampleFileResourceName = @"ShipWorks.Shipping.UI\Carriers\Ups\LocalRating\UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
@@ -34,27 +34,27 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             this.fileDialogFactory = fileDialogFactory;
             this.process = process;
-            DownloadSampleFile = new RelayCommand(DownloadSampleFileCommand);
-            UploadRatingFile = new RelayCommand(UploadRatingFileCommand);
+            DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
+            UploadRatingFileCommand = new RelayCommand(UploadRatingFile, () => LocalRatingEnabled);
         }
 
         /// <summary>
         /// Command to download the sample file
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand DownloadSampleFile { get; }
+        public ICommand DownloadSampleFileCommand { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [local rating enabled].
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool LocalRatingEnabled { get; set; }
-        
+
         /// <summary>
         /// Gets the upload rating file.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand UploadRatingFile { get; }
+        public ICommand UploadRatingFileCommand { get; }
 
         /// <summary>
         /// Loads the UpsAccount information to the view model
@@ -67,17 +67,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Saves view model information to the UpsAccount
         /// </summary>
-        public bool Save(UpsAccountEntity upsAccount)
+        public void Save(UpsAccountEntity upsAccount)
         {
             upsAccount.LocalRatingEnabled = LocalRatingEnabled;
-
-            return true;
         }
 
         /// <summary>
         /// Downloads the sample file.
         /// </summary>
-        private void DownloadSampleFileCommand()
+        private void DownloadSampleFile()
         {
             IFileDialog fileDialog = fileDialogFactory[FileDialogType.Save];
             fileDialog.DefaultExt = Extension;
@@ -104,7 +102,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Uploads the rating File.
         /// </summary>
-        private void UploadRatingFileCommand()
+        private void UploadRatingFile()
         {
             throw new NotImplementedException();
         }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Forms;
-using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using UserControl = System.Windows.Controls.UserControl;
@@ -20,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     [Component(RegistrationType.Self)]
     public partial class UpsAccountEditorDlg : Form
     {
-        private UpsAccountEntity account;
+        private readonly UpsAccountEntity account;
         private readonly IUpsLocalRatingControl localRatingControl;
         private readonly IUpsLocalRatingViewModel localRatingControlViewModel;
 

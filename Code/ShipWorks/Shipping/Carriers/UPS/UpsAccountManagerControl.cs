@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             initialShipperID = shipper.UpsAccountID;
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (UpsAccountEditorDlg dlg = scope.Resolve<UpsAccountEditorDlg>(new TypedParameter(typeof(UpsAccountEntity), shipper)))
+                using (UpsAccountEditorDlg dlg = scope.Resolve<UpsAccountEditorDlg>(TypedParameter.From(shipper)))
                 {
                     dlg.ShowDialog(this);
 
