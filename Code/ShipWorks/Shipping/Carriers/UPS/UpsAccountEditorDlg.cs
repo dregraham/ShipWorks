@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsRateTypeControl.Initialize(account, false);
 
+            localRatingControlViewModel.Load(account);
             localRatingControl.DataContext = localRatingControlViewModel;
             LocalRateControlHost.Child = (UserControl) localRatingControl;
         }
@@ -82,6 +83,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     return;
                 }
+
+                localRatingControlViewModel.Save(account);
 
                 UpsAccountManager.SaveAccount(account);
                 DialogResult = DialogResult.OK;
