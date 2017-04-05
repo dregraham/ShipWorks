@@ -154,6 +154,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 return new ShippingException("The store the shipment was in has been deleted.");
             }
 
+            if (!store.Enabled)
+            {
+                return new ShippingException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+            }
+
             // Validate that the license is valid
             Exception error = shippingManager.ValidateLicense(store, licenseCheckCache);
             if (error != null)
