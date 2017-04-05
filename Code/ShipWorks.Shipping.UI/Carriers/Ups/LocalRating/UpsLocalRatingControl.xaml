@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CheckBox Grid.Row="0" VerticalContentAlignment="Center">Enable local rating</CheckBox>
+        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
         <TextBlock Grid.Row="1"
                    Margin="21 10 0 10"
                    TextWrapping="Wrap">
