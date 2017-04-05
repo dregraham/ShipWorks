@@ -8,6 +8,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -16,19 +17,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Window for editing an existing UPS account
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class UpsAccountEditorDlg : Form
     {
         private UpsAccountEntity account;
+        private readonly IUpsLocalRatingControl localRatingControl;
+        private readonly IUpsLocalRatingViewModel localRatingControlViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsAccountEditorDlg(UpsAccountEntity account)
+        public UpsAccountEditorDlg(UpsAccountEntity account, IUpsLocalRatingControl localRatingControl, IUpsLocalRatingViewModel localRatingControlViewModel)
         {
             InitializeComponent();
 
             this.account = account;
+            this.localRatingControl = localRatingControl;
+            this.localRatingControlViewModel = localRatingControlViewModel;
         }
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -46,12 +53,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsRateTypeControl.Initialize(account, false);
 
-            using (var scope = IoC.BeginLifetimeScope())
-            {
-                UserControl localRatesControl = scope.Resolve<IUpsLocalRatingControl>() as UserControl;
-                localRatesControl.DataContext = scope.Resolve<IUpsLocalRatingViewModel>();
-                LocalRateControlHost.Child = localRatesControl;
-            }
+            localRatingControl.DataContext = localRatingControlViewModel;
+            LocalRateControlHost.Child = (UserControl) localRatingControl;
         }
 
         /// <summary>

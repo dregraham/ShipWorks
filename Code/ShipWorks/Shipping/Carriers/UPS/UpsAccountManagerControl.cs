@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using Divelements.SandGrid;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.ApplicationCore;
@@ -97,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 delete.Top = add.Top;
                 delete.BringToFront();
             }
@@ -125,13 +117,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             UpsAccountEntity shipper = (UpsAccountEntity) sandGrid.SelectedElements[0].Tag;
             initialShipperID = shipper.UpsAccountID;
-
-            using (UpsAccountEditorDlg dlg = new UpsAccountEditorDlg(shipper))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (UpsAccountEditorDlg dlg = scope.Resolve<UpsAccountEditorDlg>(new TypedParameter(typeof(UpsAccountEntity), shipper)))
+                {
+                    dlg.ShowDialog(this);
 
-                UpsAccountManager.CheckForChangesNeeded();
-                LoadShippers();
+                    UpsAccountManager.CheckForChangesNeeded();
+                    LoadShippers();
+                }
             }
         }
 
@@ -178,6 +172,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsAccountManager.DeleteAccount(shipper);
                 LoadShippers();
             }
-        }    
+        }
     }
 }
