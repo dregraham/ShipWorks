@@ -3,13 +3,10 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
@@ -21,7 +18,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     public class UpsLocalRatingViewModel : IUpsLocalRatingViewModel
     {
         private readonly Func<ISaveFileDialog> fileDialogFactory;
-        private readonly IProcess process;
         public const string SampleFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
@@ -30,10 +26,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(Func<ISaveFileDialog> fileDialogFactory, IProcess process)
+        public UpsLocalRatingViewModel(Func<ISaveFileDialog> fileDialogFactory)
         {
             this.fileDialogFactory = fileDialogFactory;
-            this.process = process;
             DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
             UploadRatingFileCommand = new RelayCommand(UploadRatingFile, () => LocalRatingEnabled);
         }
@@ -97,7 +92,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 }
             }
 
-            process.Start(fileDialog.SelectedFileName);
+            fileDialog.ShowFile();
         }
 
         /// <summary>

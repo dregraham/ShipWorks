@@ -10,6 +10,7 @@ namespace Interapptive.Shared.UI
     public class ShipWorksOpenFileDialog : IOpenFileDialog
     {
         private readonly Control owner;
+        private string selectedFileName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOpenFileDialog"/> class.
@@ -36,11 +37,6 @@ namespace Interapptive.Shared.UI
         public string DefaultFileName { private get; set; }
 
         /// <summary>
-        /// Gets the name of the selected file.
-        /// </summary>
-        public string SelectedFileName { get; private set; }
-
-        /// <summary>
         /// Shows the dialog.
         /// </summary>
         public DialogResult ShowDialog()
@@ -55,7 +51,7 @@ namespace Interapptive.Shared.UI
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    SelectedFileName = openFileDialog.FileName;
+                    selectedFileName = openFileDialog.FileName;
                 }
 
                 return dialogResult;
@@ -68,7 +64,7 @@ namespace Interapptive.Shared.UI
         /// <exception cref="UnauthorizedAccessException" />
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(SelectedFileName) ? null : File.OpenRead(SelectedFileName);
+            return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
         }
     }
 }

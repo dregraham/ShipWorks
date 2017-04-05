@@ -31,11 +31,6 @@ namespace Interapptive.Shared.UI
         string DefaultFileName { set; }
 
         /// <summary>
-        /// Gets the name of the selected file.
-        /// </summary>
-        string SelectedFileName { get; }
-
-        /// <summary>
         /// Shows the file Dialog box
         /// </summary>
         DialogResult ShowDialog();
@@ -46,5 +41,10 @@ namespace Interapptive.Shared.UI
         /// <exception cref="IOException"></exception>
         /// <exception cref="System.UnauthorizedAccessException" />
         Stream CreateFileStream();
+
+        /// <summary>
+        /// Shows the file.
+        /// </summary>
+        void ShowFile();
     }
 }

@@ -3,12 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -64,21 +61,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.DownloadSampleFileCommand.Execute(null);
 
             dialog.Verify(d => d.CreateFileStream(), Times.Never);
+            dialog.Verify(d=>d.ShowFile(), Times.Never);
         }
 
         [Fact]
-        public void DownloadSampleFileAccount_ResourceStreamAccessed_WhenFileDialogReturnsOK()
+        public void DownloadSampleFileAccount_CallsShowFile_WhenFileDialogReturnsOK()
         {
             using (var resultStream = new MemoryStream())
             {
-                var saveDialog = MockSaveDialog(DialogResult.OK, resultStream);
-                saveDialog.SetupGet(x => x.SelectedFileName).Returns("blah");
+                var mockSaveDialog = MockSaveDialog(DialogResult.OK, resultStream);
 
                 var testObject = mock.Create<UpsLocalRatingViewModel>();
 
                 testObject.DownloadSampleFileCommand.Execute(null);
 
-                mock.Mock<IProcess>().Verify(p => p.Start("blah"), Times.Once);
+                mockSaveDialog.Verify(d=>d.ShowFile(), Times.Once);
             }
         }
 
@@ -97,8 +94,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 // Setup the dialog so that it returns this mocked stream and execute the download command
                 using (var createFileStream = mockedStream.Object)
                 {
-                    var saveDialog = MockSaveDialog(DialogResult.OK, createFileStream);
-                    saveDialog.SetupGet(x => x.SelectedFileName).Returns("blah");
+                    MockSaveDialog(DialogResult.OK, createFileStream);
 
                     var testObject = mock.Create<UpsLocalRatingViewModel>();
 

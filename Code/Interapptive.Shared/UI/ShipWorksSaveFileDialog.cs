@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -10,7 +11,8 @@ namespace Interapptive.Shared.UI
     public class ShipWorksSaveFileDialog : ISaveFileDialog
     {
         private readonly Control owner;
-        
+        private string selectedFileName;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksSaveFileDialog"/> class.
         /// </summary>
@@ -36,11 +38,6 @@ namespace Interapptive.Shared.UI
         public string DefaultFileName { private get; set; }
 
         /// <summary>
-        /// Gets the name of the selected file.
-        /// </summary>
-        public string SelectedFileName { get; private set; }
-
-        /// <summary>
         /// Shows the save file Dialog box
         /// </summary>
         public DialogResult ShowDialog()
@@ -56,7 +53,7 @@ namespace Interapptive.Shared.UI
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    SelectedFileName = saveFileDialog.FileName;
+                    selectedFileName = saveFileDialog.FileName;
                 }
 
                 return dialogResult;
@@ -69,7 +66,15 @@ namespace Interapptive.Shared.UI
         /// <exception cref="UnauthorizedAccessException"></exception>
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(SelectedFileName) ? null : File.Open(SelectedFileName, FileMode.Create);
+            return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
+        }
+
+        /// <summary>
+        /// Shows the file.
+        /// </summary>
+        public void ShowFile()
+        {
+            Process.Start(selectedFileName);
         }
     }
 }
