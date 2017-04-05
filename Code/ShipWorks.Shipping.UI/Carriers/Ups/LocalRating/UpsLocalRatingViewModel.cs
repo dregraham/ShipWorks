@@ -90,10 +90,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             Assembly shippingAssembly = Assembly.GetAssembly(GetType());
 
             using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleFileResourceName))
-            using (Stream selectedFileStream = fileDialog.CreateFileStream())
             {
-                resourceStream.CopyTo(selectedFileStream);
-                selectedFileStream.Close();
+                using (Stream selectedFileStream = fileDialog.CreateFileStream())
+                {
+                    resourceStream.CopyTo(selectedFileStream);
+                }
             }
 
             process.Start(fileDialog.SelectedFileName);
