@@ -162,6 +162,9 @@ namespace ShipWorks.Tests.Shared
             mock.Provide(function.Object);
         }
 
+        /// <summary>
+        /// Mocks a function with null parameters that returns the output provided.
+        /// </summary>
         public static void MockFunc<TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
             Mock<Func<TOutput>> function = mock.MockRepository.Create<Func<TOutput>>();
