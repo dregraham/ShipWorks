@@ -418,7 +418,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
-    <EmbeddedResource Include="UpsLocalRatesSample.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />

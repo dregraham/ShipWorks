@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
                     var testObject = mock.Create<UpsLocalRatingViewModel>();
 
-                    testObject.DownloadSampleFile.Execute(null);
+                    testObject.DownloadSampleFileCommand.Execute(null);
                 }
 
                 // Convert the result stream to a string
@@ -110,14 +110,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 byte[] sampleFileBytes;
 
                 // Get the xslt file and convert it to a string
-                Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLabelService));
+                Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLocalRatingViewModel));
                 using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleFileResourceName))
                 {
                     sampleFileBytes = new byte[resourceStream.Length];
                     resourceStream.Read(sampleFileBytes, 0, (int) resourceStream.Length);
                 }
 
-                // Verify that the contents of the embedded resource is identical to the file we 
+                // Verify that the contents of the embedded resource is identical to the file we
                 // will save to disk.
                 Assert.Equal(sampleFileBytes, resultBytes);
             }

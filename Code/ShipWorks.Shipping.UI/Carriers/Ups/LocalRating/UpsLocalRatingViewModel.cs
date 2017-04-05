@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     {
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IProcess process;
-        public const string SampleFileResourceName = @"ShipWorks.Shipping.UI\Carriers\Ups\LocalRating\UpsLocalRatesSample.xlsx";
+        public const string SampleFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 return;
             }
 
-            Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLabelService));
+            Assembly shippingAssembly = Assembly.GetAssembly(GetType());
 
             using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleFileResourceName))
             using (Stream selectedFileStream = fileDialog.CreateFileStream())
