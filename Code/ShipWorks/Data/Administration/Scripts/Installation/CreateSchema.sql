@@ -5018,7 +5018,8 @@ CREATE TABLE [dbo].[UpsAccount]
 [Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PromoStatus] [tinyint] NOT NULL
+[PromoStatus] [tinyint] NOT NULL,
+[LocalRatingEnabled] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'

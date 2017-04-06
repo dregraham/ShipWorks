@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.Carriers.Ups.UpsLocalRatingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             FontFamily="Tahoma"
+             FontSize="11"
+             d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
+             mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
+        <TextBlock Grid.Row="1"
+                   Margin="21 10 0 10"
+                   TextWrapping="Wrap">
+            To display UPS rates with Best Rate in ShipWorks, please complete the following steps:
+        </TextBlock>
+        <StackPanel Grid.Row="2" Margin="41 0 0 10">
+            <TextBlock>
+                1. Download the
+                <Hyperlink Command="{Binding DownloadSampleFileCommand}">sample rate file</Hyperlink>.
+            </TextBlock>
+            <TextBlock>2. Modify the file to specify your rates.</TextBlock>
+            <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
+        </StackPanel>
+        <Button Grid.Row="3"
+                Width="73"
+                Height="21"
+                Margin="0 0 0 10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding UploadRatingFileCommand}">
+            Browse...
+        </Button>
+    </Grid>
+</UserControl>

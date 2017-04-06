@@ -342,6 +342,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Website", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PromoStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("LocalRatingEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -628,6 +630,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Byte)GetValue((int)UpsAccountFieldIndex.PromoStatus, true); }
 			set	{ SetValue((int)UpsAccountFieldIndex.PromoStatus, value); }
+		}
+
+		/// <summary> The LocalRatingEnabled property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."LocalRatingEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean LocalRatingEnabled
+		{
+			get { return (System.Boolean)GetValue((int)UpsAccountFieldIndex.LocalRatingEnabled, true); }
+			set	{ SetValue((int)UpsAccountFieldIndex.LocalRatingEnabled, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

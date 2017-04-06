@@ -164,6 +164,10 @@
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingViewModel.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml.cs">
+      <DependentUpon>UpsLocalRatingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
@@ -416,6 +420,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="Carriers\Ups\LocalRating\UpsLocalRatesSample.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
@@ -460,6 +465,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

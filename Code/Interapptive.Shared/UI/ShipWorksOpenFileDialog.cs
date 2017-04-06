@@ -7,7 +7,7 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Get a file from the user
     /// </summary>
-    public class ShipWorksOpenFileDialog : IFileDialog
+    public class ShipWorksOpenFileDialog : IOpenFileDialog
     {
         private readonly Control owner;
         private string selectedFileName;

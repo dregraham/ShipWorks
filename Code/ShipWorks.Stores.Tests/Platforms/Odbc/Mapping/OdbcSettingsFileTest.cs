@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
                 var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
 
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
 
                 var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
                 testObject.Open(streamReader);
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
                 var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
 
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
 
                 var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
                 testObject.Open(streamReader);
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
                 var ioFactory = mock.Create<JsonOdbcFieldMapIOFactory>();
                 var map = mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
 
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
 
                 var testObject = mock.Create<FakeOdbcSettingsFile>(new TypedParameter(typeof(IOdbcFieldMap), map));
                 testObject.Open(streamReader);
@@ -204,17 +204,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             return fieldMap;
         }
 
-        private void MockDialog(FileDialogType dialogType, DialogResult result, Stream stream)
+        private void MockOpenFileDialog(DialogResult result, Stream stream)
         {
-            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
-            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
+            var fileDialogMock = mock.CreateMock<IOpenFileDialog>(
+                dialog =>
+                {
+                    dialog.Setup(d => d.ShowDialog()).Returns(result);
+                    dialog.Setup(d => d.CreateFileStream()).Returns(stream);
+                });
 
-            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
-            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
-
-            dialogIndex.Setup(i => i[dialogType]).Returns(fileDialogMock.Object);
-
-            mock.Provide(dialogIndex.Object);
+            mock.MockFunc(fileDialogMock);
         }
 
         public void Dispose()

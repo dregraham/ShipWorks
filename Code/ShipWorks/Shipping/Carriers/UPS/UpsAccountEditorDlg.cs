@@ -5,25 +5,34 @@ using ShipWorks.Shipping.Carriers.Api;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Window for editing an existing UPS account
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class UpsAccountEditorDlg : Form
     {
-        private UpsAccountEntity account;
+        private readonly UpsAccountEntity account;
+        private readonly IUpsLocalRatingControl localRatingControl;
+        private readonly IUpsLocalRatingViewModel localRatingControlViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsAccountEditorDlg(UpsAccountEntity account)
+        public UpsAccountEditorDlg(UpsAccountEntity account, IUpsLocalRatingControl localRatingControl, IUpsLocalRatingViewModel localRatingControlViewModel)
         {
             InitializeComponent();
 
             this.account = account;
+            this.localRatingControl = localRatingControl;
+            this.localRatingControlViewModel = localRatingControlViewModel;
         }
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -40,6 +49,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             description.PromptText = UpsAccountManager.GetDefaultDescription(account);
 
             upsRateTypeControl.Initialize(account, false);
+
+            localRatingControlViewModel.Load(account);
+            localRatingControl.DataContext = localRatingControlViewModel;
+            LocalRateControlHost.Child = (UserControl) localRatingControl;
         }
 
         /// <summary>
@@ -70,6 +83,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     return;
                 }
+
+                localRatingControlViewModel.Save(account);
 
                 UpsAccountManager.SaveAccount(account);
                 DialogResult = DialogResult.OK;

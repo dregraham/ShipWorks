@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,7 +8,7 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Gets a file from the user
     /// </summary>
-    public class ShipWorksSaveFileDialog : IFileDialog
+    public class ShipWorksSaveFileDialog : ISaveFileDialog
     {
         private readonly Control owner;
         private string selectedFileName;
@@ -66,6 +67,14 @@ namespace Interapptive.Shared.UI
         public Stream CreateFileStream()
         {
             return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
+        }
+
+        /// <summary>
+        /// Shows the file.
+        /// </summary>
+        public void ShowFile()
+        {
+            Process.Start(selectedFileName);
         }
     }
 }

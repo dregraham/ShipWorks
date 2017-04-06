@@ -9184,6 +9184,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>PromoStatus. </summary>
 		PromoStatus,
+		///<summary>LocalRatingEnabled. </summary>
+		LocalRatingEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}

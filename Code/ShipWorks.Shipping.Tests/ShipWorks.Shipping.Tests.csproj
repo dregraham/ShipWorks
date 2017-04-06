@@ -162,6 +162,7 @@
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRatingViewModelTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapterTest.cs" />
@@ -230,6 +231,10 @@
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{A93F195E-44BC-4C73-8F70-7714A040EA0E}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
