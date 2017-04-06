@@ -58,7 +58,7 @@ begin
             'Setup was unable to download the Microsoft .NET Framework.  Please check that you have an open ' +
                 'connection to the internet, and run Setup again.' + #13 + #13 +
                 'You can also download the .NET Framework directly from the following link.',
-            'http://www.microsoft.com/downloads/details.aspx?FamilyID=9cfb2d51-5ff4-4491-b0e5-b386f32c0992');
+            GetDotNetDownloadURL());
 
     WizardForm.NextButton.Enabled := True;
     Result := not DownloadCanceled;
