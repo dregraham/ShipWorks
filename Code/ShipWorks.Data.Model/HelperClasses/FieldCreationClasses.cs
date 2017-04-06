@@ -21427,6 +21427,71 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.LocalRatingEnabled);}
 		}
+		/// <summary>Creates a new UpsAccountEntity.UpsRateTableID field instance</summary>
+		public static EntityField2 UpsRateTableID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.UpsRateTableID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UpsLocalRateEntity</summary>
+	public partial class UpsLocalRateFields
+	{
+		/// <summary>Creates a new UpsLocalRateEntity.UpsLocalRatesID field instance</summary>
+		public static EntityField2 UpsLocalRatesID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.UpsLocalRatesID);}
+		}
+		/// <summary>Creates a new UpsLocalRateEntity.UpsRateTableID field instance</summary>
+		public static EntityField2 UpsRateTableID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.UpsRateTableID);}
+		}
+		/// <summary>Creates a new UpsLocalRateEntity.Zone field instance</summary>
+		public static EntityField2 Zone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.Zone);}
+		}
+		/// <summary>Creates a new UpsLocalRateEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new UpsLocalRateEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.Service);}
+		}
+		/// <summary>Creates a new UpsLocalRateEntity.Rate field instance</summary>
+		public static EntityField2 Rate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateFieldIndex.Rate);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UpsLocalRateSurchargeEntity</summary>
+	public partial class UpsLocalRateSurchargeFields
+	{
+		/// <summary>Creates a new UpsLocalRateSurchargeEntity.UpsLocalRateSurchargeID field instance</summary>
+		public static EntityField2 UpsLocalRateSurchargeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateSurchargeFieldIndex.UpsLocalRateSurchargeID);}
+		}
+		/// <summary>Creates a new UpsLocalRateSurchargeEntity.UpsRateTableID field instance</summary>
+		public static EntityField2 UpsRateTableID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateSurchargeFieldIndex.UpsRateTableID);}
+		}
+		/// <summary>Creates a new UpsLocalRateSurchargeEntity.SurchargeType field instance</summary>
+		public static EntityField2 SurchargeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateSurchargeFieldIndex.SurchargeType);}
+		}
+		/// <summary>Creates a new UpsLocalRateSurchargeEntity.Value field instance</summary>
+		public static EntityField2 Value
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRateSurchargeFieldIndex.Value);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsPackageEntity</summary>
@@ -21841,6 +21906,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DryIceIsForMedicalUse
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfilePackageFieldIndex.DryIceIsForMedicalUse);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UpsRateTableEntity</summary>
+	public partial class UpsRateTableFields
+	{
+		/// <summary>Creates a new UpsRateTableEntity.UpsRateTableID field instance</summary>
+		public static EntityField2 UpsRateTableID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsRateTableFieldIndex.UpsRateTableID);}
+		}
+		/// <summary>Creates a new UpsRateTableEntity.UpsAccountID field instance</summary>
+		public static EntityField2 UpsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsRateTableFieldIndex.UpsAccountID);}
+		}
+		/// <summary>Creates a new UpsRateTableEntity.UploadDate field instance</summary>
+		public static EntityField2 UploadDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsRateTableFieldIndex.UploadDate);}
 		}
 	}
 

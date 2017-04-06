@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (178 + 0));
+			this.InitClass( (181 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -203,9 +203,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitThreeDCartOrderItemEntityInfos();
 			InitThreeDCartStoreEntityInfos();
 			InitUpsAccountEntityInfos();
+			InitUpsLocalRateEntityInfos();
+			InitUpsLocalRateSurchargeEntityInfos();
 			InitUpsPackageEntityInfos();
 			InitUpsProfileEntityInfos();
 			InitUpsProfilePackageEntityInfos();
+			InitUpsRateTableEntityInfos();
 			InitUpsShipmentEntityInfos();
 			InitUserEntityInfos();
 			InitUserColumnSettingsEntityInfos();
@@ -2751,6 +2754,27 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Website, 50, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "PromoStatus", typeof(System.Byte), false, false, false, false,  (int)UpsAccountFieldIndex.PromoStatus, 0, 0, 3);
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
+			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
+		}
+		/// <summary>Inits UpsLocalRateEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRateEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRateFieldIndex), "UpsLocalRateEntity");
+			this.AddElementFieldInfo("UpsLocalRateEntity", "UpsLocalRatesID", typeof(System.Int64), true, false, false, false,  (int)UpsLocalRateFieldIndex.UpsLocalRatesID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRateEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRateFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRateFieldIndex.Zone, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRateEntity", "Weight", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRateFieldIndex.Weight, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRateEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRateFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRateEntity", "Rate", typeof(System.Decimal), false, false, false, false,  (int)UpsLocalRateFieldIndex.Rate, 0, 4, 19);
+		}
+		/// <summary>Inits UpsLocalRateSurchargeEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRateSurchargeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRateSurchargeFieldIndex), "UpsLocalRateSurchargeEntity");
+			this.AddElementFieldInfo("UpsLocalRateSurchargeEntity", "UpsLocalRateSurchargeID", typeof(System.Int64), true, false, false, false,  (int)UpsLocalRateSurchargeFieldIndex.UpsLocalRateSurchargeID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRateSurchargeEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRateSurchargeFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRateSurchargeEntity", "SurchargeType", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRateSurchargeFieldIndex.SurchargeType, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRateSurchargeEntity", "Value", typeof(System.Double), false, false, false, false,  (int)UpsLocalRateSurchargeFieldIndex.Value, 0, 0, 38);
 		}
 		/// <summary>Inits UpsPackageEntity's FieldInfo objects</summary>
 		private void InitUpsPackageEntityInfos()
@@ -2846,6 +2870,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceRegulationSet", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceRegulationSet, 0, 0, 10);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceWeight, 0, 0, 38);
 			this.AddElementFieldInfo("UpsProfilePackageEntity", "DryIceIsForMedicalUse", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfilePackageFieldIndex.DryIceIsForMedicalUse, 0, 0, 0);
+		}
+		/// <summary>Inits UpsRateTableEntity's FieldInfo objects</summary>
+		private void InitUpsRateTableEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsRateTableFieldIndex), "UpsRateTableEntity");
+			this.AddElementFieldInfo("UpsRateTableEntity", "UpsRateTableID", typeof(System.Int64), true, false, false, false,  (int)UpsRateTableFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsRateTableEntity", "UpsAccountID", typeof(System.Int64), false, true, false, false,  (int)UpsRateTableFieldIndex.UpsAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsRateTableEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsRateTableFieldIndex.UploadDate, 0, 0, 0);
 		}
 		/// <summary>Inits UpsShipmentEntity's FieldInfo objects</summary>
 		private void InitUpsShipmentEntityInfos()

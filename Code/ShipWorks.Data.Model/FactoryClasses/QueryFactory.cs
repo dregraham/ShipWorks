@@ -1024,6 +1024,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<UpsAccountEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the UpsLocalRate entity</summary>
+		public EntityQuery<UpsLocalRateEntity> UpsLocalRate
+		{
+			get { return Create<UpsLocalRateEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the UpsLocalRateSurcharge entity</summary>
+		public EntityQuery<UpsLocalRateSurchargeEntity> UpsLocalRateSurcharge
+		{
+			get { return Create<UpsLocalRateSurchargeEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the UpsPackage entity</summary>
 		public EntityQuery<UpsPackageEntity> UpsPackage
 		{
@@ -1040,6 +1052,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<UpsProfilePackageEntity> UpsProfilePackage
 		{
 			get { return Create<UpsProfilePackageEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the UpsRateTable entity</summary>
+		public EntityQuery<UpsRateTableEntity> UpsRateTable
+		{
+			get { return Create<UpsRateTableEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the UpsShipment entity</summary>

@@ -30,11 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.UpsRateTableEntityUsingUpsAccountID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
+		/// <summary>Returns a new IEntityRelation object, between UpsAccountEntity and UpsRateTableEntity over the 1:n relation they have, using the relation between the fields:
+		/// UpsAccount.UpsAccountID - UpsRateTable.UpsAccountID
+		/// </summary>
+		public virtual IEntityRelation UpsRateTableEntityUsingUpsAccountID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsRateTable" , true);
+				relation.AddEntityFieldPair(UpsAccountFields.UpsAccountID, UpsRateTableFields.UpsAccountID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsAccountEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", false);
+				return relation;
+			}
+		}
 
 
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -51,6 +66,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticUpsAccountRelations
 	{
+		internal static readonly IEntityRelation UpsRateTableEntityUsingUpsAccountIDStatic = new UpsAccountRelations().UpsRateTableEntityUsingUpsAccountID;
 
 		/// <summary>CTor</summary>
 		static StaticUpsAccountRelations()

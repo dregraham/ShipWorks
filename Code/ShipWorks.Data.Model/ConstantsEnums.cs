@@ -9186,6 +9186,40 @@ namespace ShipWorks.Data.Model
 		PromoStatus,
 		///<summary>LocalRatingEnabled. </summary>
 		LocalRatingEnabled,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRate.</summary>
+	public enum UpsLocalRateFieldIndex
+	{
+		///<summary>UpsLocalRatesID. </summary>
+		UpsLocalRatesID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>Zone. </summary>
+		Zone,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Rate. </summary>
+		Rate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRateSurcharge.</summary>
+	public enum UpsLocalRateSurchargeFieldIndex
+	{
+		///<summary>UpsLocalRateSurchargeID. </summary>
+		UpsLocalRateSurchargeID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>SurchargeType. </summary>
+		SurchargeType,
+		///<summary>Value. </summary>
+		Value,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9364,6 +9398,18 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsRateTable.</summary>
+	public enum UpsRateTableFieldIndex
+	{
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>UpsAccountID. </summary>
+		UpsAccountID,
+		///<summary>UploadDate. </summary>
+		UploadDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11003,12 +11049,18 @@ namespace ShipWorks.Data.Model
 		ThreeDCartStoreEntity,
 		///<summary>UpsAccount</summary>
 		UpsAccountEntity,
+		///<summary>UpsLocalRate</summary>
+		UpsLocalRateEntity,
+		///<summary>UpsLocalRateSurcharge</summary>
+		UpsLocalRateSurchargeEntity,
 		///<summary>UpsPackage</summary>
 		UpsPackageEntity,
 		///<summary>UpsProfile</summary>
 		UpsProfileEntity,
 		///<summary>UpsProfilePackage</summary>
 		UpsProfilePackageEntity,
+		///<summary>UpsRateTable</summary>
+		UpsRateTableEntity,
 		///<summary>UpsShipment</summary>
 		UpsShipmentEntity,
 		///<summary>User</summary>

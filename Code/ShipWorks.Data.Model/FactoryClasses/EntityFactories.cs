@@ -3159,6 +3159,48 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty UpsLocalRateEntity objects.</summary>
+	[Serializable]
+	public partial class UpsLocalRateEntityFactory : EntityFactoryBase2<UpsLocalRateEntity> {
+		/// <summary>CTor</summary>
+		public UpsLocalRateEntityFactory() : base("UpsLocalRateEntity", ShipWorks.Data.Model.EntityType.UpsLocalRateEntity, false) { }
+		
+		/// <summary>Creates a new UpsLocalRateEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UpsLocalRateEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsLocalRateUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty UpsLocalRateSurchargeEntity objects.</summary>
+	[Serializable]
+	public partial class UpsLocalRateSurchargeEntityFactory : EntityFactoryBase2<UpsLocalRateSurchargeEntity> {
+		/// <summary>CTor</summary>
+		public UpsLocalRateSurchargeEntityFactory() : base("UpsLocalRateSurchargeEntity", ShipWorks.Data.Model.EntityType.UpsLocalRateSurchargeEntity, false) { }
+		
+		/// <summary>Creates a new UpsLocalRateSurchargeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UpsLocalRateSurchargeEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsLocalRateSurchargeUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty UpsPackageEntity objects.</summary>
 	[Serializable]
 	public partial class UpsPackageEntityFactory : EntityFactoryBase2<UpsPackageEntity> {
@@ -3212,6 +3254,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new UpsProfilePackageEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsProfilePackageUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty UpsRateTableEntity objects.</summary>
+	[Serializable]
+	public partial class UpsRateTableEntityFactory : EntityFactoryBase2<UpsRateTableEntity> {
+		/// <summary>CTor</summary>
+		public UpsRateTableEntityFactory() : base("UpsRateTableEntity", ShipWorks.Data.Model.EntityType.UpsRateTableEntity, false) { }
+		
+		/// <summary>Creates a new UpsRateTableEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UpsRateTableEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsRateTableUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			return toReturn;
 		}
 		#region Included Code
@@ -4130,6 +4193,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.UpsAccountEntity:
 					factoryToUse = new UpsAccountEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.UpsLocalRateEntity:
+					factoryToUse = new UpsLocalRateEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsLocalRateSurchargeEntity:
+					factoryToUse = new UpsLocalRateSurchargeEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.UpsPackageEntity:
 					factoryToUse = new UpsPackageEntityFactory();
 					break;
@@ -4138,6 +4207,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity:
 					factoryToUse = new UpsProfilePackageEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsRateTableEntity:
+					factoryToUse = new UpsRateTableEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsShipmentEntity:
 					factoryToUse = new UpsShipmentEntityFactory();
