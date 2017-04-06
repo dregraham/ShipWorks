@@ -95,6 +95,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
             shopifyStore.ShopifyShopUrlName = string.Empty;
             shopifyStore.ShopifyShopDisplayName = string.Empty;
             shopifyStore.ShopifyRequestedShippingOption = (int) ShopifyRequestedShippingField.Title;
+            shopifyStore.ApiKey = string.Empty;
+            shopifyStore.Password = string.Empty;
 
             return shopifyStore;
         }
@@ -226,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             var item = new Lazy<ShopifyOrderItemEntity>(() => (ShopifyOrderItemEntity)itemSource());
-            
+
             ElementOutline outline = container.AddElement("Shopify");
             outline.AddElement("ItemID", () => item.Value.ShopifyOrderItemID);
             outline.AddElement("ProductID", () => item.Value.ShopifyProductID);

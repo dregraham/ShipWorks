@@ -10,6 +10,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     public interface ILabelResultLogResult
     {
         /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        int Index { get; }
+
+        /// <summary>
         /// Shipment being processed
         /// </summary>
         ShipmentEntity OriginalShipment { get; }

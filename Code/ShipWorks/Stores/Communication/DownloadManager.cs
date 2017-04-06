@@ -387,6 +387,11 @@ namespace ShipWorks.Stores.Communication
                         throw new StoreDeletedException();
                     }
 
+                    if (!store.Enabled)
+                    {
+                        throw new DownloadException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+                    }
+
                     log.InfoFormat("Starting download for store '{0}' ({1})", store.StoreName, store.StoreID);
 
                     // Connection to use during the download cycle, if it disconnects we

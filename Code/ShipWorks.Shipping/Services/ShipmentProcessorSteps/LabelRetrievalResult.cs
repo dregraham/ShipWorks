@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         public LabelRetrievalResult(IShipmentPreparationResult result)
         {
+            Index = result.Index;
             EntityLock = result.EntityLock;
             Exception = result.Exception;
             Canceled = result.Canceled;
@@ -48,11 +49,17 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             List<ShipmentFieldIndex> fieldsToRestore) :
             this(result)
         {
+            Index = result.Index;
             LabelData = labelData;
             OriginalShipment = shipment;
             Clone = clone;
             FieldsToRestore = fieldsToRestore;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Clone made of the original shipment

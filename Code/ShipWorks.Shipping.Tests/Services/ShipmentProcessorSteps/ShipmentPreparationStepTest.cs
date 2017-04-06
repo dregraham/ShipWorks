@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ShipmentPreparationStep>();
             shipment = Create.Shipment(new OrderEntity()).AsBestRate().Set(x => x.ShipmentID = 2031).Build();
-            defaultInput = new ProcessShipmentState(shipment, new Dictionary<long, Exception>(), null);
+            defaultInput = new ProcessShipmentState(0, shipment, new Dictionary<long, Exception>(), null, new CancellationTokenSource());
 
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(It.IsAny<StoreEntity>(), It.IsAny<IDictionary<long, Exception>>()))
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
         {
-            var input = new ProcessShipmentState(new ShippingException());
+            var input = new ProcessShipmentState(0, new ShippingException(), new CancellationTokenSource());
 
             var result = testObject.PrepareShipment(input);
 
@@ -114,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsException_WhenValidateLicenseReturnsError()
         {
-            StoreEntity store = new StoreEntity();
+            StoreEntity store = new StoreEntity() { Enabled = true};
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(store, defaultInput.LicenseCheckCache))
@@ -129,10 +130,13 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_DelegatesToPreProcessor_WhenShipmentIsValid()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             RateResult rate = new RateResult("Foo", "1");
             Action callback = () => { };
 
-            ProcessShipmentState state = new ProcessShipmentState(shipment, new Dictionary<long, Exception>(), rate);
+            ProcessShipmentState state = new ProcessShipmentState(0, shipment, new Dictionary<long, Exception>(), rate, new CancellationTokenSource());
             testObject.CounterRateCarrierConfiguredWhileProcessing = callback;
 
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>();
@@ -147,6 +151,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsCanceledException_WhenPreprocessorReturnsNull()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
                     .Returns<IEnumerable<ShipmentEntity>>(null));
@@ -162,6 +169,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))

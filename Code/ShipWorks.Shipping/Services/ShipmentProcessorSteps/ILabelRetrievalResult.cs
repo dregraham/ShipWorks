@@ -5,8 +5,16 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
+    /// <summary>
+    /// Result of the label retrieval step
+    /// </summary>
     public interface ILabelRetrievalResult
     {
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        int Index { get; }
+
         /// <summary>
         /// Clone made of the original shipment
         /// </summary>

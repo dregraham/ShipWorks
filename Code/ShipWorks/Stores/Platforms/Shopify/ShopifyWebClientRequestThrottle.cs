@@ -29,14 +29,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 {
                     // These retry intervals are not the specific Shopify quota intervals.  Just some rough guesses based on the Shopify intervals on how quickly to retry if we are throttled
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetOrders),
-                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetOrderCount),    
+                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetOrderCount),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5), ShopifyWebClientApiCall.GetOrder),
-                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.IsRealShopifyShopUrlName),            
+                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.IsRealShopifyShopUrlName),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.GetAccessToken),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10), ShopifyWebClientApiCall.GetShop),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetProduct),
-                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.GetServerCurrentDateTime),                
-                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.AddFulfillment),
+                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.GetServerCurrentDateTime),
+                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(4),  ShopifyWebClientApiCall.AddFulfillment),
                 };
         }
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
-        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
         /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
