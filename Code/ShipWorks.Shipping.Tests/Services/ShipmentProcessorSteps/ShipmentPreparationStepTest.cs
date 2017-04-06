@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsException_WhenValidateLicenseReturnsError()
         {
-            StoreEntity store = new StoreEntity();
+            StoreEntity store = new StoreEntity() { Enabled = true};
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(store, defaultInput.LicenseCheckCache))
@@ -130,6 +130,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_DelegatesToPreProcessor_WhenShipmentIsValid()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             RateResult rate = new RateResult("Foo", "1");
             Action callback = () => { };
 
@@ -148,6 +151,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsCanceledException_WhenPreprocessorReturnsNull()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
                     .Returns<IEnumerable<ShipmentEntity>>(null));
@@ -163,6 +169,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
         {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))

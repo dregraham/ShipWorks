@@ -113,8 +113,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionContents
             // 
+            // 
+            // sectionContents.ContentPanel
+            // 
+            this.sectionContents.ContentPanel.Controls.Add(this.itemsGrid);
+            this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
+            this.sectionContents.ContentPanel.Controls.Add(this.delete);
+            this.sectionContents.ContentPanel.Controls.Add(this.add);
             this.sectionContents.Location = new System.Drawing.Point(6, 222);
-            this.sectionContents.Size = new System.Drawing.Size(438, 420);
+            this.sectionContents.Size = new System.Drawing.Size(572, 420);
             // 
             // label1
             // 
@@ -142,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionGeneral.ContentPanel.Controls.Add(this.admissibilityPackaging);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelAdmissibilityPackaging);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(441, 212);
+            this.sectionGeneral.Size = new System.Drawing.Size(572, 212);
             // 
             // groupSelectedContent
             // 
@@ -150,23 +157,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.groupSelectedContent.Controls.Add(this.labelUnitPrice);
             this.groupSelectedContent.Controls.Add(this.numberOfPieces);
             this.groupSelectedContent.Controls.Add(this.labelNumberOfPieces);
-            this.groupSelectedContent.Size = new System.Drawing.Size(418, 244);
+            this.groupSelectedContent.Size = new System.Drawing.Size(551, 244);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelNumberOfPieces, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.numberOfPieces, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelUnitPrice, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.unitPrice, 0);
-            // 
-            // add
-            // 
-            this.add.Location = new System.Drawing.Point(362, 10);
-            // 
-            // delete
-            // 
-            this.delete.Location = new System.Drawing.Point(362, 37);
-            // 
-            // sandGrid
-            // 
-            this.itemsGrid.Size = new System.Drawing.Size(344, 116);
             // 
             // labelBrokerAccountHeading
             // 
@@ -244,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBroker.Name = "sectionBroker";
             this.sectionBroker.SectionName = "International Broker";
             this.sectionBroker.SettingsKey = "{4da9daec-f847-4177-b9fb-0f9bb5f1cdcc}";
-            this.sectionBroker.Size = new System.Drawing.Size(438, 24);
+            this.sectionBroker.Size = new System.Drawing.Size(572, 24);
             this.sectionBroker.TabIndex = 3;
             // 
             // admissibilityPackaging
@@ -343,7 +338,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCommercialInvoice.Name = "sectionCommercialInvoice";
             this.sectionCommercialInvoice.SectionName = "Commercial Invoice";
             this.sectionCommercialInvoice.SettingsKey = "{de95083a-38da-4848-8967-9078ca062e50}";
-            this.sectionCommercialInvoice.Size = new System.Drawing.Size(438, 24);
+            this.sectionCommercialInvoice.Size = new System.Drawing.Size(572, 24);
             this.sectionCommercialInvoice.TabIndex = 3;
             // 
             // commercialInvoiceReference
@@ -641,7 +636,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionNafta.Name = "sectionNafta";
             this.sectionNafta.SectionName = "NAFTA";
             this.sectionNafta.SettingsKey = "{214e751c-4c94-4be8-bb4a-5421289a47a2}";
-            this.sectionNafta.Size = new System.Drawing.Size(438, 170);
+            this.sectionNafta.Size = new System.Drawing.Size(572, 170);
             this.sectionNafta.TabIndex = 4;
             // 
             // naftaProducerId
@@ -763,14 +758,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.numberOfPieces.Location = new System.Drawing.Point(105, 187);
             this.numberOfPieces.Name = "numberOfPieces";
-            this.numberOfPieces.Size = new System.Drawing.Size(100, 21);
+            this.numberOfPieces.Size = new System.Drawing.Size(95, 21);
             this.numberOfPieces.TabIndex = 13;
             // 
             // unitPrice
             // 
             this.unitPrice.Location = new System.Drawing.Point(105, 214);
             this.unitPrice.Name = "unitPrice";
-            this.unitPrice.Size = new System.Drawing.Size(100, 21);
+            this.unitPrice.Size = new System.Drawing.Size(95, 21);
             this.unitPrice.TabIndex = 15;
             // 
             // labelUnitPrice
@@ -790,7 +785,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.sectionCommercialInvoice);
             this.Controls.Add(this.sectionBroker);
             this.Name = "FedExCustomsControl";
-            this.Size = new System.Drawing.Size(447, 925);
+            this.Size = new System.Drawing.Size(581, 925);
             this.Controls.SetChildIndex(this.sectionBroker, 0);
             this.Controls.SetChildIndex(this.sectionCommercialInvoice, 0);
             this.Controls.SetChildIndex(this.sectionNafta, 0);

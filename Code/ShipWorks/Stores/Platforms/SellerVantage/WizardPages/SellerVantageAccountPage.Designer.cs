@@ -44,7 +44,7 @@
             // helpLabel
             // 
             this.helpLabel.AutoSize = true;
-            this.helpLabel.Location = new System.Drawing.Point(10, 120);
+            this.helpLabel.Location = new System.Drawing.Point(10, 143);
             this.helpLabel.Name = "helpLabel";
             this.helpLabel.Size = new System.Drawing.Size(207, 13);
             this.helpLabel.TabIndex = 7;
@@ -56,7 +56,7 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(214, 120);
+            this.helpLink.Location = new System.Drawing.Point(214, 143);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(51, 13);
             this.helpLink.TabIndex = 6;
@@ -74,6 +74,7 @@
             this.Name = "SellerVantageAccountPage";
             this.Size = new System.Drawing.Size(522, 206);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 
