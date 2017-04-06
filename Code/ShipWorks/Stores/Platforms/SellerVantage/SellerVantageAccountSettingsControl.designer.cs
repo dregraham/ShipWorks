@@ -37,7 +37,9 @@
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.clientTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            this.url = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -92,7 +94,7 @@
             this.clientTextBox.MaxLength = 50;
             this.fieldLengthProvider.SetMaxLengthSource(this.clientTextBox, ShipWorks.Data.Utility.EntityFieldLengthSource.GenericPassword);
             this.clientTextBox.Name = "clientTextBox";
-            this.clientTextBox.Size = new System.Drawing.Size(119, 21);
+            this.clientTextBox.Size = new System.Drawing.Size(230, 21);
             this.clientTextBox.TabIndex = 6;
             // 
             // label4
@@ -104,10 +106,30 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "&SellerVantage Client:";
             // 
-            // AuctionSoundAccountSettingsControl
+            // url
+            // 
+            this.url.Location = new System.Drawing.Point(140, 104);
+            this.url.MaxLength = 50;
+            this.fieldLengthProvider.SetMaxLengthSource(this.url, ShipWorks.Data.Utility.EntityFieldLengthSource.GenericPassword);
+            this.url.Name = "url";
+            this.url.Size = new System.Drawing.Size(230, 21);
+            this.url.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(102, 107);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(30, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "URL:";
+            // 
+            // SellerVantageAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.url);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.clientTextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.password);
@@ -115,9 +137,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "AuctionSoundAccountSettingsControl";
+            this.Name = "SellerVantageAccountSettingsControl";
             this.Size = new System.Drawing.Size(482, 283);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,5 +155,7 @@
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox clientTextBox;
+        private System.Windows.Forms.TextBox url;
+        private System.Windows.Forms.Label label5;
     }
 }

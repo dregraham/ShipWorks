@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
             }
 
             // SellerVantage has a single endpoint
-            genericStore.ModuleUrl = "http://app.sellervantage.com/shipworksv3/";
+            genericStore.ModuleUrl = "https://sifm.sellervantage.com/shipworksv3/";
 
             return genericStore;
         }
