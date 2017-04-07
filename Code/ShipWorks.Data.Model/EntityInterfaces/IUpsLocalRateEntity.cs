@@ -23,37 +23,37 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         /// <summary> The UpsLocalRatesID property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."UpsLocalRatesID"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."UpsRateID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 UpsLocalRatesID { get; }
         /// <summary> The UpsRateTableID property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."UpsRateTableID"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 UpsRateTableID { get; }
         /// <summary> The Zone property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."Zone"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."Zone"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 Zone { get; }
         /// <summary> The Weight property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."Weight"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."WeightInPounds"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 Weight { get; }
         /// <summary> The Service property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."Service"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 Service { get; }
         /// <summary> The Rate property of the Entity UpsLocalRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRates"."Rate"<br/>
+        /// <remarks>Mapped on table field: "UpsRate"."Rate"<br/>
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Rate { get; }

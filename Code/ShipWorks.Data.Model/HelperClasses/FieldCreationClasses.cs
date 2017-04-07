@@ -21917,11 +21917,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsRateTableFieldIndex.UpsRateTableID);}
 		}
-		/// <summary>Creates a new UpsRateTableEntity.UpsAccountID field instance</summary>
-		public static EntityField2 UpsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UpsRateTableFieldIndex.UpsAccountID);}
-		}
 		/// <summary>Creates a new UpsRateTableEntity.UploadDate field instance</summary>
 		public static EntityField2 UploadDate
 		{

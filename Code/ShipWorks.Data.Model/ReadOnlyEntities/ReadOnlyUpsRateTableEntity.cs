@@ -37,12 +37,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             UpsRateTableID = source.UpsRateTableID;
-            UpsAccountID = source.UpsAccountID;
             UploadDate = source.UploadDate;
             
             
-            UpsAccount = source.UpsAccount?.AsReadOnly(objectMap);
             
+            UpsAccount = source.UpsAccount?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsAccountEntity>();
             UpsLocalRate = source.UpsLocalRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IUpsLocalRateEntity>();
             UpsLocalRateSurcharge = source.UpsLocalRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
@@ -58,22 +58,16 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         public System.Int64 UpsRateTableID { get; }
-        /// <summary> The UpsAccountID property of the Entity UpsRateTable<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsRateTable"."UpsAccountID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 UpsAccountID { get; }
         /// <summary> The UploadDate property of the Entity UpsRateTable<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateTable"."UploadDate"<br/>
-        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime UploadDate { get; }
         
         
-        public IUpsAccountEntity UpsAccount { get; }
         
+        public IEnumerable<IUpsAccountEntity> UpsAccount { get; }
         
         public IEnumerable<IUpsLocalRateEntity> UpsLocalRate { get; }
         

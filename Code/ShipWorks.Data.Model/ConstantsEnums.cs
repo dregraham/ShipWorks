@@ -9406,8 +9406,6 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>UpsRateTableID. </summary>
 		UpsRateTableID,
-		///<summary>UpsAccountID. </summary>
-		UpsAccountID,
 		///<summary>UploadDate. </summary>
 		UploadDate,
 		/// <summary></summary>

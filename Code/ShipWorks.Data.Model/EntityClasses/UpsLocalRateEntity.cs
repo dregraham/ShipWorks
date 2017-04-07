@@ -25,20 +25,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'UpsLocalRate'.<br/><br/></summary>
 	[Serializable]
 	public partial class UpsLocalRateEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private UpsRateTableEntity _upsRateTable;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -116,7 +113,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -264,7 +260,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -340,7 +335,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -412,7 +406,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -464,7 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The UpsLocalRatesID property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."UpsLocalRatesID"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."UpsRateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 UpsLocalRatesID
@@ -474,7 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The UpsRateTableID property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."UpsRateTableID"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 UpsRateTableID
@@ -484,7 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The Zone property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."Zone"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."Zone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 Zone
@@ -494,7 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The Weight property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."Weight"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."WeightInPounds"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 Weight
@@ -504,7 +497,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The Service property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."Service"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 Service
@@ -514,7 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The Rate property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRates"."Rate"<br/>
+		/// <remarks>Mapped on  table field: "UpsRate"."Rate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Decimal Rate
@@ -567,7 +560,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

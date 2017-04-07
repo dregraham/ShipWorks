@@ -173,8 +173,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<System.Int64> UpsRateTableID { get; }
         
         
+        IUpsRateTableEntity UpsRateTable { get; }
         
-        IEnumerable<IUpsRateTableEntity> UpsRateTable { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -200,8 +200,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsAccountEntity : IUpsAccountEntity
     {
         
+        IUpsRateTableEntity IUpsAccountEntity.UpsRateTable => UpsRateTable;
         
-        IEnumerable<IUpsRateTableEntity> IUpsAccountEntity.UpsRateTable => UpsRateTable;
 
         /// <summary>
         /// Get a read only version of the entity

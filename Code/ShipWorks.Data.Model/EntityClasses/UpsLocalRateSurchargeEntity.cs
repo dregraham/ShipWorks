@@ -25,20 +25,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'UpsLocalRateSurcharge'.<br/><br/></summary>
 	[Serializable]
 	public partial class UpsLocalRateSurchargeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private UpsRateTableEntity _upsRateTable;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -116,7 +113,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -264,7 +260,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -340,7 +335,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -408,7 +402,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -460,7 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The UpsLocalRateSurchargeID property of the Entity UpsLocalRateSurcharge<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRateSurcharge"."UpsLocalRateSurchargeID"<br/>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 UpsLocalRateSurchargeID
@@ -470,7 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The UpsRateTableID property of the Entity UpsLocalRateSurcharge<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRateSurcharge"."UpsRateTableID"<br/>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 UpsRateTableID
@@ -480,7 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The SurchargeType property of the Entity UpsLocalRateSurcharge<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRateSurcharge"."SurchargeType"<br/>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."SurchargeType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 SurchargeType
@@ -490,7 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> The Value property of the Entity UpsLocalRateSurcharge<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsLocalRateSurcharge"."Value"<br/>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."Amount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Double Value
@@ -543,7 +536,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

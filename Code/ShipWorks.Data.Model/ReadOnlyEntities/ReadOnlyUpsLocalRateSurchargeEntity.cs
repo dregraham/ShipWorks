@@ -51,25 +51,25 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         /// <summary> The UpsLocalRateSurchargeID property of the Entity UpsLocalRateSurcharge<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRateSurcharge"."UpsLocalRateSurchargeID"<br/>
+        /// <remarks>Mapped on table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         public System.Int64 UpsLocalRateSurchargeID { get; }
         /// <summary> The UpsRateTableID property of the Entity UpsLocalRateSurcharge<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRateSurcharge"."UpsRateTableID"<br/>
+        /// <remarks>Mapped on table field: "UpsRateSurcharge"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 UpsRateTableID { get; }
         /// <summary> The SurchargeType property of the Entity UpsLocalRateSurcharge<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRateSurcharge"."SurchargeType"<br/>
+        /// <remarks>Mapped on table field: "UpsRateSurcharge"."SurchargeType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 SurchargeType { get; }
         /// <summary> The Value property of the Entity UpsLocalRateSurcharge<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsLocalRateSurcharge"."Value"<br/>
+        /// <remarks>Mapped on table field: "UpsRateSurcharge"."Amount"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Double Value { get; }

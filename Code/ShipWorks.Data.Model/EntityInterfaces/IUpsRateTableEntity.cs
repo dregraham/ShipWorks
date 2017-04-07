@@ -27,22 +27,16 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 UpsRateTableID { get; }
-        /// <summary> The UpsAccountID property of the Entity UpsRateTable<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsRateTable"."UpsAccountID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 UpsAccountID { get; }
         /// <summary> The UploadDate property of the Entity UpsRateTable<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateTable"."UploadDate"<br/>
-        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.DateTime UploadDate { get; }
         
         
-        IUpsAccountEntity UpsAccount { get; }
         
+        IEnumerable<IUpsAccountEntity> UpsAccount { get; }
         IEnumerable<IUpsLocalRateEntity> UpsLocalRate { get; }
         IEnumerable<IUpsLocalRateSurchargeEntity> UpsLocalRateSurcharge { get; }
 
@@ -70,8 +64,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsRateTableEntity : IUpsRateTableEntity
     {
         
-        IUpsAccountEntity IUpsRateTableEntity.UpsAccount => UpsAccount;
         
+        IEnumerable<IUpsAccountEntity> IUpsRateTableEntity.UpsAccount => UpsAccount;
         IEnumerable<IUpsLocalRateEntity> IUpsRateTableEntity.UpsLocalRate => UpsLocalRate;
         IEnumerable<IUpsLocalRateSurchargeEntity> IUpsRateTableEntity.UpsLocalRateSurcharge => UpsLocalRateSurcharge;
 

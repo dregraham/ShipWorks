@@ -2754,7 +2754,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)UpsAccountFieldIndex.Website, 50, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "PromoStatus", typeof(System.Byte), false, false, false, false,  (int)UpsAccountFieldIndex.PromoStatus, 0, 0, 3);
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
-			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
 		}
 		/// <summary>Inits UpsLocalRateEntity's FieldInfo objects</summary>
 		private void InitUpsLocalRateEntityInfos()
@@ -2876,8 +2876,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsRateTableFieldIndex), "UpsRateTableEntity");
 			this.AddElementFieldInfo("UpsRateTableEntity", "UpsRateTableID", typeof(System.Int64), true, false, false, false,  (int)UpsRateTableFieldIndex.UpsRateTableID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsRateTableEntity", "UpsAccountID", typeof(System.Int64), false, true, false, false,  (int)UpsRateTableFieldIndex.UpsAccountID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsRateTableEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsRateTableFieldIndex.UploadDate, 0, 0, 0);
+			this.AddElementFieldInfo("UpsRateTableEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsRateTableFieldIndex.UploadDate, 0, 0, 7);
 		}
 		/// <summary>Inits UpsShipmentEntity's FieldInfo objects</summary>
 		private void InitUpsShipmentEntityInfos()

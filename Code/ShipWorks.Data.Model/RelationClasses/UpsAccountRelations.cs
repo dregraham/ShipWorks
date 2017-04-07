@@ -30,28 +30,28 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.UpsRateTableEntityUsingUpsAccountID);
+			toReturn.Add(this.UpsRateTableEntityUsingUpsRateTableID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between UpsAccountEntity and UpsRateTableEntity over the 1:n relation they have, using the relation between the fields:
-		/// UpsAccount.UpsAccountID - UpsRateTable.UpsAccountID
+
+
+		/// <summary>Returns a new IEntityRelation object, between UpsAccountEntity and UpsRateTableEntity over the m:1 relation they have, using the relation between the fields:
+		/// UpsAccount.UpsRateTableID - UpsRateTable.UpsRateTableID
 		/// </summary>
-		public virtual IEntityRelation UpsRateTableEntityUsingUpsAccountID
+		public virtual IEntityRelation UpsRateTableEntityUsingUpsRateTableID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsRateTable" , true);
-				relation.AddEntityFieldPair(UpsAccountFields.UpsAccountID, UpsRateTableFields.UpsAccountID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsAccountEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", false);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "UpsRateTable", false);
+				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsAccountFields.UpsRateTableID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsAccountEntity", true);
 				return relation;
 			}
 		}
-
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -66,7 +66,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticUpsAccountRelations
 	{
-		internal static readonly IEntityRelation UpsRateTableEntityUsingUpsAccountIDStatic = new UpsAccountRelations().UpsRateTableEntityUsingUpsAccountID;
+		internal static readonly IEntityRelation UpsRateTableEntityUsingUpsRateTableIDStatic = new UpsAccountRelations().UpsRateTableEntityUsingUpsRateTableID;
 
 		/// <summary>CTor</summary>
 		static StaticUpsAccountRelations()
