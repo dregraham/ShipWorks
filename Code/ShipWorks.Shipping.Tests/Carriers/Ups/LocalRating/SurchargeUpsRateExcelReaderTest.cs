@@ -14,46 +14,50 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
     public class SurchargeUpsRateExcelReaderTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly SurchargeUpsRateExcelReader testObject;
-        readonly ExcelEngine excelEngine;
+    //    readonly AutoMock mock;
+    //    readonly SurchargeUpsRateExcelReader testObject;
+    //    readonly ExcelEngine excelEngine;
 
-        public SurchargeUpsRateExcelReaderTest()
-        {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<SurchargeUpsRateExcelReader>();
-            excelEngine = new ExcelEngine();
-        }
+    //    public SurchargeUpsRateExcelReaderTest()
+    //    {
+    //        mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+    //        testObject = mock.Create<SurchargeUpsRateExcelReader>();
+    //        excelEngine = new ExcelEngine();
+    //    }
 
-        [Fact]
-        public void Read_AddsValueAddWorksheetRatesToUpsLocalRateTable()
-        {
-            Mock<IWorksheets> rateWorksheets = mock.Mock<IWorksheets>();
-            Mock<IUpsLocalRateTable> upsLocalRateTable = mock.Mock<IUpsLocalRateTable>();
+    //    [Fact]
+    //    public void Read_AddsValueAddWorksheetRatesToUpsLocalRateTable()
+    //    {
+    //        var foo = CreateWorkbook("Value Add");
+    //        var worksheet = foo.Worksheets["Value Add"];
+    //        AddRow(worksheet, new[] { "asdf", "asdf" });
 
-            Mock<IRange> range = mock.Mock<IRange>();
-            //range.Setup()
-            //var foo = new IRange[] { new Ra};
+    //        //testObject.Read(rateWorksheets.Object, upsLocalRateTable.Object);
+    //    }
 
-            //rateWorksheets.Setup(s => s["Value Add"]).Returns(null);
+    //    private IWorkbook CreateWorkbook(string name)
+    //    {
+    //        IWorkbook workbook = excelEngine.Excel.Workbooks.Create();
+    //        workbook.Worksheets.Create(name);
+    //        return workbook;
+    //    }
+
+    //    private void AddRow(IWorksheet worksheet, string[] values)
+    //    {
+    //        worksheet.InsertRow(worksheet.Rows.Length + 1);
+    //        IRange newRow = worksheet.Rows.Last();
 
 
-            testObject.Read(rateWorksheets.Object, upsLocalRateTable.Object);
-        }
+    //        for (int i = 0; i < values.Length; i++)
+    //        {
+    //            newRow.Cells[i].Value = values[i];
+    //        }
+    //    }
 
-        public IWorksheet CreateWorkbook(string name)
-        {
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create();
-
-            workbook.Worksheets.Create(name);
-
-            return workbook;
-        }
-
-        public void Dispose()
-        {
-            mock.Dispose();
-            excelEngine.Dispose();
-        }
+    //    public void Dispose()
+    //    {
+    //        mock.Dispose();
+    //        excelEngine.Dispose();
+    //    }
     }
 }
