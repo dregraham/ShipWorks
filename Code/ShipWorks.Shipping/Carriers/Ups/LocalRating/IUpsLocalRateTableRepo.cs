@@ -21,5 +21,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Remove rate tables that are not associated with a UpsAccountEntity
         /// </summary>
         void CleanupRates();
+
+        /// <summary>
+        /// Gets the UpsRateTable for the given account
+        /// </summary>
+        UpsRateTableEntity Get(UpsAccountEntity accountEntity);
     }
 }

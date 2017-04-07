@@ -1,10 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -14,14 +10,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public interface IUpsLocalRateTable
     {
         /// <summary>
-        /// Load the rate table froma stream
+        /// Load the rate table from a stream
         /// </summary>
         void Load(Stream stream);
 
         /// <summary>
         /// Save the rate table
         /// </summary>
-        void Save(UpsAccountEntity entity);
+        void Save(UpsAccountEntity accountEntity);
 
         /// <summary>
         /// Add a rates collection to the rate table
