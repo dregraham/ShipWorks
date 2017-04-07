@@ -43,9 +43,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
         public IWorksheet CreateWorkbook(string name)
         {
-            IWorkbook foo = excelEngine.Excel.Workbooks.Create();
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create();
 
-            foo.Worksheets.Create(name);
+            workbook.Worksheets.Create(name);
+
+            return workbook;
         }
 
         public void Dispose()
