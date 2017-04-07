@@ -67,19 +67,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a rates collection to the rate table
         /// </summary>
-        public void AddRates(IEnumerable<UpsLocalRateEntity> rates)
+        public void AddRates(IEnumerable<UpsRateEntity> rates)
         {
-            rateTableEntity.UpsLocalRate.Clear();
-            rateTableEntity.UpsLocalRate.AddRange(rates);
+            rateTableEntity.UpsRate.Clear();
+            rateTableEntity.UpsRate.AddRange(rates);
         }
 
         /// <summary>
         /// Add a surcharge collection to the rate table
         /// </summary>
-        public void AddSurcharges(IEnumerable<UpsLocalRateSurchargeEntity> surcharges)
+        public void AddSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
-            rateTableEntity.UpsLocalRateSurcharge.Clear();
-            rateTableEntity.UpsLocalRateSurcharge.AddRange(surcharges);
+            rateTableEntity.UpsRateSurcharge.Clear();
+            rateTableEntity.UpsRateSurcharge.AddRange(surcharges);
         }
     }
 }

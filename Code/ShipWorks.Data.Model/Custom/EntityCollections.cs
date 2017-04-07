@@ -8727,120 +8727,6 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of UpsLocalRateEntity
-	/// </summary>
-	public class UpsLocalRateCollection : EntityCollection<UpsLocalRateEntity>
-	{
-        /// <summary>
-        /// Gets the count of all UpsLocalRateEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all UpsLocalRateEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new UpsLocalRateEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static UpsLocalRateCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static UpsLocalRateCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            UpsLocalRateCollection collection = new UpsLocalRateCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
-	/// Strongly typed collection of UpsLocalRateSurchargeEntity
-	/// </summary>
-	public class UpsLocalRateSurchargeCollection : EntityCollection<UpsLocalRateSurchargeEntity>
-	{
-        /// <summary>
-        /// Gets the count of all UpsLocalRateSurchargeEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all UpsLocalRateSurchargeEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new UpsLocalRateSurchargeEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static UpsLocalRateSurchargeCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static UpsLocalRateSurchargeCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            UpsLocalRateSurchargeCollection collection = new UpsLocalRateSurchargeCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of UpsPackageEntity
 	/// </summary>
 	public class UpsPackageCollection : EntityCollection<UpsPackageEntity>
@@ -8996,6 +8882,120 @@ namespace ShipWorks.Data.Model.Custom
         public static UpsProfilePackageCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             UpsProfilePackageCollection collection = new UpsProfilePackageCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of UpsRateEntity
+	/// </summary>
+	public class UpsRateCollection : EntityCollection<UpsRateEntity>
+	{
+        /// <summary>
+        /// Gets the count of all UpsRateEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all UpsRateEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new UpsRateEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static UpsRateCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static UpsRateCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            UpsRateCollection collection = new UpsRateCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of UpsRateSurchargeEntity
+	/// </summary>
+	public class UpsRateSurchargeCollection : EntityCollection<UpsRateSurchargeEntity>
+	{
+        /// <summary>
+        /// Gets the count of all UpsRateSurchargeEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all UpsRateSurchargeEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new UpsRateSurchargeEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static UpsRateSurchargeCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static UpsRateSurchargeCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            UpsRateSurchargeCollection collection = new UpsRateSurchargeCollection();
 
             RelationPredicateBucket bucket = null;
 

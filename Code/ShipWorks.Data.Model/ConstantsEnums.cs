@@ -9191,38 +9191,6 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRate.</summary>
-	public enum UpsLocalRateFieldIndex
-	{
-		///<summary>UpsLocalRatesID. </summary>
-		UpsLocalRatesID,
-		///<summary>UpsRateTableID. </summary>
-		UpsRateTableID,
-		///<summary>Zone. </summary>
-		Zone,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>Service. </summary>
-		Service,
-		///<summary>Rate. </summary>
-		Rate,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRateSurcharge.</summary>
-	public enum UpsLocalRateSurchargeFieldIndex
-	{
-		///<summary>UpsLocalRateSurchargeID. </summary>
-		UpsLocalRateSurchargeID,
-		///<summary>UpsRateTableID. </summary>
-		UpsRateTableID,
-		///<summary>SurchargeType. </summary>
-		SurchargeType,
-		///<summary>Value. </summary>
-		Value,
-		/// <summary></summary>
-		AmountOfFields
-	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPackage.</summary>
 	public enum UpsPackageFieldIndex
 	{
@@ -9398,6 +9366,38 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsRate.</summary>
+	public enum UpsRateFieldIndex
+	{
+		///<summary>UpsRateID. </summary>
+		UpsRateID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>Zone. </summary>
+		Zone,
+		///<summary>WeightInPounds. </summary>
+		WeightInPounds,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Rate. </summary>
+		Rate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsRateSurcharge.</summary>
+	public enum UpsRateSurchargeFieldIndex
+	{
+		///<summary>UpsRateSurchargeID. </summary>
+		UpsRateSurchargeID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>SurchargeType. </summary>
+		SurchargeType,
+		///<summary>Amount. </summary>
+		Amount,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11047,16 +11047,16 @@ namespace ShipWorks.Data.Model
 		ThreeDCartStoreEntity,
 		///<summary>UpsAccount</summary>
 		UpsAccountEntity,
-		///<summary>UpsLocalRate</summary>
-		UpsLocalRateEntity,
-		///<summary>UpsLocalRateSurcharge</summary>
-		UpsLocalRateSurchargeEntity,
 		///<summary>UpsPackage</summary>
 		UpsPackageEntity,
 		///<summary>UpsProfile</summary>
 		UpsProfileEntity,
 		///<summary>UpsProfilePackage</summary>
 		UpsProfilePackageEntity,
+		///<summary>UpsRate</summary>
+		UpsRateEntity,
+		///<summary>UpsRateSurcharge</summary>
+		UpsRateSurchargeEntity,
 		///<summary>UpsRateTable</summary>
 		UpsRateTableEntity,
 		///<summary>UpsShipment</summary>

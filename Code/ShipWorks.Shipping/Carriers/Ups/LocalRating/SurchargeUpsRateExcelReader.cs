@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Read(IWorksheets rateWorkSheets, IUpsLocalRateTable upsLocalRateTable)
         {
-            List<UpsLocalRateSurchargeEntity> result = new List<UpsLocalRateSurchargeEntity>();
+            List<UpsRateSurchargeEntity> result = new List<UpsRateSurchargeEntity>();
 
             IWorksheet valueAddSheet = rateWorkSheets["Value Add"];
             if (valueAddSheet != null)
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the surcharges from the collection of rows
         /// </summary>
-        private static IEnumerable<UpsLocalRateSurchargeEntity> GetSurcharges(IRange[] rows)
+        private static IEnumerable<UpsRateSurchargeEntity> GetSurcharges(IRange[] rows)
         {
             foreach (IRange row in rows)
             {
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                         double amount;
                         if (double.TryParse(row.Cells[1].Value, out amount))
                         {
-                            yield return new UpsLocalRateSurchargeEntity() { SurchargeType = (int)surcharge, Value = amount };
+                            yield return new UpsRateSurchargeEntity() { SurchargeType = (int)surcharge, Amount = amount };
                         }
                     }
                 }

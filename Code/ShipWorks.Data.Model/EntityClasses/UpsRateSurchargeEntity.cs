@@ -25,9 +25,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'UpsLocalRate'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'UpsRateSurcharge'.<br/><br/></summary>
 	[Serializable]
-	public partial class UpsLocalRateEntity : CommonEntityBase
+	public partial class UpsRateSurchargeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -51,13 +51,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static UpsLocalRateEntity()
+		static UpsRateSurchargeEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public UpsLocalRateEntity():base("UpsLocalRateEntity")
+		public UpsRateSurchargeEntity():base("UpsRateSurchargeEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -65,42 +65,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public UpsLocalRateEntity(IEntityFields2 fields):base("UpsLocalRateEntity")
+		public UpsRateSurchargeEntity(IEntityFields2 fields):base("UpsRateSurchargeEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this UpsLocalRateEntity</param>
-		public UpsLocalRateEntity(IValidator validator):base("UpsLocalRateEntity")
+		/// <param name="validator">The custom validator object for this UpsRateSurchargeEntity</param>
+		public UpsRateSurchargeEntity(IValidator validator):base("UpsRateSurchargeEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="upsLocalRatesID">PK value for UpsLocalRate which data should be fetched into this UpsLocalRate object</param>
+		/// <param name="upsRateSurchargeID">PK value for UpsRateSurcharge which data should be fetched into this UpsRateSurcharge object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public UpsLocalRateEntity(System.Int64 upsLocalRatesID):base("UpsLocalRateEntity")
+		public UpsRateSurchargeEntity(System.Int64 upsRateSurchargeID):base("UpsRateSurchargeEntity")
 		{
 			InitClassEmpty(null, null);
-			this.UpsLocalRatesID = upsLocalRatesID;
+			this.UpsRateSurchargeID = upsRateSurchargeID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="upsLocalRatesID">PK value for UpsLocalRate which data should be fetched into this UpsLocalRate object</param>
-		/// <param name="validator">The custom validator object for this UpsLocalRateEntity</param>
+		/// <param name="upsRateSurchargeID">PK value for UpsRateSurcharge which data should be fetched into this UpsRateSurcharge object</param>
+		/// <param name="validator">The custom validator object for this UpsRateSurchargeEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public UpsLocalRateEntity(System.Int64 upsLocalRatesID, IValidator validator):base("UpsLocalRateEntity")
+		public UpsRateSurchargeEntity(System.Int64 upsRateSurchargeID, IValidator validator):base("UpsRateSurchargeEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.UpsLocalRatesID = upsLocalRatesID;
+			this.UpsRateSurchargeID = upsRateSurchargeID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected UpsLocalRateEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected UpsRateSurchargeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -120,9 +120,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((UpsLocalRateFieldIndex)fieldIndex)
+			switch((UpsRateSurchargeFieldIndex)fieldIndex)
 			{
-				case UpsLocalRateFieldIndex.UpsRateTableID:
+				case UpsRateSurchargeFieldIndex.UpsRateTableID:
 					DesetupSyncUpsRateTable(true, false);
 					break;
 				default:
@@ -269,7 +269,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new UpsLocalRateRelations().GetAllRelations();
+			return new UpsRateSurchargeRelations().GetAllRelations();
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UpsRateTable' to this entity.</summary>
@@ -285,7 +285,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(UpsLocalRateEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(UpsRateSurchargeEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -347,17 +347,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("UpsLocalRatesID", fieldHashtable);
+			_fieldsCustomProperties.Add("UpsRateSurchargeID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UpsRateTableID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Zone", fieldHashtable);
+			_fieldsCustomProperties.Add("SurchargeType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Service", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Rate", fieldHashtable);
+			_fieldsCustomProperties.Add("Amount", fieldHashtable);
 		}
 		#endregion
 
@@ -366,7 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncUpsRateTable(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsLocalRateRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, signalRelatedEntity, "UpsLocalRate", resetFKFields, new int[] { (int)UpsLocalRateFieldIndex.UpsRateTableID } );
+			this.PerformDesetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsRateSurchargeRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, signalRelatedEntity, "UpsRateSurcharge", resetFKFields, new int[] { (int)UpsRateSurchargeFieldIndex.UpsRateTableID } );
 			_upsRateTable = null;
 		}
 
@@ -378,7 +374,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				DesetupSyncUpsRateTable(true, true);
 				_upsRateTable = (UpsRateTableEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsLocalRateRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsRateSurchargeRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, new string[] {  } );
 			}
 		}
 		
@@ -395,7 +391,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this UpsLocalRateEntity</param>
+		/// <param name="validator">The validator object for this UpsRateSurchargeEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -413,9 +409,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static UpsLocalRateRelations Relations
+		public  static UpsRateSurchargeRelations Relations
 		{
-			get	{ return new UpsLocalRateRelations(); }
+			get	{ return new UpsRateSurchargeRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -429,7 +425,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathUpsRateTable
 		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateTableEntityFactory))),	(IEntityRelation)GetRelationsForField("UpsRateTable")[0], (int)ShipWorks.Data.Model.EntityType.UpsLocalRateEntity, (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, 0, null, null, null, null, "UpsRateTable", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateTableEntityFactory))),	(IEntityRelation)GetRelationsForField("UpsRateTable")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateSurchargeEntity, (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, 0, null, null, null, null, "UpsRateTable", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -456,64 +452,44 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The UpsLocalRatesID property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."UpsRateID"<br/>
+		/// <summary> The UpsRateSurchargeID property of the Entity UpsRateSurcharge<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 UpsLocalRatesID
+		public virtual System.Int64 UpsRateSurchargeID
 		{
-			get { return (System.Int64)GetValue((int)UpsLocalRateFieldIndex.UpsLocalRatesID, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.UpsLocalRatesID, value); }
+			get { return (System.Int64)GetValue((int)UpsRateSurchargeFieldIndex.UpsRateSurchargeID, true); }
+			set	{ SetValue((int)UpsRateSurchargeFieldIndex.UpsRateSurchargeID, value); }
 		}
 
-		/// <summary> The UpsRateTableID property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."UpsRateTableID"<br/>
+		/// <summary> The UpsRateTableID property of the Entity UpsRateSurcharge<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."UpsRateTableID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 UpsRateTableID
 		{
-			get { return (System.Int64)GetValue((int)UpsLocalRateFieldIndex.UpsRateTableID, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.UpsRateTableID, value); }
+			get { return (System.Int64)GetValue((int)UpsRateSurchargeFieldIndex.UpsRateTableID, true); }
+			set	{ SetValue((int)UpsRateSurchargeFieldIndex.UpsRateTableID, value); }
 		}
 
-		/// <summary> The Zone property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."Zone"<br/>
+		/// <summary> The SurchargeType property of the Entity UpsRateSurcharge<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."SurchargeType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Zone
+		public virtual System.Int32 SurchargeType
 		{
-			get { return (System.Int32)GetValue((int)UpsLocalRateFieldIndex.Zone, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.Zone, value); }
+			get { return (System.Int32)GetValue((int)UpsRateSurchargeFieldIndex.SurchargeType, true); }
+			set	{ SetValue((int)UpsRateSurchargeFieldIndex.SurchargeType, value); }
 		}
 
-		/// <summary> The Weight property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."WeightInPounds"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// <summary> The Amount property of the Entity UpsRateSurcharge<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsRateSurcharge"."Amount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Weight
+		public virtual System.Double Amount
 		{
-			get { return (System.Int32)GetValue((int)UpsLocalRateFieldIndex.Weight, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The Service property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."Service"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Service
-		{
-			get { return (System.Int32)GetValue((int)UpsLocalRateFieldIndex.Service, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.Service, value); }
-		}
-
-		/// <summary> The Rate property of the Entity UpsLocalRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UpsRate"."Rate"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal Rate
-		{
-			get { return (System.Decimal)GetValue((int)UpsLocalRateFieldIndex.Rate, true); }
-			set	{ SetValue((int)UpsLocalRateFieldIndex.Rate, value); }
+			get { return (System.Double)GetValue((int)UpsRateSurchargeFieldIndex.Amount, true); }
+			set	{ SetValue((int)UpsRateSurchargeFieldIndex.Amount, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
@@ -529,7 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "UpsLocalRate", "UpsRateTable", _upsRateTable, true); 
+					SetSingleRelatedEntityNavigator(value, "UpsRateSurcharge", "UpsRateTable", _upsRateTable, true); 
 				}
 			}
 		}
@@ -550,7 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.UpsLocalRateEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.UpsRateSurchargeEntity; }
 		}
 
 		#endregion

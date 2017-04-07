@@ -2428,7 +2428,7 @@
           <Field Name="TimeZoneID" Type="string" IsOptional="true" MaxLength="100" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsAccount" ObjectID="3dd38bf2-2b0e-41a7-baba-ab172b4a5b36">
+      <EntityDefinition Name="UpsAccount" ObjectID="dfe88468-ba3b-4485-ab50-143ed312755d">
         <Fields>
           <Field Name="AccountNumber" Type="string" MaxLength="10" FieldIndex="3" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="15" />
@@ -2455,24 +2455,6 @@
           <Field Name="UpsRateTableID" Type="long" IsOptional="true" Precision="19" FieldIndex="24" />
           <Field Name="UserID" Type="string" MaxLength="25" FieldIndex="4" />
           <Field Name="Website" Type="string" MaxLength="50" FieldIndex="21" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="UpsLocalRate" ObjectID="0c1184cf-1bbf-459f-8725-a31c6005385c">
-        <Fields>
-          <Field Name="Rate" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
-          <Field Name="Service" Type="int" Precision="10" FieldIndex="4" />
-          <Field Name="UpsLocalRatesID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Weight" Type="int" Precision="10" FieldIndex="3" />
-          <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="UpsLocalRateSurcharge" ObjectID="96a9e31b-a838-466d-a87a-01514295cee3">
-        <Fields>
-          <Field Name="SurchargeType" Type="int" Precision="10" FieldIndex="2" />
-          <Field Name="UpsLocalRateSurchargeID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Value" Type="double" Precision="38" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="UpsPackage" ObjectID="06bfa1b7-f2e5-4a8d-abb2-cdfb95c62359">
@@ -2567,7 +2549,25 @@
           <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsRateTable" ObjectID="676e4d94-4386-4402-99fc-3d25d3384a0f">
+      <EntityDefinition Name="UpsRate" ObjectID="aadd2c08-e562-4f60-8248-fa1871839ce2">
+        <Fields>
+          <Field Name="Rate" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
+          <Field Name="Service" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="UpsRateID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="WeightInPounds" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UpsRateSurcharge" ObjectID="334a2672-958c-437c-a82a-3dd53e201bf2">
+        <Fields>
+          <Field Name="Amount" Type="double" Precision="38" FieldIndex="3" />
+          <Field Name="SurchargeType" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="UpsRateSurchargeID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UpsRateTable" ObjectID="c7ac4cd9-08f6-48b9-8c6f-95e70c8e5e02">
         <Fields>
           <Field Name="UploadDate" Type="datetime" Precision="7" FieldIndex="1" />
           <Field Name="UpsRateTableID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
@@ -3403,16 +3403,6 @@
           <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UpsLocalRate.UpsRateTable-UpsRateTable.UpsLocalRate" Start=":UpsLocalRate" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsLocalRate" Type="4" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="UpsLocalRateSurcharge.UpsRateTable-UpsRateTable.UpsLocalRateSurcharge" Start=":UpsLocalRateSurcharge" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsLocalRateSurcharge" Type="4" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="UpsPackage.UpsShipment-UpsShipment.Packages" Start=":UpsPackage" End=":UpsShipment" StartNavigator="UpsShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -3426,6 +3416,16 @@
       <NormalRelationship Name="UpsProfilePackage.UpsProfile-UpsProfile.Packages" Start=":UpsProfilePackage" End=":UpsProfile" StartNavigator="UpsProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="UpsRate.UpsRateTable-UpsRateTable.UpsRate" Start=":UpsRate" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsRate" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="UpsRateSurcharge.UpsRateTable-UpsRateTable.UpsRateSurcharge" Start=":UpsRateSurcharge" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsRateSurcharge" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="UpsShipment.Shipment-Shipment.Ups" Start=":UpsShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="Ups" Type="1" DeleteRuleAction="1">
@@ -3642,7 +3642,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-07T15:40:05.7114827Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-07T20:12:43.0870992Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -11288,24 +11288,6 @@
             <FieldMapping FieldName="Website" TargetFieldName="Website" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName=":UpsLocalRate" TargetName="ShipWorksLocal:dbo:UpsRate">
-          <FieldMappings>
-            <FieldMapping FieldName="Rate" TargetFieldName="Rate" />
-            <FieldMapping FieldName="Service" TargetFieldName="Service" />
-            <FieldMapping FieldName="UpsLocalRatesID" TargetFieldName="UpsRateID" />
-            <FieldMapping FieldName="UpsRateTableID" TargetFieldName="UpsRateTableID" />
-            <FieldMapping FieldName="Weight" TargetFieldName="WeightInPounds" />
-            <FieldMapping FieldName="Zone" TargetFieldName="Zone" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":UpsLocalRateSurcharge" TargetName="ShipWorksLocal:dbo:UpsRateSurcharge">
-          <FieldMappings>
-            <FieldMapping FieldName="SurchargeType" TargetFieldName="SurchargeType" />
-            <FieldMapping FieldName="UpsLocalRateSurchargeID" TargetFieldName="UpsRateSurchargeID" />
-            <FieldMapping FieldName="UpsRateTableID" TargetFieldName="UpsRateTableID" />
-            <FieldMapping FieldName="Value" TargetFieldName="Amount" />
-          </FieldMappings>
-        </EntityMapping>
         <EntityMapping EntityName=":UpsPackage" TargetName="ShipWorksLocal:dbo:UpsPackage">
           <FieldMappings>
             <FieldMapping FieldName="AdditionalHandlingEnabled" TargetFieldName="AdditionalHandlingEnabled" />
@@ -11396,6 +11378,24 @@
             <FieldMapping FieldName="VerbalConfirmationPhone" TargetFieldName="VerbalConfirmationPhone" />
             <FieldMapping FieldName="VerbalConfirmationPhoneExtension" TargetFieldName="VerbalConfirmationPhoneExtension" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":UpsRate" TargetName="ShipWorksLocal:dbo:UpsRate">
+          <FieldMappings>
+            <FieldMapping FieldName="Rate" TargetFieldName="Rate" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="UpsRateID" TargetFieldName="UpsRateID" />
+            <FieldMapping FieldName="UpsRateTableID" TargetFieldName="UpsRateTableID" />
+            <FieldMapping FieldName="WeightInPounds" TargetFieldName="WeightInPounds" />
+            <FieldMapping FieldName="Zone" TargetFieldName="Zone" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":UpsRateSurcharge" TargetName="ShipWorksLocal:dbo:UpsRateSurcharge">
+          <FieldMappings>
+            <FieldMapping FieldName="Amount" TargetFieldName="Amount" />
+            <FieldMapping FieldName="SurchargeType" TargetFieldName="SurchargeType" />
+            <FieldMapping FieldName="UpsRateSurchargeID" TargetFieldName="UpsRateSurchargeID" />
+            <FieldMapping FieldName="UpsRateTableID" TargetFieldName="UpsRateTableID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":UpsRateTable" TargetName="ShipWorksLocal:dbo:UpsRateTable">

@@ -43,10 +43,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             UpsAccount = source.UpsAccount?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IUpsAccountEntity>();
-            UpsLocalRate = source.UpsLocalRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<IUpsLocalRateEntity>();
-            UpsLocalRateSurcharge = source.UpsLocalRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<IUpsLocalRateSurchargeEntity>();
+            UpsRate = source.UpsRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsRateEntity>();
+            UpsRateSurcharge = source.UpsRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsRateSurchargeEntity>();
 
             CopyCustomUpsRateTableData(source);
         }
@@ -69,9 +69,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IEnumerable<IUpsAccountEntity> UpsAccount { get; }
         
-        public IEnumerable<IUpsLocalRateEntity> UpsLocalRate { get; }
+        public IEnumerable<IUpsRateEntity> UpsRate { get; }
         
-        public IEnumerable<IUpsLocalRateSurchargeEntity> UpsLocalRateSurcharge { get; }
+        public IEnumerable<IUpsRateSurchargeEntity> UpsRateSurcharge { get; }
         
         /// <summary>
         /// Get a read only version of the entity

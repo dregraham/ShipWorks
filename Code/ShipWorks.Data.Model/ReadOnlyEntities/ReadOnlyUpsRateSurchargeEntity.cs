@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'UpsLocalRateSurcharge'. <br/><br/>
+    /// Read-only representation of the entity 'UpsRateSurcharge'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyUpsLocalRateSurchargeEntity : IUpsLocalRateSurchargeEntity
+    public partial class ReadOnlyUpsRateSurchargeEntity : IUpsRateSurchargeEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyUpsLocalRateSurchargeEntity(IUpsLocalRateSurchargeEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyUpsRateSurchargeEntity(IUpsRateSurchargeEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,43 +36,43 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            UpsLocalRateSurchargeID = source.UpsLocalRateSurchargeID;
+            UpsRateSurchargeID = source.UpsRateSurchargeID;
             UpsRateTableID = source.UpsRateTableID;
             SurchargeType = source.SurchargeType;
-            Value = source.Value;
+            Amount = source.Amount;
             
             
             UpsRateTable = source.UpsRateTable?.AsReadOnly(objectMap);
             
 
-            CopyCustomUpsLocalRateSurchargeData(source);
+            CopyCustomUpsRateSurchargeData(source);
         }
 
         
-        /// <summary> The UpsLocalRateSurchargeID property of the Entity UpsLocalRateSurcharge<br/><br/>
+        /// <summary> The UpsRateSurchargeID property of the Entity UpsRateSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        public System.Int64 UpsLocalRateSurchargeID { get; }
-        /// <summary> The UpsRateTableID property of the Entity UpsLocalRateSurcharge<br/><br/>
+        public System.Int64 UpsRateSurchargeID { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsRateSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateSurcharge"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 UpsRateTableID { get; }
-        /// <summary> The SurchargeType property of the Entity UpsLocalRateSurcharge<br/><br/>
+        /// <summary> The SurchargeType property of the Entity UpsRateSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateSurcharge"."SurchargeType"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 SurchargeType { get; }
-        /// <summary> The Value property of the Entity UpsLocalRateSurcharge<br/><br/>
+        /// <summary> The Amount property of the Entity UpsRateSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateSurcharge"."Amount"<br/>
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Double Value { get; }
+        public System.Double Amount { get; }
         
         
         public IUpsRateTableEntity UpsRateTable { get; }
@@ -81,16 +81,16 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsLocalRateSurchargeEntity AsReadOnly() => this;
+        public virtual IUpsRateSurchargeEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsLocalRateSurchargeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IUpsRateSurchargeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomUpsLocalRateSurchargeData(IUpsLocalRateSurchargeEntity source);
+        partial void CopyCustomUpsRateSurchargeData(IUpsRateSurchargeEntity source);
     }
 }

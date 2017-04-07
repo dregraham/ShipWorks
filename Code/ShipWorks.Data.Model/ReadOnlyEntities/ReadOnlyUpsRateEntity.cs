@@ -9,105 +9,102 @@
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Data.Model.EntityInterfaces
+namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Entity interface which represents the entity 'UpsLocalRate'. <br/><br/>
+    /// Read-only representation of the entity 'UpsRate'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IUpsLocalRateEntity
+    [Serializable]
+    public partial class ReadOnlyUpsRateEntity : IUpsRateEntity
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal ReadOnlyUpsRateEntity(IUpsRateEntity source, IDictionary<object, object> objectMap)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
+
+            if (objectMap.ContainsKey(source) && objectMap[source] == null)
+            {
+                objectMap[source] = this;
+            }
+            
+            UpsRateID = source.UpsRateID;
+            UpsRateTableID = source.UpsRateTableID;
+            Zone = source.Zone;
+            WeightInPounds = source.WeightInPounds;
+            Service = source.Service;
+            Rate = source.Rate;
+            
+            
+            UpsRateTable = source.UpsRateTable?.AsReadOnly(objectMap);
+            
+
+            CopyCustomUpsRateData(source);
+        }
+
         
-        /// <summary> The UpsLocalRatesID property of the Entity UpsLocalRate<br/><br/>
+        /// <summary> The UpsRateID property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."UpsRateID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        System.Int64 UpsLocalRatesID { get; }
-        /// <summary> The UpsRateTableID property of the Entity UpsLocalRate<br/><br/>
+        public System.Int64 UpsRateID { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 UpsRateTableID { get; }
-        /// <summary> The Zone property of the Entity UpsLocalRate<br/><br/>
+        public System.Int64 UpsRateTableID { get; }
+        /// <summary> The Zone property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."Zone"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Zone { get; }
-        /// <summary> The Weight property of the Entity UpsLocalRate<br/><br/>
+        public System.Int32 Zone { get; }
+        /// <summary> The WeightInPounds property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."WeightInPounds"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Weight { get; }
-        /// <summary> The Service property of the Entity UpsLocalRate<br/><br/>
+        public System.Int32 WeightInPounds { get; }
+        /// <summary> The Service property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Service { get; }
-        /// <summary> The Rate property of the Entity UpsLocalRate<br/><br/>
+        public System.Int32 Service { get; }
+        /// <summary> The Rate property of the Entity UpsRate<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRate"."Rate"<br/>
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Decimal Rate { get; }
+        public System.Decimal Rate { get; }
         
         
-        IUpsRateTableEntity UpsRateTable { get; }
+        public IUpsRateTableEntity UpsRateTable { get; }
         
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public virtual IUpsRateEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IUpsLocalRateEntity AsReadOnly();
+        public virtual IUpsRateEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         /// <summary>
-        /// Get a read only version of the entity
+        /// Copy any custom data
         /// </summary>
-        IUpsLocalRateEntity AsReadOnly(IDictionary<object, object> objectMap);
-    }
-}
-
-namespace ShipWorks.Data.Model.EntityClasses
-{
-    using ShipWorks.Data.Model.EntityInterfaces;
-    using ShipWorks.Data.Model.ReadOnlyEntityClasses;
-
-    /// <summary>
-    /// Entity interface which represents the entity 'UpsLocalRate'. <br/><br/>
-    /// 
-    /// </summary>
-    public partial class UpsLocalRateEntity : IUpsLocalRateEntity
-    {
-        
-        IUpsRateTableEntity IUpsLocalRateEntity.UpsRateTable => UpsRateTable;
-        
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        public virtual IUpsLocalRateEntity AsReadOnly() =>
-            AsReadOnly(new Dictionary<object, object>());
-
-        /// <summary>
-        /// Get a read only version of the entity that handles cyclic references
-        /// </summary>
-        public virtual IUpsLocalRateEntity AsReadOnly(IDictionary<object, object> objectMap)
-        {
-            if (objectMap.ContainsKey(this))
-            {
-                return (IUpsLocalRateEntity) objectMap[this];
-            }
-
-            objectMap.Add(this, null);
-
-            return new ReadOnlyUpsLocalRateEntity(this, objectMap);
-        }
+        partial void CopyCustomUpsRateData(IUpsRateEntity source);
     }
 }

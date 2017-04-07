@@ -37,8 +37,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IEnumerable<IUpsAccountEntity> UpsAccount { get; }
-        IEnumerable<IUpsLocalRateEntity> UpsLocalRate { get; }
-        IEnumerable<IUpsLocalRateSurchargeEntity> UpsLocalRateSurcharge { get; }
+        IEnumerable<IUpsRateEntity> UpsRate { get; }
+        IEnumerable<IUpsRateSurchargeEntity> UpsRateSurcharge { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -66,8 +66,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         
         IEnumerable<IUpsAccountEntity> IUpsRateTableEntity.UpsAccount => UpsAccount;
-        IEnumerable<IUpsLocalRateEntity> IUpsRateTableEntity.UpsLocalRate => UpsLocalRate;
-        IEnumerable<IUpsLocalRateSurchargeEntity> IUpsRateTableEntity.UpsLocalRateSurcharge => UpsLocalRateSurcharge;
+        IEnumerable<IUpsRateEntity> IUpsRateTableEntity.UpsRate => UpsRate;
+        IEnumerable<IUpsRateSurchargeEntity> IUpsRateTableEntity.UpsRateSurcharge => UpsRateSurcharge;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -17,15 +17,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: UpsLocalRate. </summary>
-	public partial class UpsLocalRateRelations
+	/// <summary>Implements the relations factory for the entity: UpsRate. </summary>
+	public partial class UpsRateRelations
 	{
 		/// <summary>CTor</summary>
-		public UpsLocalRateRelations()
+		public UpsRateRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the UpsLocalRateEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the UpsRateEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
@@ -38,17 +38,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between UpsLocalRateEntity and UpsRateTableEntity over the m:1 relation they have, using the relation between the fields:
-		/// UpsLocalRate.UpsRateTableID - UpsRateTable.UpsRateTableID
+		/// <summary>Returns a new IEntityRelation object, between UpsRateEntity and UpsRateTableEntity over the m:1 relation they have, using the relation between the fields:
+		/// UpsRate.UpsRateTableID - UpsRateTable.UpsRateTableID
 		/// </summary>
 		public virtual IEntityRelation UpsRateTableEntityUsingUpsRateTableID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "UpsRateTable", false);
-				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsLocalRateFields.UpsRateTableID);
+				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsRateFields.UpsRateTableID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsLocalRateEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateEntity", true);
 				return relation;
 			}
 		}
@@ -64,12 +64,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticUpsLocalRateRelations
+	internal static class StaticUpsRateRelations
 	{
-		internal static readonly IEntityRelation UpsRateTableEntityUsingUpsRateTableIDStatic = new UpsLocalRateRelations().UpsRateTableEntityUsingUpsRateTableID;
+		internal static readonly IEntityRelation UpsRateTableEntityUsingUpsRateTableIDStatic = new UpsRateRelations().UpsRateTableEntityUsingUpsRateTableID;
 
 		/// <summary>CTor</summary>
-		static StaticUpsLocalRateRelations()
+		static StaticUpsRateRelations()
 		{
 		}
 	}
