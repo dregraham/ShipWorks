@@ -231,6 +231,7 @@
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTable.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTableRepo.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsRateExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\SurchargeUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingException.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
