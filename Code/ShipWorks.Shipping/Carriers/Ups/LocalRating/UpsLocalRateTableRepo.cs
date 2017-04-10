@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
     /// <summary>
     /// Repository for UpsLocalRateTable
     /// </summary>
+    [Component]
     public class UpsLocalRateTableRepo : IUpsLocalRateTableRepo
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -37,14 +39,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public UpsRateTableEntity Get(UpsAccountEntity accountEntity)
         {
+            UpsRateTableEntity rateTable = null;
+
             if (accountEntity.UpsRateTable != null)
             {
-                return accountEntity.UpsRateTable;
+                rateTable = accountEntity.UpsRateTable;
             }
 
             if (accountEntity.UpsRateTableID != null)
             {
-                UpsRateTableEntity rateTable = new UpsRateTableEntity(accountEntity.UpsRateTableID.Value);
+                rateTable = new UpsRateTableEntity(accountEntity.UpsRateTableID.Value);
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -52,10 +56,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     return rateTable;
                 }
             }
-
-            return null;
+            
+            return rateTable;
         }
-
+        
         /// <summary>
         /// Save the rate table and update the account to use the given rate table
         /// </summary>

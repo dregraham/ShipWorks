@@ -1,17 +1,10 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
     /// <summary>
     /// Represents a repository for LocalRateTable
     /// </summary>
-    [Service]
     public interface IUpsLocalRateTableRepo
     {
         /// <summary>
