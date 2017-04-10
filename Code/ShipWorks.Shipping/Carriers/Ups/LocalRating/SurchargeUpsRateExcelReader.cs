@@ -7,6 +7,7 @@ using Syncfusion.XlsIO;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using System.Globalization;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -15,6 +16,29 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// </summary>
     public class SurchargeUpsRateExcelReader : IUpsRateExcelReader
     {
+        IEnumerable<EnumEntry<UpsSurchargeType>> surchargeTypeMap;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SurchargeUpsRateExcelReader()
+        {
+            surchargeTypeMap = EnumHelper.GetEnumList<UpsSurchargeType>();
+        }
+
+        /// <summary>
+        /// the numbers styles
+        /// </summary>
+        private static NumberStyles NumberStyles =>
+            NumberStyles.AllowLeadingWhite |
+            NumberStyles.AllowTrailingWhite |
+            NumberStyles.AllowLeadingSign |
+            NumberStyles.AllowTrailingSign |
+            NumberStyles.AllowCurrencySymbol |
+            NumberStyles.Integer |
+            NumberStyles.AllowDecimalPoint |
+            NumberStyles.AllowThousands;
+
         /// <summary>
         /// Read the Value Add and Surcharges from the worksheet
         /// </summary>
@@ -40,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the surcharges from the collection of rows
         /// </summary>
-        private static IEnumerable<UpsRateSurchargeEntity> GetSurcharges(IRange[] rows)
+        private IEnumerable<UpsRateSurchargeEntity> GetSurcharges(IRange[] rows)
         {
             foreach (IRange row in rows)
             {
@@ -50,13 +74,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     string name = row.Cells[0].Value;
 
                     // Skip the headers
-                    if (name != "Value Added Service" && name != "Surcharge")
+                    if (!string.IsNullOrEmpty(name) && name != "Value Added Service" && name != "Surcharge")
                     {
                         // try to parse the surcharge type
                         UpsSurchargeType surcharge = GetSurchargType(name);
 
                         double amount;
-                        if (double.TryParse(row.Cells[1].Value, out amount))
+                        if (double.TryParse(row.Cells[1].Value, NumberStyles, CultureInfo.CurrentCulture, out amount))
                         {
                             yield return new UpsRateSurchargeEntity() { SurchargeType = (int)surcharge, Amount = amount };
                         }
@@ -69,16 +93,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Get the surcharge type from the string
         /// </summary>
         /// <exception cref="UpsLocalRatingException">When the surcharge type is unknown</exception>
-        private static UpsSurchargeType GetSurchargType(string name)
+        private UpsSurchargeType GetSurchargType(string name)
         {
-            UpsSurchargeType? surcharge = EnumHelper.TryParseEnum<UpsSurchargeType>(name);
-
-            if (surcharge == null)
+            IEnumerable<EnumEntry<UpsSurchargeType>> surcharge = surchargeTypeMap.Where(e => e.Description == name);
+            
+            if (surcharge.Count() != 1)
             {
                 throw new UpsLocalRatingException($"Unknown Surcharge or Value Add {name}");
             }
 
-            return (UpsSurchargeType) surcharge;
+            return surcharge.First().Value;
         }
     }
 }

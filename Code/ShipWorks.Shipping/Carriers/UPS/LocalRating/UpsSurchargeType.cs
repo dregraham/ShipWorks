@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsSurchargeType
     {
         [Description("No Signature")]
