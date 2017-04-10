@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
             request.Variables.Add("tracking", shipment.TrackingNumber);
-            request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType));
+            request.Variables.Add("carrier", type.GetOnlineCarrierName(shipment));
             request.Variables.Add("shippingcost", shipment.ShipmentCost.ToString());
             request.Variables.Add("shippingdate", FormatDate(shipment.ShipDate));
 
