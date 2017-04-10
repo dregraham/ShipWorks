@@ -56,7 +56,7 @@
             </ui:WaitSpinner>
         </StackPanel>
         <TextBlock Grid.Row="4" Text="{Binding ValidationMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
-                   VerticalAlignment="Top" HorizontalAlignment="Left">
+                   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
             <TextBlock.Style>
                 <Style>
                     <Style.Triggers>
