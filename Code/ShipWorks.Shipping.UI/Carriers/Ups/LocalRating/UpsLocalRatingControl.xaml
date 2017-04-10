@@ -4,18 +4,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              FontFamily="Tahoma"
              FontSize="11"
              d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
              mc:Ignorable="d">
+    <Control.Resources>
+        <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+    </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
+        <WrapPanel>
+            <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
+            <Label 
+                Margin="10 0 0 0" 
+                Content="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}" />
+        </WrapPanel>
         <TextBlock Grid.Row="1"
                    Margin="21 10 0 10"
                    TextWrapping="Wrap">
@@ -29,7 +39,16 @@
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
         </StackPanel>
-        <Button Grid.Row="3"
+        <TextBlock 
+                Grid.Row="3"
+                TextWrapping="Wrap" 
+                Foreground="Red"
+                Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}" 
+                Visibility="{Binding ErrorMessage,
+                                Converter={StaticResource StringToVisibilityConverter},
+                                UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Button Grid.Row="4"
                 Width="73"
                 Height="21"
                 Margin="0 0 0 10"
