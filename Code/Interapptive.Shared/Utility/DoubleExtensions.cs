@@ -14,6 +14,12 @@ namespace Interapptive.Shared.Utility
             Math.Abs(value - number) < .001;
 
         /// <summary>
+        /// Check to see if the double is an int
+        /// </summary>
+        public static bool IsInt(this double value) =>
+            Math.Abs(value % 1) <= Double.Epsilon * 100;
+
+        /// <summary>
         /// Clamp a value to an allowable range
         /// </summary>
         public static double Clamp(this double value, double min, double max)

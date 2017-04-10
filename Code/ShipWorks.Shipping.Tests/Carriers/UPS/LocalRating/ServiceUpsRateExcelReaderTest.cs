@@ -16,9 +16,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
     {
         readonly AutoMock mock;
         private readonly Mock<IUpsLocalRateTable> rateTable;
-        private IEnumerable<UpsPackageRateEntity> readRates;
+        private IEnumerable<UpsPackageRateEntity> readPackageRates;
         private readonly ServiceUpsRateExcelReader testObject;
         private readonly ExcelEngine excelEngine;
+        private IEnumerable<UpsLetterRateEntity> readLetterRates;
+        private IEnumerable<UpsPricePerPoundEntity> readPricesPerPound;
 
         public ServiceUpsRateExcelReaderTest()
         {
@@ -27,7 +29,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
                 table.Setup(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
-                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readRates = rates);
+                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readPackageRates = rates);
+
+                table.Setup(t => t.AddLetterRates(It.IsAny<IEnumerable<UpsLetterRateEntity>>()))
+                    .Callback<IEnumerable<UpsLetterRateEntity>>(rates => readLetterRates = rates);
+
+                table.Setup(t => t.AddPricesPerPound(It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
+                    .Callback<IEnumerable<UpsPricePerPoundEntity>>(prices => readPricesPerPound = prices);
             });
 
             testObject = mock.Create<ServiceUpsRateExcelReader>();
@@ -50,9 +58,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheets sheets = SetupSingleRateSheet();
             testObject.Read(sheets, rateTable.Object);
 
-            Assert.Equal(1, readRates.Count());
+            Assert.Equal(1, readPackageRates.Count());
+            Assert.Null(readPricesPerPound);
+            Assert.Null(readLetterRates);
 
-            UpsPackageRateEntity rate = readRates.Single();
+            UpsPackageRateEntity rate = readPackageRates.Single();
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -60,20 +70,39 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Read_LetterIsStoredWithZeroWeight()
+        public void Read_LetterIsStoredInLetterTable()
         {
             IWorksheets sheets = SetupSingleRateSheet();
             sheets[0].Range["A2"].Text = "Letter";
             
             testObject.Read(sheets, rateTable.Object);
 
-            Assert.Equal(1, readRates.Count());
+            Assert.Null(readPackageRates);
+            Assert.Null(readPricesPerPound);
+            Assert.Equal(1, readLetterRates.Count());
 
-            UpsPackageRateEntity rate = readRates.Single();
+            var rate = readLetterRates.Single();
             Assert.Equal(102, rate.Zone);
-            Assert.Equal(0, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
+        }
+
+        [Fact]
+        public void Read_PricePerPoundIsStoredInPricePerPoundTable()
+        {
+            IWorksheets sheets = SetupSingleRateSheet();
+            sheets[0].Range["A2"].Text = "Price Per Pound";
+
+            testObject.Read(sheets, rateTable.Object);
+
+            Assert.Null(readPackageRates);
+            Assert.Null(readLetterRates);
+            Assert.Equal(1, readPricesPerPound.Count());
+
+            var pricePerPoundEntity = readPricesPerPound.Single();
+            Assert.Equal(102, pricePerPoundEntity.Zone);
+            Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, pricePerPoundEntity.Service);
+            Assert.Equal(42.42m, pricePerPoundEntity.Rate);
         }
 
         private IWorksheets SetupSingleRateSheet()
@@ -84,9 +113,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             sheet.Name = "NDA Early";
             sheet.Range["A1"].Text = "Zones";
-            sheet.Range["B1"].Text = "102";
-            sheet.Range["A2"].Text = "50";
-            sheet.Range["B2"].Text = "42.42";
+            sheet.Range["B1"].Value2 = 102;
+            sheet.Range["A2"].Value2 = 50;
+            sheet.Range["B2"].Value2 = 42.42;
             return sheets;
         }
 
@@ -99,24 +128,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             sheet.Name = "NDA Early";
             sheet.Range["A1"].Text = "Zones";
-            sheet.Range["B1"].Text = "102";
-            sheet.Range["C1"].Text = "103";
+            sheet.Range["B1"].Value2= 102;
+            sheet.Range["C1"].Value2= 103;
 
-            sheet.Range["A2"].Text = "50";
-            sheet.Range["B2"].Text = "42.42";
-            sheet.Range["C2"].Text = "3.50";
+            sheet.Range["A2"].Value2= 50;
+            sheet.Range["B2"].Value2= 42.42;
+            sheet.Range["C2"].Value2= 3.50;
 
             testObject.Read(sheets, rateTable.Object);
 
-            Assert.Equal(2, readRates.Count());
+            Assert.Equal(2, readPackageRates.Count());
 
-            UpsPackageRateEntity rate = readRates.ElementAt(0);
+            UpsPackageRateEntity rate = readPackageRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
-            rate = readRates.ElementAt(1);
+            rate = readPackageRates.ElementAt(1);
             Assert.Equal(103, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -132,27 +161,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheet ndaEarlySheet = sheets[0];
             ndaEarlySheet.Name = "NDA Early";
             ndaEarlySheet.Range["A1"].Text = "Zones";
-            ndaEarlySheet.Range["B1"].Text = "102";
-            ndaEarlySheet.Range["A2"].Text = "50";
-            ndaEarlySheet.Range["B2"].Text = "42.42";
+            ndaEarlySheet.Range["B1"].Value2 = 102;
+            ndaEarlySheet.Range["A2"].Value2 = 50;
+            ndaEarlySheet.Range["B2"].Value2 = 42.42;
 
             IWorksheet ndaSheet = sheets[1];
             ndaSheet.Name = "NDA";
             ndaSheet.Range["A1"].Text = "Zones";
-            ndaSheet.Range["B1"].Text = "400";
-            ndaSheet.Range["A2"].Text = "6";
-            ndaSheet.Range["B2"].Text = "7.25";
+            ndaSheet.Range["B1"].Value2 = 400;
+            ndaSheet.Range["A2"].Value2 = 6;
+            ndaSheet.Range["B2"].Value2 = 7.25;
 
             testObject.Read(sheets, rateTable.Object);
-            Assert.Equal(2, readRates.Count());
+            Assert.Equal(2, readPackageRates.Count());
 
-            UpsPackageRateEntity rate = readRates.ElementAt(0);
+            UpsPackageRateEntity rate = readPackageRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
-            rate = readRates.ElementAt(1);
+            rate = readPackageRates.ElementAt(1);
             Assert.Equal(400, rate.Zone);
             Assert.Equal(6, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAir, rate.Service);

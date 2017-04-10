@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Syncfusion.XlsIO;
@@ -12,14 +14,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.IUpsRateExcelReader" />
     public class ServiceUpsRateExcelReader : IUpsRateExcelReader
     {
-        private List<UpsPackageRateEntity> readRates;
+        private List<UpsPackageRateEntity> readPackageRates;
+        private List<UpsLetterRateEntity> readLetterRates;
+        private List<UpsPricePerPoundEntity> readPricesPerPound;
+
+        public const string LetterLabel = "Letter";
+        public const string PricePerPoundLabel = "Price Per Pound";
 
         /// <summary>
         /// Reads the ups rates excel work sheets and store the rates in to the UpsLocalRateTable
         /// </summary>
         public void Read(IWorksheets rateWorkSheets, IUpsLocalRateTable upsLocalRateTable)
         {
-            readRates = new List<UpsPackageRateEntity>();
+            readPackageRates = new List<UpsPackageRateEntity>();
+            readLetterRates = new List<UpsLetterRateEntity>();
+            readPricesPerPound = new List<UpsPricePerPoundEntity>();
 
             foreach (IWorksheet sheet in rateWorkSheets)
             {
@@ -31,9 +40,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
             }
 
-            if (readRates.Count>0)
+            if (readPackageRates.Any())
             {
-                upsLocalRateTable.AddPackageRates(readRates);
+                upsLocalRateTable.AddPackageRates(readPackageRates);
+            }
+
+            if (readLetterRates.Any())
+            {
+                upsLocalRateTable.AddLetterRates(readLetterRates);
+            }
+
+            if (readPricesPerPound.Any())
+            {
+                upsLocalRateTable.AddPricesPerPound(readPricesPerPound);
             }
         }
 
@@ -56,18 +75,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 IRange[] row = sheet.Rows[rowIndex].Cells;
 
-                int weight = GetWeight(sheet, rowIndex);
+                IRange weightCell = sheet.Rows[rowIndex].Cells[0];
 
                 for (int i = 1; i < row.Length; i++)
                 {
-                    string headerText = headerCells[i].Value;
-                    string rateText = row[i].Value;
+                    IRange headerCell = headerCells[i];
+                    IRange rateCell = row[i];
 
-                    UpsPackageRateEntity rateEntity = ProcessRate(upsServiceType, weight, headerText, rateText);
-                    if (rateEntity != null)
-                    {
-                        readRates.Add(rateEntity);
-                    }
+                    ProcessRate(upsServiceType, weightCell, headerCell, rateCell);
                 }
             }
         }
@@ -75,56 +90,96 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Processes the rate.
         /// </summary>
-        private static UpsPackageRateEntity ProcessRate(UpsServiceType upsServiceType, int weight, string headerText, string rateText)
+        /// <param name="upsServiceType">Type of the ups service.</param>
+        /// <param name="weightCell">The weight cell.</param>
+        /// <param name="headerCell">The header cell.</param>
+        /// <param name="rateCell">The rate cell.</param>
+        /// <exception cref="UpsLocalRatingException">
+        /// </exception>
+        private void ProcessRate(UpsServiceType upsServiceType, IRange weightCell, IRange headerCell, IRange rateCell)
         {
-            if (string.IsNullOrWhiteSpace(headerText) || string.IsNullOrWhiteSpace(rateText))
+            if (!ValidateRate(weightCell, headerCell, rateCell))
             {
-                return null;
+                SaveRateToCollection(upsServiceType, weightCell, headerCell, rateCell);
             }
-
-            int zone;
-            if (!int.TryParse(headerText, out zone))
-            {
-                throw new UpsLocalRatingException($"Header text '{headerText}' must be a number.");
-            }
-
-            decimal rate;
-            if (!decimal.TryParse(rateText, out rate))
-            {
-                throw new UpsLocalRatingException($"Rate text '{rateText}' must be a number.");
-            }
-            
-            return new UpsPackageRateEntity()
-            {
-                Zone = zone,
-                WeightInPounds = weight,
-                Service = (int) upsServiceType,
-                Rate = rate
-            };
         }
 
         /// <summary>
-        /// Gets the weight.
+        /// Validates the rate.
         /// </summary>
-        private static int GetWeight(IWorksheet sheet, int rowIndex)
+        private static bool ValidateRate(IRange weightCell, IRange headerCell, IRange rateCell)
         {
-            IRange[] row = sheet.Rows[rowIndex].Cells;
-
-            int weight;
-            if (row[0].Text == "Letter")
+            // Validate Weight
+            if (string.IsNullOrWhiteSpace(weightCell.Value))
             {
-                weight = 0;
-            }
-            else if (row[0].Text == "Price Per Pound")
-            {
-                weight = -1;
-            }
-            else if (!int.TryParse(row[0].Value, out weight))
-            {
-                throw new UpsLocalRatingException($"Invalid weight on sheet {sheet.Name}, Row {rowIndex}");
+                if (rateCell.EntireRow.Cells.All(c => c.IsBlank))
+                {
+                    return true;
+                }
+                throw new UpsLocalRatingException($"A blank weight found in row {weightCell.Rows}");
             }
 
-            return weight;
+            if (!weightCell.HasNumber && weightCell.Text != PricePerPoundLabel && weightCell.Text != LetterLabel)
+            {
+                throw new UpsLocalRatingException(
+                    $"Weight Value '{weightCell.Text}' must be a number or = \"Letter\" or \"Price Per Pound.\"");
+            }
+
+            if (headerCell.IsBlank || rateCell.IsBlank)
+            {
+                return true;
+            }
+
+            if (!headerCell.HasNumber || !headerCell.Number.IsInt())
+            {
+                throw new UpsLocalRatingException($"Header text '{headerCell.Text}' must be a whole number.");
+            }
+
+            if (!rateCell.HasNumber)
+            {
+                throw new UpsLocalRatingException($"Rate text '{rateCell.Text}' must be a number.");
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Saves the rate to appropriate collection.
+        /// </summary>
+        private void SaveRateToCollection(UpsServiceType upsServiceType, IRange weightCell, IRange headerCell, IRange rateCell)
+        {
+            int zone = Convert.ToInt32(headerCell.Number);
+            decimal rate = Convert.ToDecimal(rateCell.Number);
+            if (weightCell.HasNumber)
+            {
+                UpsPackageRateEntity packageRateEntity = new UpsPackageRateEntity()
+                {
+                    Zone = zone,
+                    WeightInPounds = Convert.ToInt32(weightCell.Number),
+                    Service = (int) upsServiceType,
+                    Rate = rate
+                };
+                readPackageRates.Add(packageRateEntity);
+            }
+            else if (weightCell.Text == PricePerPoundLabel)
+            {
+                UpsPricePerPoundEntity pricePerPoundEntity = new UpsPricePerPoundEntity()
+                {
+                    Zone = zone,
+                    Service = (int) upsServiceType,
+                    Rate = rate
+                };
+                readPricesPerPound.Add(pricePerPoundEntity);
+            }
+            else if (weightCell.Text == LetterLabel)
+            {
+                UpsLetterRateEntity letterRateEntity = new UpsLetterRateEntity()
+                {
+                    Zone = zone,
+                    Service = (int) upsServiceType,
+                    Rate = rate
+                };
+                readLetterRates.Add(letterRateEntity);
+            }
         }
 
         /// <summary>
