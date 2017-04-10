@@ -78,7 +78,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void AddLetterRates(IEnumerable<UpsLetterRateEntity> rates)
         {
-            
+            rateTableEntity.UpsLetterRate.Clear();
+            rateTableEntity.UpsLetterRate.AddRange(rates);
         }
 
         /// <summary>
@@ -86,7 +87,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void AddPricesPerPound(IEnumerable<UpsPricePerPoundEntity> rates)
         {
-            
+            rateTableEntity.UpsPricePerPound.Clear();
+            rateTableEntity.UpsPricePerPound.AddRange(rates);
         }
 
         /// <summary>
