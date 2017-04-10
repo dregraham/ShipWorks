@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// </summary>
     public class SurchargeUpsRateExcelReader : IUpsRateExcelReader
     {
-        IEnumerable<EnumEntry<UpsSurchargeType>> surchargeTypeMap;
+        private readonly IEnumerable<EnumEntry<UpsSurchargeType>> surchargeTypeMap;
 
         /// <summary>
         /// Constructor
