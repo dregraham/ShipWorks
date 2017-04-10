@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using Moq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Save(upsAccount);
 
-            rateTableRepo.Verify(r => r.Save(testObject, upsAccount));
+            rateTableRepo.Verify(r => r.Save(It.IsAny<UpsRateTableEntity>(), upsAccount));
         }
     }
 }

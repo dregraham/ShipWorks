@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void Save(UpsAccountEntity accountEntity)
         {
             rateTableEntity.UploadDate = DateTime.UtcNow;
-            localRateTableRepo.Save(this, accountEntity);
+            localRateTableRepo.Save(rateTableEntity, accountEntity);
         }
 
         /// <summary>

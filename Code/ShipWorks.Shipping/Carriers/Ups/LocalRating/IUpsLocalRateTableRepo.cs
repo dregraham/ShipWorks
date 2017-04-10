@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Save the rate table and update the account to use the given rate table
         /// </summary>
-        void Save(IUpsLocalRateTable rateTable, UpsAccountEntity account);
+        void Save(UpsRateTableEntity rateTable, UpsAccountEntity account);
 
         /// <summary>
         /// Remove rate tables that are not associated with a UpsAccountEntity
