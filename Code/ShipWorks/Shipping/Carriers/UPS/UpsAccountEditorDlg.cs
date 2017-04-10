@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     return;
                 }
 
-                if (!localRatingControlViewModel.Save(account))
+                if (!localRatingControlViewModel.Save())
                 {
                     return;
                 }
