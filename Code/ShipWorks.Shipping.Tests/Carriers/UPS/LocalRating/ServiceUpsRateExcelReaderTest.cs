@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
     {
         readonly AutoMock mock;
         private readonly Mock<IUpsLocalRateTable> rateTable;
-        private IEnumerable<UpsLocalRateEntity> readRates;
+        private IEnumerable<UpsRateEntity> readRates;
         private readonly ServiceUpsRateExcelReader testObject;
         private readonly ExcelEngine excelEngine;
 
@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsLocalRateEntity>>()))
-                    .Callback<IEnumerable<UpsLocalRateEntity>>(rates => readRates = rates);
+                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()))
+                    .Callback<IEnumerable<UpsRateEntity>>(rates => readRates = rates);
             });
 
             testObject = mock.Create<ServiceUpsRateExcelReader>();
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 IWorksheets sheets = SetupSingleRateSheet();
                 testObject.Read(sheets, rateTable.Object);
 
-                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsLocalRateEntity>>()), Times.Once);
+                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Once);
         }
 
         [Fact]
@@ -52,9 +52,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(1, readRates.Count());
 
-            UpsLocalRateEntity rate = readRates.Single();
+            UpsRateEntity rate = readRates.Single();
             Assert.Equal(102, rate.Zone);
-            Assert.Equal(50, rate.Weight);
+            Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
         }
@@ -69,9 +69,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(1, readRates.Count());
 
-            UpsLocalRateEntity rate = readRates.Single();
+            UpsRateEntity rate = readRates.Single();
             Assert.Equal(102, rate.Zone);
-            Assert.Equal(0, rate.Weight);
+            Assert.Equal(0, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
         }
@@ -110,15 +110,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(2, readRates.Count());
 
-            UpsLocalRateEntity rate = readRates.ElementAt(0);
+            UpsRateEntity rate = readRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
-            Assert.Equal(50, rate.Weight);
+            Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
             rate = readRates.ElementAt(1);
             Assert.Equal(103, rate.Zone);
-            Assert.Equal(50, rate.Weight);
+            Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(3.5m, rate.Rate);
         }
@@ -146,15 +146,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.Read(sheets, rateTable.Object);
             Assert.Equal(2, readRates.Count());
 
-            UpsLocalRateEntity rate = readRates.ElementAt(0);
+            UpsRateEntity rate = readRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
-            Assert.Equal(50, rate.Weight);
+            Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
             rate = readRates.ElementAt(1);
             Assert.Equal(400, rate.Zone);
-            Assert.Equal(6, rate.Weight);
+            Assert.Equal(6, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAir, rate.Service);
             Assert.Equal(7.25m, rate.Rate);
         }
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsLocalRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsLocalRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsLocalRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
         }
 
         [Theory]
@@ -216,6 +216,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.NotNull(exception);
             Assert.Contains("blah", exception.Message);
+        }
+
+        [Fact]
+        public void Read_ThrowsLocalRatingException_IfSheetHasNoRows()
+        {
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheets sheets = workbook.Worksheets;
+            IWorksheet sheet = sheets[0];
+
+            sheet.Name = "NDA Early";
+
+            var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
+            Assert.Equal("Sheet NDA Early has no rows.", exception.Message);
         }
 
 

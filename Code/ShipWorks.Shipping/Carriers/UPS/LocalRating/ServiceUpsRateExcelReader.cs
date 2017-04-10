@@ -1,18 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
+    /// <summary>
+    /// Service to read rates from rate file.
+    /// </summary>
+    /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.IUpsRateExcelReader" />
     public class ServiceUpsRateExcelReader : IUpsRateExcelReader
     {
-        private List<UpsLocalRateEntity> readRates;
+        private List<UpsRateEntity> readRates;
 
+        /// <summary>
+        /// Reads the ups rates excel work sheets and store the rates in to the UpsLocalRateTable
+        /// </summary>
         public void Read(IWorksheets rateWorkSheets, IUpsLocalRateTable upsLocalRateTable)
         {
-            readRates = new List<UpsLocalRateEntity>();
+            readRates = new List<UpsRateEntity>();
 
             foreach (IWorksheet sheet in rateWorkSheets)
             {
@@ -30,10 +37,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
         }
 
+        /// <summary>
+        /// Processes a rate sheet from the excel document
+        /// </summary>
+        /// <remarks>
+        /// This method assumes the incoming sheet is a rate sheet and not a surcharge sheet
+        /// </remarks>
         private void ProcessSheet(IWorksheet sheet, UpsServiceType upsServiceType)
         {
-            IRange[] headerCells = sheet.Rows[0].Cells;
+            if (sheet.Rows.Length == 0)
+            {
+                throw new UpsLocalRatingException($"Sheet {sheet.Name} has no rows.");
+            }
 
+            IRange[] headerCells = sheet.Rows[0].Cells;
+            
             for (int rowIndex = 1; rowIndex < sheet.Rows.Length; rowIndex++)
             {
                 IRange[] row = sheet.Rows[rowIndex].Cells;
@@ -45,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     string headerText = headerCells[i].Value;
                     string rateText = row[i].Value;
 
-                    UpsLocalRateEntity rateEntity = ProcessRate(upsServiceType, weight, headerText, rateText);
+                    UpsRateEntity rateEntity = ProcessRate(upsServiceType, weight, headerText, rateText);
                     if (rateEntity != null)
                     {
                         readRates.Add(rateEntity);
@@ -54,7 +72,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
         }
 
-        private static UpsLocalRateEntity ProcessRate(UpsServiceType upsServiceType, int weight, string headerText, string rateText)
+        /// <summary>
+        /// Processes the rate.
+        /// </summary>
+        private static UpsRateEntity ProcessRate(UpsServiceType upsServiceType, int weight, string headerText, string rateText)
         {
             if (string.IsNullOrWhiteSpace(headerText) || string.IsNullOrWhiteSpace(rateText))
             {
@@ -73,15 +94,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 throw new UpsLocalRatingException($"Rate text '{rateText}' must be a number.");
             }
             
-            return new UpsLocalRateEntity()
+            return new UpsRateEntity()
             {
                 Zone = zone,
-                Weight = weight,
+                WeightInPounds = weight,
                 Service = (int) upsServiceType,
                 Rate = rate
             };
         }
 
+        /// <summary>
+        /// Gets the weight.
+        /// </summary>
         private static int GetWeight(IWorksheet sheet, int rowIndex)
         {
             IRange[] row = sheet.Rows[rowIndex].Cells;
@@ -103,6 +127,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             return weight;
         }
 
+        /// <summary>
+        /// Gets the type of the service.
+        /// </summary>
         private UpsServiceType? GetServiceType(string sheetName)
         {
             if (sheetName=="NDA Early")
@@ -112,6 +139,26 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             else if (sheetName=="NDA")
             {
                 return UpsServiceType.UpsNextDayAir;
+            }
+            else if (sheetName == "NDA Saver")
+            {
+                return UpsServiceType.UpsNextDayAirSaver;
+            }
+            else if (sheetName == "2DA AM")
+            {
+                return UpsServiceType.Ups2DayAirAM;
+            }
+            else if (sheetName == "2DA")
+            {
+                return UpsServiceType.Ups2DayAir;
+            } 
+            else if (sheetName == "3DA Select")
+            {
+                return UpsServiceType.Ups3DaySelect;
+            }
+            else if (sheetName == "Ground")
+            {
+                return UpsServiceType.UpsGround;
             }
             else
             {
