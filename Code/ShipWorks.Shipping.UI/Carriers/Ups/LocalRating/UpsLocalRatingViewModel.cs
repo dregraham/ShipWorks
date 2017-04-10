@@ -62,11 +62,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Saves view model information to the UpsAccount
         /// </summary>
-        /// <returns>true when successful or false when register fails</returns>
+        /// <returns>true when successful or false when save fails</returns>
         public bool Save(UpsAccountEntity upsAccount)
         {
             upsAccount.LocalRatingEnabled = LocalRatingEnabled;
 
+            // todo: actually return true or false based on if saving is successful.
             return true;
         }
 
