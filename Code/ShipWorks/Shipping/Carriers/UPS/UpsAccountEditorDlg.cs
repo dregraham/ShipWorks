@@ -84,7 +84,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     return;
                 }
 
-                localRatingControlViewModel.Save(account);
+                if (!localRatingControlViewModel.Save(account))
+                {
+                    return;
+                }
 
                 UpsAccountManager.SaveAccount(account);
                 DialogResult = DialogResult.OK;
