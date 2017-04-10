@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (readRates.Count>0)
             {
-                upsLocalRateTable.AddRates(readRates);
+                upsLocalRateTable.AddPackageRates(readRates);
             }
         }
 

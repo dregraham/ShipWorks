@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
+                table.Setup(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
                     .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readRates = rates);
             });
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 IWorksheets sheets = SetupSingleRateSheet();
                 testObject.Read(sheets, rateTable.Object);
 
-                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Once);
+                rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Once);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Theory]

@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
+                table.Setup(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
                     .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readRates = rates);
             });
 
