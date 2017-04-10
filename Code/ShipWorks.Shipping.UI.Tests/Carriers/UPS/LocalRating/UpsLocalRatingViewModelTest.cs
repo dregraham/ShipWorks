@@ -322,7 +322,37 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             log.Verify(l => l.Error(It.IsAny<string>()));
         }
-        
+
+        [Fact]
+        public void UploadRatingFile_SetsValidatingRatesToFalse_WhenExceptionOccurs()
+        {
+            var openFileDialog = mock.Mock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
+            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+
+            var testObject = mock.Create<UpsLocalRatingViewModel>();
+            // Not calling load here will cause exception
+            testObject.UploadRatingFileCommand.Execute(null);
+
+            Assert.False(testObject.ValidatingRates);
+        }
+
+        [Fact]
+        public void UploadRatingFile_SetsErrorValidatingRatesToTrue_WhenExceptionOccurs()
+        {
+            var openFileDialog = mock.Mock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
+            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+
+            var testObject = mock.Create<UpsLocalRatingViewModel>();
+            // Not calling load here will cause exception
+            testObject.UploadRatingFileCommand.Execute(null);
+
+            Assert.True(testObject.ErrorValidatingRates);
+        }
+
         private Mock<ISaveFileDialog> MockSaveDialog(DialogResult result, Stream stream = null)
         {
             var fileDialogMock = mock.MockRepository.Create<ISaveFileDialog>();

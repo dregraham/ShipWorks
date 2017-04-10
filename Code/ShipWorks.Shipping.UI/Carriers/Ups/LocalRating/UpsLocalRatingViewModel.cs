@@ -42,6 +42,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private string statusMessage;
         private string validationMessage;
         private UpsAccountEntity upsAccount;
+        private bool errorValidatingRates;
+        private bool validatingRates;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
@@ -101,6 +103,26 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             get => validationMessage;
             set => Handler.Set(nameof(ValidationMessage), ref validationMessage, value);
+        }
+
+        /// <summary>
+        /// Whether or not there was an error validating the rate file.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ValidatingRates
+        {
+            get => validatingRates;
+            set => Handler.Set(nameof(ValidatingRates), ref validatingRates, value);
+        }
+
+        /// <summary>
+        /// Whether or not there was an error validating the rate file.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ErrorValidatingRates
+        {
+            get => errorValidatingRates;
+            set => Handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value);
         }
 
         /// <summary>
@@ -174,6 +196,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             {
                 try
                 {
+                    ValidatingRates = true;
                     Stream fileStream = fileDialog.CreateFileStream();
                     rateTable.Load(fileStream);
                     rateTable.Save(upsAccount);
@@ -181,9 +204,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     SetStatusMessage();
                     ValidationMessage = "Local rates have been uploaded successfully";
                     log.Info("Successfully uploaded rate table");
+                    ValidatingRates = false;
                 }
                 catch (Exception e)
                 {
+                    ValidatingRates = false;
+                    ErrorValidatingRates = true;
                     ValidationMessage = $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
                     log.Error($"Error uploading rate table: {e.Message}");
                 }
