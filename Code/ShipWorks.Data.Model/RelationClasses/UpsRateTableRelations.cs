@@ -31,7 +31,9 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.UpsAccountEntityUsingUpsRateTableID);
-			toReturn.Add(this.UpsRateEntityUsingUpsRateTableID);
+			toReturn.Add(this.UpsLetterRateEntityUsingUpsRateTableID);
+			toReturn.Add(this.UpsPackageRateEntityUsingUpsRateTableID);
+			toReturn.Add(this.UpsPricePerPoundEntityUsingUpsRateTableID);
 			toReturn.Add(this.UpsRateSurchargeEntityUsingUpsRateTableID);
 			return toReturn;
 		}
@@ -53,17 +55,47 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between UpsRateTableEntity and UpsRateEntity over the 1:n relation they have, using the relation between the fields:
-		/// UpsRateTable.UpsRateTableID - UpsRate.UpsRateTableID
+		/// <summary>Returns a new IEntityRelation object, between UpsRateTableEntity and UpsLetterRateEntity over the 1:n relation they have, using the relation between the fields:
+		/// UpsRateTable.UpsRateTableID - UpsLetterRate.UpsRateTableID
 		/// </summary>
-		public virtual IEntityRelation UpsRateEntityUsingUpsRateTableID
+		public virtual IEntityRelation UpsLetterRateEntityUsingUpsRateTableID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsRate" , true);
-				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsRateFields.UpsRateTableID);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsLetterRate" , true);
+				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsLetterRateFields.UpsRateTableID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsLetterRateEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between UpsRateTableEntity and UpsPackageRateEntity over the 1:n relation they have, using the relation between the fields:
+		/// UpsRateTable.UpsRateTableID - UpsPackageRate.UpsRateTableID
+		/// </summary>
+		public virtual IEntityRelation UpsPackageRateEntityUsingUpsRateTableID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsPackageRate" , true);
+				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsPackageRateFields.UpsRateTableID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsPackageRateEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between UpsRateTableEntity and UpsPricePerPoundEntity over the 1:n relation they have, using the relation between the fields:
+		/// UpsRateTable.UpsRateTableID - UpsPricePerPound.UpsRateTableID
+		/// </summary>
+		public virtual IEntityRelation UpsPricePerPoundEntityUsingUpsRateTableID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UpsPricePerPound" , true);
+				relation.AddEntityFieldPair(UpsRateTableFields.UpsRateTableID, UpsPricePerPoundFields.UpsRateTableID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsRateTableEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UpsPricePerPoundEntity", false);
 				return relation;
 			}
 		}
@@ -99,7 +131,9 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticUpsRateTableRelations
 	{
 		internal static readonly IEntityRelation UpsAccountEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsAccountEntityUsingUpsRateTableID;
-		internal static readonly IEntityRelation UpsRateEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsRateEntityUsingUpsRateTableID;
+		internal static readonly IEntityRelation UpsLetterRateEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsLetterRateEntityUsingUpsRateTableID;
+		internal static readonly IEntityRelation UpsPackageRateEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsPackageRateEntityUsingUpsRateTableID;
+		internal static readonly IEntityRelation UpsPricePerPoundEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsPricePerPoundEntityUsingUpsRateTableID;
 		internal static readonly IEntityRelation UpsRateSurchargeEntityUsingUpsRateTableIDStatic = new UpsRateTableRelations().UpsRateSurchargeEntityUsingUpsRateTableID;
 
 		/// <summary>CTor</summary>

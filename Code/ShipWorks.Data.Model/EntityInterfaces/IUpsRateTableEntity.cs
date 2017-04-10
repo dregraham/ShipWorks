@@ -37,7 +37,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IEnumerable<IUpsAccountEntity> UpsAccount { get; }
-        IEnumerable<IUpsRateEntity> UpsRate { get; }
+        IEnumerable<IUpsLetterRateEntity> UpsLetterRate { get; }
+        IEnumerable<IUpsPackageRateEntity> UpsPackageRate { get; }
+        IEnumerable<IUpsPricePerPoundEntity> UpsPricePerPound { get; }
         IEnumerable<IUpsRateSurchargeEntity> UpsRateSurcharge { get; }
 
         /// <summary>
@@ -66,7 +68,9 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         
         IEnumerable<IUpsAccountEntity> IUpsRateTableEntity.UpsAccount => UpsAccount;
-        IEnumerable<IUpsRateEntity> IUpsRateTableEntity.UpsRate => UpsRate;
+        IEnumerable<IUpsLetterRateEntity> IUpsRateTableEntity.UpsLetterRate => UpsLetterRate;
+        IEnumerable<IUpsPackageRateEntity> IUpsRateTableEntity.UpsPackageRate => UpsPackageRate;
+        IEnumerable<IUpsPricePerPoundEntity> IUpsRateTableEntity.UpsPricePerPound => UpsPricePerPound;
         IEnumerable<IUpsRateSurchargeEntity> IUpsRateTableEntity.UpsRateSurcharge => UpsRateSurcharge;
 
         /// <summary>

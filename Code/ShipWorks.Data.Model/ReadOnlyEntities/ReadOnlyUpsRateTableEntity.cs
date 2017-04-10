@@ -43,8 +43,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             UpsAccount = source.UpsAccount?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IUpsAccountEntity>();
-            UpsRate = source.UpsRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<IUpsRateEntity>();
+            UpsLetterRate = source.UpsLetterRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsLetterRateEntity>();
+            UpsPackageRate = source.UpsPackageRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsPackageRateEntity>();
+            UpsPricePerPound = source.UpsPricePerPound?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IUpsPricePerPoundEntity>();
             UpsRateSurcharge = source.UpsRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IUpsRateSurchargeEntity>();
 
@@ -69,7 +73,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IEnumerable<IUpsAccountEntity> UpsAccount { get; }
         
-        public IEnumerable<IUpsRateEntity> UpsRate { get; }
+        public IEnumerable<IUpsLetterRateEntity> UpsLetterRate { get; }
+        
+        public IEnumerable<IUpsPackageRateEntity> UpsPackageRate { get; }
+        
+        public IEnumerable<IUpsPricePerPoundEntity> UpsPricePerPound { get; }
         
         public IEnumerable<IUpsRateSurchargeEntity> UpsRateSurcharge { get; }
         

@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
     {
         readonly AutoMock mock;
         private readonly Mock<IUpsLocalRateTable> rateTable;
-        private IEnumerable<UpsRateEntity> readRates;
+        private IEnumerable<UpsPackageRateEntity> readRates;
         private readonly ServiceUpsRateExcelReader testObject;
         private readonly ExcelEngine excelEngine;
 
@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()))
-                    .Callback<IEnumerable<UpsRateEntity>>(rates => readRates = rates);
+                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
+                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readRates = rates);
             });
 
             testObject = mock.Create<ServiceUpsRateExcelReader>();
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 IWorksheets sheets = SetupSingleRateSheet();
                 testObject.Read(sheets, rateTable.Object);
 
-                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Once);
+                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Once);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(1, readRates.Count());
 
-            UpsRateEntity rate = readRates.Single();
+            UpsPackageRateEntity rate = readRates.Single();
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(1, readRates.Count());
 
-            UpsRateEntity rate = readRates.Single();
+            UpsPackageRateEntity rate = readRates.Single();
             Assert.Equal(102, rate.Zone);
             Assert.Equal(0, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.Equal(2, readRates.Count());
 
-            UpsRateEntity rate = readRates.ElementAt(0);
+            UpsPackageRateEntity rate = readRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.Read(sheets, rateTable.Object);
             Assert.Equal(2, readRates.Count());
 
-            UpsRateEntity rate = readRates.ElementAt(0);
+            UpsPackageRateEntity rate = readRates.ElementAt(0);
             Assert.Equal(102, rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()), Times.Never);
+            rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
         }
 
         [Theory]

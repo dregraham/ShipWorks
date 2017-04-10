@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'UpsRate'. <br/><br/>
+    /// Read-only representation of the entity 'UpsLetterRate'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyUpsRateEntity : IUpsRateEntity
+    public partial class ReadOnlyUpsLetterRateEntity : IUpsLetterRateEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyUpsRateEntity(IUpsRateEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyUpsLetterRateEntity(IUpsLetterRateEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,10 +36,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            UpsRateID = source.UpsRateID;
+            UpsLetterRateID = source.UpsLetterRateID;
             UpsRateTableID = source.UpsRateTableID;
             Zone = source.Zone;
-            WeightInPounds = source.WeightInPounds;
             Service = source.Service;
             Rate = source.Rate;
             
@@ -47,43 +46,37 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UpsRateTable = source.UpsRateTable?.AsReadOnly(objectMap);
             
 
-            CopyCustomUpsRateData(source);
+            CopyCustomUpsLetterRateData(source);
         }
 
         
-        /// <summary> The UpsRateID property of the Entity UpsRate<br/><br/>
+        /// <summary> The UpsLetterRateID property of the Entity UpsLetterRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."UpsRateID"<br/>
+        /// <remarks>Mapped on table field: "UpsLetterRate"."UpsLetterRateID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        public System.Int64 UpsRateID { get; }
-        /// <summary> The UpsRateTableID property of the Entity UpsRate<br/><br/>
+        public System.Int64 UpsLetterRateID { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsLetterRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."UpsRateTableID"<br/>
+        /// <remarks>Mapped on table field: "UpsLetterRate"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 UpsRateTableID { get; }
-        /// <summary> The Zone property of the Entity UpsRate<br/><br/>
+        /// <summary> The Zone property of the Entity UpsLetterRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Zone"<br/>
+        /// <remarks>Mapped on table field: "UpsLetterRate"."Zone"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Zone { get; }
-        /// <summary> The WeightInPounds property of the Entity UpsRate<br/><br/>
+        /// <summary> The Service property of the Entity UpsLetterRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."WeightInPounds"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 WeightInPounds { get; }
-        /// <summary> The Service property of the Entity UpsRate<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Service"<br/>
+        /// <remarks>Mapped on table field: "UpsLetterRate"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Service { get; }
-        /// <summary> The Rate property of the Entity UpsRate<br/><br/>
+        /// <summary> The Rate property of the Entity UpsLetterRate<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Rate"<br/>
+        /// <remarks>Mapped on table field: "UpsLetterRate"."Rate"<br/>
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal Rate { get; }
@@ -95,16 +88,16 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsRateEntity AsReadOnly() => this;
+        public virtual IUpsLetterRateEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsRateEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IUpsLetterRateEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomUpsRateData(IUpsRateEntity source);
+        partial void CopyCustomUpsLetterRateData(IUpsLetterRateEntity source);
     }
 }

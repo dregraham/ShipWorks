@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a rates collection to the rate table
         /// </summary>
-        void AddRates(IEnumerable<UpsRateEntity> rates);
+        void AddRates(IEnumerable<UpsPackageRateEntity> rates);
 
         /// <summary>
         /// Add a surcharge collection to the rate table

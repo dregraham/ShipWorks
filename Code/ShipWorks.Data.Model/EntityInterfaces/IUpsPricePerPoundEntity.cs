@@ -15,45 +15,39 @@ using System.Linq;
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
-    /// Entity interface which represents the entity 'UpsRate'. <br/><br/>
+    /// Entity interface which represents the entity 'UpsPricePerPound'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IUpsRateEntity
+    public partial interface IUpsPricePerPoundEntity
     {
         
-        /// <summary> The UpsRateID property of the Entity UpsRate<br/><br/>
+        /// <summary> The UpsPricePerPoundID property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."UpsRateID"<br/>
+        /// <remarks>Mapped on table field: "UpsPricePerPound"."UpsPricePerPoundID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        System.Int64 UpsRateID { get; }
-        /// <summary> The UpsRateTableID property of the Entity UpsRate<br/><br/>
+        System.Int64 UpsPricePerPoundID { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."UpsRateTableID"<br/>
+        /// <remarks>Mapped on table field: "UpsPricePerPound"."UpsRateTableID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 UpsRateTableID { get; }
-        /// <summary> The Zone property of the Entity UpsRate<br/><br/>
+        /// <summary> The Zone property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Zone"<br/>
+        /// <remarks>Mapped on table field: "UpsPricePerPound"."Zone"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 Zone { get; }
-        /// <summary> The WeightInPounds property of the Entity UpsRate<br/><br/>
+        /// <summary> The Service property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."WeightInPounds"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 WeightInPounds { get; }
-        /// <summary> The Service property of the Entity UpsRate<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Service"<br/>
+        /// <remarks>Mapped on table field: "UpsPricePerPound"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 Service { get; }
-        /// <summary> The Rate property of the Entity UpsRate<br/><br/>
+        /// <summary> The Rate property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UpsRate"."Rate"<br/>
+        /// <remarks>Mapped on table field: "UpsPricePerPound"."Rate"<br/>
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Rate { get; }
@@ -65,12 +59,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IUpsRateEntity AsReadOnly();
+        IUpsPricePerPoundEntity AsReadOnly();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IUpsRateEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IUpsPricePerPoundEntity AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 
@@ -80,34 +74,34 @@ namespace ShipWorks.Data.Model.EntityClasses
     using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 
     /// <summary>
-    /// Entity interface which represents the entity 'UpsRate'. <br/><br/>
+    /// Entity interface which represents the entity 'UpsPricePerPound'. <br/><br/>
     /// 
     /// </summary>
-    public partial class UpsRateEntity : IUpsRateEntity
+    public partial class UpsPricePerPoundEntity : IUpsPricePerPoundEntity
     {
         
-        IUpsRateTableEntity IUpsRateEntity.UpsRateTable => UpsRateTable;
+        IUpsRateTableEntity IUpsPricePerPoundEntity.UpsRateTable => UpsRateTable;
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IUpsRateEntity AsReadOnly() =>
+        public virtual IUpsPricePerPoundEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IUpsRateEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public virtual IUpsPricePerPoundEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
-                return (IUpsRateEntity) objectMap[this];
+                return (IUpsPricePerPoundEntity) objectMap[this];
             }
 
             objectMap.Add(this, null);
 
-            return new ReadOnlyUpsRateEntity(this, objectMap);
+            return new ReadOnlyUpsPricePerPoundEntity(this, objectMap);
         }
     }
 }

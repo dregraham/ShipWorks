@@ -33,7 +33,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<UpsAccountEntity> _upsAccount;
-		private EntityCollection<UpsRateEntity> _upsRate;
+		private EntityCollection<UpsLetterRateEntity> _upsLetterRate;
+		private EntityCollection<UpsPackageRateEntity> _upsPackageRate;
+		private EntityCollection<UpsPricePerPoundEntity> _upsPricePerPound;
 		private EntityCollection<UpsRateSurchargeEntity> _upsRateSurcharge;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -49,8 +51,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name UpsAccount</summary>
 			public static readonly string UpsAccount = "UpsAccount";
-			/// <summary>Member name UpsRate</summary>
-			public static readonly string UpsRate = "UpsRate";
+			/// <summary>Member name UpsLetterRate</summary>
+			public static readonly string UpsLetterRate = "UpsLetterRate";
+			/// <summary>Member name UpsPackageRate</summary>
+			public static readonly string UpsPackageRate = "UpsPackageRate";
+			/// <summary>Member name UpsPricePerPound</summary>
+			public static readonly string UpsPricePerPound = "UpsPricePerPound";
 			/// <summary>Member name UpsRateSurcharge</summary>
 			public static readonly string UpsRateSurcharge = "UpsRateSurcharge";
 		}
@@ -111,7 +117,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_upsAccount = (EntityCollection<UpsAccountEntity>)info.GetValue("_upsAccount", typeof(EntityCollection<UpsAccountEntity>));
-				_upsRate = (EntityCollection<UpsRateEntity>)info.GetValue("_upsRate", typeof(EntityCollection<UpsRateEntity>));
+				_upsLetterRate = (EntityCollection<UpsLetterRateEntity>)info.GetValue("_upsLetterRate", typeof(EntityCollection<UpsLetterRateEntity>));
+				_upsPackageRate = (EntityCollection<UpsPackageRateEntity>)info.GetValue("_upsPackageRate", typeof(EntityCollection<UpsPackageRateEntity>));
+				_upsPricePerPound = (EntityCollection<UpsPricePerPoundEntity>)info.GetValue("_upsPricePerPound", typeof(EntityCollection<UpsPricePerPoundEntity>));
 				_upsRateSurcharge = (EntityCollection<UpsRateSurchargeEntity>)info.GetValue("_upsRateSurcharge", typeof(EntityCollection<UpsRateSurchargeEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -131,8 +139,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "UpsAccount":
 					this.UpsAccount.Add((UpsAccountEntity)entity);
 					break;
-				case "UpsRate":
-					this.UpsRate.Add((UpsRateEntity)entity);
+				case "UpsLetterRate":
+					this.UpsLetterRate.Add((UpsLetterRateEntity)entity);
+					break;
+				case "UpsPackageRate":
+					this.UpsPackageRate.Add((UpsPackageRateEntity)entity);
+					break;
+				case "UpsPricePerPound":
+					this.UpsPricePerPound.Add((UpsPricePerPoundEntity)entity);
 					break;
 				case "UpsRateSurcharge":
 					this.UpsRateSurcharge.Add((UpsRateSurchargeEntity)entity);
@@ -162,8 +176,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "UpsAccount":
 					toReturn.Add(Relations.UpsAccountEntityUsingUpsRateTableID);
 					break;
-				case "UpsRate":
-					toReturn.Add(Relations.UpsRateEntityUsingUpsRateTableID);
+				case "UpsLetterRate":
+					toReturn.Add(Relations.UpsLetterRateEntityUsingUpsRateTableID);
+					break;
+				case "UpsPackageRate":
+					toReturn.Add(Relations.UpsPackageRateEntityUsingUpsRateTableID);
+					break;
+				case "UpsPricePerPound":
+					toReturn.Add(Relations.UpsPricePerPoundEntityUsingUpsRateTableID);
 					break;
 				case "UpsRateSurcharge":
 					toReturn.Add(Relations.UpsRateSurchargeEntityUsingUpsRateTableID);
@@ -199,8 +219,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "UpsAccount":
 					this.UpsAccount.Add((UpsAccountEntity)relatedEntity);
 					break;
-				case "UpsRate":
-					this.UpsRate.Add((UpsRateEntity)relatedEntity);
+				case "UpsLetterRate":
+					this.UpsLetterRate.Add((UpsLetterRateEntity)relatedEntity);
+					break;
+				case "UpsPackageRate":
+					this.UpsPackageRate.Add((UpsPackageRateEntity)relatedEntity);
+					break;
+				case "UpsPricePerPound":
+					this.UpsPricePerPound.Add((UpsPricePerPoundEntity)relatedEntity);
 					break;
 				case "UpsRateSurcharge":
 					this.UpsRateSurcharge.Add((UpsRateSurchargeEntity)relatedEntity);
@@ -221,8 +247,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "UpsAccount":
 					this.PerformRelatedEntityRemoval(this.UpsAccount, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "UpsRate":
-					this.PerformRelatedEntityRemoval(this.UpsRate, relatedEntity, signalRelatedEntityManyToOne);
+				case "UpsLetterRate":
+					this.PerformRelatedEntityRemoval(this.UpsLetterRate, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "UpsPackageRate":
+					this.PerformRelatedEntityRemoval(this.UpsPackageRate, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "UpsPricePerPound":
+					this.PerformRelatedEntityRemoval(this.UpsPricePerPound, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "UpsRateSurcharge":
 					this.PerformRelatedEntityRemoval(this.UpsRateSurcharge, relatedEntity, signalRelatedEntityManyToOne);
@@ -255,7 +287,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.UpsAccount);
-			toReturn.Add(this.UpsRate);
+			toReturn.Add(this.UpsLetterRate);
+			toReturn.Add(this.UpsPackageRate);
+			toReturn.Add(this.UpsPricePerPound);
 			toReturn.Add(this.UpsRateSurcharge);
 			return toReturn;
 		}
@@ -269,7 +303,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_upsAccount", ((_upsAccount!=null) && (_upsAccount.Count>0) && !this.MarkedForDeletion)?_upsAccount:null);
-				info.AddValue("_upsRate", ((_upsRate!=null) && (_upsRate.Count>0) && !this.MarkedForDeletion)?_upsRate:null);
+				info.AddValue("_upsLetterRate", ((_upsLetterRate!=null) && (_upsLetterRate.Count>0) && !this.MarkedForDeletion)?_upsLetterRate:null);
+				info.AddValue("_upsPackageRate", ((_upsPackageRate!=null) && (_upsPackageRate.Count>0) && !this.MarkedForDeletion)?_upsPackageRate:null);
+				info.AddValue("_upsPricePerPound", ((_upsPricePerPound!=null) && (_upsPricePerPound.Count>0) && !this.MarkedForDeletion)?_upsPricePerPound:null);
 				info.AddValue("_upsRateSurcharge", ((_upsRateSurcharge!=null) && (_upsRateSurcharge.Count>0) && !this.MarkedForDeletion)?_upsRateSurcharge:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -295,12 +331,30 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsRate' to this entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsLetterRate' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoUpsRate()
+		public virtual IRelationPredicateBucket GetRelationInfoUpsLetterRate()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsRateFields.UpsRateTableID, null, ComparisonOperator.Equal, this.UpsRateTableID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsLetterRateFields.UpsRateTableID, null, ComparisonOperator.Equal, this.UpsRateTableID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsPackageRate' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoUpsPackageRate()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsPackageRateFields.UpsRateTableID, null, ComparisonOperator.Equal, this.UpsRateTableID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UpsPricePerPound' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoUpsPricePerPound()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsPricePerPoundFields.UpsRateTableID, null, ComparisonOperator.Equal, this.UpsRateTableID));
 			return bucket;
 		}
 
@@ -326,7 +380,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._upsAccount);
-			collectionsQueue.Enqueue(this._upsRate);
+			collectionsQueue.Enqueue(this._upsLetterRate);
+			collectionsQueue.Enqueue(this._upsPackageRate);
+			collectionsQueue.Enqueue(this._upsPricePerPound);
 			collectionsQueue.Enqueue(this._upsRateSurcharge);
 		}
 		
@@ -336,7 +392,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._upsAccount = (EntityCollection<UpsAccountEntity>) collectionsQueue.Dequeue();
-			this._upsRate = (EntityCollection<UpsRateEntity>) collectionsQueue.Dequeue();
+			this._upsLetterRate = (EntityCollection<UpsLetterRateEntity>) collectionsQueue.Dequeue();
+			this._upsPackageRate = (EntityCollection<UpsPackageRateEntity>) collectionsQueue.Dequeue();
+			this._upsPricePerPound = (EntityCollection<UpsPricePerPoundEntity>) collectionsQueue.Dequeue();
 			this._upsRateSurcharge = (EntityCollection<UpsRateSurchargeEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -347,7 +405,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			bool toReturn = false;
 			toReturn |=(this._upsAccount != null);
-			toReturn |=(this._upsRate != null);
+			toReturn |=(this._upsLetterRate != null);
+			toReturn |=(this._upsPackageRate != null);
+			toReturn |=(this._upsPricePerPound != null);
 			toReturn |=(this._upsRateSurcharge != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
@@ -359,7 +419,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsAccountEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsAccountEntityFactory))) : null);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsLetterRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsLetterRateEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsPackageRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsPackageRateEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsPricePerPoundEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsPricePerPoundEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UpsRateSurchargeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateSurchargeEntityFactory))) : null);
 		}
 #endif
@@ -369,7 +431,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("UpsAccount", _upsAccount);
-			toReturn.Add("UpsRate", _upsRate);
+			toReturn.Add("UpsLetterRate", _upsLetterRate);
+			toReturn.Add("UpsPackageRate", _upsPackageRate);
+			toReturn.Add("UpsPricePerPound", _upsPricePerPound);
 			toReturn.Add("UpsRateSurcharge", _upsRateSurcharge);
 			return toReturn;
 		}
@@ -437,11 +501,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get	{ return new PrefetchPathElement2( new EntityCollection<UpsAccountEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsAccountEntityFactory))), (IEntityRelation)GetRelationsForField("UpsAccount")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, (int)ShipWorks.Data.Model.EntityType.UpsAccountEntity, 0, null, null, null, null, "UpsAccount", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsRate' for this entity.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsLetterRate' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathUpsRate
+		public static IPrefetchPathElement2 PrefetchPathUpsLetterRate
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<UpsRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateEntityFactory))), (IEntityRelation)GetRelationsForField("UpsRate")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, (int)ShipWorks.Data.Model.EntityType.UpsRateEntity, 0, null, null, null, null, "UpsRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<UpsLetterRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsLetterRateEntityFactory))), (IEntityRelation)GetRelationsForField("UpsLetterRate")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, (int)ShipWorks.Data.Model.EntityType.UpsLetterRateEntity, 0, null, null, null, null, "UpsLetterRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsPackageRate' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathUpsPackageRate
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<UpsPackageRateEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsPackageRateEntityFactory))), (IEntityRelation)GetRelationsForField("UpsPackageRate")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, (int)ShipWorks.Data.Model.EntityType.UpsPackageRateEntity, 0, null, null, null, null, "UpsPackageRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsPricePerPound' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathUpsPricePerPound
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<UpsPricePerPoundEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UpsPricePerPoundEntityFactory))), (IEntityRelation)GetRelationsForField("UpsPricePerPound")[0], (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, (int)ShipWorks.Data.Model.EntityType.UpsPricePerPoundEntity, 0, null, null, null, null, "UpsPricePerPound", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsRateSurcharge' for this entity.</summary>
@@ -502,11 +580,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return GetOrCreateEntityCollection<UpsAccountEntity, UpsAccountEntityFactory>("UpsRateTable", true, false, ref _upsAccount);	}
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'UpsRateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(UpsRateEntity))]
-		public virtual EntityCollection<UpsRateEntity> UpsRate
+		/// <summary> Gets the EntityCollection with the related entities of type 'UpsLetterRateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(UpsLetterRateEntity))]
+		public virtual EntityCollection<UpsLetterRateEntity> UpsLetterRate
 		{
-			get { return GetOrCreateEntityCollection<UpsRateEntity, UpsRateEntityFactory>("UpsRateTable", true, false, ref _upsRate);	}
+			get { return GetOrCreateEntityCollection<UpsLetterRateEntity, UpsLetterRateEntityFactory>("UpsRateTable", true, false, ref _upsLetterRate);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageRateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(UpsPackageRateEntity))]
+		public virtual EntityCollection<UpsPackageRateEntity> UpsPackageRate
+		{
+			get { return GetOrCreateEntityCollection<UpsPackageRateEntity, UpsPackageRateEntityFactory>("UpsRateTable", true, false, ref _upsPackageRate);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPricePerPoundEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(UpsPricePerPoundEntity))]
+		public virtual EntityCollection<UpsPricePerPoundEntity> UpsPricePerPound
+		{
+			get { return GetOrCreateEntityCollection<UpsPricePerPoundEntity, UpsPricePerPoundEntityFactory>("UpsRateTable", true, false, ref _upsPricePerPound);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsRateSurchargeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

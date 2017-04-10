@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
     public class ServiceUpsRateExcelReaderTest : IDisposable
     {
         readonly AutoMock mock;
-        private IEnumerable<UpsRateEntity> readRates;
+        private IEnumerable<UpsPackageRateEntity> readRates;
         private readonly ExcelEngine excelEngine;
         private readonly IWorkbook sampleExcelFile;
         private readonly Mock<IUpsLocalRateTable> rateTable;
@@ -28,8 +28,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsRateEntity>>()))
-                    .Callback<IEnumerable<UpsRateEntity>>(rates => readRates = rates);
+                table.Setup(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
+                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readRates = rates);
             });
 
             excelEngine = new ExcelEngine();

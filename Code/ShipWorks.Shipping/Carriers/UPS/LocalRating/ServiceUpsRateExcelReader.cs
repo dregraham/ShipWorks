@@ -12,14 +12,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.IUpsRateExcelReader" />
     public class ServiceUpsRateExcelReader : IUpsRateExcelReader
     {
-        private List<UpsRateEntity> readRates;
+        private List<UpsPackageRateEntity> readRates;
 
         /// <summary>
         /// Reads the ups rates excel work sheets and store the rates in to the UpsLocalRateTable
         /// </summary>
         public void Read(IWorksheets rateWorkSheets, IUpsLocalRateTable upsLocalRateTable)
         {
-            readRates = new List<UpsRateEntity>();
+            readRates = new List<UpsPackageRateEntity>();
 
             foreach (IWorksheet sheet in rateWorkSheets)
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     string headerText = headerCells[i].Value;
                     string rateText = row[i].Value;
 
-                    UpsRateEntity rateEntity = ProcessRate(upsServiceType, weight, headerText, rateText);
+                    UpsPackageRateEntity rateEntity = ProcessRate(upsServiceType, weight, headerText, rateText);
                     if (rateEntity != null)
                     {
                         readRates.Add(rateEntity);
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Processes the rate.
         /// </summary>
-        private static UpsRateEntity ProcessRate(UpsServiceType upsServiceType, int weight, string headerText, string rateText)
+        private static UpsPackageRateEntity ProcessRate(UpsServiceType upsServiceType, int weight, string headerText, string rateText)
         {
             if (string.IsNullOrWhiteSpace(headerText) || string.IsNullOrWhiteSpace(rateText))
             {
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 throw new UpsLocalRatingException($"Rate text '{rateText}' must be a number.");
             }
             
-            return new UpsRateEntity()
+            return new UpsPackageRateEntity()
             {
                 Zone = zone,
                 WeightInPounds = weight,

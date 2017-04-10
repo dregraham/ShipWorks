@@ -5927,23 +5927,61 @@ PRINT N'Creating primary key [PK_UpsRateTable] on [dbo].[UpsRateTable]'
 GO
 ALTER TABLE [UpsRateTable] ADD CONSTRAINT [PK_UpsRateTable] PRIMARY KEY CLUSTERED ([UpsRateTableID])
 GO
-PRINT N'Creating [dbo].[UpsRate]'
+PRINT N'Creating [dbo].[UpsPackageRate]'
 GO
-CREATE TABLE [dbo].[UpsRate](
-	[UpsRateID] [bigint] NOT NULL,
+CREATE TABLE [dbo].[UpsPackageRate](
+	[UpsPackageRateID] [bigint] NOT NULL,
 	[UpsRateTableID][bigint] NOT NULL,
 	[Zone][int] NOT NULL,
 	[WeightInPounds][int] NOT NULL,
 	[Service][int] NOT NULL,
 	[Rate][Money] NOT NULL)
 GO
-PRINT N'Creating primary key [PK_UpsRate] on [dbo].[UpsRate]'
+PRINT N'Creating primary key [PK_UpsPackageRate] on [dbo].[UpsPackageRate]'
 GO
-ALTER TABLE [dbo].[UpsRate] ADD CONSTRAINT [PK_UpsRate] PRIMARY KEY CLUSTERED ([UpsRateID])
+ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [PK_UpsPackageRate] PRIMARY KEY CLUSTERED ([UpsPackageRateID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsPackageRate]'
+ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [FK_UpsPackageRate_UpsPackageRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[UpsLetterRate]'
+GO
+CREATE TABLE [dbo].[UpsLetterRate](
+	[UpsLetterRateID] [bigint] NOT NULL,
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][int] NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
+GO
+PRINT N'Creating primary key [PK_UpsLetterRate] on [dbo].[UpsLetterRate]'
+GO
+ALTER TABLE [dbo].[UpsLetterRate] ADD CONSTRAINT [PK_UpsLetterRate] PRIMARY KEY CLUSTERED ([UpsLetterRateID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsLetterRate]'
+ALTER TABLE [dbo].[UpsLetterRate] ADD CONSTRAINT [FK_UpsLetterRate_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[UpsPricePerPound]'
+GO
+CREATE TABLE [dbo].[UpsPricePerPound](
+	[UpsPricePerPoundID] [bigint] NOT NULL,
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][int] NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
+GO
+PRINT N'Creating primary key [PK_UpsPricePerPound] on [dbo].[UpsPricePerPound]'
+GO
+ALTER TABLE [dbo].[UpsPricePerPound] ADD CONSTRAINT [PK_UpsPricePerPound] PRIMARY KEY CLUSTERED ([UpsPricePerPoundID])
 GO
 PRINT N'Adding foreign keys to [dbo].[UpsRate]'
-ALTER TABLE [dbo].[UpsRate] ADD CONSTRAINT [FK_UpsRate_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+ALTER TABLE [dbo].[UpsPricePerPound] ADD CONSTRAINT [FK_UpsPricePerPound_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
 ON DELETE CASCADE
+GO
+
 GO
 PRINT N'Creating [dbo].[UpsRateSurcharge]'
 GO

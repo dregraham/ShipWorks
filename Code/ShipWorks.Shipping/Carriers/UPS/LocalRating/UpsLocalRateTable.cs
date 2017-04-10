@@ -67,10 +67,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a rates collection to the rate table
         /// </summary>
-        public void AddRates(IEnumerable<UpsRateEntity> rates)
+        public void AddRates(IEnumerable<UpsPackageRateEntity> rates)
         {
-            rateTableEntity.UpsRate.Clear();
-            rateTableEntity.UpsRate.AddRange(rates);
+            rateTableEntity.UpsPackageRate.Clear();
+            rateTableEntity.UpsPackageRate.AddRange(rates);
         }
 
         /// <summary>
