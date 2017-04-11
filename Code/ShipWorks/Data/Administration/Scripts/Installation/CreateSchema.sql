@@ -5920,7 +5920,7 @@ GO
 PRINT N'Creating [dbo].[UpsRateTable]'
 GO
 CREATE TABLE [dbo].[UpsRateTable](
-	[UpsRateTableID] [bigint] NOT NULL,
+	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UploadDate][DateTime2] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsRateTable] on [dbo].[UpsRateTable]'
@@ -5930,7 +5930,7 @@ GO
 PRINT N'Creating [dbo].[UpsPackageRate]'
 GO
 CREATE TABLE [dbo].[UpsPackageRate](
-	[UpsPackageRateID] [bigint] NOT NULL,
+	[UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
 	[Zone][int] NOT NULL,
 	[WeightInPounds][int] NOT NULL,
@@ -5949,7 +5949,7 @@ GO
 PRINT N'Creating [dbo].[UpsLetterRate]'
 GO
 CREATE TABLE [dbo].[UpsLetterRate](
-	[UpsLetterRateID] [bigint] NOT NULL,
+	[UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
 	[Zone][int] NOT NULL,
 	[Service][int] NOT NULL,
@@ -5967,7 +5967,7 @@ GO
 PRINT N'Creating [dbo].[UpsPricePerPound]'
 GO
 CREATE TABLE [dbo].[UpsPricePerPound](
-	[UpsPricePerPoundID] [bigint] NOT NULL,
+	[UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
 	[Zone][int] NOT NULL,
 	[Service][int] NOT NULL,
@@ -5986,7 +5986,7 @@ GO
 PRINT N'Creating [dbo].[UpsRateSurcharge]'
 GO
 CREATE TABLE [dbo].[UpsRateSurcharge](
-	[UpsRateSurchargeID] [bigint] NOT NULL,
+	[UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
 	[SurchargeType][int] NOT NULL,
 	[Amount][float] NOT NULL)
