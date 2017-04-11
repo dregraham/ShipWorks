@@ -220,11 +220,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     log.Info("Successfully uploaded rate table");
                     ValidatingRates = false;
                 }
-                catch (UpsLocalRatingException e)
+                catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
                     ValidatingRates = false;
                     ErrorValidatingRates = true;
-                    ValidationMessage = $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
+                    ValidationMessage =
+                        $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
                     log.Error($"Error uploading rate table: {e.Message}");
                 }
             }

@@ -61,10 +61,16 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Gets the file with the name chosen by the user from ShowOpenFile or ShowSaveFile.
         /// </summary>
-        /// <exception cref="UnauthorizedAccessException" />
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
+            try
+            {
+                return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
+            }
+            catch (Exception ex)
+            {
+                throw new ShipWorksOpenFileDialogException(ex.Message, ex);
+            }
         }
     }
 }
