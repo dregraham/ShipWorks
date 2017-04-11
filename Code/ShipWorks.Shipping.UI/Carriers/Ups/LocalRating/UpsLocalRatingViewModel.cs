@@ -59,7 +59,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.messageHelper = messageHelper;
             log = logFactory(GetType());
 
-
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -168,8 +167,25 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 return;
             }
 
-            Assembly shippingAssembly = Assembly.GetAssembly(GetType());
+            try
+            {
+                SaveFile(fileDialog);
 
+                fileDialog.ShowFile();
+            }
+            catch (ShipWorksSaveFileDialogException e)
+            {
+                messageHelper.ShowError(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Saves the file.
+        /// </summary>
+        /// <param name="fileDialog">The file dialog.</param>
+        private void SaveFile(ISaveFileDialog fileDialog)
+        {
+            Assembly shippingAssembly = Assembly.GetAssembly(GetType());
             using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleFileResourceName))
             {
                 using (Stream selectedFileStream = fileDialog.CreateFileStream())
@@ -177,8 +193,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     resourceStream.CopyTo(selectedFileStream);
                 }
             }
-
-            fileDialog.ShowFile();
         }
 
         /// <summary>

@@ -22,6 +22,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             "Local rates is an experimental feature and for rating purposes only. It does not affect billing. Please ensure the rates uploaded match the rates on your UPS account.\n\n" +
             "Note: All previously uploaded rates will be overwritten with the new rates.";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpsLocalRatingViewModelTest"/> class.
+        /// </summary>
         public UpsLocalRatingViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
