@@ -81,8 +81,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         [Obfuscation(Exclude = true)]
         public bool LocalRatingEnabled
         {
-            get => localRatingEnabled;
-            set => Handler.Set(nameof(LocalRatingEnabled), ref localRatingEnabled, value);
+            get { return localRatingEnabled; }
+            set { Handler.Set(nameof(LocalRatingEnabled), ref localRatingEnabled, value); }
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         [Obfuscation(Exclude = true)]
         public string StatusMessage
         {
-            get => statusMessage;
-            set => Handler.Set(nameof(StatusMessage), ref statusMessage, value);
+            get { return statusMessage; }
+            set { Handler.Set(nameof(StatusMessage), ref statusMessage, value); }
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         [Obfuscation(Exclude = true)]
         public string ValidationMessage
         {
-            get => validationMessage;
-            set => Handler.Set(nameof(ValidationMessage), ref validationMessage, value);
+            get { return validationMessage; }
+            set { Handler.Set(nameof(ValidationMessage), ref validationMessage, value); }
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         [Obfuscation(Exclude = true)]
         public bool ValidatingRates
         {
-            get => validatingRates;
-            set => Handler.Set(nameof(ValidatingRates), ref validatingRates, value);
+            get { return validatingRates; }
+            set { Handler.Set(nameof(ValidatingRates), ref validatingRates, value); }
         }
 
         /// <summary>
@@ -121,8 +121,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         [Obfuscation(Exclude = true)]
         public bool ErrorValidatingRates
         {
-            get => errorValidatingRates;
-            set => Handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value);
+            get { return errorValidatingRates; }
+            set { Handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value); }
         }
 
         /// <summary>
