@@ -50,11 +50,12 @@
                 Command="{Binding UploadRatingFileCommand}">
             Browse...
         </Button>
-        <StackPanel Grid.Row="4" Visibility="{Binding ValidatingRates, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ui:WaitSpinner BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
-                Uploading rate table
-            </ui:WaitSpinner>
-        </StackPanel>
+        
+        <ui:WaitSpinner Grid.Row="4" Visibility="{Binding ValidatingRates, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
+            Uploading rate table
+        </ui:WaitSpinner>
+        
         <TextBlock Grid.Row="4" Text="{Binding ValidationMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
             <TextBlock.Style>

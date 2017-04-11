@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -199,27 +200,30 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Uploads the rating File.
         /// </summary>
-        private void UploadRatingFile()
+        private async void UploadRatingFile()
         {
             messageHelper.ShowWarning(WarningMessage);
 
             IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
-
+            
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     ValidatingRates = true;
-                    Stream fileStream = fileDialog.CreateFileStream();
-                    rateTable.Load(fileStream);
-                    rateTable.Save(upsAccount);
+                    await Task.Run(() =>
+                    {
+                        Stream fileStream = fileDialog.CreateFileStream();
+                        rateTable.Load(fileStream);
+                        rateTable.Save(upsAccount);
 
-                    SetStatusMessage();
-                    ValidationMessage = "Local rates have been uploaded successfully";
-                    log.Info("Successfully uploaded rate table");
-                    ValidatingRates = false;
+                        SetStatusMessage();
+                        ValidationMessage = "Local rates have been uploaded successfully";
+                        log.Info("Successfully uploaded rate table");
+                        ValidatingRates = false;
+                    });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -231,7 +235,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 }
             }
         }
-
+        
         /// <summary>
         /// Sets the status message.
         /// </summary>
