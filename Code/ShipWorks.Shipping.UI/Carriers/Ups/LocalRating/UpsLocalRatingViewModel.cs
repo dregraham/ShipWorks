@@ -130,7 +130,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public void Load(UpsAccountEntity account)
         {
             LocalRatingEnabled = account.LocalRatingEnabled;
-            
+            rateTable.Load(account);
+
             upsAccount = account;
             SetStatusMessage();
         }
@@ -236,9 +237,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void SetStatusMessage()
         {
-            StatusMessage = upsAccount.UpsRateTable?.UploadDate == null ?
+            StatusMessage = rateTable.UploadDate == null ?
                 "There is no rate table associated with the selected account" :
-                $"Last Upload: {upsAccount.UpsRateTable.UploadDate:g}";
+                $"Last Upload: {rateTable.UploadDate:g}";
         }
     }
 }

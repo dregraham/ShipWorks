@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,9 +11,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public interface IUpsLocalRateTable
     {
         /// <summary>
+        /// The date of the rate upload
+        /// </summary>
+        DateTime? UploadDate { get; }
+
+        /// <summary>
         /// Load the rate table from a stream
         /// </summary>
         void Load(Stream stream);
+
+        /// <summary>
+        /// Load the rate table from a UpsAccountEntity
+        /// </summary>
+        void Load(UpsAccountEntity account);
 
         /// <summary>
         /// Save the rate table

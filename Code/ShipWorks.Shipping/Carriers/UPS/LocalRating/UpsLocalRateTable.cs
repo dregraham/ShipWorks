@@ -19,9 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
         private UpsRateTableEntity rateTableEntity;
-
-        public DateTime? UploadDate => rateTableEntity?.UploadDate;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
@@ -35,6 +33,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             rateTableEntity = new UpsRateTableEntity();
         }
+
+        /// <summary>
+        /// Date of the upload
+        /// </summary>
+        public DateTime? UploadDate => rateTableEntity?.UploadDate;
 
         /// <summary>
         /// Load the rate table from a stream
