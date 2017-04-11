@@ -457,7 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The UpsPricePerPoundID property of the Entity UpsPricePerPound<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."UpsPricePerPoundID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int64 UpsPricePerPoundID
 		{
 			get { return (System.Int64)GetValue((int)UpsPricePerPoundFieldIndex.UpsPricePerPoundID, true); }

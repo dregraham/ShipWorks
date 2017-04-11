@@ -2762,7 +2762,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsLetterRateEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsLetterRateFieldIndex), "UpsLetterRateEntity");
-			this.AddElementFieldInfo("UpsLetterRateEntity", "UpsLetterRateID", typeof(System.Int64), true, false, false, false,  (int)UpsLetterRateFieldIndex.UpsLetterRateID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLetterRateEntity", "UpsLetterRateID", typeof(System.Int64), true, false, true, false,  (int)UpsLetterRateFieldIndex.UpsLetterRateID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsLetterRateFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Zone, 0, 0, 10);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Service, 0, 0, 10);
@@ -2802,7 +2802,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsPackageRateEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsPackageRateFieldIndex), "UpsPackageRateEntity");
-			this.AddElementFieldInfo("UpsPackageRateEntity", "UpsPackageRateID", typeof(System.Int64), true, false, false, false,  (int)UpsPackageRateFieldIndex.UpsPackageRateID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsPackageRateEntity", "UpsPackageRateID", typeof(System.Int64), true, false, true, false,  (int)UpsPackageRateFieldIndex.UpsPackageRateID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsPackageRateFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsPackageRateFieldIndex.Zone, 0, 0, 10);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "WeightInPounds", typeof(System.Int32), false, false, false, false,  (int)UpsPackageRateFieldIndex.WeightInPounds, 0, 0, 10);
@@ -2813,7 +2813,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsPricePerPoundEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsPricePerPoundFieldIndex), "UpsPricePerPoundEntity");
-			this.AddElementFieldInfo("UpsPricePerPoundEntity", "UpsPricePerPoundID", typeof(System.Int64), true, false, false, false,  (int)UpsPricePerPoundFieldIndex.UpsPricePerPoundID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsPricePerPoundEntity", "UpsPricePerPoundID", typeof(System.Int64), true, false, true, false,  (int)UpsPricePerPoundFieldIndex.UpsPricePerPoundID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsPricePerPoundFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Zone, 0, 0, 10);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Service, 0, 0, 10);
@@ -2888,7 +2888,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsRateSurchargeEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsRateSurchargeFieldIndex), "UpsRateSurchargeEntity");
-			this.AddElementFieldInfo("UpsRateSurchargeEntity", "UpsRateSurchargeID", typeof(System.Int64), true, false, false, false,  (int)UpsRateSurchargeFieldIndex.UpsRateSurchargeID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsRateSurchargeEntity", "UpsRateSurchargeID", typeof(System.Int64), true, false, true, false,  (int)UpsRateSurchargeFieldIndex.UpsRateSurchargeID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsRateSurchargeEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsRateSurchargeFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsRateSurchargeEntity", "SurchargeType", typeof(System.Int32), false, false, false, false,  (int)UpsRateSurchargeFieldIndex.SurchargeType, 0, 0, 10);
 			this.AddElementFieldInfo("UpsRateSurchargeEntity", "Amount", typeof(System.Double), false, false, false, false,  (int)UpsRateSurchargeFieldIndex.Amount, 0, 0, 38);
@@ -2897,7 +2897,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitUpsRateTableEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UpsRateTableFieldIndex), "UpsRateTableEntity");
-			this.AddElementFieldInfo("UpsRateTableEntity", "UpsRateTableID", typeof(System.Int64), true, false, false, false,  (int)UpsRateTableFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsRateTableEntity", "UpsRateTableID", typeof(System.Int64), true, false, true, false,  (int)UpsRateTableFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsRateTableEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsRateTableFieldIndex.UploadDate, 0, 0, 7);
 		}
 		/// <summary>Inits UpsShipmentEntity's FieldInfo objects</summary>

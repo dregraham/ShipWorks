@@ -25,7 +25,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "UpsRateSurcharge"."UpsRateSurchargeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
         System.Int64 UpsRateSurchargeID { get; }
         /// <summary> The UpsRateTableID property of the Entity UpsRateSurcharge<br/><br/>
         /// </summary>

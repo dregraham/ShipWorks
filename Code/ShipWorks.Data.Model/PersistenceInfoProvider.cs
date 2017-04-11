@@ -2910,7 +2910,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsLetterRateEntityMappings()
 		{
 			this.AddElementMapping("UpsLetterRateEntity", @"ShipWorksLocal", @"dbo", "UpsLetterRate", 5, 0);
-			this.AddElementFieldMapping("UpsLetterRateEntity", "UpsLetterRateID", "UpsLetterRateID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsLetterRateEntity", "UpsLetterRateID", "UpsLetterRateID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsLetterRateEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsLetterRateEntity", "Zone", "Zone", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("UpsLetterRateEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
@@ -2952,7 +2952,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsPackageRateEntityMappings()
 		{
 			this.AddElementMapping("UpsPackageRateEntity", @"ShipWorksLocal", @"dbo", "UpsPackageRate", 6, 0);
-			this.AddElementFieldMapping("UpsPackageRateEntity", "UpsPackageRateID", "UpsPackageRateID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsPackageRateEntity", "UpsPackageRateID", "UpsPackageRateID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsPackageRateEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsPackageRateEntity", "Zone", "Zone", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("UpsPackageRateEntity", "WeightInPounds", "WeightInPounds", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
@@ -2964,7 +2964,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsPricePerPoundEntityMappings()
 		{
 			this.AddElementMapping("UpsPricePerPoundEntity", @"ShipWorksLocal", @"dbo", "UpsPricePerPound", 5, 0);
-			this.AddElementFieldMapping("UpsPricePerPoundEntity", "UpsPricePerPoundID", "UpsPricePerPoundID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsPricePerPoundEntity", "UpsPricePerPoundID", "UpsPricePerPoundID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsPricePerPoundEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsPricePerPoundEntity", "Zone", "Zone", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("UpsPricePerPoundEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
@@ -3042,7 +3042,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsRateSurchargeEntityMappings()
 		{
 			this.AddElementMapping("UpsRateSurchargeEntity", @"ShipWorksLocal", @"dbo", "UpsRateSurcharge", 4, 0);
-			this.AddElementFieldMapping("UpsRateSurchargeEntity", "UpsRateSurchargeID", "UpsRateSurchargeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsRateSurchargeEntity", "UpsRateSurchargeID", "UpsRateSurchargeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsRateSurchargeEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsRateSurchargeEntity", "SurchargeType", "SurchargeType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("UpsRateSurchargeEntity", "Amount", "Amount", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 3);
@@ -3052,7 +3052,7 @@ namespace ShipWorks.Data.Model
 		private void InitUpsRateTableEntityMappings()
 		{
 			this.AddElementMapping("UpsRateTableEntity", @"ShipWorksLocal", @"dbo", "UpsRateTable", 2, 0);
-			this.AddElementFieldMapping("UpsRateTableEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("UpsRateTableEntity", "UpsRateTableID", "UpsRateTableID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsRateTableEntity", "UploadDate", "UploadDate", false, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 1);
 		}
 

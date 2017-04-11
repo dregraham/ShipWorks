@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "UpsPackageRate"."UpsPackageRateID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
         public System.Int64 UpsPackageRateID { get; }
         /// <summary> The UpsRateTableID property of the Entity UpsPackageRate<br/><br/>
         /// </summary>
