@@ -56,20 +56,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Save_DelegatesToAdapterSaveAndRefetchWithRateTable()
-        {
-            UpsRateTableEntity rateTable = new UpsRateTableEntity() { UpsRateTableID = 123 };
-            UpsAccountEntity account = new UpsAccountEntity() { UpsRateTable = rateTable, UpsRateTableID = 123 };
-            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
-
-            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
-
-            testObject.Save(rateTable, account);
-
-            adapter.Verify(a => a.SaveAndRefetch(rateTable));
-        }
-
-        [Fact]
         public void Save_DelegatesToAdapterSaveAndRefetchWithAccount()
         {
             UpsRateTableEntity rateTable = new UpsRateTableEntity() { UpsRateTableID = 123 };
