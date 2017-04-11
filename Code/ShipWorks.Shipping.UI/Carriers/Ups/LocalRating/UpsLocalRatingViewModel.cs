@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public void Load(UpsAccountEntity account)
         {
             LocalRatingEnabled = account.LocalRatingEnabled;
-
+            
             upsAccount = account;
             SetStatusMessage();
         }
@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             upsAccount.LocalRatingEnabled = LocalRatingEnabled;
 
-            if (LocalRatingEnabled && upsAccount.UpsRateTable == null)
+            if (LocalRatingEnabled && upsAccount.UpsRateTableID == null)
             {
                 ValidationMessage = "Please upload your rate table to enable local rating";
                 upsAccount.LocalRatingEnabled = false;
