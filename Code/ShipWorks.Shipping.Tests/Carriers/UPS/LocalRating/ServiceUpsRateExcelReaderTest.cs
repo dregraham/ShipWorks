@@ -9,6 +9,7 @@ using Syncfusion.XlsIO;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using Xunit.Sdk;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
@@ -28,19 +29,29 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
-                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readPackageRates = rates);
 
-                table.Setup(t => t.AddLetterRates(It.IsAny<IEnumerable<UpsLetterRateEntity>>()))
-                    .Callback<IEnumerable<UpsLetterRateEntity>>(rates => readLetterRates = rates);
+                table.Setup(
+                        t =>
+                            t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
+                    .Callback
+                    <IEnumerable<UpsPackageRateEntity>, IEnumerable<UpsLetterRateEntity>,
+                        IEnumerable<UpsPricePerPoundEntity>>(SaveReadRates);
 
-                table.Setup(t => t.AddPricesPerPound(It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
-                    .Callback<IEnumerable<UpsPricePerPoundEntity>>(prices => readPricesPerPound = prices);
+
             });
 
             testObject = mock.Create<ServiceUpsRateExcelReader>();
 
             excelEngine = new ExcelEngine();
+        }
+
+        private void SaveReadRates(IEnumerable<UpsPackageRateEntity> packageRates, IEnumerable<UpsLetterRateEntity> letterRates, IEnumerable<UpsPricePerPoundEntity> pricesPerPound)
+        {
+            readPackageRates = packageRates;
+            readLetterRates = letterRates;
+            readPricesPerPound = pricesPerPound;
         }
 
         [Fact]
@@ -49,7 +60,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 IWorksheets sheets = SetupSingleRateSheet();
                 testObject.Read(sheets, rateTable.Object);
 
-                rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Once);
+                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()), Times.Once);
         }
 
         [Fact]
@@ -59,8 +72,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.Read(sheets, rateTable.Object);
 
             Assert.Equal(1, readPackageRates.Count());
-            Assert.Null(readPricesPerPound);
-            Assert.Null(readLetterRates);
+            Assert.Empty(readPricesPerPound);
+            Assert.Empty(readLetterRates);
 
             UpsPackageRateEntity rate = readPackageRates.Single();
             Assert.Equal(102, rate.Zone);
@@ -77,8 +90,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             
             testObject.Read(sheets, rateTable.Object);
 
-            Assert.Null(readPackageRates);
-            Assert.Null(readPricesPerPound);
+            Assert.Empty(readPackageRates);
+            Assert.Empty(readPricesPerPound);
             Assert.Equal(1, readLetterRates.Count());
 
             var rate = readLetterRates.Single();
@@ -95,8 +108,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            Assert.Null(readPackageRates);
-            Assert.Null(readLetterRates);
+            Assert.Empty(readPackageRates);
+            Assert.Empty(readLetterRates);
             Assert.Equal(1, readPricesPerPound.Count());
 
             var pricePerPoundEntity = readPricesPerPound.Single();
@@ -196,7 +209,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            Assert.Empty(readLetterRates);
+            Assert.Empty(readPackageRates);
+            Assert.Empty(readPricesPerPound);
         }
 
         [Fact]
@@ -208,7 +223,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            Assert.Empty(readLetterRates);
+            Assert.Empty(readPackageRates);
+            Assert.Empty(readPricesPerPound);
         }
 
         [Fact]
@@ -219,7 +236,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(sheets, rateTable.Object);
 
-            rateTable.Verify(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()), Times.Never);
+            Assert.Empty(readLetterRates);
+            Assert.Empty(readPackageRates);
+            Assert.Empty(readPricesPerPound);
         }
 
         [Theory]
@@ -259,7 +278,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
             Assert.Equal("Sheet NDA Early has no rows.", exception.Message);
         }
-
 
         public void Dispose()
         {

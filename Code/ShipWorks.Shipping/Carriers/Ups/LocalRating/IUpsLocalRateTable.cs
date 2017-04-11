@@ -20,23 +20,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         void Save(UpsAccountEntity accountEntity);
 
         /// <summary>
-        /// Add a package rates collection to UpsLocalRateTable
-        /// </summary>
-        void AddPackageRates(IEnumerable<UpsPackageRateEntity> rates);
-
-        /// <summary>
-        /// Add a letter rates collection to UpsLocalRateTable
-        /// </summary>
-        void AddLetterRates(IEnumerable<UpsLetterRateEntity> rates);
-
-        /// <summary>
-        /// Add price per pound collection to UpsLocalRateTable
-        /// </summary>
-        void AddPricesPerPound(IEnumerable<UpsPricePerPoundEntity> rates);
-
-        /// <summary>
-        /// Add a surcharge collection to the rate table
+        /// Add a surcharge collection to the surcharge table
         /// </summary>
         void AddSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges);
+
+        /// <summary>
+        /// Adds the rates to the rate tables
+        /// </summary>
+        void AddRates(IEnumerable<UpsPackageRateEntity> packageRates,
+            IEnumerable<UpsLetterRateEntity> letterRates,
+            IEnumerable<UpsPricePerPoundEntity> pricesPerPound);
     }
 }

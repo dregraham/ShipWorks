@@ -6,13 +6,14 @@ using System.Reflection;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using Syncfusion.XlsIO;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
+namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 {
     public class ServiceUpsRateExcelReaderTest : IDisposable
     {
@@ -22,22 +23,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
         private IEnumerable<UpsPricePerPoundEntity> readPricesPerPound;
         private readonly ExcelEngine excelEngine;
         private readonly IWorkbook sampleExcelFile;
-        private readonly Mock<IUpsLocalRateTable> rateTable;
 
         public ServiceUpsRateExcelReaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
+            var rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-                table.Setup(t => t.AddPackageRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>()))
-                    .Callback<IEnumerable<UpsPackageRateEntity>>(rates => readPackageRates = rates);
-
-                table.Setup(t => t.AddLetterRates(It.IsAny<IEnumerable<UpsLetterRateEntity>>()))
-                    .Callback<IEnumerable<UpsLetterRateEntity>>(rates => readLetterRates = rates);
-
-                table.Setup(t => t.AddPricesPerPound(It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
-                    .Callback<IEnumerable<UpsPricePerPoundEntity>>(prices => readPricesPerPound = prices);
+                table.Setup(t =>
+                            t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
+                                It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
+                    .Callback<IEnumerable<UpsPackageRateEntity>, IEnumerable<UpsLetterRateEntity>, IEnumerable<UpsPricePerPoundEntity>>(SaveReadRates);
             });
 
             excelEngine = new ExcelEngine();
@@ -49,6 +46,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups
 
             ServiceUpsRateExcelReader testObject = mock.Create<ServiceUpsRateExcelReader>();
             testObject.Read(sampleExcelFile.Worksheets, rateTable.Object);
+        }
+
+        private void SaveReadRates(IEnumerable<UpsPackageRateEntity> packageRates, IEnumerable<UpsLetterRateEntity> letterRates, IEnumerable<UpsPricePerPoundEntity> pricesPerPound)
+        {
+            readPackageRates = packageRates;
+            readLetterRates = letterRates;
+            readPricesPerPound = pricesPerPound;
         }
 
         [Fact]

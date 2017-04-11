@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using Syncfusion.XlsIO;
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     {
         private readonly IUpsLocalRateTableRepo localRateTableRepo;
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
+        private readonly IUpsImportedRateValidator importedRateValidator;
         private UpsRateTableEntity rateTableEntity;
 
         public DateTime? UploadDate => rateTableEntity?.UploadDate;
@@ -23,10 +25,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
-        public UpsLocalRateTable(IUpsLocalRateTableRepo localRateTableRepo, IEnumerable<IUpsRateExcelReader> upsRateExcelReaders)
+        public UpsLocalRateTable(IUpsLocalRateTableRepo localRateTableRepo, 
+            IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
+            IUpsImportedRateValidator importedRateValidator)
         {
             this.localRateTableRepo = localRateTableRepo;
             this.upsRateExcelReaders = upsRateExcelReaders;
+            this.importedRateValidator = importedRateValidator;
 
             rateTableEntity = new UpsRateTableEntity();
         }
@@ -64,10 +69,27 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             localRateTableRepo.Save(rateTableEntity, accountEntity);
         }
 
+        public void AddRates(IEnumerable<UpsPackageRateEntity> packageRates,
+            IEnumerable<UpsLetterRateEntity> letterRates,
+            IEnumerable<UpsPricePerPoundEntity> pricesPerPound)
+        {
+            IEnumerable<UpsPackageRateEntity> packageRateList = packageRates as IList<UpsPackageRateEntity> ?? packageRates.ToList();
+            IEnumerable<UpsLetterRateEntity> letterRateList = letterRates as IList<UpsLetterRateEntity> ?? letterRates.ToList();
+            IEnumerable<UpsPricePerPoundEntity> pricePerPoundList = pricesPerPound as IList<UpsPricePerPoundEntity> ?? pricesPerPound.ToList();
+
+            importedRateValidator.Validate(packageRateList.Select(r=>r.AsReadOnly()).ToList(),
+                letterRateList.Select(r=>r.AsReadOnly()).ToList(),
+                pricePerPoundList.Select(r=>r.AsReadOnly()).ToList());
+
+            AddPackageRates(packageRateList);
+            AddLetterRates(letterRateList);
+            AddPricesPerPound(pricePerPoundList);
+        }
+
         /// <summary>
         /// Add a package rates collection to UpsLocalRateTable
         /// </summary>
-        public void AddPackageRates(IEnumerable<UpsPackageRateEntity> rates)
+        private void AddPackageRates(IEnumerable<UpsPackageRateEntity> rates)
         {
             rateTableEntity.UpsPackageRate.Clear();
             rateTableEntity.UpsPackageRate.AddRange(rates);
@@ -76,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a letter rates collection to UpsLocalRateTable
         /// </summary>
-        public void AddLetterRates(IEnumerable<UpsLetterRateEntity> rates)
+        private void AddLetterRates(IEnumerable<UpsLetterRateEntity> rates)
         {
             rateTableEntity.UpsLetterRate.Clear();
             rateTableEntity.UpsLetterRate.AddRange(rates);
@@ -85,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add price per pound collection to UpsLocalRateTable
         /// </summary>
-        public void AddPricesPerPound(IEnumerable<UpsPricePerPoundEntity> rates)
+        private void AddPricesPerPound(IEnumerable<UpsPricePerPoundEntity> rates)
         {
             rateTableEntity.UpsPricePerPound.Clear();
             rateTableEntity.UpsPricePerPound.AddRange(rates);

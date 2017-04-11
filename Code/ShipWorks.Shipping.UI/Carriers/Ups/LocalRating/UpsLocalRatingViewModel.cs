@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     log.Info("Successfully uploaded rate table");
                     ValidatingRates = false;
                 }
-                catch (Exception e)
+                catch (UpsLocalRatingException e)
                 {
                     ValidatingRates = false;
                     ErrorValidatingRates = true;

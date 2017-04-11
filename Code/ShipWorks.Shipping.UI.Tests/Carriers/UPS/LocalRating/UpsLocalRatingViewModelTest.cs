@@ -202,6 +202,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialogFactory.Setup(f=> f()).Returns(openFileDialog);
 
             var testObject = mock.Create<UpsLocalRatingViewModel>();
+            testObject.Load(new UpsAccountEntity());
             testObject.UploadRatingFileCommand.Execute(null);
 
             rateTable.Verify(t=> t.Load(fileStream));
@@ -297,8 +298,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
             openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
 
+            mock.Mock<IUpsLocalRateTable>()
+                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Throws<UpsLocalRatingException>();
+
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            // Not calling load here will cause exception
+            testObject.Load(new UpsAccountEntity());
             testObject.UploadRatingFileCommand.Execute(null);
 
             Assert.StartsWith("Local rates failed to upload:", testObject.ValidationMessage);
@@ -316,8 +321,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var logFactory = mock.MockRepository.Create<Func<ILog>>();
             logFactory.Setup(f => f()).Returns(log);
 
+            mock.Mock<IUpsLocalRateTable>()
+                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Throws<UpsLocalRatingException>();
+
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            // Not calling load here will cause exception
+            testObject.Load(new UpsAccountEntity());
+            
             testObject.UploadRatingFileCommand.Execute(null);
 
             log.Verify(l => l.Error(It.IsAny<string>()));
@@ -332,7 +342,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
 
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            // Not calling load here will cause exception
+            testObject.Load(new UpsAccountEntity());
             testObject.UploadRatingFileCommand.Execute(null);
 
             Assert.False(testObject.ValidatingRates);
@@ -346,8 +356,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
             openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
 
+            mock.Mock<IUpsLocalRateTable>()
+                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Throws<UpsLocalRatingException>();
+
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            // Not calling load here will cause exception
+            testObject.Load(new UpsAccountEntity());
             testObject.UploadRatingFileCommand.Execute(null);
 
             Assert.True(testObject.ErrorValidatingRates);
