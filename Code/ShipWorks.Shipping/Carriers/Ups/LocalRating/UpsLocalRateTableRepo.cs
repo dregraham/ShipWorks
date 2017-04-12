@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -31,12 +28,29 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void CleanupRates()
         {
-            throw new NotImplementedException();
+            // bucket is used to get all rate tables that have a RateTableID not in any UPSAccounts
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.PredicateExpression.Add(
+                new FieldCompareSetPredicate(
+                    UpsRateTableFields.UpsRateTableID,
+                    null,
+                    UpsAccountFields.UpsRateTableID,
+                    null,
+                    SetOperator.Exist,
+                    (UpsRateTableFields.UpsRateTableID == UpsAccountFields.UpsRateTableID),
+                    true));
+
+            IEntityCollection2 rateTables = new EntityCollection(new UpsRateTableEntityFactory());
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                ((SqlAdapter) adapter).FetchEntityCollection(rateTables, bucket);
+                adapter.DeleteEntityCollection(rateTables);
+            }
         }
 
         /// <summary>
         /// Gets the UpsRateTable for the given account
-        /// </summary>
+        /// </summary>  
         public UpsRateTableEntity Get(UpsAccountEntity accountEntity)
         {
             UpsRateTableEntity rateTable = null;

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
