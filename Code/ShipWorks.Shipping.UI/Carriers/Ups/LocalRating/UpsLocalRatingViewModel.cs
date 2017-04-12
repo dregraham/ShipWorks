@@ -212,6 +212,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             {
                 try
                 {
+                    ValidationMessage = string.Empty;
                     ValidatingRates = true;
                     await Task.Run(() =>
                     {
