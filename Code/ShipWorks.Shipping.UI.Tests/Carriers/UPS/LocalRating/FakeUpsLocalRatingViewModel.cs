@@ -10,8 +10,15 @@ using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 {
+    /// <summary>
+    /// This class Inherits from UpsLocalRatingViewModel and allows 
+    /// one to call the protected method UploadRatingFile().
+    /// </summary>
     public class FakeUpsLocalRatingViewModel : UpsLocalRatingViewModel
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeUpsLocalRatingViewModel"/> class.
+        /// </summary>
         public FakeUpsLocalRatingViewModel(IUpsLocalRateTable rateTable,
             Func<ISaveFileDialog> saveFileDialogFactory,
             Func<IOpenFileDialog> openFileDialogFactory,

@@ -205,6 +205,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             await UploadRatingFile();
         }
 
+        /// <summary>
+        /// Uploads the rating file.
+        /// </summary>
         protected async Task UploadRatingFile()
         {
             messageHelper.ShowWarning(WarningMessage);
