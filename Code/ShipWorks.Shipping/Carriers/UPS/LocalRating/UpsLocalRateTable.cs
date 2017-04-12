@@ -60,7 +60,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity upsAccount)
         {
-            rateTableEntity = localRateTableRepo.Get(upsAccount);
+            UpsRateTableEntity table = localRateTableRepo.Get(upsAccount);
+
+            if (table != null)
+            {
+                rateTableEntity = table;
+            }
         }
 
         /// <summary>

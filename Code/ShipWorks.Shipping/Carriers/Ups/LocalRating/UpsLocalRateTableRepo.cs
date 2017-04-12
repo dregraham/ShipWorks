@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 account.UpsRateTable = rateTable;
-
+                
                 adapter.SaveAndRefetch(account);
             }
         }
