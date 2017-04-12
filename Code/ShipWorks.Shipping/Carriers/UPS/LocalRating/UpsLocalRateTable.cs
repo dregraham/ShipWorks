@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     [Component]
     public class UpsLocalRateTable : IUpsLocalRateTable
     {
-        private readonly IUpsLocalRateTableRepo localRateTableRepo;
+        private readonly IUpsLocalRateTableRepository localRateTableRepository;
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
         private UpsRateTableEntity rateTableEntity;
@@ -28,11 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
-        public UpsLocalRateTable(IUpsLocalRateTableRepo localRateTableRepo, 
+        public UpsLocalRateTable(IUpsLocalRateTableRepository localRateTableRepository, 
             IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
             IUpsImportedRateValidator importedRateValidator)
         {
-            this.localRateTableRepo = localRateTableRepo;
+            this.localRateTableRepository = localRateTableRepository;
             this.upsRateExcelReaders = upsRateExcelReaders;
             this.importedRateValidator = importedRateValidator;
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity upsAccount)
         {
-            UpsRateTableEntity table = localRateTableRepo.Get(upsAccount);
+            UpsRateTableEntity table = localRateTableRepository.Get(upsAccount);
 
             if (table != null)
             {
@@ -88,8 +88,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             newRateTable.UpsPricePerPound.AddRange(newPricesPerPound);
             newRateTable.UpsRateSurcharge.AddRange(newSurcharges);
 
-            localRateTableRepo.Save(newRateTable, accountEntity);
-            localRateTableRepo.CleanupRates();
+            localRateTableRepository.Save(newRateTable, accountEntity);
+            localRateTableRepository.CleanupRates();
 
             rateTableEntity = newRateTable;
         }

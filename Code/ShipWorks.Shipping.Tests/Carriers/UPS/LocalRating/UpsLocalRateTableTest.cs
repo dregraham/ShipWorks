@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         public void Load_DelegatesToUpsLocalRateTableRepo()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepo>();
+            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
             UpsAccountEntity upsAccount = new UpsAccountEntity();
             var testObject = mock.Create<UpsLocalRateTable>();
 
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         public void Save_SetsUploadDate()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            mock.Mock<IUpsLocalRateTableRepo>();
+            mock.Mock<IUpsLocalRateTableRepository>();
             UpsAccountEntity upsAccount = new UpsAccountEntity();
 
             var testObject = mock.Create<UpsLocalRateTable>();
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         public void Save_DelegatesToUpsLocalRateTableRepo()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepo>();
+            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
             UpsAccountEntity upsAccount = new UpsAccountEntity();
 
             var testObject = mock.Create<UpsLocalRateTable>();

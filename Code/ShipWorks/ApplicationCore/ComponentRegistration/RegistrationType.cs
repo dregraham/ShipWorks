@@ -16,6 +16,6 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register the component as its implemented interfaces
         /// </summary>
-        ImplementedInterfaces = 2,
+        ImplementedInterfaces = 2
     }
 }

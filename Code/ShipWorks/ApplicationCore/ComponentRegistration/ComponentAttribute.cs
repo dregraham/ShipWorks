@@ -28,6 +28,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public RegistrationType RegisterAs { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating the component should be registered as a single instance.
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
+
+        /// <summary>
         /// Get a registration, either from cache or by creating a new one
         /// </summary>
         public static IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> GetRegistrationBuilder(
@@ -72,6 +77,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                 if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.Self))
                 {
                     registration.AsSelf();
+                }
+
+                if (item.Attributes.Any(x=>x.SingleInstance))
+                {
+                    registration.SingleInstance();
                 }
             }
         }

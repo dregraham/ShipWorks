@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Represents a repository for LocalRateTable
     /// </summary>
-    public interface IUpsLocalRateTableRepo
+    public interface IUpsLocalRateTableRepository
     {
         /// <summary>
         /// Save the rate table and update the account to use the given rate table

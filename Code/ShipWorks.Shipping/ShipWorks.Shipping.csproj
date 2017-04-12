@@ -231,12 +231,12 @@
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTable.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTableRepo.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTableRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\SurchargeUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateTable.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateTableRepo.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateTableRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingException.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />

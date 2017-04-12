@@ -16,13 +16,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
     public class UpsLocalRateTableRepoTest : IDisposable
     {
         readonly AutoMock mock;
-        readonly UpsLocalRateTableRepo testObject;
+        readonly UpsLocalRateTableRepository testObject;
 
         public UpsLocalRateTableRepoTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            testObject = mock.Create<UpsLocalRateTableRepo>();
+            testObject = mock.Create<UpsLocalRateTableRepository>();
         }
 
         [Fact]
