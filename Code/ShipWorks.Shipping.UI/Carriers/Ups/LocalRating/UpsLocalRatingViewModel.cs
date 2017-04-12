@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             StatusMessage = rateTable.UploadDate == null ?
                 "There is no rate table associated with the selected account" :
-                $"Last Upload: {rateTable.UploadDate:g}";
+                $"Last Upload: {rateTable.UploadDate.Value.ToLocalTime():g}";
         }
     }
 }
