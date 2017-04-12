@@ -84,7 +84,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 // save and refetch the rate table only. Not all the rates.
                 adapter.SaveEntity(rateTable, true, false);
 
-                // save all the rates but don't
+                // save all the rates but don't refetch all the rates. 
+                // doing a saved and refetch was causing us to make an extra
+                // 10,000 fetches.
                 adapter.SaveEntity(rateTable, false, true);
 
                 // update account with new rate table
