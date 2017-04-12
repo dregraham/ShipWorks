@@ -31,5 +31,18 @@ namespace ShipWorks.Data.Connection
         /// are marked with the state 'Deleted' but are not removed from the collection.
         /// </summary>
         int DeleteEntityCollection(IEntityCollection2 collectionToDelete);
+
+        /// <summary>
+        /// Saves the passed in entity to the persistent storage. Will <i>not</i> refetch the entity after this save.
+        /// The entity will stay out-of-sync. If the entity is new, it will be inserted, if the entity is existent, the changed
+        /// entity fields will be changed in the database. Will do a recursive save.
+        /// Will pass the concurrency predicate returned by GetConcurrencyPredicate(ConcurrencyPredicateType.Save) as update restriction.
+        /// </summary>
+        /// <param name="entityToSave">The entity to save</param>
+        /// <returns>true if the save was succesful, false otherwise.</returns>
+        /// <remarks>Will use a current transaction if a transaction is in progress</remarks>
+        bool SaveEntity(IEntity2 entityToSave);
+
+        bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, bool recurse);
     }
 }

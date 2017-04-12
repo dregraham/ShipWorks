@@ -81,9 +81,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
+                // save and refetch the rate table only. Not all the rates.
+                adapter.SaveEntity(rateTable, true, false);
+
+                // save all the rates but don't
+                adapter.SaveEntity(rateTable, false, true);
+
+                // update account with new rate table
                 account.UpsRateTable = rateTable;
-                
-                adapter.SaveAndRefetch(account);
+
+                // save and refetch the account, but not all the rates.
+                adapter.SaveEntity(account, true, false);
             }
         }
     }
