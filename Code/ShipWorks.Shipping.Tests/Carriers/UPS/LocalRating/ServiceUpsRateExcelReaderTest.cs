@@ -229,16 +229,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Read_ValueIgnoredIfBlank()
+        public void Read_ThrowsLocalRatingException_IfBlankRate()
         {
             IWorksheets sheets = SetupSingleRateSheet();
             sheets[0].Range["B2"].Value2 = string.Empty;
 
-            testObject.Read(sheets, rateTable.Object);
-
-            Assert.Empty(readLetterRates);
-            Assert.Empty(readPackageRates);
-            Assert.Empty(readPricesPerPound);
+            var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
+            Assert.NotNull(exception);
+            Assert.Equal("Empty rate cell found in row 2", exception.Message);
         }
 
         [Theory]

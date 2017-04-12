@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
-        protected readonly PropertyChangedHandler Handler;
+        protected readonly PropertyChangedHandler handler;
 
         private bool localRatingEnabled;
         private string statusMessage;
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.messageHelper = messageHelper;
             log = logFactory(GetType());
 
-            Handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public bool LocalRatingEnabled
         {
             get { return localRatingEnabled; }
-            set { Handler.Set(nameof(LocalRatingEnabled), ref localRatingEnabled, value); }
+            set { handler.Set(nameof(LocalRatingEnabled), ref localRatingEnabled, value); }
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public string StatusMessage
         {
             get { return statusMessage; }
-            set { Handler.Set(nameof(StatusMessage), ref statusMessage, value); }
+            set { handler.Set(nameof(StatusMessage), ref statusMessage, value); }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public string ValidationMessage
         {
             get { return validationMessage; }
-            set { Handler.Set(nameof(ValidationMessage), ref validationMessage, value); }
+            set { handler.Set(nameof(ValidationMessage), ref validationMessage, value); }
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public bool ValidatingRates
         {
             get { return validatingRates; }
-            set { Handler.Set(nameof(ValidatingRates), ref validatingRates, value); }
+            set { handler.Set(nameof(ValidatingRates), ref validatingRates, value); }
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public bool ErrorValidatingRates
         {
             get { return errorValidatingRates; }
-            set { Handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value); }
+            set { handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value); }
         }
 
         /// <summary>
@@ -200,6 +200,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Uploads the rating File.
         /// </summary>
+        /// <remarks>
+        /// The reason we don't call this directly is because we need to be able to test UploadRatingFile().
+        /// ICommand can't take a method that returns Task and we can't await a void method.
+        /// </remarks>
         private async void CallUploadRatingFile()
         {
             await UploadRatingFile();
@@ -225,8 +229,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     ValidatingRates = true;
                     await Task.Run(() =>
                     {
-                        Stream fileStream = fileDialog.CreateFileStream();
-                        rateTable.Load(fileStream);
+                        using (Stream fileStream = fileDialog.CreateFileStream())
+                        {
+                            rateTable.Load(fileStream);
+                        }
+
                         rateTable.Save(upsAccount);
 
                         SetStatusMessage();

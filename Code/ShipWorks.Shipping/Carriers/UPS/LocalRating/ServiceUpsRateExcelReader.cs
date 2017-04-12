@@ -11,6 +11,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Service to read rates from rate file.
     /// </summary>
+    /// <remarks>
+    /// This class reads the values an excel document.  The format of the document can be seen at
+    /// ShipWorks.Shipping.UI.UpsLocalRatesSample.xlsx.
+    /// The reader reads the sheets whose names correlate to a service. 
+    /// We expect that row 1 contains the Ups Zone and Column A represents the weight.
+    /// The inner cells represent the rate of a package for the corresponding weight and zone.
+    /// These rates are stored in the UpsPackageRate table
+    /// Column A may also read "Letter." In this case, we store the rate  in the
+    /// UpsLetterRate table.
+    /// Finally, Column A may read "PricePerPound." In this case, we store the rate in the 
+    /// UpsPricePerPound table.
+    /// </remarks>
     /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.IUpsRateExcelReader" />
     public class ServiceUpsRateExcelReader : IUpsRateExcelReader
     {
@@ -51,6 +63,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </remarks>
         private void ProcessSheet(IWorksheet sheet, UpsServiceType upsServiceType)
         {
+            // Column A and Row 1 describe the what the rates are for. The actual rates are then stored battle ship
+            // style within Column A and Row 1.  We loop through the rows and then the cells in the row and call 
+            // ProcessRate, passing in the service, weightCell from Column 1, zone cell from the header, and the rate cell.
             if (sheet.Rows.Length == 0)
             {
                 throw new UpsLocalRatingException($"Sheet {sheet.Name} has no rows.");
@@ -58,12 +73,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             IRange[] headerCells = sheet.Rows[0].Cells;
             
+            // Loop through each row after the header row
             for (int rowIndex = 1; rowIndex < sheet.Rows.Length; rowIndex++)
             {
                 IRange[] row = sheet.Rows[rowIndex].Cells;
+                if (row.All(c=>c.IsBlank))
+                {
+                    continue;
+                }
 
+                // The first cell contains the weight value (or "Letter" or "Price Per Pound")
                 IRange weightCell = sheet.Rows[rowIndex].Cells[0];
 
+                // Loop through each cell in the row, starting with second cell.
                 for (int i = 1; i < row.Length; i++)
                 {
                     IRange headerCell = headerCells[i];
@@ -85,25 +107,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </exception>
         private void ProcessRate(UpsServiceType upsServiceType, IRange weightCell, IRange headerCell, IRange rateCell)
         {
-            if (!ValidateRate(weightCell, headerCell, rateCell))
+            // Assuming this isn't a rate, skip.
+            if (headerCell.IsBlank)
             {
-                SaveRateToCollection(upsServiceType, weightCell, headerCell, rateCell);
+                return;
             }
-        }
 
-        /// <summary>
-        /// Validates the rate.
-        /// </summary>
-        private static bool ValidateRate(IRange weightCell, IRange headerCell, IRange rateCell)
-        {
             // Validate Weight
             if (string.IsNullOrWhiteSpace(weightCell.Value))
             {
-                if (rateCell.EntireRow.Cells.All(c => c.IsBlank))
-                {
-                    return true;
-                }
-                throw new UpsLocalRatingException($"A blank weight found in row {weightCell.Rows}");
+                throw new UpsLocalRatingException($"A blank weight found in row {weightCell.Row}");
             }
 
             if (!weightCell.HasNumber && weightCell.Text != PricePerPoundLabel && weightCell.Text != LetterLabel)
@@ -112,21 +125,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     $"Weight Value '{weightCell.Text}' must be a number or = \"Letter\" or \"Price Per Pound.\"");
             }
 
-            if (headerCell.IsBlank || rateCell.IsBlank)
-            {
-                return true;
-            }
-
             if (!headerCell.HasNumber || !headerCell.Number.IsInt())
             {
                 throw new UpsLocalRatingException($"Header text '{headerCell.Text}' must be a whole number.");
+            }
+
+            if (rateCell.IsBlank)
+            {
+                throw new UpsLocalRatingException($"Empty rate cell found in row {rateCell.Row}");
             }
 
             if (!rateCell.HasNumber)
             {
                 throw new UpsLocalRatingException($"Rate text '{rateCell.Text}' must be a number.");
             }
-            return false;
+
+            SaveRateToCollection(upsServiceType, weightCell, headerCell, rateCell);
         }
 
         /// <summary>
@@ -136,6 +150,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             int zone = Convert.ToInt32(headerCell.Number);
             decimal rate = Convert.ToDecimal(rateCell.Number);
+
+            // If weight has number, it represents a package weight. We store this in the UpsPackageRate table
             if (weightCell.HasNumber)
             {
                 UpsPackageRateEntity packageRateEntity = new UpsPackageRateEntity()
@@ -147,6 +163,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 };
                 readPackageRates.Add(packageRateEntity);
             }
+            // If the cell reads "Price Per Pound" this is a price per pound value and is stored in the
+            // UpsPricePerPound table
             else if (weightCell.Text == PricePerPoundLabel)
             {
                 UpsPricePerPoundEntity pricePerPoundEntity = new UpsPricePerPoundEntity()
@@ -157,6 +175,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 };
                 readPricesPerPound.Add(pricePerPoundEntity);
             }
+            // If the cell reads "Letter" this is the price for sending a letter and is stored in the
+            // UpsLetterRate table.
             else if (weightCell.Text == LetterLabel)
             {
                 UpsLetterRateEntity letterRateEntity = new UpsLetterRateEntity()
@@ -174,11 +194,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private UpsServiceType? GetServiceType(string sheetName)
         {
-            if (sheetName=="NDA Early")
+            if (sheetName == "NDA Early")
             {
                 return UpsServiceType.UpsNextDayAirAM;
             }
-            else if (sheetName=="NDA")
+            else if (sheetName == "NDA")
             {
                 return UpsServiceType.UpsNextDayAir;
             }
@@ -193,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             else if (sheetName == "2DA")
             {
                 return UpsServiceType.Ups2DayAir;
-            } 
+            }
             else if (sheetName == "3DA Select")
             {
                 return UpsServiceType.Ups3DaySelect;
