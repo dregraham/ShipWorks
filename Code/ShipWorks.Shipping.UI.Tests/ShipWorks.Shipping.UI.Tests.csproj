@@ -169,6 +169,7 @@
   <ItemGroup>
     <Compile Include="Carriers\Postal\Usps\GlobalPostAvailabilityServiceTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostNotificationTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\FakeUpsLocalRatingViewModel.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRatingViewModelTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OrderSelectionChangedHandlerTest.cs" />

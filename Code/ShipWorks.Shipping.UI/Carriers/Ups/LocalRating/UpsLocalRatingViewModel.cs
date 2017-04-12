@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.saveFileDialogFactory = saveFileDialogFactory;
             this.openFileDialogFactory = openFileDialogFactory;
             DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
-            UploadRatingFileCommand = new RelayCommand(UploadRatingFile);
+            UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
 
             this.messageHelper = messageHelper;
             log = logFactory(GetType());
@@ -200,14 +200,19 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Uploads the rating File.
         /// </summary>
-        private async void UploadRatingFile()
+        private async void CallUploadRatingFile()
+        {
+            await UploadRatingFile();
+        }
+
+        protected async Task UploadRatingFile()
         {
             messageHelper.ShowWarning(WarningMessage);
 
             IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
-            
+
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -237,7 +242,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 }
             }
         }
-        
+
         /// <summary>
         /// Sets the status message.
         /// </summary>
