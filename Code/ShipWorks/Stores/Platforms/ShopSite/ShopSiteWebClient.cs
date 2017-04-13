@@ -92,9 +92,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
                     resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
 
-                    XmlDocument xmlResponse = new XmlDocument();
+                    XmlDocument xmlResponse = new XmlDocument {XmlResolver = new XmlUrlResolver()};
                     xmlResponse.LoadXml(resultXml);
-
+                    
                     return xmlResponse;
                 }
             }
