@@ -48,14 +48,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(Stream stream)
         {
-            using (ExcelEngine excelEngine = new ExcelEngine())
+            try
             {
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Open(stream);
-
-                foreach (IUpsRateExcelReader excelReader in upsRateExcelReaders)
+                using (ExcelEngine excelEngine = new ExcelEngine())
                 {
-                    excelReader.Read(workbook.Worksheets, this);
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Open(stream);
+
+                    foreach (IUpsRateExcelReader excelReader in upsRateExcelReaders)
+                    {
+                        excelReader.Read(workbook.Worksheets, this);
+                    }
                 }
+            }
+            catch (Exception ex) when (!(ex is UpsLocalRatingException))
+            {
+                throw new UpsLocalRatingException("Error loading Excel file.", ex);
             }
         }
 
