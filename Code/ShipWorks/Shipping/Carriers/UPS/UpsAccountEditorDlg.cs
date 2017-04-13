@@ -50,9 +50,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsRateTypeControl.Initialize(account, false);
 
-            localRatingControlViewModel.Load(account);
+            localRatingControlViewModel.Load(account, HandleLocalRatingControlIsBusy);
             localRatingControl.DataContext = localRatingControlViewModel;
             LocalRateControlHost.Child = (UserControl) localRatingControl;
+        }
+
+        /// <summary>
+        /// Enables / Disables OK and Cancel
+        /// </summary>
+        private void HandleLocalRatingControlIsBusy(bool isBusy)
+        {
+            ok.Enabled = !isBusy;
+            cancel.Enabled = !isBusy;
+            this.ControlBox = !isBusy;
         }
 
         /// <summary>

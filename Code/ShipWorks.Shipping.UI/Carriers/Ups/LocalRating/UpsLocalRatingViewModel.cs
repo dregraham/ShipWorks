@@ -46,6 +46,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private bool errorValidatingRates;
         private bool validatingRates;
 
+        // Action to call when busy uploading a file
+        private Action<bool> isBusy;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
@@ -128,10 +131,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Loads the UpsAccount information to the view model
         /// </summary>
-        public void Load(UpsAccountEntity account)
+        public void Load(UpsAccountEntity account, Action<bool> isBusy)
         {
             try
             {
+                this.isBusy = isBusy;
                 LocalRatingEnabled = account.LocalRatingEnabled;
                 rateTable.Load(account);
                 upsAccount = account;
@@ -240,27 +244,33 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     ErrorValidatingRates = false;
                     ValidationMessage = string.Empty;
                     ValidatingRates = true;
+                    isBusy(true);
+
                     await Task.Run(() =>
                     {
                         using (Stream fileStream = fileDialog.CreateFileStream())
                         {
                             rateTable.Load(fileStream);
-                            rateTable.Save(upsAccount);
-
-                            SetStatusMessage();
-                            ValidationMessage = "Local rates have been uploaded successfully";
-                            log.Info("Successfully uploaded rate table");
-                            ValidatingRates = false;
                         }
+
+                        rateTable.Save(upsAccount);
                     });
+
+                    SetStatusMessage();
+                    ValidationMessage = "Local rates have been uploaded successfully";
+                    log.Info("Successfully uploaded rate table");
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
-                    ValidatingRates = false;
                     ErrorValidatingRates = true;
                     ValidationMessage =
                         $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
                     log.Error($"Error uploading rate table: {e.Message}");
+                }
+                finally
+                {
+                    ValidatingRates = false;
+                    isBusy(false);
                 }
             }
         }
