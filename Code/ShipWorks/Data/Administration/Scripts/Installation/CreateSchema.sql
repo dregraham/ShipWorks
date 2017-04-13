@@ -6003,7 +6003,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[UpsAccount]'
 GO
 ALTER TABLE [dbo].[UpsAccount] ADD CONSTRAINT [FK_UpsAccount_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
-ON DELETE CASCADE
 GO
 
 PRINT N'Creating extended properties'

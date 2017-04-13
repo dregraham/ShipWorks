@@ -95,5 +95,4 @@ BEGIN
 	ALTER TABLE [dbo].[UpsAccount]
 	Add [UpsRateTableID][bigint] NULL
 	ALTER TABLE [dbo].[UpsAccount] ADD CONSTRAINT [FK_UpsAccount_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
-	ON DELETE CASCADE
 END
