@@ -8,8 +8,6 @@ using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
@@ -84,6 +82,41 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsNotANumber()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "Value Add";
+            worksheet.Range["A1"].Text = "Value Added Service";
+            worksheet.Range["B1"].Text = "Rate";
+            AddRow(worksheet, new[] { "Large Package", "yes very" });
+
+            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("The rate for Large Package is invalid 'yes very'.", ex.Message);
+        }
+
+        [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeDuplicated()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "Value Add";
+            worksheet.Range["A1"].Text = "Value Added Service";
+            worksheet.Range["B1"].Text = "Rate";
+            AddRow(worksheet, new[] { "Large Package", "2.00" });
+            AddRow(worksheet, new[] { "Large Package", "2.00" });
+            
+            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("The surcharge Large Package was specified more than once.", ex.Message);
+        }
+
+        [Fact]
         public void Read_ThrowsUpsLocalRatingException_WhenSurchargeTypeIsUnknown()
         {
             Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
@@ -102,7 +135,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
         private void AddRow(IWorksheet workSheet , string[] values)
         {
-            workSheet.InsertRow(workSheet.Rows.Length);
+            workSheet.InsertRow(workSheet.Rows.Length + 1);
             IRange row = workSheet.Rows.Last();
 
             for (int i = 0; i < values.Length; i++)
