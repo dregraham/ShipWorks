@@ -92,10 +92,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 UploadDate = DateTime.UtcNow
             };
 
-            newRateTable.UpsPackageRate.AddRange(rateTableEntity.UpsPackageRate);
-            newRateTable.UpsLetterRate.AddRange(rateTableEntity.UpsLetterRate);
-            newRateTable.UpsPricePerPound.AddRange(rateTableEntity.UpsPricePerPound);
-            newRateTable.UpsRateSurcharge.AddRange(rateTableEntity.UpsRateSurcharge);
+            newRateTable.UpsPackageRate.AddRange(rateTableEntity.UpsPackageRate.ToList());
+            newRateTable.UpsLetterRate.AddRange(rateTableEntity.UpsLetterRate.ToList());
+            newRateTable.UpsPricePerPound.AddRange(rateTableEntity.UpsPricePerPound.ToList());
+            newRateTable.UpsRateSurcharge.AddRange(rateTableEntity.UpsRateSurcharge.ToList());
 
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();
