@@ -40,6 +40,8 @@ namespace Interapptive.Shared.Tests.Utility
         [InlineData(.1D, false)]
         [InlineData(42.00001D, false)]
         [InlineData(33.999999D, false)]
+        [InlineData(double.Epsilon * 100 - .1E-320, false)]
+        [InlineData(double.Epsilon * 100 - .1E-321, true)]
         public void IsInt(double value, bool expected)
         {
             bool result = value.IsInt();
