@@ -20,7 +20,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly IUpsLocalRateTableRepository localRateTableRepository;
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
-        private UpsRateTableEntity rateTableEntity;
+
+        private List<UpsPackageRateEntity> packageRates;
+        private List<UpsLetterRateEntity> letterRates;
+        private List<UpsPricePerPoundEntity> pricePerPound;
+        private IEnumerable<UpsRateSurchargeEntity> surcharges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
@@ -32,14 +36,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.localRateTableRepository = localRateTableRepository;
             this.upsRateExcelReaders = upsRateExcelReaders;
             this.importedRateValidator = importedRateValidator;
-
-            rateTableEntity = new UpsRateTableEntity();
         }
 
         /// <summary>
         /// Date of the upload
         /// </summary>
-        public DateTime? UploadDate => rateTableEntity?.UploadDate;
+        public DateTime? UploadDate { get; private set; } = null;
 
         /// <summary>
         /// Load the rate table from a stream
@@ -62,21 +64,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity upsAccount)
         {
-            UpsRateTableEntity table;
+            UpsRateTableEntity rateTable;
 
             try
             {
-                table = localRateTableRepository.Get(upsAccount);
+                rateTable = localRateTableRepository.Get(upsAccount);
             }
             catch (Exception e) when (e is ORMException || e is SqlException)
             {
                 throw new UpsLocalRatingException(
-                    "An error occured loading the rate table associated with this account");
+                    "An error occurred loading the rate table associated with this account");
             }
 
-            if (table != null)
+            if (rateTable != null)
             {
-                rateTableEntity = table;
+                UploadDate = rateTable.UploadDate;
             }
         }
 
@@ -92,15 +94,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 UploadDate = DateTime.UtcNow
             };
 
-            newRateTable.UpsPackageRate.AddRange(rateTableEntity.UpsPackageRate.ToList());
-            newRateTable.UpsLetterRate.AddRange(rateTableEntity.UpsLetterRate.ToList());
-            newRateTable.UpsPricePerPound.AddRange(rateTableEntity.UpsPricePerPound.ToList());
-            newRateTable.UpsRateSurcharge.AddRange(rateTableEntity.UpsRateSurcharge.ToList());
+            newRateTable.UpsPackageRate.AddRange(packageRates);
+            newRateTable.UpsLetterRate.AddRange(letterRates);
+            newRateTable.UpsPricePerPound.AddRange(pricePerPound);
+            newRateTable.UpsRateSurcharge.AddRange(surcharges);
 
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();
 
-            rateTableEntity = newRateTable;
+            UploadDate = newRateTable.UploadDate;
         }
 
         /// <summary>
@@ -118,15 +120,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 letterRateList.Select(r => r.AsReadOnly()).ToList(),
                 pricePerPoundList.Select(r => r.AsReadOnly()).ToList());
 
-            rateTableEntity.UpsPackageRate.Clear();
-            rateTableEntity.UpsPackageRate.AddRange(packageRateList);
-
-            rateTableEntity.UpsLetterRate.Clear();
-            rateTableEntity.UpsLetterRate.AddRange(letterRateList);
-
-
-            rateTableEntity.UpsPricePerPound.Clear();
-            rateTableEntity.UpsPricePerPound.AddRange(pricePerPoundList);
+            this.packageRates = packageRateList;
+            this.letterRates = letterRateList;
+            this.pricePerPound = pricePerPoundList;
         }
 
         /// <summary>
@@ -134,8 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
-            rateTableEntity.UpsRateSurcharge.Clear();
-            rateTableEntity.UpsRateSurcharge.AddRange(surcharges);
+            this.surcharges = surcharges;
         }
     }
 }
