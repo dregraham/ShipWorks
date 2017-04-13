@@ -33,12 +33,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a surcharge collection to the surcharge table
         /// </summary>
-        void AddSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges);
+        void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges);
 
         /// <summary>
         /// Adds the rates to the rate tables
         /// </summary>
-        void AddRates(IEnumerable<UpsPackageRateEntity> packageRates,
+        void ReplaceRates(IEnumerable<UpsPackageRateEntity> packageRates,
             IEnumerable<UpsLetterRateEntity> letterRates,
             IEnumerable<UpsPricePerPoundEntity> pricesPerPound);
     }

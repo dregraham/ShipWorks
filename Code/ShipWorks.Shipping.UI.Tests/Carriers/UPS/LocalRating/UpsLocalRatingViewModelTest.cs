@@ -121,6 +121,18 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
+        public void Save_ReturnsFalse_WhenValidatingRatesIsTrue()
+        {
+            var upsAccount = new UpsAccountEntity();
+            var testObject = mock.Create<UpsLocalRatingViewModel>();
+            testObject.Load(upsAccount);
+            testObject.LocalRatingEnabled = false;
+            testObject.ValidatingRates = true;
+
+            Assert.False(testObject.Save());
+        }
+
+        [Fact]
         public void DownloadSampleFileAccount_ResourceStreamNotAccessed_WhenFileDialogDoesNotReturnOK()
         {
             var dialog = MockSaveDialog(DialogResult.Cancel);

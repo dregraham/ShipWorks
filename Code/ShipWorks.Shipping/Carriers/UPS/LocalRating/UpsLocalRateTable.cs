@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using Syncfusion.XlsIO;
@@ -19,11 +21,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
         private UpsRateTableEntity rateTableEntity;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
-        public UpsLocalRateTable(IUpsLocalRateTableRepository localRateTableRepository, 
+        public UpsLocalRateTable(IUpsLocalRateTableRepository localRateTableRepository,
             IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
             IUpsImportedRateValidator importedRateValidator)
         {
@@ -60,7 +62,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity upsAccount)
         {
-            UpsRateTableEntity table = localRateTableRepository.Get(upsAccount);
+            UpsRateTableEntity table;
+
+            try
+            {
+                table = localRateTableRepository.Get(upsAccount);
+            }
+            catch (Exception e) when (e is ORMException || e is SqlException)
+            {
+                throw new UpsLocalRatingException(
+                    "An error occured loading the rate table associated with this account");
+            }
 
             if (table != null)
             {
@@ -92,9 +104,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Adds the rates to the rate tables
+        /// Replace current rates with rates from the new rate table
         /// </summary>
-        public void AddRates(IEnumerable<UpsPackageRateEntity> packageRates,
+        public void ReplaceRates(IEnumerable<UpsPackageRateEntity> packageRates,
             IEnumerable<UpsLetterRateEntity> letterRates,
             IEnumerable<UpsPricePerPoundEntity> pricesPerPound)
         {
@@ -102,24 +114,25 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             List<UpsLetterRateEntity> letterRateList = letterRates.ToList();
             List<UpsPricePerPoundEntity> pricePerPoundList = pricesPerPound.ToList();
 
-            importedRateValidator.Validate(packageRateList.Select(r=>r.AsReadOnly()).ToList(),
-                letterRateList.Select(r=>r.AsReadOnly()).ToList(),
-                pricePerPoundList.Select(r=>r.AsReadOnly()).ToList());
-            
+            importedRateValidator.Validate(packageRateList.Select(r => r.AsReadOnly()).ToList(),
+                letterRateList.Select(r => r.AsReadOnly()).ToList(),
+                pricePerPoundList.Select(r => r.AsReadOnly()).ToList());
+
             rateTableEntity.UpsPackageRate.Clear();
             rateTableEntity.UpsPackageRate.AddRange(packageRateList);
 
             rateTableEntity.UpsLetterRate.Clear();
             rateTableEntity.UpsLetterRate.AddRange(letterRateList);
 
+
             rateTableEntity.UpsPricePerPound.Clear();
             rateTableEntity.UpsPricePerPound.AddRange(pricePerPoundList);
         }
 
         /// <summary>
-        /// Add a surcharge collection to the rate table
+        /// Replace current surcharge collection with surcharges from the new rate table
         /// </summary>
-        public void AddSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
+        public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
             rateTableEntity.UpsRateSurcharge.Clear();
             rateTableEntity.UpsRateSurcharge.AddRange(surcharges);

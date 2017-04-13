@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Reflection;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             var rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
                 table.Setup(t =>
-                            t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                            t.ReplaceRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
                     .Callback<IEnumerable<UpsPackageRateEntity>, IEnumerable<UpsLetterRateEntity>, IEnumerable<UpsPricePerPoundEntity>>(SaveReadRates);
@@ -85,13 +85,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         private int CalculateRateCount(Func<IRange, bool> shouldIncludeRowFunc)
         {
             int calculatedRateCount = 0;
-            foreach (IWorksheet sheet in sampleExcelFile.Worksheets)
-            {
-                if (sheet.Range["A1"].Text != "Zones")
-                {
-                    continue;
-                }
 
+            foreach (IWorksheet sheet in ((IEnumerable<IWorksheet>) sampleExcelFile.Worksheets).Where(
+                s => s.Range["A1"].Text == "Zones"))
+            {
                 int zoneCount = sheet.Rows[0].Cells.Count(cell => cell.HasNumber);
                 int weightCount = sheet.Columns[0].Cells.Count(shouldIncludeRowFunc);
 
@@ -100,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
             return calculatedRateCount;
         }
-      
+
         public void Dispose()
         {
             mock.Dispose();

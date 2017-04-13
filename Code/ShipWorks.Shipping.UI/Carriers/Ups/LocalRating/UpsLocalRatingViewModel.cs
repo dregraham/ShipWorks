@@ -130,11 +130,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(UpsAccountEntity account)
         {
-            LocalRatingEnabled = account.LocalRatingEnabled;
-            rateTable.Load(account);
-
-            upsAccount = account;
-            SetStatusMessage();
+            try
+            {
+                LocalRatingEnabled = account.LocalRatingEnabled;
+                rateTable.Load(account);
+                upsAccount = account;
+                SetStatusMessage();
+            }
+            catch (UpsLocalRatingException e)
+            {
+                ValidationMessage = e.Message;
+            }
         }
 
         /// <summary>
@@ -151,6 +157,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 upsAccount.LocalRatingEnabled = false;
                 return false;
             }
+
+            if (ValidatingRates)
+            {
+                messageHelper.ShowError("Please wait until the rate table has finished uploading before closing the UPS account window");
+                return false;
+            }
+
             return true;
         }
 
@@ -232,14 +245,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         using (Stream fileStream = fileDialog.CreateFileStream())
                         {
                             rateTable.Load(fileStream);
+                            rateTable.Save(upsAccount);
+
+                            SetStatusMessage();
+                            ValidationMessage = "Local rates have been uploaded successfully";
+                            log.Info("Successfully uploaded rate table");
+                            ValidatingRates = false;
                         }
-
-                        rateTable.Save(upsAccount);
-
-                        SetStatusMessage();
-                        ValidationMessage = "Local rates have been uploaded successfully";
-                        log.Info("Successfully uploaded rate table");
-                        ValidatingRates = false;
                     });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)

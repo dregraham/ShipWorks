@@ -10,7 +10,6 @@
              d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
-        <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Control.Resources>
     <Grid Margin="10">
@@ -23,7 +22,6 @@
         </Grid.RowDefinitions>
         <WrapPanel>
             <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
-            
         </WrapPanel>
         <TextBlock Grid.Row="1"
                    Margin="21 10 0 10"
@@ -38,7 +36,6 @@
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
         </StackPanel>
-        
         <TextBlock Grid.Row="3"
                    VerticalAlignment="Center"
                    Text="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
@@ -50,12 +47,10 @@
                 Command="{Binding UploadRatingFileCommand}">
             Browse...
         </Button>
-        
         <ui:WaitSpinner Grid.Row="4" Visibility="{Binding ValidatingRates, Converter={StaticResource BooleanToVisibilityConverter}}" 
                         BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
             Uploading rate table
         </ui:WaitSpinner>
-        
         <TextBlock Grid.Row="4" Text="{Binding ValidationMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
             <TextBlock.Style>

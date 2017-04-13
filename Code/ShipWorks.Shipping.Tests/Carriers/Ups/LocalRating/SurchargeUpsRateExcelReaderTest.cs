@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
             
-            rateTable.Verify(r => r.AddSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.NoSignature)));
+            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.NoSignature)));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
-            rateTable.Verify(r => r.AddSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
+            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
         }
 
 
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
-            rateTable.Verify(r => r.AddSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
+            rateTable.Verify(r => r.ReplaceSurcharges(It.Is<IEnumerable<UpsRateSurchargeEntity>>(e => e.First().Amount == 2.00 && e.First().SurchargeType == (int)UpsSurchargeType.LargePackage)));
         }
 
         [Fact]

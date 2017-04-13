@@ -55,8 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 result.AddRange(GetSurcharges(surchargesSheet.Rows));
             }
-            
-            upsLocalRateTable.AddSurcharges(result);
+
+            upsLocalRateTable.ReplaceSurcharges(result);
         }
 
         /// <summary>

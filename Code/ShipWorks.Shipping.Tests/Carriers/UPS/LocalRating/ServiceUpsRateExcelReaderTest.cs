@@ -29,17 +29,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
-
                 table.Setup(
                         t =>
-                            t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                            t.ReplaceRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()))
                     .Callback
                     <IEnumerable<UpsPackageRateEntity>, IEnumerable<UpsLetterRateEntity>,
                         IEnumerable<UpsPricePerPoundEntity>>(SaveReadRates);
-
-
             });
 
             testObject = mock.Create<ServiceUpsRateExcelReader>();
@@ -60,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 IWorksheets sheets = SetupSingleRateSheet();
                 testObject.Read(sheets, rateTable.Object);
 
-                rateTable.Verify(t => t.AddRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
+                rateTable.Verify(t => t.ReplaceRates(It.IsAny<IEnumerable<UpsPackageRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsLetterRateEntity>>(),
                                 It.IsAny<IEnumerable<UpsPricePerPoundEntity>>()), Times.Once);
         }

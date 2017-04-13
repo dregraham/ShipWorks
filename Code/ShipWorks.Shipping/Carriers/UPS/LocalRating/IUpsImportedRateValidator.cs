@@ -3,6 +3,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
+    /// <summary>
+    /// Validates imported rates.
+    /// </summary>
     public interface IUpsImportedRateValidator
     {
         /// <summary>

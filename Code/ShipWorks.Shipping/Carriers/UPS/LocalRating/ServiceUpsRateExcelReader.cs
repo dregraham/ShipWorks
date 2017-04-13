@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
             }
 
-            upsLocalRateTable.AddRates(readPackageRates, readLetterRates, readPricesPerPound);
+            upsLocalRateTable.ReplaceRates(readPackageRates, readLetterRates, readPricesPerPound);
         }
 
         /// <summary>
