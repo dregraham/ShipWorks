@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -70,10 +71,12 @@ namespace Interapptive.Shared.UI
             {
                 return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
             }
-            catch (Exception e)
+            catch (Exception e) when (e is IOException ||
+                                      e is NotSupportedException || 
+                                      e is UnauthorizedAccessException ||
+                                      e is ArgumentException)
             {
-                string message = $"An error occurred saving the file:{Environment.NewLine}{Environment.NewLine}" +
-                                 $"{e.Message}";
+                string message = $"An error occurred saving the file:{Environment.NewLine}{Environment.NewLine}{e.Message}";
                 throw new ShipWorksSaveFileDialogException(message, e);
             }
         }
@@ -87,10 +90,11 @@ namespace Interapptive.Shared.UI
             {
                 Process.Start(selectedFileName);
             }
-            catch (Exception e)
+            catch (Exception e) when (e is InvalidOperationException ||
+                                       e is Win32Exception ||
+                                       e is FileNotFoundException)
             {
-                string message = $"An error occurred opening the file after it was saved:{Environment.NewLine}{Environment.NewLine}" +
-                                 $"{e.Message}";
+                string message = $"An error occurred opening the file after it was saved:{Environment.NewLine}{Environment.NewLine}{e.Message}";
                 throw new ShipWorksSaveFileDialogException(message, e);
             }
         }

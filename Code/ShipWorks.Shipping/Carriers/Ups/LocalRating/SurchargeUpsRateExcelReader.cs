@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private IEnumerable<UpsRateSurchargeEntity> GetSurcharges(IRange[] rows)
         {
             IList<UpsRateSurchargeEntity> result = new List<UpsRateSurchargeEntity>();
-            rows.ToList().Where(IsSurchargeRow).ForEach(r => AddRowToSurcharges(r, result));
+            rows.Where(IsSurchargeRow).ForEach(r => AddRowToSurcharges(r, result));
 
             // check the results before returning
             ValidateResult(result);

@@ -19,11 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
         private UpsRateTableEntity rateTableEntity;
-
-        private List<UpsPackageRateEntity> newPackageRates;
-        private List<UpsLetterRateEntity> newLetterRates;
-        private List<UpsPricePerPoundEntity> newPricesPerPound;
-        private List<UpsRateSurchargeEntity> newSurcharges;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
@@ -78,15 +73,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Save(UpsAccountEntity accountEntity)
         {
+            // Creating new table so that a ups account can still get the old rates while
+            // we save the new rates.
             UpsRateTableEntity newRateTable = new UpsRateTableEntity
             {
                 UploadDate = DateTime.UtcNow
             };
 
-            newRateTable.UpsPackageRate.AddRange(newPackageRates);
-            newRateTable.UpsLetterRate.AddRange(newLetterRates);
-            newRateTable.UpsPricePerPound.AddRange(newPricesPerPound);
-            newRateTable.UpsRateSurcharge.AddRange(newSurcharges);
+            newRateTable.UpsPackageRate.AddRange(rateTableEntity.UpsPackageRate);
+            newRateTable.UpsLetterRate.AddRange(rateTableEntity.UpsLetterRate);
+            newRateTable.UpsPricePerPound.AddRange(rateTableEntity.UpsPricePerPound);
+            newRateTable.UpsRateSurcharge.AddRange(rateTableEntity.UpsRateSurcharge);
 
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();
@@ -108,10 +105,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             importedRateValidator.Validate(packageRateList.Select(r=>r.AsReadOnly()).ToList(),
                 letterRateList.Select(r=>r.AsReadOnly()).ToList(),
                 pricePerPoundList.Select(r=>r.AsReadOnly()).ToList());
+            
+            rateTableEntity.UpsPackageRate.Clear();
+            rateTableEntity.UpsPackageRate.AddRange(packageRateList);
 
-            newPackageRates = packageRateList;
-            newLetterRates = letterRateList;
-            newPricesPerPound = pricePerPoundList;
+            rateTableEntity.UpsLetterRate.Clear();
+            rateTableEntity.UpsLetterRate.AddRange(letterRateList);
+
+            rateTableEntity.UpsPricePerPound.Clear();
+            rateTableEntity.UpsPricePerPound.AddRange(pricePerPoundList);
         }
 
         /// <summary>
@@ -119,7 +121,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void AddSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
-            newSurcharges = surcharges.ToList();
+            rateTableEntity.UpsRateSurcharge.Clear();
+            rateTableEntity.UpsRateSurcharge.AddRange(surcharges);
         }
     }
 }

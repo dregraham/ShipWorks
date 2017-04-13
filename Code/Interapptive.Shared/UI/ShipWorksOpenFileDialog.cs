@@ -67,9 +67,13 @@ namespace Interapptive.Shared.UI
             {
                 return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
             }
-            catch (Exception ex)
+            catch (Exception e) when (e is IOException ||
+                                      e is NotSupportedException ||
+                                      e is UnauthorizedAccessException ||
+                                      e is ArgumentException)
+
             {
-                throw new ShipWorksOpenFileDialogException(ex.Message, ex);
+                throw new ShipWorksOpenFileDialogException(e.Message, e);
             }
         }
     }

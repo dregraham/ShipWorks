@@ -85,5 +85,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                         Times.Once);
             }
         }
+
+        [Fact]
+        public void Save_SavesNewRateTable()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
+            rateTableRepo.Setup(r => r.Get(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
+
+            UpsAccountEntity upsAccount = new UpsAccountEntity();
+
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+            testObject.AddRates(new UpsPackageRateEntity[0], new UpsLetterRateEntity[0], new UpsPricePerPoundEntity[0]);
+            testObject.AddSurcharges(new UpsRateSurchargeEntity[0]);
+
+            testObject.Load(upsAccount);
+            testObject.Save(upsAccount);
+            rateTableRepo
+                .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
+        }
     }
 }
