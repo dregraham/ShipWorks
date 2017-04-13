@@ -78,14 +78,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             // At this point, we know there cannot be more than 150 distinct values, so we can just check the less than
-            int disctinctWeightCount = zonePackageRates.Select(r => r.WeightInPounds).Distinct().Count();
+            int distinctWeightCount = zonePackageRates.Select(r => r.WeightInPounds).Distinct().Count();
 
-            if (disctinctWeightCount != zonePackageRates.Count())
+            if (distinctWeightCount != zonePackageRates.Count())
             {
                 ThrowError(DuplicateWeightDetectedErrorMessageFormat, serviceType);
             }
 
-            if (disctinctWeightCount < 150)
+            if (distinctWeightCount < 150)
             {
                 ThrowError(MissingPackageWeightErrorMessageFormat, serviceType);
             }
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 ThrowError(MissingPricePerPoundErrorMessageFormat, serviceType);
             }
 
-            if (CanSendLetterWith(serviceType))
+            if (IsLetterAllowed(serviceType))
             {
                 if (zoneLetterRates.Any())
                 {
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Determines whether this service can send a letter.
         /// </summary>
-        private static bool CanSendLetterWith(UpsServiceType serviceType)
+        private static bool IsLetterAllowed(UpsServiceType serviceType)
         {
             return serviceType == UpsServiceType.UpsGround || serviceType == UpsServiceType.Ups3DaySelect;
         }
