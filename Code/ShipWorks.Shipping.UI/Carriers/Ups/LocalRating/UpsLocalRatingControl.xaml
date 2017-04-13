@@ -11,6 +11,7 @@
              mc:Ignorable="d">
     <Control.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -44,6 +45,7 @@
                 Height="21"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                IsEnabled="{Binding ValidatingRates, Converter={StaticResource InverseBooleanConverter}}"
                 Command="{Binding UploadRatingFileCommand}">
             Browse...
         </Button>

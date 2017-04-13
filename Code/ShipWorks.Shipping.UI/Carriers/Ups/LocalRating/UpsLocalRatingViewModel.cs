@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Whether or not there was an error validating the rate file.
+        /// Whether or not we are in the process of validating the rates.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool ValidatingRates
