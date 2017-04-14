@@ -25,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private List<UpsLetterRateEntity> letterRates;
         private List<UpsPricePerPoundEntity> pricePerPound;
         private IEnumerable<UpsRateSurchargeEntity> surcharges;
+        private string fileName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
@@ -48,6 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void Load(Stream stream)
         {
+            fileName = (stream as FileStream)?.Name;
+
             try
             {
                 using (ExcelEngine excelEngine = new ExcelEngine())
@@ -62,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {
-                throw new UpsLocalRatingException("Error loading Excel file.", ex);
+                throw new UpsLocalRatingException($"Error loading Excel file '{fileName}'.", ex);
             }
         }
 
@@ -105,6 +108,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             newRateTable.UpsLetterRate.AddRange(letterRates);
             newRateTable.UpsPricePerPound.AddRange(pricePerPound);
             newRateTable.UpsRateSurcharge.AddRange(surcharges);
+
+            // Throw if the selected file does not contain any rate information
+            if (!newRateTable.UpsPackageRate.Any() && !newRateTable.UpsLetterRate.Any() &&
+                !newRateTable.UpsPricePerPound.Any() && !newRateTable.UpsRateSurcharge.Any())
+            {
+                throw new UpsLocalRatingException($"The selected file '{fileName}' does not contain any rates.");
+            }
 
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();

@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public const string MissingPackageWeightErrorMessageFormat =
             "Weights required for all whole number weights between 1-150. {0} sheet is missing a weight.";
 
+        public const string DuplicateZoneDetectedErrorMessageFormat = "Duplicate zone detected in sheet {0}.";
         public const string DuplicateWeightDetectedErrorMessageFormat = "Duplicate weight detected in sheet {0}.";
         public const string MissingPricePerPoundErrorMessageFormat = "{0} sheet is missing a value for Price Per Pound.";
         public const string LetterNotValidForServiceErrorMessageFormat = "{0} sheet cannot have a rate for Letter.";
@@ -79,8 +80,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             // At this point, we know there cannot be more than 150 distinct values, so we can just check the less than
             int distinctWeightCount = zonePackageRates.Select(r => r.WeightInPounds).Distinct().Count();
+            
+            if (zonePackageRates.Select(r => r.Zone).Count() != zonePackageRates.Select(r => r.Zone).Distinct().Count())
+            {
+                ThrowError(DuplicateZoneDetectedErrorMessageFormat, serviceType);
+            }
 
-            if (distinctWeightCount != zonePackageRates.Count())
+            if (distinctWeightCount != zonePackageRates.Count)
             {
                 ThrowError(DuplicateWeightDetectedErrorMessageFormat, serviceType);
             }
