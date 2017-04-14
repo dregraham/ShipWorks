@@ -271,7 +271,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             sheet.Name = "NDA Early";
 
             var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
-            Assert.Equal("Sheet NDA Early has no rows.", exception.Message);
+            Assert.Equal("Sheet 'NDA Early' has no rows.", exception.Message);
+        }
+
+        [Fact]
+        public void Validate_Throws_WhenDuplicateZone()
+        {
+            IWorksheets sheets = SetupSingleRateSheet();
+            sheets[0].Name = "NDA";
+            sheets[0].Range["B1"].Number = 100;
+            sheets[0].Range["C1"].Number = 100;
+
+            var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
+
+            Assert.Equal($"Duplicate zone detected in sheet '{sheets[0].Name}'.", exception.Message);
         }
 
         public void Dispose()

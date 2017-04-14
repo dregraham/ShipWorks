@@ -68,11 +68,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // ProcessRate, passing in the service, weightCell from Column 1, zone cell from the header, and the rate cell.
             if (sheet.Rows.Length == 0)
             {
-                throw new UpsLocalRatingException($"Sheet {sheet.Name} has no rows.");
+                throw new UpsLocalRatingException($"Sheet '{sheet.Name}' has no rows.");
             }
 
             IRange[] headerCells = sheet.Rows[0].Cells;
-            
+
+            IEnumerable<string> zoneHeaders = headerCells.Where(c => !string.IsNullOrWhiteSpace(c.Value))
+                .Select(c => c.Value).ToList();
+
+            // Ensure there are not duplicate zone columns
+            if (zoneHeaders.Distinct().Count() != zoneHeaders.Count())
+            {
+                throw new UpsLocalRatingException($"Duplicate zone detected in sheet '{sheet.Name}'.");
+            }
+
             // Loop through each row after the header row
             for (int rowIndex = 1; rowIndex < sheet.Rows.Length; rowIndex++)
             {

@@ -34,10 +34,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             mock.Mock<IUpsLocalRateTableRepository>();
             UpsAccountEntity upsAccount = new UpsAccountEntity();
 
-            var testObject = mock.Create<UpsLocalRateTable>();
-            testObject.ReplaceRates(new UpsPackageRateEntity[0], new UpsLetterRateEntity[0], new UpsPricePerPoundEntity[0]);
-            testObject.ReplaceSurcharges(new UpsRateSurchargeEntity[0]);
-
+            var testObject = CreatePopulatedRateTable(mock);
             testObject.Save(upsAccount);
 
             Assert.NotEqual(new DateTime(), testObject.UploadDate);
@@ -50,9 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
             UpsAccountEntity upsAccount = new UpsAccountEntity();
 
-            var testObject = mock.Create<UpsLocalRateTable>();
-            testObject.ReplaceRates(new UpsPackageRateEntity[0], new UpsLetterRateEntity[0], new UpsPricePerPoundEntity[0]);
-            testObject.ReplaceSurcharges(new UpsRateSurchargeEntity[0]);
+            var testObject = CreatePopulatedRateTable(mock);
 
             testObject.Save(upsAccount);
             rateTableRepo.Verify(r => r.Save(It.IsAny<UpsRateTableEntity>(), upsAccount), Times.Once);
@@ -61,18 +56,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void AddRates_DelegatesToImportedRateValidator()
         {
-            var upsPackageRateEntity = new UpsPackageRateEntity(2);
-            var upsLetterRateEntity = new UpsLetterRateEntity(3);
-            var upsPricePerPoundEntity = new UpsPricePerPoundEntity(4);
-
-            List<UpsPackageRateEntity> packageRates = new List<UpsPackageRateEntity> {upsPackageRateEntity};
-            List<UpsLetterRateEntity> letterRate = new List<UpsLetterRateEntity> {upsLetterRateEntity};
-            List<UpsPricePerPoundEntity> pricesPerPound = new List<UpsPricePerPoundEntity> {upsPricePerPoundEntity};
-
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                var testObject = mock.Create<UpsLocalRateTable>();
-                testObject.ReplaceRates(packageRates, letterRate, pricesPerPound);
+                CreatePopulatedRateTable(mock);
 
                 mock.Mock<IUpsImportedRateValidator>()
                     .Verify(v => v.Validate(
@@ -94,15 +80,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             rateTableRepo.Setup(r => r.Get(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
 
             UpsAccountEntity upsAccount = new UpsAccountEntity();
-            
-            var testObject = mock.Create<UpsLocalRateTable>();
-            testObject.ReplaceRates(new UpsPackageRateEntity[0], new UpsLetterRateEntity[0], new UpsPricePerPoundEntity[0]);
-            testObject.ReplaceSurcharges(new UpsRateSurchargeEntity[0]);
+
+            var testObject = CreatePopulatedRateTable(mock);
 
             testObject.Load(upsAccount);
             testObject.Save(upsAccount);
             rateTableRepo
                 .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
+        }
+
+        private UpsLocalRateTable CreatePopulatedRateTable(AutoMock mock)
+        {
+            var upsPackageRateEntity = new UpsPackageRateEntity(2);
+            var upsLetterRateEntity = new UpsLetterRateEntity(3);
+            var upsPricePerPoundEntity = new UpsPricePerPoundEntity(4);
+            var upsSurchargeEntity = new UpsRateSurchargeEntity(5);
+
+            List<UpsPackageRateEntity> packageRates = new List<UpsPackageRateEntity> { upsPackageRateEntity };
+            List<UpsLetterRateEntity> letterRate = new List<UpsLetterRateEntity> { upsLetterRateEntity };
+            List<UpsPricePerPoundEntity> pricesPerPound = new List<UpsPricePerPoundEntity> { upsPricePerPoundEntity };
+            List<UpsRateSurchargeEntity> surcharges = new List<UpsRateSurchargeEntity> { upsSurchargeEntity };
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+            testObject.ReplaceRates(packageRates, letterRate, pricesPerPound);
+            testObject.ReplaceSurcharges(surcharges);
+
+            return testObject;
         }
     }
 }

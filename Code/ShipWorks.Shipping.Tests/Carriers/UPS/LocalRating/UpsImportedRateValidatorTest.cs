@@ -97,24 +97,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             string expectedErrorMessage = string.Format(UpsImportedRateValidator.MissingPackageWeightErrorMessageFormat, EnumHelper.GetDescription(UpsServiceType.Ups2DayAir));
             Assert.Equal(expectedErrorMessage, exception.Message);
         }
-
-        [Fact]
-        public void Validate_Throws_WhenDuplicateZone()
-        {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
-            packageRates.Add(new UpsPackageRateEntity(){Service = (int) UpsServiceType.Ups2DayAir, Zone = 45, WeightInPounds = 2});
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
-            AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
-
-            var testObject = mock.Create<UpsImportedRateValidator>();
-            var exception = Record.Exception(() => testObject.Validate(packageRates, letterRates, pricesPerPound));
-            Assert.IsType<UpsLocalRatingException>(exception);
-
-            string expectedErrorMessage = string.Format(UpsImportedRateValidator.DuplicateZoneDetectedErrorMessageFormat, EnumHelper.GetDescription(UpsServiceType.Ups2DayAir));
-            Assert.Equal(expectedErrorMessage, exception.Message);
-        }
-
+        
         [Fact]
         public void Validate_Throws_WhenDuplicatePackageWeight()
         {
