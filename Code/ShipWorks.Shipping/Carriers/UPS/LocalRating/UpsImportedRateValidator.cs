@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsImportedRateValidator : IUpsImportedRateValidator
     {
         public const string PackageWeightOutOfRangeErrorMessageFormat =
-            "Weights must be between 1-150. {0} sheet has a weight of this range.";
+            "Weights must be between 1-150. {0} sheet has a weight outside of this range.";
 
         public const string MissingPackageWeightErrorMessageFormat =
             "Weights required for all whole number weights between 1-150. {0} sheet is missing a weight.";

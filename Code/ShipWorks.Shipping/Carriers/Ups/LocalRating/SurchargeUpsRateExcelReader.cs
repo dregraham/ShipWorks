@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private void AddRowToSurcharges(IRange row, IList<UpsRateSurchargeEntity> surcharges)
         {
             // try to parse the surcharge type
-            UpsSurchargeType surcharge = GetSurchargType(row.Cells[0].Value);
+            UpsSurchargeType surcharge = GetSurchargeType(row.Cells[0].Value);
 
             double amount;
             if (double.TryParse(row.Cells[1].Value, NumberStyles, CultureInfo.CurrentCulture, out amount))
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Get the surcharge type from the string
         /// </summary>
         /// <exception cref="UpsLocalRatingException">When the surcharge type is unknown</exception>
-        private UpsSurchargeType GetSurchargType(string name)
+        private UpsSurchargeType GetSurchargeType(string name)
         {
             IEnumerable<EnumEntry<UpsSurchargeType>> surcharge =
                 surchargeTypeMap.Where(e => e.Description == name).ToList();
