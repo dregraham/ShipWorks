@@ -6,6 +6,10 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using System;
+using System.Web.Services.Protocols;
+using Autofac;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
@@ -103,20 +107,49 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             {
                 throw new UpsPromoException("You must first accept the Terms and Conditions");
             }
-
-            IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
-
-            // If the activation was successful save it to the UpsAccount Entity
-            // Otherwise throw exception containing the info about the failure
-            if (promoActivation.IsSuccessful)
+            
+            try
             {
-                account.PromoStatus = (int)UpsPromoStatus.Applied;
-                upsAccountRepository.Save(account);
+                IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
+                PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
+
+                // If the activation was successful save it to the UpsAccount Entity
+                // Otherwise throw exception containing the info about the failure
+                if (promoActivation.IsSuccessful)
+                {
+                    account.PromoStatus = (int)UpsPromoStatus.Applied;
+                    upsAccountRepository.Save(account);
+                }
+                else
+                {
+                    throw new UpsPromoException(promoActivation.Info);
+                }
             }
-            else
+            catch (UpsPromoException ex)
             {
-                throw new UpsPromoException(promoActivation.Info);
+                SoapException soapEx = ex.InnerException as SoapException;
+
+                string errCode = soapEx?.Detail?.SelectSingleNode("//*[local-name()='Code']")?.InnerText;
+                if (errCode == "9560008")
+                {
+                    // "Account is already signed up for this promotion"
+                    // Set the promo status on the account as applied because our promo has already been applied
+                    account.PromoStatus = (int)UpsPromoStatus.Applied;
+                    upsAccountRepository.Save(account);
+                }
+                else if (errCode == "9560010")
+                {
+                    // Account is on a bid that cannot be overridden
+                    // Set the promo status to declined because our promo cannot be applied
+                    Decline();
+                    throw  new UpsPromoException("Your UPS Account is on a promo that cannot be overridden.");
+                }
+                else
+                {
+                    // This is an error we dont know about, could be an outage so remind me later
+                    RemindMe();
+                    throw;
+                }
             }
         }
 
