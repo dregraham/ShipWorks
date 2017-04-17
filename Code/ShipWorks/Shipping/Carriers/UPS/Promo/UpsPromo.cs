@@ -107,23 +107,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             {
                 throw new UpsPromoException("You must first accept the Terms and Conditions");
             }
-            
+
+            PromoActivation promoActivation = null;
+
             try
             {
                 IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-                PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
-
-                // If the activation was successful save it to the UpsAccount Entity
-                // Otherwise throw exception containing the info about the failure
-                if (promoActivation.IsSuccessful)
-                {
-                    account.PromoStatus = (int)UpsPromoStatus.Applied;
-                    upsAccountRepository.Save(account);
-                }
-                else
-                {
-                    throw new UpsPromoException(promoActivation.Info);
-                }
+                promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
             }
             catch (UpsPromoException ex)
             {
@@ -150,6 +140,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                     RemindMe();
                     throw;
                 }
+            }
+
+            // If the activation was successful save it to the UpsAccount Entity
+            // Otherwise throw exception containing the info about the failure
+            if (promoActivation != null && promoActivation.IsSuccessful)
+            {
+                account.PromoStatus = (int)UpsPromoStatus.Applied;
+                upsAccountRepository.Save(account);
+            }
+            else
+            {
+                throw new UpsPromoException(promoActivation?.Info);
             }
         }
 
