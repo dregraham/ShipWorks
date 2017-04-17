@@ -138,10 +138,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 throw new UpsLocalRatingException($"Header text '{headerCell.Text}' must be a whole number.");
             }
-            
-            if (!rateCell.HasNumber && rateCell.Value != "-" && !rateCell.IsBlank)
+
+            if (rateCell.IsBlank)
             {
-                throw new UpsLocalRatingException($"Rate text '{rateCell.Text}' must be a number, '-', or empty.");
+                throw new UpsLocalRatingException($"Empty rate cell found in row {rateCell.Row}");
+            }
+
+            if (!rateCell.HasNumber)
+            {
+                throw new UpsLocalRatingException($"Rate text '{rateCell.Text}' must be a number.");
             }
 
             SaveRateToCollection(upsServiceType, weightCell, headerCell, rateCell);
@@ -153,8 +158,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private void SaveRateToCollection(UpsServiceType upsServiceType, IRange weightCell, IRange headerCell, IRange rateCell)
         {
             int zone = Convert.ToInt32(headerCell.Number);
-            decimal rate = rateCell.HasNumber ? Convert.ToDecimal(rateCell.Number) : 0;
-            
+            decimal rate = Convert.ToDecimal(rateCell.Number);
+
             // If weight has number, it represents a package weight. We store this in the UpsPackageRate table
             if (weightCell.HasNumber)
             {

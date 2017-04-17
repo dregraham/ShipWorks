@@ -225,6 +225,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Empty(readPricesPerPound);
         }
 
+        [Fact]
+        public void Read_ThrowsLocalRatingException_IfBlankRate()
+        {
+            IWorksheets sheets = SetupSingleRateSheet();
+            sheets[0].Range["B2"].Value2 = string.Empty;
+
+            var exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
+            Assert.NotNull(exception);
+            Assert.Equal("Empty rate cell found in row 2", exception.Message);
+        }
+
         [Theory]
         [InlineData("bad string value")]
         [InlineData("1.5")]
@@ -239,7 +250,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Read_ThrowsLocalRatingException_IfRateNotDecimalDashOrEmpty()
+        public void Read_ThrowsLocalRatingException_IfRateNotDecimal()
         {
             IWorksheets sheets = SetupSingleRateSheet();
             sheets[0].Range["B2"].Text = "blah";
@@ -248,28 +259,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.NotNull(exception);
             Assert.Contains("blah", exception.Message);
-        }
-
-        [Fact]
-        public void Read_SavesRateAsZero_IfRateCellIsDash()
-        {
-            IWorksheets sheets = SetupSingleRateSheet();
-            sheets[0].Range["B2"].Text = "-";
-
-            testObject.Read(sheets, rateTable.Object);
-            
-            Assert.Equal(0, readPackageRates.ElementAt(0).Rate);
-        }
-
-        [Fact]
-        public void Read_SavesRateAsZero_IfRateCellIsEmpty()
-        {
-            IWorksheets sheets = SetupSingleRateSheet();
-            sheets[0].Range["B2"].Text = string.Empty;
-
-            testObject.Read(sheets, rateTable.Object);
-
-            Assert.Equal(0, readPackageRates.ElementAt(0).Rate);
         }
 
         [Fact]
