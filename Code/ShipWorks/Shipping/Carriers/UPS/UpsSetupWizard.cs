@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
         private DateTime? smartPickupNotifyTime;
-        private UpsPromo promo;
+        private IUpsPromo promo;
 
         private string upsLicense;
 
@@ -887,7 +887,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000098802-creating-a-new-ups-account-in-shipworks", this);
         }
 
         /// <summary>
@@ -1132,7 +1132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount);
+                promo = upsPromoFactory.Get(upsAccount, false);
 
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;

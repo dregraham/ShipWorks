@@ -11,6 +11,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
+using System.Text;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -180,6 +182,35 @@ namespace ShipWorks.Shipping.Settings
             {
                 settings.DefaultType = (int) shipmentTypeCode;
             }
+        }
+
+        /// <summary>
+        /// Collect Shipping Settings related telemetry
+        /// </summary>
+        public static IDictionary<string, string> GetTelemetryData()
+        {
+            IShippingSettingsEntity settings = FetchReadOnly();
+
+            // Grab the ShipmentTypeCodes description excluding express 1 because we need a more explicit description
+            List<string> shipmentTypeDescriptions = settings.ActivatedTypes.Except(settings.ExcludedTypes)
+                .Except(new [] { ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps })
+                .Select(t => EnumHelper.GetDescription(t))
+                .ToList();
+
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Usps) && !settings.ExcludedTypes.Contains(ShipmentTypeCode.Express1Usps))
+            {
+                shipmentTypeDescriptions.Add("Express1 (Stamps.com)");
+            }
+
+            if (settings.ActivatedTypes.Contains(ShipmentTypeCode.Express1Endicia) && !settings.ExcludedTypes.Contains(ShipmentTypeCode.Express1Endicia))
+            {
+                shipmentTypeDescriptions.Add("Express1 (Endicia)");
+            }
+
+            return new Dictionary<string, string>
+            {
+                {"Shipping.ActiveProviders", string.Join(",", shipmentTypeDescriptions.Any() ? string.Join(",", shipmentTypeDescriptions) : "N/A") }
+            };
         }
 
         /// <summary>

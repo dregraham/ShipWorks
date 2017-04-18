@@ -965,6 +965,7 @@
     <Compile Include="Common\ICompositeValidatorResult.cs" />
     <Compile Include="Common\IValidator.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
+    <Compile Include="Common\Threading\CancellationTokenProgressProvider.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
@@ -1249,6 +1250,7 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
@@ -10762,6 +10764,7 @@
     <None Include="Resources\odbc.png" />
     <Resource Include="Resources\printer_redo_16_16.png" />
     <None Include="Resources\sellercloud.png" />
+    <None Include="Resources\selleractive.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />

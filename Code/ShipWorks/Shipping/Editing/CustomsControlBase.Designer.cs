@@ -122,7 +122,7 @@
             this.sectionContents.Size = new System.Drawing.Size(572, 362);
             this.sectionContents.TabIndex = 1;
             // 
-            // sandGrid
+            // itemsGrid
             // 
             this.itemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -185,13 +185,15 @@
             // 
             // weight
             // 
+            this.weight.AutoSize = true;
+            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(105, 79);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(218, 24);
+            this.weight.Size = new System.Drawing.Size(268, 24);
             this.weight.TabIndex = 5;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnShipSenseFieldChanged);

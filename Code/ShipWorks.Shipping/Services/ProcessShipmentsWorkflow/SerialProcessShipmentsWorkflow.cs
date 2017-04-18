@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -45,69 +47,101 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         }
 
         /// <summary>
+        /// Get the name of the workflow
+        /// </summary>
+        public string Name => "Serial";
+
+        /// <summary>
+        /// Concurrent number of tasks used for processing shipments
+        /// </summary>
+        public int ConcurrencyCount => 1;
+
+        /// <summary>
         /// Process the shipments
         /// </summary>
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
-            RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction)
+            RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
+            Action counterRateCarrierConfiguredWhileProcessingAction)
         {
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(ownerRetriever(),
-                "Processing Shipments",
-                "ShipWorks is processing the shipments.",
-                "Shipment {0} of {1}",
-                false);
-
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
-            ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
 
-            // What to do before it gets started (but is on the background thread)
-            // sender is a ShipWorks.Common.Threading.BackgroundExecutor<ShipWorks.Data.Model.EntityClasses.ShipmentEntity>
-            executor.ExecuteStarting += (sender, args) =>
+            IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+            return await Task.Run(() =>
             {
-                // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
-                executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(shipments, true);
-            };
+                ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
+                return input.Where(_ => !cancellationSource.IsCancellationRequested)
+                    .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
+                    .Where(x => x != null)
+                    .Aggregate(executionState, AggregateResults);
+            });
+        }
 
-            await executor.ExecuteAsync(ProcessShipment, shipments, executionState);
+        /// <summary>
+        /// Aggregate the results
+        /// </summary>
+        private ShipmentProcessorExecutionState AggregateResults(ShipmentProcessorExecutionState executionState, ILabelResultLogResult result)
+        {
+            if (!string.IsNullOrEmpty(result.ErrorMessage))
+            {
+                executionState.NewErrors.Add("Order " + result.OriginalShipment.Order.OrderNumberComplete + ": " + result.ErrorMessage);
+            }
+
+            executionState.OutOfFundsException = executionState.OutOfFundsException ?? result.OutOfFundsException;
+            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? result.TermsAndConditionsException;
+            executionState.WorldshipExported |= result.WorldshipExported;
+
+            if (result.Success)
+            {
+                executionState.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
+            }
 
             return executionState;
         }
 
         /// <summary>
+        /// Create processing input from each shipment that will be used by the processor
+        /// </summary>
+        private async Task<IEnumerable<ProcessShipmentState>> CreateShipmentProcessorInput(
+            IEnumerable<ShipmentEntity> shipments, RateResult chosenRateResult, CancellationTokenSource cancellationSource)
+        {
+            IDictionary<long, Exception> licenseCheckCache = new Dictionary<long, Exception>();
+
+            // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
+            IDictionary<ShipmentEntity, Exception> concurrencyErrors =
+                await Task.Run(() => shippingManager.SaveShipmentsToDatabase(shipments, true));
+
+            return shipments.Select((shipment, i) =>
+            {
+                return concurrencyErrors.ContainsKey(shipment) ?
+                    new ProcessShipmentState(i, concurrencyErrors[shipment], cancellationSource) :
+                    new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
+            });
+        }
+
+        /// <summary>
         /// Process a single shipment
         /// </summary>
-        private void ProcessShipment(ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder)
+        private ILabelResultLogResult ProcessShipment(ProcessShipmentState initial, IProgressReporter workProgress, int shipmentCount)
         {
-            ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
-            ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
+            workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
 
             IShipmentPreparationResult prepareShipmentResult = null;
-            ILabelResultLogResult completeLabelResult = null;
 
             try
             {
                 prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+                if (initial.CancellationSource.IsCancellationRequested)
+                {
+                    return null;
+                }
+
                 ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
                 ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
-                completeLabelResult = completeLabelTask.Complete(saveLabelResult);
+                return completeLabelTask.Complete(saveLabelResult);
             }
             finally
             {
                 prepareShipmentResult?.EntityLock?.Dispose();
-            }
-
-            // When we introduce Akka.net, the rest of this method would go into the reducer method
-            if (!string.IsNullOrEmpty(completeLabelResult.ErrorMessage))
-            {
-                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + completeLabelResult.ErrorMessage);
-            }
-
-            executionState.OutOfFundsException = executionState.OutOfFundsException ?? completeLabelResult.OutOfFundsException;
-            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? completeLabelResult.TermsAndConditionsException;
-            executionState.WorldshipExported |= completeLabelResult.WorldshipExported;
-
-            if (completeLabelResult.Success)
-            {
-                executionState.OrderHashes.Add(shipment.Order.ShipSenseHashKey);
             }
         }
     }

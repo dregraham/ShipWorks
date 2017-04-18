@@ -52,5 +52,15 @@ namespace ShipWorks.Stores.Platforms.SellerVantage.WizardPages
                 return;
             }
         }
+
+        /// <summary>
+        /// Called when [load].
+        /// </summary>
+        private void OnLoad(object sender, System.EventArgs e)
+        {
+            GenericModuleStoreEntity store = GetStore<GenericModuleStoreEntity>();
+
+            accountSettingsControl.LoadStore(store);
+        }
     }
 }

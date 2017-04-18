@@ -85,7 +85,7 @@
             this.sectionGeneral.ContentPanel.Controls.Add(this.documentsOnly);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelDocuments);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(606, 110);
+            this.sectionGeneral.Size = new System.Drawing.Size(555, 110);
             // 
             // groupSelectedContent
             // 

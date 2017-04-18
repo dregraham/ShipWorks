@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -13,20 +14,30 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentState(Exception exception)
+        public ProcessShipmentState(int index, Exception exception, CancellationTokenSource cancellationSource)
         {
             Exception = exception;
+            Index = index;
+            CancellationSource = cancellationSource;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentState(ShipmentEntity shipment, IDictionary<long, Exception> licenseCheckCache, RateResult chosenRate)
+        public ProcessShipmentState(int index, ShipmentEntity shipment, IDictionary<long, Exception> licenseCheckCache,
+            RateResult chosenRate, CancellationTokenSource cancellationSource)
         {
             ChosenRate = chosenRate;
             OriginalShipment = shipment;
             LicenseCheckCache = licenseCheckCache;
+            Index = index;
+            CancellationSource = cancellationSource;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Rate that was chosen for processing
@@ -52,5 +63,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Was previous phase successful
         /// </summary>
         public bool Success => Exception == null;
+
+        /// <summary>
+        /// Allow the process to be cancelled
+        /// </summary>
+        public CancellationTokenSource CancellationSource { get; }
     }
 }

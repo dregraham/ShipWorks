@@ -528,6 +528,8 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTermsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActiviationTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromoTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />

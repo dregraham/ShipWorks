@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         public LabelResultLogResult(ILabelPersistenceResult result, bool worldshipExported, string errorMessage,
             IInsufficientFunds outOfFundsException, ITermsAndConditionsException termsAndConditionsException)
         {
+            Index = result.Index;
             OriginalShipment = result.OriginalShipment;
             Canceled = result.Canceled;
             WorldshipExported = worldshipExported;
@@ -22,6 +23,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             OutOfFundsException = outOfFundsException;
             TermsAndConditionsException = termsAndConditionsException;
         }
+
+        /// <summary>
+        /// Index of the shipment being processed
+        /// </summary>
+        public int Index { get; }
 
         /// <summary>
         /// Shipment being processed

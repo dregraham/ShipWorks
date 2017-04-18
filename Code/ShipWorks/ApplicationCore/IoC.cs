@@ -139,6 +139,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TrackedDurationEvent>()
                 .As<ITrackedDurationEvent>();
 
+            builder.RegisterType<TrackedEvent>()
+                .As<ITrackedEvent>();
+
             builder.RegisterType<ShipBillAddressEditorDlg>();
 
             builder.Register(c => Program.MainForm)

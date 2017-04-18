@@ -381,9 +381,14 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("infiplex")]
         InfiPlex = 74,
 
-        [Description("Walmart")]
+		[Description("Walmart")]
         [StoreTypeIdentity("WALMART", "WAL")]
         [StoreTypeIcon("walmart")]
-        Walmart = 75
+        Walmart = 75,
+
+        [Description("SellerActive")]
+        [StoreTypeIdentity("SELLERACTIVE", "SEA")]
+        [StoreTypeIcon("selleractive")]
+        SellerActive = 76
     }
 }
