@@ -37,10 +37,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 promo.Terms.AcceptTerms();
                 promo.Apply();
             }
-            catch (UpsPromoException)
+            catch (UpsPromoException ex)
             {
-                MessageHelper.ShowError(this, "An error occurred while attempting to apply the promo to your UPS account. Please try again later.");
-                promo.RemindMe();
+                MessageHelper.ShowError(this, $"An error occurred while attempting to apply the promo to your UPS account. {ex.Message}");
             }
 
             Close();
