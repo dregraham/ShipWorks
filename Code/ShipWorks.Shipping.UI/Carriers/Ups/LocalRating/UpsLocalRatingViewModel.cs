@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     {
                         using (Stream fileStream = fileDialog.CreateFileStream())
                         {
-                            rateTable.Load(fileStream);
+                            rateTable.LoadRates(fileStream);
                         }
 
                         rateTable.Save(upsAccount);
@@ -282,7 +282,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             StatusMessage = upsAccount.UpsRateTableID == null ?
                 "There is no rate table associated with the selected account" :
-                $"Last Upload: {rateTable.UploadDate.Value.ToLocalTime():g}";
+                $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}";
         }
     }
 }

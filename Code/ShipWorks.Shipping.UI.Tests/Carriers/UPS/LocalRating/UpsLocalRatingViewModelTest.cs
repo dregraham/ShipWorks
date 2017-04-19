@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         public void Load_SetsStatusMessageToNoRateTable_WhenRateTableIsNotUploaded()
         {
             var uploadDate = DateTime.UtcNow;
-            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.UploadDate).Returns(uploadDate);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(uploadDate);
             
             var upsAccount = new UpsAccountEntity();
             upsAccount.UpsRateTableID = 42;
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             upsAccount.UpsRateTable = new UpsRateTableEntity(10);
 
-            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.UploadDate).Returns(DateTime.Now);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
 
             testObject.Load(upsAccount, b=> { });
             testObject.LocalRatingEnabled = localRatingEnabled;
@@ -228,7 +228,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(new UpsAccountEntity(), b=> { });
             testObject.UploadRatingFileCommand.Execute(null);
 
-            rateTable.Verify(t=> t.Load(fileStream));
+            rateTable.Verify(t=> t.LoadRates(fileStream));
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 UpsRateTable = new UpsRateTableEntity(42) {UploadDate = uploadDate}
             };
 
-            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.UploadDate).Returns(uploadDate);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(uploadDate);
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
             mock.MockFunc(openFileDialog);
 
-            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.UploadDate).Returns(DateTime.Now);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
             
             var log = mock.Mock<ILog>();
             var logFactory = mock.MockRepository.Create<Func<ILog>>();
@@ -403,7 +403,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
             mock.MockFunc(openFileDialog);
 
-            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.UploadDate).Returns(DateTime.Now);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b => isBusyValues.Add(b));

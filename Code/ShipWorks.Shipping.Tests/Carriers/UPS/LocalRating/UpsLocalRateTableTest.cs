@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var testObject = CreatePopulatedRateTable(mock);
             testObject.Save(upsAccount);
 
-            Assert.NotEqual(new DateTime(), testObject.UploadDate);
+            Assert.NotEqual(new DateTime(), testObject.RateUploadDate);
         }
 
         [Fact]

@@ -42,12 +42,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Date of the upload
         /// </summary>
-        public DateTime? UploadDate { get; private set; } = null;
+        public DateTime? RateUploadDate { get; private set; } = null;
+
+        public DateTime? ZoneUploadDate { get; private set; } = null;
 
         /// <summary>
         /// Load the rate table from a stream
         /// </summary>
-        public void Load(Stream stream)
+        public void LoadRates(Stream stream)
         {
             fileName = (stream as FileStream)?.Name;
 
@@ -88,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (rateTable != null)
             {
-                UploadDate = rateTable.UploadDate;
+                RateUploadDate = rateTable.UploadDate;
             }
         }
 
@@ -119,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();
 
-            UploadDate = newRateTable.UploadDate;
+            RateUploadDate = newRateTable.UploadDate;
         }
 
         /// <summary>
@@ -148,6 +150,38 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
             this.surcharges = surcharges;
+        }
+
+        /// <summary>
+        /// Loads the zones from a stream
+        /// </summary>
+        public void LoadZones(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Replaces the zones.
+        /// </summary>
+        public void ReplaceZones(IEnumerable<UpsLocalRatingZoneEntity> zones)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Replaces the delivery area surcharges.
+        /// </summary>
+        public void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Writes the zones to stream.
+        /// </summary>
+        public void WriteZonesToStream(Stream stream)
+        {
+            throw new NotImplementedException();
         }
     }
 }
