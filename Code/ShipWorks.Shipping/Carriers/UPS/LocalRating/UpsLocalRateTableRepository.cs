@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     UpsLocalRatingZoneFileCollection zoneFiles = new UpsLocalRatingZoneFileCollection();
                     adapter.FetchEntityCollection(zoneFiles, null);
 
-                    return zoneFiles.Items.OrderBy(f => f.UploadDate).FirstOrDefault();
+                    return zoneFiles.Items.OrderByDescending(f => f.UploadDate).FirstOrDefault();
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
-                    adapter.SaveAndRefetch(zoneFile);
+                    adapter.SaveEntity(zoneFile, false, true);
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
