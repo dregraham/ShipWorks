@@ -179,5 +179,10 @@ namespace ShipWorks.Templates.Distribution
 
             return templates;
         }
+
+        /// <summary>
+        /// Reinstall all the builtin templates
+        /// </summary>
+        internal static void ReinstallTemplates() => PerformInitialInstall();
     }
 }
