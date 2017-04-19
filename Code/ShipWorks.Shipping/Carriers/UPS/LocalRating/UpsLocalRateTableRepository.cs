@@ -25,6 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
+        public UpsLocalRatingZoneFileEntity GetLatestZoneFile()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Remove rate tables that are not associated with a UpsAccountEntity
         /// </summary>
@@ -127,6 +132,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 throw new UpsLocalRatingException($"Error saving rates:\r\n\r\n{ex.Message}", ex);
             }
+        }
+
+        public void Save(UpsLocalRatingZoneFileEntity zoneFile)
+        {
+            throw new NotImplementedException();
         }
     }
 }
