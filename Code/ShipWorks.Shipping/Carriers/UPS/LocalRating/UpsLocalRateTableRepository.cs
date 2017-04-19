@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Data.SqlClient;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -23,11 +26,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public UpsLocalRateTableRepository(ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-        }
-
-        public UpsLocalRatingZoneFileEntity GetLatestZoneFile()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -134,9 +132,44 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
         }
 
+        /// <summary>
+        /// Get the newest zone file
+        /// </summary>
+        /// <returns></returns>
+        public UpsLocalRatingZoneFileEntity GetLatestZoneFile()
+        {
+            try
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    UpsLocalRatingZoneFileCollection zoneFiles = new UpsLocalRatingZoneFileCollection();
+                    adapter.FetchEntityCollection(zoneFiles, null);
+
+                    return zoneFiles.Items.OrderBy(f => f.UploadDate).FirstOrDefault();
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error retrieving zones:\r\n\r\n{ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Save the zone file
+        /// </summary>
         public void Save(UpsLocalRatingZoneFileEntity zoneFile)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.SaveAndRefetch(zoneFile);
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error saving zones:\r\n\r\n{ex.Message}", ex);
+            }
         }
     }
 }
