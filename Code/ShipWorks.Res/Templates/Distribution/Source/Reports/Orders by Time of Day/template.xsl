@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt"
     xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
 
@@ -12,9 +12,9 @@
     <!-- Start of template -->
     <xsl:template match="/"><xsl:apply-templates /></xsl:template>
     <xsl:template match="ShipWorks">
-        
+
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
@@ -33,7 +33,7 @@
         </style>
 
     </head>
-        
+
     <xsl:variable name="hours">
         <hour code="00" display="12:00 AM to 1:00 AM" />
         <hour code="01" display="1:00 AM to 2:00 AM" />
@@ -60,36 +60,36 @@
         <hour code="22" display="10:00 PM to 11:00 PM" />
         <hour code="23" display="11:00 PM to 12:00 AM" />
 	</xsl:variable>
-        
+
     <body style="{$pageFont}">
-        
-         <h3>Orders by Time of Day</h3>
-         
-         <b>Orders Reported: <xsl:value-of select="count(//Order)" /></b><br /> 
-         <b>Orders Total: $<xsl:value-of select="format-number(sum(//Order/Total), '#,##0.00')" /></b> 
-        
-         <table style="width:4in; margin: 10px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+
+         <h3 style="font-size: 1.67em; margin-top: 0;">Orders by Time of Day</h3>
+
+         <b>Orders Reported: <xsl:value-of select="count(//Order)" /></b><br />
+         <b>Orders Total: $<xsl:value-of select="format-number(sum(//Order/Total), '#,##0.00')" /></b>
+
+         <table style="width:4in; margin: 10px 0px 0px 0px; border-collapse: collapse;" cellspacing="0">
             <tr>
                 <td style="{$headerStyle};">Hour</td>
                 <td style="{$headerStyle};">Count</td>
                 <td style="{$headerStyle};">Total</td>
             </tr>
-            
+
             <!-- Have to put this in variable since msxsl:node-set changes our root reference -->
             <xsl:variable name="allOrders" select="//Order" />
-            
+
             <xsl:for-each select="msxsl:node-set($hours)/hour">
-                
+
                 <xsl:variable name="orders" select="$allOrders[sw:FormatDateTime(Date, 'HH')= current()/@code]" />
-                
+
                 <tr>
                     <td style="{$rowStyle};"><xsl:value-of select="@display" /></td>
                     <td style="{$rowStyle};" align="right"><xsl:value-of select="count($orders)" /></td>
                     <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(sum($orders/Total), '#,##0.00')" /></td>
                 </tr>
-                
+
 			</xsl:for-each>
-        
+
         </table>
 
     </body>
