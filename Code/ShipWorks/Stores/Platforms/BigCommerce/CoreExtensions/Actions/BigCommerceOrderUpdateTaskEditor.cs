@@ -12,6 +12,8 @@ using ShipWorks.Stores.Platforms;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Actions.Tasks;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 {
@@ -51,12 +53,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
             BigCommerceStoreEntity store = StoreManager.GetStore(task.StoreID) as BigCommerceStoreEntity;
             if (store != null)
             {
-                BigCommerceStatusCodeProvider statusCodeProvider = new BigCommerceStatusCodeProvider(store);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    BigCommerceStatusCodeProvider statusCodeProvider =
+                        lifetimeScope.Resolve<BigCommerceStatusCodeProvider>(TypedParameter.From(store));
 
-                comboBoxStatus.DisplayMember = "Key";
-                comboBoxStatus.ValueMember = "Value";
+                    comboBoxStatus.DisplayMember = "Key";
+                    comboBoxStatus.ValueMember = "Value";
 
-                comboBoxStatus.DataSource = statusCodeProvider.CodeValues.Select(codeValue => new KeyValuePair<string, int>(statusCodeProvider.GetCodeName(codeValue), codeValue)).ToList();
+                    comboBoxStatus.DataSource = statusCodeProvider.CodeValues.Select(codeValue => new KeyValuePair<string, int>(statusCodeProvider.GetCodeName(codeValue), codeValue)).ToList();
+                }
 
                 int code = task.StatusCode;
                 if (code >= 0)

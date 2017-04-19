@@ -17,29 +17,45 @@ using log4net;
 using System.Globalization;
 using System.Linq;
 using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
     /// <summary>
     /// BigCommerce Store Type implementation
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.BigCommerce)]
     public class BigCommerceStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStoreType));
+        readonly Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader;
+        readonly Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater;
+        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceStoreType(StoreEntity store)
+        public BigCommerceStoreType(StoreEntity store, 
+            Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader,
+            Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater,
+            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
             : base(store)
         {
-
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            this.createOnlineUpdater = createOnlineUpdater;
+            this.createDownloader = createDownloader;
         }
 
         /// <summary>
         /// StoreTypeCode enum value for BigCommerce Store Types
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.BigCommerce;
+
+        /// <summary>
+        /// Gets a typed version of the store
+        /// </summary>
+        public BigCommerceStoreEntity TypedStore => Store as BigCommerceStoreEntity;
 
         /// <summary>
         /// This is a string that uniquely identifies the store.  
@@ -50,9 +66,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             get
             {
-                BigCommerceStoreEntity store = (BigCommerceStoreEntity)Store;
-
-                string identifier = store.ApiUrl.ToLowerInvariant();
+                string identifier = TypedStore.ApiUrl.ToLowerInvariant();
 
                 // When upgrading legacy BigCommerce stores, we changed from store module to ApiUrl
                 // So it now ends in api/v2/ which doesn't match up with what the license is registered to, 
@@ -69,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 // reset to the StoreUrl 
                 if (identifier.EndsWith(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
                 {
-                    identifier = store.ApiUrl.ToLowerInvariant();
+                    identifier = TypedStore.ApiUrl.ToLowerInvariant();
                 }
 
                 return identifier;
@@ -103,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
-        /// Get the store-specifc OrderIdentifier that can be used to identify the specified order.
+        /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
@@ -145,13 +159,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            BigCommerceStatusCodeProvider statusCodeProvider = new BigCommerceStatusCodeProvider((BigCommerceStoreEntity)Store);
+            BigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(TypedStore);
 
             return statusCodeProvider.CodeNames;
         }
 
         /// <summary>
-        /// Get the store-specific fields that are used to unqiuely identifiy an online cusotmer record.  Such
+        /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
         /// as the eBay User ID or the osCommerce CustomerID.  If a particular store does not have any concept
         /// of a unique online customer, than this can return null.  If multiple fields are returned, they
         /// will be tested using OR.  If customer identifiers are unique per store instance, 
@@ -167,10 +181,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Create a downloader for our current store instance
         /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new BigCommerceDownloader((BigCommerceStoreEntity)Store);
-        }
+        public override StoreDownloader CreateDownloader() => createDownloader(Store as BigCommerceStoreEntity);
 
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
@@ -188,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
-        /// Create the control used to configurd the actions for online update after shipping
+        /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
@@ -233,7 +244,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // get possible status codes from the provider
-            BigCommerceStatusCodeProvider codeProvider = new BigCommerceStatusCodeProvider((BigCommerceStoreEntity)Store);
+            BigCommerceStatusCodeProvider codeProvider = createStatusCodeProvider(TypedStore);
 
             // create a menu item for each status 
             ICollection<string> statusCodeNames = GetOnlineStatusChoices();
@@ -293,7 +304,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     return;
                 }
 
-                BigCommerceOnlineUpdater updater = new BigCommerceOnlineUpdater((BigCommerceStoreEntity)Store);
+                IBigCommerceOnlineUpdater updater = createOnlineUpdater(TypedStore);
                 updater.UpdateShipmentDetails(order);
             }
             catch (BigCommerceException ex)
@@ -336,7 +347,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             int statusCode = (int)userState;
             try
             {
-                BigCommerceOnlineUpdater updater = new BigCommerceOnlineUpdater((BigCommerceStoreEntity)Store);
+                IBigCommerceOnlineUpdater updater = createOnlineUpdater(TypedStore);
                 updater.UpdateOrderStatus(orderID, statusCode);
             }
             catch (BigCommerceException ex)

@@ -7,6 +7,8 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 {
@@ -16,9 +18,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
     [ActionTask("Update store status", "BigCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class BigCommerceOrderUpdateTask : StoreInstanceTaskBase
     {
-        // Default the status code to an invalid code (so the drop down works correctly)
-        int statusCode = -1;
-
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
@@ -30,41 +29,26 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         /// <summary>
         /// The status code the task will be run with
         /// </summary>
-        public int StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
+        /// <remarks>
+        /// Default the status code to an invalid code (so the drop down works correctly)
+        /// </remarks>
+        public int StatusCode { get; set; } = -1;
 
         /// <summary>
         /// How to label input selection for the task
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Set status of:";
-            }
-        }
+        public override string InputLabel => "Set status of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.OrderEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BigCommerceOrderUpdateTaskEditor(this);
-        }
+        public override ActionTaskEditor CreateEditor() =>
+            new BigCommerceOrderUpdateTaskEditor(this);
 
         /// <summary>
         /// Execute the status updates
@@ -84,10 +68,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 
             try
             {
-                BigCommerceOnlineUpdater updater = new BigCommerceOnlineUpdater(store);
-                foreach (long orderID in inputKeys)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    updater.UpdateOrderStatus(orderID, statusCode, context.CommitWork);
+                    IBigCommerceOnlineUpdater updater = lifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
+                    foreach (long orderID in inputKeys)
+                    {
+                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                    }
                 }
             }
             catch (BigCommerceException ex)

@@ -120,7 +120,6 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.ClickCartPro: return new Platforms.ClickCartPro.ClickCartProStoreType(store);
                 case StoreTypeCode.CommerceInterface: return new Platforms.CommerceInterface.CommerceInterfaceStoreType(store);
                 case StoreTypeCode.ThreeDCart: return new Platforms.ThreeDCart.ThreeDCartStoreType(store);
-                case StoreTypeCode.BigCommerce: return new Platforms.BigCommerce.BigCommerceStoreType(store);
                 case StoreTypeCode.Etsy: return new Platforms.Etsy.EtsyStoreType(store);
                 case StoreTypeCode.Shopify: return new Platforms.Shopify.ShopifyStoreType(store);
                 case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);             

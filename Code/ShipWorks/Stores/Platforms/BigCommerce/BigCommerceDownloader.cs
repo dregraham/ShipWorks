@@ -19,30 +19,41 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
 using log4net;
+using ShipWorks.ApplicationCore;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
     /// <summary>
     /// Downloader for BigCommerce stores
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class BigCommerceDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
         int totalCount;
-        BigCommerceWebClient webClient;
+        IBigCommerceWebClient webClient;
         readonly BigCommerceStoreEntity bigCommerceStore;
         const int MissingCustomerID = 0;
 
         // provider for status codes
         BigCommerceStatusCodeProvider statusProvider;
+        readonly IBigCommerceWebClientFactory webClientFactory;
+        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public BigCommerceDownloader(BigCommerceStoreEntity store)
+        public BigCommerceDownloader(BigCommerceStoreEntity store, 
+            IBigCommerceWebClientFactory webClientFactory,
+            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
             : base(store)
         {
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            this.webClientFactory = webClientFactory;
             bigCommerceStore = store;
             totalCount = 0;
         }
@@ -50,16 +61,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// The web client used to download
         /// </summary>
-        public BigCommerceWebClient WebClient
-        {
-            get 
-            {
-                return webClient ??
-                       (webClient =
-                        new BigCommerceWebClient(bigCommerceStore.ApiUserName, bigCommerceStore.ApiUrl,
-                                                 bigCommerceStore.ApiToken, Progress));
-            }
-        }
+        public IBigCommerceWebClient WebClient =>
+            webClient ?? (webClient = webClientFactory.Create(bigCommerceStore, Progress));
 
         /// <summary>
         /// Download orders and statuses for the BigCommerce store
@@ -82,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 if (totalCount != 0)
                 {
-                    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
+                    // Download any newly created orders (their modified dates could be older than the last modified date SW has)
                     DownloadOrders(orderSearchCriteria);
                 }
 
@@ -139,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             Progress.Detail = "Updating status codes...";
 
             // refresh the status codes from BigCommerce
-            statusProvider = new BigCommerceStatusCodeProvider((BigCommerceStoreEntity)Store);
+            statusProvider = createStatusCodeProvider((BigCommerceStoreEntity) Store);
             statusProvider.UpdateFromOnlineStore();
         }
 
@@ -211,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
         /// <summary>
         /// Gets the last online modified date from the orders table, and adds 1 second so that we don't processes the already downloaded
-        /// order mulitple times.
+        /// order multiple times.
         /// </summary>
         /// <returns>BigCommerceWebClientOrderSearchCriteria </returns>
         private BigCommerceWebClientOrderSearchCriteria GetOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType orderDateSearchType)
@@ -278,7 +281,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     int shipToAddressIndex = 1;
                     foreach (BigCommerceAddress shipToAddress in order.OrderShippingAddresses.OrderBy(address => address.id))
                     {
-                        // If there are mulitple ship to addresses, create the post fix.  Otherwise leave it blank.
+                        // If there are multiple ship to addresses, create the post fix.  Otherwise leave it blank.
                         string orderPostfix = hasSubOrders ? string.Format("-{0}", shipToAddressIndex) : string.Empty;
 
                         LoadOrder(order, orderPostfix, shipToAddress, isSubOrder, hasSubOrders);
@@ -714,7 +717,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             //Bill only properties
             orderEntity.BillEmail = order.billing_address.email;
 
-            // BigCommerce doesnt have a ShipTo email, so set it to the bill email
+            // BigCommerce doesn't have a ShipTo email, so set it to the bill email
             orderEntity.ShipEmail = orderEntity.BillEmail;
         }
 

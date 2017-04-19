@@ -5,24 +5,30 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using log4net;
+using ShipWorks.Data.Model.EntityInterfaces;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
     /// <summary>
     /// Provides online status codes for BigCommerce
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class BigCommerceStatusCodeProvider : OnlineStatusCodeProvider<int>
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStatusCodeProvider));
+        readonly IBigCommerceWebClientFactory webClientFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceStatusCodeProvider(BigCommerceStoreEntity store)
+        public BigCommerceStatusCodeProvider(BigCommerceStoreEntity store, IBigCommerceWebClientFactory webClientFactory)
             : base(store, BigCommerceStoreFields.StatusCodes)
         {
-
+            this.webClientFactory = webClientFactory;
         }
 
         /// <summary>
@@ -32,14 +38,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             try
             {
-                Dictionary<int, string> codeMap = new Dictionary<int, string>();
-                BigCommerceStoreEntity store = (BigCommerceStoreEntity)Store;
-                BigCommerceWebClient client = new BigCommerceWebClient(store.ApiUserName, store.ApiUrl, store.ApiToken);
-                
-                foreach (BigCommerceOrderStatus orderStatus in client.FetchOrderStatuses())
-                {
-                    codeMap.Add(orderStatus.StatusID, orderStatus.StatusText);
-                }
+                Dictionary<int, string> codeMap = GetCodeMap(Store as IBigCommerceStoreEntity);
 
                 // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
                 if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
@@ -55,6 +54,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Get the code map from the given store
+        /// </summary>
+        private Dictionary<int, string> GetCodeMap(IBigCommerceStoreEntity store)
+        {
+            IBigCommerceWebClient client = webClientFactory.Create(store);
+            return client.FetchOrderStatuses().ToDictionary(x => x.StatusID, x => x.StatusText);
         }
     }
 }

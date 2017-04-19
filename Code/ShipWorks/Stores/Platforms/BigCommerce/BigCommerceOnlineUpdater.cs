@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using log4net;
 using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -19,7 +22,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Updates BigCommerce order status/shipments
     /// </summary>
-    public class BigCommerceOnlineUpdater
+    [Component]
+    public class BigCommerceOnlineUpdater : IBigCommerceOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceOnlineUpdater));
         readonly BigCommerceStoreEntity bigCommerceStore;
@@ -38,12 +42,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
         // status code provider
         BigCommerceStatusCodeProvider statusCodeProvider;
+        readonly IBigCommerceWebClientFactory webClientFactory;
+        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceOnlineUpdater(BigCommerceStoreEntity store)
+        public BigCommerceOnlineUpdater(BigCommerceStoreEntity store, 
+            IBigCommerceWebClientFactory webClientFactory,
+            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
         {
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            this.webClientFactory = webClientFactory;
             bigCommerceStore = store;
         }
 
@@ -51,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Gets the status code provider
         /// </summary>
         protected BigCommerceStatusCodeProvider StatusCodeProvider =>
-            statusCodeProvider ?? (statusCodeProvider = new BigCommerceStatusCodeProvider(bigCommerceStore));
+            statusCodeProvider ?? (statusCodeProvider = createStatusCodeProvider(bigCommerceStore));
 
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
@@ -78,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 if (!order.IsManual)
                 {
-                    BigCommerceWebClient client = new BigCommerceWebClient(bigCommerceStore.ApiUserName, bigCommerceStore.ApiUrl, bigCommerceStore.ApiToken);
+                    IBigCommerceWebClient client = webClientFactory.Create(bigCommerceStore);
                     client.UpdateOrderStatus(Convert.ToInt32(order.OrderNumber), statusCode);
 
                     // Update the local database with the new status
@@ -90,12 +100,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 }
                 else
                 {
-                    log.InfoFormat("Not uploading order status since order {0} is manual or the order only has digital items.", order.OrderID);
+                    log.InfoFormat($"Not uploading order status since order {order.OrderID} is manual or the order only has digital items.");
                 }
             }
             else
             {
-                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
+                log.WarnFormat($"Unable to update online status for order {orderID}: cannot find order");
             }
         }
 
@@ -165,7 +175,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 return;
             }
 
-            BigCommerceWebClient webClient = new BigCommerceWebClient(bigCommerceStore.ApiUserName, bigCommerceStore.ApiUrl, bigCommerceStore.ApiToken);
+            IBigCommerceWebClient webClient = webClientFactory.Create(bigCommerceStore);
+
             List<BigCommerceProduct> orderProducts = null;
             long bigCommerceOrderAddressId = BigCommerceConstants.InvalidOrderAddressID;
 
@@ -237,7 +248,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 service = service.Substring(carrier.Length + 1);
             }
 
-            // Bigcommerce doesn't like it when you set shipping_method to an empty string
+            // BigCommerce doesn't like it when you set shipping_method to an empty string
             return service.IsNullOrWhiteSpace() ? "other" : service;
         }
 

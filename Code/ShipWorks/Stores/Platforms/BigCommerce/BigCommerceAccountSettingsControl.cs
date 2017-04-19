@@ -6,6 +6,8 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using log4net;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -97,11 +99,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 try
                 {
-                    BigCommerceWebClient webClient = new BigCommerceWebClient(bigCommerceStore.ApiUserName, bigCommerceStore.ApiUrl, bigCommerceStore.ApiToken);
-                    webClient.TestConnection();
-
-                    BigCommerceStatusCodeProvider statusProvider = new BigCommerceStatusCodeProvider(bigCommerceStore);
-                    statusProvider.UpdateFromOnlineStore();
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IBigCommerceWebClient webClient = lifetimeScope.Resolve<IBigCommerceWebClientFactory>().Create(bigCommerceStore);
+                        webClient.TestConnection();
+                        
+                        BigCommerceStatusCodeProvider statusProvider = lifetimeScope.Resolve<BigCommerceStatusCodeProvider>(TypedParameter.From(bigCommerceStore));
+                        statusProvider.UpdateFromOnlineStore();
+                    }
                 }
                 catch (BigCommerceException ex)
                 {
@@ -127,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
-        /// Helper method that that does type checking and casts the generic StoreEntity
+        /// Helper method that does type checking and casts the generic StoreEntity
         /// to a BigCommerceStoreEntity.
         /// </summary>
         /// <param name="store">The store.</param>

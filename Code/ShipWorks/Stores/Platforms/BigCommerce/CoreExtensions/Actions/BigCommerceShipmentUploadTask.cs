@@ -8,6 +8,8 @@ using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 {
@@ -22,40 +24,23 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         /// </summary>
         /// <param name="storeType"></param>
         /// <returns>True if the store type is BigCommerceStoreType</returns>
-        public override bool SupportsType(StoreType storeType)
-        {
-            return storeType is BigCommerceStoreType;
-        }
+        public override bool SupportsType(StoreType storeType) =>
+            storeType is BigCommerceStoreType;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload tracking number of:";
-            }
-        }
+        public override string InputLabel => "Upload tracking number of:";
 
         /// <summary>
         /// This task only operates on shipments
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
         /// Execute the details upload
@@ -72,8 +57,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 
                 try
                 {
-                    BigCommerceOnlineUpdater updater = new BigCommerceOnlineUpdater(storeEntity);
-                    updater.UpdateShipmentDetails(entityID);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IBigCommerceOnlineUpdater updater = lifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(storeEntity));
+                        updater.UpdateShipmentDetails(entityID);
+                    }
                 }
                 catch (BigCommerceException ex)
                 {

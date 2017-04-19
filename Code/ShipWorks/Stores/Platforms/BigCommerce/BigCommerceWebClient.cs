@@ -9,6 +9,8 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
@@ -18,15 +20,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Interface for connecting to BigCommerce
     /// </summary>
-    public class BigCommerceWebClient
+    [Component]
+    public class BigCommerceWebClient : IBigCommerceWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
-        readonly List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
-        readonly string apiUserName;
-        readonly string apiToken;
-        readonly string apiUrl;
+        List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
+        readonly IBigCommerceStoreEntity store;
         readonly static BigCommerceWebClientRequestThrottle throttler = new BigCommerceWebClientRequestThrottle();
-        readonly IProgressReporter progressReporter;
         readonly List<HttpStatusCode> successHttpStatusCodes;
         RestClient apiClient;
 
@@ -36,44 +36,49 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        public BigCommerceWebClient(string apiUserName, string apiUrl, string apiToken) :
-            this(apiUserName, apiUrl, apiToken, null)
+        public BigCommerceWebClient(IBigCommerceStoreEntity store)
         {
+            ValidateApiAccessData(store);
+
+            this.store = store;
+
+            bigCommerceOrderStatuses = new List<BigCommerceOrderStatus>();
+            successHttpStatusCodes = new List<HttpStatusCode>
+            {
+                HttpStatusCode.OK,
+                HttpStatusCode.Created,
+                HttpStatusCode.Accepted,
+                HttpStatusCode.NoContent
+            };
         }
 
         /// <summary>
-        /// Create an instance of the web client for connecting to the specified store
+        /// Progress reporter associated with the client
         /// </summary>
-        /// <exception cref="BigCommerceException" />
-        public BigCommerceWebClient(string apiUserName, string apiUrl, string apiToken, IProgressReporter progressReporter)
-        {
+        /// <remarks>
+        /// If this is null, the client cannot be canceled and progress will not be reported
+        /// </remarks>
+        public IProgressReporter ProgressReporter { get; set; }
 
-            if (string.IsNullOrWhiteSpace(apiUrl))
+        /// <summary>
+        /// Validate API access data
+        /// </summary>
+        private static void ValidateApiAccessData(IBigCommerceStoreEntity store)
+        {
+            if (string.IsNullOrWhiteSpace(store?.ApiUrl))
             {
                 throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Path"));
             }
 
-            if (string.IsNullOrWhiteSpace(apiUserName))
+            if (string.IsNullOrWhiteSpace(store?.ApiUserName))
             {
                 throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Username"));
             }
 
-            if (string.IsNullOrWhiteSpace(apiToken))
+            if (string.IsNullOrWhiteSpace(store?.ApiToken))
             {
                 throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Token"));
             }
-
-            this.apiUserName = apiUserName;
-            this.apiToken = apiToken;
-            this.apiUrl = apiUrl;
-            this.progressReporter = progressReporter;
-
-            bigCommerceOrderStatuses = new List<BigCommerceOrderStatus>();
-
-            successHttpStatusCodes = new List<HttpStatusCode> { HttpStatusCode.OK,
-                                                                HttpStatusCode.Created,
-                                                                HttpStatusCode.Accepted,
-                                                                HttpStatusCode.NoContent};
         }
 
         /// <summary>
@@ -84,14 +89,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             if (apiClient == null)
             {
-                apiClient = new RestClient(apiUrl);
+                apiClient = new RestClient(store.ApiUrl);
 
                 if (apiClient == null)
                 {
                     throw new BigCommerceException("Unable to create API client for BigCommerce.");
                 }
 
-                apiClient.Authenticator = new HttpBasicAuthenticator(apiUserName, apiToken);
+                apiClient.Authenticator = new HttpBasicAuthenticator(store.ApiUserName, store.ApiToken);
+                //apiClient.Authenticator = new BigCommerceAuthenticator();
             }
 
             return apiClient;
@@ -129,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             IRestResponse restResponse;
             try
             {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.CreateShipment, restRequest, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.CreateShipment, restRequest, ProgressReporter);
 
                 restResponse = throttler.ExecuteRequest<RestRequest, RestResponse>(requestThrottleArgs, MakeRequest<RestRequest, RestResponse>);
             }
@@ -177,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             IRestResponse restResponse;
             try
             {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.UpdateOrderStatus, restRequest, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.UpdateOrderStatus, restRequest, ProgressReporter);
 
                 restResponse =
                     throttler.ExecuteRequest<RestRequest, RestResponse>(requestThrottleArgs, MakeRequest<RestRequest, RestResponse>);
@@ -245,7 +251,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             BigCommerceGetOrderCountResponse restResponse;
             try
             {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderCount, getOrderCountRequest, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderCount, getOrderCountRequest, ProgressReporter);
 
                 restResponse =
                     throttler.ExecuteRequest<RestRequest, BigCommerceGetOrderCountResponse>(requestThrottleArgs, MakeRequest<RestRequest, BigCommerceGetOrderCountResponse>);
@@ -348,7 +354,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             }
             else if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
             {
-                // Check to see if we we denied access due to authentication.
+                // Check to see if we denied access due to authentication.
                 log.Error("BigCommerce API credentials are invalid.");
                 throw new BigCommerceException("The BigCommerce API credentials are invalid", (int) restResponse.StatusCode);
             }
@@ -356,7 +362,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                      !(restResponse.ResponseStatus == ResponseStatus.Completed || restResponse.ResponseStatus == ResponseStatus.None))
             {
                 // There was an error, find the error message and throw
-                log.Error(string.Format("An error occured while communicating with BigCommerce.  Response content: {0}{1}", Environment.NewLine, restResponse.Content), restResponse.ErrorException);
+                log.Error(string.Format("An error occurred while communicating with BigCommerce.  Response content: {0}{1}", Environment.NewLine, restResponse.Content), restResponse.ErrorException);
 
                 string errorMessage = GetExceptionMessage(restResponse.Content);
 
@@ -462,7 +468,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             List<BigCommerceOrder> ordersRestResponse;
             try
             {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrders, request, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrders, request, ProgressReporter);
 
                 ordersRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceOrder>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceOrder>>);
             }
@@ -493,7 +499,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 foreach (BigCommerceOrder order in nonIncompleteOrders)
                 {
                     // Check for user cancel
-                    if (progressReporter != null && progressReporter.IsCancelRequested)
+                    if (ProgressReporter != null && ProgressReporter.IsCancelRequested)
                     {
                         break;
                     }
@@ -520,7 +526,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the order coupons
             RestRequest request = new RestRequest();
             request.Resource = order.coupons.resource;
-            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetCoupons, request, progressReporter);
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetCoupons, request, ProgressReporter);
             List<BigCommerceCoupon> couponsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceCoupon>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceCoupon>>);
             order.OrderCoupons = couponsRestResponse;
         }
@@ -535,7 +541,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             request.Resource = order.shipping_addresses.resource;
             request.AddParameter("limit", BigCommerceConstants.MaxPageSize);
 
-            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, progressReporter);
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, ProgressReporter);
             List<BigCommerceAddress> shipToAddressesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceAddress>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceAddress>>);
             order.OrderShippingAddresses = shipToAddressesRestResponse;
 
@@ -564,7 +570,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 // There were not matching shipping addresses to order product addresses, so get each address per distinct order product
                 // address id.  We need to do this individually as the order could have multiple ship to addresses and we wouldn't know which
-                // shipping address goes to which orde product address id.
+                // shipping address goes to which order product address id.
 
                 // Clear out the current shipping addresses
                 order.OrderShippingAddresses.Clear();
@@ -575,7 +581,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     // Create a new request for this order address id
                     request = new RestRequest();
                     request.Resource = string.Format("{0}/{1}.json", order.shipping_addresses.resource, realShipmentOrderAddressID.ToString());
-                    requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, progressReporter);
+                    requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, ProgressReporter);
 
                     BigCommerceAddress fixedShipmentAddress =
                         throttler.ExecuteRequest<RestRequest, BigCommerceAddress>(requestThrottleArgs, MakeRequest<RestRequest, BigCommerceAddress>);
@@ -597,7 +603,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the order shipments
             RestRequest request = new RestRequest();
             request.Resource = BigCommerceWebClientEndpoints.GetOrderProducts(orderNumber);
-            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderProducts, request, progressReporter);
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderProducts, request, ProgressReporter);
             List<BigCommerceProduct> orderProductsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceProduct>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>);
 
             return orderProductsRestResponse;
@@ -606,42 +612,44 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the list of BigCommerce online order statuses
         /// </summary>
-        public List<BigCommerceOrderStatus> FetchOrderStatuses()
+        public IEnumerable<BigCommerceOrderStatus> FetchOrderStatuses()
         {
             // If we don't have any order statuses, retrieve them
-            if (bigCommerceOrderStatuses.Count == 0)
+            if (bigCommerceOrderStatuses.None())
             {
-                // Create a request for getting order statuses
-                RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetOrderStatusesPath());
-                List<BigCommerceApiOrderStatus> orderStatusesRestResponse;
-
-                try
-                {
-                    RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderStatuses, request, progressReporter);
-
-                    orderStatusesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceApiOrderStatus>>);
-                }
-                catch (BigCommerceException bigCommerceException)
-                {
-                    throw new BigCommerceException("ShipWorks was unable to download order statuses for your BigCommerce store.", bigCommerceException);
-                }
-                catch (Exception ex)
-                {
-                    throw WebHelper.TranslateWebException(ex, typeof(BigCommerceException));
-                }
-
-                List<BigCommerceApiOrderStatus> orderStatuses = orderStatusesRestResponse;
-                foreach (BigCommerceApiOrderStatus orderStatus in orderStatuses)
-                {
-                    if (!string.IsNullOrWhiteSpace(orderStatus.name))
-                    {
-                        BigCommerceOrderStatus bigCommerceOrderStatus = new BigCommerceOrderStatus(orderStatus.id, orderStatus.name);
-                        bigCommerceOrderStatuses.Add(bigCommerceOrderStatus);
-                    }
-                }
+                bigCommerceOrderStatuses = RetrieveOrderStatusesFromStore();
             }
 
             return bigCommerceOrderStatuses;
+        }
+
+        /// <summary>
+        /// Get order statuses from the store
+        /// </summary>
+        /// <returns></returns>
+        private List<BigCommerceOrderStatus> RetrieveOrderStatusesFromStore()
+        {
+            // Create a request for getting order statuses
+            RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetOrderStatusesPath());
+            List<BigCommerceApiOrderStatus> orderStatusesRestResponse;
+
+            try
+            {
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderStatuses, request, ProgressReporter);
+
+                return throttler.ExecuteRequest<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceApiOrderStatus>>)
+                    .Where(x => !string.IsNullOrWhiteSpace(x.name))
+                    .Select(x => new BigCommerceOrderStatus(x.id, x.name))
+                    .ToList();
+            }
+            catch (BigCommerceException bigCommerceException)
+            {
+                throw new BigCommerceException("ShipWorks was unable to download order statuses for your BigCommerce store.", bigCommerceException);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(BigCommerceException));
+            }
         }
 
         /// <summary>
@@ -672,7 +680,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     request.AddParameter("page", page);
 
                     RequestThrottleParameters requestThrottleArgs =
-                        new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProducts, request, progressReporter);
+                        new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProducts, request, ProgressReporter);
 
                     List<BigCommerceProduct> pageOfProductsRestResponse =
                         throttler.ExecuteRequest<RestRequest, List<BigCommerceProduct>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>);
@@ -720,7 +728,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             order.OrderProducts = GetOrderProducts(order);
 
             // Get the store specific product image cache
-            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(apiUserName, apiUrl, apiToken);
+            LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(
+                store.ApiUserName, store.ApiUrl, store.ApiToken);
 
             foreach (BigCommerceProduct product in order.OrderProducts)
             {
@@ -728,7 +737,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 BigCommerceProductImage productImage = productImageCache[product.product_id];
                 if (productImage == null)
                 {
-                    // Get the orduct images from BigCommerce
+                    // Get the product images from BigCommerce
                     List<BigCommerceImage> productImagesRestResponse = GetProductImages(order.id, product.product_id);
 
                     // If we received a productImagesRestResponse, process it
@@ -789,7 +798,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             List<BigCommerceImage> productImagesRestResponse = new List<BigCommerceImage>();
             try
             {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProduct, request, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProduct, request, ProgressReporter);
 
                 productImagesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceImage>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceImage>>);
             }
