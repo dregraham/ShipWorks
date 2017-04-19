@@ -476,11 +476,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Zone property of the Entity UpsPricePerPound<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsPricePerPound"."Zone"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Zone
+		public virtual System.String Zone
 		{
-			get { return (System.Int32)GetValue((int)UpsPricePerPoundFieldIndex.Zone, true); }
+			get { return (System.String)GetValue((int)UpsPricePerPoundFieldIndex.Zone, true); }
 			set	{ SetValue((int)UpsPricePerPoundFieldIndex.Zone, value); }
 		}
 

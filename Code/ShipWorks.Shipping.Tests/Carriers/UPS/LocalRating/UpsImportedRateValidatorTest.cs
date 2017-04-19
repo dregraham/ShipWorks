@@ -24,9 +24,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_DoesNotThrow_WhenHasAllPackageRates_OneLetterRate_OnePricePerPound()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
+            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, "42");
+            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -36,9 +36,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_DoesNotThrow_WhenHasAllPackageRates_OnePricePerPound_NoLetterRate_Ground()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.UpsGround, 42);
-            List<IUpsLetterRateEntity> letterRates = new List<IUpsLetterRateEntity>();
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.UpsGround, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.UpsGround, "42");
+            List <IUpsLetterRateEntity> letterRates = new List<IUpsLetterRateEntity>();
+            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.UpsGround, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -50,9 +50,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [InlineData(UpsServiceType.Ups3DaySelect)]
         public void Validate_Throws_WhenHasAllPackageRates_OnePricePerPound_OneLetterRate_IncompatibleLetterService(UpsServiceType upsServiceType)
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(upsServiceType, 42);
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(upsServiceType, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(upsServiceType, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(upsServiceType, "42");
+            List <IUpsLetterRateEntity> letterRates = GetLetterRate(upsServiceType, "42");
+            List <IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(upsServiceType, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -67,9 +67,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_Throws_WhenHasAllPackageRates_OnePricePerPound_NoLetterRate_NotGround()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsLetterRateEntity> letterRates = new List<IUpsLetterRateEntity>();
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsLetterRateEntity> letterRates = new List<IUpsLetterRateEntity>();
+            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -83,11 +83,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_Throws_WhenMissingPackageWeight()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
             packageRates.RemoveAt(0);
 
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -101,11 +101,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_Throws_WhenDuplicatePackageWeight()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
             ((UpsPackageRateEntity) packageRates.First()).WeightInPounds = 2;
 
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -122,11 +122,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [InlineData(-1)]
         public void Validate_Throws_WhenHasWeightOutOfRange(int outOfRangeWeight)
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
             ((UpsPackageRateEntity) packageRates.Skip(10).First()).WeightInPounds = outOfRangeWeight;
 
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, 42);
+            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsPricePerPoundEntity> pricesPerPound = GetPricePerPound(UpsServiceType.Ups2DayAir, "42");
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -140,9 +140,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Validate_Throws_WhenMissingPricePerPound()
         {
-            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, 42);
-            List<IUpsPricePerPoundEntity> pricesPerPound = new List<IUpsPricePerPoundEntity>();
+            List<IUpsPackageRateEntity> packageRates = GetAllRequiredPackageRates(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsLetterRateEntity> letterRates = GetLetterRate(UpsServiceType.Ups2DayAir, "42");
+            List <IUpsPricePerPoundEntity> pricesPerPound = new List<IUpsPricePerPoundEntity>();
             AddValidZoneData(packageRates, letterRates, pricesPerPound, UpsServiceType.Ups2DayAir);
 
             var testObject = mock.Create<UpsImportedRateValidator>();
@@ -159,17 +159,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             List<IUpsPricePerPoundEntity> pricesPerPound,
             UpsServiceType serviceTypeInTest)
         {
-            packageRates.AddRange(GetAllRequiredPackageRates(serviceTypeInTest, 22));
-            packageRates.AddRange(GetAllRequiredPackageRates(UpsServiceType.UpsExpress, 45));
-            
-            letterRates.AddRange(GetLetterRate(serviceTypeInTest, 22));
-            letterRates.AddRange(GetLetterRate(UpsServiceType.UpsExpress, 45));
+            packageRates.AddRange(GetAllRequiredPackageRates(serviceTypeInTest, "22"));
+            packageRates.AddRange(GetAllRequiredPackageRates(UpsServiceType.UpsExpress, "45"));
 
-            pricesPerPound.AddRange(GetPricePerPound(serviceTypeInTest, 22));
-            pricesPerPound.AddRange(GetPricePerPound(UpsServiceType.UpsExpress, 45));
+
+            letterRates.AddRange(GetLetterRate(serviceTypeInTest, "22"));
+            letterRates.AddRange(GetLetterRate(UpsServiceType.UpsExpress, "45"));
+
+            pricesPerPound.AddRange(GetPricePerPound(serviceTypeInTest, "22"));
+            pricesPerPound.AddRange(GetPricePerPound(UpsServiceType.UpsExpress, "45"));
         }
 
-        private static List<IUpsLetterRateEntity> GetLetterRate(UpsServiceType upsServiceType, int zone)
+        private static List<IUpsLetterRateEntity> GetLetterRate(UpsServiceType upsServiceType, string zone)
         {
             return new List<IUpsLetterRateEntity>()
             {
@@ -182,7 +183,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             };
         }
 
-        private static List<IUpsPricePerPoundEntity> GetPricePerPound(UpsServiceType upsServiceType, int zone)
+        private static List<IUpsPricePerPoundEntity> GetPricePerPound(UpsServiceType upsServiceType, string zone)
         {
             return new List<IUpsPricePerPoundEntity>()
             {
@@ -195,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             };
         }
 
-        private static List<IUpsPackageRateEntity> GetAllRequiredPackageRates(UpsServiceType serviceType, int zone)
+        private static List<IUpsPackageRateEntity> GetAllRequiredPackageRates(UpsServiceType serviceType, string zone)
         {
             List<IUpsPackageRateEntity> upsPackageRateEntities = new List<IUpsPackageRateEntity>();
             for (int weight = 1; weight <= 150; weight++)

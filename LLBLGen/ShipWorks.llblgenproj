@@ -2463,7 +2463,7 @@
           <Field Name="Service" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="UpsLetterRateID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="Zone" Type="string" MaxLength="3" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="UpsPackage" ObjectID="06bfa1b7-f2e5-4a8d-abb2-cdfb95c62359">
@@ -2502,7 +2502,7 @@
           <Field Name="UpsPackageRateID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="WeightInPounds" Type="int" Precision="10" FieldIndex="3" />
-          <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="Zone" Type="string" MaxLength="3" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="UpsPricePerPound" ObjectID="959fcaf7-cf8e-49e6-b10d-338891c0188d">
@@ -2511,7 +2511,7 @@
           <Field Name="Service" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="UpsPricePerPoundID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="UpsRateTableID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="Zone" Type="string" MaxLength="3" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="UpsProfile" ObjectID="092ec51b-2546-4674-8bc5-1fe030b513dc">
@@ -3416,7 +3416,7 @@
           <FieldFieldRelationship FkField="TemplateID" PkField="TemplateID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UpsAccount.UpsRateTable-UpsRateTable.UpsAccount" Start=":UpsAccount" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsAccount" Type="4" EndIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="UpsAccount.UpsRateTable-UpsRateTable.UpsAccount" Start=":UpsAccount" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsAccount" Type="4" EndIsOptional="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
         </FieldRelationships>
@@ -3670,7 +3670,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-11T20:17:17.0072101Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-19T21:33:36.4627596Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7351,7 +7351,7 @@
                   <Fields>
                     <Field Name="UpsLetterRateID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="UpsRateTableID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="Zone" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="Zone" Ordinal="3" DbType="24" Length="3" />
                     <Field Name="Service" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Rate" Ordinal="5" DbType="9" Precision="19" Scale="4" />
                   </Fields>
@@ -7391,7 +7391,7 @@
                   <Fields>
                     <Field Name="UpsPackageRateID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="UpsRateTableID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="Zone" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="Zone" Ordinal="3" DbType="24" Length="3" />
                     <Field Name="WeightInPounds" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Service" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="Rate" Ordinal="6" DbType="9" Precision="19" Scale="4" />
@@ -7402,7 +7402,7 @@
                   <Fields>
                     <Field Name="UpsPricePerPoundID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="UpsRateTableID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="Zone" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="Zone" Ordinal="3" DbType="24" Length="3" />
                     <Field Name="Service" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="Rate" Ordinal="5" DbType="9" Precision="19" Scale="4" />
                   </Fields>
@@ -8830,7 +8830,7 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ThreeDCartStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:UpsAccount:FK_UpsAccount_UpsRateTable" DeleteRuleAction="1">
+            <ForeignKeyConstraint Name="dbo:UpsAccount:FK_UpsAccount_UpsRateTable">
               <FieldPairs>
                 <FieldPair PkField="dbo:UpsRateTable:UpsRateTableID" FkField="dbo:UpsAccount:UpsRateTableID" />
               </FieldPairs>
