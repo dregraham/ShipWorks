@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private UpsRateTableEntity _upsRateTable;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,6 +45,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name UpsRateTable</summary>
+			public static readonly string UpsRateTable = "UpsRateTable";
 		}
 		#endregion
 		
@@ -101,12 +104,32 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_upsRateTable = (UpsRateTableEntity)info.GetValue("_upsRateTable", typeof(UpsRateTableEntity));
+				if(_upsRateTable!=null)
+				{
+					_upsRateTable.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((UpsAccountFieldIndex)fieldIndex)
+			{
+				case UpsAccountFieldIndex.UpsRateTableID:
+					DesetupSyncUpsRateTable(true, false);
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -116,6 +139,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "UpsRateTable":
+					this.UpsRateTable = (UpsRateTableEntity)entity;
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -138,6 +164,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "UpsRateTable":
+					toReturn.Add(Relations.UpsRateTableEntityUsingUpsRateTableID);
+					break;
 				default:
 					break;				
 			}
@@ -166,6 +195,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "UpsRateTable":
+					SetupSyncUpsRateTable(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -179,6 +211,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "UpsRateTable":
+					DesetupSyncUpsRateTable(false, true);
+					break;
 				default:
 					break;
 			}
@@ -198,6 +233,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_upsRateTable!=null)
+			{
+				toReturn.Add(_upsRateTable);
+			}
 			return toReturn;
 		}
 		
@@ -217,6 +256,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_upsRateTable", (!this.MarkedForDeletion?_upsRateTable:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -230,6 +270,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new UpsAccountRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UpsRateTable' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoUpsRateTable()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsRateTableFields.UpsRateTableID, null, ComparisonOperator.Equal, this.UpsRateTableID));
+			return bucket;
 		}
 		
 
@@ -275,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("UpsRateTable", _upsRateTable);
 			return toReturn;
 		}
 
@@ -344,8 +394,43 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PromoStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("LocalRatingEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("UpsRateTableID", fieldHashtable);
 		}
 		#endregion
+
+		/// <summary> Removes the sync logic for member _upsRateTable</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncUpsRateTable(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsAccountRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, signalRelatedEntity, "UpsAccount", resetFKFields, new int[] { (int)UpsAccountFieldIndex.UpsRateTableID } );
+			_upsRateTable = null;
+		}
+
+		/// <summary> setups the sync logic for member _upsRateTable</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncUpsRateTable(IEntityCore relatedEntity)
+		{
+			if(_upsRateTable!=relatedEntity)
+			{
+				DesetupSyncUpsRateTable(true, true);
+				_upsRateTable = (UpsRateTableEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _upsRateTable, new PropertyChangedEventHandler( OnUpsRateTablePropertyChanged ), "UpsRateTable", ShipWorks.Data.Model.RelationClasses.StaticUpsAccountRelations.UpsRateTableEntityUsingUpsRateTableIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnUpsRateTablePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this UpsAccountEntity</param>
@@ -376,6 +461,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsRateTable' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathUpsRateTable
+		{
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsRateTableEntityFactory))),	(IEntityRelation)GetRelationsForField("UpsRateTable")[0], (int)ShipWorks.Data.Model.EntityType.UpsAccountEntity, (int)ShipWorks.Data.Model.EntityType.UpsRateTableEntity, 0, null, null, null, null, "UpsRateTable", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -640,6 +732,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UpsAccountFieldIndex.LocalRatingEnabled, true); }
 			set	{ SetValue((int)UpsAccountFieldIndex.LocalRatingEnabled, value); }
+		}
+
+		/// <summary> The UpsRateTableID property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."UpsRateTableID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> UpsRateTableID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)UpsAccountFieldIndex.UpsRateTableID, false); }
+			set	{ SetValue((int)UpsAccountFieldIndex.UpsRateTableID, value); }
+		}
+
+		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual UpsRateTableEntity UpsRateTable
+		{
+			get	{ return _upsRateTable; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncUpsRateTable(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "UpsAccount", "UpsRateTable", _upsRateTable, true); 
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

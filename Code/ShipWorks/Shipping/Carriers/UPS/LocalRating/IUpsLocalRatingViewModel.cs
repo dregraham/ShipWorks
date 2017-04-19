@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
 {
@@ -10,11 +11,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
         /// <summary>
         /// Loads the UpsAccount information to the view model
         /// </summary>
-        void Load(UpsAccountEntity upsAccount);
+        void Load(UpsAccountEntity account, Action<bool> isBusy);
 
         /// <summary>
         /// Saves view model information to the UpsAccount
         /// </summary>
-        void Save(UpsAccountEntity upsAccount);
+        /// <returns>true when successful or false when save fails</returns>
+        bool Save();
     }
 }

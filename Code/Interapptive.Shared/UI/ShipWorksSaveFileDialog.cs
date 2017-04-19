@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -66,7 +67,18 @@ namespace Interapptive.Shared.UI
         /// <exception cref="UnauthorizedAccessException"></exception>
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
+            try
+            {
+                return string.IsNullOrEmpty(selectedFileName) ? null : File.Open(selectedFileName, FileMode.Create);
+            }
+            catch (Exception e) when (e is IOException ||
+                                      e is NotSupportedException || 
+                                      e is UnauthorizedAccessException ||
+                                      e is ArgumentException)
+            {
+                string message = $"An error occurred saving the file:{Environment.NewLine}{Environment.NewLine}{e.Message}";
+                throw new ShipWorksSaveFileDialogException(message, e);
+            }
         }
 
         /// <summary>
@@ -74,7 +86,17 @@ namespace Interapptive.Shared.UI
         /// </summary>
         public void ShowFile()
         {
-            Process.Start(selectedFileName);
+            try
+            {
+                Process.Start(selectedFileName);
+            }
+            catch (Exception e) when (e is InvalidOperationException ||
+                                       e is Win32Exception ||
+                                       e is FileNotFoundException)
+            {
+                string message = $"An error occurred opening the file after it was saved:{Environment.NewLine}{Environment.NewLine}{e.Message}";
+                throw new ShipWorksSaveFileDialogException(message, e);
+            }
         }
     }
 }

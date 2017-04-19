@@ -165,8 +165,15 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean LocalRatingEnabled { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."UpsRateTableID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> UpsRateTableID { get; }
         
         
+        IUpsRateTableEntity UpsRateTable { get; }
         
 
         /// <summary>
@@ -193,6 +200,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UpsAccountEntity : IUpsAccountEntity
     {
         
+        IUpsRateTableEntity IUpsAccountEntity.UpsRateTable => UpsRateTable;
         
 
         /// <summary>

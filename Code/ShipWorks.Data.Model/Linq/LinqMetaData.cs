@@ -521,14 +521,29 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.UpsAccountEntity:
 					toReturn = this.UpsAccount;
 					break;
+				case ShipWorks.Data.Model.EntityType.UpsLetterRateEntity:
+					toReturn = this.UpsLetterRate;
+					break;
 				case ShipWorks.Data.Model.EntityType.UpsPackageEntity:
 					toReturn = this.UpsPackage;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsPackageRateEntity:
+					toReturn = this.UpsPackageRate;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsPricePerPoundEntity:
+					toReturn = this.UpsPricePerPound;
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsProfileEntity:
 					toReturn = this.UpsProfile;
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsProfilePackageEntity:
 					toReturn = this.UpsProfilePackage;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsRateSurchargeEntity:
+					toReturn = this.UpsRateSurcharge;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsRateTableEntity:
+					toReturn = this.UpsRateTable;
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsShipmentEntity:
 					toReturn = this.UpsShipment;
@@ -1530,10 +1545,28 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<UpsAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsLetterRateEntity instances in the database.</summary>
+		public DataSource2<UpsLetterRateEntity> UpsLetterRate
+		{
+			get { return new DataSource2<UpsLetterRateEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting UpsPackageEntity instances in the database.</summary>
 		public DataSource2<UpsPackageEntity> UpsPackage
 		{
 			get { return new DataSource2<UpsPackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsPackageRateEntity instances in the database.</summary>
+		public DataSource2<UpsPackageRateEntity> UpsPackageRate
+		{
+			get { return new DataSource2<UpsPackageRateEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsPricePerPoundEntity instances in the database.</summary>
+		public DataSource2<UpsPricePerPoundEntity> UpsPricePerPound
+		{
+			get { return new DataSource2<UpsPricePerPoundEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting UpsProfileEntity instances in the database.</summary>
@@ -1546,6 +1579,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UpsProfilePackageEntity> UpsProfilePackage
 		{
 			get { return new DataSource2<UpsProfilePackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsRateSurchargeEntity instances in the database.</summary>
+		public DataSource2<UpsRateSurchargeEntity> UpsRateSurcharge
+		{
+			get { return new DataSource2<UpsRateSurchargeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsRateTableEntity instances in the database.</summary>
+		public DataSource2<UpsRateTableEntity> UpsRateTable
+		{
+			get { return new DataSource2<UpsRateTableEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting UpsShipmentEntity instances in the database.</summary>
