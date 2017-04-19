@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Empty(readLetterRates);
 
             UpsPackageRateEntity rate = readPackageRates.Single();
-            Assert.Equal(102, rate.Zone);
+            Assert.Equal("102", rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(1, readLetterRates.Count());
 
             var rate = readLetterRates.Single();
-            Assert.Equal(102, rate.Zone);
+            Assert.Equal("102", rate.Zone);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
         }
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(1, readPricesPerPound.Count());
 
             var pricePerPoundEntity = readPricesPerPound.Single();
-            Assert.Equal(102, pricePerPoundEntity.Zone);
+            Assert.Equal("102", pricePerPoundEntity.Zone);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, pricePerPoundEntity.Service);
             Assert.Equal(42.42m, pricePerPoundEntity.Rate);
         }
@@ -150,13 +150,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(2, readPackageRates.Count());
 
             UpsPackageRateEntity rate = readPackageRates.ElementAt(0);
-            Assert.Equal(102, rate.Zone);
+            Assert.Equal("102", rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
             rate = readPackageRates.ElementAt(1);
-            Assert.Equal(103, rate.Zone);
+            Assert.Equal("103", rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(3.5m, rate.Rate);
@@ -186,13 +186,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(2, readPackageRates.Count());
 
             UpsPackageRateEntity rate = readPackageRates.ElementAt(0);
-            Assert.Equal(102, rate.Zone);
+            Assert.Equal("102", rate.Zone);
             Assert.Equal(50, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAirAM, rate.Service);
             Assert.Equal(42.42m, rate.Rate);
 
             rate = readPackageRates.ElementAt(1);
-            Assert.Equal(400, rate.Zone);
+            Assert.Equal("400", rate.Zone);
             Assert.Equal(6, rate.WeightInPounds);
             Assert.Equal((int) UpsServiceType.UpsNextDayAir, rate.Service);
             Assert.Equal(7.25m, rate.Rate);
