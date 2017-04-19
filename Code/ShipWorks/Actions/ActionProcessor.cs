@@ -102,7 +102,6 @@ namespace ShipWorks.Actions
                         {
                             actionProcessorTasks.Add(Task.Run(() =>
                             {
-                                log.InfoFormat("Starting action processor");
                                 actionProcessor.ProcessQueues();
                             }));
                         }
