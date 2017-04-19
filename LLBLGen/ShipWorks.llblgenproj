@@ -2466,6 +2466,33 @@
           <Field Name="Zone" Type="int" Precision="10" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="UpsLocalRatingDeliveryAreaSurcharge" ObjectID="698b7db0-a0a8-44b0-bfb9-8a423ea15a4f">
+        <Fields>
+          <Field Name="DeliveryAreaSurchargeID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="DeliveryAreaType" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="DestinationZip" Type="string" MaxLength="5" FieldIndex="2" />
+          <Field Name="ZoneFileID" Type="long" Precision="19" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UpsLocalRatingZone" ObjectID="71cce4a3-0959-4cfd-b1fe-b5c2670440a1">
+        <Fields>
+          <Field Name="DestinationZipCeiling" Type="string" MaxLength="5" FieldIndex="5" />
+          <Field Name="DestinationZipFloor" Type="string" MaxLength="5" FieldIndex="4" />
+          <Field Name="OriginZipCeiling" Type="string" MaxLength="5" FieldIndex="3" />
+          <Field Name="OriginZipFloor" Type="string" MaxLength="5" FieldIndex="2" />
+          <Field Name="Service" Type="int" Precision="10" FieldIndex="6" />
+          <Field Name="Zone" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="ZoneFileID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="ZoneID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UpsLocalRatingZoneFile" ObjectID="3d762feb-3aa9-4cbc-936f-09bab6293b09">
+        <Fields>
+          <Field Name="FileContent" Type="byte[]" MaxLength="2147483647" FieldIndex="2" />
+          <Field Name="UploadDate" Type="datetime" Precision="7" FieldIndex="1" />
+          <Field Name="ZoneFileID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="UpsPackage" ObjectID="06bfa1b7-f2e5-4a8d-abb2-cdfb95c62359">
         <Fields>
           <Field Name="AdditionalHandlingEnabled" Type="bool" FieldIndex="16" />
@@ -3416,7 +3443,7 @@
           <FieldFieldRelationship FkField="TemplateID" PkField="TemplateID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UpsAccount.UpsRateTable-UpsRateTable.UpsAccount" Start=":UpsAccount" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsAccount" Type="4" EndIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="UpsAccount.UpsRateTable-UpsRateTable.UpsAccount" Start=":UpsAccount" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsAccount" Type="4" EndIsOptional="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
         </FieldRelationships>
@@ -3424,6 +3451,16 @@
       <NormalRelationship Name="UpsLetterRate.UpsRateTable-UpsRateTable.UpsLetterRate" Start=":UpsLetterRate" End=":UpsRateTable" StartNavigator="UpsRateTable" EndNavigator="UpsLetterRate" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="UpsRateTableID" PkField="UpsRateTableID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="UpsLocalRatingDeliveryAreaSurcharge.UpsLocalRatingZoneFile-UpsLocalRatingZoneFile.UpsLocalRatingDeliveryAreaSurcharge" Start=":UpsLocalRatingDeliveryAreaSurcharge" End=":UpsLocalRatingZoneFile" StartNavigator="UpsLocalRatingZoneFile" EndNavigator="UpsLocalRatingDeliveryAreaSurcharge" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ZoneFileID" PkField="ZoneFileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="UpsLocalRatingZone.UpsLocalRatingZoneFile-UpsLocalRatingZoneFile.UpsLocalRatingZone" Start=":UpsLocalRatingZone" End=":UpsLocalRatingZoneFile" StartNavigator="UpsLocalRatingZoneFile" EndNavigator="UpsLocalRatingZone" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ZoneFileID" PkField="ZoneFileID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="UpsPackage.UpsShipment-UpsShipment.Packages" Start=":UpsPackage" End=":UpsShipment" StartNavigator="UpsShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
@@ -3670,7 +3707,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-11T20:17:17.0072101Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-19T15:15:25.924913Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7356,6 +7393,36 @@
                     <Field Name="Rate" Ordinal="5" DbType="9" Precision="19" Scale="4" />
                   </Fields>
                 </Table>
+                <Table Name="UpsLocalRatingDeliveryAreaSurcharge">
+                  <PkConstraintName Name="PK_UpsLocalRatingDeliveryAreaSurcharge" />
+                  <Fields>
+                    <Field Name="DeliveryAreaSurchargeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ZoneFileID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="DestinationZip" Ordinal="3" DbType="24" Length="5" />
+                    <Field Name="DeliveryAreaType" Ordinal="4" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="UpsLocalRatingZone">
+                  <PkConstraintName Name="PK_UpsLocalRatingZone" />
+                  <Fields>
+                    <Field Name="ZoneID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ZoneFileID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="OriginZipFloor" Ordinal="3" DbType="24" Length="5" />
+                    <Field Name="OriginZipCeiling" Ordinal="4" DbType="24" Length="5" />
+                    <Field Name="DestinationZipFloor" Ordinal="5" DbType="24" Length="5" />
+                    <Field Name="DestinationZipCeiling" Ordinal="6" DbType="24" Length="5" />
+                    <Field Name="Service" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="Zone" Ordinal="8" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="UpsLocalRatingZoneFile">
+                  <PkConstraintName Name="PK_UpsLocalRatingZoneFile" />
+                  <Fields>
+                    <Field Name="ZoneFileID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="UploadDate" Ordinal="2" DbType="29" Precision="7" />
+                    <Field Name="FileContent" Ordinal="3" DbType="23" Length="2147483647" />
+                  </Fields>
+                </Table>
                 <Table Name="UpsPackage">
                   <PkConstraintName Name="PK_UpsPackage" />
                   <Fields>
@@ -8830,7 +8897,7 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ThreeDCartStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:UpsAccount:FK_UpsAccount_UpsRateTable" DeleteRuleAction="1">
+            <ForeignKeyConstraint Name="dbo:UpsAccount:FK_UpsAccount_UpsRateTable">
               <FieldPairs>
                 <FieldPair PkField="dbo:UpsRateTable:UpsRateTableID" FkField="dbo:UpsAccount:UpsRateTableID" />
               </FieldPairs>
@@ -8838,6 +8905,16 @@
             <ForeignKeyConstraint Name="dbo:UpsLetterRate:FK_UpsLetterRate_UpsRateTable" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:UpsRateTable:UpsRateTableID" FkField="dbo:UpsLetterRate:UpsRateTableID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:UpsLocalRatingDeliveryAreaSurcharge:FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:UpsLocalRatingZoneFile:ZoneFileID" FkField="dbo:UpsLocalRatingDeliveryAreaSurcharge:ZoneFileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:UpsLocalRatingZone:FK_UpsLocalRatingZone_UpsLocalRatingZoneFile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:UpsLocalRatingZoneFile:ZoneFileID" FkField="dbo:UpsLocalRatingZone:ZoneFileID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:UpsPackage:FK_UpsPackage_UpsShipment" DeleteRuleAction="1">
@@ -11353,6 +11430,33 @@
             <FieldMapping FieldName="UpsLetterRateID" TargetFieldName="UpsLetterRateID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="UpsRateTableID" TargetFieldName="UpsRateTableID" />
             <FieldMapping FieldName="Zone" TargetFieldName="Zone" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":UpsLocalRatingDeliveryAreaSurcharge" TargetName="ShipWorksLocal:dbo:UpsLocalRatingDeliveryAreaSurcharge">
+          <FieldMappings>
+            <FieldMapping FieldName="DeliveryAreaSurchargeID" TargetFieldName="DeliveryAreaSurchargeID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="DeliveryAreaType" TargetFieldName="DeliveryAreaType" />
+            <FieldMapping FieldName="DestinationZip" TargetFieldName="DestinationZip" />
+            <FieldMapping FieldName="ZoneFileID" TargetFieldName="ZoneFileID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":UpsLocalRatingZone" TargetName="ShipWorksLocal:dbo:UpsLocalRatingZone">
+          <FieldMappings>
+            <FieldMapping FieldName="DestinationZipCeiling" TargetFieldName="DestinationZipCeiling" />
+            <FieldMapping FieldName="DestinationZipFloor" TargetFieldName="DestinationZipFloor" />
+            <FieldMapping FieldName="OriginZipCeiling" TargetFieldName="OriginZipCeiling" />
+            <FieldMapping FieldName="OriginZipFloor" TargetFieldName="OriginZipFloor" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="Zone" TargetFieldName="Zone" />
+            <FieldMapping FieldName="ZoneFileID" TargetFieldName="ZoneFileID" />
+            <FieldMapping FieldName="ZoneID" TargetFieldName="ZoneID" SequenceToUse="SCOPE_IDENTITY()" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":UpsLocalRatingZoneFile" TargetName="ShipWorksLocal:dbo:UpsLocalRatingZoneFile">
+          <FieldMappings>
+            <FieldMapping FieldName="FileContent" TargetFieldName="FileContent" />
+            <FieldMapping FieldName="UploadDate" TargetFieldName="UploadDate" />
+            <FieldMapping FieldName="ZoneFileID" TargetFieldName="ZoneFileID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":UpsPackage" TargetName="ShipWorksLocal:dbo:UpsPackage">

@@ -9207,6 +9207,54 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingDeliveryAreaSurcharge.</summary>
+	public enum UpsLocalRatingDeliveryAreaSurchargeFieldIndex
+	{
+		///<summary>DeliveryAreaSurchargeID. </summary>
+		DeliveryAreaSurchargeID,
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>DestinationZip. </summary>
+		DestinationZip,
+		///<summary>DeliveryAreaType. </summary>
+		DeliveryAreaType,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingZone.</summary>
+	public enum UpsLocalRatingZoneFieldIndex
+	{
+		///<summary>ZoneID. </summary>
+		ZoneID,
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>OriginZipFloor. </summary>
+		OriginZipFloor,
+		///<summary>OriginZipCeiling. </summary>
+		OriginZipCeiling,
+		///<summary>DestinationZipFloor. </summary>
+		DestinationZipFloor,
+		///<summary>DestinationZipCeiling. </summary>
+		DestinationZipCeiling,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Zone. </summary>
+		Zone,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingZoneFile.</summary>
+	public enum UpsLocalRatingZoneFileFieldIndex
+	{
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>UploadDate. </summary>
+		UploadDate,
+		///<summary>FileContent. </summary>
+		FileContent,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPackage.</summary>
 	public enum UpsPackageFieldIndex
 	{
@@ -11081,6 +11129,12 @@ namespace ShipWorks.Data.Model
 		UpsAccountEntity,
 		///<summary>UpsLetterRate</summary>
 		UpsLetterRateEntity,
+		///<summary>UpsLocalRatingDeliveryAreaSurcharge</summary>
+		UpsLocalRatingDeliveryAreaSurchargeEntity,
+		///<summary>UpsLocalRatingZone</summary>
+		UpsLocalRatingZoneEntity,
+		///<summary>UpsLocalRatingZoneFile</summary>
+		UpsLocalRatingZoneFileEntity,
 		///<summary>UpsPackage</summary>
 		UpsPackageEntity,
 		///<summary>UpsPackageRate</summary>

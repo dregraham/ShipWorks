@@ -1030,6 +1030,24 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<UpsLetterRateEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the UpsLocalRatingDeliveryAreaSurcharge entity</summary>
+		public EntityQuery<UpsLocalRatingDeliveryAreaSurchargeEntity> UpsLocalRatingDeliveryAreaSurcharge
+		{
+			get { return Create<UpsLocalRatingDeliveryAreaSurchargeEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the UpsLocalRatingZone entity</summary>
+		public EntityQuery<UpsLocalRatingZoneEntity> UpsLocalRatingZone
+		{
+			get { return Create<UpsLocalRatingZoneEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the UpsLocalRatingZoneFile entity</summary>
+		public EntityQuery<UpsLocalRatingZoneFileEntity> UpsLocalRatingZoneFile
+		{
+			get { return Create<UpsLocalRatingZoneFileEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the UpsPackage entity</summary>
 		public EntityQuery<UpsPackageEntity> UpsPackage
 		{

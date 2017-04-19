@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (183 + 0));
+			this.InitClass( (186 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -204,6 +204,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitThreeDCartStoreEntityInfos();
 			InitUpsAccountEntityInfos();
 			InitUpsLetterRateEntityInfos();
+			InitUpsLocalRatingDeliveryAreaSurchargeEntityInfos();
+			InitUpsLocalRatingZoneEntityInfos();
+			InitUpsLocalRatingZoneFileEntityInfos();
 			InitUpsPackageEntityInfos();
 			InitUpsPackageRateEntityInfos();
 			InitUpsPricePerPoundEntityInfos();
@@ -2767,6 +2770,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Zone, 0, 0, 10);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Rate", typeof(System.Decimal), false, false, false, false,  (int)UpsLetterRateFieldIndex.Rate, 0, 4, 19);
+		}
+		/// <summary>Inits UpsLocalRatingDeliveryAreaSurchargeEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingDeliveryAreaSurchargeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingDeliveryAreaSurchargeFieldIndex), "UpsLocalRatingDeliveryAreaSurchargeEntity");
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaSurchargeID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaSurchargeID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "ZoneFileID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DestinationZip", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DestinationZip, 5, 0, 0);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaType", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaType, 0, 0, 10);
+		}
+		/// <summary>Inits UpsLocalRatingZoneEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingZoneEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingZoneFieldIndex), "UpsLocalRatingZoneEntity");
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "ZoneID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingZoneFieldIndex.ZoneID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "ZoneFileID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRatingZoneFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "OriginZipFloor", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.OriginZipFloor, 5, 0, 0);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "OriginZipCeiling", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.OriginZipCeiling, 5, 0, 0);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "DestinationZipFloor", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.DestinationZipFloor, 5, 0, 0);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "DestinationZipCeiling", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.DestinationZipCeiling, 5, 0, 0);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.Zone, 0, 0, 10);
+		}
+		/// <summary>Inits UpsLocalRatingZoneFileEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingZoneFileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingZoneFileFieldIndex), "UpsLocalRatingZoneFileEntity");
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "ZoneFileID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingZoneFileFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsLocalRatingZoneFileFieldIndex.UploadDate, 0, 0, 7);
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "FileContent", typeof(System.Byte[]), false, false, false, false,  (int)UpsLocalRatingZoneFileFieldIndex.FileContent, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UpsPackageEntity's FieldInfo objects</summary>
 		private void InitUpsPackageEntityInfos()

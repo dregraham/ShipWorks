@@ -174,6 +174,9 @@ namespace ShipWorks.Data.Model.Custom
 				case "ThreeDCartStoreEntity": return EntityType.ThreeDCartStoreEntity;
 				case "UpsAccountEntity": return EntityType.UpsAccountEntity;
 				case "UpsLetterRateEntity": return EntityType.UpsLetterRateEntity;
+				case "UpsLocalRatingDeliveryAreaSurchargeEntity": return EntityType.UpsLocalRatingDeliveryAreaSurchargeEntity;
+				case "UpsLocalRatingZoneEntity": return EntityType.UpsLocalRatingZoneEntity;
+				case "UpsLocalRatingZoneFileEntity": return EntityType.UpsLocalRatingZoneFileEntity;
 				case "UpsPackageEntity": return EntityType.UpsPackageEntity;
 				case "UpsPackageRateEntity": return EntityType.UpsPackageRateEntity;
 				case "UpsPricePerPoundEntity": return EntityType.UpsPricePerPoundEntity;
