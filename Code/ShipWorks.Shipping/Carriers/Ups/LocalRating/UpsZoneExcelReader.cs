@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -28,6 +29,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 } 
             }
 
+            // If the zones list is empty there were no worksheets that match our naming convention
+            if (!zones.Any())
+            {
+                throw new UpsLocalRatingException("The zone file contains no zone worksheets that zone naming convention of '#####-#####'");
+            }
+
             upsLocalRateTable.ReplaceZones(zones);
         }
         
@@ -54,13 +61,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, string originFloor, string originCeiling)
         {
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i <= 6; i++)
             {
                 if (row.Cells[i].Value.Trim() == "-")
                 {
                     continue;
                 }
-
+                
+                // TODO: zone should be a string, fix when regen is done
                 int zoneValue;
                 if (!int.TryParse(row.Cells[i].Value, out zoneValue))
                 {
@@ -84,13 +92,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the origin zip floor from the worksheet
         /// </summary>
-        private static string GetDestinationZipFloor(string value) => 
+        private static string GetDestinationZipCeiling(string value) => 
             value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3);
 
         /// <summary>
         /// Get the origin zip ceiling from the worksheet
         /// </summary>
-        private static string GetDestinationZipCeiling(string value) => value.Substring(0, 3);
+        private static string GetDestinationZipFloor(string value) => value.Substring(0, 3);
 
         /// <summary>
         /// Get the origin zip floor from the worksheet

@@ -27,7 +27,50 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Read_AddsValueAddWorksheetRatesToUpsLocalRateTable()
+        public void Read_ThrowsUpsLocalRatingException_WhenWorksheetsHasNoZoneInfo()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "EomeEmptyWorksheet";
+
+            UpsLocalRatingException ex= Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+           Assert.Equal("The zone file contains no zone worksheets that zone naming convention of '#####-#####'", ex.Message);
+        }
+
+        [Fact]
+        public void Read_SkipsZoneColumnsWithDash()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+            worksheet.Range["C1"].Text = "3 Day Select";
+            worksheet.Range["D1"].Text = "2nd Day Air";
+            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
+            worksheet.Range["F1"].Text = "Next Day Air Saver";
+            worksheet.Range["G1"].Text = "Next Day Air";
+
+            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-" });
+
+            testObject.Read(workbook.Worksheets, rateTable.Object);
+
+            rateTable.Verify(r => r.ReplaceZones(
+                It.Is<List<UpsLocalRatingZoneEntity>>(
+                    z => z.Count == 4 && z.All(a => a.OriginZipFloor == "12345" &&
+                                                    a.OriginZipCeiling == "12345" &&
+                                                    a.DestinationZipFloor == "004" &&
+                                                    a.DestinationZipCeiling == "005"))));
+        }
+
+        [Fact]
+        public void Read_ReplacesZonesOnUpsLocalRateTable()
         {
             Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
 
@@ -46,7 +89,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             AddRow(worksheet, new []{"004-005","005","305","205","245","135","105"});
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
-            
+
+            rateTable.Verify(r => r.ReplaceZones(
+                It.Is<List<UpsLocalRatingZoneEntity>>(
+                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == "12345" &&
+                                                    a.OriginZipCeiling == "12345" &&
+                                                    a.DestinationZipFloor == "004" &&
+                                                    a.DestinationZipCeiling == "005"))));
         }
         
         private void AddRow(IWorksheet workSheet, string[] values)
