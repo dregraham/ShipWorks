@@ -3192,7 +3192,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new UpsLocalRatingDeliveryAreaSurchargeEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsLocalRatingDeliveryAreaSurchargeUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -3213,7 +3212,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new UpsLocalRatingZoneEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsLocalRatingZoneUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -3234,7 +3232,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new UpsLocalRatingZoneFileEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsLocalRatingZoneFileUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code

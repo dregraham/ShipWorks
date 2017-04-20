@@ -25,20 +25,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'UpsLocalRatingZone'.<br/><br/></summary>
 	[Serializable]
 	public partial class UpsLocalRatingZoneEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private UpsLocalRatingZoneFileEntity _upsLocalRatingZoneFile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -116,7 +113,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -264,7 +260,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -340,7 +335,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -416,7 +410,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -489,41 +482,41 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The OriginZipFloor property of the Entity UpsLocalRatingZone<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZone"."OriginZipFloor"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OriginZipFloor
+		public virtual System.Int32 OriginZipFloor
 		{
-			get { return (System.String)GetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipFloor, true); }
+			get { return (System.Int32)GetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipFloor, true); }
 			set	{ SetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipFloor, value); }
 		}
 
 		/// <summary> The OriginZipCeiling property of the Entity UpsLocalRatingZone<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZone"."OriginZipCeiling"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OriginZipCeiling
+		public virtual System.Int32 OriginZipCeiling
 		{
-			get { return (System.String)GetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipCeiling, true); }
+			get { return (System.Int32)GetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipCeiling, true); }
 			set	{ SetValue((int)UpsLocalRatingZoneFieldIndex.OriginZipCeiling, value); }
 		}
 
 		/// <summary> The DestinationZipFloor property of the Entity UpsLocalRatingZone<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZone"."DestinationZipFloor"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String DestinationZipFloor
+		public virtual System.Int32 DestinationZipFloor
 		{
-			get { return (System.String)GetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipFloor, true); }
+			get { return (System.Int32)GetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipFloor, true); }
 			set	{ SetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipFloor, value); }
 		}
 
 		/// <summary> The DestinationZipCeiling property of the Entity UpsLocalRatingZone<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZone"."DestinationZipCeiling"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String DestinationZipCeiling
+		public virtual System.Int32 DestinationZipCeiling
 		{
-			get { return (System.String)GetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipCeiling, true); }
+			get { return (System.Int32)GetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipCeiling, true); }
 			set	{ SetValue((int)UpsLocalRatingZoneFieldIndex.DestinationZipCeiling, value); }
 		}
 
@@ -539,11 +532,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Zone property of the Entity UpsLocalRatingZone<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZone"."Zone"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Zone
+		public virtual System.String Zone
 		{
-			get { return (System.Int32)GetValue((int)UpsLocalRatingZoneFieldIndex.Zone, true); }
+			get { return (System.String)GetValue((int)UpsLocalRatingZoneFieldIndex.Zone, true); }
 			set	{ SetValue((int)UpsLocalRatingZoneFieldIndex.Zone, value); }
 		}
 
@@ -591,7 +584,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

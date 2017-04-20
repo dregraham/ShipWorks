@@ -2466,27 +2466,27 @@
           <Field Name="Zone" Type="string" MaxLength="3" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsLocalRatingDeliveryAreaSurcharge" ObjectID="698b7db0-a0a8-44b0-bfb9-8a423ea15a4f">
+      <EntityDefinition Name="UpsLocalRatingDeliveryAreaSurcharge" ObjectID="d57b295c-0d0d-4629-8eb1-918e9da81ddf">
         <Fields>
           <Field Name="DeliveryAreaSurchargeID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="DeliveryAreaType" Type="int" Precision="10" FieldIndex="3" />
-          <Field Name="DestinationZip" Type="string" MaxLength="5" FieldIndex="2" />
+          <Field Name="DestinationZip" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="ZoneFileID" Type="long" Precision="19" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsLocalRatingZone" ObjectID="71cce4a3-0959-4cfd-b1fe-b5c2670440a1">
+      <EntityDefinition Name="UpsLocalRatingZone" ObjectID="64ab5815-83d8-4df8-b9fb-aa46be5c8ff9">
         <Fields>
-          <Field Name="DestinationZipCeiling" Type="string" MaxLength="5" FieldIndex="5" />
-          <Field Name="DestinationZipFloor" Type="string" MaxLength="5" FieldIndex="4" />
-          <Field Name="OriginZipCeiling" Type="string" MaxLength="5" FieldIndex="3" />
-          <Field Name="OriginZipFloor" Type="string" MaxLength="5" FieldIndex="2" />
+          <Field Name="DestinationZipCeiling" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="DestinationZipFloor" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="OriginZipCeiling" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="OriginZipFloor" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="6" />
-          <Field Name="Zone" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="Zone" Type="string" MaxLength="3" FieldIndex="7" />
           <Field Name="ZoneFileID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="ZoneID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UpsLocalRatingZoneFile" ObjectID="3d762feb-3aa9-4cbc-936f-09bab6293b09">
+      <EntityDefinition Name="UpsLocalRatingZoneFile" ObjectID="1c3493c3-987e-4cf3-b6fd-715360f091b9">
         <Fields>
           <Field Name="FileContent" Type="byte[]" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="UploadDate" Type="datetime" Precision="7" FieldIndex="1" />
@@ -3707,7 +3707,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-19T21:33:36.4627596Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-19T21:52:40.7881704Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7398,7 +7398,7 @@
                   <Fields>
                     <Field Name="DeliveryAreaSurchargeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ZoneFileID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="DestinationZip" Ordinal="3" DbType="24" Length="5" />
+                    <Field Name="DestinationZip" Ordinal="3" DbType="8" Precision="10" />
                     <Field Name="DeliveryAreaType" Ordinal="4" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
@@ -7407,12 +7407,12 @@
                   <Fields>
                     <Field Name="ZoneID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ZoneFileID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginZipFloor" Ordinal="3" DbType="24" Length="5" />
-                    <Field Name="OriginZipCeiling" Ordinal="4" DbType="24" Length="5" />
-                    <Field Name="DestinationZipFloor" Ordinal="5" DbType="24" Length="5" />
-                    <Field Name="DestinationZipCeiling" Ordinal="6" DbType="24" Length="5" />
+                    <Field Name="OriginZipFloor" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="OriginZipCeiling" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="DestinationZipFloor" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="DestinationZipCeiling" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="Service" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="Zone" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="Zone" Ordinal="8" DbType="24" Length="3" />
                   </Fields>
                 </Table>
                 <Table Name="UpsLocalRatingZoneFile">

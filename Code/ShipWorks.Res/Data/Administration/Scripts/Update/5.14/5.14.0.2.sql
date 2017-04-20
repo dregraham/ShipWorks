@@ -21,12 +21,12 @@ GO
 CREATE TABLE [dbo].[UpsLocalRatingZone](
 	[ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
 	[ZoneFileID] [bigint] NOT NULL,
-	[OriginZipFloor] [varchar](5) NOT NULL,
-	[OriginZipCeiling] [varchar](5) NOT NULL,
-	[DestinationZipFloor] [varchar](5) NOT NULL,
-	[DestinationZipCeiling] [varchar](5) NOT NULL,
+	[OriginZipFloor] [int] NOT NULL,
+	[OriginZipCeiling] [int] NOT NULL,
+	[DestinationZipFloor] [int] NOT NULL,
+	[DestinationZipCeiling] [int] NOT NULL,
 	[Service] [int] NOT NULL,
-	[Zone] [int] NOT NULL)
+	[Zone] [varchar](3) NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingZone] on [dbo].[UpsLocalRatingZone]'
 GO
@@ -43,7 +43,7 @@ GO
 CREATE TABLE [dbo].UpsLocalRatingDeliveryAreaSurcharge(
 	[DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
 	[ZoneFileID] [bigint] NOT NULL,
-	[DestinationZip] [varchar](5) NOT NULL,
+	[DestinationZip] [int] NOT NULL,
 	[DeliveryAreaType] [int] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingDeliveryAreaSurcharge] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'

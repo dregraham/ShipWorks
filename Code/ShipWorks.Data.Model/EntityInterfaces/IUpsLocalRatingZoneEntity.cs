@@ -36,27 +36,27 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The OriginZipFloor property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."OriginZipFloor"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String OriginZipFloor { get; }
+        System.Int32 OriginZipFloor { get; }
         /// <summary> The OriginZipCeiling property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."OriginZipCeiling"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String OriginZipCeiling { get; }
+        System.Int32 OriginZipCeiling { get; }
         /// <summary> The DestinationZipFloor property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."DestinationZipFloor"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String DestinationZipFloor { get; }
+        System.Int32 DestinationZipFloor { get; }
         /// <summary> The DestinationZipCeiling property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."DestinationZipCeiling"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String DestinationZipCeiling { get; }
+        System.Int32 DestinationZipCeiling { get; }
         /// <summary> The Service property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."Service"<br/>
@@ -66,9 +66,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Zone property of the Entity UpsLocalRatingZone<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingZone"."Zone"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Zone { get; }
+        System.String Zone { get; }
         
         
         IUpsLocalRatingZoneFileEntity UpsLocalRatingZoneFile { get; }

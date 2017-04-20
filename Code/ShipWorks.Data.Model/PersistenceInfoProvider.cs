@@ -2926,7 +2926,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", @"ShipWorksLocal", @"dbo", "UpsLocalRatingDeliveryAreaSurcharge", 4, 0);
 			this.AddElementFieldMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaSurchargeID", "DeliveryAreaSurchargeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", "ZoneFileID", "ZoneFileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", "DestinationZip", "DestinationZip", false, "VarChar", 5, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", "DestinationZip", "DestinationZip", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaType", "DeliveryAreaType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 		}
 
@@ -2936,12 +2936,12 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("UpsLocalRatingZoneEntity", @"ShipWorksLocal", @"dbo", "UpsLocalRatingZone", 8, 0);
 			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "ZoneID", "ZoneID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "ZoneFileID", "ZoneFileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "OriginZipFloor", "OriginZipFloor", false, "VarChar", 5, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "OriginZipCeiling", "OriginZipCeiling", false, "VarChar", 5, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "DestinationZipFloor", "DestinationZipFloor", false, "VarChar", 5, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "DestinationZipCeiling", "DestinationZipCeiling", false, "VarChar", 5, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "OriginZipFloor", "OriginZipFloor", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "OriginZipCeiling", "OriginZipCeiling", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "DestinationZipFloor", "DestinationZipFloor", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "DestinationZipCeiling", "DestinationZipCeiling", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
-			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "Zone", "Zone", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+			this.AddElementFieldMapping("UpsLocalRatingZoneEntity", "Zone", "Zone", false, "VarChar", 3, 0, 0, false, "", null, typeof(System.String), 7);
 		}
 
 		/// <summary>Inits UpsLocalRatingZoneFileEntity's mappings</summary>

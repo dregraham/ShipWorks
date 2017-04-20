@@ -36,9 +36,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The DestinationZip property of the Entity UpsLocalRatingDeliveryAreaSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingDeliveryAreaSurcharge"."DestinationZip"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String DestinationZip { get; }
+        System.Int32 DestinationZip { get; }
         /// <summary> The DeliveryAreaType property of the Entity UpsLocalRatingDeliveryAreaSurcharge<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsLocalRatingDeliveryAreaSurcharge"."DeliveryAreaType"<br/>
