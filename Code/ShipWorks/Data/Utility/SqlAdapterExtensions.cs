@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Utility
         /// <summary>
         /// Get a collection of entities using the given predicate configuration
         /// </summary>
-        public static EntityCollection<T> GetCollectionFromPredicate<T>(this ISqlAdapter sqlAdapter, Action<IPredicateExpression> predicateConfigurator, int maxRowsToReturn = 0) where T : EntityBase2
+        public static EntityCollection<T> GetCollectionFromPredicate<T>(this ISqlAdapter sqlAdapter, Action<IPredicateExpression> predicateConfigurator, int maxRowsToReturn) where T : EntityBase2
         {
             if (sqlAdapter == null)
             {
