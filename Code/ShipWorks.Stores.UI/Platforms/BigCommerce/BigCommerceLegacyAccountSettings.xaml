@@ -43,7 +43,7 @@
 
         <TextBlock Grid.Row="1" TextAlignment="Right">API Path:</TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding ApiPath}" />
+                 Text="{Binding ApiUrl}" />
 
         <TextBlock Grid.Row="2" TextAlignment="Right">API Username:</TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1"

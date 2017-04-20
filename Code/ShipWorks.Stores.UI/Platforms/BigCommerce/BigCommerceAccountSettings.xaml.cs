@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
     /// </summary>
     public partial class BigCommerceAccountSettings : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BigCommerceAccountSettings()
         {
             InitializeComponent();
