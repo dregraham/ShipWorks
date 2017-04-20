@@ -55,7 +55,6 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
-        [NDependIgnoreLongMethod]
         public override bool SaveToEntity(StoreEntity store) =>
             viewModel.SaveToEntity(store);
     }
