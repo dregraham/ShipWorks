@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Magento;
@@ -12,6 +13,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
     /// Wizard page for getting Magento store settings from user
     /// </summary>
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Magento)]
+    [Order(typeof(WizardPage), Order.Unordered)]
     public partial class MagentoStoreSetupPage : AddStoreWizardPage
     {
         private readonly IMessageHelper messageHelper;

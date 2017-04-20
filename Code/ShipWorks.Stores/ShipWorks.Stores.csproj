@@ -87,6 +87,9 @@
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=104.2.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RestSharpSigned.104.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -134,6 +137,56 @@
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticator.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceConstants.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceDownloader.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceMaxIncompleteOrdersReachedException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientEndpoints.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientOrderSearchCriteria.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottle.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottledException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientThrottleWaitCancelException.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTask.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceShipmentUploadTask.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\IBigCommerceOrderUpdateEditorFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceDigitalItemCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventDateCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventNameCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddress.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddShipment.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceApiOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceBillingAddress.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceConfigurableField.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceCoupon.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceCoupons.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceGetOrderCountResponse.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceImage.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceItem.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceOrder.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProduct.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductDiscount.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductImage.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductOption.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProducts.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceShipment.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceShippingAddresses.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceUpdateOrderStatusRequest.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceOnlineOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceProductType.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientApiCall.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
@@ -360,7 +413,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

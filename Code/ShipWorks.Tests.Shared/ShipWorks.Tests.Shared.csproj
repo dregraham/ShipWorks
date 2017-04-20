@@ -173,6 +173,11 @@
     <Compile Include="TestPackageAdapter.cs" />
     <Compile Include="TestSchedulerProvider.cs" />
     <Compile Include="TestStoreType.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STAFactAttribute.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STAFactDiscoverer.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATestCase.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATheoryAttribute.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATheoryDiscoverer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
