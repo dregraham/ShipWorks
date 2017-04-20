@@ -24,7 +24,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public const string SampleFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
+        public const string SampleRatesFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
+        public const string SampleZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZonesSample.xlsx";
+
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
@@ -205,7 +207,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private void SaveFile(ISaveFileDialog fileDialog)
         {
             Assembly shippingAssembly = Assembly.GetAssembly(GetType());
-            using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleFileResourceName))
+            using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleRatesFileResourceName))
             {
                 using (Stream selectedFileStream = fileDialog.CreateFileStream())
                 {

@@ -68,9 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             IRange dasColumn = matchingColumns.Single();
 
-            for (int index = 1; index < dasColumn.Cells.Length; index++)
+            foreach (IRange cell in dasColumn.Cells.Skip(1).Where(c=>(c.Text?.Trim() ?? string.Empty) != string.Empty))
             {
-                IRange cell = dasColumn.Cells[index];
                 string zip = cell.Text.Trim();
 
                 if (!Regex.IsMatch(zip, "^[0-9]{5}$"))
@@ -78,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     string errorMessage = string.Format(InvalidZipCode, dasTypeEntry.ApiValue, cell.Row);
                     throw new UpsLocalRatingException(errorMessage);
                 }
+
                 readSurcharges.Add(new UpsLocalRatingDeliveryAreaSurchargeEntity()
                 {
                     DestinationZip = int.Parse(zip),

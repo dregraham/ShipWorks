@@ -421,7 +421,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Carriers\Ups\LocalRating\UpsLocalRatesSample.xlsx" />
-    <None Include="Carriers\Ups\LocalRating\UpsZonesSample.xlsx" />
+    <EmbeddedResource Include="Carriers\Ups\LocalRating\UpsZonesSample.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>

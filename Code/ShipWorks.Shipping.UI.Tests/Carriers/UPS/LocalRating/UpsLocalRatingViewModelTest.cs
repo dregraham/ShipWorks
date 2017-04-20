@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
                 // Get the xslt file and convert it to a string
                 Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLocalRatingViewModel));
-                using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleFileResourceName))
+                using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleRatesFileResourceName))
                 {
                     sampleFileBytes = new byte[resourceStream.Length];
                     resourceStream.Read(sampleFileBytes, 0, (int) resourceStream.Length);

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
-    public class UpsDeliveryAreaSurchargeReaderTest : IDisposable
+    public class DeliveryAreaSurchargeUpsZoneExcelReaderTest : IDisposable
     {
         readonly AutoMock mock;
         private readonly ExcelEngine excelEngine;
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         private readonly string expectedRemoteAkHeader = "Remote AK";
 
 
-        public UpsDeliveryAreaSurchargeReaderTest()
+        public DeliveryAreaSurchargeUpsZoneExcelReaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
