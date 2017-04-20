@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -33,7 +34,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         string apiToken;
         string clientID;
         string accessToken;
-        bool testingConnection;
 
         /// <summary>
         /// Constructor
@@ -103,17 +103,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
-        /// Is the connection being testing
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool TestingConnection
-        {
-            get { return testingConnection; }
-            set { handler.Set(nameof(TestingConnection), ref testingConnection, value); }
-        }
-
-
-        /// <summary>
         /// Load the data from the given store into the control
         /// </summary>
         /// <param name="store"></param>
@@ -168,29 +157,28 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
         private bool UpdateConnection(BigCommerceStoreEntity store)
         {
-            TestingConnection = true;
-
-            try
+            using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                IBigCommerceWebClient webClient = webClientFactory.Create(store);
-                webClient.TestConnection();
-
-                using (Owned<BigCommerceStatusCodeProvider> statusProvider = createStatusCodeProvider(store))
+                try
                 {
-                    statusProvider.Value.UpdateFromOnlineStore();
+                    IBigCommerceWebClient webClient = webClientFactory.Create(store);
+                    webClient.TestConnection();
+
+                    using (Owned<BigCommerceStatusCodeProvider> statusProvider = createStatusCodeProvider(store))
+                    {
+                        statusProvider.Value.UpdateFromOnlineStore();
+                    }
+
+                    return true;
                 }
+                catch (BigCommerceException ex)
+                {
+                    log.Error(ex.Message, ex);
+                    messageHelper.ShowError(ex.Message);
 
-                return true;
+                    return false;
+                }
             }
-            catch (BigCommerceException ex)
-            {
-                log.Error(ex.Message, ex);
-                messageHelper.ShowError(ex.Message);
-
-                return false;
-            }
-
-            TestingConnection = false;
         }
 
         /// <summary>

@@ -68,5 +68,6 @@ namespace Interapptive.Shared.UI
         /// Show a message
         /// </summary>
         void ShowMessage(string message);
+        IDisposable SetCursor(Cursor waitCursor);
     }
 }

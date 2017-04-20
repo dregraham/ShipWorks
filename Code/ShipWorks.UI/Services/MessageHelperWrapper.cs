@@ -109,7 +109,7 @@ namespace ShipWorks.UI.Services
             Control owner = ownerFactory();
             if (owner.InvokeRequired)
             {
-                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>)(ShowDialog), createDialog);
+                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>) (ShowDialog), createDialog);
             }
 
             using (IForm dlg = createDialog())
@@ -153,6 +153,17 @@ namespace ShipWorks.UI.Services
             dialog?.Dispose();
 
             return Disposable.Empty;
+        }
+
+        /// <summary>
+        /// Set the cursor, then set it back when the result is disposed
+        /// </summary>
+        public IDisposable SetCursor(Cursor cursor)
+        {
+            Cursor current = Cursor.Current;
+            Cursor.Current = cursor;
+
+            return Disposable.Create(() => Cursor.Current = current);
         }
     }
 }
