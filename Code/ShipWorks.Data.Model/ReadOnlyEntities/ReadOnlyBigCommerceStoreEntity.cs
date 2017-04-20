@@ -42,6 +42,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             StatusCodes = source.StatusCodes;
             WeightUnitOfMeasure = source.WeightUnitOfMeasure;
             DownloadModifiedNumberOfDaysBack = source.DownloadModifiedNumberOfDaysBack;
+            BigCommerceAuthentication = source.BigCommerceAuthentication;
+            OauthClientId = source.OauthClientId;
+            OauthToken = source.OauthToken;
             
             
             
@@ -86,6 +89,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 DownloadModifiedNumberOfDaysBack { get; }
+        /// <summary> The BigCommerceAuthentication property of the Entity BigCommerceStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BigCommerceStore"."BigCommerceAuthentication"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.BigCommerceAuthenticationType BigCommerceAuthentication { get; }
+        /// <summary> The OauthClientId property of the Entity BigCommerceStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BigCommerceStore"."OauthClientId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String OauthClientId { get; }
+        /// <summary> The OauthToken property of the Entity BigCommerceStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BigCommerceStore"."OauthToken"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String OauthToken { get; }
         
         
         

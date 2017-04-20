@@ -341,6 +341,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WeightUnitOfMeasure", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BigCommerceAuthentication", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OauthClientId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OauthToken", fieldHashtable);
 		}
 		#endregion
 
@@ -452,6 +458,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
 			set	{ SetValue((int)BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack, value); }
+		}
+
+		/// <summary> The BigCommerceAuthentication property of the Entity BigCommerceStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BigCommerceStore"."BigCommerceAuthentication"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual Interapptive.Shared.Enums.BigCommerceAuthenticationType BigCommerceAuthentication
+		{
+			get { return (Interapptive.Shared.Enums.BigCommerceAuthenticationType)GetValue((int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, true); }
+			set	{ SetValue((int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, value); }
+		}
+
+		/// <summary> The OauthClientId property of the Entity BigCommerceStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BigCommerceStore"."OauthClientId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OauthClientId
+		{
+			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.OauthClientId, true); }
+			set	{ SetValue((int)BigCommerceStoreFieldIndex.OauthClientId, value); }
+		}
+
+		/// <summary> The OauthToken property of the Entity BigCommerceStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BigCommerceStore"."OauthToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OauthToken
+		{
+			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.OauthToken, true); }
+			set	{ SetValue((int)BigCommerceStoreFieldIndex.OauthToken, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -900,6 +900,12 @@ namespace ShipWorks.Data.Model
 		WeightUnitOfMeasure,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>BigCommerceAuthentication. </summary>
+		BigCommerceAuthentication,
+		///<summary>OauthClientId. </summary>
+		OauthClientId,
+		///<summary>OauthToken. </summary>
+		OauthToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

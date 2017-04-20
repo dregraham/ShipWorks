@@ -2042,6 +2042,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.BigCommerceAuthentication field instance</summary>
+		public static EntityField2 BigCommerceAuthentication
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.BigCommerceAuthentication);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.OauthClientId field instance</summary>
+		public static EntityField2 OauthClientId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.OauthClientId);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.OauthToken field instance</summary>
+		public static EntityField2 OauthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.OauthToken);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BuyDotComOrderItemEntity</summary>

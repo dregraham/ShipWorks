@@ -129,6 +129,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             bigCommerceStore.StoreName = "BigCommerce Store";
             bigCommerceStore.WeightUnitOfMeasure = (int) WeightUnitOfMeasure.Pounds;
             bigCommerceStore.DownloadModifiedNumberOfDaysBack = 7;
+            bigCommerceStore.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+            bigCommerceStore.OauthClientId = string.Empty;
+            bigCommerceStore.OauthToken = string.Empty;
 
             return bigCommerceStore;
         }

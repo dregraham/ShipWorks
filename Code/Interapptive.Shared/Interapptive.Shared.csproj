@@ -159,6 +159,7 @@
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Enums\BigCommerceAuthenticationType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
