@@ -102,7 +102,10 @@ namespace ShipWorks.Actions
                         {
                             actionProcessorTasks.Add(Task.Run(() =>
                             {
-                                actionProcessor.ProcessQueues();
+                                if (actionProcessor.AnyWorkToDo())
+                                {
+                                    actionProcessor.ProcessQueues();
+                                }
                             }));
                         }
 
@@ -191,11 +194,6 @@ namespace ShipWorks.Actions
         /// </summary>
         public void ProcessQueues()
         {
-            if (!AnyWorkToDo())
-            {
-                return;
-            }
-
             // Make sure we have the latest set of actions
             ActionManager.CheckForChangesNeeded();
 
