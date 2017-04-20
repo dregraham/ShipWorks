@@ -43,8 +43,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ParseZones(IWorksheet worksheet, List<UpsLocalRatingZoneEntity> zones)
         {
-            string originFloor = GetOriginZipFloor(worksheet.Name);
-            string originCeiling = GetOriginZipCeiling(worksheet.Name);
+            int originFloor = GetOriginZipFloor(worksheet.Name);
+            int originCeiling = GetOriginZipCeiling(worksheet.Name);
 
             foreach (IRange row in worksheet.Rows)
             {
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Parse the given row and add it as a zone to the zones collection
         /// </summary>
-        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, string originFloor, string originCeiling)
+        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling)
         {
             for (int i = 1; i <= 6; i++)
             {
@@ -68,13 +68,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     continue;
                 }
                 
-                // TODO: zone should be a string, fix when regen is done
-                int zoneValue;
-                if (!int.TryParse(row.Cells[i].Value, out zoneValue))
-                {
-                    throw new UpsLocalRatingException("Row is invalid");
-                }
-
                 UpsLocalRatingZoneEntity zoneEntity =
                     new UpsLocalRatingZoneEntity
                     {
@@ -83,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                         OriginZipCeiling = originCeiling,
                         OriginZipFloor = originFloor,
                         Service = (int) GetServiceType(i),
-                        Zone = zoneValue
+                        Zone = row.Cells[i].Value.Trim()
                     };
                 zones.Add(zoneEntity);
             }
@@ -92,24 +85,62 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the origin zip floor from the worksheet
         /// </summary>
-        private static string GetDestinationZipCeiling(string value) => 
-            value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3);
+        private static int GetDestinationZipCeiling(string value)
+        {
+            int result;
+            if (int.TryParse(value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3), out result))
+            {
+                return result;
+            }
+
+            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+        }
+
 
         /// <summary>
         /// Get the origin zip ceiling from the worksheet
         /// </summary>
-        private static string GetDestinationZipFloor(string value) => value.Substring(0, 3);
+        private static int GetDestinationZipFloor(string value)
+        {
+            int result;
+            if (int.TryParse(value.Substring(0, 3), out result))
+            {
+                return result;
+            }
+
+            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+        }
 
         /// <summary>
         /// Get the origin zip floor from the worksheet
         /// </summary>
-        private static string GetOriginZipFloor(string value) => 
-            value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 5);
+        private static int GetOriginZipFloor(string value)
+        {
+            int result;
+            if (int.TryParse(value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 5), out result))
+            {
+                return result;
+            }
+
+            throw new UpsLocalRatingException($"Invalid origin zip {value}.");
+        }
+
 
         /// <summary>
         /// Get the origin zip ceiling from the worksheet
         /// </summary>
-        private static string GetOriginZipCeiling(string value) => value.Substring(0, 5);
+        private static int GetOriginZipCeiling(string value)
+        {
+            int result;
+            if (int.TryParse(value.Substring(0, 5), out result))
+            {
+                return result;
+            }
+
+            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+        }
+            
+
 
         /// <summary>
         /// Get the service type based on the column position

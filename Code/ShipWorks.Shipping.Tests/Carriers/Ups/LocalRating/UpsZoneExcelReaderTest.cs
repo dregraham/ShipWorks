@@ -63,10 +63,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable.Verify(r => r.ReplaceZones(
                 It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 4 && z.All(a => a.OriginZipFloor == "12345" &&
-                                                    a.OriginZipCeiling == "12345" &&
-                                                    a.DestinationZipFloor == "004" &&
-                                                    a.DestinationZipCeiling == "005"))));
+                    z => z.Count == 4 && z.All(a => a.OriginZipFloor == 12345 &&
+                                                    a.OriginZipCeiling == 12345 &&
+                                                    a.DestinationZipFloor == 004 &&
+                                                    a.DestinationZipCeiling == 005))));
         }
 
         [Fact]
@@ -92,10 +92,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             rateTable.Verify(r => r.ReplaceZones(
                 It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == "12345" &&
-                                                    a.OriginZipCeiling == "12345" &&
-                                                    a.DestinationZipFloor == "004" &&
-                                                    a.DestinationZipCeiling == "005"))));
+                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == 12345 &&
+                                                    a.OriginZipCeiling == 12345 &&
+                                                    a.DestinationZipFloor == 004 &&
+                                                    a.DestinationZipCeiling == 005))));
         }
         
         private void AddRow(IWorksheet workSheet, string[] values)
