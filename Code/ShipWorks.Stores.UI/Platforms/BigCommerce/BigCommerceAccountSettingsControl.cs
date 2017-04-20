@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.UI.Controls.Design;
@@ -47,7 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         {
             base.LoadStore(store);
 
-            viewModel.LoadStore(store);
+            viewModel.LoadStore(store as IBigCommerceStoreEntity);
         }
 
         /// <summary>
@@ -56,6 +57,6 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
         public override bool SaveToEntity(StoreEntity store) =>
-            viewModel.SaveToEntity(store);
+            viewModel.SaveToEntity(store as BigCommerceStoreEntity);
     }
 }

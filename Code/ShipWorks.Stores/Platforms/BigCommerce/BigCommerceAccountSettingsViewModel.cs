@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -50,6 +51,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
+        /// <summary>
+        /// Has a property changed
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -106,13 +110,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Load the data from the given store into the control
         /// </summary>
         /// <param name="store"></param>
-        public void LoadStore(StoreEntity store)
+        public void LoadStore(IBigCommerceStoreEntity store)
         {
-            BigCommerceStoreEntity bigCommerceStore = GetBigCommerceStore(store);
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
-            ApiUrl = bigCommerceStore.ApiUrl;
-            ApiUsername = bigCommerceStore.ApiUserName;
-            ApiToken = bigCommerceStore.ApiToken;
+            ApiUrl = store.ApiUrl;
+            ApiUsername = store.ApiUserName;
+            ApiToken = store.ApiToken;
         }
 
         /// <summary>
@@ -120,23 +124,23 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
-        public bool SaveToEntity(StoreEntity store)
+        public bool SaveToEntity(BigCommerceStoreEntity store)
         {
             // To make a call to the store, we need a valid api user name, so check that next.
-            string apiUsernameToCheck = apiUsername.Trim();
-            if (string.IsNullOrWhiteSpace(apiUsernameToCheck))
+            if (string.IsNullOrWhiteSpace(ApiUsername))
             {
                 messageHelper.ShowError("Please enter the API Username for your BigCommerce store.");
                 return false;
             }
+            string apiUsernameToCheck = ApiUsername.Trim();
 
             // Check the api token
-            string apiTokenToCheck = apiToken.Trim();
-            if (string.IsNullOrWhiteSpace(apiTokenToCheck))
+            if (string.IsNullOrWhiteSpace(ApiToken))
             {
                 messageHelper.ShowError("Please enter an API Token.");
                 return false;
             }
+            string apiTokenToCheck = ApiToken.Trim();
 
             GenericResult<string> storeUrlToCheck = ValidateAndFormatApiUrl(ApiUrl);
             if (storeUrlToCheck.Failure)
@@ -145,16 +149,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 return false;
             }
 
-            BigCommerceStoreEntity bigCommerceStore = GetBigCommerceStore(store);
-            bigCommerceStore.ApiUrl = storeUrlToCheck.Value;
-            bigCommerceStore.ApiToken = apiTokenToCheck;
-            bigCommerceStore.ApiUserName = apiUsernameToCheck;
+            store.ApiUrl = storeUrlToCheck.Value;
+            store.ApiToken = apiTokenToCheck;
+            store.ApiUserName = apiUsernameToCheck;
 
-            return ConnectionVerificationNeeded(bigCommerceStore) ?
-                UpdateConnection(bigCommerceStore) :
+            return ConnectionVerificationNeeded(store) ?
+                UpdateConnection(store) :
                 true;
         }
 
+        /// <summary>
+        /// Update the connection information
+        /// </summary>
         private bool UpdateConnection(BigCommerceStoreEntity store)
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
@@ -186,11 +192,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         private GenericResult<string> ValidateAndFormatApiUrl(string url)
         {
-            string storeUrlToCheck = url.Trim();
-            if (string.IsNullOrWhiteSpace(storeUrlToCheck))
+            if (string.IsNullOrWhiteSpace(url))
             {
                 return GenericResult.FromError("Please enter the API Path of your BigCommerce store.", string.Empty);
             }
+            string storeUrlToCheck = url.Trim();
 
             // Check for the url scheme, and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)

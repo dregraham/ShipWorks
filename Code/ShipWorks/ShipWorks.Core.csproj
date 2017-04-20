@@ -293,9 +293,6 @@
       <HintPath>..\..\Components\Rebex.Sftp.dll</HintPath>
       <Aliases>rebex2015</Aliases>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\Components\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SandDock.dll</HintPath>

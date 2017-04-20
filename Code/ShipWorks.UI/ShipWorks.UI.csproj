@@ -211,7 +211,6 @@
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UiModule.cs" />
-    <Compile Include="ValueConverters\BooleanToWaitCursorConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
