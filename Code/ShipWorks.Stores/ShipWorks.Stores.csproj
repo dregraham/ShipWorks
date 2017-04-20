@@ -184,6 +184,7 @@
     <Compile Include="Platforms\BigCommerce\Enums\BigCommerceProductType.cs" />
     <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientApiCall.cs" />
     <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
