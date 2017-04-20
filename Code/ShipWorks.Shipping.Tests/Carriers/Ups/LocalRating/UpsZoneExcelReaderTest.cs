@@ -5,7 +5,6 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
-using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Tests.Shared;
 using Syncfusion.XlsIO;
 using Xunit;
@@ -17,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         readonly AutoMock mock;
         readonly UpsZoneExcelReader testObject;
         readonly ExcelEngine excelEngine;
-
+        
         public UpsZoneExcelReaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -119,36 +118,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                                                     a.OriginZipCeiling == 12345 &&
                                                     a.DestinationZipFloor == 004 &&
                                                     a.DestinationZipCeiling == 005))));
-        }
-
-        [Fact]
-        public void Read_ReplacesZonesOnUpsLocalRateTable_WithHawaiiZones()
-        {
-            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
-
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
-
-            worksheet.Name = "12345-12345";
-            worksheet.Range["A1"].Text = "Dest. ZIP";
-            worksheet.Range["B1"].Text = "Ground";
-            worksheet.Range["C1"].Text = "3 Day Select";
-            worksheet.Range["D1"].Text = "2nd Day Air";
-            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
-            worksheet.Range["F1"].Text = "Next Day Air Saver";
-            worksheet.Range["G1"].Text = "Next Day Air";
-            worksheet.Range["H1"].Text = "header";
-            worksheet.Range["I1"].Text = "header";
-
-            AddRow(worksheet, new[] { "HI", "44", string.Empty, "224", string.Empty, string.Empty,  "124", string.Empty });
-            AddRow(worksheet, new[] { "12345", "67890", "23456", "78901", "23456", "78911", "11223", "44444", "11111" });
-
-            testObject.Read(workbook.Worksheets, rateTable.Object);
-
-            rateTable.Verify(r => r.ReplaceZones(
-                It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 27)));
-
         }
 
         private void AddRow(IWorksheet workSheet, string[] values)
