@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
         /// </summary>
         public BigCommerceAccountPage()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         /// <summary>

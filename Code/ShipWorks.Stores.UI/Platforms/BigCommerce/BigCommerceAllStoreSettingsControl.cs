@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Enums;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce
 {
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceAllStoreSettingsControl()            
+        public BigCommerceAllStoreSettingsControl()
         {
             InitializeComponent();
         }
@@ -35,14 +35,8 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
-            //bigCommerceStore = (BigCommerceStoreEntity)store;
-
             bigCommerceStoreSettingsControl.LoadStore(store);
             downloadCriteriaControl.LoadStore(store);
-
-            //weightUnitOfMeasure.SelectedValue = (WeightUnitOfMeasure) bigCommerceStore.WeightUnitOfMeasure;
-
-            //downloadCriteria.LoadStore(bigCommerceStore);
         }
 
         /// <summary>
@@ -53,12 +47,6 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
             bigCommerceStoreSettingsControl.SaveToEntity(store);
             downloadCriteriaControl.SaveToEntity(store);
 
-            //bigCommerceStore = (BigCommerceStoreEntity) store;
-
-            //// Weight unit of measure
-            //bigCommerceStore.WeightUnitOfMeasure = (int) weightUnitOfMeasure.SelectedValue;
-
-            //return downloadCriteria.SaveToEntity(bigCommerceStore);
             return true;
         }
     }

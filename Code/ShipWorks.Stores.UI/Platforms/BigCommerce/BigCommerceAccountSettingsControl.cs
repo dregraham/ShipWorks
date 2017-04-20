@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.BigCommerce;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce
@@ -19,7 +20,9 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.BigCommerce, ExternallyOwned = true)]
     public partial class BigCommerceAccountSettingsControl : AccountSettingsControlBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceAccountSettingsControl));
+        readonly IBigCommerceWebClientFactory webClientFactory;
+        readonly Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider;
+        readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -27,6 +30,18 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         public BigCommerceAccountSettingsControl()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BigCommerceAccountSettingsControl(IBigCommerceWebClientFactory webClientFactory,
+            Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider,
+            Func<Type, ILog> createLogger)
+        {
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            this.webClientFactory = webClientFactory;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -102,13 +117,12 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
 
                 try
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    IBigCommerceWebClient webClient = webClientFactory.Create(bigCommerceStore);
+                    webClient.TestConnection();
+
+                    using (Owned<BigCommerceStatusCodeProvider> statusProvider = createStatusCodeProvider(bigCommerceStore))
                     {
-                        IBigCommerceWebClient webClient = lifetimeScope.Resolve<IBigCommerceWebClientFactory>().Create(bigCommerceStore);
-                        webClient.TestConnection();
-                        
-                        BigCommerceStatusCodeProvider statusProvider = lifetimeScope.Resolve<BigCommerceStatusCodeProvider>(TypedParameter.From(bigCommerceStore));
-                        statusProvider.UpdateFromOnlineStore();
+                        statusProvider.Value.UpdateFromOnlineStore();
                     }
                 }
                 catch (BigCommerceException ex)
@@ -129,9 +143,9 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// </summary>
         protected static bool ConnectionVerificationNeeded(BigCommerceStoreEntity store)
         {
-            return (store.Fields[(int)BigCommerceStoreFieldIndex.ApiUrl].IsChanged ||
-                    store.Fields[(int)BigCommerceStoreFieldIndex.ApiUserName].IsChanged ||
-                    store.Fields[(int)BigCommerceStoreFieldIndex.ApiToken].IsChanged);
+            return (store.Fields[(int) BigCommerceStoreFieldIndex.ApiUrl].IsChanged ||
+                    store.Fields[(int) BigCommerceStoreFieldIndex.ApiUserName].IsChanged ||
+                    store.Fields[(int) BigCommerceStoreFieldIndex.ApiToken].IsChanged);
         }
 
         /// <summary>
