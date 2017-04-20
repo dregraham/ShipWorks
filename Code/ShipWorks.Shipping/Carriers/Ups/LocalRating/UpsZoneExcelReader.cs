@@ -13,6 +13,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// </summary>
     public class UpsZoneExcelReader : IUpsZoneExcelReader
     {
+        private readonly AlaskaHawaiiZoneExcelReader alaskaHawaiiReader;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpsZoneExcelReader(AlaskaHawaiiZoneExcelReader alaskaHawaiiReader)
+        {
+            this.alaskaHawaiiReader = alaskaHawaiiReader;
+        }
+
         /// <summary>
         ///  Reads the ups zone excel work sheets and stores the zone info in to the UpsLocalRateTable
         /// </summary>
@@ -29,12 +39,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     ParseLower48Zones(worksheet, zones);
                 } 
             }
-
+            
             // If the zones list is empty there were no worksheets that match our naming convention
             if (!zones.Any())
             {
                 throw new UpsLocalRatingException("The zone file contains no zone worksheets that zone naming convention of '#####-#####'");
             }
+
+            zones.AddRange(alaskaHawaiiReader.GetAlaskaHawaiiZones(zoneWorksheets));
 
             upsLocalRateTable.ReplaceZones(zones);
         }
