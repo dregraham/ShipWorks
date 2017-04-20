@@ -25,7 +25,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 // looking for any workbook whos name is 5 digits dash 5 digits with optional white space xxxxx-xxxxx
                 if (Regex.IsMatch(worksheet.Name, "^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$"))
                 {
-                    ParseZones(worksheet, zones);
+                    //ValidateWorksheet(worksheet);
+                    ParseHawaiiZones(worksheet, zones);
                 } 
             }
 
@@ -37,11 +38,90 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             upsLocalRateTable.ReplaceZones(zones);
         }
+
+        /// <summary>
+        /// parse Hawaii zones from the worksheet and add them to the zone collection
+        /// </summary>
+        private static void ParseHawaiiZones(IWorksheet worksheet, List<UpsLocalRatingZoneEntity> zones)
+        {
+            foreach (IRange row in worksheet.Rows)
+            {
+                // Find the Hawaii row
+                if (row.Cells[0].Text == "HI")
+                {
+                    // loop each cell
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        // if the cell is not empty it has a zone
+                        if (!string.IsNullOrWhiteSpace(row.Cells[i].Text))
+                        {
+                            // Grab all of the rows after the HI row and before any other HI or AK row
+                            foreach (IRange foo in worksheet.Rows.Where(r=> r.Row > row.Row))
+                            {
+                                // If we hit a new state row break out of this foreach
+                                if (foo.Cells[0].Text == "HI" || row.Cells[0].Text == "AK")
+                                {
+                                    break;
+                                }
+
+                                string cellText = foo.Cells[0].Text ?? string.Empty;
+                                // If its a zip add the zone
+                                if (Regex.IsMatch(cellText, "^\\s*[0-9]{5}\\s*$"))
+                                {
+                                    foreach (IRange zipCell in foo.Cells)
+                                    {
+                                        UpsLocalRatingZoneEntity zoneEntity =
+                                            new UpsLocalRatingZoneEntity
+                                            {
+                                                DestinationZipCeiling = Get5DigitZip(zipCell.Value),
+                                                DestinationZipFloor = Get5DigitZip(zipCell.Value),
+                                                OriginZipCeiling = GetOriginZipCeiling(worksheet.Name),
+                                                OriginZipFloor = GetOriginZipFloor(worksheet.Name),
+                                                Service = (int) GetServiceType(i),
+                                                Zone = row.Cells[i].Value.Trim()
+                                            };
+                                        zones.Add(zoneEntity);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
+        /// <summary>
+        /// Quickly lint the worksheet and make sure that the required rows are present and correct
+        /// </summary>
+        private static void ValidateWorksheet(IWorksheet worksheet)
+        {
+            foreach (IRange range in worksheet.Rows)
+            {
+                string cellText = range.Cells[0].Text;
+
+                // Check for the header, Alaska and Hawaii rows
+                if (cellText == null || cellText == "Dest. ZIP" || cellText == "HI" || cellText == "AK")
+                {
+                    continue;
+                }
+
+                // Everything else has to be one of the following formats ###-###, ### or #####
+                if (Regex.IsMatch(cellText, "^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$") || 
+                    Regex.IsMatch(cellText, "^\\s*[0-9]{3}\\s*$") || 
+                    Regex.IsMatch(worksheet.Name, "^\\s*[0-9]{5}\\s*$"))
+                {
+                    continue;
+                }
+
+                // If we got this far the first column of the row is not valid
+                throw new UpsLocalRatingException($"Worksheet {worksheet.Name} has an invalid value {cellText}.");
+            }
+        }
+
         /// <summary>
         /// parse zones from the worksheet and add them to the zone collection
         /// </summary>
-        private static void ParseZones(IWorksheet worksheet, List<UpsLocalRatingZoneEntity> zones)
+        private static void ParseLower48Zones(IWorksheet worksheet, List<UpsLocalRatingZoneEntity> zones)
         {
             int originFloor = GetOriginZipFloor(worksheet.Name);
             int originCeiling = GetOriginZipCeiling(worksheet.Name);
@@ -139,8 +219,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             throw new UpsLocalRatingException($"Invalid destination zip {value}.");
         }
-            
 
+        /// <summary>
+        /// Get the origin zip ceiling from the worksheet
+        /// </summary>
+        private static int Get5DigitZip(string value)
+        {
+            if (Regex.IsMatch(value, "^\\s*[0-9]{5}\\s*$"))
+            {
+                int result;
+                if (int.TryParse(value, out result))
+                {
+                    return result;
+                }
+            }
+
+            throw new UpsLocalRatingException($"Invalid zip {value}.");
+        }
 
         /// <summary>
         /// Get the service type based on the column position
