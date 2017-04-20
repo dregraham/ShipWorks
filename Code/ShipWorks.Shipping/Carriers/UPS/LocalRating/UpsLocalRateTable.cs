@@ -29,8 +29,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private string rateFileName;
         private string zoneFileName;
         private UpsLocalRatingZoneFileEntity zoneFile;
-        
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
@@ -44,6 +42,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.upsRateExcelReaders = upsRateExcelReaders;
             this.zoneExcelReaders = zoneExcelReaders;
             this.importedRateValidator = importedRateValidator;
+
+            zoneFile = new UpsLocalRatingZoneFileEntity();
         }
 
         /// <summary>
@@ -88,6 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             try
             {
                 rateTable = localRateTableRepository.Get(upsAccount);
+                zoneFile = localRateTableRepository.GetLatestZoneFile();
             }
             catch (Exception e) when (e is ORMException || e is SqlException)
             {

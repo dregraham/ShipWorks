@@ -34,6 +34,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             "Local rates is an experimental feature and for rating purposes only. It does not affect billing. Please ensure the rates uploaded match the rates on your UPS account.\n\n" +
             "Note: All previously uploaded rates will be overwritten with the new rates.";
 
+        private const string SampleZoneFileText = "4. Download the sample";
+        private const string ExistingZoneFileText = "4. Download your current";
+
         private readonly IUpsLocalRateTable rateTable;
         private readonly Func<ISaveFileDialog> saveFileDialogFactory;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
@@ -42,11 +45,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         protected readonly PropertyChangedHandler handler;
 
         private bool localRatingEnabled;
-        private string statusMessage;
-        private string validationMessage;
+        private string rateStatusMessage;
+        private string uploadMessage;
         private UpsAccountEntity upsAccount;
-        private bool errorValidatingRates;
-        private bool validatingRates;
+        private bool errorUploading;
+        private bool isUploading;
+        private string zoneStatusMessage;
+        private string zoneStepText = SampleZoneFileText;
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
@@ -61,10 +66,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.openFileDialogFactory = openFileDialogFactory;
             DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
             UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
+            UploadZoneFileCommand = new RelayCommand(CallUploadZoneFile);
 
             this.messageHelper = messageHelper;
             log = logFactory(GetType());
-
+            
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -81,6 +87,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public ICommand UploadRatingFileCommand { get; }
 
         /// <summary>
+        /// Gets the upload rating file.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand UploadZoneFileCommand { get; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [local rating enabled].
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -94,40 +106,60 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// Gets or sets the status message.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string StatusMessage
+        public string RateStatusMessage
         {
-            get { return statusMessage; }
-            set { handler.Set(nameof(StatusMessage), ref statusMessage, value); }
+            get { return rateStatusMessage; }
+            set { handler.Set(nameof(RateStatusMessage), ref rateStatusMessage, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the status message.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ZoneStatusMessage
+        {
+            get { return zoneStatusMessage; }
+            set { handler.Set(nameof(ZoneStatusMessage), ref zoneStatusMessage, value); }
         }
 
         /// <summary>
         /// Gets or sets the error message.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ValidationMessage
+        public string UploadMessage
         {
-            get { return validationMessage; }
-            set { handler.Set(nameof(ValidationMessage), ref validationMessage, value); }
+            get { return uploadMessage; }
+            set { handler.Set(nameof(UploadMessage), ref uploadMessage, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ZoneStepText
+        {
+            get { return zoneStepText; }
+            set { handler.Set(nameof(ZoneStepText), ref zoneStepText, value); }
         }
 
         /// <summary>
         /// Whether or not we are in the process of validating the rates.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ValidatingRates
+        public bool IsUploading
         {
-            get { return validatingRates; }
-            set { handler.Set(nameof(ValidatingRates), ref validatingRates, value); }
+            get { return isUploading; }
+            set { handler.Set(nameof(IsUploading), ref isUploading, value); }
         }
 
         /// <summary>
         /// Whether or not there was an error validating the rate file.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ErrorValidatingRates
+        public bool ErrorUploading
         {
-            get { return errorValidatingRates; }
-            set { handler.Set(nameof(ErrorValidatingRates), ref errorValidatingRates, value); }
+            get { return errorUploading; }
+            set { handler.Set(nameof(ErrorUploading), ref errorUploading, value); }
         }
 
         /// <summary>
@@ -141,11 +173,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 LocalRatingEnabled = account.LocalRatingEnabled;
                 rateTable.Load(account);
                 upsAccount = account;
-                SetStatusMessage();
+                UpdateMessages();
             }
             catch (UpsLocalRatingException e)
             {
-                ValidationMessage = e.Message;
+                UploadMessage = e.Message;
             }
         }
 
@@ -159,12 +191,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
             if (LocalRatingEnabled && upsAccount.UpsRateTableID == null)
             {
-                ValidationMessage = "Please upload your rate table to enable local rating";
+                UploadMessage = "Please upload your rate table to enable local rating";
                 upsAccount.LocalRatingEnabled = false;
                 return false;
             }
 
-            if (ValidatingRates)
+            if (IsUploading)
             {
                 messageHelper.ShowError("Please wait until the rate table has finished uploading before closing the UPS account window");
                 return false;
@@ -243,9 +275,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             {
                 try
                 {
-                    ErrorValidatingRates = false;
-                    ValidationMessage = string.Empty;
-                    ValidatingRates = true;
+                    ErrorUploading = false;
+                    UploadMessage = string.Empty;
+                    IsUploading = true;
                     isBusy(true);
 
                     await Task.Run(() =>
@@ -258,20 +290,79 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         rateTable.Save(upsAccount);
                     });
 
-                    SetStatusMessage();
-                    ValidationMessage = "Local rates have been uploaded successfully";
+                    UpdateMessages();
+                    UploadMessage = "Local rates have been uploaded successfully";
                     log.Info("Successfully uploaded rate table");
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
-                    ErrorValidatingRates = true;
-                    ValidationMessage =
+                    ErrorUploading = true;
+                    UploadMessage =
                         $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
                     log.Error($"Error uploading rate table: {e.Message}");
                 }
                 finally
                 {
-                    ValidatingRates = false;
+                    IsUploading = false;
+                    isBusy(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Uploads the rating File.
+        /// </summary>
+        /// <remarks>
+        /// The reason we don't call this directly is because we need to be able to test UploadRatingFile().
+        /// ICommand can't take a method that returns Task and we can't await a void method.
+        /// </remarks>
+        private async void CallUploadZoneFile()
+        {
+            await UploadZoneFile();
+        }
+
+        /// <summary>
+        /// Uploads the rating file.
+        /// </summary>
+        protected async Task UploadZoneFile()
+        {
+            IOpenFileDialog fileDialog = openFileDialogFactory();
+            fileDialog.DefaultExt = Extension;
+            fileDialog.Filter = Filter;
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ErrorUploading = false;
+                    UploadMessage = string.Empty;
+                    IsUploading = true;
+                    isBusy(true);
+
+                    await Task.Run(() =>
+                    {
+                        using (Stream fileStream = fileDialog.CreateFileStream())
+                        {
+                            rateTable.LoadZones(fileStream);
+                        }
+
+                        rateTable.Save(upsAccount);
+                    });
+
+                    UpdateMessages();
+                    UploadMessage = "Zones have been uploaded successfully";
+                    log.Info("Successfully uploaded zone file");
+                }
+                catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
+                {
+                    ErrorUploading = true;
+                    UploadMessage =
+                        $"Zones failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your zones again.";
+                    log.Error($"Error uploading zones: {e.Message}");
+                }
+                finally
+                {
+                    IsUploading = false;
                     isBusy(false);
                 }
             }
@@ -280,11 +371,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Sets the status message.
         /// </summary>
-        private void SetStatusMessage()
+        private void UpdateMessages()
         {
-            StatusMessage = upsAccount.UpsRateTableID == null ?
+            RateStatusMessage = upsAccount.UpsRateTableID == null ?
                 "There is no rate table associated with the selected account" :
                 $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}";
+
+            ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ?
+                $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" :
+                "UPS zones have not been uploaded";
+            
+            ZoneStepText = rateTable.ZoneUploadDate.HasValue ? ExistingZoneFileText : SampleZoneFileText;
         }
     }
 }

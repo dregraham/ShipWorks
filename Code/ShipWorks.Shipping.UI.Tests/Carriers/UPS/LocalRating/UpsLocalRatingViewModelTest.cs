@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
 
-            Assert.Equal("There is no rate table associated with the selected account", testObject.StatusMessage);
+            Assert.Equal("There is no rate table associated with the selected account", testObject.RateStatusMessage);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
 
-            Assert.StartsWith($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.StatusMessage);
+            Assert.StartsWith($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.RateStatusMessage);
         }
 
         [Theory]
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             testObject.Save();
 
-            Assert.Equal("Please upload your rate table to enable local rating", testObject.ValidationMessage);
+            Assert.Equal("Please upload your rate table to enable local rating", testObject.UploadMessage);
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
             testObject.LocalRatingEnabled = false;
-            testObject.ValidatingRates = true;
+            testObject.IsUploading = true;
 
             Assert.False(testObject.Save());
         }
@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(upsAccount, b=> { });
             await testObject.CallUploadRatingFile();
 
-            Assert.Equal($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.StatusMessage);
+            Assert.Equal($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.RateStatusMessage);
         }
 
         [Fact]
@@ -289,7 +289,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(upsAccount, b=> { });
             await testObject.CallUploadRatingFile();
 
-            Assert.Equal("Local rates have been uploaded successfully", testObject.ValidationMessage);
+            Assert.Equal("Local rates have been uploaded successfully", testObject.UploadMessage);
         }
 
         [Fact]
@@ -333,7 +333,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(new UpsAccountEntity(42), b => { });
             await testObject.CallUploadRatingFile();
 
-            Assert.StartsWith("Local rates failed to upload:", testObject.ValidationMessage);
+            Assert.StartsWith("Local rates failed to upload:", testObject.UploadMessage);
         }
 
         [Fact]
@@ -371,7 +371,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(new UpsAccountEntity(42), b => { });
             await testObject.CallUploadRatingFile();
 
-            Assert.False(testObject.ValidatingRates);
+            Assert.False(testObject.IsUploading);
         }
 
         [Fact]
@@ -430,7 +430,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(new UpsAccountEntity(), b=> { });
             await testObject.CallUploadRatingFile();
 
-            Assert.True(testObject.ErrorValidatingRates);
+            Assert.True(testObject.ErrorUploading);
         }
 
         private Mock<ISaveFileDialog> MockSaveDialog(DialogResult result, Stream stream = null)

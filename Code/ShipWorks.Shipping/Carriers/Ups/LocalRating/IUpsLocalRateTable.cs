@@ -67,6 +67,5 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Writes the zones to stream.
         /// </summary>
         void WriteZonesToStream(Stream stream);
-
     }
 }
