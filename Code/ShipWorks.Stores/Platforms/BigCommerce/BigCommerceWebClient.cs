@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using log4net;
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         readonly static BigCommerceWebClientRequestThrottle throttler = new BigCommerceWebClientRequestThrottle();
         readonly List<HttpStatusCode> successHttpStatusCodes;
         RestClient apiClient;
+        private readonly IBigCommerceAuthenticatorFactory authenticatorFactory;
 
         private const string storeSettingMissingErrorMessage = "The BigCommerce {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
 
@@ -36,8 +38,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        public BigCommerceWebClient(IBigCommerceStoreEntity store)
+        public BigCommerceWebClient(IBigCommerceStoreEntity store, IBigCommerceAuthenticatorFactory authenticatorFactory)
         {
+            this.authenticatorFactory = authenticatorFactory;
+
             ValidateApiAccessData(store);
 
             this.store = store;
@@ -65,19 +69,34 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         private static void ValidateApiAccessData(IBigCommerceStoreEntity store)
         {
-            if (string.IsNullOrWhiteSpace(store?.ApiUrl))
+            if (store.BigCommerceAuthentication == BigCommerceAuthenticationType.Basic)
             {
-                throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Path"));
-            }
+                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
+                {
+                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Path"));
+                }
 
-            if (string.IsNullOrWhiteSpace(store?.ApiUserName))
-            {
-                throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Username"));
-            }
+                if (string.IsNullOrWhiteSpace(store?.ApiUserName))
+                {
+                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Username"));
+                }
 
-            if (string.IsNullOrWhiteSpace(store?.ApiToken))
+                if (string.IsNullOrWhiteSpace(store?.ApiToken))
+                {
+                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Token"));
+                }
+            }
+            else
             {
-                throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Token"));
+                if (string.IsNullOrWhiteSpace(store?.OauthClientId))
+                {
+                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API OAuth Client ID"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.OauthToken))
+                {
+                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API OAuth Token"));
+                }
             }
         }
 
@@ -96,8 +115,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     throw new BigCommerceException("Unable to create API client for BigCommerce.");
                 }
 
-                apiClient.Authenticator = new HttpBasicAuthenticator(store.ApiUserName, store.ApiToken);
-                //apiClient.Authenticator = new BigCommerceAuthenticator();
+
+                apiClient.Authenticator = authenticatorFactory.Create(store);
             }
 
             return apiClient;

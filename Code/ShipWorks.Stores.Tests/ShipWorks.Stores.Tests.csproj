@@ -108,6 +108,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RestSharp, Version=104.2.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -167,6 +168,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactoryTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticatorTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactoryTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
