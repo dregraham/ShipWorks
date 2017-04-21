@@ -39,7 +39,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Save the rate table
         /// </summary>
-        void Save(UpsAccountEntity accountEntity);
+        void SaveRates(UpsAccountEntity accountEntity);
+
+        /// <summary>
+        /// Saves the zones.
+        /// </summary>
+        void SaveZones();
 
         /// <summary>
         /// Add a surcharge collection to the surcharge table

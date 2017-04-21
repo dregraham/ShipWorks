@@ -321,7 +321,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                             rateTable.LoadRates(fileStream);
                         }
 
-                        rateTable.Save(upsAccount);
+                        rateTable.SaveRates(upsAccount);
                     });
 
                     UpdateMessages();
@@ -381,7 +381,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                             rateTable.LoadZones(fileStream);
                         }
 
-                        rateTable.Save(upsAccount);
+                        rateTable.SaveZones();
                     });
 
                     UpdateMessages();

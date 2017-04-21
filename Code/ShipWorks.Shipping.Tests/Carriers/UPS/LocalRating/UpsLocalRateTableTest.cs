@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             UpsAccountEntity upsAccount = new UpsAccountEntity();
 
             var testObject = CreatePopulatedRateTable(mock);
-            testObject.Save(upsAccount);
+            testObject.SaveRates(upsAccount);
 
             Assert.NotEqual(new DateTime(), testObject.RateUploadDate);
         }
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             var testObject = CreatePopulatedRateTable(mock);
 
-            testObject.Save(upsAccount);
+            testObject.SaveRates(upsAccount);
             rateTableRepo.Verify(r => r.Save(It.IsAny<UpsRateTableEntity>(), upsAccount), Times.Once);
         }
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var testObject = CreatePopulatedRateTable(mock);
 
             testObject.Load(upsAccount);
-            testObject.Save(upsAccount);
+            testObject.SaveRates(upsAccount);
             rateTableRepo
                 .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
         }

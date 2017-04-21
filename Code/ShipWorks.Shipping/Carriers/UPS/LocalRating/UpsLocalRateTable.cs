@@ -28,7 +28,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> deliveryAreaSurcharges;
         private string rateFileName;
         private string zoneFileName;
-        private UpsLocalRatingZoneFileEntity zoneFile;
+        private IEnumerable<UpsLocalRatingZoneEntity> zones;
+        private byte[] zoneFileContent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
@@ -42,8 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.upsRateExcelReaders = upsRateExcelReaders;
             this.zoneExcelReaders = zoneExcelReaders;
             this.importedRateValidator = importedRateValidator;
-
-            zoneFile = new UpsLocalRatingZoneFileEntity();
         }
 
         /// <summary>
@@ -85,6 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             UpsRateTableEntity rateTable;
 
+            UpsLocalRatingZoneFileEntity zoneFile;
             try
             {
                 rateTable = localRateTableRepository.Get(upsAccount);
@@ -104,13 +104,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (zoneFile != null)
             {
                 ZoneUploadDate = zoneFile.UploadDate;
+                zoneFileContent = zoneFile.FileContent;
             }
         }
 
         /// <summary>
         /// Save the rate table
         /// </summary>
-        public void Save(UpsAccountEntity accountEntity)
+        public void SaveRates(UpsAccountEntity accountEntity)
         {
             // Creating new table so that a ups account can still get the old rates while
             // we save the new rates.
@@ -135,6 +136,25 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             localRateTableRepository.CleanupRates();
 
             RateUploadDate = newRateTable.UploadDate;
+        }
+
+        /// <summary>
+        /// Saves the zones.
+        /// </summary>
+        public void SaveZones()
+        {
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity()
+            {
+                UploadDate = DateTime.UtcNow
+            };
+
+            zoneFile.UpsLocalRatingDeliveryAreaSurcharge.AddRange(deliveryAreaSurcharges);
+            zoneFile.UpsLocalRatingZone.AddRange(zones);
+            zoneFile.FileContent = zoneFileContent;
+
+            localRateTableRepository.Save(zoneFile);
+
+            ZoneUploadDate = zoneFile.UploadDate;
         }
 
         /// <summary>
@@ -195,12 +215,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void ReplaceZones(IEnumerable<UpsLocalRatingZoneEntity> zones)
         {
-            List<UpsLocalRatingZoneEntity> zoneList = zones.ToList();
-
-            foreach (UpsLocalRatingZoneEntity zoneEntity in zoneList)
-            {
-                zoneFile.UpsLocalRatingZone.Add(zoneEntity);
-            }
+            this.zones = zones;
         }
 
         /// <summary>
@@ -216,7 +231,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void WriteZonesToStream(Stream stream)
         {
-            stream.Write(zoneFile.FileContent, 0, zoneFile.FileContent.Length);
+            if (zoneFileContent == null)
+            {
+                throw new UpsLocalRatingException("Error in WriteZonesToStream - ZoneFileContent is null.");
+            }
+
+            stream.Write(zoneFileContent, 0, zoneFileContent.Length);
         }
     }
 }

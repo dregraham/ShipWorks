@@ -246,7 +246,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             testObject.Load(upsAccount, b=> { });
             await testObject.CallUploadRatingFile();
 
-            rateTable.Verify(t => t.Save(upsAccount));
+            rateTable.Verify(t => t.SaveRates(upsAccount));
         }
 
         [Fact]
@@ -326,7 +326,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
-                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Setup(t => t.SaveRates(It.IsAny<UpsAccountEntity>()))
                 .Throws<UpsLocalRatingException>();
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
@@ -348,7 +348,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             logFactory.Setup(f => f()).Returns(log);
 
             mock.Mock<IUpsLocalRateTable>()
-                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Setup(t => t.SaveRates(It.IsAny<UpsAccountEntity>()))
                 .Throws<UpsLocalRatingException>();
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
@@ -423,7 +423,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
-                .Setup(t => t.Save(It.IsAny<UpsAccountEntity>()))
+                .Setup(t => t.SaveRates(It.IsAny<UpsAccountEntity>()))
                 .Throws<UpsLocalRatingException>();
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
