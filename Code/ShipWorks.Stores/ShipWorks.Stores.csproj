@@ -138,6 +138,7 @@
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceConnectionVerifier.cs" />

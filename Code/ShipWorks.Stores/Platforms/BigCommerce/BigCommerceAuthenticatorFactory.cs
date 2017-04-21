@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Enums;
 using RestSharp;
+using RestSharp.Authenticators;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 

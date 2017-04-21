@@ -1,5 +1,6 @@
 ﻿using System;
 using RestSharp;
+using RestSharp.Authenticators;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce

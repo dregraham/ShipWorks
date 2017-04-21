@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Enums;
 using RestSharp;
+using RestSharp.Authenticators;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using Xunit;

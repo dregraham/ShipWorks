@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModelTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifierTest.cs" />
