@@ -390,7 +390,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Restore a backup from the given filename
         /// </summary>
-        [NDependIgnoreLongMethod]
         public void RestoreBackup(string filename)
         {
             if (filename == null)
