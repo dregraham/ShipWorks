@@ -54,8 +54,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
-        private bool rateFileExists;
-        private bool zoneFileExists;
 
 
         /// <summary>
@@ -201,6 +199,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             if (LocalRatingEnabled && upsAccount.UpsRateTableID == null)
             {
                 UploadMessage = "Please upload your rate table to enable local rating";
+                upsAccount.LocalRatingEnabled = false;
+                return false;
+            }
+
+            if (LocalRatingEnabled && !rateTable.ZoneUploadDate.HasValue)
+            {
+                UploadMessage = "Please upload your zones to enable local rating";
                 upsAccount.LocalRatingEnabled = false;
                 return false;
             }
@@ -403,23 +408,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void UpdateMessages()
         {
-            if (rateTable.RateUploadDate.HasValue)
-            {
-                RateStatusMessage = $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}";
-            }
-            else
-            {
-                RateStatusMessage = "Rates have not been uploaded for this account";
-            }
+            RateStatusMessage = rateTable.RateUploadDate.HasValue ?
+                $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}" :
+                "Rates have not been uploaded for this account";
 
-            if (rateTable.ZoneUploadDate.HasValue)
-            {
-                ZoneStatusMessage = $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}";
-            }
-            else
-            {
-                ZoneStatusMessage = "Zones have not been uploaded";
-            }
+            ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ? 
+                $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" 
+                : "Zones have not been uploaded";
         }
     }
 }
