@@ -5,22 +5,19 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Autofac;
-using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.BigCommerce.Downloading;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
 
@@ -38,10 +35,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         readonly BigCommerceStoreEntity bigCommerceStore;
         const int MissingCustomerID = 0;
 
-        // provider for status codes
-        BigCommerceStatusCodeProvider statusProvider;
+        IBigCommerceStatusCodeProvider statusProvider;
         readonly IBigCommerceWebClientFactory webClientFactory;
-        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
+        readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
+        readonly IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory;
 
         /// <summary>
         /// Constructor
@@ -49,9 +46,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="store">Store for which this downloader will operate</param>
         public BigCommerceDownloader(BigCommerceStoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
-            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
+            IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory,
+            Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider)
             : base(store)
         {
+            this.orderSearchCriteriaFactory = orderSearchCriteriaFactory;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
             bigCommerceStore = store;
@@ -80,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 // Get the total number of orders for the range
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
-                    GetOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate);
+                    orderSearchCriteriaFactory.Create(Store, BigCommerceWebClientOrderDateSearchType.CreatedDate);
                 totalCount = WebClient.GetOrderCount(orderSearchCriteria);
 
                 if (totalCount != 0)
@@ -212,43 +211,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             return LoadOrders(orders);
         }
 
-        /// <summary>
-        /// Gets the last online modified date from the orders table, and adds 1 second so that we don't processes the already downloaded
-        /// order multiple times.
-        /// </summary>
-        /// <returns>BigCommerceWebClientOrderSearchCriteria </returns>
-        private BigCommerceWebClientOrderSearchCriteria GetOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType orderDateSearchType)
-        {
-            // Getting last online modified starting point
-            DateTime? createdDateStartingPoint = GetOrderDateStartingPoint();
 
-            // If the date has a value, add 1 second, otherwise default to 6 months back
-            createdDateStartingPoint = createdDateStartingPoint.HasValue ? createdDateStartingPoint.Value.ToUniversalTime() : DateTime.UtcNow.AddMonths(-6);
-
-            // Set end date to now
-            DateTime createdDateEndPoint = DateTime.UtcNow;
-
-            // Getting last online modified starting point
-            DateTime? modifiedDateStartingPoint = GetOnlineLastModifiedStartingPoint();
-
-            // If the date has a value, add 1 second, otherwise default to 6 months back
-            modifiedDateStartingPoint = modifiedDateStartingPoint.HasValue ? modifiedDateStartingPoint.Value.ToUniversalTime() : DateTime.UtcNow.AddMonths(-6);
-
-            // Set end date to now
-            DateTime modifiedDateEndPoint = DateTime.UtcNow;
-
-            BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
-                new BigCommerceWebClientOrderSearchCriteria(orderDateSearchType,
-                    modifiedDateStartingPoint.Value, modifiedDateEndPoint,
-                    createdDateStartingPoint.Value, createdDateEndPoint)
-                {
-                    PageSize = BigCommerceConstants.OrdersPageSize,
-                    Page = 1
-                };
-
-            // Create the order search criteria
-            return orderSearchCriteria;
-        }
 
         /// <summary>
         /// Load all the orders contained in the list

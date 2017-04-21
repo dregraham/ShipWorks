@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
 using System.ComponentModel;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
 using System.Linq;
+using System.Text;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Stores
 {
@@ -49,10 +50,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static StatusPresetEntity GetStoreDefault(StoreEntity store, StatusPresetTarget presetTarget)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             lock (statusSynchronizer)
             {

@@ -23,5 +23,11 @@ namespace ShipWorks.Data.Connection
         /// Fetch an entity from the database
         /// </summary>
         bool FetchEntity(IEntity2 entity);
+
+        /// <summary>
+        /// Gets a scalar value, calculated with the aggregate and expression specified.
+        /// the field specified is the field the expression and aggregate are applied on.
+        /// </summary>
+        object GetScalar(IEntityField2 field, IExpression expressionToExecute, AggregateFunction aggregateToApply, IPredicate filter);
     }
 }

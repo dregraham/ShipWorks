@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
@@ -14,6 +15,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -53,6 +55,9 @@ namespace ShipWorks.Stores.Communication
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected StoreDownloader([Obfuscation(Exclude = true)] StoreEntity store, StoreType storeType)
         {
             if (store == null)
@@ -169,32 +174,10 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual DateTime? GetOnlineLastModifiedStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OnlineLastModified,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
-
-                log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
-
-                // If we don't have a max, but do have a days-back policy, use the days back
-                if (dateTime == null && store.InitialDownloadDays != null)
-                {
-                    // Also add on 2 hours just to make sure we are in range
-                    dateTime = DateTime.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OnlineLastModified) adjusted by download policy = {0:u}", dateTime);
-                }
-
-                // Dates pulled from the database are always UTC
-                if (dateTime != null && dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-                }
-
-                return dateTime;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return startingPoint.OnlineLastModified(store);
             }
         }
 
@@ -204,32 +187,10 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected DateTime? GetOrderDateStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderDate,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
-
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
-
-                log.InfoFormat("MAX(OrderDate) = {0:u}", dateTime);
-
-                // If we don't have a max, but do have a days-back policy, use the days back
-                if (dateTime == null && store.InitialDownloadDays != null)
-                {
-                    // Also add on 2 hours just to make sure we are in range
-                    dateTime = DateTime.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OrderDate) adjusted by download policy = {0:u}", dateTime);
-                }
-
-                // Dates pulled from the database are always UTC
-                if (dateTime != null && dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-                }
-
-                return dateTime;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return startingPoint.OrderDate(store);
             }
         }
 

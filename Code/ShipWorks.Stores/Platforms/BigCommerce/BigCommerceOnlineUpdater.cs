@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using log4net;
 using Quartz.Util;
@@ -39,27 +40,20 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         };
 
         // status code provider
-        BigCommerceStatusCodeProvider statusCodeProvider;
         readonly IBigCommerceWebClientFactory webClientFactory;
-        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
+        readonly Func<BigCommerceStoreEntity, Owned<IBigCommerceStatusCodeProvider>> createStatusCodeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceOnlineUpdater(BigCommerceStoreEntity store, 
+        public BigCommerceOnlineUpdater(BigCommerceStoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
-            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
+            Func<BigCommerceStoreEntity, Owned<IBigCommerceStatusCodeProvider>> createStatusCodeProvider)
         {
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
             bigCommerceStore = store;
         }
-
-        /// <summary>
-        /// Gets the status code provider
-        /// </summary>
-        protected BigCommerceStatusCodeProvider StatusCodeProvider =>
-            statusCodeProvider ?? (statusCodeProvider = createStatusCodeProvider(bigCommerceStore));
 
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
@@ -89,12 +83,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     IBigCommerceWebClient client = webClientFactory.Create(bigCommerceStore);
                     client.UpdateOrderStatus(Convert.ToInt32(order.OrderNumber), statusCode);
 
-                    // Update the local database with the new status
-                    OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
-                    basePrototype.OnlineStatusCode = statusCode;
-                    basePrototype.OnlineStatus = StatusCodeProvider.GetCodeName(statusCode);
+                    using (Owned<IBigCommerceStatusCodeProvider> statusCodeProvider = createStatusCodeProvider(bigCommerceStore))
+                    {
+                        // Update the local database with the new status
+                        OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
+                        basePrototype.OnlineStatusCode = statusCode;
+                        basePrototype.OnlineStatus = statusCodeProvider.Value.GetCodeName(statusCode);
 
-                    unitOfWork.AddForSave(basePrototype);
+                        unitOfWork.AddForSave(basePrototype);
+                    }
                 }
                 else
                 {

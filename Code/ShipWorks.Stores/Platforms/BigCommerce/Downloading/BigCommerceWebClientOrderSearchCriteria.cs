@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
@@ -11,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceWebClientOrderSearchCriteria
     {
         /// <summary>
-        /// Constructor and sets the searach criteria, converting paramaters as needed for the api
+        /// Constructor and sets the search criteria, converting parameters as needed for the api
         /// </summary>
         /// <param name="orderDateSearchType">The date search type to perform, Created by date or modified date</param>
         /// <param name="lastModifiedFromDateTimeUtc">The UTC date for the start of the order modified date range</param>
@@ -69,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public DateTime LastCreatedToDate
         {
-            get; 
+            get;
             set;
         }
 

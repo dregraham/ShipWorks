@@ -146,6 +146,7 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Communication\DownloadStartingPoint.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
@@ -174,7 +175,8 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientEndpoints.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactory.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientOrderSearchCriteria.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceOrderSearchCriteriaFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceWebClientOrderSearchCriteria.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottle.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottledException.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientThrottleWaitCancelException.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceDigitalItemCondition.cs" />
     <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventDateCondition.cs" />
     <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventNameCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\IBigCommerceOrderSearchCriteriaFactory.cs" />
     <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddress.cs" />
     <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddShipment.cs" />
     <Compile Include="Platforms\BigCommerce\DTO\BigCommerceApiOrderStatus.cs" />
