@@ -26,11 +26,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
         public const string SampleRatesFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         public const string SampleZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZonesSample.xlsx";
-        public const string ExistingRateFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
-        public const string ExistingZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
+        public const string ExistingRateFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRates.xlsx";
+        public const string ExistingZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZones.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
-        private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
+        private const string DefaultRateFileName = "UpsLocalRatesSample.xlsx";
+        private const string DefaultZoneFileName = "UpsZonesSample.xlsx";
         private const string WarningMessage =
             "Local rates is an experimental feature and for rating purposes only. It does not affect billing. Please ensure the rates uploaded match the rates on your UPS account.\n\n" +
             "Note: All previously uploaded rates will be overwritten with the new rates.";
@@ -252,7 +253,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void DownloadSampleRateFile()
         {
-            DownloadFile(SampleRateFileResourceName);
+            DownloadFile(SampleRatesFileResourceName, DefaultRateFileName);
         }
 
         /// <summary>
@@ -260,7 +261,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void DownloadSampleZoneFile()
         {
-            DownloadFile(SampleZoneFileResourceName);
+            DownloadFile(SampleZoneFileResourceName, DefaultZoneFileName);
         }
 
         /// <summary>
@@ -268,7 +269,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void DownloadExistingRateFile()
         {
-            DownloadFile(ExistingRateFileResourceName);
+            DownloadFile(ExistingRateFileResourceName, DefaultRateFileName);
         }
 
         /// <summary>
@@ -276,19 +277,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void DownloadExistingZoneFile()
         {
-            DownloadFile(ExistingZoneFileResourceName);
+            DownloadFile(ExistingZoneFileResourceName, DefaultZoneFileName);
         }
 
         /// <summary>
         /// Downloads the given file
         /// </summary>
         /// <param name="resourceName">Resource name for the file</param>
-        private void DownloadFile(string resourceName)
+        /// <param name="defaultFileName">File name for the</param>
+        private void DownloadFile(string resourceName, string defaultFileName)
         {
             ISaveFileDialog fileDialog = saveFileDialogFactory();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
-            fileDialog.DefaultFileName = DefaultFileName;
+            fileDialog.DefaultFileName = defaultFileName;
 
             if (fileDialog.ShowDialog() != DialogResult.OK)
             {
