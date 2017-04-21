@@ -987,7 +987,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             /// <summary>
             /// Execute the command
             /// </summary>
-            [NDependIgnoreLongMethod]
             public void Execute(List<string> args)
             {
                 string action = null;

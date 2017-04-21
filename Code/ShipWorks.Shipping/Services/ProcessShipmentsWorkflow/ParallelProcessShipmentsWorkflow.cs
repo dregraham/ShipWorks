@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
         public ParallelProcessShipmentsWorkflow(
             ShipmentPreparationStep prepareShipmentTask,
             LabelRetrievalStep getLabelTask,
