@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Threading;
-using Moq;
-using RestSharp;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using Xunit.Sdk;
 
 namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
 {
