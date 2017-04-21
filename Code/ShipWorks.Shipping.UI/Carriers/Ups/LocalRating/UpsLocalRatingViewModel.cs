@@ -68,8 +68,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.openFileDialogFactory = openFileDialogFactory;
             DownloadSampleRateFileCommand = new RelayCommand(DownloadSampleRateFile);
             DownloadSampleZoneFileCommand = new RelayCommand(DownloadSampleZoneFile);
-            DownloadExistingRateFileCommand = new RelayCommand(DownloadExistingRateFile);
-            DownloadExistingZoneFileCommand = new RelayCommand(DownloadExistingZoneFile);
             UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
             UploadZoneFileCommand = new RelayCommand(CallUploadZoneFile);
 
@@ -90,18 +88,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand DownloadSampleZoneFileCommand { get; }
-
-        /// <summary>
-        /// Command to download the existing rate file
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand DownloadExistingRateFileCommand { get; }
-
-        /// <summary>
-        /// Command to download the existing zone file
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand DownloadExistingZoneFileCommand { get; }
 
         /// <summary>
         /// Command to upload the modified rate file
@@ -186,26 +172,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Text for link for downloading existing rate file
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool RateFileExists
-        {
-            get { return rateFileExists; }
-            set { handler.Set(nameof(RateFileExists), ref rateFileExists, value); }
-        }
-
-        /// <summary>
-        /// Text for link for downloading existing zone file
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ZoneFileExists
-        {
-            get { return zoneFileExists; }
-            set { handler.Set(nameof(ZoneFileExists), ref zoneFileExists, value); }
-        }
-
-        /// <summary>
         /// Loads the UpsAccount information to the view model
         /// </summary>
         public void Load(UpsAccountEntity account, Action<bool> isBusy)
@@ -262,22 +228,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private void DownloadSampleZoneFile()
         {
             DownloadFile(SampleZoneFileResourceName, DefaultZoneFileName);
-        }
-
-        /// <summary>
-        /// Downloads the existing rate file.
-        /// </summary>
-        private void DownloadExistingRateFile()
-        {
-            DownloadFile(ExistingRateFileResourceName, DefaultRateFileName);
-        }
-
-        /// <summary>
-        /// Downloads the existing zone file.
-        /// </summary>
-        private void DownloadExistingZoneFile()
-        {
-            DownloadFile(ExistingZoneFileResourceName, DefaultZoneFileName);
         }
 
         /// <summary>
@@ -455,23 +405,19 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             if (rateTable.RateUploadDate.HasValue)
             {
-                RateFileExists = true;
-                RateStatusMessage = $": {rateTable.RateUploadDate.Value.ToLocalTime():g}";
+                RateStatusMessage = $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}";
             }
             else
             {
-                RateFileExists = false;
                 RateStatusMessage = "Rates have not been uploaded for this account";
             }
 
             if (rateTable.ZoneUploadDate.HasValue)
             {
-                ZoneFileExists = true;
-                ZoneStatusMessage = $": {rateTable.ZoneUploadDate.Value.ToLocalTime():g}";
+                ZoneStatusMessage = $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}";
             }
             else
             {
-                ZoneFileExists = false;
                 ZoneStatusMessage = "Zones have not been uploaded";
             }
         }

@@ -46,12 +46,6 @@
 
         <DockPanel Grid.Row="3"
                     Margin="0 0 0 10">
-            <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" 
-                       Visibility="{Binding RateFileExists, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                <Hyperlink Command="{Binding DownloadExistingRateFileCommand}">
-                    Last Upload
-                </Hyperlink>
-            </TextBlock>
             <TextBlock VerticalAlignment="Center"
                 Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Width="120"
@@ -66,12 +60,6 @@
 
         <DockPanel Grid.Row="4"
                    Margin="0 0 0 10">
-            <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" 
-                       Visibility="{Binding ZoneFileExists, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                <Hyperlink Command="{Binding DownloadExistingZoneFileCommand}">
-                    Last Upload
-                </Hyperlink>
-            </TextBlock>
             <TextBlock VerticalAlignment="Center"
                        Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Width="120"
