@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.BigCommerce;
+using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce

@@ -6,7 +6,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -16,13 +18,13 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Platforms.BigCommerce
+namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
 {
     /// <summary>
     /// View model for the BigCommerce account settings control
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class BigCommerceAccountSettingsViewModel : INotifyPropertyChanged
+    public class BigCommerceAccountSettingsViewModel : IBigCommerceAccountSettingsViewModel, INotifyPropertyChanged
     {
         readonly IBigCommerceWebClientFactory webClientFactory;
         readonly Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider;
@@ -30,20 +32,25 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         readonly IMessageHelper messageHelper;
         readonly PropertyChangedHandler handler;
 
+        BigCommerceAuthenticationType authenticationType;
         string apiUrl;
-        string apiUsername;
-        string apiToken;
-        string clientID;
-        string accessToken;
+        string basicUsername;
+        string basicToken;
+        string oauthClientID;
+        string oauthToken;
+        readonly IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory;
+        private IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public BigCommerceAccountSettingsViewModel(IBigCommerceWebClientFactory webClientFactory,
             IMessageHelper messageHelper,
+            IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory,
             Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider,
             Func<Type, ILog> createLogger)
         {
+            this.persistenceStrategyFactory = persistenceStrategyFactory;
             this.messageHelper = messageHelper;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
@@ -55,6 +62,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Has a property changed
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Authentication type to use for BigCommerce requests
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public BigCommerceAuthenticationType AuthenticationType
+        {
+            get { return authenticationType; }
+            private set { handler.Set(nameof(AuthenticationType), ref authenticationType, value); }
+        }
 
         /// <summary>
         /// Url for the API
@@ -70,40 +87,40 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// User name for legacy API access
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ApiUsername
+        public string BasicUsername
         {
-            get { return apiUsername; }
-            set { handler.Set(nameof(ApiUsername), ref apiUsername, value); }
+            get { return basicUsername; }
+            set { handler.Set(nameof(BasicUsername), ref basicUsername, value); }
         }
 
         /// <summary>
         /// Token for legacy API access
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ApiToken
+        public string BasicToken
         {
-            get { return apiToken; }
-            set { handler.Set(nameof(ApiToken), ref apiToken, value); }
+            get { return basicToken; }
+            set { handler.Set(nameof(BasicToken), ref basicToken, value); }
         }
 
         /// <summary>
         /// Client ID for OAuth access
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ClientID
+        public string OauthClientID
         {
-            get { return clientID; }
-            set { handler.Set(nameof(ClientID), ref clientID, value); }
+            get { return oauthClientID; }
+            set { handler.Set(nameof(OauthClientID), ref oauthClientID, value); }
         }
 
         /// <summary>
         /// Access Token for OAuth access
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string AccessToken
+        public string OauthToken
         {
-            get { return accessToken; }
-            set { handler.Set(nameof(AccessToken), ref accessToken, value); }
+            get { return oauthToken; }
+            set { handler.Set(nameof(OauthToken), ref oauthToken, value); }
         }
 
         /// <summary>
@@ -115,8 +132,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             ApiUrl = store.ApiUrl;
-            ApiUsername = store.ApiUserName;
-            ApiToken = store.ApiToken;
+            AuthenticationType = store.BigCommerceAuthentication;
+
+            persistenceStrategy = persistenceStrategyFactory[AuthenticationType];
+
+            persistenceStrategy.LoadStoreIntoViewModel(store, this);
         }
 
         /// <summary>
@@ -126,22 +146,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
         public bool SaveToEntity(BigCommerceStoreEntity store)
         {
-            // To make a call to the store, we need a valid api user name, so check that next.
-            if (string.IsNullOrWhiteSpace(ApiUsername))
-            {
-                messageHelper.ShowError("Please enter the API Username for your BigCommerce store.");
-                return false;
-            }
-            string apiUsernameToCheck = ApiUsername.Trim();
-
-            // Check the api token
-            if (string.IsNullOrWhiteSpace(ApiToken))
-            {
-                messageHelper.ShowError("Please enter an API Token.");
-                return false;
-            }
-            string apiTokenToCheck = ApiToken.Trim();
-
             GenericResult<string> storeUrlToCheck = ValidateAndFormatApiUrl(ApiUrl);
             if (storeUrlToCheck.Failure)
             {
@@ -149,11 +153,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 return false;
             }
 
-            store.ApiUrl = storeUrlToCheck.Value;
-            store.ApiToken = apiTokenToCheck;
-            store.ApiUserName = apiUsernameToCheck;
+            GenericResult<BigCommerceStoreEntity> result = persistenceStrategy.SaveDataToStoreFromViewModel(store, this);
+            if (result.Failure)
+            {
+                messageHelper.ShowError(result.Message);
+                return false;
+            }
 
-            return ConnectionVerificationNeeded(store) ?
+            store.ApiUrl = storeUrlToCheck.Value;
+
+            return ConnectionVerificationNeeded(store, persistenceStrategy) ?
                 UpdateConnection(store) :
                 true;
         }
@@ -216,29 +225,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// For determining if the connection needs to be tested
         /// </summary>
-        protected static bool ConnectionVerificationNeeded(BigCommerceStoreEntity store)
+        protected static bool ConnectionVerificationNeeded(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy strategy)
         {
-            return (store.Fields[(int) BigCommerceStoreFieldIndex.ApiUrl].IsChanged ||
-                    store.Fields[(int) BigCommerceStoreFieldIndex.ApiUserName].IsChanged ||
-                    store.Fields[(int) BigCommerceStoreFieldIndex.ApiToken].IsChanged);
-        }
-
-        /// <summary>
-        /// Helper method that does type checking and casts the generic StoreEntity
-        /// to a BigCommerceStoreEntity.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        /// <returns>A BigCommerceStoreEntity.</returns>
-        /// <exception cref="ArgumentException" />
-        private static BigCommerceStoreEntity GetBigCommerceStore(StoreEntity store)
-        {
-            BigCommerceStoreEntity bigCommerceStore = store as BigCommerceStoreEntity;
-            if (bigCommerceStore == null)
-            {
-                throw new ArgumentException("A non BigCommerce store was passed to BigCommerce account settings.");
-            }
-
-            return bigCommerceStore;
+            return store.Fields[(int) BigCommerceStoreFieldIndex.ApiUrl].IsChanged ||
+                strategy.ConnectionVerificationNeeded(store);
         }
     }
 }

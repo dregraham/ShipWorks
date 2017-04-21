@@ -217,5 +217,11 @@ namespace ShipWorks.Tests.Shared
                 action(item);
             }
         }
+
+        /// <summary>
+        /// Get a keyed mock creator for the given service
+        /// </summary>
+        public static IKeyedMockCreator<T> CreateKeyedMockOf<T>(this AutoMock mock) where T : class =>
+            new KeyedMockCreator<T>(mock);
     }
 }
