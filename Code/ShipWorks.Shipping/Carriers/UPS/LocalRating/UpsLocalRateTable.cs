@@ -100,6 +100,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 RateUploadDate = rateTable.UploadDate;
             }
+
+            if (zoneFile != null)
+            {
+                ZoneUploadDate = zoneFile.UploadDate;
+            }
         }
 
         /// <summary>
