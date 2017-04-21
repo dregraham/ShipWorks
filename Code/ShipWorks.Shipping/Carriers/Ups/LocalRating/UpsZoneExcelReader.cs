@@ -13,12 +13,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// </summary>
     public class UpsZoneExcelReader : IUpsZoneExcelReader
     {
-        private readonly AlaskaHawaiiZoneExcelReader alaskaHawaiiReader;
+        private readonly IAlaskaHawaiiZoneExcelReader alaskaHawaiiReader;
+        private static readonly Regex fiveDigitZipRangeRegex = new Regex("^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$");
+        private static readonly Regex threeDigitZipRangeRegex = new Regex("^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$");
+        private static readonly Regex threeDigitNumberRegex = new Regex("^\\s*[0-9]{3}\\s*$");
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsZoneExcelReader(AlaskaHawaiiZoneExcelReader alaskaHawaiiReader)
+        public UpsZoneExcelReader(IAlaskaHawaiiZoneExcelReader alaskaHawaiiReader)
         {
             this.alaskaHawaiiReader = alaskaHawaiiReader;
         }
@@ -33,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             foreach (IWorksheet worksheet in zoneWorksheets)
             {
                 // looking for any workbook whos name is 5 digits dash 5 digits with optional white space xxxxx-xxxxx
-                if (Regex.IsMatch(worksheet.Name, "^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$"))
+                if (fiveDigitZipRangeRegex.IsMatch(worksheet.Name))
                 {
                     ValidateWorksheet(worksheet);
                     ParseLower48Zones(worksheet, zones);
@@ -68,8 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
 
                 // Everything else has to be one of the following formats ###-###, ### or #####
-                if (Regex.IsMatch(cellText, "^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$") || 
-                    Regex.IsMatch(cellText, "^\\s*[0-9]{3}\\s*$"))
+                if (threeDigitZipRangeRegex.IsMatch(cellText) ||
+                    threeDigitNumberRegex.IsMatch(cellText))
                 {
                     continue;
                 }
@@ -90,7 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             foreach (IRange row in worksheet.Rows)
             {
                 // the cell 0 is xxx-xxx or xxx where x is a number
-                if (Regex.IsMatch(row.Cells[0].Value, "^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$") || Regex.IsMatch(row.Cells[0].Value, "^\\s*[0-9]{3}\\s*$"))
+                if (threeDigitZipRangeRegex.IsMatch(row.Cells[0].Value) || 
+                    threeDigitNumberRegex.IsMatch(row.Cells[0].Value))
                 {
                     ParseRow(row, zones, originFloor, originCeiling);
                 }
@@ -179,23 +183,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             throw new UpsLocalRatingException($"Invalid destination zip {value}.");
-        }
-
-        /// <summary>
-        /// Get the origin zip ceiling from the worksheet
-        /// </summary>
-        private static int Get5DigitZip(string value)
-        {
-            if (Regex.IsMatch(value, "^\\s*[0-9]{5}\\s*$"))
-            {
-                int result;
-                if (int.TryParse(value, out result))
-                {
-                    return result;
-                }
-            }
-
-            throw new UpsLocalRatingException($"Invalid zip {value}.");
         }
 
         /// <summary>

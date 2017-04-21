@@ -92,6 +92,30 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
+        public void Read_DelegatestoAlaskaHawaiiZoneReader()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+            worksheet.Range["C1"].Text = "3 Day Select";
+            worksheet.Range["D1"].Text = "2nd Day Air";
+            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
+            worksheet.Range["F1"].Text = "Next Day Air Saver";
+            worksheet.Range["G1"].Text = "Next Day Air";
+
+            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-" });
+
+            testObject.Read(workbook.Worksheets, rateTable.Object);
+
+            mock.Mock<IAlaskaHawaiiZoneExcelReader>().Verify(a => a.GetAlaskaHawaiiZones(workbook.Worksheets));
+        }
+
+        [Fact]
         public void Read_ReplacesZonesOnUpsLocalRateTable()
         {
             Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
