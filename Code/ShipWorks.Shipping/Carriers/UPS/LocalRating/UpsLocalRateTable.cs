@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {
-                throw new UpsLocalRatingException($"Error loading Excel file '{rateFileName}'.", ex);
+                throw new UpsLocalRatingException($"Error loading Excel file '{zoneFileName}'.", ex);
             }
         }
 
