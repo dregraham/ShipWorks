@@ -28,7 +28,7 @@
             Visibility="{Binding AuthenticationType,
                 Converter={StaticResource VisibleWhenEqualToParameter},
                 ConverterParameter={x:Static int:BigCommerceAuthenticationType.Basic}}">
-            <Hyperlink>Migrate to OAuth...</Hyperlink>
+            <Hyperlink Command="{Binding MigrateToOauth}">Migrate to OAuth...</Hyperlink>
         </TextBlock>
         <local:BigCommerceOAuthAccountSettings Grid.Row="2"
             Visibility="{Binding AuthenticationType,

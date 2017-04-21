@@ -10,14 +10,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Cache mechanism for BigCommerce product images.  Since multiple BC stores can be downloading and product IDs are not unique across stores,
     /// each store needs it's own cache.  This class takes care of creating and getting store specific product image caches.
-    /// 
+    ///
     /// DON'T INSTANTIATE THIS CLASS OUTSIDE OF TESTS. USE INSTANCE SINGLETON.
     /// </summary>
     public class BigCommerceProductImageCache
     {
-        private Dictionary<string, LruCache<int, BigCommerceProductImage>> storeProductImageCaches;
+        private readonly Dictionary<string, LruCache<int, BigCommerceProductImage>> storeProductImageCaches;
 
-        private static readonly Lazy<BigCommerceProductImageCache> instance = 
+        private static readonly Lazy<BigCommerceProductImageCache> instance =
             new Lazy<BigCommerceProductImageCache>(() => new BigCommerceProductImageCache());
 
         /// <summary>

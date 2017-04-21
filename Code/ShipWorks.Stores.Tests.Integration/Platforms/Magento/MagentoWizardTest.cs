@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.UI.Platforms.Magento.WizardPages;
 using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
-using ShipWorks.UI.Wizard;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
@@ -20,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
     [Trait("Store", "Magento")]
     public class MagentoWizardTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public MagentoWizardTest()
         {
@@ -35,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             var result = storeType.CreateAddStoreWizardPages(container);
 
             Assert.IsType<MagentoStoreSetupPage>(result.ElementAt(0));
-            Assert.Equal(result.Count(), 1);
+            Assert.Equal(result.Count, 1);
         }
 
         public void Dispose() => container.Dispose();

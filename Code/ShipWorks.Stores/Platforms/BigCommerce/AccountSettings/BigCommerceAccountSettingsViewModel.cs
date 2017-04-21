@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -56,6 +57,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             AuthenticationType = BigCommerceAuthenticationType.Oauth;
+
+            MigrateToOauth = new RelayCommand(MigrateToOauthAction);
         }
 
         /// <summary>
@@ -135,6 +138,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         }
 
         /// <summary>
+        /// Migrate from Basic to OAuth
+        /// </summary>
+        public RelayCommand MigrateToOauth { get; }
+
+        /// <summary>
         /// Load the data from the given store into the control
         /// </summary>
         /// <param name="store"></param>
@@ -155,42 +163,47 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
         public bool SaveToEntity(BigCommerceStoreEntity store)
         {
-            GenericResult<string> storeUrlToCheck = ValidateAndFormatApiUrl(ApiUrl);
+            IResult result = PerformSave(store);
+
+            if (result.Failure)
+            {
+                messageHelper.ShowError(result.Message);
+            }
+
+            return result.Success;
+        }
+
+        /// <summary>
+        /// Perform the actual save
+        /// </summary>
+        private IResult PerformSave(BigCommerceStoreEntity store)
+        {
+            GenericResult<string> storeUrlToCheck = SaveApiUrlToStore(store, ApiUrl);
             if (storeUrlToCheck.Failure)
             {
-                messageHelper.ShowError(storeUrlToCheck.Message);
-                return false;
+                return storeUrlToCheck;
             }
 
-            GenericResult<BigCommerceStoreEntity> persistenceResult = PersistenceStrategy.SaveDataToStoreFromViewModel(store, this);
+            IResult persistenceResult = PersistenceStrategy.SaveDataToStoreFromViewModel(store, this);
             if (persistenceResult.Failure)
             {
-                messageHelper.ShowError(persistenceResult.Message);
-                return false;
+                return persistenceResult;
             }
-
-            store.ApiUrl = storeUrlToCheck.Value;
 
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                GenericResult<Unit> result = connectionVerifier.Verify(store, PersistenceStrategy);
-                if (result.Failure)
-                {
-                    messageHelper.ShowError(result.Message);
-                }
-
-                return result.Success;
+                return connectionVerifier.Verify(store, PersistenceStrategy);
             }
         }
 
         /// <summary>
         /// Validate and format the API url
         /// </summary>
-        private GenericResult<string> ValidateAndFormatApiUrl(string url)
+        private static GenericResult<string> SaveApiUrlToStore(BigCommerceStoreEntity store, string url)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
-                return GenericResult.FromError("Please enter the API Path of your BigCommerce store.", string.Empty);
+                return GenericResult.FromError<string>("Please enter the API Path of your BigCommerce store.");
             }
             string storeUrlToCheck = url.Trim();
 
@@ -203,10 +216,21 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             // Now check the url to see if it's a valid address
             if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
             {
-                return GenericResult.FromError("The specified API Path is not a valid address.", string.Empty);
+                return GenericResult.FromError<string>("The specified API Path is not a valid address.");
             }
 
+            store.ApiUrl = storeUrlToCheck;
+
             return GenericResult.FromSuccess(storeUrlToCheck);
+        }
+
+        /// <summary>
+        /// Migrate from basic to OAuth
+        /// </summary>
+        private void MigrateToOauthAction()
+        {
+            AuthenticationType = BigCommerceAuthenticationType.Oauth;
+            persistenceStrategy = null;
         }
     }
 }

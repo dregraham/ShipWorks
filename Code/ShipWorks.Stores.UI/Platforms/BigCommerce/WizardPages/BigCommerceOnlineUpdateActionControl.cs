@@ -90,18 +90,6 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
             BigCommerceShipmentUploadTask shipmentUploadTask = (BigCommerceShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(BigCommerceShipmentUploadTask), store).CreateInstance();
             tasks.Add(shipmentUploadTask);
 
-            //if (setStatus.Checked)
-            //{
-            //    // Create the task instance
-            //    BigCommerceOrderUpdateTask orderUpdateTask = (BigCommerceOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(BigCommerceOrderUpdateTask), store).CreateInstance();
-           
-            //    // Apply the desired status code
-            //    BigCommerceStatusCodeProvider statusProvider = new BigCommerceStatusCodeProvider((BigCommerceStoreEntity) store);
-            //    orderUpdateTask.StatusCode = statusProvider.GetCodeValue(status.Text);
-
-            //    tasks.Add(orderUpdateTask);
-            //}
-
             return tasks;
         }
     }

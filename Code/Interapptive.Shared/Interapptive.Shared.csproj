@@ -468,6 +468,7 @@
     <Compile Include="Utility\IClrHelper.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\IEnvironmentWrapper.cs" />
+    <Compile Include="Utility\IResult.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />

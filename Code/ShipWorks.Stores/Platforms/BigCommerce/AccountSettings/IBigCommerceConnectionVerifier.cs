@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Verify the connection
         /// </summary>
-        GenericResult<Unit> Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy);
+        IResult Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy);
     }
 }

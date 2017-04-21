@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -180,7 +178,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [Fact]
         public void ConnectionVerificationNeeded_ReturnsFalse_WhenBasicDataHasNotChanged()
         {
-            var viewModel = mock.CreateMock<IBigCommerceAccountSettingsViewModel>();
             var store = CreateBigCommerceStore(username: "foo", token: "bar");
 
             var testObject = mock.Create<BigCommerceBasicAuthenticationPersisitenceStrategy>();
@@ -195,7 +192,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [InlineData(BigCommerceStoreFieldIndex.ApiToken)]
         public void ConnectionVerificationNeeded_ReturnsTrue_WhenBasicDataHasChanged(BigCommerceStoreFieldIndex changedField)
         {
-            var viewModel = mock.CreateMock<IBigCommerceAccountSettingsViewModel>();
             var store = CreateBigCommerceStore(username: "foo", token: "bar");
             store.Fields[(int) changedField].IsChanged = true;
 

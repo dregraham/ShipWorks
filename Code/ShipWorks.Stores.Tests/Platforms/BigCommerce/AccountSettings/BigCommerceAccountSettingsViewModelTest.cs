@@ -214,6 +214,38 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             disposable.Verify(x => x.Dispose());
         }
 
+        [Fact]
+        public void MigrateToOauth_ChangesAuthenticationType_ToOauth()
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+            testObject.LoadStore(new BigCommerceStoreEntity());
+
+            testObject.MigrateToOauth.Execute(null);
+
+            Assert.Equal(BigCommerceAuthenticationType.Oauth, testObject.AuthenticationType);
+        }
+
+        [Fact]
+        public void MigrateToOauth_DelegatesToOauthStrategy_AfterChange()
+        {
+            var builder = mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>();
+            var basicStrategy = builder.For(BigCommerceAuthenticationType.Basic);
+            var oauthStrategy = builder.For(BigCommerceAuthenticationType.Oauth);
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = "http://www.foo.com" });
+
+            testObject.MigrateToOauth.Execute(null);
+            testObject.SaveToEntity(new BigCommerceStoreEntity());
+
+            basicStrategy.Verify(x => x.LoadStoreIntoViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAccountSettingsViewModel>()));
+            oauthStrategy.Verify(x => x.LoadStoreIntoViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAccountSettingsViewModel>()), Times.Never);
+            basicStrategy.Verify(x => x.SaveDataToStoreFromViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<BigCommerceAccountSettingsViewModel>()), Times.Never);
+            oauthStrategy.Verify(x => x.SaveDataToStoreFromViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<BigCommerceAccountSettingsViewModel>()));
+        }
+
         /// <summary>
         /// Create a persistence strategy mock for the given type
         /// </summary>

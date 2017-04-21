@@ -110,13 +110,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             if (apiClient == null)
             {
                 apiClient = new RestClient(store.ApiUrl);
-
-                if (apiClient == null)
-                {
-                    throw new BigCommerceException("Unable to create API client for BigCommerce.");
-                }
-
-
                 apiClient.Authenticator = authenticatorFactory.Create(store);
             }
 
@@ -651,7 +644,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             // Create a request for getting order statuses
             RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetOrderStatusesPath());
-            List<BigCommerceApiOrderStatus> orderStatusesRestResponse;
 
             try
             {

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Interapptive.Shared.Utility;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -34,6 +34,8 @@ namespace ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes
 
         public IMethodInfo Method => testCase.Method;
 
+        [SuppressMessage("SonarQube", "SW0001:Wrap in exception monitor",
+            Justification = "Errors will be handled correctly by the test framework")]
         public Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink,
                                          IMessageBus messageBus,
                                          object[] constructorArguments,
@@ -128,21 +130,30 @@ namespace ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes
             info.AddValue("InnerTestCase", testCase);
         }
 
+        [SuppressMessage("ShipWorks", "SW0002:Do not obfuscate variables",
+            Justification = "We don't obfuscate tests, but if we did, we'd still want the actual name of the parameter")]
         private static void CopyTaskResultFrom<T>(TaskCompletionSource<T> tcs, Task<T> template)
         {
-            if (tcs == null)
-                throw new ArgumentNullException("tcs");
-            if (template == null)
-                throw new ArgumentNullException("template");
+            MethodConditions.EnsureArgumentIsNotNull(tcs, nameof(tcs));
+            MethodConditions.EnsureArgumentIsNotNull(template, nameof(template));
+
             if (!template.IsCompleted)
-                throw new ArgumentException("Task must be completed first.", "template");
+            {
+                throw new ArgumentException("Task must be completed first.", nameof(template));
+            }
 
             if (template.IsFaulted)
+            {
                 tcs.SetException(template.Exception);
+            }
             else if (template.IsCanceled)
+            {
                 tcs.SetCanceled();
+            }
             else
+            {
                 tcs.SetResult(template.Result);
+            }
         }
     }
 }

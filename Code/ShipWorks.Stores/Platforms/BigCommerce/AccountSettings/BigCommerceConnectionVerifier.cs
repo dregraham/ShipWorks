@@ -38,11 +38,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Verify the connection
         /// </summary>
-        public GenericResult<Unit> Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy)
+        public IResult Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy)
         {
             return ConnectionVerificationNeeded(store, persistenceStrategy) ?
                 UpdateConnection(store) :
-                GenericResult.FromSuccess(Unit.Default);
+                Result.FromSuccess();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Update the connection information
         /// </summary>
-        private GenericResult<Unit> UpdateConnection(BigCommerceStoreEntity store)
+        private Result UpdateConnection(BigCommerceStoreEntity store)
         {
             try
             {
@@ -69,12 +69,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
                     statusProvider.Value.UpdateFromOnlineStore();
                 }
 
-                return GenericResult.FromSuccess(Unit.Default);
+                return Result.FromSuccess();
             }
             catch (BigCommerceException ex)
             {
                 log.Error(ex);
-                return GenericResult.FromError<Unit>(ex);
+                return Result.FromError(ex);
             }
         }
     }

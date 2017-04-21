@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Startup;
@@ -16,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
     [Trait("Category", "IoCRegistration")]
     public class WizardPageRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public WizardPageRegistrationTest()
         {
@@ -36,8 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             {
                 var count = type.GetCustomAttributes(typeof(OrderAttribute), false)
                     .OfType<OrderAttribute>()
-                    .Where(x => x.Service == typeof(WizardPage))
-                    .Count();
+                    .Count(x => x.Service == typeof(WizardPage));
 
                 Assert.True(count == 1,
                     $"{type.Name} should have 1 OrderAttribute for WizardPage, but has {count}");
@@ -48,8 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         {
             return arg.GetCustomAttributes(typeof(KeyedComponentAttribute), false)
                 .OfType<KeyedComponentAttribute>()
-                .Where(x => x.Service == typeof(WizardPage))
-                .Any();
+                .Any(x => x.Service == typeof(WizardPage));
         }
 
         public void Dispose() => container?.Dispose();

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.DTO
 {
-
-
-
     /// <summary>
     /// Order dto object that gets populated by the REST call
     /// </summary>
+    [SuppressMessage("SonarQube", "S125:Remove this commented out code",
+        Justification = "The commented out properties are included in the API but we don't use them")]
     public class BigCommerceOrder
     {
         public int id { get; set; }

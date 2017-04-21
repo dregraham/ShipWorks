@@ -4,11 +4,16 @@ using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
@@ -18,11 +23,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using Autofac.Features.OwnedInstances;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public BigCommerceDownloader(BigCommerceStoreEntity store, 
+        public BigCommerceDownloader(BigCommerceStoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
             Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider)
             : base(store)
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Download orders and statuses for the BigCommerce store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     totalCount += modifiedCount;
 
                     // Update the progress bar for the new count
-                    Progress.PercentComplete = QuantitySaved/totalCount;
+                    Progress.PercentComplete = QuantitySaved / totalCount;
 
                     // Download the modified orders
                     DownloadOrders(orderSearchCriteria);
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
-        /// Download the next range of orders. 
+        /// Download the next range of orders.
         /// </summary>
         /// <param name="orderSearchCriteria">The BigCommerceWebClientOrderSearchCriteria for which to download orders.</param>
         /// <returns>True if orders were loaded, false if the user clicks cancel or if no orders were left to download</returns>
@@ -194,11 +194,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             }
 
             // Update progress reporter that we are now downloading orders
-            Progress.Detail = string.Format("Downloading {0} orders...", 
+            Progress.Detail = string.Format("Downloading {0} orders...",
                 orderSearchCriteria.OrderDateSearchType == BigCommerceWebClientOrderDateSearchType.CreatedDate ? "new" : "modified");
 
             // Download the orders to process
-            List<BigCommerceOrder> orders = WebClient.GetOrders(orderSearchCriteria); 
+            List<BigCommerceOrder> orders = WebClient.GetOrders(orderSearchCriteria);
 
             // Check to see that we received some orders to process (just in case another ShipWorks instance downloaded them before we got to them)
             if (orders.Count == 0)
@@ -237,8 +237,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Set end date to now
             DateTime modifiedDateEndPoint = DateTime.UtcNow;
 
-            BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = 
-                new BigCommerceWebClientOrderSearchCriteria(orderDateSearchType, 
+            BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
+                new BigCommerceWebClientOrderSearchCriteria(orderDateSearchType,
                     modifiedDateStartingPoint.Value, modifiedDateEndPoint,
                     createdDateStartingPoint.Value, createdDateEndPoint)
                 {
@@ -324,10 +324,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 // Set the total.  It will be calculated and verified later.
                 orderEntity.OrderTotal = Convert(order.total_inc_tax, 0m);
             }
-            
+
             // Get the customer
-            int onlineCustomerID = (int)order.customer_id;
-            orderEntity.OnlineCustomerID = (onlineCustomerID <= MissingCustomerID) ? (int?)null : onlineCustomerID;
+            int onlineCustomerID = (int) order.customer_id;
+            orderEntity.OnlineCustomerID = (onlineCustomerID <= MissingCustomerID) ? (int?) null : onlineCustomerID;
 
             // Requested shipping.  Default to N/A to support all digital orders.
             string requestedShipping = "N/A";
@@ -365,7 +365,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BigCommerceDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
         }
-  
+
         private void PopulateNewOrder(BigCommerceOrder order, BigCommerceAddress shipToAddress, bool isSubOrder, OrderEntity orderEntity, bool hasSubOrders)
         {
             // If the order isn't new, return
@@ -397,18 +397,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 //Load all payment details
                 LoadPaymentDetails(orderEntity, order);
 
-                // Load any store credit 
+                // Load any store credit
                 LoadStoreCredit(orderEntity, order);
             }
 
-            // If this is a sub order, or it's the first order that has sub orders, calculate the total 
+            // If this is a sub order, or it's the first order that has sub orders, calculate the total
             if (isSubOrder || hasSubOrders)
             {
                 decimal total = OrderUtility.CalculateTotal(orderEntity);
                 orderEntity.OrderTotal = total;
             }
         }
-  
+
         /// <summary>
         /// Converts and sets BigCommerce order dates to SW dates on the order
         /// </summary>
@@ -450,12 +450,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             orderEntity.OnlineStatus = order.status;
 
             // Deleted isn't a BigCommerce status, it's a flag.  But we'll treat it as a status in SW
-            if (order.is_deleted)
+            if (order.is_deleted && statusProvider[BigCommerceConstants.OnlineStatusDeletedCode] != null)
             {
-                if (statusProvider[BigCommerceConstants.OnlineStatusDeletedCode] != null)
-                {
-                    orderEntity.OnlineStatus = statusProvider[BigCommerceConstants.OnlineStatusDeletedCode];
-                }
+                orderEntity.OnlineStatus = statusProvider[BigCommerceConstants.OnlineStatusDeletedCode];
             }
         }
 
@@ -474,8 +471,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             item.UnitCost = Convert(orderProduct.cost_price_ex_tax, 0m);
 
             // Convert weights from store units to pounds
-            item.Weight = WeightUtility.Convert((WeightUnitOfMeasure)bigCommerceStore.WeightUnitOfMeasure, 
-                                                 WeightUnitOfMeasure.Pounds, 
+            item.Weight = WeightUtility.Convert((WeightUnitOfMeasure) bigCommerceStore.WeightUnitOfMeasure,
+                                                 WeightUnitOfMeasure.Pounds,
                                                  Convert<double>(orderProduct.weight, 0));
 
             item.Name = orderProduct.name;
@@ -521,7 +518,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
                 optionToAdd.Name = string.Format("Gift Wrap - {0}", product.wrapping_name);
                 optionToAdd.Description = product.wrapping_message;
-                optionToAdd.UnitPrice = Convert(product.wrapping_cost_ex_tax, 0m); 
+                optionToAdd.UnitPrice = Convert(product.wrapping_cost_ex_tax, 0m);
             }
         }
 
@@ -533,11 +530,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Add each product option as an SW attribute.
             // BigCommerce doesn't provide pricing at the product option level, so set to $0
             foreach (BigCommerceProductOption productOption in product.product_options)
-            { 
+            {
                 OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
                 optionToAdd.Name = productOption.display_name;
                 optionToAdd.Description = productOption.display_value;
-                optionToAdd.UnitPrice = 0; 
+                optionToAdd.UnitPrice = 0;
             }
 
             // BigCommerce has configurable fields that admins can create their own data to capture when ordering.  For example, engraving text, allow uploading a file, etc...
@@ -547,17 +544,17 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 OrderItemAttributeEntity optionToAdd = InstantiateOrderItemAttribute(item);
                 optionToAdd.Name = configurableField.name;
                 optionToAdd.Description = string.IsNullOrWhiteSpace(configurableField.original_filename) ? configurableField.value.ToString() : configurableField.original_filename;
-                optionToAdd.UnitPrice = 0; 
+                optionToAdd.UnitPrice = 0;
             }
 
             if (product.Image != null)
             {
-                item.Image = product.Image; 
+                item.Image = product.Image;
             }
 
             if (product.ThumbnailImage != null)
             {
-                item.Thumbnail = product.ThumbnailImage; 
+                item.Thumbnail = product.ThumbnailImage;
             }
         }
 
@@ -604,7 +601,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // the parts don't always add up to the real total_tax on the order.  So, only add the total tax.
             decimal totalTax = Convert(order.total_tax, 0m);
             LoadCharge(orderEntity, "Tax", "Total Tax", totalTax);
-            
+
             CreateChargeIfNecessary(orderEntity, order.shipping_cost_ex_tax, "Shipping", orderEntity.RequestedShipping);
             CreateChargeIfNecessary(orderEntity, order.handling_cost_ex_tax, "Handling", string.Empty);
             CreateChargeIfNecessary(orderEntity, order.wrapping_cost_ex_tax, "Wrapping", string.Empty);
@@ -710,7 +707,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 LoadAddressInfo(orderEntity, shipToAddress, "Ship");
             }
-            
+
             //Load billing address info
             LoadAddressInfo(orderEntity, order.billing_address.ToAddress(), "Bill");
 
@@ -734,7 +731,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             //Parse person's name
             PersonName fullName = PersonName.Parse(string.Format("{0} {1}", first, last));
             PersonAdapter personAdapter = new PersonAdapter(order, dbPrefix);
-            
+
             personAdapter.UnparsedName = fullName.FullName;
             personAdapter.NameParseStatus = PersonNameParseStatus.Simple;
             personAdapter.FirstName = first;
@@ -765,7 +762,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             var converter = TypeDescriptor.GetConverter(typeof(T));
             if (converter != null)
             {
-                return (T)converter.ConvertFromString(input);
+                return (T) converter.ConvertFromString(input);
             }
             return defaultValue;
         }

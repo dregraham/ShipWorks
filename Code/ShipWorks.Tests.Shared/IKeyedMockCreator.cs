@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Enums;
-using Moq;
+﻿using Moq;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -11,6 +10,6 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Create a mock for the given key
         /// </summary>
-        Mock<T> For<K>(K basic);
+        Mock<T> For<TKey>(TKey basic);
     }
 }

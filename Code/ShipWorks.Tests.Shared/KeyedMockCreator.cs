@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shared
     internal class KeyedMockCreator<T> : IKeyedMockCreator<T> where T : class
     {
         object existingIndex;
-        private AutoMock mock;
+        readonly AutoMock mock;
 
         /// <summary>
         /// Constructor
@@ -24,10 +24,10 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Get a mock for the given key
         /// </summary>
-        public Mock<T> For<K>(K key)
+        public Mock<T> For<TKey>(TKey key)
         {
             var mockT = mock.CreateMock<T>();
-            GetIndexFor<K>().Setup(x => x[key]).Returns(mockT);
+            GetIndexFor<TKey>().Setup(x => x[key]).Returns(mockT);
 
             return mockT;
         }
@@ -35,15 +35,15 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Get an index for the given type
         /// </summary>
-        private Mock<IIndex<K, T>> GetIndexFor<K>() =>
-            GetExistingIndex<K>() ?? CreateNewIndex<K>();
+        private Mock<IIndex<TKey, T>> GetIndexFor<TKey>() =>
+            GetExistingIndex<TKey>() ?? CreateNewIndex<TKey>();
 
         /// <summary>
         /// Create a new index
         /// </summary>
-        private Mock<IIndex<K, T>> CreateNewIndex<K>()
+        private Mock<IIndex<TKey, T>> CreateNewIndex<TKey>()
         {
-            var typedIndex = mock.Override<IIndex<K, T>>();
+            var typedIndex = mock.Override<IIndex<TKey, T>>();
             existingIndex = typedIndex;
             return typedIndex;
         }
@@ -51,14 +51,14 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Attempt to get an existing index
         /// </summary>
-        private Mock<IIndex<K, T>> GetExistingIndex<K>()
+        private Mock<IIndex<TKey, T>> GetExistingIndex<TKey>()
         {
             if (existingIndex == null)
             {
                 return null;
             }
 
-            var typedIndex = existingIndex as Mock<IIndex<K, T>>;
+            var typedIndex = existingIndex as Mock<IIndex<TKey, T>>;
             if (typedIndex == null)
             {
                 throw new InvalidOperationException("Mocks created from this creator must all have keys of the same type");

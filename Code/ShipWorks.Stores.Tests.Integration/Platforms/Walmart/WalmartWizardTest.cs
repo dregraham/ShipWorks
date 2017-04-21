@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.UI.Platforms.Walmart.WizardPages;
 using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
-using ShipWorks.UI.Wizard;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
@@ -19,7 +14,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
     [Trait("Store", "Walmart")]
     public class WalmartWizardTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public WalmartWizardTest()
         {
@@ -34,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             var result = storeType.CreateAddStoreWizardPages(container);
 
             Assert.IsType<WalmartStoreSetupControlHost>(result.ElementAt(0));
-            Assert.Equal(result.Count(), 1);
+            Assert.Equal(result.Count, 1);
         }
 
         public void Dispose() => container.Dispose();
