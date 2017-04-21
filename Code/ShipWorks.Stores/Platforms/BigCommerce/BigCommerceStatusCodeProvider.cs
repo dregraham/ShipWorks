@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
-using ShipWorks.Data.Model.EntityInterfaces;
 using Autofac;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
     /// <summary>
     /// Provides online status codes for BigCommerce
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class BigCommerceStatusCodeProvider : OnlineStatusCodeProvider<int>
+    [Component]
+    public class BigCommerceStatusCodeProvider : OnlineStatusCodeProvider<int>, IBigCommerceStatusCodeProvider
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStatusCodeProvider));
         readonly IBigCommerceWebClientFactory webClientFactory;
 

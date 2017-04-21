@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive;
+using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Enums;
@@ -12,7 +14,7 @@ using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
+namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 {
     public class BigCommerceAccountSettingsViewModelTest : IDisposable
     {
@@ -24,10 +26,17 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         }
 
         [Fact]
+        public void Constructor_SetsAuthenticationTypeToOauth()
+        {
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            Assert.Equal(BigCommerceAuthenticationType.Oauth, testObject.AuthenticationType);
+        }
+
+        [Fact]
         public void LoadStore_SetsDataFromStore()
         {
-            mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>()
-                .For(BigCommerceAuthenticationType.Basic);
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
 
             var store = mock.CreateMock<IBigCommerceStoreEntity>();
             store.SetupGet(x => x.ApiUrl).Returns("http://www.foo.com");
@@ -125,10 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData(" www.example.com ")]
         public void SaveToEntity_SetsStoreApi_WhenDataIsValid(string newUrl)
         {
-            mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>()
-                .For(BigCommerceAuthenticationType.Basic)
-                .Setup(x => x.SaveDataToStoreFromViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<BigCommerceAccountSettingsViewModel>()))
-                .Returns(GenericResult.FromSuccess(new BigCommerceStoreEntity()));
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
 
             var store = new BigCommerceStoreEntity();
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
@@ -139,6 +145,85 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             testObject.SaveToEntity(store);
 
             Assert.Equal("https://www.example.com", store.ApiUrl);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SaveToEntity_DelegatesToConnectionVerifier_AndReturnsResult(bool verifierResult)
+        {
+            var store = new BigCommerceStoreEntity();
+
+            var strategy = CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            mock.Mock<IBigCommerceConnectionVerifier>()
+                .Setup(x => x.Verify(store, strategy.Object))
+                .Returns(verifierResult ? GenericResult.FromSuccess(Unit.Default) : GenericResult.FromError<Unit>("Foo"));
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            testObject.LoadStore(store);
+            testObject.ApiUrl = "http://www.example.com";
+
+            var result = testObject.SaveToEntity(store);
+
+            Assert.Equal(verifierResult, result);
+        }
+
+        [Fact]
+        public void SaveToEntity_ShowsError_WhenVerifierFails()
+        {
+            var store = new BigCommerceStoreEntity();
+
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            mock.Mock<IBigCommerceConnectionVerifier>()
+                .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
+                .Returns(GenericResult.FromError<Unit>("Foo"));
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            testObject.LoadStore(store);
+            testObject.ApiUrl = "http://www.example.com";
+
+            testObject.SaveToEntity(store);
+
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("Foo"));
+        }
+
+        [Fact]
+        public void SaveToEntity_TogglesCursor_WhenVerifyingConnection()
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            mock.Mock<IBigCommerceConnectionVerifier>()
+                .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
+                .Returns(GenericResult.FromSuccess(Unit.Default));
+
+            var disposable = mock.CreateMock<IDisposable>();
+            mock.Mock<IMessageHelper>().Setup(x => x.SetCursor(Cursors.WaitCursor))
+                .Returns(disposable);
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            testObject.LoadStore(new BigCommerceStoreEntity());
+            testObject.ApiUrl = "http://www.example.com";
+
+            testObject.SaveToEntity(new BigCommerceStoreEntity());
+
+            disposable.Verify(x => x.Dispose());
+        }
+
+        /// <summary>
+        /// Create a persistence strategy mock for the given type
+        /// </summary>
+        private Mock<IBigCommerceAuthenticationPersistenceStrategy> CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType type)
+        {
+            var strategy = mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>()
+                .For(type);
+            strategy.Setup(x => x.SaveDataToStoreFromViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<BigCommerceAccountSettingsViewModel>()))
+                .Returns(GenericResult.FromSuccess(new BigCommerceStoreEntity()));
+            return strategy;
         }
 
         public void Dispose()

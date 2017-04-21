@@ -43,15 +43,15 @@
 
         <TextBlock Grid.Row="1" TextAlignment="Right">API Path:</TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding ApiUrl}" />
+                 Text="{Binding ApiUrl, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="2" TextAlignment="Right">API Username:</TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding ApiUsername}" />
+                 Text="{Binding BasicUsername, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="3" TextAlignment="Right">API Token:</TextBlock>
         <TextBox Grid.Row="3" Grid.Column="1"
-                 Text="{Binding ApiToken}" />
+                 Text="{Binding BasicToken, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="4"
                     Grid.Column="1"

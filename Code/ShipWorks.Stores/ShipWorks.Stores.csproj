@@ -138,7 +138,9 @@
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceConnectionVerifier.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticator.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactory.cs" />
@@ -191,9 +193,9 @@
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAuthenticationPersistenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
-    <Compile Include="Platforms\BigCommerce\IIndex.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />

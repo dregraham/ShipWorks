@@ -179,6 +179,7 @@
     <Compile Include="Metrics\TrackedDurationEvent.cs" />
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
     <Compile Include="Security\EncryptionException.cs" />

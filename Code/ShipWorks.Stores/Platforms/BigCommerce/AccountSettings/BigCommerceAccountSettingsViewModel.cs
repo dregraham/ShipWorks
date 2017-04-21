@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,10 +27,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
     [Component(RegistrationType.Self)]
     public class BigCommerceAccountSettingsViewModel : IBigCommerceAccountSettingsViewModel, INotifyPropertyChanged
     {
-        readonly IBigCommerceWebClientFactory webClientFactory;
-        readonly Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider;
         readonly ILog log;
         readonly IMessageHelper messageHelper;
+        readonly IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory;
+        readonly IBigCommerceConnectionVerifier connectionVerifier;
         readonly PropertyChangedHandler handler;
 
         BigCommerceAuthenticationType authenticationType;
@@ -38,24 +39,23 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         string basicToken;
         string oauthClientID;
         string oauthToken;
-        readonly IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory;
         private IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceAccountSettingsViewModel(IBigCommerceWebClientFactory webClientFactory,
-            IMessageHelper messageHelper,
+        public BigCommerceAccountSettingsViewModel(IMessageHelper messageHelper,
             IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory,
-            Func<BigCommerceStoreEntity, Owned<BigCommerceStatusCodeProvider>> createStatusCodeProvider,
+            IBigCommerceConnectionVerifier connectionVerifier,
             Func<Type, ILog> createLogger)
         {
+            this.connectionVerifier = connectionVerifier;
             this.persistenceStrategyFactory = persistenceStrategyFactory;
             this.messageHelper = messageHelper;
-            this.createStatusCodeProvider = createStatusCodeProvider;
-            this.webClientFactory = webClientFactory;
             log = createLogger(GetType());
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
+            AuthenticationType = BigCommerceAuthenticationType.Oauth;
         }
 
         /// <summary>
@@ -124,6 +124,17 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         }
 
         /// <summary>
+        /// Get the current persistence strategy
+        /// </summary>
+        private IBigCommerceAuthenticationPersistenceStrategy PersistenceStrategy
+        {
+            get
+            {
+                return persistenceStrategy ?? (persistenceStrategy = persistenceStrategyFactory[AuthenticationType]);
+            }
+        }
+
+        /// <summary>
         /// Load the data from the given store into the control
         /// </summary>
         /// <param name="store"></param>
@@ -134,9 +145,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             ApiUrl = store.ApiUrl;
             AuthenticationType = store.BigCommerceAuthentication;
 
-            persistenceStrategy = persistenceStrategyFactory[AuthenticationType];
-
-            persistenceStrategy.LoadStoreIntoViewModel(store, this);
+            PersistenceStrategy.LoadStoreIntoViewModel(store, this);
         }
 
         /// <summary>
@@ -153,46 +162,24 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
                 return false;
             }
 
-            GenericResult<BigCommerceStoreEntity> result = persistenceStrategy.SaveDataToStoreFromViewModel(store, this);
-            if (result.Failure)
+            GenericResult<BigCommerceStoreEntity> persistenceResult = PersistenceStrategy.SaveDataToStoreFromViewModel(store, this);
+            if (persistenceResult.Failure)
             {
-                messageHelper.ShowError(result.Message);
+                messageHelper.ShowError(persistenceResult.Message);
                 return false;
             }
 
             store.ApiUrl = storeUrlToCheck.Value;
 
-            return ConnectionVerificationNeeded(store, persistenceStrategy) ?
-                UpdateConnection(store) :
-                true;
-        }
-
-        /// <summary>
-        /// Update the connection information
-        /// </summary>
-        private bool UpdateConnection(BigCommerceStoreEntity store)
-        {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                try
+                GenericResult<Unit> result = connectionVerifier.Verify(store, PersistenceStrategy);
+                if (result.Failure)
                 {
-                    IBigCommerceWebClient webClient = webClientFactory.Create(store);
-                    webClient.TestConnection();
-
-                    using (Owned<BigCommerceStatusCodeProvider> statusProvider = createStatusCodeProvider(store))
-                    {
-                        statusProvider.Value.UpdateFromOnlineStore();
-                    }
-
-                    return true;
+                    messageHelper.ShowError(result.Message);
                 }
-                catch (BigCommerceException ex)
-                {
-                    log.Error(ex.Message, ex);
-                    messageHelper.ShowError(ex.Message);
 
-                    return false;
-                }
+                return result.Success;
             }
         }
 
@@ -220,15 +207,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             }
 
             return GenericResult.FromSuccess(storeUrlToCheck);
-        }
-
-        /// <summary>
-        /// For determining if the connection needs to be tested
-        /// </summary>
-        protected static bool ConnectionVerificationNeeded(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy strategy)
-        {
-            return store.Fields[(int) BigCommerceStoreFieldIndex.ApiUrl].IsChanged ||
-                strategy.ConnectionVerificationNeeded(store);
         }
     }
 }

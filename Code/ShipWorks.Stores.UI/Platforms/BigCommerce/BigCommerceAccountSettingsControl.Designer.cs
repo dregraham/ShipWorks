@@ -32,24 +32,24 @@
             this.accountSettingsElementHost = new System.Windows.Forms.Integration.ElementHost();
             this.bigCommerceAccountSettings1 = new ShipWorks.Stores.UI.Platforms.BigCommerce.BigCommerceAccountSettings();
             this.SuspendLayout();
-            // 
+            //
             // accountSettingsElementHost
-            // 
+            //
             this.accountSettingsElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.accountSettingsElementHost.Location = new System.Drawing.Point(0, 0);
             this.accountSettingsElementHost.Name = "accountSettingsElementHost";
-            this.accountSettingsElementHost.Size = new System.Drawing.Size(463, 127);
+            this.accountSettingsElementHost.Size = new System.Drawing.Size(463, 200);
             this.accountSettingsElementHost.TabIndex = 0;
             this.accountSettingsElementHost.Text = "elementHost1";
             this.accountSettingsElementHost.Child = this.bigCommerceAccountSettings1;
-            // 
+            //
             // BigCommerceAccountSettingsControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.accountSettingsElementHost);
             this.Name = "BigCommerceAccountSettingsControl";
-            this.Size = new System.Drawing.Size(463, 127);
+            this.Size = new System.Drawing.Size(463, 200);
             this.ResumeLayout(false);
 
         }

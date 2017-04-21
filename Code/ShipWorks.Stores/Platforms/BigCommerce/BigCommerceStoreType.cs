@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStoreType));
         readonly Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader;
         readonly Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater;
-        readonly Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider;
+        readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
         readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
         readonly IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex;
         readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         public BigCommerceStoreType(StoreEntity store,
             Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader,
             Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater,
-            Func<BigCommerceStoreEntity, BigCommerceStatusCodeProvider> createStatusCodeProvider,
+            Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
             IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex,
             IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex,
             IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex)
@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            BigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(TypedStore);
+            IBigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(TypedStore);
 
             return statusCodeProvider.CodeNames;
         }
@@ -243,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // get possible status codes from the provider
-            BigCommerceStatusCodeProvider codeProvider = createStatusCodeProvider(TypedStore);
+            IBigCommerceStatusCodeProvider codeProvider = createStatusCodeProvider(TypedStore);
 
             // create a menu item for each status
             ICollection<string> statusCodeNames = GetOnlineStatusChoices();
