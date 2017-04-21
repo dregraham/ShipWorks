@@ -8,6 +8,7 @@ using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
+using Interapptive.Shared;
 
 namespace ShipWorks.SingleScan
 {
@@ -49,6 +50,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
             if (!autoPrintSettings.IsAutoWeighEnabled())
