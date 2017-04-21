@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Communication
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
+                DateTime? dateTime = result as DateTime?;
 
                 log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
 

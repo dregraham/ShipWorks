@@ -169,6 +169,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\DownloadStartingPointTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersistenceStrategyTest.cs" />

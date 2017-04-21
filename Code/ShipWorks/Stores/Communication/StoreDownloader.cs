@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// The progress reporting interface used to report progress and check cancelation.
+        /// The progress reporting interface used to report progress and check cancellation.
         /// </summary>
         public IProgressReporter Progress
         {
@@ -351,7 +351,7 @@ namespace ShipWorks.Stores.Communication
             OrderItemEntity item = storeType.CreateOrderItemInstance();
             item.Order = order;
 
-            // Downloaded items are assumed not manua
+            // Downloaded items are assumed not manual
             item.IsManual = false;
 
             // Initialize the rest of the fields
