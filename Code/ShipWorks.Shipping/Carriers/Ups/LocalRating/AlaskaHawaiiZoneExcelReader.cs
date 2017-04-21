@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             // The worksheet has two sections of postal codes, find the second header "Postal Codes:" because it divides the two sections
             // to use as an anchor 
-            IRange secondPostalCodeRow = worksheet.Rows.FirstOrDefault(s => s.Cells[0].Text == "Postal Codes:" && s.Row > SecondPostalCodesRow);
+            IRange secondPostalCodeRow = worksheet.Rows.FirstOrDefault(s => s.Cells[0].Value == "Postal Codes:" && s.Row > SecondPostalCodesRow);
             if (secondPostalCodeRow == null)
             {
                 throw new UpsLocalRatingException($"Missing postal codes from {worksheet.Name}.");
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 foreach (IRange cell in row.Cells)
                 {
-                    string zip = cell.Text ?? string.Empty;
+                    string zip = cell.Value ?? string.Empty;
 
                     if (fiveDigitZipRegex.IsMatch(zip))
                     {
@@ -146,9 +146,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static Dictionary<UpsServiceType, string> GetFirstZoneServiceDictinary(IWorksheet worksheet)
         {
-            string groundZone = worksheet.Range["B1"].Text;
-            string nextDayAirZone = worksheet.Range["B2"].Text;
-            string twoDayAirZone = worksheet.Range["B3"].Text;
+            string groundZone = worksheet.Range["B1"].Value;
+            string nextDayAirZone = worksheet.Range["B2"].Value;
+            string twoDayAirZone = worksheet.Range["B3"].Value;
 
             ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, "first", worksheet.Name);
 
@@ -160,9 +160,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static Dictionary<UpsServiceType, string> GetSecondZoneServiceDictinary(IWorksheet worksheet)
         {
-            string groundZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Text == "Ground" && r.Row > SecondPostalCodesRow)?.Cells[1].Text;
-            string nextDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Text == "Next Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Text;
-            string twoDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Text == "Second Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Text;
+            string groundZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Ground" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
+            string nextDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Next Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
+            string twoDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Second Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
 
             ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, "second", worksheet.Name);
 
