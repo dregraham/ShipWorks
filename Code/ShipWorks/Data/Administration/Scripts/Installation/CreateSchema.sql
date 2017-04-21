@@ -5932,7 +5932,7 @@ GO
 CREATE TABLE [dbo].[UpsPackageRate](
 	[UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar(3)] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
 	[WeightInPounds][int] NOT NULL,
 	[Service][int] NOT NULL,
 	[Rate][Money] NOT NULL)
@@ -5951,7 +5951,7 @@ GO
 CREATE TABLE [dbo].[UpsLetterRate](
 	[UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar(3)] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
 	[Service][int] NOT NULL,
 	[Rate][Money] NOT NULL)
 GO
@@ -5969,7 +5969,7 @@ GO
 CREATE TABLE [dbo].[UpsPricePerPound](
 	[UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar(3)] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
 	[Service][int] NOT NULL,
 	[Rate][Money] NOT NULL)
 GO

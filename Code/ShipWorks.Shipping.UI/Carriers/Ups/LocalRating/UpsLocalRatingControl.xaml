@@ -32,49 +32,59 @@
         </TextBlock>
         <StackPanel Grid.Row="2" Margin="41 0 0 10">
             <TextBlock>
-                1. Download the sample
-                <Hyperlink Command="{Binding DownloadSampleFileCommand}">rate file</Hyperlink>.
+                1. Download the
+                <Hyperlink Command="{Binding DownloadSampleRateFileCommand}">sample rate file</Hyperlink>.
             </TextBlock>
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Upload the modified rate file.</TextBlock>
-            <TextBlock Text="{Binding ZoneStepText}">
-                
-                <Hyperlink Command="{Binding DownloadSampleFileCommand}">zone file</Hyperlink>.
+            <TextBlock>4. Download the
+                <Hyperlink Command="{Binding DownloadSampleZoneFileCommand}">sample zone file</Hyperlink>.
             </TextBlock>
             <TextBlock>5. Modify the file to specify zones for your origin addresses.</TextBlock>
             <TextBlock>6. Upload the modified zone file.</TextBlock>
         </StackPanel>
-        <TextBlock Grid.Row="3"
-                   VerticalAlignment="Center"
-                   Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3"
-                Width="120"
-                Height="21"
-                Margin="0 0 0 10"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
-                Command="{Binding UploadRatingFileCommand}">
-            Upload Rate File...
-        </Button>
 
-        <TextBlock Grid.Row="4"
-                   VerticalAlignment="Center"
-                   Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="4"
-                Width="120"
-                Height="21"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
-                Command="{Binding UploadZoneFileCommand}">
-            Upload Zone File...
-        </Button>
+        <DockPanel Grid.Row="3"
+                    Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" 
+                       Visibility="{Binding RateFileExists, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Hyperlink Command="{Binding DownloadExistingRateFileCommand}">
+                    Last Upload
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center"
+                Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadRatingFileCommand}">
+                Upload Rate File...
+            </Button>
+        </DockPanel>
 
+        <DockPanel Grid.Row="4"
+                   Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" 
+                       Visibility="{Binding ZoneFileExists, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Hyperlink Command="{Binding DownloadExistingZoneFileCommand}">
+                    Last Upload
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadZoneFileCommand}">
+                Upload Zone File...
+            </Button>
+        </DockPanel>
         <ui:WaitSpinner Grid.Row="5" Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
-            Uploading rate table
-        </ui:WaitSpinner>
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top" Content="{Binding SpinnerText}"/>
         <TextBlock Grid.Row="5" Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
             <TextBlock.Style>

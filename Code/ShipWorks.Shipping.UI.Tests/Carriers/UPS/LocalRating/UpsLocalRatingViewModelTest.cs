@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var dialog = MockSaveDialog(DialogResult.Cancel);
             var testObject = mock.Create<UpsLocalRatingViewModel>();
 
-            testObject.DownloadSampleFileCommand.Execute(null);
+            testObject.DownloadSampleRateFileCommand.Execute(null);
 
             dialog.Verify(d => d.CreateFileStream(), Times.Never);
             dialog.Verify(d=>d.ShowFile(), Times.Never);
@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
                 var testObject = mock.Create<UpsLocalRatingViewModel>();
 
-                testObject.DownloadSampleFileCommand.Execute(null);
+                testObject.DownloadSampleRateFileCommand.Execute(null);
 
                 mockSaveDialog.Verify(d=>d.ShowFile(), Times.Once);
             }
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
                     var testObject = mock.Create<UpsLocalRatingViewModel>();
 
-                    testObject.DownloadSampleFileCommand.Execute(null);
+                    testObject.DownloadSampleRateFileCommand.Execute(null);
                 }
 
                 // Convert the result stream to a string

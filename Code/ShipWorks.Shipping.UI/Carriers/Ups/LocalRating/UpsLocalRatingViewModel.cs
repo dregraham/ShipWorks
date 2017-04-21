@@ -26,17 +26,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
         public const string SampleRatesFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         public const string SampleZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZonesSample.xlsx";
-
+        public const string ExistingRateFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
+        public const string ExistingZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRatesSample.xlsx";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultFileName = "UpsLocalRatesSample.xlsx";
         private const string WarningMessage =
             "Local rates is an experimental feature and for rating purposes only. It does not affect billing. Please ensure the rates uploaded match the rates on your UPS account.\n\n" +
             "Note: All previously uploaded rates will be overwritten with the new rates.";
-
-        private const string SampleZoneFileText = "4. Download the sample";
-        private const string ExistingZoneFileText = "4. Download your current";
-
+        
         private readonly IUpsLocalRateTable rateTable;
         private readonly Func<ISaveFileDialog> saveFileDialogFactory;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
@@ -51,10 +49,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private bool errorUploading;
         private bool isUploading;
         private string zoneStatusMessage;
-        private string zoneStepText = SampleZoneFileText;
+        private string spinnerText;
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
+        private bool rateFileExists;
+        private bool zoneFileExists;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
@@ -64,7 +65,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             this.rateTable = rateTable;
             this.saveFileDialogFactory = saveFileDialogFactory;
             this.openFileDialogFactory = openFileDialogFactory;
-            DownloadSampleFileCommand = new RelayCommand(DownloadSampleFile);
+            DownloadSampleRateFileCommand = new RelayCommand(DownloadSampleRateFile);
+            DownloadSampleZoneFileCommand = new RelayCommand(DownloadSampleZoneFile);
+            DownloadExistingRateFileCommand = new RelayCommand(DownloadExistingRateFile);
+            DownloadExistingZoneFileCommand = new RelayCommand(DownloadExistingZoneFile);
             UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
             UploadZoneFileCommand = new RelayCommand(CallUploadZoneFile);
 
@@ -75,13 +79,31 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Command to download the sample file
+        /// Command to download the sample rate file
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand DownloadSampleFileCommand { get; }
+        public ICommand DownloadSampleRateFileCommand { get; }
 
         /// <summary>
-        /// Gets the upload rating file.
+        /// Command to download the sample zone file
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DownloadSampleZoneFileCommand { get; }
+
+        /// <summary>
+        /// Command to download the existing rate file
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DownloadExistingRateFileCommand { get; }
+
+        /// <summary>
+        /// Command to download the existing zone file
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DownloadExistingZoneFileCommand { get; }
+
+        /// <summary>
+        /// Command to upload the modified rate file
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand UploadRatingFileCommand { get; }
@@ -133,16 +155,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Gets or sets the error message.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ZoneStepText
-        {
-            get { return zoneStepText; }
-            set { handler.Set(nameof(ZoneStepText), ref zoneStepText, value); }
-        }
-
-        /// <summary>
         /// Whether or not we are in the process of validating the rates.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -160,6 +172,36 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             get { return errorUploading; }
             set { handler.Set(nameof(ErrorUploading), ref errorUploading, value); }
+        }
+
+        /// <summary>
+        /// Text for spinner to display
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string SpinnerText
+        {
+            get { return spinnerText; }
+            set { handler.Set(nameof(SpinnerText), ref spinnerText, value); }
+        }
+
+        /// <summary>
+        /// Text for link for downloading existing rate file
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool RateFileExists
+        {
+            get { return rateFileExists; }
+            set { handler.Set(nameof(RateFileExists), ref rateFileExists, value); }
+        }
+
+        /// <summary>
+        /// Text for link for downloading existing zone file
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ZoneFileExists
+        {
+            get { return zoneFileExists; }
+            set { handler.Set(nameof(ZoneFileExists), ref zoneFileExists, value); }
         }
 
         /// <summary>
@@ -198,7 +240,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
             if (IsUploading)
             {
-                messageHelper.ShowError("Please wait until the rate table has finished uploading before closing the UPS account window");
+                messageHelper.ShowError("Please wait until the current action has finished before closing the UPS account window");
                 return false;
             }
 
@@ -206,9 +248,42 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Downloads the sample file.
+        /// Downloads the sample rate file.
         /// </summary>
-        private void DownloadSampleFile()
+        private void DownloadSampleRateFile()
+        {
+            DownloadFile(SampleRateFileResourceName);
+        }
+
+        /// <summary>
+        /// Downloads the sample zone file.
+        /// </summary>
+        private void DownloadSampleZoneFile()
+        {
+            DownloadFile(SampleZoneFileResourceName);
+        }
+
+        /// <summary>
+        /// Downloads the existing rate file.
+        /// </summary>
+        private void DownloadExistingRateFile()
+        {
+            DownloadFile(ExistingRateFileResourceName);
+        }
+
+        /// <summary>
+        /// Downloads the existing zone file.
+        /// </summary>
+        private void DownloadExistingZoneFile()
+        {
+            DownloadFile(ExistingZoneFileResourceName);
+        }
+
+        /// <summary>
+        /// Downloads the given file
+        /// </summary>
+        /// <param name="resourceName">Resource name for the file</param>
+        private void DownloadFile(string resourceName)
         {
             ISaveFileDialog fileDialog = saveFileDialogFactory();
             fileDialog.DefaultExt = Extension;
@@ -222,7 +297,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
             try
             {
-                SaveFile(fileDialog);
+                SaveFile(fileDialog, resourceName);
 
                 fileDialog.ShowFile();
             }
@@ -236,10 +311,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// Saves the file.
         /// </summary>
         /// <param name="fileDialog">The file dialog.</param>
-        private void SaveFile(ISaveFileDialog fileDialog)
+        /// <param name="resourceName">Resource name for the file</param>
+        private void SaveFile(ISaveFileDialog fileDialog, string resourceName)
         {
             Assembly shippingAssembly = Assembly.GetAssembly(GetType());
-            using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(SampleRatesFileResourceName))
+            using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(resourceName))
             {
                 using (Stream selectedFileStream = fileDialog.CreateFileStream())
                 {
@@ -277,6 +353,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 {
                     ErrorUploading = false;
                     UploadMessage = string.Empty;
+                    SpinnerText = "Uploading rates";
                     IsUploading = true;
                     isBusy(true);
 
@@ -336,6 +413,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 {
                     ErrorUploading = false;
                     UploadMessage = string.Empty;
+                    SpinnerText = "Uploading zones";
                     IsUploading = true;
                     isBusy(true);
 
@@ -373,15 +451,27 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         private void UpdateMessages()
         {
-            RateStatusMessage = upsAccount.UpsRateTableID == null ?
-                "There is no rate table associated with the selected account" :
-                $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}";
+            if (rateTable.RateUploadDate.HasValue)
+            {
+                RateFileExists = true;
+                RateStatusMessage = $": {rateTable.RateUploadDate.Value.ToLocalTime():g}";
+            }
+            else
+            {
+                RateFileExists = false;
+                RateStatusMessage = "Rates have not been uploaded for this account";
+            }
 
-            ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ?
-                $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" :
-                "UPS zones have not been uploaded";
-            
-            ZoneStepText = rateTable.ZoneUploadDate.HasValue ? ExistingZoneFileText : SampleZoneFileText;
+            if (rateTable.ZoneUploadDate.HasValue)
+            {
+                ZoneFileExists = true;
+                ZoneStatusMessage = $": {rateTable.ZoneUploadDate.Value.ToLocalTime():g}";
+            }
+            else
+            {
+                ZoneFileExists = false;
+                ZoneStatusMessage = "Zones have not been uploaded";
+            }
         }
     }
 }
