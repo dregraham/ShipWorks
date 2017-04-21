@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -203,6 +204,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                         excelReader.Read(workbook.Worksheets, this);
                     }
                 }
+
+                zoneFileContent = stream.ToArray();
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {

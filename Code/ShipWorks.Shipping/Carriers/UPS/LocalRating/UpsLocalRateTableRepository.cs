@@ -163,7 +163,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
+                    // save all the zones, but don't refetch all the zones.
                     adapter.SaveEntity(zoneFile, false, true);
+
+                    // refetch the zone table only, not all the zones
+                    adapter.FetchEntity(zoneFile);
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
