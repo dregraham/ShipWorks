@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
 
-            Assert.Equal("There is no rate table associated with the selected account", testObject.RateStatusMessage);
+            Assert.Equal("Rates have not been uploaded for this account", testObject.RateStatusMessage);
         }
 
         [Fact]
