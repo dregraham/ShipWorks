@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     {
         private readonly static List<RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>> quotas = new List<RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>>();
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClientRequestThrottle));
+        private readonly ILogEntryFactory logEntryFactory;
 
         /// <summary>
         /// Initialize throttling definitions
@@ -45,9 +46,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceWebClientRequestThrottle() :
+        public BigCommerceWebClientRequestThrottle(ILogEntryFactory logEntryFactory) :
             base("BigCommerce", log)
         {
+            this.logEntryFactory = logEntryFactory;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             requestThrottleParams.RetryInterval = definition.RetryInterval;
 
             // Get a logger for this request, serialize the JSON request, and log it.
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.BigCommerce, EnumHelper.GetDescription(requestThrottleParams.ApiCall));
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.BigCommerce, EnumHelper.GetDescription(requestThrottleParams.ApiCall), LogActionType.Other);
             string requestText = JsonConvert.SerializeObject((TWebClientRequestType)requestThrottleParams.Request);
             logger.LogRequest(requestText, "txt");
 

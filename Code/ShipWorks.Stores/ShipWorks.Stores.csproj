@@ -170,6 +170,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAuthenticationPersistenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />

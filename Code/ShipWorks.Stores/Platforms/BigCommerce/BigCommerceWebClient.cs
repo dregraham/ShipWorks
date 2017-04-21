@@ -6,12 +6,14 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
@@ -25,13 +27,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [Component]
     public class BigCommerceWebClient : IBigCommerceWebClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
-        List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
-        readonly IBigCommerceStoreEntity store;
-        readonly static BigCommerceWebClientRequestThrottle throttler = new BigCommerceWebClientRequestThrottle();
-        readonly List<HttpStatusCode> successHttpStatusCodes;
-        RestClient apiClient;
-        private readonly IBigCommerceAuthenticatorFactory authenticatorFactory;
+        private static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceWebClient));
+        private List<BigCommerceOrderStatus> bigCommerceOrderStatuses;
+        private readonly IBigCommerceStoreEntity store;
+        private readonly BigCommerceWebClientRequestThrottle throttler;
+        private readonly List<HttpStatusCode> successHttpStatusCodes;
+        private readonly IBigCommerceRestClientFactory restClientFactory;
 
         private const string storeSettingMissingErrorMessage = "The BigCommerce {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
 
@@ -39,9 +40,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        public BigCommerceWebClient(IBigCommerceStoreEntity store, IBigCommerceAuthenticatorFactory authenticatorFactory)
+        public BigCommerceWebClient(IBigCommerceStoreEntity store, IBigCommerceRestClientFactory restClientFactory, ILogEntryFactory logEntryFactory)
         {
-            this.authenticatorFactory = authenticatorFactory;
+            this.throttler = new BigCommerceWebClientRequestThrottle(logEntryFactory);
+            this.restClientFactory = restClientFactory;
 
             ValidateApiAccessData(store);
 
@@ -70,13 +72,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         private static void ValidateApiAccessData(IBigCommerceStoreEntity store)
         {
+            if (string.IsNullOrWhiteSpace(store?.ApiUrl))
+            {
+                throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Path"));
+            }
+
             if (store.BigCommerceAuthentication == BigCommerceAuthenticationType.Basic)
             {
-                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
-                {
-                    throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Path"));
-                }
-
                 if (string.IsNullOrWhiteSpace(store?.ApiUserName))
                 {
                     throw new BigCommerceException(string.Format(storeSettingMissingErrorMessage, "Store API Username"));
@@ -100,22 +102,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 }
             }
         }
-
-        /// <summary>
-        /// Gets the RestClient used to contact BigCommerce
-        /// </summary>
-        /// <exception cref="BigCommerceException" />
-        private RestClient CreateApiClient()
-        {
-            if (apiClient == null)
-            {
-                apiClient = new RestClient(store.ApiUrl);
-                apiClient.Authenticator = authenticatorFactory.Create(store);
-            }
-
-            return apiClient;
-        }
-
+        
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
@@ -199,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.UpdateOrderStatus, restRequest, ProgressReporter);
 
                 restResponse =
-                    throttler.ExecuteRequest<RestRequest, RestResponse>(requestThrottleArgs, MakeRequest<RestRequest, RestResponse>);
+                    throttler.ExecuteRequest<IRestRequest, IRestResponse>(requestThrottleArgs, MakeRequest<IRestRequest, RestResponse>);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -303,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             try
             {
                 // Make a call to the api
-                IRestResponse restResponse = CreateApiClient().Execute(request);
+                IRestResponse restResponse = restClientFactory.Create(store).Execute(request);
 
                 // Serialize the response and log it
                 log.Error(restResponse.Content);
