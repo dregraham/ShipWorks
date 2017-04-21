@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
 
-            Assert.Equal("Rates have not been uploaded for this account", testObject.RateStatusMessage);
+            Assert.Equal(UpsLocalRatingViewModel.NoRatesUploadedMessage, testObject.RateStatusMessage);
         }
 
         [Fact]
@@ -78,14 +78,14 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void Save_CorrectlySetsLocalRatingEnabled_WhenRateTableIsUploaded(bool localRatingEnabled)
+        public void Save_CorrectlySetsLocalRatingEnabled_WhenRateTableAndZonesAreUploaded(bool localRatingEnabled)
         {
             var upsAccount = new UpsAccountEntity();
             var testObject = mock.Create<UpsLocalRatingViewModel>();
             upsAccount.UpsRateTable = new UpsRateTableEntity(10);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
-
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
             testObject.Load(upsAccount, b=> { });
             testObject.LocalRatingEnabled = localRatingEnabled;
 

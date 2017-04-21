@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         public const string SampleZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZonesSample.xlsx";
         public const string ExistingRateFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRates.xlsx";
         public const string ExistingZoneFileResourceName = "ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsZones.xlsx";
+        public const string NoRatesUploadedMessage = "Rates have not been uploaded for this account";
+        public const string NoZonesUploadedMessage = "Zones have not been uploaded";
         private const string Extension = ".xlsx";
         private const string Filter = "Excel File (*.xlsx)|*.xlsx";
         private const string DefaultRateFileName = "UpsLocalRatesSample.xlsx";
@@ -35,7 +37,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private const string WarningMessage =
             "Local rates is an experimental feature and for rating purposes only. It does not affect billing. Please ensure the rates uploaded match the rates on your UPS account.\n\n" +
             "Note: All previously uploaded rates will be overwritten with the new rates.";
-        
+
         private readonly IUpsLocalRateTable rateTable;
         private readonly Func<ISaveFileDialog> saveFileDialogFactory;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
@@ -54,8 +56,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
-
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
@@ -198,6 +199,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
             if (LocalRatingEnabled && upsAccount.UpsRateTableID == null)
             {
+                ErrorUploading = true;
                 UploadMessage = "Please upload your rate table to enable local rating";
                 upsAccount.LocalRatingEnabled = false;
                 return false;
@@ -205,6 +207,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
             if (LocalRatingEnabled && !rateTable.ZoneUploadDate.HasValue)
             {
+                ErrorUploading = true;
                 UploadMessage = "Please upload your zones to enable local rating";
                 upsAccount.LocalRatingEnabled = false;
                 return false;
@@ -410,11 +413,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             RateStatusMessage = rateTable.RateUploadDate.HasValue ?
                 $"Last Upload: {rateTable.RateUploadDate.Value.ToLocalTime():g}" :
-                "Rates have not been uploaded for this account";
+                NoRatesUploadedMessage;
 
             ZoneStatusMessage = rateTable.ZoneUploadDate.HasValue ? 
-                $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" 
-                : "Zones have not been uploaded";
+                $"Last Upload: {rateTable.ZoneUploadDate.Value.ToLocalTime():g}" :
+                NoZonesUploadedMessage;
         }
     }
 }
