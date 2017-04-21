@@ -184,17 +184,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ValidateZones(string ground, string nextDayAir, string twoDayAir, string section, string worksheetName)
         {
-            if (ground == null)
+            if (string.IsNullOrWhiteSpace(ground))
             {
                 HandleMissingZone("Ground", section, worksheetName);
             }
 
-            if (nextDayAir == null)
+            if (string.IsNullOrWhiteSpace(nextDayAir))
             {
                 HandleMissingZone("Next Day Air", section, worksheetName);
             }
 
-            if (twoDayAir == null)
+            if (string.IsNullOrWhiteSpace(twoDayAir))
             {
                 HandleMissingZone("Second Day Air", section, worksheetName);
             }

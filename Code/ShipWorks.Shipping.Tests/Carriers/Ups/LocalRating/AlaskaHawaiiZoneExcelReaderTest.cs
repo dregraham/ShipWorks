@@ -24,8 +24,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
         }
 
-
-
         [Fact]
         public void Read_ReplacesZonesOnUpsLocalRateTable()
         {
@@ -48,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Read_ThrowsUpsRatingException_WhenWorksheetsSectondSEctionIsMissingGroundZone()
+        public void Read_ThrowsUpsRatingException_WhenWorksheetsSecondSectionIsMissingGroundZone()
         {
             IWorkbook workbook = GetDefaultWorkbook();
 
