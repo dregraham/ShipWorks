@@ -56,9 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                 switch ((GenericFileSourceTypeCode) generic.FileSource)
                 {
                     case GenericFileSourceTypeCode.Disk:
-                        // truncate the disk folder to 111 characters because tango limits the length to 150 char total
-                        // 111 characters plus the database guid, parenthesis  and space equals 150 characters
-                        return $"{generic.DiskFolder.Substring(0, 111)} ({SystemData.Fetch().DatabaseID:D})";
+                        return $"{TruncateFolderPath(generic.DiskFolder)} ({SystemData.Fetch().DatabaseID:D})";
 
                     case GenericFileSourceTypeCode.FTP:
                         return string.Format("{0}{1}", FtpAccountManager.GetAccount(generic.FtpAccountID.Value).Host, generic.FtpFolder);
@@ -70,6 +68,19 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                         throw new InvalidOperationException("Invalid generic file source type: " + generic.FileSource);
                 }
             }
+        }
+
+        /// <summary>
+        /// truncate the folder path to 111 characters because tango limits the length to 150 char total
+        /// 111 characters plus the database guid, parenthesis and space equals 150 characters
+        /// </summary>
+        private static string TruncateFolderPath(string path)
+        {
+            // find the start position that will give us the last 111 characters of the string
+            // if the string is less than 111 start at the begining
+            int start = path.Length - 111 > 0 ? path.Length - 111 : 0;
+
+            return path.Substring(start);
         }
 
         /// <summary>
