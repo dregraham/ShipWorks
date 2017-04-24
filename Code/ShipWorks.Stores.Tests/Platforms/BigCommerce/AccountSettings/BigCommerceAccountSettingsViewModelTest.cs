@@ -283,7 +283,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             var oauthStrategy = builder.For(BigCommerceAuthenticationType.Oauth);
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
-            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = "http://www.foo.com" });
+            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = "https://api.bigcommerce.com/stores/vplh1lw/v3/" });
 
             testObject.MigrateToOauth.Execute(null);
             testObject.SaveToEntity(new BigCommerceStoreEntity());
