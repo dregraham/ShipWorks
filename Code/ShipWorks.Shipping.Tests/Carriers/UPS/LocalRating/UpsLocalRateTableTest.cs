@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Save_SetsUploadDate()
+        public void SaveRates_SetsUploadDate()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             mock.Mock<IUpsLocalRateTableRepository>();
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Save_DelegatesToUpsLocalRateTableRepo()
+        public void SaveRates_DelegatesToUpsLocalRateTableRepo()
         {
             AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
@@ -51,6 +51,51 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.SaveRates(upsAccount);
             rateTableRepo.Verify(r => r.Save(It.IsAny<UpsRateTableEntity>(), upsAccount), Times.Once);
+        }
+        
+        [Fact]
+        public void SaveRates_SavesNewRateTable()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
+            rateTableRepo.Setup(r => r.Get(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
+
+            UpsAccountEntity upsAccount = new UpsAccountEntity();
+
+            var testObject = CreatePopulatedRateTable(mock);
+
+            testObject.Load(upsAccount);
+            testObject.SaveRates(upsAccount);
+            rateTableRepo
+                .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
+        }
+        
+        [Fact]
+        public void SaveZones_SetsUploadDate()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Mock<IUpsLocalRateTableRepository>();
+
+            var testObject = CreatePopulatedRateTable(mock);
+            testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity>{new UpsLocalRatingDeliveryAreaSurchargeEntity()});
+            testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity>{new UpsLocalRatingZoneEntity()});
+            testObject.SaveZones();
+            
+            Assert.NotEqual(new DateTime(), testObject.ZoneUploadDate);
+        }
+
+        [Fact]
+        public void SaveZones_DelegatesToUpsLocalRateTableRepo()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
+
+            var testObject = CreatePopulatedRateTable(mock);
+            testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity> { new UpsLocalRatingDeliveryAreaSurchargeEntity() });
+            testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity> { new UpsLocalRatingZoneEntity() });
+
+            testObject.SaveZones();
+            rateTableRepo.Verify(r => r.Save(It.IsAny<UpsLocalRatingZoneFileEntity>()), Times.Once);
         }
 
         [Fact]
@@ -70,23 +115,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                                 r => (r.Single() as ReadOnlyUpsPricePerPoundEntity).UpsPricePerPoundID == 4)),
                         Times.Once);
             }
-        }
-
-        [Fact]
-        public void Save_SavesNewRateTable()
-        {
-            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
-            rateTableRepo.Setup(r => r.Get(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
-
-            UpsAccountEntity upsAccount = new UpsAccountEntity();
-
-            var testObject = CreatePopulatedRateTable(mock);
-
-            testObject.Load(upsAccount);
-            testObject.SaveRates(upsAccount);
-            rateTableRepo
-                .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
         }
 
         private UpsLocalRateTable CreatePopulatedRateTable(AutoMock mock)
