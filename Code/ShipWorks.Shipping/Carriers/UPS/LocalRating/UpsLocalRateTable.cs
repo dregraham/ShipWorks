@@ -154,6 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             zoneFile.FileContent = zoneFileContent;
 
             localRateTableRepository.Save(zoneFile);
+            localRateTableRepository.CleanupZones();
 
             ZoneUploadDate = zoneFile.UploadDate;
         }

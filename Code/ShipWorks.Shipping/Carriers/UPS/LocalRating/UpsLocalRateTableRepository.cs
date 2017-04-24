@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -151,6 +150,31 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
             {
                 throw new UpsLocalRatingException($"Error retrieving zones:\r\n\r\n{ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Removes Zone Files that are not the newest zone file
+        /// </summary>
+        public void CleanupZones()
+        {
+            try
+            {
+                ISortExpression sort = new SortExpression(new SortClause(UpsLocalRatingZoneFileFields.UploadDate, null, SortOperator.Descending));
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    UpsLocalRatingZoneFileCollection zoneFiles = new UpsLocalRatingZoneFileCollection();
+                    adapter.FetchEntityCollection(zoneFiles, null, 0, sort);
+                    if (zoneFiles.Count > 1)
+                    {
+                        zoneFiles.RemoveAt(0);
+                        adapter.DeleteEntityCollection(zoneFiles);
+                    }
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error cleaning up old zones:\r\n\r\n{ex.Message}", ex);
             }
         }
 

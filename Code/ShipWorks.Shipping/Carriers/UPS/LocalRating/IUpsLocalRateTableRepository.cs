@@ -31,5 +31,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Gets the UpsRateTable for the given account
         /// </summary>
         UpsRateTableEntity Get(UpsAccountEntity accountEntity);
+
+        /// <summary>
+        /// Removes Zone Files that are not the newest zone file
+        /// </summary>
+        void CleanupZones();
     }
 }
