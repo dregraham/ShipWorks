@@ -56,6 +56,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                 switch ((GenericFileSourceTypeCode) generic.FileSource)
                 {
                     case GenericFileSourceTypeCode.Disk:
+                        // truncate the disk folder to 111 characters because tango limits the length to 150 char total
+                        // 111 characters plus the database guid, parenthesis  and space equals 150 characters
                         return $"{generic.DiskFolder.Substring(0, 111)} ({SystemData.Fetch().DatabaseID:D})";
 
                     case GenericFileSourceTypeCode.FTP:
