@@ -77,13 +77,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             // Get all of the zone/service combos from the first section
-            Dictionary<UpsServiceType, string> firstZoneDictionary = GetFirstZoneServiceDictinary(worksheet);
+            Dictionary<UpsServiceType, string> firstZoneDictionary = GetFirstZoneServiceDictionary(worksheet);
 
             // Create and add zone entities for all of the zip codes in the first section
             AddToZones(firstZoneDictionary, GetPostalCodes(worksheet.Rows.Where(r => r.Row > SecondPostalCodesRow && r.Row < secondPostalCodeRow.Row)), zones);
             
             // Get all of the zone/service combos for the second section
-            Dictionary<UpsServiceType, string> secondZoneDictionary = GetSecondZoneServiceDictinary(worksheet);
+            Dictionary<UpsServiceType, string> secondZoneDictionary = GetSecondZoneServiceDictionary(worksheet);
 
             // Create and add zone entities for all of the zip codes in the second section
             AddToZones(secondZoneDictionary, GetPostalCodes(worksheet.Rows.Where(r => r.Row > secondPostalCodeRow.Row)), zones);
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Build a dictionary of UpsServiceType/Zone from the worksheet
         /// </summary>
-        private static Dictionary<UpsServiceType, string> GetFirstZoneServiceDictinary(IWorksheet worksheet)
+        private static Dictionary<UpsServiceType, string> GetFirstZoneServiceDictionary(IWorksheet worksheet)
         {
             string groundZone = worksheet.Range["B1"].Value;
             string nextDayAirZone = worksheet.Range["B2"].Value;
@@ -152,13 +152,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, "first", worksheet.Name);
 
-            return GetServiceDictinary(groundZone, nextDayAirZone, twoDayAirZone);
+            return GetServiceDictionary(groundZone, nextDayAirZone, twoDayAirZone);
         }
 
         /// <summary>
         /// Build a dictionary of UpsServiceType/Zone from the worksheet
         /// </summary>
-        private static Dictionary<UpsServiceType, string> GetSecondZoneServiceDictinary(IWorksheet worksheet)
+        private static Dictionary<UpsServiceType, string> GetSecondZoneServiceDictionary(IWorksheet worksheet)
         {
             string groundZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Ground" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
             string nextDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Next Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
@@ -166,10 +166,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, "second", worksheet.Name);
 
-            return GetServiceDictinary(groundZone, nextDayAirZone, twoDayAirZone);
+            return GetServiceDictionary(groundZone, nextDayAirZone, twoDayAirZone);
         }
 
-        private static Dictionary<UpsServiceType, string> GetServiceDictinary(string ground, string nextDayAir, string twoDayAir)
+        /// <summary>
+        /// Build a dictionary of UpsServiceType and passed in strings.
+        /// </summary>
+        private static Dictionary<UpsServiceType, string> GetServiceDictionary(string ground, string nextDayAir, string twoDayAir)
         {
             return new Dictionary<UpsServiceType, string>
             {

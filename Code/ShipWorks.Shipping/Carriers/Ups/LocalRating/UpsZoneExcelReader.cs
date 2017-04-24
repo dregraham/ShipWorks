@@ -128,12 +128,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Get the origin zip floor from the worksheet
+        /// Get the Destination Zip ceiling from the worksheet
         /// </summary>
         private static int GetDestinationZipCeiling(string value)
         {
             int result;
-            if (int.TryParse(value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3), out result))
+            if (int.TryParse($"{value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3)}99", out result))
             {
                 return result;
             }
@@ -143,12 +143,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
 
         /// <summary>
-        /// Get the origin zip ceiling from the worksheet
+        /// Get the Destination zip floor from the worksheet
         /// </summary>
         private static int GetDestinationZipFloor(string value)
         {
             int result;
-            if (int.TryParse(value.Substring(0, 3), out result))
+            if (int.TryParse($"{value.Substring(0, 3)}00", out result))
             {
                 return result;
             }
@@ -157,9 +157,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Get the origin zip floor from the worksheet
+        /// Get the origin zip ceiling from the worksheet
         /// </summary>
-        private static int GetOriginZipFloor(string value)
+        private static int GetOriginZipCeiling(string value)
         {
             int result;
             if (int.TryParse(value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 5), out result))
@@ -172,9 +172,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
 
         /// <summary>
-        /// Get the origin zip ceiling from the worksheet
+        /// Get the origin zip floor from the worksheet
         /// </summary>
-        private static int GetOriginZipCeiling(string value)
+        private static int GetOriginZipFloor(string value)
         {
             int result;
             if (int.TryParse(value.Substring(0, 5), out result))

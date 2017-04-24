@@ -71,7 +71,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void Read_ThrowsUpsRatingException_WhenWorksheetsIsMissingHI()
         {
-
             IWorkbook workbook = GetDefaultWorkbook();
 
             workbook.Worksheets.Remove("HI");

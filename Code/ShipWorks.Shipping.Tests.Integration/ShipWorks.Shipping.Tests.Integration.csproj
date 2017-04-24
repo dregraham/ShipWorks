@@ -170,9 +170,11 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
     <Compile Include="Carriers\CarrierAccountRepositoryRegistrationTest.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidatorTest.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentTypeTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="GlobalSuppressions.cs" />
