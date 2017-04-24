@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                 switch ((GenericFileSourceTypeCode) generic.FileSource)
                 {
                     case GenericFileSourceTypeCode.Disk:
-                        return string.Format("{0} ({1})", generic.DiskFolder, SystemData.Fetch().DatabaseID.ToString("D"));
+                        return $"{generic.DiskFolder.Substring(0, 111)} ({SystemData.Fetch().DatabaseID:D})";
 
                     case GenericFileSourceTypeCode.FTP:
                         return string.Format("{0}{1}", FtpAccountManager.GetAccount(generic.FtpAccountID.Value).Host, generic.FtpFolder);
