@@ -32,5 +32,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         /// Calls the upload rating file.
         /// </summary>
         public async Task CallUploadRatingFile() => await UploadRatingFile();
+
+
+        /// <summary>
+        /// Calls the upload rating file.
+        /// </summary>
+        public async Task CallUploadZoneFile() => await UploadZoneFile();
     }
 }

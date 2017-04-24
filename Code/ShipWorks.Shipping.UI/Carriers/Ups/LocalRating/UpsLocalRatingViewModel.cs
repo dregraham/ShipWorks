@@ -347,10 +347,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Uploads the rating File.
+        /// Uploads the zone file.
         /// </summary>
         /// <remarks>
-        /// The reason we don't call this directly is because we need to be able to test UploadRatingFile().
+        /// The reason we don't call this directly is because we need to be able to test UploadZoneFile().
         /// ICommand can't take a method that returns Task and we can't await a void method.
         /// </remarks>
         private async void CallUploadZoneFile()
@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Uploads the rating file.
+        /// Uploads the zone file.
         /// </summary>
         protected async Task UploadZoneFile()
         {
