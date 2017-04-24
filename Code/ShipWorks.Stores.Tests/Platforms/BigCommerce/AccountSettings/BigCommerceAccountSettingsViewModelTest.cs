@@ -127,24 +127,72 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Theory]
-        [InlineData("www.example.com")]
-        [InlineData("https://www.example.com")]
-        [InlineData(" www.example.com")]
-        [InlineData("www.example.com ")]
-        [InlineData(" www.example.com ")]
-        public void SaveToEntity_SetsStoreApi_WhenDataIsValid(string newUrl)
+        [InlineData("www.example.com", "https://www.example.com")]
+        [InlineData("https://www.example.com", "https://www.example.com")]
+        [InlineData(" www.example.com", "https://www.example.com")]
+        [InlineData("www.example.com ", "https://www.example.com")]
+        [InlineData(" www.example.com ", "https://www.example.com")]
+        [InlineData("https://api.bigcommerce.com/stores/vplh1lw/v3/", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData("https://store-vplh1lw.mybigcommerce.com/api/v2/", "https://store-vplh1lw.mybigcommerce.com/api/v2/")]
+        public void SaveToEntity_SetsStoreApi_WhenDataIsValidForBasic(string newUrl, string expectedUrl)
         {
             CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
 
             var store = new BigCommerceStoreEntity();
+            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Basic;
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
-            testObject.LoadStore(new BigCommerceStoreEntity());
+            testObject.LoadStore(store);
             testObject.ApiUrl = newUrl;
 
             testObject.SaveToEntity(store);
 
-            Assert.Equal("https://www.example.com", store.ApiUrl);
+            Assert.Equal(expectedUrl, store.ApiUrl);
+        }
+
+        [Theory]
+        [InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        public void SaveToEntity_SetsStoreApi_WhenDataIsValidForOauth(string newUrl, string expectedUrl)
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+
+            var store = new BigCommerceStoreEntity();
+            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            testObject.LoadStore(store);
+            testObject.ApiUrl = newUrl;
+
+            testObject.SaveToEntity(store);
+
+            Assert.Equal(expectedUrl, store.ApiUrl);
+        }
+
+        [Theory]
+        [InlineData("www.example.com", "www.example.com")]
+        [InlineData("https://www.example.com", "https://www.example.com")]
+        [InlineData(" www.example.com", " www.example.com")]
+        [InlineData("www.example.com ", "www.example.com ")]
+        [InlineData(" www.example.com ", " www.example.com ")]
+        public void SaveToEntity_SetsStoreApi_WhenDataIsNotValidForOauth(string newUrl, string expectedUrl)
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+
+            var store = new BigCommerceStoreEntity();
+            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+            testObject.LoadStore(store);
+            testObject.ApiUrl = newUrl;
+
+            testObject.SaveToEntity(store);
+
+            Assert.Equal(expectedUrl, testObject.ApiUrl);
         }
 
         [Theory]

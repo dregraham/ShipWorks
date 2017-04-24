@@ -199,18 +199,42 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Validate and format the API url
         /// </summary>
-        private static GenericResult<string> SaveApiUrlToStore(BigCommerceStoreEntity store, string url)
+        private GenericResult<string> SaveApiUrlToStore(BigCommerceStoreEntity store, string url)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
                 return GenericResult.FromError<string>("Please enter the API Path of your BigCommerce store.");
             }
-            string storeUrlToCheck = url.Trim();
+
+            // Trim and convert to v2 URL
+            string storeUrlToCheck = url.Trim().Replace("/v3", "/v2");
 
             // Check for the url scheme, and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
             {
                 storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
+            }
+
+            // OAuth requires a different URL than basic auth, so if we are migrating we need to convert the URL
+            if (AuthenticationType == BigCommerceAuthenticationType.Oauth &&
+                !storeUrlToCheck.Contains("api.bigcommerce.com", StringComparison.InvariantCultureIgnoreCase))
+            {
+                // Old style:  https://store-vplh1lw.mybigcommerce.com/api/v2/
+                // New style:  https://api.bigcommerce.com/stores/vplh1lw/v2/
+
+                // First find the BC store identifier
+                int start = storeUrlToCheck.IndexOf("store-", StringComparison.InvariantCultureIgnoreCase) + 6;
+                int end = storeUrlToCheck.IndexOf(".mybigcommerce.com", StringComparison.InvariantCultureIgnoreCase);
+
+                if (start < 0 || end < 0 || (end - start) <= 0)
+                {
+                    return GenericResult.FromError<string>("The specified API Path is not a valid address.");
+                }
+
+                string storeIdentifier = storeUrlToCheck.Substring(start, end - start);
+
+                // Now format it correctly
+                storeUrlToCheck = $"https://api.bigcommerce.com/stores/{storeIdentifier}/v2/";
             }
 
             // Now check the url to see if it's a valid address
