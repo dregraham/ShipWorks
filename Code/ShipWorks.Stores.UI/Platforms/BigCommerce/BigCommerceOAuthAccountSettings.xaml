@@ -47,11 +47,11 @@
 
         <TextBlock Grid.Row="2" TextAlignment="Right">Client ID:</TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding ClientID, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding OauthClientID, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="3" TextAlignment="Right">Access Token:</TextBlock>
         <TextBox Grid.Row="3" Grid.Column="1"
-                 Text="{Binding AccessToken, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding OauthToken, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="4"
                     Grid.Column="1"
