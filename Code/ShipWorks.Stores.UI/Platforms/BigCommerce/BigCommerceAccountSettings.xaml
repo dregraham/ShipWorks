@@ -22,14 +22,34 @@
             Visibility="{Binding AuthenticationType,
                 Converter={StaticResource VisibleWhenEqualToParameter},
                 ConverterParameter={x:Static int:BigCommerceAuthenticationType.Basic}}" />
-        <TextBlock Grid.Row="1"
-                   TextAlignment="Left"
-                   Margin="10, 0, 10, 10"
-            Visibility="{Binding AuthenticationType,
-                Converter={StaticResource VisibleWhenEqualToParameter},
-                ConverterParameter={x:Static int:BigCommerceAuthenticationType.Basic}}">
-            <Hyperlink Command="{Binding MigrateToOauth}">Migrate to OAuth...</Hyperlink>
-        </TextBlock>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal"
+                    Visibility="{Binding AuthenticationType,
+                    Converter={StaticResource VisibleWhenEqualToParameter},
+                    ConverterParameter={x:Static int:BigCommerceAuthenticationType.Basic}}">
+            <Button
+                    Width="150"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="10, 0, 0, 0"
+                    Command="{Binding MigrateToOauth}">Connect using OAuth</Button>
+            <Image Margin="7 0 0 0"
+                   Width="12"
+                   VerticalAlignment="Center"
+                   Source="/Shipworks.Core;component/Resources/InfoTip.png">
+                <Image.ToolTip>
+                    <ToolTip>
+                        <Label Content="While it is not required, BigCommerce recommends that all stores convert to the OAuth API." />
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+            <TextBlock TextAlignment="Left" VerticalAlignment="Center"
+                       Margin="6, 0, 0, 0">
+                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000101573-converting-bigcommerce-to-oauth-api" ui:Link.OpenInBrowser="true">More info...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        
         <local:BigCommerceOAuthAccountSettings Grid.Row="2"
             Visibility="{Binding AuthenticationType,
                 Converter={StaticResource VisibleWhenEqualToParameter},

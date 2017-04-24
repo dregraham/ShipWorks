@@ -66,6 +66,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             store.ApiToken = string.Empty;
             store.OauthClientId = viewModel.OauthClientID.Trim();
             store.OauthToken = viewModel.OauthToken.Trim();
+            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
 
             return GenericResult.FromSuccess(store);
         }

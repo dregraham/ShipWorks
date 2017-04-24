@@ -23,7 +23,7 @@
             <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="14, 7, 10, 10">
+    <Grid Margin="15, 7, 10, 10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -38,7 +38,7 @@
 
         <TextBlock Grid.ColumnSpan="2"
                    Padding="0, 0, 0, 6">
-            Enter your API Path, Client ID, and Access Token provided to you by BigCommerce.
+            Enter your BigCommerce-issued credentials.
         </TextBlock>
 
         <TextBlock Grid.Row="1" TextAlignment="Right">API Path:</TextBlock>
@@ -57,7 +57,7 @@
                     Grid.Column="1"
                     Margin="0 0 3 3">
             <Run>For help finding your API Path, Client ID or Access Token, </Run>
-            <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/155262-adding-a-bigcommerce-store-" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000101573-converting-bigcommerce-to-oauth-api" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>
