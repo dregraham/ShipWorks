@@ -25,6 +25,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public void Authenticate(IRestClient client, IRestRequest request)
         {
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Accept", "application/json");
             request.AddHeader("X-Auth-Client", store.OauthClientId);
             request.AddHeader("X-Auth-Token", store.OauthToken);
         }

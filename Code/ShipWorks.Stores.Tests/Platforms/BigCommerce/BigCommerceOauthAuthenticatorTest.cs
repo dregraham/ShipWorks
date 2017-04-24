@@ -27,9 +27,11 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             IAuthenticator authenticator = new BigCommerceOAuthAuthenticator(store);
             authenticator.Authenticate(client, request);
 
-            Assert.Equal(2, request.Parameters.Count);
+            Assert.Equal(4, request.Parameters.Count);
             Assert.Equal(store.OauthClientId, request.Parameters.FirstOrDefault(p => p.Name == "X-Auth-Client").Value);
             Assert.Equal(store.OauthToken, request.Parameters.FirstOrDefault(p => p.Name == "X-Auth-Token").Value);
+            Assert.Equal("application/json", request.Parameters.FirstOrDefault(p => p.Name == "Content-Type").Value);
+            Assert.Equal("application/json", request.Parameters.FirstOrDefault(p => p.Name == "Accept").Value);
         }
     }
 }
