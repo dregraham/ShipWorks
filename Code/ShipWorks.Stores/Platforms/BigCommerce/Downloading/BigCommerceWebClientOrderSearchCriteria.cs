@@ -24,69 +24,43 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             LastModifiedToDate = lastModifiedToDateTimeUtc;
             LastCreatedFromDate = lastCreatedFromDateTimeUtc;
             LastCreatedToDate = lastCreatedToDateTimeUtc;
+
+            Page = 1;
         }
 
         /// <summary>
         /// The type of order date search to perform
         /// </summary>
-        public BigCommerceWebClientOrderDateSearchType OrderDateSearchType
-        {
-            get;
-            set;
-        }
+        public BigCommerceWebClientOrderDateSearchType OrderDateSearchType { get; set; }
 
         /// <summary>
         /// The converted start date of the order modified date range
         /// </summary>
-        public DateTime LastModifiedFromDate
-        {
-            get;
-            set;
-        }
+        public DateTime LastModifiedFromDate { get; set; }
 
         /// <summary>
         /// The converted end date of the order modified date range
         /// </summary>
-        public DateTime LastModifiedToDate
-        {
-            get;
-            set;
-        }
+        public DateTime LastModifiedToDate { get; set; }
 
         /// <summary>
         /// The converted start date of the created date range
         /// </summary>
-        public DateTime LastCreatedFromDate
-        {
-            get;
-            set;
-        }
+        public DateTime LastCreatedFromDate { get; set; }
 
         /// <summary>
         /// The converted end date of the created date range
         /// </summary>
-        public DateTime LastCreatedToDate
-        {
-            get;
-            set;
-        }
+        public DateTime LastCreatedToDate { get; set; }
 
         /// <summary>
         /// The maximum number of results to return per page
         /// </summary>
-        public int PageSize
-        {
-            get;
-            set;
-        }
+        public int PageSize => BigCommerceConstants.OrdersPageSize;
 
         /// <summary>
         /// The page of results to return
         /// </summary>
-        public int Page
-        {
-            get;
-            set;
-        }
+        public int Page { get; set; }
     }
 }

@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 }
             }
         }
-        
+
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
@@ -828,11 +828,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate,
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow,
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
-                {
-                    PageSize = BigCommerceConstants.OrdersPageSize,
-                    Page = 1
-                };
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow);
 
                 GetOrderCount(orderSearchCriteria);
             }

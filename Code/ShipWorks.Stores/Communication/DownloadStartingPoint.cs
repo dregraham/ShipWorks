@@ -37,60 +37,35 @@ namespace ShipWorks.Stores.Communication
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to.
         /// </summary>
-        public DateTime? OnlineLastModified(IStoreEntity store)
-        {
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                object result = adapter.GetScalar(
-                    OrderFields.OnlineLastModified,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                DateTime? dateTime = result as DateTime?;
-
-                log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
-
-                // If we don't have a max, but do have a days-back policy, use the days back
-                if (dateTime == null && store.InitialDownloadDays != null)
-                {
-                    // Also add on 2 hours just to make sure we are in range
-                    dateTime = dateTimeProvider.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OnlineLastModified) adjusted by download policy = {0:u}", dateTime);
-                }
-
-                // Dates pulled from the database are always UTC
-                if (dateTime != null && dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-                }
-
-                return dateTime;
-            }
-        }
+        public DateTime? OnlineLastModified(IStoreEntity store) =>
+            GetStartingPoint(OrderFields.OnlineLastModified, store);
 
         /// <summary>
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to.
         /// </summary>
-        public DateTime? OrderDate(IStoreEntity store)
+        public DateTime? OrderDate(IStoreEntity store) =>
+            GetStartingPoint(OrderFields.OrderDate, store);
+
+        private DateTime? GetStartingPoint(EntityField2 dateField, IStoreEntity store)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 object result = adapter.GetScalar(
-                    OrderFields.OrderDate,
+                    dateField,
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
+                DateTime? dateTime = result as DateTime?;
 
-                log.InfoFormat("MAX(OrderDate) = {0:u}", dateTime);
+                log.Info($"MAX({dateField.Name}) = {dateTime:u}");
 
                 // If we don't have a max, but do have a days-back policy, use the days back
                 if (dateTime == null && store.InitialDownloadDays != null)
                 {
                     // Also add on 2 hours just to make sure we are in range
                     dateTime = dateTimeProvider.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OrderDate) adjusted by download policy = {0:u}", dateTime);
+                    log.Info($"MAX({dateField.Name}) adjusted by download policy = {dateTime:u}");
                 }
 
                 // Dates pulled from the database are always UTC

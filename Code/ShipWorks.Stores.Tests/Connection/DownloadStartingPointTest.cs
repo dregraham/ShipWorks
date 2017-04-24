@@ -102,6 +102,82 @@ namespace ShipWorks.Stores.Tests.Connection
             Assert.Equal(DateTimeKind.Utc, result.Value.Kind);
         }
 
+        [Fact]
+        public void OrderDate_DelegatesToSqlAdapter()
+        {
+            var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
+                .Mock(x => x.Create());
+
+            store.SetupGet(x => x.StoreID).Returns(123);
+            var testObject = mock.Create<DownloadStartingPoint>();
+
+            testObject.OrderDate(store.Object);
+
+            sqlAdapter.Verify(x => x.GetScalar(
+                MatchesField(OrderFields.OrderDate),
+                null,
+                AggregateFunction.Max,
+                MatchesPredicate(OrderFields.StoreID == 123 & OrderFields.IsManual == false)));
+        }
+
+        [Theory]
+        [InlineData("DBNULL")]
+        [InlineData(null)]
+        [InlineData("123")]
+        public void OrderDate_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
+        {
+            SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
+            var testObject = mock.Create<DownloadStartingPoint>();
+
+            var result = testObject.OrderDate(store.Object);
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void OrderDate_ReturnsDateTime_WhenSqlReturnsDateTime()
+        {
+            SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15));
+            var testObject = mock.Create<DownloadStartingPoint>();
+
+            var result = testObject.OrderDate(store.Object);
+
+            Assert.Equal(new DateTime(2017, 4, 21, 15, 30, 15), result);
+        }
+
+        [Fact]
+        public void OrderDate_ReturnsInitialDownloadDays_WhenSqlReturnsNull()
+        {
+            SetupSqlGetScalerToReturn(null);
+
+            store.SetupGet(x => x.InitialDownloadDays).Returns(3);
+
+            mock.Mock<IDateTimeProvider>()
+                .SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2017, 4, 21, 15, 30, 15));
+
+            var testObject = mock.Create<DownloadStartingPoint>();
+
+            var result = testObject.OrderDate(store.Object);
+
+            Assert.Equal(new DateTime(2017, 4, 18, 17, 30, 15), result);
+        }
+
+        [Fact]
+        public void OrderDate_SpecifiesUtc_WhenDateTypeIsUnspecified()
+        {
+            SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15, DateTimeKind.Unspecified));
+
+            mock.Mock<IDateTimeProvider>()
+                .SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2017, 4, 21, 15, 30, 15));
+
+            var testObject = mock.Create<DownloadStartingPoint>();
+
+            var result = testObject.OrderDate(store.Object);
+
+            Assert.Equal(DateTimeKind.Utc, result.Value.Kind);
+        }
+
         /// <summary>
         /// Setup the SqlAdapter to return a specified value when GetScalar is called
         /// </summary>

@@ -36,28 +36,28 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Downloading
             DateTime? createdDateStartingPoint = startingPoint.OrderDate(store);
 
             // If the date has a value, add 1 second, otherwise default to 6 months back
-            createdDateStartingPoint = createdDateStartingPoint.HasValue ? createdDateStartingPoint.Value.ToUniversalTime() : DateTime.UtcNow.AddMonths(-6);
+            createdDateStartingPoint = createdDateStartingPoint.HasValue ?
+                createdDateStartingPoint.Value.ToUniversalTime() :
+                dateTimeProvider.UtcNow.AddMonths(-6);
 
             // Set end date to now
-            DateTime createdDateEndPoint = DateTime.UtcNow;
+            DateTime createdDateEndPoint = dateTimeProvider.UtcNow;
 
             // Getting last online modified starting point
             DateTime? modifiedDateStartingPoint = startingPoint.OnlineLastModified(store);
 
             // If the date has a value, add 1 second, otherwise default to 6 months back
-            modifiedDateStartingPoint = modifiedDateStartingPoint.HasValue ? modifiedDateStartingPoint.Value.ToUniversalTime() : DateTime.UtcNow.AddMonths(-6);
+            modifiedDateStartingPoint = modifiedDateStartingPoint.HasValue ?
+                modifiedDateStartingPoint.Value.ToUniversalTime() :
+                dateTimeProvider.UtcNow.AddMonths(-6);
 
             // Set end date to now
-            DateTime modifiedDateEndPoint = DateTime.UtcNow;
+            DateTime modifiedDateEndPoint = dateTimeProvider.UtcNow;
 
             BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
                 new BigCommerceWebClientOrderSearchCriteria(searchType,
                     modifiedDateStartingPoint.Value, modifiedDateEndPoint,
-                    createdDateStartingPoint.Value, createdDateEndPoint)
-                {
-                    PageSize = BigCommerceConstants.OrdersPageSize,
-                    Page = 1
-                };
+                    createdDateStartingPoint.Value, createdDateEndPoint);
 
             // Create the order search criteria
             return orderSearchCriteria;
