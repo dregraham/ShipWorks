@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Shared
     /// </summary>
     internal class MockFactory<TFactory> : IMockFactory<TFactory> where TFactory : class
     {
-        private AutoMock mock;
+        private readonly AutoMock mock;
 
         /// <summary>
         /// Constructor

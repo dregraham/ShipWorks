@@ -47,10 +47,10 @@ namespace ShipWorks.Stores.Tests.Connection
         [Theory]
         [InlineData("DBNULL")]
         [InlineData(null)]
-        [InlineData(123)]
+        [InlineData("123")]
         public void OnlineLastModified_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
         {
-            SetupSqlGetScalerToReturn(value == "DBNULL" ? DBNull.Value : value);
+            SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
             var testObject = mock.Create<DownloadStartingPoint>();
 
             var result = testObject.OnlineLastModified(store.Object);

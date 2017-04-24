@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [Component]
     public class BigCommerceRestClientFactory : IBigCommerceRestClientFactory
     {
-        private IBigCommerceAuthenticatorFactory authenticatorFactory;
+        private readonly IBigCommerceAuthenticatorFactory authenticatorFactory;
 
         /// <summary>
         /// Constructor
@@ -31,12 +31,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         public IRestClient Create(IBigCommerceStoreEntity store)
         {
             IRestClient apiClient = new RestClient(store.ApiUrl);
-
-            if (apiClient == null)
-            {
-                throw new BigCommerceException("Unable to create API client for BigCommerce.");
-            }
-
+            
             apiClient.Authenticator = authenticatorFactory.Create(store);
 
             return apiClient;
