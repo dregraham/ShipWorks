@@ -8,6 +8,7 @@ using System.Threading;
 using Autofac;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -206,6 +207,8 @@ namespace ShipWorks.Actions
                 {
                     // Make's sure we keep getting the next page of queues during a single iteration.
                     long lastQueueID = 0;
+
+                    log.Debug($"Processing Queues for {EnumHelper.GetDescription(GatewayType)}");
 
                     // Fetch all queued actions
                     List<long> queueList = GetNextQueuePage(lastQueueID);
