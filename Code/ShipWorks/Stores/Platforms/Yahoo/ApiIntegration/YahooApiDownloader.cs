@@ -407,9 +407,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (!item.ThumbnailUrl.IsNullOrWhiteSpace())
             {
-                string url = item.ThumbnailUrl.Substring(item.ThumbnailUrl.IndexOf("http://", StringComparison.Ordinal));
+                // Thumbnail node format - <img border=0 width=42 height=70 src=Actual_Thumbnail_URL>
+                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[]{"src="}, StringSplitOptions.RemoveEmptyEntries);
 
-                itemEntity.Thumbnail = url.TrimEnd('>');
+                if (thumbnailSplit.Length == 2)
+                {
+                    itemEntity.Thumbnail = thumbnailSplit[1].TrimEnd('>');
+                }
+                else
+                {
+                    log.Error("An error occured retrieving the item thumbnail url");
+                }
             }
 
             if (CatalogEnabled)
