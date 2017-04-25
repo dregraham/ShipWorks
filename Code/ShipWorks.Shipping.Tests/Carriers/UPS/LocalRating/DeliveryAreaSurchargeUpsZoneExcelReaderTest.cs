@@ -26,6 +26,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         private readonly string expectedRemoteHiHeader = "Remote HI";
         private readonly string expectedRemoteAkHeader = "Remote AK";
 
+        private const string MissingColumn = "DASzips missing '{0}' column.";
+        private const string MissingDasTab = "Spreadsheet missing DASzips Tab";
+        private const string TooManyColumns = "DASzips can only have 4 columns. There may be a cell with text outside of the expected 4 columns.";
+        private const string DasZipsTabName = "DASzips";
+        private const string InvalidZipCode = "DASzips has an invalid zip code for column {0} row {1}.";
+        private const string DuplicateColumns = "DASzips can only have 1 '{0}' column.";
 
         public DeliveryAreaSurchargeUpsZoneExcelReaderTest()
         {
@@ -66,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.NotNull(exception);
             Assert.IsType<UpsLocalRatingException>(exception);
-            Assert.Equal(DeliveryAreaSurchargeUpsZoneExcelReader.MissingDasTab, exception.Message);
+            Assert.Equal(MissingDasTab, exception.Message);
         }
 
         [Fact]
@@ -75,8 +81,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheets sheets = SetupSheetWithOneZipForEachDas();
             sheets[0]["B1"].Text = expectedUs48DasHeader;
 
-            string expectedErrorMessage = string.Format(DeliveryAreaSurchargeUpsZoneExcelReader.DuplicateColumns,
-                expectedUs48DasHeader);
+            string expectedErrorMessage = string.Format(DuplicateColumns, expectedUs48DasHeader);
 
             Exception exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
 
@@ -97,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Assert.NotNull(exception);
             Assert.IsType<UpsLocalRatingException>(exception);
-            Assert.Equal(DeliveryAreaSurchargeUpsZoneExcelReader.TooManyColumns, exception.Message);
+            Assert.Equal(TooManyColumns, exception.Message);
         }
 
         [Fact]
@@ -106,9 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheets sheets = SetupSheetWithOneZipForEachDas();
             sheets[0].Range["A2"].Text = "BadZip";
 
-            string expectedExceptionMessage = string.Format(DeliveryAreaSurchargeUpsZoneExcelReader.InvalidZipCode,
-                expectedUs48DasHeader,
-                2);
+            string expectedExceptionMessage = string.Format(InvalidZipCode, expectedUs48DasHeader, 2);
 
             Exception exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
 
@@ -127,8 +130,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var sheets = SetupSheetWithMissingColumn(missingDasType);
             Exception exception = Record.Exception(() => testObject.Read(sheets, rateTable.Object));
 
-            string expectedExceptionMessage = string.Format(DeliveryAreaSurchargeUpsZoneExcelReader.MissingColumn,
-                EnumHelper.GetApiValue(missingDasType));
+            string expectedExceptionMessage = string.Format(MissingColumn, EnumHelper.GetApiValue(missingDasType));
 
             Assert.NotNull(exception);
             Assert.IsType<UpsLocalRatingException>(exception);
@@ -141,7 +143,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheets sheets = workbook.Worksheets;
             IWorksheet sheet = sheets[0];
 
-            sheet.Name = DeliveryAreaSurchargeUpsZoneExcelReader.DasZipsTabName;
+            sheet.Name = DasZipsTabName;
 
             var dasTypes = EnumHelper.GetEnumList<UpsDeliveryAreaSurchargeType>(type => type != missingDasType).ToList();
             Assert.Equal(3, dasTypes.Count);
@@ -163,7 +165,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorksheets sheets = workbook.Worksheets;
             IWorksheet sheet = sheets[0];
 
-            sheet.Name = DeliveryAreaSurchargeUpsZoneExcelReader.DasZipsTabName;
+            sheet.Name = DasZipsTabName;
             sheet.Range["A1"].Text = expectedUs48DasHeader;
             sheet.Range["B1"].Text = expectedUs48DasExtendedHeader;
             sheet.Range["C1"].Text = expectedRemoteHiHeader;
@@ -181,6 +183,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             mock.Dispose();
             excelEngine.Dispose();
         }
-
     }
 }
