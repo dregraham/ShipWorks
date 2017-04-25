@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public IRestClient Create(IBigCommerceStoreEntity store)
         {
-            IRestClient apiClient = createRestClient(store.ApiUrl);
+            IRestClient apiClient = new RestClient(store.ApiUrl);
 
             apiClient.Authenticator = authenticatorFactory.Create(store);
 
