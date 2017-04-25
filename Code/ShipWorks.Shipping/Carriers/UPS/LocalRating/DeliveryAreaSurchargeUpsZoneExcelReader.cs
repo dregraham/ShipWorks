@@ -50,8 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Processes the column.
+        /// Processes the column with a header equal to the ApiValue of the dasTypeEntry
         /// </summary>
+        /// <remarks>
+        /// It is assumed the top cell in each column will be a header that matches the ApiValue of dasTypeEntry
+        /// followed by zip codes for that surcharge type.
+        /// </remarks>
         private void ProcessColumn(IWorksheet zoneWorksheet,
             EnumEntry<UpsDeliveryAreaSurchargeType> dasTypeEntry,
             List<UpsLocalRatingDeliveryAreaSurchargeEntity> readSurcharges)
@@ -68,7 +72,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             IRange dasColumn = matchingColumns.Single();
 
-            foreach (IRange cell in dasColumn.Cells.Skip(1).Where(c=>(c.Text?.Trim() ?? string.Empty) != string.Empty))
+            // Loop through the column cells. We skip the first cell as it is the header. 
+            // We also ignore empty cells. There will be empty cells because some columns are longer
+            // than other columns and excel will return equal number of cells for each column.
+            foreach (IRange cell in dasColumn.Cells.Skip(1).Where(c=>!string.IsNullOrWhiteSpace(c.Text)))
             {
                 string zip = cell.Text.Trim();
 

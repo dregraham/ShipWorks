@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,7 +18,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
     public class DeliveryAreaSurchargeUpsZoneExcelReaderTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly Mock<IUpsLocalRateTable> rateTable;
         private IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> readSurcharges;
         private readonly ExcelEngine excelEngine;
         private readonly IWorkbook sampleExcelFile;
@@ -29,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
+            Mock<IUpsLocalRateTable> rateTable = mock.CreateMock<IUpsLocalRateTable>(table =>
             {
                 table.Setup(t => t.ReplaceDeliveryAreaSurcharges(
                         It.IsAny<IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity>>()))
