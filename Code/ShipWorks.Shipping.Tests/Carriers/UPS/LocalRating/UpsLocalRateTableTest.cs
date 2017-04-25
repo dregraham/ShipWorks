@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,6 +10,7 @@ using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.ReadOnlyEntityClasses;
+using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
@@ -209,6 +211,128 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                         Times.Once);
             }
         }
+
+        [Fact]
+        public void LoadRates_ThrowsUpsLocalRatingException_WhenStreamIsNull()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+
+            Assert.Throws<UpsLocalRatingException>(() => testObject.LoadRates(null));
+        }
+
+        [Fact]
+        public void LoadRates_ThrowsUpsLocalRatingException_WhenStreamIsNotFileStream()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+
+            Assert.Throws<UpsLocalRatingException>(() => testObject.LoadRates(new MemoryStream()));
+        }
+
+        [Fact]
+        public void LoadRates_CallsReadOnExcelReaders()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    var reader1 = mock.CreateMock<IUpsRateExcelReader>();
+                    var reader2 = mock.CreateMock<IUpsRateExcelReader>();
+                    mock.Provide<IEnumerable<IUpsRateExcelReader>>(new[] {reader1.Object, reader2.Object});
+
+                    var testObject = mock.Create<UpsLocalRateTable>();
+
+                    testObject.LoadRates(stream);
+
+                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                }
+            }
+        }
+
+        [Fact]
+        public void LoadZones_CallsReadOnExcelReaders()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    var reader1 = mock.CreateMock<IUpsZoneExcelReader>();
+                    var reader2 = mock.CreateMock<IUpsZoneExcelReader>();
+                    mock.Provide<IEnumerable<IUpsZoneExcelReader>>(new[] { reader1.Object, reader2.Object });
+
+                    var testObject = mock.Create<UpsLocalRateTable>();
+
+                    testObject.LoadZones(stream);
+
+                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                }
+            }
+        }
+
+        [Fact]
+        public void LoadZones_SavesFileContentToEntity()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    UpsLocalRatingZoneFileEntity zoneFileEntity = new UpsLocalRatingZoneFileEntity();
+
+                    mock.Mock<IUpsLocalRateTableRepository>()
+                        .Setup(r => r.Save(It.IsAny<UpsLocalRatingZoneFileEntity>()))
+                        .Callback<UpsLocalRatingZoneFileEntity>(entity => zoneFileEntity = entity);
+
+                    var testObject = mock.Create<UpsLocalRateTable>();
+                    testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity> { new UpsLocalRatingDeliveryAreaSurchargeEntity() });
+                    testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity> { new UpsLocalRatingZoneEntity() });
+                    testObject.LoadZones(stream);
+                    testObject.SaveZones();
+
+                    Assert.Equal(stream.ToArray(), zoneFileEntity.FileContent);
+                }
+            }
+        }
+
+        [Fact]
+        public void LoadZones_ThrowsUpsLocalRatingException_WhenStreamIsNull()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+
+            Assert.Throws<UpsLocalRatingException>(() => testObject.LoadZones(null));
+        }
+
+        [Fact]
+        public void LoadZones_ThrowsUpsLocalRatingException_WhenStreamIsNotFileStream()
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var testObject = mock.Create<UpsLocalRateTable>();
+
+            Assert.Throws<UpsLocalRatingException>(() => testObject.LoadZones(new MemoryStream()));
+        }
+
 
         private UpsLocalRateTable CreatePopulatedRateTable(AutoMock mock)
         {

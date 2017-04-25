@@ -27,8 +27,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private List<UpsPricePerPoundEntity> pricePerPound;
         private IEnumerable<UpsRateSurchargeEntity> surcharges;
         private IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> deliveryAreaSurcharges;
-        private string rateFileName;
-        private string zoneFileName;
         private IEnumerable<UpsLocalRatingZoneEntity> zones;
         private byte[] zoneFileContent;
 
@@ -58,7 +56,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void LoadRates(Stream stream)
         {
-            rateFileName = (stream as FileStream)?.Name;
+            if (stream == null)
+            {
+                throw new UpsLocalRatingException("Error loading rate file from stream.");
+            }
 
             try
             {
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {
-                throw new UpsLocalRatingException($"Error loading Excel file '{rateFileName}'.", ex);
+                throw new UpsLocalRatingException("Error loading Excel file.", ex);
             }
         }
         
@@ -130,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (!newRateTable.UpsPackageRate.Any() && !newRateTable.UpsLetterRate.Any() &&
                 !newRateTable.UpsPricePerPound.Any() && !newRateTable.UpsRateSurcharge.Any())
             {
-                throw new UpsLocalRatingException($"The selected file '{rateFileName}' does not contain any rates.");
+                throw new UpsLocalRatingException($"The selected file does not contain any rates.");
             }
 
             localRateTableRepository.Save(newRateTable, accountEntity);
@@ -192,7 +193,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void LoadZones(Stream stream)
         {
-            zoneFileName = (stream as FileStream)?.Name;
+            if (stream == null)
+            {
+                throw new UpsLocalRatingException("Error loading zone file from stream.");
+            }
 
             try
             {
@@ -206,11 +210,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     }
                 }
 
+                stream.Position = 0;
                 zoneFileContent = stream.ToArray();
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {
-                throw new UpsLocalRatingException($"Error loading Excel file '{zoneFileName}'.", ex);
+                throw new UpsLocalRatingException($"Error loading Excel file.", ex);
             }
         }
 

@@ -335,8 +335,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 {
                     ErrorUploading = true;
                     UploadMessage =
-                        $"Local rates failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your local rates again.";
-                    log.Error($"Error uploading rate table: {e.Message}");
+                        $"Local rates failed to upload:\n\n{e.Message}\n\nFile: {fileDialog.SelectedFileName}\n\nPlease review and try uploading your local rates again.";
+                    log.Error($"Error uploading rate table: {e.Message}", e);
                 }
                 finally
                 {
@@ -395,8 +395,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 {
                     ErrorUploading = true;
                     UploadMessage =
-                        $"Zones failed to upload:\n\n{e.Message}\n\nPlease review and try uploading your zones again.";
-                    log.Error($"Error uploading zones: {e.Message}");
+                        $"Zones failed to upload:\n\n{e.Message}\n\nFile: {fileDialog.SelectedFileName}\n\nPlease review and try uploading your zones again.";
+                    log.Error($"Error uploading zones: {e.Message}", e);
                 }
                 finally
                 {

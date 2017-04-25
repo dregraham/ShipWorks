@@ -431,7 +431,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             await testObject.CallUploadRatingFile();
 
-            log.Verify(l => l.Error(It.IsAny<string>()));
+            log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<UpsLocalRatingException>()));
         }
 
         [Fact]
@@ -643,7 +643,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             await testObject.CallUploadZoneFile();
 
-            log.Verify(l => l.Error(It.IsAny<string>()));
+            log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<UpsLocalRatingException>()));
         }
 
         [Fact]
