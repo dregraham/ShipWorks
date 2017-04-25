@@ -12,29 +12,22 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce;
+using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 
 namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
 {
     public class BigCommerceWebClientTest
     {
         private readonly AutoMock mock;
-        private readonly Mock<IApiLogEntry> mockedLogger;
-        private readonly Mock<ILogEntryFactory> mockedLogFactory;
+        private readonly ILogEntryFactory logFactory;
 
         public BigCommerceWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            //Setup Logger
-            mockedLogger = new Mock<IApiLogEntry>();
-
-            mockedLogFactory = new Mock<ILogEntryFactory>();
-            mockedLogFactory
-                .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
-                .Returns(mockedLogger.Object);
+            logFactory = mock.Create<ILogEntryFactory>();
         }
 
         [Fact]
@@ -46,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUserName = "username";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Path is missing or invalid", ex.Message);
         }
 
@@ -59,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUrl = "url";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Username is missing or invalid", ex.Message);
         }
 
@@ -72,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUrl = "url";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Token is missing or invalid", ex.Message);
         }
 
@@ -85,7 +78,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.OauthToken = "token";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API OAuth Client ID is missing or invalid", ex.Message);
         }
 
@@ -98,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.OauthClientId = "client id";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API OAuth Token is missing or invalid", ex.Message);
         }
 
@@ -111,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.OauthToken = "token";
 
             BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, new BigCommerceRestClientFactory(authenticatorFactory), mockedLogFactory.Object));
+            BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Path is missing or invalid", ex.Message);
         }
 
@@ -134,24 +127,12 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 ErrorException = null
             };
 
-            Mock<IRestClient> restClient = new Mock<IRestClient>();
-            restClient.Setup(c => c.Execute(It.IsAny<IRestRequest>())).Returns(response);
-            mock.Provide(restClient.Object);
+            mock.FromFactory<IBigCommerceRestClientFactory>()
+                .Mock<IRestClient>(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()))
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>()))
+                .Returns(response);
 
-            IBigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
-
-            Mock<IBigCommerceRestClientFactory> restClientFactory = new Mock<IBigCommerceRestClientFactory>();
-            restClientFactory.Setup(f => f.Create(It.IsAny<IBigCommerceStoreEntity>())).Returns(restClient.Object);
-            mock.Provide(restClientFactory);
-
-            IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(new[]
-            {
-                new TypedParameter(typeof(IBigCommerceStoreEntity), store),
-                new TypedParameter(typeof(IBigCommerceAuthenticatorFactory), authenticatorFactory),
-                new TypedParameter(typeof(IBigCommerceRestClientFactory), restClientFactory.Object),
-                new TypedParameter(typeof(ILogEntryFactory), mockedLogFactory.Object),
-            });
-
+            IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(TypedParameter.From((IBigCommerceStoreEntity) store));
 
             webClient.UpdateOrderStatus(1, 1);
         }
@@ -175,25 +156,12 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 ErrorException = null
             };
 
-            Mock<IBigCommerceAuthenticatorFactory> authenticatorFactory = new Mock<IBigCommerceAuthenticatorFactory>();
-            mock.Provide(authenticatorFactory);
+            mock.FromFactory<IBigCommerceRestClientFactory>()
+                .Mock<IRestClient>(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()))
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>()))
+                .Returns(response);
 
-            Mock<IRestClient> restClient = new Mock<IRestClient>();
-            restClient.Setup(c => c.Execute(It.IsAny<IRestRequest>())).Returns(response);
-            mock.Provide(restClient.Object);
-
-
-            Mock<IBigCommerceRestClientFactory> restClientFactory = new Mock<IBigCommerceRestClientFactory>();
-            restClientFactory.Setup(f => f.Create(It.IsAny<IBigCommerceStoreEntity>())).Returns(restClient.Object);
-            mock.Provide(restClientFactory);
-
-            IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(new[]
-            {
-                new TypedParameter(typeof(IBigCommerceStoreEntity), store),
-                new TypedParameter(typeof(IBigCommerceAuthenticatorFactory), authenticatorFactory.Object),
-                new TypedParameter(typeof(IBigCommerceRestClientFactory), restClientFactory.Object),
-                new TypedParameter(typeof(ILogEntryFactory), mockedLogFactory.Object),
-            });
+            IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(TypedParameter.From((IBigCommerceStoreEntity) store));
 
             webClient.UploadOrderShipmentDetails(1, 1, "asdf", new Tuple<string, string>("1", "2"), new List<BigCommerceItem>());
         }

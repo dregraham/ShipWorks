@@ -16,12 +16,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceRestClientFactory : IBigCommerceRestClientFactory
     {
         private readonly IBigCommerceAuthenticatorFactory authenticatorFactory;
+        readonly Func<string, IRestClient> createRestClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceRestClientFactory(IBigCommerceAuthenticatorFactory authenticatorFactory)
+        public BigCommerceRestClientFactory(IBigCommerceAuthenticatorFactory authenticatorFactory, Func<string, IRestClient> createRestClient)
         {
+            this.createRestClient = createRestClient;
             this.authenticatorFactory = authenticatorFactory;
         }
 
@@ -30,8 +32,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public IRestClient Create(IBigCommerceStoreEntity store)
         {
-            IRestClient apiClient = new RestClient(store.ApiUrl);
-            
+            IRestClient apiClient = createRestClient(store.ApiUrl);
+
             apiClient.Authenticator = authenticatorFactory.Create(store);
 
             return apiClient;
