@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
         private const string MissingServiceHeaderErrorMessage = "{0} is missing the required {1} header.";
-        private const string InvalidZoneErrorMessage = "Invalid zone in sheet {0}, cell {1}. Zones must be 3 digit numbers.";
+        private const string InvalidZoneErrorMessage = "Invalid zone in Worksheet {0}, cell {1}. Zones must be 3 digit numbers.";
 
         /// <summary>
         /// Constructor
@@ -45,21 +45,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void Read(IWorksheets zoneWorksheets, IUpsLocalRateTable upsLocalRateTable)
         {
             List<UpsLocalRatingZoneEntity> zones = new List<UpsLocalRatingZoneEntity>();
-
-            foreach (IWorksheet worksheet in zoneWorksheets)
-            {
-                // looking for any workbook whos name is 5 digits dash 5 digits with optional white space xxxxx-xxxxx
-                if (fiveDigitZipRangeRegex.IsMatch(worksheet.Name))
-                {
-                    ValidateWorksheet(worksheet);
-                    ParseLower48Zones(worksheet, zones);
-                } 
-            }
             
-            // If the zones list is empty there were no worksheets that match our naming convention
-            if (!zones.Any())
+            // looking for any workbook whose name is 5 digits dash 5 digits with optional white space xxxxx-xxxxx
+            List<IWorksheet> zipWorkSheets = zoneWorksheets.Cast<IWorksheet>()
+                .Where(worksheet => fiveDigitZipRangeRegex.IsMatch(worksheet.Name)).ToList();
+
+            if (!zipWorkSheets.Any())
             {
                 throw new UpsLocalRatingException("The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'");
+            }
+
+            foreach (IWorksheet worksheet in zipWorkSheets)
+            {
+                ValidateWorksheet(worksheet);
+                ParseLower48Zones(worksheet, zones);
             }
 
             zones.AddRange(alaskaHawaiiReader.GetAlaskaHawaiiZones(zoneWorksheets));
@@ -67,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             upsLocalRateTable.ReplaceZones(zones);
         }
 
-      
+
         /// <summary>
         /// Quickly lint the worksheet and make sure that the required rows are present and correct
         /// </summary>
@@ -75,12 +74,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             ValidateWorksheetHeaders(worksheet);
 
-            foreach (IRange range in worksheet.Rows)
+            foreach (IRange cell in worksheet.Columns[0].Cells)
             {
-                string cellText = range.Cells[0].Text ?? string.Empty;
+                string cellText = cell.Value;
                 
-                // Check for the header, Alaska and Hawaii rows
-                if (string.IsNullOrWhiteSpace(cellText) || cellText == DestinationZipHeader)
+                if (cell.EntireRow.IsBlank || cellText == DestinationZipHeader)
                 {
                     continue;
                 }
@@ -93,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
 
                 // If we got this far the first column of the row is not valid
-                throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, worksheet.Name, cellText));
+                throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, worksheet.Name, cell.Value));
             }
         }
         
@@ -121,6 +119,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling, string worksheetName)
         {
+            int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
+            int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
+
             for (int i = 1; i <= 6; i++)
             {
                 string cellValue = row.Cells[i].Value.Trim();
@@ -138,8 +139,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 UpsLocalRatingZoneEntity zoneEntity =
                     new UpsLocalRatingZoneEntity
                     {
-                        DestinationZipCeiling = GetDestinationZipCeiling(row.Cells[0].Value),
-                        DestinationZipFloor = GetDestinationZipFloor(row.Cells[0].Value),
+                        DestinationZipCeiling = destinationZipCeiling,
+                        DestinationZipFloor = destinationZipFloor,
                         OriginZipCeiling = originCeiling,
                         OriginZipFloor = originFloor,
                         Service = (int) GetServiceType(i),
@@ -152,30 +153,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the Destination Zip ceiling from the worksheet
         /// </summary>
-        private static int GetDestinationZipCeiling(string value)
+        private static int GetDestinationZipCeiling(IRange cell)
         {
+            string value = cell.Value;
             int result;
             if (int.TryParse($"{value.Substring(value.IndexOf("-", StringComparison.Ordinal) + 1, 3)}99", out result))
             {
                 return result;
             }
 
-            throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, value));
+            throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, value, cell.Worksheet.Name));
         }
 
 
         /// <summary>
         /// Get the Destination zip floor from the worksheet
         /// </summary>
-        private static int GetDestinationZipFloor(string value)
+        private static int GetDestinationZipFloor(IRange cell)
         {
+            string value = cell.Value;
             int result;
             if (int.TryParse($"{value.Substring(0, 3)}00", out result))
             {
                 return result;
             }
 
-            throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, value));
+            throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, value, cell.Worksheet.Name));
         }
 
         /// <summary>

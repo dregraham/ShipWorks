@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
@@ -171,6 +172,61 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                                                     a.OriginZipCeiling == 12345 &&
                                                     a.DestinationZipFloor == 00400 &&
                                                     a.DestinationZipCeiling == 00499))));
+        }
+
+        [Fact]
+        public void Read_SkipsEmptyRow_WhenBlankLineBeforeSingleDestination()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+            worksheet.Range["C1"].Text = "3 Day Select";
+            worksheet.Range["D1"].Text = "2nd Day Air";
+            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
+            worksheet.Range["F1"].Text = "Next Day Air Saver";
+            worksheet.Range["G1"].Text = "Next Day Air";
+
+            AddRow(worksheet, Enumerable.Repeat(string.Empty, 7).ToArray());
+            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135", "105" });
+
+            testObject.Read(workbook.Worksheets, rateTable.Object);
+
+            rateTable.Verify(r => r.ReplaceZones(
+                It.Is<List<UpsLocalRatingZoneEntity>>(
+                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == 12345 &&
+                                                    a.OriginZipCeiling == 12345 &&
+                                                    a.DestinationZipFloor == 00400 &&
+                                                    a.DestinationZipCeiling == 00499))));
+        }
+
+        [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenNumericValueAsDestinationZip()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+            worksheet.Range["C1"].Text = "3 Day Select";
+            worksheet.Range["D1"].Text = "2nd Day Air";
+            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
+            worksheet.Range["F1"].Text = "Next Day Air Saver";
+            worksheet.Range["G1"].Text = "Next Day Air";
+
+            AddRow(worksheet, new[] { "", "005", "305", "205", "245", "135", "105" });
+            // reset A2 (which was empty string from line above) to a numeric value.
+            worksheet.Range["A2"].Value2 = 4;
+
+            var ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("Worksheet 12345-12345 has an invalid destination zip value 4.", ex.Message);
         }
 
         private void AddRow(IWorksheet workSheet, string[] values)
