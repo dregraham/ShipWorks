@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Is the assembly a test assembly
         /// </summary>
-        private static bool IsNotTestAssembly(Assembly assembly) => assembly.FullName.Contains("Tests");
+        private static bool IsNotTestAssembly(Assembly assembly) => !assembly.FullName.Contains("Tests");
 
         /// <summary>
         /// Is the assembly a ShipWorks built assembly

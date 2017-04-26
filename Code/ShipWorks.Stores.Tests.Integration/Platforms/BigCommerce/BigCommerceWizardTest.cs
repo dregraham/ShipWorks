@@ -4,6 +4,7 @@ using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages;
+using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
@@ -20,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             container = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build());
         }
 
-        [Fact]
+        [STAFact]
         public void EnsureRegistrationOrder()
         {
             StoreEntity store = new BigCommerceStoreEntity { StoreTypeCode = StoreTypeCode.BigCommerce };
