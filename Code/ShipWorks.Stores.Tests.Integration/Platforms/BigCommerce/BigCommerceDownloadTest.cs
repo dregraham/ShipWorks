@@ -18,11 +18,14 @@ using Microsoft.Owin.Hosting;
 using Moq;
 using Owin;
 using RestSharp;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping;
@@ -104,16 +107,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                     downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
-                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-                {
-                    var statuses = storeType.GetOnlineStatusChoices();
-                    Assert.Equal(new[] { "Incomplete", "Pending", "Shipped", "Deleted" }, statuses);
-                }
+                var statuses = storeType.GetOnlineStatusChoices();
+                Assert.Equal(new[] { "Incomplete", "Pending", "Shipped", "Deleted" }, statuses);
             }
         }
 
         [Fact]
-        public void Download_CreatesOrder()
+        public async Task Download_CreatesOrder()
         {
             using (var webApp = replayServer.Start("Download_CreatesOrder.har"))
             {
@@ -125,22 +125,20 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                     downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
-                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-                {
-                    var orders = sqlAdapter.GetCollectionFromPredicate<OrderEntity>(x => x.Add(OrderFields.StoreID == store.StoreID));
-                    var orderManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderManager>();
-                    IEnumerable<OrderEntity> fullOrders = orderManager.LoadOrders(
-                        orders.OfType<IOrderEntity>().Select(x => x.OrderID),
-                        ShipmentsLoader.FullOrderPrefetchPath.Value);
+                var orderID = await GetNewestOrderIDForStore(store);
 
-                    var order = fullOrders.OfType<IOrderEntity>().Single();
-                    var product = order.OrderItems.OfType<IBigCommerceOrderItemEntity>().Single();
+                var orderManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderManager>();
+                IEnumerable<OrderEntity> fullOrders = orderManager.LoadOrders(
+                    new[] { orderID },
+                    ShipmentsLoader.FullOrderPrefetchPath.Value);
 
-                    Assert.Equal(100, order.OrderNumber);
-                    Assert.Equal("1 S Memorial Drive", order.BillStreet1);
-                    Assert.Equal("1 S Memorial Drive", order.ShipStreet1);
-                    Assert.Equal("Widget A", product.Name);
-                }
+                var order = fullOrders.OfType<IOrderEntity>().Single();
+                var product = order.OrderItems.OfType<IBigCommerceOrderItemEntity>().Single();
+
+                Assert.Equal(100, order.OrderNumber);
+                Assert.Equal("1 S Memorial Drive", order.BillStreet1);
+                Assert.Equal("1 S Memorial Drive", order.ShipStreet1);
+                Assert.Equal("Widget A", product.Name);
             }
         }
 
@@ -156,6 +154,20 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
                 var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
                 updater.UpdateOrderStatus(order.OrderID, BigCommerceConstants.OrderStatusCompleted);
+            }
+        }
+
+        /// <summary>
+        /// Get the max order id for the given store
+        /// </summary>
+        private static async Task<long> GetNewestOrderIDForStore(BigCommerceStoreEntity store)
+        {
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                var query = new QueryFactory().Order
+                        .Select(OrderFields.OrderID.Max())
+                        .Where(OrderFields.StoreID == store.StoreID);
+                return await sqlAdapter.FetchScalarAsync<long>(query);
             }
         }
 

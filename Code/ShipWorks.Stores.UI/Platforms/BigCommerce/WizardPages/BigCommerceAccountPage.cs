@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
@@ -22,6 +24,15 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
         public BigCommerceAccountPage()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="lifetimeScope"></param>
+        public BigCommerceAccountPage(BigCommerceAccountSettingsViewModel viewModel) : this()
+        {
+            accountSettingsControl.SetViewModel(viewModel);
         }
 
         /// <summary>

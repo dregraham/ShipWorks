@@ -23,7 +23,6 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.BigCommerce, ExternallyOwned = true)]
     public partial class BigCommerceAccountSettingsControl : AccountSettingsControlBase
     {
-        ILifetimeScope lifetimeScope;
         BigCommerceAccountSettingsViewModel viewModel;
 
         /// <summary>
@@ -32,13 +31,23 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         public BigCommerceAccountSettingsControl()
         {
             InitializeComponent();
+        }
 
-            if (!DesignModeDetector.IsDesignerHosted())
-            {
-                lifetimeScope = IoC.BeginLifetimeScope();
-                viewModel = lifetimeScope.Resolve<BigCommerceAccountSettingsViewModel>();
-                ((BigCommerceAccountSettings) accountSettingsElementHost.Child).DataContext = viewModel;
-            }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BigCommerceAccountSettingsControl(BigCommerceAccountSettingsViewModel viewModel) : this()
+        {
+            SetViewModel(viewModel);
+        }
+
+        /// <summary>
+        /// Set the view model on the control
+        /// </summary>
+        public void SetViewModel(BigCommerceAccountSettingsViewModel viewModel)
+        {
+            this.viewModel = viewModel;
+            ((BigCommerceAccountSettings) accountSettingsElementHost.Child).DataContext = viewModel;
         }
 
         /// <summary>

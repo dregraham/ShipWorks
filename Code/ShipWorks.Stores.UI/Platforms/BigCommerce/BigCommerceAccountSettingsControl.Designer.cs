@@ -16,7 +16,6 @@
             if (disposing)
             {
                 components?.Dispose();
-                lifetimeScope?.Dispose();
             }
             base.Dispose(disposing);
         }
