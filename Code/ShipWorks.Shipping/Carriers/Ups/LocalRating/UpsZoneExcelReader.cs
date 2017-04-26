@@ -17,7 +17,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static readonly Regex fiveDigitZipRangeRegex = new Regex("^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$");
         private static readonly Regex threeDigitZipRangeRegex = new Regex("^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$");
         private static readonly Regex threeDigitNumberRegex = new Regex("^\\s*[0-9]{3}\\s*$");
-
+        private const string DestinationZipHeader = "Dest. ZIP";
+        private static readonly string missingDestinationZipColumnErrorMessage = $"Worksheet {0} is missing column header '{DestinationZipHeader}' expected at row 1, column 1";
+        private static readonly string invalidOriginZipErrorMessage = $"Invalid origin zip {0}.";
+        private static readonly string invalidDestinationZipErrorMessage = $"Invalid destination zip {0}.";
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // If the zones list is empty there were no worksheets that match our naming convention
             if (!zones.Any())
             {
-                throw new UpsLocalRatingException("The zone file contains no zone worksheets that zone naming convention of '#####-#####'");
+                throw new UpsLocalRatingException("The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'");
             }
 
             zones.AddRange(alaskaHawaiiReader.GetAlaskaHawaiiZones(zoneWorksheets));
@@ -65,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 string cellText = range.Cells[0].Text ?? string.Empty;
 
                 // Check for the header, Alaska and Hawaii rows
-                if (string.IsNullOrWhiteSpace(cellText) || cellText == "Dest. ZIP")
+                if (string.IsNullOrWhiteSpace(cellText) || cellText == DestinationZipHeader)
                 {
                     continue;
                 }
@@ -78,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
 
                 // If we got this far the first column of the row is not valid
-                throw new UpsLocalRatingException($"Worksheet {worksheet.Name} has an invalid value {cellText}.");
+                throw new UpsLocalRatingException(string.Format(missingDestinationZipColumnErrorMessage, worksheet.Name));
             }
         }
 
@@ -138,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 return result;
             }
 
-            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+            throw new UpsLocalRatingException(string.Format(invalidDestinationZipErrorMessage, value));
         }
 
 
@@ -153,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 return result;
             }
 
-            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+            throw new UpsLocalRatingException(string.Format(invalidDestinationZipErrorMessage, value));
         }
 
         /// <summary>
@@ -167,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 return result;
             }
 
-            throw new UpsLocalRatingException($"Invalid origin zip {value}.");
+            throw new UpsLocalRatingException(string.Format(invalidOriginZipErrorMessage, value));
         }
 
 
@@ -182,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 return result;
             }
 
-            throw new UpsLocalRatingException($"Invalid destination zip {value}.");
+            throw new UpsLocalRatingException(string.Format(invalidOriginZipErrorMessage, value));
         }
 
         /// <summary>
