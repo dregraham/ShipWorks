@@ -96,15 +96,76 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         /// </summary>
         private bool VerifyRequestMatchesExpected(Entry entry, IOwinContext context)
         {
-            if (entry.Request.Url.AbsolutePath != context.Request.Uri.AbsolutePath)
+            var expectedHeaders = entry.Request.Headers.Where(x => x.Name == "host");
+
+            return EnsureUrlMatches(entry, context) &&
+                VerifyHeadersExist(expectedHeaders, context) &&
+                VerifyHeaderValuesMatch(expectedHeaders, context);
+        }
+
+        /// <summary>
+        /// Verify that the header values match expected
+        /// </summary>
+        private bool VerifyHeaderValuesMatch(IEnumerable<Header> expectedHeaders, IOwinContext context)
+        {
+            var incorrectValues = expectedHeaders
+                   .Where(x => !context.Request.Headers[x.Name].Contains(x.Value))
+                   .Select(x => Tuple.Create(x.Name, x.Value, context.Request.Headers[x.Name]));
+            if (incorrectValues.Any())
             {
-                context.Response.StatusCode = 505;
-                context.Response.Write($"[{{\"message\": \"{context.Request.Uri.AbsolutePath} was requested but {entry.Request.Url.AbsolutePath} was expected\"}}]");
+                string errorMessage = $"The following headers had incorrect values for the request to {context.Request.Uri.AbsolutePath}:\n" +
+                    string.Join(Environment.NewLine, incorrectValues.Select(x => $"{x.Item1} should be {x.Item2} but was {string.Join(", ", x.Item3)}"));
+
+                PopulateErrorResponse(context.Response, errorMessage);
 
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Verify that all expected headers exist
+        /// </summary>
+        private bool VerifyHeadersExist(IEnumerable<Header> expectedHeaders, IOwinContext context)
+        {
+            var missingHeaders = expectedHeaders.Where(x => !context.Request.Headers.ContainsKey(x.Name)).Select(x => x.Name);
+            if (missingHeaders.Any())
+            {
+                string errorMessage = $"The following headers were expected but not included in the request to {context.Request.Uri.AbsolutePath}:\n{string.Join(", ", missingHeaders)}";
+
+                PopulateErrorResponse(context.Response, errorMessage);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Ensure the request url matches
+        /// </summary>
+        private bool EnsureUrlMatches(Entry entry, IOwinContext context)
+        {
+            if (entry.Request.Url.AbsolutePath == context.Request.Uri.AbsolutePath)
+            {
+                return true;
+            }
+
+            string errorMessage = $"{context.Request.Uri.AbsolutePath} was requested but {entry.Request.Url.AbsolutePath} was expected";
+
+            PopulateErrorResponse(context.Response, errorMessage);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Populate the error response
+        /// </summary>
+        private static void PopulateErrorResponse(IOwinResponse response, string errorMessage)
+        {
+            response.StatusCode = 505;
+            response.Write($"[{{\"message\": \"{errorMessage}\"}}]");
         }
     }
 }

@@ -68,8 +68,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
             store = Create.Store<BigCommerceStoreEntity>(StoreTypeCode.BigCommerce)
                 .Set(x => x.ApiUrl, replayServer.TranslateUrl("https://api.bigcommerce.com/stores/vplh1lw/v2/"))
-                .Set(x => x.OauthClientId, "Foo")
-                .Set(x => x.OauthToken, "Bar")
+                .Set(x => x.OauthClientId, "l7ksaksgrfgtvgh96hjjwleyf2uld75")
+                .Set(x => x.OauthToken, "n4itbtdl0eiztunnr05qtosttfn5476")
                 .Set(x => x.BigCommerceAuthentication, BigCommerceAuthenticationType.Oauth)
                 .Save();
 
