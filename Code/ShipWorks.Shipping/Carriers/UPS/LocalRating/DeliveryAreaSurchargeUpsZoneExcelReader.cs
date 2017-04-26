@@ -14,12 +14,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// </summary>
     public class DeliveryAreaSurchargeUpsZoneExcelReader : IUpsZoneExcelReader
     {
-        private const string MissingColumn = "DASzips missing '{0}' column.";
-        private const string MissingDasTab = "Spreadsheet missing DASzips Tab";
-        private const string TooManyColumns = "DASzips can only have 4 columns. There may be a cell with text outside of the expected 4 columns.";
         private const string DasZipsTabName = "DASzips";
-        private const string InvalidZipCode = "DASzips has an invalid zip code for column {0} row {1}.";
-        private const string DuplicateColumns = "DASzips can only have 1 '{0}' column.";
+        private const string MissingColumn = DasZipsTabName + " missing '{0}' column.";
+        private const string MissingDasTab = "Spreadsheet missing " + DasZipsTabName + " Tab";
+        private const string TooManyColumns = DasZipsTabName + " can only have 4 columns. There may be a cell with text outside of the expected 4 columns.";
+        private const string InvalidZipCode = DasZipsTabName + " has an invalid zip code for column '{0}' row {1}.";
+        private const string DuplicateColumns = DasZipsTabName + " can only have 1 '{0}' column.";
 
         /// <summary>
         /// Reads the worksheets in a UPS zone excel document, creates a list of  
