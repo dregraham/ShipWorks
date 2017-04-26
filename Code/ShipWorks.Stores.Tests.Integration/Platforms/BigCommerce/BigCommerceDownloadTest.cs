@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         private readonly BigCommerceStoreEntity store;
         private readonly long downloadLogID;
         private readonly DateTime utcNow;
-        private HttpArchiveReplayServer replayServer;
+        private readonly HttpArchiveReplayServer replayServer;
 
         public BigCommerceDownloadTest(DatabaseFixture db)
         {
@@ -145,12 +145,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
-        public async Task UpdateOnlineStatus_ToPending_Succeeds()
+        public void UpdateOnlineStatus_ToPending_Succeeds()
         {
             using (var webApp = replayServer.Start("BigCommerce_UpdateStoreToPending.har"))
             {
-                var storeType = StoreTypeManager.GetType(store);
-
                 var order = Create.Order(store, context.Customer)
                     .Set(x => x.OrderNumber, 100)
                     .Set(x => x.OrderDate, DateTime.UtcNow)

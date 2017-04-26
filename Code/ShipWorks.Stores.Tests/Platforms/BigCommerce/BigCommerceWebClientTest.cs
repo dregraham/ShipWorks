@@ -38,7 +38,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiToken = "token";
             store.ApiUserName = "username";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Path is missing or invalid", ex.Message);
         }
@@ -51,7 +50,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiToken = "token";
             store.ApiUrl = "url";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Username is missing or invalid", ex.Message);
         }
@@ -64,7 +62,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUserName = "username";
             store.ApiUrl = "url";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Token is missing or invalid", ex.Message);
         }
@@ -77,7 +74,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUrl = "url";
             store.OauthToken = "token";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API OAuth Client ID is missing or invalid", ex.Message);
         }
@@ -90,7 +86,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.ApiUrl = "url";
             store.OauthClientId = "client id";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API OAuth Token is missing or invalid", ex.Message);
         }
@@ -103,7 +98,6 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             store.OauthClientId = "client id";
             store.OauthToken = "token";
 
-            BigCommerceAuthenticatorFactory authenticatorFactory = new BigCommerceAuthenticatorFactory();
             BigCommerceException ex = Assert.Throws<BigCommerceException>(() => new BigCommerceWebClient(store, mock.Create<BigCommerceRestClientFactory>(), logFactory));
             Assert.Contains("Store API Path is missing or invalid", ex.Message);
         }
