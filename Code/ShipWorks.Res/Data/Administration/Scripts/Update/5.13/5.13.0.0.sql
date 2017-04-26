@@ -7,5 +7,5 @@ GO
 PRINT N'Altering [dbo].[Configuration]'
 GO
 ALTER TABLE [dbo].[Configuration] ADD
-[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((0))
 GO
