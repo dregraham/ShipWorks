@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             EnumEntry<UpsDeliveryAreaSurchargeType> dasTypeEntry,
             List<UpsLocalRatingDeliveryAreaSurchargeEntity> readSurcharges)
         {
-            List<IRange> matchingColumns = zoneWorksheet.Columns.Where(c => c.Cells[0].Text.Trim() == dasTypeEntry.ApiValue).ToList();
+            List<IRange> matchingColumns = zoneWorksheet.Columns.Where(c => c.Cells[0].Text?.Trim() == dasTypeEntry.ApiValue).ToList();
             if (matchingColumns.None())
             {
                 throw new UpsLocalRatingException(string.Format(MissingColumn, dasTypeEntry.ApiValue));

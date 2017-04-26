@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     [Component]
     public class AlaskaHawaiiZoneExcelReader : IAlaskaHawaiiZoneExcelReader
     {
-        private const int SecondPostalCodesRow = 4;
+        private const int FirstPostalCodesRow = 4;
         private static readonly Regex fiveDigitZipRegex = new Regex("^\\s*[0-9]{5}\\s*$");
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             // The worksheet has two sections of postal codes, find the second header "Postal Codes:" because it divides the two sections
             // to use as an anchor 
-            IRange secondPostalCodeRow = worksheet.Rows.FirstOrDefault(s => s.Cells[0].Value == "Postal Codes:" && s.Row > SecondPostalCodesRow);
+            IRange secondPostalCodeRow = worksheet.Rows.FirstOrDefault(s => s.Cells[0].Value == "Postal Codes:" && s.Row > FirstPostalCodesRow);
             if (secondPostalCodeRow == null)
             {
                 throw new UpsLocalRatingException($"Missing postal codes from {worksheet.Name}.");
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             Dictionary<UpsServiceType, string> firstZoneDictionary = GetFirstZoneServiceDictionary(worksheet);
 
             // Create and add zone entities for all of the zip codes in the first section
-            AddToZones(firstZoneDictionary, GetPostalCodes(worksheet.Rows.Where(r => r.Row > SecondPostalCodesRow && r.Row < secondPostalCodeRow.Row)), zones);
+            AddToZones(firstZoneDictionary, GetPostalCodes(worksheet.Rows.Where(r => r.Row > FirstPostalCodesRow && r.Row < secondPostalCodeRow.Row)), zones);
             
             // Get all of the zone/service combos for the second section
             Dictionary<UpsServiceType, string> secondZoneDictionary = GetSecondZoneServiceDictionary(worksheet);
@@ -160,9 +160,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static Dictionary<UpsServiceType, string> GetSecondZoneServiceDictionary(IWorksheet worksheet)
         {
-            string groundZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Ground" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
-            string nextDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Next Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
-            string twoDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Second Day Air" && r.Row > SecondPostalCodesRow)?.Cells[1].Value;
+            string groundZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Ground" && r.Row > FirstPostalCodesRow)?.Cells[1].Value;
+            string nextDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Next Day Air" && r.Row > FirstPostalCodesRow)?.Cells[1].Value;
+            string twoDayAirZone = worksheet.Rows.FirstOrDefault(r => r.Cells[0].Value == "Second Day Air" && r.Row > FirstPostalCodesRow)?.Cells[1].Value;
 
             ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, "second", worksheet.Name);
 

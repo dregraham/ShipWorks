@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static readonly Regex threeDigitZipRangeRegex = new Regex("^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$");
         private static readonly Regex threeDigitNumberRegex = new Regex("^\\s*[0-9]{3}\\s*$");
         private const string DestinationZipHeader = "Dest. ZIP";
-        private const string MissingDestinationZipColumnErrorMessage = "Worksheet {0} is missing column header '" + DestinationZipHeader + "' expected at row 1, column 1";
+        private const string MissingDestinationZipColumnErrorMessage = "Worksheet {0} is missing column header '" + DestinationZipHeader + "' expected at cell A1";
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Invalid destination zip {0}.";
         
