@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Name = "EomeEmptyWorksheet";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("The zone file contains no zone worksheets that zone naming convention of '#####-#####'", ex.Message);
+            Assert.Equal("The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'", ex.Message);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             AddRow(worksheet, new[] { "0a4-0b5", "005", "305", "205", "-", "135", "-" });
             
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("Worksheet 12345-12345 has an invalid value 0a4-0b5.", ex.Message);
+            Assert.Equal("Worksheet 12345-12345 has an invalid destination zip value 0a4-0b5.", ex.Message);
         }
 
         [Fact]

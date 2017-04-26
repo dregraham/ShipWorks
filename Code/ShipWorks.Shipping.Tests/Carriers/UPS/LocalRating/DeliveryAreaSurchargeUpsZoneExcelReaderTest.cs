@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         private const string MissingDasTab = "Spreadsheet missing DASzips Tab";
         private const string TooManyColumns = "DASzips can only have 4 columns. There may be a cell with text outside of the expected 4 columns.";
         private const string DasZipsTabName = "DASzips";
-        private const string InvalidZipCode = "DASzips has an invalid zip code for column {0} row {1}.";
+        private const string InvalidZipCode = "DASzips has an invalid zip code for column '{0}' row {1}.";
         private const string DuplicateColumns = "DASzips can only have 1 '{0}' column.";
 
         public DeliveryAreaSurchargeUpsZoneExcelReaderTest()
