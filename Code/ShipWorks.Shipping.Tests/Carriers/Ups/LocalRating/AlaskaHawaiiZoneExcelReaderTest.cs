@@ -79,9 +79,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal("Zone file must have 'AK' and 'HI' worksheets.", ex.Message);
         }
 
+        [Fact]
+        public void Read_ThrowsUpsRatingException_WhenFirstColumnRemoved()
+        {
+            IWorkbook workbook = GetDefaultWorkbook();
+            workbook.Worksheets["HI"].DeleteColumn(1);
+
+            string expectedError = "Error reading worksheet 'HI.'\r\r" +
+                                   "HI should have two sections of zip codes with a header" +
+                                   "in the first column labeled 'Postal Codes:'";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
+            Assert.Equal(expectedError, ex.Message);
+
+        }
+
         private IWorkbook GetDefaultWorkbook()
         {
-            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
             IWorksheet hiWorksheet = workbook.Worksheets[0];
 
             hiWorksheet.Name = "HI";
@@ -117,7 +132,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             hiWorksheet.Range["A15"].Text = "56789";
             hiWorksheet.Range["A16"].Text = "01234";
 
-            IWorksheet akWorksheet = workbook.Worksheets.Create();
+            IWorksheet akWorksheet = workbook.Worksheets[1];
 
             akWorksheet.Name = "AK";
             akWorksheet.Range["C1"].Text = "";

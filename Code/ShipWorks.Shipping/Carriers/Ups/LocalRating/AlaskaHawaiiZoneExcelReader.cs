@@ -73,7 +73,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             IRange secondPostalCodeRow = worksheet.Rows.FirstOrDefault(s => s.Cells[0].Value == "Postal Codes:" && s.Row > FirstPostalCodesRow);
             if (secondPostalCodeRow == null)
             {
-                throw new UpsLocalRatingException($"Missing postal codes from {worksheet.Name}.");
+                throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\r\r" +
+                                                  $"{worksheet.Name} should have two sections of zip codes with a header" +
+                                                  "in the first column labeled 'Postal Codes:'");
             }
 
             // Get all of the zone/service combos from the first section
