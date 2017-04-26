@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             for (int i = 1; i <= 6; i++)
             {
-                if (row.Cells[i].Value.Trim() == "-")
+                if (row.Cells[i].Value.Trim() == "-" || string.IsNullOrWhiteSpace(row.Cells[i].Value.Trim()))
                 {
                     continue;
                 }
