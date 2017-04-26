@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private const string MissingDestinationZipColumnErrorMessage = "Worksheet {0} is missing column header '" + DestinationZipHeader + "' expected at cell A1";
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Invalid destination zip {0}.";
+        private const string InvalidZoneErrorMessage = "Invalid zone in sheet {0}, cell {1}. Zones must be 3 digit numbers.";
         
         /// <summary>
         /// Constructor
@@ -67,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             foreach (IRange range in worksheet.Rows)
             {
                 string cellText = range.Cells[0].Text ?? string.Empty;
-
+                
                 // Check for the header, Alaska and Hawaii rows
                 if (string.IsNullOrWhiteSpace(cellText) || cellText == DestinationZipHeader)
                 {
@@ -100,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 if (threeDigitZipRangeRegex.IsMatch(row.Cells[0].Value) || 
                     threeDigitNumberRegex.IsMatch(row.Cells[0].Value))
                 {
-                    ParseRow(row, zones, originFloor, originCeiling);
+                    ParseRow(row, zones, originFloor, originCeiling, worksheet.Name);
                 }
             }
         }
@@ -108,15 +109,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Parse the given row and add it as a zone to the zones collection
         /// </summary>
-        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling)
+        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling, string worksheetName)
         {
             for (int i = 1; i <= 6; i++)
             {
-                if (row.Cells[i].Value.Trim() == "-" || string.IsNullOrWhiteSpace(row.Cells[i].Value.Trim()))
+                string cellValue = row.Cells[i].Value.Trim();
+
+                if (cellValue == "-" || string.IsNullOrWhiteSpace(cellValue))
                 {
                     continue;
                 }
-                
+
+                if (!threeDigitNumberRegex.IsMatch(cellValue))
+                {
+                    throw new UpsLocalRatingException(string.Format(InvalidZoneErrorMessage, worksheetName, row.Cells[i].AddressLocal));
+                }
+
                 UpsLocalRatingZoneEntity zoneEntity =
                     new UpsLocalRatingZoneEntity
                     {
