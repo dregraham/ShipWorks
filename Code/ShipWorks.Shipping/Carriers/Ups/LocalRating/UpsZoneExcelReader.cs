@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
-        private const string MissingServiceHeaderErrorMessage = "{0} is missing the required {1} header.";
+        private const string MissingServiceHeaderErrorMessage = "{0} is missing the required {1} header at {2}.";
         private const string InvalidZoneErrorMessage = "Invalid zone in Worksheet {0}, cell {1}. Zones must be 3 digit numbers.";
 
         /// <summary>
@@ -194,8 +194,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             throw new UpsLocalRatingException(string.Format(InvalidOriginZipErrorMessage, value));
         }
-
-
+        
         /// <summary>
         /// Get the origin zip floor from the worksheet
         /// </summary>
@@ -215,33 +214,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ValidateWorksheetHeaders(IWorksheet worksheet)
         {
-            string worksheetName = worksheet.Name;
-            IRange headerRow = worksheet.Rows[0];
-            
-            ValidateColumnHeader(DestinationZipHeader, 0, headerRow, worksheetName);
-            ValidateColumnHeader(GroundHeader, 1, headerRow, worksheetName);
-            ValidateColumnHeader(ThreeDaySelectHeader, 2, headerRow, worksheetName);
-            ValidateColumnHeader(SecondDayAirHeader, 3, headerRow, worksheetName);
-            ValidateColumnHeader(SecondDayAirAMHeader, 4, headerRow, worksheetName);
-            ValidateColumnHeader(NextDayAirSaverHeader, 5, headerRow, worksheetName);
-            ValidateColumnHeader(NextDayAirHeader, 6, headerRow, worksheetName);
+            ValidateColumnHeader(DestinationZipHeader, "A1", worksheet);
+            ValidateColumnHeader(GroundHeader, "B1", worksheet);
+            ValidateColumnHeader(ThreeDaySelectHeader, "C1", worksheet);
+            ValidateColumnHeader(SecondDayAirHeader, "D1", worksheet);
+            ValidateColumnHeader(SecondDayAirAMHeader, "E1", worksheet);
+            ValidateColumnHeader(NextDayAirSaverHeader, "F1", worksheet);
+            ValidateColumnHeader(NextDayAirHeader, "G1", worksheet);
         }
 
         /// <summary>
         /// Validate that the header string exists in the header row at the given postion 
         /// </summary>
-        private static void ValidateColumnHeader(string header, int position, IRange headerRow, string worksheetName)
+        private static void ValidateColumnHeader(string header, string position, IWorksheet worksheet)
         {
             try
             {
-                if (headerRow.Cells[position].Text != header)
+                if (worksheet.Range[position].Text != header)
                 {
-                    throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheetName, NextDayAirHeader));
+                    throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheet.Name,
+                        NextDayAirHeader, position));
                 }
             }
             catch (IndexOutOfRangeException)
             {
-                throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheetName, NextDayAirHeader));
+                throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheet.Name,
+                    NextDayAirHeader, position));
             }
         }
 

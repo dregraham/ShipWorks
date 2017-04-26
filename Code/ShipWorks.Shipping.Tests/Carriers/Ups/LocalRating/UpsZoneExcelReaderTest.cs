@@ -175,6 +175,46 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenWorksheetIsMissingAColumHeader()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+            worksheet.Range["C1"].Text = "3 Day Select";
+            worksheet.Range["D1"].Text = "2nd Day Air";
+            worksheet.Range["E1"].Text = "2nd Day Air A.M.";
+            worksheet.Range["F1"].Text = "Next Day Air Saver";
+
+            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135" });
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("12345-12345 is missing the required Next Day Air header at G1.", ex.Message);
+        }
+
+        [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenWorksheetIsMissingMultipleColumHeader()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "12345-12345";
+            worksheet.Range["A1"].Text = "Dest. ZIP";
+            worksheet.Range["B1"].Text = "Ground";
+
+            AddRow(worksheet, new[] { "004", "005" });
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("12345-12345 is missing the required Next Day Air header at C1.", ex.Message);
+        }
+
+        [Fact]
         public void Read_SkipsEmptyRow_WhenBlankLineBeforeSingleDestination()
         {
             Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
