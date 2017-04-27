@@ -140,6 +140,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Migrate from Basic to OAuth
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand MigrateToOauth { get; }
 
         /// <summary>
