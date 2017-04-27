@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 else
                 {
-                    throw new UpsLocalRatingException($"Invalid zip code found in sheet {section.Worksheet.Name}, cell {cell.AddressLocal}");
+                    throw new UpsLocalRatingException($"Invalid zip code found in sheet {section.Worksheet.Name}, cell {cell.AddressLocal}.");
                 }
             }
         }
