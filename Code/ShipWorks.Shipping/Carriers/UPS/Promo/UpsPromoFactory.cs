@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public IUpsPromo Get(UpsAccountEntity account, bool existingAccount)
         {
-            return new TelemetricUpsPromo(telemetryEventFunc("Ups.Promo"), GetUpsPromo(account), existingAccount);
+            return new TelemetricUpsPromo(telemetryEventFunc, GetUpsPromo(account), existingAccount);
         }
 
         /// <summary>
