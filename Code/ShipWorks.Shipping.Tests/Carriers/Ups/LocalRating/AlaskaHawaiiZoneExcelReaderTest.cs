@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
@@ -57,26 +56,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
 
-        [Fact]
-        public void Read_ThrowsUpsRatingException_WhenWorksheetsIsMissingAK()
+        [Theory]
+        [InlineData("HI")]
+        [InlineData("AK")]
+        public void Read_ThrowsUpsRatingException_WhenWorksheetsIsMissingAkOrHi(string state)
         {
             IWorkbook workbook = GetDefaultWorkbook();
 
-            workbook.Worksheets.Remove("AK");
-
+            workbook.Worksheets.Remove(state);
+            
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
-            Assert.Equal("Zone file must have 'AK' and 'HI' worksheets.", ex.Message);
-        }
-
-        [Fact]
-        public void Read_ThrowsUpsRatingException_WhenWorksheetsIsMissingHI()
-        {
-            IWorkbook workbook = GetDefaultWorkbook();
-
-            workbook.Worksheets.Remove("HI");
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
-            Assert.Equal("Zone file must have 'AK' and 'HI' worksheets.", ex.Message);
+            Assert.Equal($"Zone file must have a '{state}' worksheet.", ex.Message);
         }
 
         [Fact]
