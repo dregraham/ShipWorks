@@ -1,9 +1,5 @@
 ﻿using Interapptive.Shared.Metrics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
@@ -13,18 +9,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     /// </summary>
     public class TelemetricUpsPromo : IUpsPromo
     {
-        readonly ITrackedEvent telemetryEvent;
         readonly IUpsPromo upsPromo;
+        private readonly Func<string, ITrackedEvent> telemetryEventFunc;
         readonly bool existingAccount;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricUpsPromo(ITrackedEvent telemetryEvent, IUpsPromo upsPromo, bool existingAccount)
+        public TelemetricUpsPromo(Func<string, ITrackedEvent> telemetryEventFunc, IUpsPromo upsPromo, bool existingAccount)
         {
+            this.telemetryEventFunc = telemetryEventFunc;
             this.existingAccount = existingAccount;
             this.upsPromo = upsPromo;
-            this.telemetryEvent = telemetryEvent;
         }
 
         /// <summary>
@@ -105,6 +101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private void LogResult(string result)
         {
+            ITrackedEvent telemetryEvent = telemetryEventFunc("Ups.Promo");
             telemetryEvent.AddProperty("Ups.Promo.Result", result);
             telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", existingAccount ? "true" : "false");
             telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
