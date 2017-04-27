@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.GeekSeller
     /// <summary>
     /// GeekSeller store type
     /// </summary>
-    [KeyedComponent(typeof(StoreType), StoreTypeCode.GeekSeller)]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.GeekSeller, ExternallyOwned = true)]
     public class GeekSellerStoreType : GenericModuleStoreType
     {
         /// <summary>
