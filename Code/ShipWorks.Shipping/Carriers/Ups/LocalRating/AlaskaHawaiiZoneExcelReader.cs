@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     [Component]
     public class AlaskaHawaiiZoneExcelReader : IAlaskaHawaiiZoneExcelReader
     {
-        private static readonly Regex fiveDigitZipRegex = new Regex("^\\s*[0-9]{5}\\s*$");
+        private readonly Regex fiveDigitZipRegex = new Regex("^\\s*[0-9]{5}\\s*$");
         private List<UpsLocalRatingZoneEntity> zones;
 
         /// <summary>
@@ -33,6 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Gets the state sheet.
         /// </summary>
+        /// <exception cref="UpsLocalRatingException"> Throws exception if 1 sheet isn't found
+        /// </exception>
         private static IWorksheet GetStateSheet(IWorksheets zoneWorksheets, string sheetName)
         {
             List<IWorksheet> stateSheets = zoneWorksheets.Cast<IWorksheet>().Where(sheet => sheet.Name == sheetName).ToList();
@@ -55,88 +58,51 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void AddToZones(IWorksheet worksheet)
         {
-            // The worksheet has two sections of postal codes, find the second header "Postal Codes:" because it divides the two sections
-            // to use as an anchor 
-            int rowStartSecondSection = GetSecondSectionStartRow(worksheet);
-            IRange firstSection = worksheet.Range[1, 1, rowStartSecondSection - 1, worksheet.UsedRange.LastColumn];
-            IRange secondSection = worksheet.Range[rowStartSecondSection, 1, worksheet.UsedRange.LastRow, worksheet.UsedRange.LastColumn];
-            AddSectionToZones(firstSection, "first");
-            AddSectionToZones(secondSection, "second");
+            List<IRange> sections = GetSections(worksheet).ToList();
+            if (sections.None())
+            {
+                throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\r\r" +
+                                  $"{worksheet.Name} should have at least one section starting with ground" +
+                                  "in the first column.");
+            }
+
+            foreach (IRange section in sections)
+            {
+                AddSectionToZones(section);
+            }
+        }
+
+        /// <summary>
+        /// Gets the sections from a given worksheet.
+        /// </summary>
+        private IEnumerable<IRange> GetSections(IWorksheet worksheet)
+        {
+            List<int> groundRowNumbers =
+                worksheet.Columns[0].Cells.Where(s => s.Value == "Ground").Select(cell => cell.Row).ToList();
+
+            for (int groundRowNumberIndex = 0; groundRowNumberIndex < groundRowNumbers.Count; groundRowNumberIndex++)
+            {
+                int lastRowOfSection = groundRowNumberIndex == groundRowNumbers.Count - 1 ?
+                    worksheet.UsedRange.LastRow :
+                    groundRowNumbers[groundRowNumberIndex + 1] - 1;
+
+                yield return worksheet.Range[groundRowNumbers[groundRowNumberIndex], 1, lastRowOfSection, worksheet.UsedRange.LastColumn];
+            }
         }
 
         /// <summary>
         /// Adds the section to zones.
         /// </summary>
-        private void AddSectionToZones(IRange section, string sectionName)
+        /// <remarks>
+        /// Each section will start with service labels followed by zone number in columns a and b.
+        /// This will be followed by Postal Codes: in column A followed by a block of zip codes that
+        /// can span any number of columns.
+        /// </remarks>
+        private void AddSectionToZones(IRange section)
         {
-            // Get all of the zone/service combos from the section
-            Dictionary<UpsServiceType, string> zoneDictionary = GetZoneServiceDictionary(section, sectionName);
+            List<int> zipCodes = GetPostalCodes(section).ToList();
+            Dictionary<UpsServiceType, string> zoneDictionary = GetZoneServiceDictionary(section);
 
-            // Create and add zone entities for all of the zip codes in the first section
-            AddToZones(zoneDictionary, GetPostalCodes(section));
-        }
-
-        /// <summary>
-        /// Gets the second section start row number.
-        /// </summary>
-        private int GetSecondSectionStartRow(IWorksheet worksheet)
-        {
-            // Make sure there are two postal codes labels
-            List<int> postalCodeLabelRowNumbers = worksheet.Columns[0].Cells
-                .Where(c => c.Value == "Postal Codes:")
-                .Select(c=>c.Row).ToList();
-
-            if (postalCodeLabelRowNumbers.Count != 2)
-            {
-                    throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\r\r" +
-                                                      $"{worksheet.Name} should have two sections of zip codes with a header" +
-                                                      "in the first column labeled 'Postal Codes:'");
-            }
-
-            // The second section starts with Ground and is between the first and second "Postal Codes:" label
-            List<int> groundLabelRow = worksheet.Columns[0].Cells
-                .Where(
-                    c =>
-                        c.Value == "Ground" && c.Row > postalCodeLabelRowNumbers.First() &&
-                        c.Row < postalCodeLabelRowNumbers.Last())
-                .Select(c => c.Row).ToList();
-
-            if (groundLabelRow.Count != 1)
-            {
-                HandleMissingZone("Ground", "second", worksheet.Name);
-            }
-
-            return groundLabelRow.Single();
-        }
-
-        /// <summary>
-        /// Get a collection of 5 digit zip codes from the given collection or ranges
-        /// </summary>
-        private static List<int> GetPostalCodes(IRange section)
-        {
-            IEnumerable<int> postalCodeLabelRowNumbers =
-                section.Rows.Where(s => s.Cells[0].Value == "Postal Codes:").Select(r=>r.Row).ToList();
-            if (postalCodeLabelRowNumbers.Count() != 1)
-            {
-                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\r\r" +
-                                                  $"{section.Worksheet.Name} should have two sections of zip codes with a header" +
-                                                  "in the first column labeled 'Postal Codes:'");
-            }
-            int postalCodeLabelRowNumber = postalCodeLabelRowNumbers.Single();
-
-            return section.Rows
-                .Where(r => r.Row > postalCodeLabelRowNumber)
-                .SelectMany(r => r.Cells)
-                .Select(cell => cell.Value ?? string.Empty)
-                .Where(zip => fiveDigitZipRegex.IsMatch(zip))
-                .Select(int.Parse).ToList();
-        }
-
-        /// <summary>
-        /// Add a UpsLocalRatingZoneEntity to the zones collection for each Service/Zone and Zip combination
-        /// </summary>
-        private void AddToZones(Dictionary<UpsServiceType, string> zoneDictionary, List<int> zipCodes)
-        {
             foreach (KeyValuePair<UpsServiceType, string> serviceZone in zoneDictionary)
             {
                 foreach (int zipCode in zipCodes)
@@ -155,63 +121,82 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Get a collection of 5 digit zip codes from the given collection or ranges
+        /// </summary>
+        /// <remarks>
+        /// Each section will end with a label in column A with the value of "Postal Codes:"
+        /// followed by a block of zip codes that can span any number of columns.
+        /// </remarks>
+        private IEnumerable<int> GetPostalCodes(IRange section)
+        {
+            // Find "Postal Code:" label and throw if it cannot be found.
+            IEnumerable<int> postalCodeLabelRowNumbers =
+                section.Rows.Where(s => s.Cells[0].Value == "Postal Codes:").Select(r=>r.Row).ToList();
+            if (postalCodeLabelRowNumbers.Count() != 1)
+            {
+                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\r\r" +
+                                                  $"section starting at row {section.Row} should have zip codes with a header" +
+                                                  "in the first column labeled 'Postal Codes:'");
+            }
+
+            // Get the row number for the found postal code row.
+            int postalCodeLabelRowNumber = postalCodeLabelRowNumbers.Single();
+
+            // Get all the non-blank cells in the section under "Postal Codes:"
+            List<IRange> postalCodeCells = section.Rows
+                .Where(r => r.Row > postalCodeLabelRowNumber)
+                .SelectMany(r => r.Cells)
+                .Where(r=> !r.IsBlank)
+                .ToList();
+
+            // Loop through each cell. If we encounter a value that cannot be parsed, throw an exception
+            foreach (IRange cell in postalCodeCells)
+            {
+                string zip = cell.Value ?? string.Empty;
+
+                if (fiveDigitZipRegex.IsMatch(zip))
+                {
+                    yield return int.Parse(zip);
+                }
+                else
+                {
+                    throw new UpsLocalRatingException($"Invalid zip code found in sheet {section.Worksheet.Name}, cell {cell.AddressLocal}");
+                }
+            }
+        }
+
         /// <summary>
         /// Build a dictionary of UpsServiceType/Zone from the worksheet
         /// </summary>
-        private static Dictionary<UpsServiceType, string> GetZoneServiceDictionary(IRange section, string sectionName)
+        private static Dictionary<UpsServiceType, string> GetZoneServiceDictionary(IRange section)
         {
-            string groundZone = section.Rows.FirstOrDefault(r => r.Cells[0].Value == "Ground")?.Cells[1].Value;
-            string nextDayAirZone = section.Rows.FirstOrDefault(r => r.Cells[0].Value == "Next Day Air")?.Cells[1].Value;
-            string twoDayAirZone = section.Rows.FirstOrDefault(r => r.Cells[0].Value == "Second Day Air")?.Cells[1].Value;
-            
-            ValidateZones(groundZone, nextDayAirZone, twoDayAirZone, sectionName, section.Worksheet.Name);
+            Dictionary<UpsServiceType, string> zoneTypes = new Dictionary<UpsServiceType, string>();
 
-            return GetServiceDictionary(groundZone, nextDayAirZone, twoDayAirZone);
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsGround, "Ground");
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsNextDayAir, "Next Day Air");
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.Ups2DayAir, "Second Day Air");
+
+            return zoneTypes;
         }
 
         /// <summary>
-        /// Build a dictionary of UpsServiceType and passed in strings.
+        /// Adds the UpsServiceType Zone defined in section.
         /// </summary>
-        private static Dictionary<UpsServiceType, string> GetServiceDictionary(string ground,
-            string nextDayAir,
-            string twoDayAir)
+        private static void AddZoneDictionaryEntry(Dictionary<UpsServiceType, string> zoneTypes,
+            IRange section,
+            UpsServiceType upsServiceType,
+            string serviceName)
         {
-            return new Dictionary<UpsServiceType, string>
+            string zoneValue = section.Rows.FirstOrDefault(r => r.Cells[0].Value == serviceName)?.Cells[1].Value;
+            if (string.IsNullOrWhiteSpace(zoneValue))
             {
-                {UpsServiceType.UpsGround, ground},
-                {UpsServiceType.UpsNextDayAir, nextDayAir},
-                {UpsServiceType.Ups2DayAir, twoDayAir}
-            };
-        }
-
-        /// <summary>
-        /// Ensure each zone string has a value
-        /// </summary>
-        private static void ValidateZones(string ground, string nextDayAir, string twoDayAir, string section, string worksheetName)
-        {
-            if (string.IsNullOrWhiteSpace(ground))
-            {
-                HandleMissingZone("Ground", section, worksheetName);
+                throw new UpsLocalRatingException($"Error reading worksheet {section.Worksheet.Name} \n\n" +
+                                                  $"Missing {serviceName} zone for section starting at row {section.Row}.");
             }
 
-            if (string.IsNullOrWhiteSpace(nextDayAir))
-            {
-                HandleMissingZone("Next Day Air", section, worksheetName);
-            }
-
-            if (string.IsNullOrWhiteSpace(twoDayAir))
-            {
-                HandleMissingZone("Second Day Air", section, worksheetName);
-            }
-        }
-
-        /// <summary>
-        /// Throw an exception with the missing zone service for a section/worksheet 
-        /// </summary>
-        private static void HandleMissingZone(string service, string section, string worksheetName)
-        {
-            throw new UpsLocalRatingException($"Missing {service} zone for {section} section of {worksheetName} worksheet.");
+            zoneTypes.Add(upsServiceType, zoneValue);
         }
     }
 }

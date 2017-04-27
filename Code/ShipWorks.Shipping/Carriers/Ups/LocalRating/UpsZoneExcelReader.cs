@@ -122,9 +122,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
             int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
 
-            for (int i = 1; i <= 6; i++)
+            for (int column = 1; column <= 6; column++)
             {
-                string cellValue = row.Cells[i].Value.Trim();
+                string cellValue = row.Cells[column].Value.Trim();
 
                 if (cellValue == "-" || string.IsNullOrWhiteSpace(cellValue))
                 {
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                 if (!threeDigitNumberRegex.IsMatch(cellValue))
                 {
-                    throw new UpsLocalRatingException(string.Format(InvalidZoneErrorMessage, worksheetName, row.Cells[i].AddressLocal));
+                    throw new UpsLocalRatingException(string.Format(InvalidZoneErrorMessage, worksheetName, row.Cells[column].AddressLocal));
                 }
 
                 UpsLocalRatingZoneEntity zoneEntity =
@@ -143,8 +143,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                         DestinationZipFloor = destinationZipFloor,
                         OriginZipCeiling = originCeiling,
                         OriginZipFloor = originFloor,
-                        Service = (int) GetServiceType(i),
-                        Zone = row.Cells[i].Value.Trim()
+                        Service = (int) GetServiceType(column),
+                        Zone = row.Cells[column].Value.Trim()
                     };
                 zones.Add(zoneEntity);
             }

@@ -33,28 +33,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(48, result.Count());
         }
 
-        [Fact]
-        public void Read_ThrowsUpsRatingException_WhenWorksheetsFirstSectionIsMissingGroundZone()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(8)]
+        public void Read_ThrowsUpsRatingException_WhenWorksheetsSectionIsMissingGroundZone(int row)
         {
             IWorkbook workbook = GetDefaultWorkbook();
 
-            workbook.Worksheets["AK"].Range["B1"].Text = string.Empty;
+            workbook.Worksheets["AK"].Range[$"B{row}"].Text = string.Empty;
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
-            Assert.Equal("Missing Ground zone for first section of AK worksheet.", ex.Message);
+
+            string expectedErrorMessage = "Error reading worksheet AK \n\n" +
+                                          $"Missing Ground zone for section starting at row {row}.";
+            Assert.Equal(expectedErrorMessage, ex.Message);
         }
-
-        [Fact]
-        public void Read_ThrowsUpsRatingException_WhenWorksheetsSecondSectionIsMissingGroundZone()
-        {
-            IWorkbook workbook = GetDefaultWorkbook();
-
-            workbook.Worksheets["AK"].Range["B8"].Text = string.Empty;
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
-            Assert.Equal("Missing Ground zone for second section of AK worksheet.", ex.Message);
-        }
-
 
         [Theory]
         [InlineData("HI")]
@@ -76,8 +69,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             workbook.Worksheets["HI"].DeleteColumn(1);
 
             string expectedError = "Error reading worksheet 'HI.'\r\r" +
-                                   "HI should have two sections of zip codes with a header" +
-                                   "in the first column labeled 'Postal Codes:'";
+                                  "HI should have at least one section starting with ground" +
+                                  "in the first column.";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
             Assert.Equal(expectedError, ex.Message);
