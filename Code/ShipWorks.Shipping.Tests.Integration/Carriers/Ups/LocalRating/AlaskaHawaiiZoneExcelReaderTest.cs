@@ -52,16 +52,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Theory]
-        [InlineData("AK", "99", UpsServiceType.UpsGround, "44", 5, 11)]
+        [InlineData("AK", "99", UpsServiceType.UpsGround, "044", 5, 11)]
         [InlineData("AK", "99", UpsServiceType.UpsNextDayAir, "124", 5, 11)]
         [InlineData("AK", "99", UpsServiceType.Ups2DayAir, "224", 5, 11)]
-        [InlineData("AK", "99", UpsServiceType.UpsGround, "46", 17, 41)]
+        [InlineData("AK", "99", UpsServiceType.UpsGround, "046", 17, 41)]
         [InlineData("AK", "99", UpsServiceType.UpsNextDayAir, "126", 17, 41)]
         [InlineData("AK", "99", UpsServiceType.Ups2DayAir, "226", 17, 41)]
-        [InlineData("HI", "96", UpsServiceType.UpsGround, "44", 5, 13)]
+        [InlineData("HI", "96", UpsServiceType.UpsGround, "044", 5, 13)]
         [InlineData("HI", "96", UpsServiceType.UpsNextDayAir, "124", 5, 13)]
         [InlineData("HI", "96", UpsServiceType.Ups2DayAir, "224", 5, 13)]
-        [InlineData("HI", "96", UpsServiceType.UpsGround, "46", 19, 26)]
+        [InlineData("HI", "96", UpsServiceType.UpsGround, "046", 19, 26)]
         [InlineData("HI", "96", UpsServiceType.UpsNextDayAir, "126", 19, 26)]
         [InlineData("HI", "96", UpsServiceType.Ups2DayAir, "226", 19, 26)]
         public void Read_SavesCorrectNumberOfUS48Das(string sheetName, string zipPrefix, UpsServiceType service, string zone, int startRow, int endRow)

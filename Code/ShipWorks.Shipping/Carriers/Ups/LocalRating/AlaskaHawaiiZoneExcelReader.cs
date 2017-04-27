@@ -189,14 +189,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsServiceType upsServiceType,
             string serviceName)
         {
-            string zoneValue = section.Rows.FirstOrDefault(r => r.Cells[0].Value == serviceName)?.Cells[1].Value;
-            if (string.IsNullOrWhiteSpace(zoneValue))
+            IRange zoneCell = section.Rows.FirstOrDefault(r => r.Cells[0].Value == serviceName)?.Cells[1];
+            
+            if (string.IsNullOrWhiteSpace(zoneCell?.Value))
             {
                 throw new UpsLocalRatingException($"Error reading worksheet {section.Worksheet.Name} \n\n" +
                                                   $"Missing {serviceName} zone for section starting at row {section.Row}.");
             }
 
-            zoneTypes.Add(upsServiceType, zoneValue);
+            zoneTypes.Add(upsServiceType, UpsZoneExcelReader.GetZoneValue(zoneCell));
         }
     }
 }

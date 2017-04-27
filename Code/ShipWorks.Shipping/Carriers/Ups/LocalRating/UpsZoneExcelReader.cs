@@ -66,6 +66,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             upsLocalRateTable.ReplaceZones(zones);
         }
 
+        /// <summary>
+        /// Gets the zone value from the zone cell
+        /// </summary>
+        public static string GetZoneValue(IRange zoneCell)
+        {
+            int zone;
+
+            // Ensure zone is a number between 0-1000. Pad with leading zeros if number is less than 3 digits
+            if (int.TryParse(zoneCell.Value, out zone) && zone > 0 && zone < 1000)
+            {
+                return zoneCell.Value.PadLeft(3, '0');
+            }
+
+            throw new UpsLocalRatingException(string.Format(InvalidZoneErrorMessage, zoneCell.Worksheet.Name, zoneCell.AddressLocal));
+        }
 
         /// <summary>
         /// Quickly lint the worksheet and make sure that the required rows are present and correct
@@ -109,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 if (threeDigitZipRangeRegex.IsMatch(row.Cells[0].Value) || 
                     threeDigitNumberRegex.IsMatch(row.Cells[0].Value))
                 {
-                    ParseRow(row, zones, originFloor, originCeiling, worksheet.Name);
+                    ParseRow(row, zones, originFloor, originCeiling);
                 }
             }
         }
@@ -117,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Parse the given row and add it as a zone to the zones collection
         /// </summary>
-        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling, string worksheetName)
+        private static void ParseRow(IRange row, List<UpsLocalRatingZoneEntity> zones, int originFloor, int originCeiling)
         {
             int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
             int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
@@ -131,11 +146,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     continue;
                 }
 
-                if (!threeDigitNumberRegex.IsMatch(cellValue))
-                {
-                    throw new UpsLocalRatingException(string.Format(InvalidZoneErrorMessage, worksheetName, row.Cells[column].AddressLocal));
-                }
-
                 UpsLocalRatingZoneEntity zoneEntity =
                     new UpsLocalRatingZoneEntity
                     {
@@ -144,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                         OriginZipCeiling = originCeiling,
                         OriginZipFloor = originFloor,
                         Service = (int) GetServiceType(column),
-                        Zone = row.Cells[column].Value.Trim()
+                        Zone = GetZoneValue(row.Cells[column])
                     };
                 zones.Add(zoneEntity);
             }
