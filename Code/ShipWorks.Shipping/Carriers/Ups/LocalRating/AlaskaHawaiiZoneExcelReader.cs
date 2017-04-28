@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (sections.None())
             {
                 throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\r\r" +
-                                  $"{worksheet.Name} should have at least one section starting with ground" +
+                                  $"{worksheet.Name} should have at least one section starting with 'Ground' " +
                                   "in the first column.");
             }
 
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (postalCodeLabelRowNumbers.Count() != 1)
             {
                 throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\r\r" +
-                                                  $"section starting at row {section.Row} should have zip codes with a header" +
+                                                  $"section starting at row {section.Row} should have zip codes with a header " +
                                                   "in the first column labeled 'Postal Codes:'");
             }
 
