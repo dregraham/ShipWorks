@@ -43,6 +43,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal("Invalid zip code found in sheet HI, cell A13.", ex.Message);
         }
 
+
+        [Fact]
+        public void Read_ThrowsUpsRatingException_WhenGroundNotInA1()
+        {
+            IWorkbook workbook = GetDefaultWorkbook();
+            workbook.Worksheets["HI"].Range["A1"].Value = "Overnight";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
+            Assert.Equal("Invalid zip code found in sheet HI, cell A13.", ex.Message);
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(8)]

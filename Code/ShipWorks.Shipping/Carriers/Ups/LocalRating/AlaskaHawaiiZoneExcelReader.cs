@@ -58,6 +58,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void AddToZones(IWorksheet worksheet)
         {
+            if (worksheet.Range["A1"].Value != "Ground")
+            {
+                throw new UpsLocalRatingException($"In worksheet '{worksheet.Name}', cell A1 should be Ground.");
+            }
+
             List<IRange> sections = GetSections(worksheet).ToList();
             if (sections.None())
             {
@@ -79,8 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             List<int> groundRowNumbers =
                 worksheet.Columns[0].Cells.Where(s => s.Value == "Ground").Select(cell => cell.Row).ToList();
-
-
+            
             List<IRange> sections = new List<IRange>();
             for (int groundRowNumberIndex = 0; groundRowNumberIndex < groundRowNumbers.Count; groundRowNumberIndex++)
             {
