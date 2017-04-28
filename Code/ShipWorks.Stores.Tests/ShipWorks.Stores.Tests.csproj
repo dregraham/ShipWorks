@@ -177,6 +177,7 @@
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifierTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactoryTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticatorTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactoryTest.cs" />
     <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceOrderSearchCriteriaFactoryTest.cs" />

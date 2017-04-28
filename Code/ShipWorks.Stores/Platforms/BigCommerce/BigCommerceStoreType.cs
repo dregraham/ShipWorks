@@ -31,6 +31,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [KeyedComponent(typeof(StoreType), StoreTypeCode.BigCommerce)]
     public class BigCommerceStoreType : StoreType
     {
+        static readonly Regex oauthLicenseTransformer =
+            new Regex("https?://api.bigcommerce.com/stores/([^/]*)/.*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStoreType));
         readonly Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader;
         readonly Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater;
@@ -85,27 +88,45 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 string identifier = TypedStore.ApiUrl.ToLowerInvariant();
 
-                // When upgrading legacy BigCommerce stores, we changed from store module to ApiUrl
-                // So it now ends in api/v2/ which doesn't match up with what the license is registered to,
-                // so remove api/v2/ to mimic the old license scheme
-                int indexOfApiPath = identifier.IndexOf("api/v2/", 0, StringComparison.OrdinalIgnoreCase);
-                if (indexOfApiPath > 0)
-                {
-                    identifier = identifier.Substring(0, indexOfApiPath);
-                }
-
-                identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
-
-                // The regex above will return just the scheme if there's no ending /, so check for that and
-                // reset to the StoreUrl
-                if (identifier.EndsWith(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-                {
-                    identifier = TypedStore.ApiUrl.ToLowerInvariant();
-                }
-
-                return identifier;
+                return TypedStore.BigCommerceAuthentication == BigCommerceAuthenticationType.Oauth ?
+                    OAuthLicenseIdentifier(identifier) :
+                    LegacyLicenseIdentifier(identifier);
             }
         }
+
+        /// <summary>
+        /// Get a legacy license identifier from the store
+        /// </summary>
+        /// <remarks>
+        /// When upgrading legacy BigCommerce stores, we changed from store module to ApiUrl
+        /// So it now ends in api/v2/ which doesn't match up with what the license is registered to,
+        /// so remove api/v2/ to mimic the old license scheme
+        /// </remarks>
+        private string LegacyLicenseIdentifier(string identifier)
+        {
+            int indexOfApiPath = identifier.IndexOf("api/v2/", 0, StringComparison.OrdinalIgnoreCase);
+            if (indexOfApiPath > 0)
+            {
+                identifier = identifier.Substring(0, indexOfApiPath);
+            }
+
+            identifier = Regex.Replace(identifier, @"(admin/)?[^/]*(\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+
+            // The regex above will return just the scheme if there's no ending /, so check for that and
+            // reset to the StoreUrl
+            if (identifier.EndsWith(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
+            {
+                identifier = TypedStore.ApiUrl.ToLowerInvariant();
+            }
+
+            return identifier;
+        }
+
+        /// <summary>
+        /// Get an OAuth license identifier
+        /// </summary>
+        private static string OAuthLicenseIdentifier(string identifier) =>
+            oauthLicenseTransformer.Replace(identifier, "store-$1.mybigcommerce.com/");
 
         /// <summary>
         /// Initial download policy of the store
