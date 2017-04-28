@@ -176,6 +176,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
             orderEntity.OnlineStatusCode = GetOnlineStatusCode(order);
+            orderEntity.OnlineStatus = GetOnlineStatus(orderEntity);
             orderEntity.RequestedShipping = GetRequestedShipping(order);
             orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
             orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
@@ -194,6 +195,21 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         }
 
         /// <summary>
+        /// Get Online Status
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderEntity"></param>
+        /// <returns></returns>
+        private string GetOnlineStatusCode(YahooOrder order)
+        {
+            string code = order.StatusList.OrderStatus.First().StatusID;
+
+            return code.Equals("0") ?
+                order.StatusList.OrderStatus.Last().StatusID :
+                code;
+        }
+
+        /// <summary>
         /// Get the online status code for this order
         /// </summary>
         /// <remarks>
@@ -204,16 +220,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// been updated manually, so take the last one instead. If not, that is the
         /// manually updated status, so keep it
         /// </remarks>
-        private object GetOnlineStatusCode(YahooOrder order)
+        private string GetOnlineStatus(YahooOrderEntity order)
         {
-            string code = order.StatusList.OrderStatus.First().StatusID;
-
-            if (code.Equals("0"))
-            {
-                code = order.StatusList.OrderStatus.Last().StatusID;
-            }
-
-            int statusID = int.Parse(code);
+            int statusID = int.Parse(order.OnlineStatusCode.ToString());
 
             if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count())
             {
@@ -221,15 +230,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             }
 
             string status = webClient.GetCustomOrderStatus(statusID)
-                    .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
-                    .Code;
+                .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
+                .Code;
 
             if (status != null)
             {
                 return status;
             }
 
-            return code;
+            return order.OnlineStatus;
         }
 
         /// <summary>
