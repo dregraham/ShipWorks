@@ -45,10 +45,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Date of the upload
+        /// Date of the rates upload
         /// </summary>
         public DateTime? RateUploadDate { get; private set; } = null;
 
+        /// <summary>
+        /// Date of the zones upload
+        /// </summary>
         public DateTime? ZoneUploadDate { get; private set; } = null;
 
         /// <summary>
@@ -233,19 +236,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges)
         {
             deliveryAreaSurcharges = localRatingDeliveryAreaSurcharges;
-        }
-
-        /// <summary>
-        /// Writes the zones to stream.
-        /// </summary>
-        public void WriteZonesToStream(Stream stream)
-        {
-            if (zoneFileContent == null)
-            {
-                throw new UpsLocalRatingException("Error in WriteZonesToStream - ZoneFileContent is null.");
-            }
-
-            stream.Write(zoneFileContent, 0, zoneFileContent.Length);
         }
     }
 }

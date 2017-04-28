@@ -67,10 +67,5 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Replaces the delivery area surcharges.
         /// </summary>
         void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges);
-
-        /// <summary>
-        /// Writes the zones to stream.
-        /// </summary>
-        void WriteZonesToStream(Stream stream);
     }
 }
