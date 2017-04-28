@@ -80,14 +80,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             List<int> groundRowNumbers =
                 worksheet.Columns[0].Cells.Where(s => s.Value == "Ground").Select(cell => cell.Row).ToList();
 
+
+            List<IRange> sections = new List<IRange>();
             for (int groundRowNumberIndex = 0; groundRowNumberIndex < groundRowNumbers.Count; groundRowNumberIndex++)
             {
                 int lastRowOfSection = groundRowNumberIndex == groundRowNumbers.Count - 1 ?
                     worksheet.UsedRange.LastRow :
                     groundRowNumbers[groundRowNumberIndex + 1] - 1;
 
-                yield return worksheet.Range[groundRowNumbers[groundRowNumberIndex], 1, lastRowOfSection, worksheet.UsedRange.LastColumn];
+                sections.Add(worksheet.Range[groundRowNumbers[groundRowNumberIndex], 1, lastRowOfSection, worksheet.UsedRange.LastColumn]);
             }
+            return sections;
         }
 
         /// <summary>
@@ -152,19 +155,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 .ToList();
 
             // Loop through each cell. If we encounter a value that cannot be parsed, throw an exception
+            List<int> codes = new List<int>();
             foreach (IRange cell in postalCodeCells)
             {
                 string zip = cell.Value ?? string.Empty;
 
                 if (fiveDigitZipRegex.IsMatch(zip))
                 {
-                    yield return int.Parse(zip);
+                    codes.Add(int.Parse(zip));
                 }
                 else
                 {
                     throw new UpsLocalRatingException($"Invalid zip code found in sheet {section.Worksheet.Name}, cell {cell.AddressLocal}.");
                 }
             }
+            return codes;
         }
 
         /// <summary>
