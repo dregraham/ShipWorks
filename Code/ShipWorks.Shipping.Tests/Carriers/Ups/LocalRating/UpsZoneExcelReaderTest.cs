@@ -211,7 +211,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             AddRow(worksheet, new[] { "004", "005" });
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("12345-12345 is missing the required Next Day Air header at C1.", ex.Message);
+            Assert.Equal("12345-12345 is missing the required 3 Day Select header at C1.", ex.Message);
         }
 
         [Fact]
