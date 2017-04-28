@@ -241,14 +241,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 if (worksheet.Range[position].Text != header)
                 {
-                    throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheet.Name,
-                        NextDayAirHeader, position));
+                    throw new UpsLocalRatingException(
+                        string.Format(MissingServiceHeaderErrorMessage, worksheet.Name, header, position));
                 }
             }
             catch (IndexOutOfRangeException)
             {
-                throw new UpsLocalRatingException(string.Format(MissingServiceHeaderErrorMessage, worksheet.Name,
-                    NextDayAirHeader, position));
+                throw new UpsLocalRatingException(
+                    string.Format(MissingServiceHeaderErrorMessage, worksheet.Name, header, position));
             }
         }
 
