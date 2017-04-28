@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             List<IRange> sections = GetSections(worksheet).ToList();
             if (sections.None())
             {
-                throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\r\r" +
+                throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\n\n" +
                                   $"{worksheet.Name} should have at least one section starting with 'Ground' " +
                                   "in the first column.");
             }
@@ -139,8 +139,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 section.Rows.Where(s => s.Cells[0].Value == "Postal Codes:").Select(r=>r.Row).ToList();
             if (postalCodeLabelRowNumbers.Count() != 1)
             {
-                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\r\r" +
-                                                  $"section starting at row {section.Row} should have zip codes with a header " +
+                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\n\n" +
+                                                  $"Section starting at row {section.Row} should have zip codes with a header " +
                                                   "in the first column labeled 'Postal Codes:'");
             }
 
