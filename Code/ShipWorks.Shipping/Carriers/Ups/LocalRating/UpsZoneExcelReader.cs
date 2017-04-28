@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Animation;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Syncfusion.XlsIO;
@@ -90,24 +92,26 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             ValidateWorksheetHeaders(worksheet);
 
-            foreach (IRange cell in worksheet.Columns[0].Cells)
-            {
-                string cellText = cell.Value;
-                
-                if (cell.EntireRow.IsBlank || cellText == DestinationZipHeader)
-                {
-                    continue;
-                }
+            worksheet.Columns[0].Cells.ForEach(ValidateCell);
+        }
 
-                // Everything else has to be one of the following formats ###-###, ### or #####
-                if (!threeDigitZipRangeRegex.IsMatch(cellText) && !threeDigitNumberRegex.IsMatch(cellText))
-                {
-                    // If we got this far the first column of the row is not valid
-                    throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage, worksheet.Name, cell.Value));
-                }
+        /// <summary>
+        /// Validates the cell - throws if invalid.
+        /// </summary>
+        private static void ValidateCell(IRange cell)
+        {
+            bool valid = cell.EntireRow.IsBlank ||
+                         cell.Value == DestinationZipHeader ||
+                         threeDigitZipRangeRegex.IsMatch(cell.Value) ||
+                         threeDigitNumberRegex.IsMatch(cell.Value);
+            
+            if (!valid)
+            {
+                throw new UpsLocalRatingException(string.Format(InvalidDestinationZipErrorMessage,
+                    cell.Worksheet.Name, cell.Value));
             }
         }
-        
+
         /// <summary>
         /// parse zones from the worksheet and add them to the zone collection
         /// </summary>
