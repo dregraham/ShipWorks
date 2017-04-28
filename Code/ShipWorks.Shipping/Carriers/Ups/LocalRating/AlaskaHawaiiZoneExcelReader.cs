@@ -141,11 +141,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // Find "Postal Code:" label and throw if it cannot be found.
             IEnumerable<int> postalCodeLabelRowNumbers =
                 section.Rows.Where(s => s.Cells[0].Value == "Postal Codes:").Select(r=>r.Row).ToList();
-            if (postalCodeLabelRowNumbers.Count() != 1)
+            if (postalCodeLabelRowNumbers.None())
             {
                 throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\n\n" +
                                                   $"Section starting at row {section.Row} should have zip codes with a header " +
                                                   "in the first column labeled 'Postal Codes:'");
+            }
+
+            if (postalCodeLabelRowNumbers.Count() > 1)
+            {
+                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}.'\n\n" +
+                                                  "Each section must start with a Ground zone definition in column A.");
             }
 
             // Get the row number for the found postal code row.

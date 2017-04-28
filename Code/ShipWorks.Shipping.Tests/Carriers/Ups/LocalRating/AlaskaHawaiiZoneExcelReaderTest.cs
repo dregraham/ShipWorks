@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             workbook.Worksheets["HI"].Range["A1"].Value = "Overnight";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
-            Assert.Equal("Invalid zip code found in sheet HI, cell A13.", ex.Message);
+            Assert.Equal("In worksheet 'HI', cell A1 should be Ground.", ex.Message);
         }
 
         [Theory]
@@ -67,6 +67,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             string expectedErrorMessage = "Error reading worksheet AK \n\n" +
                                           $"Missing Ground zone for section starting at row {row}.";
+            Assert.Equal(expectedErrorMessage, ex.Message);
+        }
+
+        [Fact]
+        public void Read_ThrowsUpsRatingException_WhenWorksheetsSectionIsMissingGroundLabel()
+        {
+            IWorkbook workbook = GetDefaultWorkbook();
+
+            workbook.Worksheets["AK"].Range["A8"].Text = string.Empty;
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
+
+            string expectedErrorMessage = "Error reading worksheet \'AK.\'\n\n" +
+                                          "Each section must start with a Ground zone definition in column A.";
             Assert.Equal(expectedErrorMessage, ex.Message);
         }
 
@@ -89,9 +103,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IWorkbook workbook = GetDefaultWorkbook();
             workbook.Worksheets["HI"].DeleteColumn(1);
 
-            string expectedError = "Error reading worksheet 'HI.'\r\r" +
-                                  "HI should have at least one section starting with ground" +
-                                  "in the first column.";
+            string expectedError = "In worksheet 'HI', cell A1 should be Ground.";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
             Assert.Equal(expectedError, ex.Message);
