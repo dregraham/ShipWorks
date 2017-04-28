@@ -84,6 +84,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal(expectedErrorMessage, ex.Message);
         }
 
+        [Fact]
+        public void Read_ThrowsUpsRatingException_WhenWorksheetsSectionStartsWithAServiceOtherThanGround()
+        {
+            IWorkbook workbook = GetDefaultWorkbook();
+
+            workbook.Worksheets["AK"].Range["A8"].Text = "Next Day Air"; 
+            workbook.Worksheets["AK"].Range["A9"].Text = "Ground";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.GetAlaskaHawaiiZones(workbook.Worksheets));
+
+            string expectedErrorMessage = "Error reading worksheet 'AK' \n\n" +
+                                          "The zones for section starting at around row 9 should be in the order of:\n" +
+                                          " - Ground\n - Next Day Air\n - Second Day Air\n - Postal Codes:";
+
+            Assert.Equal(expectedErrorMessage, ex.Message);
+        }
+
         [Theory]
         [InlineData("HI")]
         [InlineData("AK")]

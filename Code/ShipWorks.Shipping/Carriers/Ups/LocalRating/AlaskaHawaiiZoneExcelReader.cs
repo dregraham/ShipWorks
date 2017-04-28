@@ -64,16 +64,42 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             List<IRange> sections = GetSections(worksheet).ToList();
+            ValidateSections(worksheet.Name, sections);
+
+            foreach (IRange section in sections)
+            {
+                AddSectionToZones(section);
+            }
+        }
+
+        /// <summary>
+        /// Validates the sections - Makes sure there is at least one section and it has all expected zones.
+        /// </summary>
+        private void ValidateSections(string worksheetName, List<IRange> sections)
+        {
             if (sections.None())
             {
-                throw new UpsLocalRatingException($"Error reading worksheet '{worksheet.Name}.'\n\n" +
-                                  $"{worksheet.Name} should have at least one section starting with 'Ground' " +
+                throw new UpsLocalRatingException($"Error reading worksheet '{worksheetName}.'\n\n" +
+                                  $"{worksheetName} should have at least one section starting with 'Ground' " +
                                   "in the first column.");
             }
 
             foreach (IRange section in sections)
             {
-                AddSectionToZones(section);
+                ValidateLabel(section, 0, "Ground");
+                ValidateLabel(section, 1, "Next Day Air");
+                ValidateLabel(section, 2, "Second Day Air");
+                ValidateLabel(section, 3, "Postal Codes:");
+            }
+        }
+
+        private void ValidateLabel(IRange section, int relativeRow, string expectedValue)
+        {
+            if (section.Columns[0].Cells[relativeRow].Value != expectedValue)
+            {
+                throw new UpsLocalRatingException($"Error reading worksheet '{section.Worksheet.Name}' \n\n" +
+                                                  $"The zones for section starting at around row {section.Row} should be in the order of:\n" +
+                                                  " - Ground\n - Next Day Air\n - Second Day Air\n - Postal Codes:");
             }
         }
 
@@ -94,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                 sections.Add(worksheet.Range[groundRowNumbers[groundRowNumberIndex], 1, lastRowOfSection, worksheet.UsedRange.LastColumn]);
             }
+
             return sections;
         }
 
@@ -189,9 +216,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             Dictionary<UpsServiceType, string> zoneTypes = new Dictionary<UpsServiceType, string>();
 
-            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsGround, "Ground");
-            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsNextDayAir, "Next Day Air");
-            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.Ups2DayAir, "Second Day Air");
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsGround, "Ground", 0);
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.UpsNextDayAir, "Next Day Air", 1);
+            AddZoneDictionaryEntry(zoneTypes, section, UpsServiceType.Ups2DayAir, "Second Day Air", 2);
 
             return zoneTypes;
         }
@@ -199,20 +226,24 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Adds the UpsServiceType Zone defined in section.
         /// </summary>
+        /// <remarks>
+        /// expectedRelativeRow is 0 based.
+        /// </remarks>
         private static void AddZoneDictionaryEntry(Dictionary<UpsServiceType, string> zoneTypes,
             IRange section,
             UpsServiceType upsServiceType,
-            string serviceName)
+            string serviceName,
+            int expectedRelativeRow)
         {
-            IRange zoneCell = section.Rows.FirstOrDefault(r => r.Cells[0].Value == serviceName)?.Cells[1];
-            
-            if (string.IsNullOrWhiteSpace(zoneCell?.Value))
+            IRange zoneValueCell = section.Rows[expectedRelativeRow]?.Cells[1];
+
+            if (string.IsNullOrWhiteSpace(zoneValueCell?.Value))
             {
                 throw new UpsLocalRatingException($"Error reading worksheet {section.Worksheet.Name} \n\n" +
                                                   $"Missing {serviceName} zone for section starting at row {section.Row}.");
             }
 
-            zoneTypes.Add(upsServiceType, UpsZoneExcelReader.GetZoneValue(zoneCell));
+            zoneTypes.Add(upsServiceType, UpsZoneExcelReader.GetZoneValue(zoneValueCell));
         }
     }
 }
