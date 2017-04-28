@@ -13,12 +13,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// The date of the rate upload
         /// </summary>
-        DateTime? UploadDate { get; }
+        DateTime? RateUploadDate { get; }
+
+
+        /// <summary>
+        /// The date the zones were uploaded
+        /// </summary>
+        DateTime? ZoneUploadDate { get; }
 
         /// <summary>
         /// Load the rate table from a stream
         /// </summary>
-        void Load(Stream stream);
+        void LoadRates(Stream stream);
+
+        /// <summary>
+        /// Loads the zones from a stream
+        /// </summary>
+        void LoadZones(Stream stream);
 
         /// <summary>
         /// Load the rate table from a UpsAccountEntity
@@ -28,7 +39,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Save the rate table
         /// </summary>
-        void Save(UpsAccountEntity accountEntity);
+        void SaveRates(UpsAccountEntity accountEntity);
+
+        /// <summary>
+        /// Saves the zones.
+        /// </summary>
+        void SaveZones();
 
         /// <summary>
         /// Add a surcharge collection to the surcharge table
@@ -41,5 +57,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         void ReplaceRates(IEnumerable<UpsPackageRateEntity> packageRates,
             IEnumerable<UpsLetterRateEntity> letterRates,
             IEnumerable<UpsPricePerPoundEntity> pricesPerPound);
+
+        /// <summary>
+        /// Replaces the zones.
+        /// </summary>
+        void ReplaceZones(IEnumerable<UpsLocalRatingZoneEntity> zones);
+
+        /// <summary>
+        /// Replaces the delivery area surcharges.
+        /// </summary>
+        void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges);
     }
 }

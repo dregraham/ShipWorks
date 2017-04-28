@@ -47,5 +47,21 @@ namespace ShipWorks.Data.Connection
         /// Saves the entity.
         /// </summary>
         bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, bool recurse);
+
+        /// <summary>
+        /// Fetches one or more entities which match the filter information in the filterBucket into the EntityCollection passed.
+        /// The entity collection object has to contain an entity factory object which will be the factory for the entity instances
+        /// to be fetched.
+        /// </summary>
+        /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned of the type created by
+        /// the factory in the passed in EntityCollection instance.</param>
+        /// <param name="maxNumberOfItemsToReturn">The maximum amount of entities to return. If 0, all entities matching the filter are returned</param>
+        /// <param name="sortClauses">SortClause expression which is applied to the query executed, sorting the fetch result.</param>
+        /// <exception cref="T:System.ArgumentException">If the passed in collectionToFill doesn't contain an entity factory.</exception>
+        void FetchEntityCollection(IEntityCollection2 collectionToFill,
+            IRelationPredicateBucket filterBucket,
+            int maxNumberOfItemsToReturn,
+            ISortExpression sortClauses);
     }
 }

@@ -13,6 +13,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         void Save(UpsRateTableEntity rateTable, UpsAccountEntity account);
 
         /// <summary>
+        /// Saves the given zone file
+        /// </summary>
+        void Save(UpsLocalRatingZoneFileEntity zoneFile);
+
+        /// <summary>
+        /// Gets the latest zone file
+        /// </summary>
+        UpsLocalRatingZoneFileEntity GetLatestZoneFile();
+
+        /// <summary>
         /// Remove rate tables that are not associated with a UpsAccountEntity
         /// </summary>
         void CleanupRates();
@@ -21,5 +31,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Gets the UpsRateTable for the given account
         /// </summary>
         UpsRateTableEntity Get(UpsAccountEntity accountEntity);
+
+        /// <summary>
+        /// Removes Zone Files that are not the newest zone file
+        /// </summary>
+        void CleanupZones();
     }
 }

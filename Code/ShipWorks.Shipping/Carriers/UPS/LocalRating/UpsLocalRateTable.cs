@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,36 +21,48 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly IUpsLocalRateTableRepository localRateTableRepository;
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
-
+        private readonly IEnumerable<IUpsZoneExcelReader> zoneExcelReaders;
         private List<UpsPackageRateEntity> packageRates;
         private List<UpsLetterRateEntity> letterRates;
         private List<UpsPricePerPoundEntity> pricePerPound;
         private IEnumerable<UpsRateSurchargeEntity> surcharges;
-        private string fileName;
+        private IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> deliveryAreaSurcharges;
+        private IEnumerable<UpsLocalRatingZoneEntity> zones;
+        private byte[] zoneFileContent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
         public UpsLocalRateTable(IUpsLocalRateTableRepository localRateTableRepository,
             IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
+            IEnumerable<IUpsZoneExcelReader> zoneExcelReaders,
             IUpsImportedRateValidator importedRateValidator)
         {
             this.localRateTableRepository = localRateTableRepository;
             this.upsRateExcelReaders = upsRateExcelReaders;
+            this.zoneExcelReaders = zoneExcelReaders;
             this.importedRateValidator = importedRateValidator;
         }
 
         /// <summary>
-        /// Date of the upload
+        /// Date of the rates upload
         /// </summary>
-        public DateTime? UploadDate { get; private set; } = null;
+        public DateTime? RateUploadDate { get; private set; } = null;
+
+        /// <summary>
+        /// Date of the zones upload
+        /// </summary>
+        public DateTime? ZoneUploadDate { get; private set; } = null;
 
         /// <summary>
         /// Load the rate table from a stream
         /// </summary>
-        public void Load(Stream stream)
+        public void LoadRates(Stream stream)
         {
-            fileName = (stream as FileStream)?.Name;
+            if (stream == null)
+            {
+                throw new UpsLocalRatingException("Error loading rate file from stream.");
+            }
 
             try
             {
@@ -65,10 +78,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
             catch (Exception ex) when (!(ex is UpsLocalRatingException))
             {
-                throw new UpsLocalRatingException($"Error loading Excel file '{fileName}'.", ex);
+                throw new UpsLocalRatingException("Error loading Excel file.", ex);
             }
         }
-
+        
         /// <summary>
         /// Loads the specified ups account.
         /// </summary>
@@ -76,9 +89,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             UpsRateTableEntity rateTable;
 
+            UpsLocalRatingZoneFileEntity zoneFile;
             try
             {
                 rateTable = localRateTableRepository.Get(upsAccount);
+                zoneFile = localRateTableRepository.GetLatestZoneFile();
             }
             catch (Exception e) when (e is ORMException || e is SqlException)
             {
@@ -88,14 +103,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (rateTable != null)
             {
-                UploadDate = rateTable.UploadDate;
+                RateUploadDate = rateTable.UploadDate;
+            }
+
+            if (zoneFile != null)
+            {
+                ZoneUploadDate = zoneFile.UploadDate;
+                zoneFileContent = zoneFile.FileContent;
             }
         }
 
         /// <summary>
         /// Save the rate table
         /// </summary>
-        public void Save(UpsAccountEntity accountEntity)
+        public void SaveRates(UpsAccountEntity accountEntity)
         {
             // Creating new table so that a ups account can still get the old rates while
             // we save the new rates.
@@ -113,13 +134,33 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (!newRateTable.UpsPackageRate.Any() && !newRateTable.UpsLetterRate.Any() &&
                 !newRateTable.UpsPricePerPound.Any() && !newRateTable.UpsRateSurcharge.Any())
             {
-                throw new UpsLocalRatingException($"The selected file '{fileName}' does not contain any rates.");
+                throw new UpsLocalRatingException($"The selected file does not contain any rates.");
             }
 
             localRateTableRepository.Save(newRateTable, accountEntity);
             localRateTableRepository.CleanupRates();
 
-            UploadDate = newRateTable.UploadDate;
+            RateUploadDate = newRateTable.UploadDate;
+        }
+
+        /// <summary>
+        /// Saves the zones.
+        /// </summary>
+        public void SaveZones()
+        {
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity()
+            {
+                UploadDate = DateTime.UtcNow
+            };
+
+            zoneFile.UpsLocalRatingDeliveryAreaSurcharge.AddRange(deliveryAreaSurcharges);
+            zoneFile.UpsLocalRatingZone.AddRange(zones);
+            zoneFile.FileContent = zoneFileContent;
+
+            localRateTableRepository.Save(zoneFile);
+            localRateTableRepository.CleanupZones();
+
+            ZoneUploadDate = zoneFile.UploadDate;
         }
 
         /// <summary>
@@ -148,6 +189,53 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
         {
             this.surcharges = surcharges;
+        }
+
+        /// <summary>
+        /// Loads the zones from a stream
+        /// </summary>
+        public void LoadZones(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new UpsLocalRatingException("Error loading zone file from stream.");
+            }
+
+            try
+            {
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Open(stream);
+
+                    foreach (IUpsZoneExcelReader excelReader in zoneExcelReaders)
+                    {
+                        excelReader.Read(workbook.Worksheets, this);
+                    }
+                }
+
+                stream.Position = 0;
+                zoneFileContent = stream.ToArray();
+            }
+            catch (Exception ex) when (!(ex is UpsLocalRatingException))
+            {
+                throw new UpsLocalRatingException($"Error loading Excel file.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Replaces the zones.
+        /// </summary>
+        public void ReplaceZones(IEnumerable<UpsLocalRatingZoneEntity> zones)
+        {
+            this.zones = zones;
+        }
+
+        /// <summary>
+        /// Replaces the delivery area surcharges.
+        /// </summary>
+        public void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges)
+        {
+            deliveryAreaSurcharges = localRatingDeliveryAreaSurcharges;
         }
     }
 }

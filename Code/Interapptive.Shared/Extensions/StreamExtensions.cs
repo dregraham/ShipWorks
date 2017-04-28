@@ -19,5 +19,20 @@ namespace Interapptive.Shared.Extensions
                 return streamReader.ReadToEnd();
             }
         }
+
+        /// <summary>
+        /// Converts a stream to a string
+        /// </summary>
+        /// <exception cref="IOException"></exception>
+        public static byte[] ToArray(this Stream stream)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(stream);
+
+            using (MemoryStream memstream = new MemoryStream())
+            {
+                stream.CopyTo(memstream);
+                return memstream.ToArray();
+            }
+        }
     }
 }

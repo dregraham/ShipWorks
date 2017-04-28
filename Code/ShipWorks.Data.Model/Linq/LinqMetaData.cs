@@ -524,6 +524,15 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.UpsLetterRateEntity:
 					toReturn = this.UpsLetterRate;
 					break;
+				case ShipWorks.Data.Model.EntityType.UpsLocalRatingDeliveryAreaSurchargeEntity:
+					toReturn = this.UpsLocalRatingDeliveryAreaSurcharge;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsLocalRatingZoneEntity:
+					toReturn = this.UpsLocalRatingZone;
+					break;
+				case ShipWorks.Data.Model.EntityType.UpsLocalRatingZoneFileEntity:
+					toReturn = this.UpsLocalRatingZoneFile;
+					break;
 				case ShipWorks.Data.Model.EntityType.UpsPackageEntity:
 					toReturn = this.UpsPackage;
 					break;
@@ -1549,6 +1558,24 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UpsLetterRateEntity> UpsLetterRate
 		{
 			get { return new DataSource2<UpsLetterRateEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsLocalRatingDeliveryAreaSurchargeEntity instances in the database.</summary>
+		public DataSource2<UpsLocalRatingDeliveryAreaSurchargeEntity> UpsLocalRatingDeliveryAreaSurcharge
+		{
+			get { return new DataSource2<UpsLocalRatingDeliveryAreaSurchargeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsLocalRatingZoneEntity instances in the database.</summary>
+		public DataSource2<UpsLocalRatingZoneEntity> UpsLocalRatingZone
+		{
+			get { return new DataSource2<UpsLocalRatingZoneEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UpsLocalRatingZoneFileEntity instances in the database.</summary>
+		public DataSource2<UpsLocalRatingZoneFileEntity> UpsLocalRatingZoneFile
+		{
+			get { return new DataSource2<UpsLocalRatingZoneFileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting UpsPackageEntity instances in the database.</summary>

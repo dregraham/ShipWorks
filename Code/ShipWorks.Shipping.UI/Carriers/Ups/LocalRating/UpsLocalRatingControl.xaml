@@ -20,6 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <WrapPanel>
             <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
@@ -32,36 +33,55 @@
         <StackPanel Grid.Row="2" Margin="41 0 0 10">
             <TextBlock>
                 1. Download the
-                <Hyperlink Command="{Binding DownloadSampleFileCommand}">sample rate file</Hyperlink>.
+                <Hyperlink Command="{Binding DownloadSampleRateFileCommand}">sample rate file</Hyperlink>.
             </TextBlock>
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
-            <TextBlock>3. Click Browse below to upload the modified rate file.</TextBlock>
+            <TextBlock>3. Upload the modified rate file.</TextBlock>
+            <TextBlock>4. Download the
+                <Hyperlink Command="{Binding DownloadSampleZoneFileCommand}">sample zone file</Hyperlink>.
+            </TextBlock>
+            <TextBlock>5. Modify the file to specify zones for your origin addresses.</TextBlock>
+            <TextBlock>6. Upload the modified zone file.</TextBlock>
         </StackPanel>
-        <TextBlock Grid.Row="3"
-                   VerticalAlignment="Center"
-                   Text="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3"
-                Width="73"
-                Height="21"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                IsEnabled="{Binding ValidatingRates, Converter={StaticResource InverseBooleanConverter}}"
-                Command="{Binding UploadRatingFileCommand}">
-            Browse...
-        </Button>
-        <ui:WaitSpinner Grid.Row="4" Visibility="{Binding ValidatingRates, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
-            Uploading rate table
-        </ui:WaitSpinner>
-        <TextBlock Grid.Row="4" Text="{Binding ValidationMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
+
+        <DockPanel Grid.Row="3"
+                    Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center"
+                Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadRatingFileCommand}">
+                Upload Rate File...
+            </Button>
+        </DockPanel>
+
+        <DockPanel Grid.Row="4"
+                   Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadZoneFileCommand}">
+                Upload Zone File...
+            </Button>
+        </DockPanel>
+        <ui:WaitSpinner Grid.Row="5" Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top" Content="{Binding SpinnerText}"/>
+        <TextBlock Grid.Row="5" Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
             <TextBlock.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ErrorValidatingRates, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="True">
                             <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ErrorValidatingRates, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="False">
                             <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                         </DataTrigger>
                     </Style.Triggers>

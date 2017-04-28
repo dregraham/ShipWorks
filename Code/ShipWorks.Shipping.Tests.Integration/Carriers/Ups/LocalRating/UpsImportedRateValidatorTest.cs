@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
                 using (
                     Stream sampleExcelStream =
-                        shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleFileResourceName))
+                        shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleRatesFileResourceName))
                 {
                     sampleExcelFile = excelEngine.Excel.Workbooks.Open(sampleExcelStream, ExcelOpenType.Automatic);
                 }

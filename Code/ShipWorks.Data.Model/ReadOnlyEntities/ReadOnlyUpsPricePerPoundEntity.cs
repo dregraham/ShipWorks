@@ -65,9 +65,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Zone property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsPricePerPound"."Zone"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 Zone { get; }
+        public System.String Zone { get; }
         /// <summary> The Service property of the Entity UpsPricePerPound<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsPricePerPound"."Service"<br/>

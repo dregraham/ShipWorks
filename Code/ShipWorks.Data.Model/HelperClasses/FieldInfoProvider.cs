@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (183 + 0));
+			this.InitClass( (186 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -204,6 +204,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitThreeDCartStoreEntityInfos();
 			InitUpsAccountEntityInfos();
 			InitUpsLetterRateEntityInfos();
+			InitUpsLocalRatingDeliveryAreaSurchargeEntityInfos();
+			InitUpsLocalRatingZoneEntityInfos();
+			InitUpsLocalRatingZoneFileEntityInfos();
 			InitUpsPackageEntityInfos();
 			InitUpsPackageRateEntityInfos();
 			InitUpsPricePerPoundEntityInfos();
@@ -2764,9 +2767,39 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(UpsLetterRateFieldIndex), "UpsLetterRateEntity");
 			this.AddElementFieldInfo("UpsLetterRateEntity", "UpsLetterRateID", typeof(System.Int64), true, false, true, false,  (int)UpsLetterRateFieldIndex.UpsLetterRateID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsLetterRateFieldIndex.UpsRateTableID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsLetterRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Zone, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLetterRateEntity", "Zone", typeof(System.String), false, false, false, false,  (int)UpsLetterRateFieldIndex.Zone, 3, 0, 0);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLetterRateFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("UpsLetterRateEntity", "Rate", typeof(System.Decimal), false, false, false, false,  (int)UpsLetterRateFieldIndex.Rate, 0, 4, 19);
+		}
+		/// <summary>Inits UpsLocalRatingDeliveryAreaSurchargeEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingDeliveryAreaSurchargeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingDeliveryAreaSurchargeFieldIndex), "UpsLocalRatingDeliveryAreaSurchargeEntity");
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaSurchargeID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaSurchargeID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "ZoneFileID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DestinationZip", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DestinationZip, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingDeliveryAreaSurchargeEntity", "DeliveryAreaType", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaType, 0, 0, 10);
+		}
+		/// <summary>Inits UpsLocalRatingZoneEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingZoneEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingZoneFieldIndex), "UpsLocalRatingZoneEntity");
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "ZoneID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingZoneFieldIndex.ZoneID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "ZoneFileID", typeof(System.Int64), false, true, false, false,  (int)UpsLocalRatingZoneFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "OriginZipFloor", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.OriginZipFloor, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "OriginZipCeiling", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.OriginZipCeiling, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "DestinationZipFloor", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.DestinationZipFloor, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "DestinationZipCeiling", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.DestinationZipCeiling, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("UpsLocalRatingZoneEntity", "Zone", typeof(System.String), false, false, false, false,  (int)UpsLocalRatingZoneFieldIndex.Zone, 3, 0, 0);
+		}
+		/// <summary>Inits UpsLocalRatingZoneFileEntity's FieldInfo objects</summary>
+		private void InitUpsLocalRatingZoneFileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UpsLocalRatingZoneFileFieldIndex), "UpsLocalRatingZoneFileEntity");
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "ZoneFileID", typeof(System.Int64), true, false, true, false,  (int)UpsLocalRatingZoneFileFieldIndex.ZoneFileID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "UploadDate", typeof(System.DateTime), false, false, false, false,  (int)UpsLocalRatingZoneFileFieldIndex.UploadDate, 0, 0, 7);
+			this.AddElementFieldInfo("UpsLocalRatingZoneFileEntity", "FileContent", typeof(System.Byte[]), false, false, false, false,  (int)UpsLocalRatingZoneFileFieldIndex.FileContent, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UpsPackageEntity's FieldInfo objects</summary>
 		private void InitUpsPackageEntityInfos()
@@ -2804,7 +2837,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(UpsPackageRateFieldIndex), "UpsPackageRateEntity");
 			this.AddElementFieldInfo("UpsPackageRateEntity", "UpsPackageRateID", typeof(System.Int64), true, false, true, false,  (int)UpsPackageRateFieldIndex.UpsPackageRateID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsPackageRateFieldIndex.UpsRateTableID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsPackageRateEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsPackageRateFieldIndex.Zone, 0, 0, 10);
+			this.AddElementFieldInfo("UpsPackageRateEntity", "Zone", typeof(System.String), false, false, false, false,  (int)UpsPackageRateFieldIndex.Zone, 3, 0, 0);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "WeightInPounds", typeof(System.Int32), false, false, false, false,  (int)UpsPackageRateFieldIndex.WeightInPounds, 0, 0, 10);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsPackageRateFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("UpsPackageRateEntity", "Rate", typeof(System.Decimal), false, false, false, false,  (int)UpsPackageRateFieldIndex.Rate, 0, 4, 19);
@@ -2815,7 +2848,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(UpsPricePerPoundFieldIndex), "UpsPricePerPoundEntity");
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "UpsPricePerPoundID", typeof(System.Int64), true, false, true, false,  (int)UpsPricePerPoundFieldIndex.UpsPricePerPoundID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "UpsRateTableID", typeof(System.Int64), false, true, false, false,  (int)UpsPricePerPoundFieldIndex.UpsRateTableID, 0, 0, 19);
-			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Zone", typeof(System.Int32), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Zone, 0, 0, 10);
+			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Zone", typeof(System.String), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Zone, 3, 0, 0);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("UpsPricePerPoundEntity", "Rate", typeof(System.Decimal), false, false, false, false,  (int)UpsPricePerPoundFieldIndex.Rate, 0, 4, 19);
 		}

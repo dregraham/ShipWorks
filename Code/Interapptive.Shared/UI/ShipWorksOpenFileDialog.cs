@@ -10,7 +10,6 @@ namespace Interapptive.Shared.UI
     public class ShipWorksOpenFileDialog : IOpenFileDialog
     {
         private readonly Control owner;
-        private string selectedFileName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOpenFileDialog"/> class.
@@ -37,6 +36,11 @@ namespace Interapptive.Shared.UI
         public string DefaultFileName { private get; set; }
 
         /// <summary>
+        /// Gets the name of the selected file.
+        /// </summary>
+        public string SelectedFileName { get; private set; }
+
+        /// <summary>
         /// Shows the dialog.
         /// </summary>
         public DialogResult ShowDialog()
@@ -51,7 +55,7 @@ namespace Interapptive.Shared.UI
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    selectedFileName = openFileDialog.FileName;
+                    SelectedFileName = openFileDialog.FileName;
                 }
 
                 return dialogResult;
@@ -65,7 +69,7 @@ namespace Interapptive.Shared.UI
         {
             try
             {
-                return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
+                return string.IsNullOrEmpty(SelectedFileName) ? null : File.OpenRead(SelectedFileName);
             }
             catch (Exception e) when (e is IOException ||
                                       e is NotSupportedException ||

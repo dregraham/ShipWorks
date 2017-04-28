@@ -21464,6 +21464,96 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity UpsLocalRatingDeliveryAreaSurchargeEntity</summary>
+	public partial class UpsLocalRatingDeliveryAreaSurchargeFields
+	{
+		/// <summary>Creates a new UpsLocalRatingDeliveryAreaSurchargeEntity.DeliveryAreaSurchargeID field instance</summary>
+		public static EntityField2 DeliveryAreaSurchargeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaSurchargeID);}
+		}
+		/// <summary>Creates a new UpsLocalRatingDeliveryAreaSurchargeEntity.ZoneFileID field instance</summary>
+		public static EntityField2 ZoneFileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingDeliveryAreaSurchargeFieldIndex.ZoneFileID);}
+		}
+		/// <summary>Creates a new UpsLocalRatingDeliveryAreaSurchargeEntity.DestinationZip field instance</summary>
+		public static EntityField2 DestinationZip
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DestinationZip);}
+		}
+		/// <summary>Creates a new UpsLocalRatingDeliveryAreaSurchargeEntity.DeliveryAreaType field instance</summary>
+		public static EntityField2 DeliveryAreaType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingDeliveryAreaSurchargeFieldIndex.DeliveryAreaType);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UpsLocalRatingZoneEntity</summary>
+	public partial class UpsLocalRatingZoneFields
+	{
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.ZoneID field instance</summary>
+		public static EntityField2 ZoneID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.ZoneID);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.ZoneFileID field instance</summary>
+		public static EntityField2 ZoneFileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.ZoneFileID);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.OriginZipFloor field instance</summary>
+		public static EntityField2 OriginZipFloor
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.OriginZipFloor);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.OriginZipCeiling field instance</summary>
+		public static EntityField2 OriginZipCeiling
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.OriginZipCeiling);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.DestinationZipFloor field instance</summary>
+		public static EntityField2 DestinationZipFloor
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.DestinationZipFloor);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.DestinationZipCeiling field instance</summary>
+		public static EntityField2 DestinationZipCeiling
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.DestinationZipCeiling);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.Service);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneEntity.Zone field instance</summary>
+		public static EntityField2 Zone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFieldIndex.Zone);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UpsLocalRatingZoneFileEntity</summary>
+	public partial class UpsLocalRatingZoneFileFields
+	{
+		/// <summary>Creates a new UpsLocalRatingZoneFileEntity.ZoneFileID field instance</summary>
+		public static EntityField2 ZoneFileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFileFieldIndex.ZoneFileID);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneFileEntity.UploadDate field instance</summary>
+		public static EntityField2 UploadDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFileFieldIndex.UploadDate);}
+		}
+		/// <summary>Creates a new UpsLocalRatingZoneFileEntity.FileContent field instance</summary>
+		public static EntityField2 FileContent
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsLocalRatingZoneFileFieldIndex.FileContent);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity UpsPackageEntity</summary>
 	public partial class UpsPackageFields
 	{
