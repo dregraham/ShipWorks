@@ -234,6 +234,7 @@
     <Compile Include="Carriers\Ups\LocalRating\IUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\DimensionServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ValueAddServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\IServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\PackageServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsDeliveryAreaSurchargeType.cs" />

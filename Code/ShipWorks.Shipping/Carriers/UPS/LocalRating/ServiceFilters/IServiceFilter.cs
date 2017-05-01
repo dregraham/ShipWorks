@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
     /// <summary>
     /// Filter for determining eligible services
     /// </summary>
+    [Service]
     public interface IServiceFilter
     {
         /// <summary>

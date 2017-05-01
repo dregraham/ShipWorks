@@ -2,7 +2,7 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Tests.Shared;
 using Xunit;
