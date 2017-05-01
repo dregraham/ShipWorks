@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -8,6 +9,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -100,7 +102,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             
             return rateTable;
         }
-        
+
+        /// <summary>
+        /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
+        /// </summary>
+        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Get the surcharges for the given account
+        /// </summary>
+        public IDictionary<UpsServiceType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Save the rate table and update the account to use the given rate table
         /// </summary>

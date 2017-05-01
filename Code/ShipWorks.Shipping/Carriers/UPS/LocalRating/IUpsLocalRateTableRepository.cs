@@ -1,4 +1,6 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -31,6 +33,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Gets the UpsRateTable for the given account
         /// </summary>
         UpsRateTableEntity Get(UpsAccountEntity accountEntity);
+
+        /// <summary>
+        /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
+        /// </summary>
+        IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes);
+
+        /// <summary>
+        /// Get the surcharges for the given account
+        /// </summary>
+        IDictionary<UpsServiceType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account);
 
         /// <summary>
         /// Removes Zone Files that are not the newest zone file
