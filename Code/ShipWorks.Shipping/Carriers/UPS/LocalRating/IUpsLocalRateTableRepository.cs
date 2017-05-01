@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -42,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
-        IDictionary<UpsServiceType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account);
+        IDictionary<UpsSurchargeType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account);
 
         /// <summary>
         /// Removes Zone Files that are not the newest zone file

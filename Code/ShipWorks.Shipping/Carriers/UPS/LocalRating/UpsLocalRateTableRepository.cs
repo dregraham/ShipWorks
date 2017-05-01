@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -114,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
-        public IDictionary<UpsServiceType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account)
+        public IDictionary<UpsSurchargeType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account)
         {
             throw new NotImplementedException();
         }
