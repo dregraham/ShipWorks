@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
+namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 {
     /// <summary>
     /// Interface that represents a surcharge
