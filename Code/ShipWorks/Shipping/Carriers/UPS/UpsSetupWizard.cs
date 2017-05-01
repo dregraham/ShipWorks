@@ -568,17 +568,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+                    UpsRegistrationStatus result = clerk.RegisterAccount(upsAccount, upsInvoiceAuthorizationControl.InvoiceAuthorizationData);
+
+                    if (result != UpsRegistrationStatus.Success)
+                    {
+                        HandleInvoiceAuthError("Error attempting to perform invoice authentication, please check the info provided and try again. ", e);
+                    }
                 }
             }
             catch (UpsWebServiceException ex)
             {
-                string errorMessage = ex.Message + Environment.NewLine + Environment.NewLine +
-                    "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be " +
-                                      "authenticated after three attempts.";
-                MessageHelper.ShowError(this, errorMessage);
-                e.NextPage = CurrentPage;
+                HandleInvoiceAuthError(ex.Message, e);
             }
+        }
+
+        /// <summary>
+        /// Show the user an error when invoice auth fails and stay on the same page
+        /// </summary>
+        private void HandleInvoiceAuthError(string message, WizardStepEventArgs e)
+        {
+            string errorMessage = message + Environment.NewLine + Environment.NewLine +
+                                  "Note: UPS will lock out accounts for a 24 hour period if your invoice information cannot be " +
+                                  "authenticated after three attempts.";
+            MessageHelper.ShowError(this, errorMessage);
+            e.NextPage = CurrentPage;
         }
 
         /// <summary>
