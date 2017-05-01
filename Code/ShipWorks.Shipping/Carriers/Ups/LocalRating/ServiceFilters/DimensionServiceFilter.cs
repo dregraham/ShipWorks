@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
+namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
 {
     /// <summary>
     /// Filtker services based on package dimensions
