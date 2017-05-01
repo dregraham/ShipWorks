@@ -231,12 +231,13 @@
     <Compile Include="Carriers\Ups\IUpsRateClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\IServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsServiceRequirements.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\DimensionServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\IServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\PackageServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsDeliveryAreaSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTable.cs" />
