@@ -9,6 +9,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
-        IEnumerable<UpsServiceRate> GetRates(UpsShipmentEntity shipment);
+        List<UpsServiceRate> GetRates(ShipmentEntity shipment);
     }
 }

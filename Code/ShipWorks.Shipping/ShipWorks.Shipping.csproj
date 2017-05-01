@@ -228,11 +228,9 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
-    <Compile Include="Carriers\Ups\IUpsRateClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\IUpsServiceRequirements.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\DimensionServiceFilter.cs" />
