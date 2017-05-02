@@ -336,6 +336,9 @@
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteLegacyAccountSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -607,6 +610,10 @@
     <Page Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
       <SubType>Designer</SubType>
