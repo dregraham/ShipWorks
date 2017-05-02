@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
+namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 {
     public class ValueAddServiceFilterTest : IDisposable
     {
@@ -26,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 UpsServiceType.Ups2DayAir,
                 UpsServiceType.Ups2DayAirAM,
                 UpsServiceType.UpsNextDayAirSaver,
-                UpsServiceType.UpsNextDayAir,
+                UpsServiceType.UpsNextDayAir
             };
         }
 

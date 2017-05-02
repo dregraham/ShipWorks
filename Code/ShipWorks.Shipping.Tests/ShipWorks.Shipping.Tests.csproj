@@ -179,13 +179,14 @@
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\DimensionServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateClientTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepositoryTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\SurchargeUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalServiceRateTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsZoneExcelReaderTest.cs" />
-    <Compile Include="Carriers\UPS\LocalRating\ValueAddServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ValueAddServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapterTest.cs" />

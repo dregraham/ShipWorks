@@ -126,6 +126,7 @@ namespace ShipWorks.ApplicationCore.Logging
         SellerCloud,
         InfiPlex,
         Walmart,
-		SellerActive
+		SellerActive,
+        UpsLocalRating
     }
 }

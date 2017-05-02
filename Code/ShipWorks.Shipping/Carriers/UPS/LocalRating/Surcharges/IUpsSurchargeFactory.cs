@@ -11,6 +11,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Gets the specified surcharges to be applied to a shipment
         /// </summary>
-        IEnumerable<IUpsSurcharge> Get(Dictionary<UpsSurchargeType, decimal> surchargeEntityLookup);
+        IEnumerable<IUpsSurcharge> Get(IDictionary<UpsSurchargeType, double> surchargeEntityLookup);
     }
 }

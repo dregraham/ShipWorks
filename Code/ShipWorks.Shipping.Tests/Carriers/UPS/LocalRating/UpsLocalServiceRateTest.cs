@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Text;
 using Autofac.Extras.Moq;
-using log4net;
-using Moq;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Tests.Shared;
@@ -12,12 +11,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
     public class UpsLocalServiceRateTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly Mock<ILog> log;
+        private readonly StringBuilder logEntry;
 
         public UpsLocalServiceRateTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            log = mock.CreateMock<ILog>();
+            logEntry = new StringBuilder();
         }
 
         [Fact]
@@ -34,8 +33,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             UpsLocalServiceRate testObject = 
                 new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
-            testObject.Log(log.Object);
-            log.Verify(l => l.Info("Initial Value : $10.10"));
+            testObject.Log(logEntry);
+            Assert.Contains("Initial Value : $10.10", logEntry.ToString());
         }
 
         [Fact]
@@ -43,8 +42,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             UpsLocalServiceRate testObject =
                 new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
-            testObject.Log(log.Object);
-            log.Verify(l => l.Info("Rate Calculation for Ups3DaySelect"));
+            testObject.Log(logEntry);
+            Assert.Contains("Rate Calculation for Ups3DaySelect", logEntry.ToString());
         }
 
         [Fact]
@@ -54,9 +53,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
 
             testObject.AddAmount(.42M, "blah");
-            testObject.Log(log.Object);
+            testObject.Log(logEntry);
 
-            log.Verify(l => l.Info("\tAdded for 'blah' : $0.42"));
+            Assert.Contains("\tAdded for 'blah' : $0.42", logEntry.ToString());
         }
 
         [Fact]
@@ -66,9 +65,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
 
             testObject.AddAmount(.42M, "blah");
-            testObject.Log(log.Object);
+            testObject.Log(logEntry);
 
-            log.Verify(l => l.Info("Total : $10.52"));
+            Assert.Contains("Total : $10.52", logEntry.ToString());
         }
 
         public void Dispose()

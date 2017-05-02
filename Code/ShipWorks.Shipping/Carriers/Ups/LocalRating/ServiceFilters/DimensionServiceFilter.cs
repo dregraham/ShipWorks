@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
 {
     /// <summary>
-    /// Filtker services based on package dimensions
+    /// Filter services based on package dimensions
     /// </summary>
     public class DimensionServiceFilter : IServiceFilter
     {

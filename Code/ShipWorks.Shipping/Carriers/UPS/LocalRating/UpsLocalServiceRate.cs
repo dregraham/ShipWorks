@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
@@ -37,12 +38,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Logs the specified log.
         /// </summary>
-        public void Log(ILog log)
+        public void Log(StringBuilder logEntry)
         {
-            log.Info($"Rate Calculation for {Service}");
-            log.Info($"Initial Value : {initialAmount:C}");
-            addedSurcharges.ForEach(s=>log.Info($"\tAdded for '{s.Key}' : {s.Value:C}"));
-            log.Info($"Total : {Amount:C}");
+            logEntry.AppendLine($"Rate Calculation for {Service}");
+            logEntry.AppendLine($"Initial Value : {initialAmount:C}");
+            addedSurcharges.ForEach(s=>logEntry.AppendLine($"\tAdded for '{s.Key}' : {s.Value:C}"));
+            logEntry.AppendLine($"Total : {Amount:C}");
         }
     }
 }

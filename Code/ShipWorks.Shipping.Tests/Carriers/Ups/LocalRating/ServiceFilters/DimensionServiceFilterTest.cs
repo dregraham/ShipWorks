@@ -43,8 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             };
 
             IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, services);
-
-
+            
             Assert.Equal(!emptyResult, result.Any());
         }
 
