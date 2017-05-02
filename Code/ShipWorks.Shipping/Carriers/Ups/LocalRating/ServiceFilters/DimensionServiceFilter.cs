@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -16,33 +15,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         /// </summary>
         public IEnumerable<UpsServiceType> GetEligibleServices(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> services)
         {
-            if (shipment.Packages.Any(package => GetPackageLength(package) >= 108 ||
-                                                 GetPackageLength(package) + GetPackageGirth(package) >= 165))
+            if (shipment.Packages.Any(package => package.LongestSide > 108 ||
+                                                 package.Girth + package.LongestSide > 165))
             {
                 return Enumerable.Empty<UpsServiceType>();
             }
 
             return services;
-        }
-
-        /// <summary>
-        /// Get the longest side of a package
-        /// </summary>
-        /// <param name="package"></param>
-        /// <returns></returns>
-        private static double GetPackageLength(UpsPackageEntity package)
-        {
-            return Math.Max(Math.Max(package.DimsLength, package.DimsHeight), package.DimsWidth);
-        }
-
-        /// <summary>
-        /// Get the package girth 
-        /// </summary>
-        private static double GetPackageGirth(UpsPackageEntity package)
-        {
-            return new List<double> {package.DimsLength, package.DimsHeight, package.DimsWidth}.OrderBy(d => d)
-                .Take(2)
-                .Aggregate<double, double>(0, (c, d) => c + d * 2);
         }
     }
 }

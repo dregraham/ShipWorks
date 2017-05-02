@@ -172,12 +172,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
             UpsPackageEntity package = shipment.Packages.FirstOrDefault();
 
-            if (package?.PackagingType == (int) UpsPackagingType.Letter && package.Weight <= .5)
+            if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
             {
                 return GetLetterRates(rateTable, serviceTypes, zone);
             }
-
-            //TODO: Large Packages are subject to a minimum billable weight of 90 pounds (40kgs) in addition to the Large Package Surcharge. 
+            
             return GetPackageRates(rateTable, serviceTypes, zone, package);
         }
 
@@ -186,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
         {
-            if (package.Weight >= 150)
+            if (package.TotalWeight >= 150)
             {
                 // Get the base rate at 150
                 IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
@@ -211,7 +210,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 return result;
             }
             IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
-                                                                                          serviceTypes.Contains((UpsServiceType) r.Service));
+                                                                                          serviceTypes.Contains((UpsServiceType) r.Service)&&
+                                                                                          r.WeightInPounds == package.BillableWeight);
             return GetServiceRates(rates);
         }
 
@@ -268,18 +268,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 new Dictionary<UpsSurchargeType, double>();
 
             UpsAccountEntity account = accountRepository.GetAccount(accountId);
+            UpsRateTableEntity rateTable = Get(account);
 
-            foreach (UpsRateSurchargeEntity surcharge in Get(account).UpsRateSurcharge)
+            if (rateTable != null)
             {
-                if (result.ContainsKey((UpsSurchargeType) surcharge.SurchargeType))
+                foreach (UpsRateSurchargeEntity surcharge in rateTable.UpsRateSurcharge)
                 {
-                    result[(UpsSurchargeType) surcharge.SurchargeType] = surcharge.Amount;
-                }
-                else
-                {
-                    result.Add((UpsSurchargeType) surcharge.SurchargeType, surcharge.Amount);
+                    if (result.ContainsKey((UpsSurchargeType)surcharge.SurchargeType))
+                    {
+                        result[(UpsSurchargeType)surcharge.SurchargeType] = surcharge.Amount;
+                    }
+                    else
+                    {
+                        result.Add((UpsSurchargeType)surcharge.SurchargeType, surcharge.Amount);
+                    }
                 }
             }
+
             return result;
         }
 

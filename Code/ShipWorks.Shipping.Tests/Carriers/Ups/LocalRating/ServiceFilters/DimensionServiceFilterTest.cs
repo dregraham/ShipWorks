@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
+namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 {
     public class DimensionServiceFilterTest : IDisposable
     {
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [InlineData(1, 2, 3, false)]
         [InlineData(5, 5, 5, false)]
         [InlineData(10, 10, 10, false)]
-        [InlineData(1, 2, 108, true)]
+        [InlineData(1, 2, 109, true)]
         [InlineData(10, 10, 100, false)]
         [InlineData(30, 10, 100, true)]
         public void GetEligibleServices_ReturnsEmptyList_WhenPackageDimensionsAreNotValidForUPS(double length, double width, double height, bool emptyResult)

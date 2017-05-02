@@ -6,21 +6,22 @@ using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
-    public class UpsLocalRateTableRepoTest : IDisposable
+    public class UpsLocalRateTableRepositoryTest : IDisposable
     {
         readonly AutoMock mock;
         readonly UpsLocalRateTableRepository testObject;
 
-        public UpsLocalRateTableRepoTest()
+        public UpsLocalRateTableRepositoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -140,6 +141,50 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
             
             Assert.Equal(file1, testObject.GetLatestZoneFile());
+        }
+
+        [Fact]
+        public void GetSurcharges_GetsAccountFromAccountRepository()
+        {
+            UpsAccountEntity account = new UpsAccountEntity();
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<long>(l => l == 123123))).Returns(account);
+            
+            testObject.GetSurcharges(123123);
+
+            accountRepo.Verify(r => r.GetAccount(123123));
+        }
+
+        [Fact]
+        public void GetSurcharges_ReturnsSurchargesForAccount()
+        {
+            UpsAccountEntity account = new UpsAccountEntity {UpsRateTable = new UpsRateTableEntity()};
+
+            account.UpsRateTable.UpsRateSurcharge.Add(new UpsRateSurchargeEntity {SurchargeType = (int) UpsSurchargeType.LargePackage, Amount = 12.21});
+            account.UpsRateTable.UpsRateSurcharge.Add(new UpsRateSurchargeEntity {SurchargeType = (int) UpsSurchargeType.AdditionalHandling, Amount = 44.21});
+            account.UpsRateTable.UpsRateSurcharge.Add(new UpsRateSurchargeEntity {SurchargeType = (int) UpsSurchargeType.AdultSignatureRequired, Amount = 9.21});
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<long>(l => l == 123123))).Returns(account);
+
+            IDictionary<UpsSurchargeType, double> result = testObject.GetSurcharges(123123);
+
+            Assert.Contains(new KeyValuePair<UpsSurchargeType, double>(UpsSurchargeType.LargePackage, 12.21), result);
+            Assert.Contains(new KeyValuePair<UpsSurchargeType, double>(UpsSurchargeType.AdditionalHandling, 44.21), result);
+            Assert.Contains(new KeyValuePair<UpsSurchargeType, double>(UpsSurchargeType.AdultSignatureRequired, 9.21), result);
+        }
+
+        [Fact]
+        public void GetSurcharges_ReturnsEmptySurcharges_WhenAccountHasNoRateTable()
+        {
+            UpsAccountEntity account = new UpsAccountEntity();
+            
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<long>(l => l == 123123))).Returns(account);
+
+            IDictionary<UpsSurchargeType, double> result = testObject.GetSurcharges(123123);
+            Assert.Empty(result);
         }
 
         public void Dispose()

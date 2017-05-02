@@ -176,10 +176,10 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
-    <Compile Include="Carriers\UPS\LocalRating\DimensionServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\DimensionServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
-    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepoTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepositoryTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\SurchargeUpsRateExcelReaderTest.cs" />
