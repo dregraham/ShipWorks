@@ -340,6 +340,10 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteDownloader.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteException.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteStoreType.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteWebClient.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Address.cs" />
@@ -444,7 +448,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

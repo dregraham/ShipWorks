@@ -330,6 +330,18 @@
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
+      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.Designer.cs">
+      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -485,6 +497,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.resx">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
+      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.resx">
+      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>

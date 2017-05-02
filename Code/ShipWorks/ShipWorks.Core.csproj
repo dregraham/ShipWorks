@@ -1736,6 +1736,7 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
@@ -6046,7 +6047,6 @@
       <DependentUpon>ProStoresTokenLoginPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\SearchFit\SearchFitStoreType.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteException.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartStoreType.cs" />
     <Compile Include="Stores\Platforms\VirtueMart\VirtueMartStoreType.cs" />
     <Compile Include="Stores\Platforms\Volusion\CoreExtensions\Actions\VolusionShipmentUploadTask.cs" />
@@ -7185,21 +7185,6 @@
     <Compile Include="Stores\StatusPresetTarget.cs" />
     <Compile Include="Stores\StatusPresetCommands.cs" />
     <Compile Include="Stores\OnlineUpdateCommandProvider.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
-      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteDownloader.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteStoreType.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteWebClient.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.Designer.cs">
-      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Management\StoreManagerDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -9886,14 +9871,6 @@
     <EmbeddedResource Include="Stores\Management\StatusPresetEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StatusPresetEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.resx">
-      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\StoreManagerDlg.resx">
       <SubType>Designer</SubType>

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
 using Autofac;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores
 {
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores
 
                     if (IsStoreTypeDisabled(typeCode))
                     {
-                        // Temporary: don't show in ShipWorks for the new stores until marketing materials 
+                        // Temporary: don't show in ShipWorks for the new stores until marketing materials
                         // and other ancillary materials are ready to go
                         continue;
                     }
@@ -42,10 +42,10 @@ namespace ShipWorks.Stores
                 }
 
                 // Sort based on the store name
-                storeTypes.Sort(new Comparison<StoreType>( delegate (StoreType left, StoreType right)
-                    {
-                        return left.StoreTypeName.CompareTo(right.StoreTypeName);  
-                    }));
+                storeTypes.Sort(new Comparison<StoreType>(delegate (StoreType left, StoreType right)
+                   {
+                       return left.StoreTypeName.CompareTo(right.StoreTypeName);
+                   }));
 
                 return storeTypes;
             }
@@ -97,7 +97,6 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.GenericFile: return new Platforms.GenericFile.GenericFileStoreType(store);
                 case StoreTypeCode.Magento: return new Platforms.Magento.MagentoStoreType(store);
                 case StoreTypeCode.osCommerce: return new Platforms.osCommerce.oscStoreType(store);
-                case StoreTypeCode.ShopSite: return new Platforms.ShopSite.ShopSiteStoreType(store);
                 case StoreTypeCode.VirtueMart: return new Platforms.VirtueMart.VirtueMartStoreType(store);
                 case StoreTypeCode.XCart: return new Platforms.XCart.XCartStoreType(store);
                 case StoreTypeCode.ZenCart: return new Platforms.ZenCart.ZenCartStoreType(store);
@@ -122,7 +121,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.ThreeDCart: return new Platforms.ThreeDCart.ThreeDCartStoreType(store);
                 case StoreTypeCode.Etsy: return new Platforms.Etsy.EtsyStoreType(store);
                 case StoreTypeCode.Shopify: return new Platforms.Shopify.ShopifyStoreType(store);
-                case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);             
+                case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
@@ -137,11 +136,11 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
                 case StoreTypeCode.ChannelSale: return new Platforms.ChannelSale.ChannelSaleStoreType(store);
                 case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
-				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
+                case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
                 case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
                 case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
                 case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
-				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
+                case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
                 case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
                 case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
                 case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
@@ -151,7 +150,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.LoadedCommerce: return new Platforms.LoadedCommerce.LoadedCommerceStoreType(store);
                 case StoreTypeCode.Choxi: return new Platforms.Choxi.ChoxiStoreType(store);
                 case StoreTypeCode.StageBloc: return new Platforms.StageBloc.StageBlocStoreType(store);
-				case StoreTypeCode.Groupon: return new Platforms.Groupon.GrouponStoreType(store);
+                case StoreTypeCode.Groupon: return new Platforms.Groupon.GrouponStoreType(store);
                 case StoreTypeCode.RevolutionParts: return new Platforms.RevolutionParts.RevolutionPartsStoreType(store);
                 case StoreTypeCode.InstaStore: return new Platforms.InstanteStore.InstanteStoreStoreType(store);
                 case StoreTypeCode.OrderBot: return new Platforms.OrderBot.OrderBotStoreType(store);
@@ -172,7 +171,7 @@ namespace ShipWorks.Stores
         /// </summary>
         private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
         {
-            // Don't show in ShipWorks until marketing materials and other ancillary 
+            // Don't show in ShipWorks until marketing materials and other ancillary
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
