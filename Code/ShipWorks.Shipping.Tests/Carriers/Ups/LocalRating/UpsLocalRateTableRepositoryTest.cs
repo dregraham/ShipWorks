@@ -262,6 +262,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             Assert.Equal("Unable to find zone using destination postal code 1234", ex.Message);
         }
 
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsNotToAKAndOriginPostalCodeIsShorterThan3Chars()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.OriginPostalCode = "12";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+            
+            Assert.Equal("Unable to find zone using origin postal code 12.", ex.Message);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

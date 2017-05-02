@@ -143,12 +143,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // Try every other zone
             if (zone == null)
             {
-                if (!int.TryParse(origin.Substring(0, 3), out originPostalCode))
+                if (origin.Length < 3 || !int.TryParse(origin.Substring(0, 3), out originPostalCode))
                 {
                     throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
                 }
 
-                if (!int.TryParse(destination.Substring(0, 3), out destinationPostalCode))
+                if (destination.Length < 3 || !int.TryParse(destination.Substring(0, 3), out destinationPostalCode))
                 {
                     throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
                 }
