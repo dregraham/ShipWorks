@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Xunit;
 
@@ -185,6 +186,80 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             IDictionary<UpsSurchargeType, double> result = testObject.GetSurcharges(123123);
             Assert.Empty(result);
+        }
+
+        [Fact]
+        public void GetServiceRates_ReturnsEmptyList_WhenShipmentHasMultiplePackages()
+        {
+            UpsShipmentEntity shipment =
+                new UpsShipmentEntity { Packages = { new UpsPackageEntity(), new UpsPackageEntity() } };
+
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(shipment, new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToAKAndPostalCodeIsNotValid()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "AK";
+            upsShipment.Shipment.ShipPostalCode = "abcde";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] {UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround}));
+
+
+            Assert.Equal("Unable to find zone using destination postal code abcde" , ex.Message);
+        }
+
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToHIAndPostalCodeIsNotValid()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "HI";
+            upsShipment.Shipment.ShipPostalCode = "abcde";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+
+
+            Assert.Equal("Unable to find zone using destination postal code abcde", ex.Message);
+        }
+
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToAKAndPostalCodeIsShorterThan5Chars()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "AK";
+            upsShipment.Shipment.ShipPostalCode = "1234";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+
+
+            Assert.Equal("Unable to find zone using destination postal code 1234", ex.Message);
         }
 
         public void Dispose()

@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // Try and determin the zone if the shipment is to alaska or hawaii
             if (shipment.Shipment.ShipStateProvCode == "HI" || shipment.Shipment.ShipStateProvCode == "AK")
             {
-                if (!int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
+                if (destination.Length < 5 || !int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
                 {
                     throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}");
                 }
