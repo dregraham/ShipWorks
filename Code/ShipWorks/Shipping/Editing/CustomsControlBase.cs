@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -382,8 +381,8 @@ namespace ShipWorks.Shipping.Editing
         private void SaveValuesToSelectedEntities()
         {
             // Keeps a list for all shipments whose content weights or values have changed
-            Dictionary<ShipmentEntity, bool> changedWeights = new Dictionary<ShipmentEntity, bool>();
-            Dictionary<ShipmentEntity, bool> changedValues = new Dictionary<ShipmentEntity, bool>();
+            List<long> changedWeights = new List<long>();
+            List<long> changedValues = new List<long>();
 
             foreach (GridRow row in selectedRows)
             {
@@ -394,8 +393,8 @@ namespace ShipWorks.Shipping.Editing
             }
 
             // Update the content weights and values for all affected shipments
-            UpdateContentWeight(changedWeights.Select(p => p.Key));
-            UpdateCustomsValue(changedValues.Select(p => p.Key));
+            UpdateContentWeight(loadedShipments.Where(s => changedWeights.Contains(s.ShipmentID )));
+            UpdateCustomsValue(loadedShipments.Where(s => changedValues.Contains(s.ShipmentID)));
         }
 
         /// <summary>
@@ -413,7 +412,7 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="customsItem">The customs item.</param>
         /// <param name="changedWeights">The changed weights.</param>
         /// <param name="changedValues">The changed values.</param>
-        protected virtual void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, Dictionary<ShipmentEntity, bool> changedWeights, Dictionary<ShipmentEntity, bool> changedValues)
+        protected virtual void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, List<long> changedWeights, List<long> changedValues)
         {
             description.ReadMultiText(s => customsItem.Description = s);
 
@@ -427,8 +426,8 @@ namespace ShipWorks.Shipping.Editing
                         if (quantityValue != customsItem.Quantity)
                         {
                             customsItem.Quantity = quantityValue;
-                            changedWeights[customsItem.Shipment] = true;
-                            changedValues[customsItem.Shipment] = true;
+                            changedWeights.Add(customsItem.ShipmentID);
+                            changedValues.Add(customsItem.ShipmentID);
                         }
                     }
                 });
@@ -437,7 +436,7 @@ namespace ShipWorks.Shipping.Editing
                     if (customsItem.Weight != newWeight)
                     {
                         customsItem.Weight = newWeight;
-                        changedWeights[customsItem.Shipment] = true;
+                        changedWeights.Add(customsItem.ShipmentID);
                     }
                 });
                 value.ReadMultiText(s =>
@@ -448,7 +447,7 @@ namespace ShipWorks.Shipping.Editing
                         if (unitValue != customsItem.UnitValue)
                         {
                             customsItem.UnitValue = unitValue;
-                            changedValues[customsItem.Shipment] = true;
+                            changedValues.Add(customsItem.ShipmentID);
                         }
                     }
                 });
