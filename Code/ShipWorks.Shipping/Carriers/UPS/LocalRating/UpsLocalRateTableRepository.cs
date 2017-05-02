@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -21,13 +23,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsLocalRateTableRepository : IUpsLocalRateTableRepository
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsLocalRateTableRepository(ISqlAdapterFactory sqlAdapterFactory)
+        public UpsLocalRateTableRepository(ISqlAdapterFactory sqlAdapterFactory, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -109,15 +113,174 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes)
         {
-            throw new NotImplementedException();
+            // Currently no service rates support multiple packages
+            if (shipment.Packages.IsCountGreaterThan(1))
+            {
+                return Enumerable.Empty<UpsLocalServiceRate>();
+            }
+
+            string origin = shipment.Shipment.OriginPostalCode;
+            string destination = shipment.Shipment.ShipPostalCode;
+
+            int originPostalCode;
+            int destinationPostalCode;
+
+            UpsLocalRatingZoneEntity zone = null;
+
+            // Try and determin the zone if the shipment is to alaska or hawaii
+            if (shipment.Shipment.ShipStateProvCode == "HI" || shipment.Shipment.ShipStateProvCode == "AK")
+            {
+                if (!int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
+                {
+                    throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}");
+                }
+
+                zone = GetLatestZoneFile()
+                    .UpsLocalRatingZone.FirstOrDefault(z => z.DestinationZipFloor == destinationPostalCode &&
+                                                            z.DestinationZipCeiling == destinationPostalCode);
+            }
+
+            // Try every other zone
+            if (zone == null)
+            {
+                if (!int.TryParse(origin.Substring(0, 3), out originPostalCode))
+                {
+                    throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
+                }
+
+                if (!int.TryParse(destination.Substring(0, 3), out destinationPostalCode))
+                {
+                    throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
+                }
+
+                zone = GetLatestZoneFile()
+                    .UpsLocalRatingZone.FirstOrDefault(z => z.OriginZipFloor <= originPostalCode &&
+                                                            z.OriginZipCeiling >= originPostalCode &&
+                                                            z.DestinationZipFloor <= destinationPostalCode &&
+                                                            z.DestinationZipCeiling >= destinationPostalCode);
+            }
+
+            // We dont have zone info for the given origin/destination combo
+            if (zone == null)
+            {
+                throw new UpsLocalRatingException($"Unable to find zone using oringin postal code {origin} and destination postal code {destination}.");
+            }
+
+            UpsRateTableEntity rateTable = Get(accountRepository.GetAccount(shipment.Shipment));
+
+            // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
+            // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
+            UpsPackageEntity package = shipment.Packages.FirstOrDefault();
+
+            if (package?.PackagingType == (int) UpsPackagingType.Letter && package.Weight <= .5)
+            {
+                return GetLetterRates(rateTable, serviceTypes, zone);
+            }
+
+            //TODO: Large Packages are subject to a minimum billable weight of 90 pounds (40kgs) in addition to the Large Package Surcharge. 
+            return GetPackageRates(rateTable, serviceTypes, zone, package);
         }
 
         /// <summary>
+        /// Get all of the price per pound rates for the given package/zone/servicetypes
+        /// </summary>
+        private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
+        {
+            if (package.Weight >= 150)
+            {
+                // Get the base rate at 150
+                IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
+                                                                                              serviceTypes.Contains((UpsServiceType) r.Service) &&
+                                                                                              r.WeightInPounds == 150);
+                // Add the price per pound for anything over 150
+                List<UpsLocalServiceRate> result = new List<UpsLocalServiceRate>();
+                foreach (UpsPackageRateEntity baseRate in baseRates)
+                {
+                    UpsPricePerPoundEntity pricePerPoundRate =
+                        rateTable.UpsPricePerPound.FirstOrDefault(r => r.Service == baseRate.Service && r.Zone == baseRate.Zone);
+
+                    decimal rate = baseRate.Rate;
+                    if (pricePerPoundRate != null)
+                    {
+                        rate = rate + pricePerPoundRate.Rate;
+                    }
+
+                    result.Add(new UpsLocalServiceRate((UpsServiceType)baseRate.Service, rate, true, null));
+
+                }
+                return result;
+            }
+            IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
+                                                                                          serviceTypes.Contains((UpsServiceType) r.Service));
+            return GetServiceRates(rates);
+        }
+
+        /// <summary>
+        /// Get all the letter rates from the rate table matching the service/zone
+        /// </summary>
+        private IEnumerable<UpsLocalServiceRate> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone)
+        {
+            IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => r.Zone == zone.Zone &&
+                                                                                        serviceTypes.Contains((UpsServiceType)r.Service));
+            return GetServiceRates(rates);
+        }
+
+        /// <summary>
+        /// Get a collection of UpsLocalServiceRates from a collection of rates
+        /// </summary>
+        private static IEnumerable<UpsLocalServiceRate> GetServiceRates(IEnumerable<object> rates)
+        {
+            return rates.Select(GetServiceRate).ToList();
+        }
+
+        /// <summary>
+        /// Get a UpsLocalServiceRate from the given object
+        /// </summary>
+        private static UpsLocalServiceRate GetServiceRate(object rate)
+        {
+            UpsPackageRateEntity packageRate = rate as UpsPackageRateEntity;
+            if (packageRate != null)
+            {
+                return new UpsLocalServiceRate((UpsServiceType) packageRate.Service, packageRate.Rate, true, null);
+            }
+
+            UpsLetterRateEntity letterRate = rate as UpsLetterRateEntity;
+            if (letterRate != null)
+            {
+                return new UpsLocalServiceRate((UpsServiceType) letterRate.Service, letterRate.Rate, true, null);
+            }
+
+            UpsPricePerPoundEntity perPoundRate = rate as UpsPricePerPoundEntity;
+            if (perPoundRate != null)
+            {
+                return new UpsLocalServiceRate((UpsServiceType) perPoundRate.Service, perPoundRate.Rate, true, null);
+            }
+
+            throw new UpsLocalRatingException("Unknown RateType");
+        }
+        
+        /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
-        public IDictionary<UpsSurchargeType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account)
+        public IDictionary<UpsSurchargeType, double> GetSurcharges(long accountId)
         {
-            throw new NotImplementedException();
+            Dictionary<UpsSurchargeType, double> result =
+                new Dictionary<UpsSurchargeType, double>();
+
+            UpsAccountEntity account = accountRepository.GetAccount(accountId);
+
+            foreach (UpsRateSurchargeEntity surcharge in Get(account).UpsRateSurcharge)
+            {
+                if (result.ContainsKey((UpsSurchargeType) surcharge.SurchargeType))
+                {
+                    result[(UpsSurchargeType) surcharge.SurchargeType] = surcharge.Amount;
+                }
+                else
+                {
+                    result.Add((UpsSurchargeType) surcharge.SurchargeType, surcharge.Amount);
+                }
+            }
+            return result;
         }
 
         /// <summary>

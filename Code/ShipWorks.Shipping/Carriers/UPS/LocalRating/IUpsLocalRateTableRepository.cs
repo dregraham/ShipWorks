@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
-        IDictionary<UpsSurchargeType, UpsRateSurchargeEntity> GetSurcharges(UpsAccountEntity account);
+        IDictionary<UpsSurchargeType, double> GetSurcharges(long accountId);
 
         /// <summary>
         /// Removes Zone Files that are not the newest zone file
