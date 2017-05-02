@@ -520,6 +520,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "BigCommerceAuthentication", typeof(Interapptive.Shared.Enums.BigCommerceAuthenticationType), false, false, false, false,  (int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, 0, 0, 10);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthClientId", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthClientId, 100, 0, 0);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthToken", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthToken, 100, 0, 0);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "LicenseUrl", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.LicenseUrl, 110, 0, 0);
 		}
 		/// <summary>Inits BuyDotComOrderItemEntity's FieldInfo objects</summary>
 		private void InitBuyDotComOrderItemEntityInfos()
