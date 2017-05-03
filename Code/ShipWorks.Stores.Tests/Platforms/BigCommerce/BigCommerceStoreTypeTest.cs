@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -18,61 +19,26 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
-        [Fact]
-        public void LicenseIdentifier_ReturnsLegacyURLAsIs_WhenLegacyURLDoesNotEndInSlash()
-        {
-            StoreEntity store = new BigCommerceStoreEntity
-            {
-                BigCommerceAuthentication = BigCommerceAuthenticationType.Basic,
-                ApiUrl = "https://store-cee1f.mybigcommerce.com",
-                StoreTypeCode = StoreTypeCode.BigCommerce
-            };
-            var testObject = mock.Create<BigCommerceStoreType>(TypedParameter.From(store));
-
-            var license = testObject.LicenseIdentifier;
-
-            Assert.Equal("store-cee1f.mybigcommerce.com", license);
-        }
-
         [Theory]
-        [InlineData("https://store-cee1f.mybigcommerce.com/")]
-        [InlineData("https://store-cee1f.mybigcommerce.com/api/v2/")]
-        [InlineData("https://store-cee1f.mybigcommerce.com/admin")]
-        [InlineData("https://store-cee1f.mybigcommerce.com/shipworks.php")]
-        [InlineData("https://store-cee1f.mybigcommerce.com/admin/shipworks.php")]
-        public void LicenseIdentifier_ReturnsLegacyLicense_ForLegacyURLs(string url)
+        [InlineData("Foo", "foo")]
+        [InlineData("FOO", "foo")]
+        [InlineData("foo", "foo")]
+        public void LicenseIdentifier_ReturnsDecryptedLicense(string input, string expected)
         {
-            StoreEntity store = new BigCommerceStoreEntity
+            BigCommerceStoreEntity store = new BigCommerceStoreEntity
             {
-                BigCommerceAuthentication = BigCommerceAuthenticationType.Basic,
-                ApiUrl = url,
                 StoreTypeCode = StoreTypeCode.BigCommerce
             };
-            var testObject = mock.Create<BigCommerceStoreType>(TypedParameter.From(store));
 
-            var license = testObject.LicenseIdentifier;
+            mock.Mock<IBigCommerceIdentifier>()
+                .Setup(x => x.Get(store))
+                .Returns(input);
 
-            Assert.Equal("store-cee1f.mybigcommerce.com/", license);
-        }
+            var testObject = mock.Create<BigCommerceStoreType>(TypedParameter.From<StoreEntity>(store));
 
-        [Theory]
-        [InlineData("http://api.bigcommerce.com/stores/cee1f/v2/")]
-        [InlineData("https://api.bigcommerce.com/stores/cee1f/v2/")]
-        [InlineData("https://api.bigcommerce.com/stores/cee1f/v2/some/thing?else=foo")]
-        [InlineData("https://api.bigcommerce.com/stores/cee1f/v3/")]
-        public void LicenseIdentifier_ReturnsLegacyLicense_ForOAuthURLs(string url)
-        {
-            StoreEntity store = new BigCommerceStoreEntity
-            {
-                BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth,
-                ApiUrl = url,
-                StoreTypeCode = StoreTypeCode.BigCommerce
-            };
-            var testObject = mock.Create<BigCommerceStoreType>(TypedParameter.From(store));
+            var result = testObject.LicenseIdentifier;
 
-            var license = testObject.LicenseIdentifier;
-
-            Assert.Equal("store-cee1f.mybigcommerce.com/", license);
+            Assert.Equal(expected, result);
         }
 
         public void Dispose()

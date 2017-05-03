@@ -34,7 +34,7 @@ IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditName', 'SCHEMA', N'd
 EXEC sp_addextendedproperty N'AuditName', N'OAuth Token', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'
 GO
 
-UPDATE BigCommerceStore SET BigCommerceAuthentication = 0, Identifier = ApiUrl
+UPDATE BigCommerceStore SET BigCommerceAuthentication = 0
 GO
 
 ALTER TABLE [dbo].[BigCommerceStore] DROP CONSTRAINT [DF_BigCommerceStore_Identifier]

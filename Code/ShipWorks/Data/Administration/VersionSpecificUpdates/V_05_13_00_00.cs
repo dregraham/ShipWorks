@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Security;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.BigCommerce;
 
 namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {
@@ -21,15 +21,15 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     public class V_05_13_00_00 : IVersionSpecificUpdate
     {
         readonly ISqlAdapterFactory sqlAdapterFactory;
-        readonly IEncryptionProviderFactory encryptionFactory;
+        readonly IBigCommerceIdentifier identifier;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public V_05_13_00_00(ISqlAdapterFactory sqlAdapterFactory, IEncryptionProviderFactory encryptionFactory)
+        public V_05_13_00_00(ISqlAdapterFactory sqlAdapterFactory, IBigCommerceIdentifier identifier)
         {
-            this.encryptionFactory = encryptionFactory;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.identifier = identifier;
         }
 
         /// <summary>
@@ -47,44 +47,19 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// </summary>
         public void Update()
         {
-            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 EntityQuery<BigCommerceStoreEntity> query = new QueryFactory().BigCommerceStore
-                    .Where(BigCommerceStoreFields.ApiUrl == BigCommerceStoreFields.Identifier);
+                    .Where(BigCommerceStoreFields.Identifier == string.Empty);
 
                 IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<BigCommerceStoreEntity>(query).Result;
                 foreach (BigCommerceStoreEntity store in stores.OfType<BigCommerceStoreEntity>())
                 {
-                    store.Identifier = CleanseIdentifier(store.Identifier);
+                    identifier.Set(store, store.ApiUrl);
                 }
 
                 sqlAdapter.SaveEntityCollection(stores);
             }
-        }
-
-        /// <summary>
-        /// Translate the license URL
-        /// </summary>
-        private string CleanseIdentifier(string originalIdentifier)
-        {
-            string identifier = originalIdentifier;
-
-            int indexOfApiPath = identifier.IndexOf("api/v2/", 0, StringComparison.OrdinalIgnoreCase);
-            if (indexOfApiPath > 0)
-            {
-                identifier = identifier.Substring(0, indexOfApiPath);
-            }
-
-            identifier = Regex.Replace(identifier, @"(admin/)?[^/]*(\.)?[^/]+$", "", RegexOptions.IgnoreCase);
-
-            // The regex above will return just the scheme if there's no ending /, so check for that and
-            // reset to the StoreUrl
-            if (identifier.EndsWith(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase))
-            {
-                identifier = originalIdentifier;
-            }
-
-            return identifier;
         }
     }
 }

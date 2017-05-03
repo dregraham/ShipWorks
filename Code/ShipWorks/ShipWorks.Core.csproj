@@ -1679,6 +1679,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
+    <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
