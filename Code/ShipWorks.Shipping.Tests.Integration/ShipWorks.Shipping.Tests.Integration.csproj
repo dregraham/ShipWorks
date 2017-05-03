@@ -174,7 +174,7 @@
     <Compile Include="Carriers\Ups\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidatorTest.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\IUpsRateClientRegistrationTest.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\RegisterIUpsRateClientTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentTypeTest.cs" />
     <Compile Include="DatabaseCollection.cs" />

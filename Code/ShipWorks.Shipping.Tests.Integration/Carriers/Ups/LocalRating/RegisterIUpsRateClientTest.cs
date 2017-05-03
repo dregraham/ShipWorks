@@ -17,12 +17,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 {
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "IoCRegistration")]
-    public class IUpsRateClientRegistrationTest : IDisposable
+    public class RegisterIUpsRateClientTest : IDisposable
     {
         private readonly IContainer container;
         private readonly Func<UpsAccountEntity, IUpsRateClient> upsRateClientFactory;
 
-        public IUpsRateClientRegistrationTest()
+        public RegisterIUpsRateClientTest()
         {
             container = new ContainerBuilder().Build();
             ContainerInitializer.Initialize(container);
