@@ -232,6 +232,7 @@
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeliveryAreaSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\FuelGroundSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\IUpsSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReader.cs" />

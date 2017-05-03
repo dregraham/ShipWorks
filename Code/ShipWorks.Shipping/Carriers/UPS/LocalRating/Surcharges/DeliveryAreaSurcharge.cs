@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                     das => das.DestinationZip == destinationZip);
 
             bool isResidential = shipment.Shipment.ResidentialResult;
-            bool isGround = shipment.Service == (int) UpsServiceType.UpsGround;
+            bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
 
             if (deliveryAreaSurcharge == null)
             {
