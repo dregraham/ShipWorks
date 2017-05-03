@@ -330,11 +330,17 @@
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteAccountSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteOAuthAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteOAuthAccountSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml.cs">
       <DependentUpon>ShopSiteLegacyAccountSettings.xaml</DependentUpon>
@@ -608,6 +614,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteOAuthAccountSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
