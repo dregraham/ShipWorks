@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}");
                 }
 
-                zone = GetLatestZoneFile()
+                zone = GetLatestZoneFile()?
                     .UpsLocalRatingZone.FirstOrDefault(z => z.DestinationZipFloor == destinationPostalCode &&
                                                             z.DestinationZipCeiling == destinationPostalCode);
             }
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
                 }
 
-                zone = GetLatestZoneFile()
+                zone = GetLatestZoneFile()?
                     .UpsLocalRatingZone.FirstOrDefault(z => z.OriginZipFloor <= originPostalCode &&
                                                             z.OriginZipCeiling >= originPostalCode &&
                                                             z.DestinationZipFloor <= destinationPostalCode &&
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone/servicetypes
         /// </summary>
-        private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
+        private static IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
         {
             if (package.TotalWeight >= 150)
             {
@@ -205,7 +205,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     }
 
                     result.Add(new UpsLocalServiceRate((UpsServiceType)baseRate.Service, rate, true, null));
-
                 }
                 return result;
             }
@@ -218,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all the letter rates from the rate table matching the service/zone
         /// </summary>
-        private IEnumerable<UpsLocalServiceRate> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone)
+        private static IEnumerable<UpsLocalServiceRate> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone)
         {
             IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => r.Zone == zone.Zone &&
                                                                                         serviceTypes.Contains((UpsServiceType)r.Service));

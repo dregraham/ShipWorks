@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -280,6 +281,265 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
             
             Assert.Equal("Unable to find zone using origin postal code 12.", ex.Message);
+        }
+
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsNotToAKAndDestinationPostalCodeIsShorterThan3Chars()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "12";
+            upsShipment.Shipment.OriginPostalCode = "123";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+
+            Assert.Equal("Unable to find zone using destination postal code 12.", ex.Message);
+        }
+        
+        [Fact]
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenZoneCannotBeFoundBetweenDestinationAndOrigin()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "123";
+            upsShipment.Shipment.OriginPostalCode = "123";
+
+            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
+                () => testObject.GetServiceRates(upsShipment,
+                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+
+            Assert.Equal("Unable to find zone using oringin postal code 123 and destination postal code 123.", ex.Message);
+        }
+
+        [Fact]
+        public void GetServiceRates_ReturnsEmptyList_WhenNoRatesExistForZone()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "123";
+            upsShipment.Shipment.OriginPostalCode = "123";
+
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "ABCD",
+                OriginZipFloor = 123,
+                OriginZipCeiling = 123,
+                DestinationZipFloor = 123,
+                DestinationZipCeiling = 123
+            });
+
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
+
+            Assert.Empty(testObject.GetServiceRates(upsShipment, new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+        }
+
+        [Fact]
+        public void GetServiceRates_ReturnsRateMatchingZone()
+        {
+            UpsAccountEntity account = new UpsAccountEntity {UpsRateTable = new UpsRateTableEntity()};
+            account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
+            {
+                Zone = "ABC",
+                Rate = 99,
+                WeightInPounds = 0,
+                Service = (int) UpsServiceType.UpsGround
+            });
+
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = {new UpsPackageEntity {Weight = 0}},
+                    Shipment = new ShipmentEntity()
+                };
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "123";
+            upsShipment.Shipment.OriginPostalCode = "123";
+            
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "ABC",
+                OriginZipFloor = 123,
+                OriginZipCeiling = 123,
+                DestinationZipFloor = 123,
+                DestinationZipCeiling = 123
+            });
+
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
+
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
+                new[] {UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround});
+
+            Assert.Equal(result.First().Amount, 99);
+        }
+
+        [Fact]
+        public void GetServiceRates_ReturnsLetterRate_WhenPackageTypeIsLetter()
+        {
+            UpsAccountEntity account = new UpsAccountEntity { UpsRateTable = new UpsRateTableEntity() };
+            account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
+            {
+                Zone = "ABC",
+                Rate = 99,
+                WeightInPounds = 0,
+                Service = (int) UpsServiceType.UpsGround
+            });
+
+            account.UpsRateTable.UpsLetterRate.Add(new UpsLetterRateEntity()
+            {
+                Zone = "AAA",
+                Rate = 12,
+                Service = (int) UpsServiceType.UpsGround
+            });
+
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity { Weight = 0, PackagingType = (int) UpsPackagingType.Letter} },
+                    Shipment = new ShipmentEntity()
+                };
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "123";
+            upsShipment.Shipment.OriginPostalCode = "123";
+
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "ABC",
+                OriginZipFloor = 456,
+                OriginZipCeiling = 456,
+                DestinationZipFloor = 456,
+                DestinationZipCeiling = 456
+            });
+
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "AAA",
+                OriginZipFloor = 123,
+                OriginZipCeiling = 123,
+                DestinationZipFloor = 123,
+                DestinationZipCeiling = 123
+            });
+
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
+
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
+                new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+
+            Assert.Equal(result.First().Amount, 12);
+        }
+
+
+        [Fact]
+        public void GetServiceRates_ReturnsPricePerPound_WhenShipmentIsMoreThan150LBS()
+        {
+            UpsAccountEntity account = new UpsAccountEntity { UpsRateTable = new UpsRateTableEntity() };
+            account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
+            {
+                Zone = "ABC",
+                Rate = 999,
+                WeightInPounds = 150,
+                Service = (int)UpsServiceType.UpsGround
+            });
+
+            account.UpsRateTable.UpsPricePerPound.Add(new UpsPricePerPoundEntity()
+            {
+                Zone = "ABC",
+                Rate = 12,
+                Service = (int)UpsServiceType.UpsGround
+            });
+
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity { Weight = 151, PackagingType = (int)UpsPackagingType.Custom } },
+                    Shipment = new ShipmentEntity()
+                };
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
+
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "123";
+            upsShipment.Shipment.OriginPostalCode = "123";
+
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "ABC",
+                OriginZipFloor = 123,
+                OriginZipCeiling = 123,
+                DestinationZipFloor = 123,
+                DestinationZipCeiling = 123
+            });
+
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
+
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
+                new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+
+            Assert.Equal(result.First().Amount, 1011);
         }
 
         public void Dispose()
