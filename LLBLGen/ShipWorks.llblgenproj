@@ -394,7 +394,7 @@
           <Field Name="ApiUserName" Type="string" MaxLength="65" FieldIndex="1" />
           <Field Name="BigCommerceAuthentication" Type="BigCommerceAuthenticationType" FieldIndex="6" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" FieldIndex="5" />
-          <Field Name="LicenseUrl" Type="string" MaxLength="110" FieldIndex="9" />
+          <Field Name="Identifier" Type="string" MaxLength="110" FieldIndex="9" />
           <Field Name="OauthClientId" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="OauthToken" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="StatusCodes" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="3" />
@@ -3958,7 +3958,7 @@
                         <CustomProperty Name="AuditName" Value="OAuth Token" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="LicenseUrl" Ordinal="11" DbType="12" Length="110" />
+                    <Field Name="Identifier" Ordinal="11" DbType="12" Length="110" />
                   </Fields>
                 </Table>
                 <Table Name="BuyDotComOrderItem">
@@ -9122,7 +9122,7 @@
             <FieldMapping FieldName="ApiUserName" TargetFieldName="ApiUserName" />
             <FieldMapping FieldName="BigCommerceAuthentication" TargetFieldName="BigCommerceAuthentication" />
             <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
-            <FieldMapping FieldName="LicenseUrl" TargetFieldName="LicenseUrl" />
+            <FieldMapping FieldName="Identifier" TargetFieldName="Identifier" />
             <FieldMapping FieldName="OauthClientId" TargetFieldName="OauthClientId" />
             <FieldMapping FieldName="OauthToken" TargetFieldName="OauthToken" />
             <FieldMapping FieldName="StatusCodes" TargetFieldName="StatusCodes" />

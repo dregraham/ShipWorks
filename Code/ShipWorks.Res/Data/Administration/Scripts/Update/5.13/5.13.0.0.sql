@@ -10,8 +10,8 @@ IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'OauthClientId') IS NULL
 ALTER TABLE [dbo].[BigCommerceStore] ADD[OauthClientId] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_OauthClientId] DEFAULT ('')
 IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'OauthToken') IS NULL
 ALTER TABLE [dbo].[BigCommerceStore] ADD[OauthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_OauthToken] DEFAULT ('')
-IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'LicenseUrl') IS NULL
-ALTER TABLE [dbo].[BigCommerceStore] ADD[LicenseUrl] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_LicenseUrl] DEFAULT ('')
+IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'Identifier') IS NULL
+ALTER TABLE [dbo].[BigCommerceStore] ADD[Identifier] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_Identifier] DEFAULT ('')
 GO
 PRINT N'Creating extended properties'
 GO
@@ -34,8 +34,8 @@ IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditName', 'SCHEMA', N'd
 EXEC sp_addextendedproperty N'AuditName', N'OAuth Token', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'
 GO
 
-UPDATE BigCommerceStore SET BigCommerceAuthentication = 0, LicenseUrl = ApiUrl
+UPDATE BigCommerceStore SET BigCommerceAuthentication = 0, Identifier = ApiUrl
 GO
 
-ALTER TABLE [dbo].[BigCommerceStore] DROP CONSTRAINT [DF_BigCommerceStore_LicenseUrl]
+ALTER TABLE [dbo].[BigCommerceStore] DROP CONSTRAINT [DF_BigCommerceStore_Identifier]
 GO

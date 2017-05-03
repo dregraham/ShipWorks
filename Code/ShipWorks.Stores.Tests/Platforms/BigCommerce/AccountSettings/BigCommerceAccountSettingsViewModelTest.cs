@@ -126,73 +126,110 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             mock.Mock<IMessageHelper>().Verify(x => x.ShowError("Foo"));
         }
 
+        //[Theory]
+        //[InlineData("www.example.com", "https://www.example.com")]
+        //[InlineData("https://www.example.com", "https://www.example.com")]
+        //[InlineData(" www.example.com", "https://www.example.com")]
+        //[InlineData("www.example.com ", "https://www.example.com")]
+        //[InlineData(" www.example.com ", "https://www.example.com")]
+        //[InlineData("https://api.bigcommerce.com/stores/vplh1lw/v3/", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //[InlineData("https://store-vplh1lw.mybigcommerce.com/api/v2/", "https://store-vplh1lw.mybigcommerce.com/api/v2/")]
+        //public void SaveToEntity_SetsStoreApi_WhenDataIsValidForBasic(string newUrl, string expectedUrl)
+        //{
+        //    CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+        //    var store = new BigCommerceStoreEntity();
+        //    store.BigCommerceAuthentication = BigCommerceAuthenticationType.Basic;
+        //    var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+        //    testObject.LoadStore(store);
+        //    testObject.ApiUrl = newUrl;
+
+        //    testObject.SaveToEntity(store);
+
+        //    Assert.Equal(expectedUrl, store.ApiUrl);
+        //}
+
+        //[Theory]
+        //[InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //[InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //[InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //[InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2")]
+        //[InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //[InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        //public void SaveToEntity_SetsStoreApi_WhenDataIsValidForOauth(string newUrl, string expectedUrl)
+        //{
+        //    CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+
+        //    var store = new BigCommerceStoreEntity();
+        //    store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+        //    var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+        //    testObject.LoadStore(store);
+        //    testObject.ApiUrl = newUrl;
+
+        //    testObject.SaveToEntity(store);
+
+        //    Assert.Equal(expectedUrl, store.ApiUrl);
+        //}
+
+        //[Theory]
+        //[InlineData("www.example.com", "www.example.com")]
+        //[InlineData("https://www.example.com", "https://www.example.com")]
+        //[InlineData(" www.example.com", " www.example.com")]
+        //[InlineData("www.example.com ", "www.example.com ")]
+        //[InlineData(" www.example.com ", " www.example.com ")]
+        //public void SaveToEntity_SetsStoreApi_WhenDataIsNotValidForOauth(string newUrl, string expectedUrl)
+        //{
+        //    CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+
+        //    var store = new BigCommerceStoreEntity();
+        //    store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+        //    var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+
+        //    testObject.LoadStore(store);
+        //    testObject.ApiUrl = newUrl;
+
+        //    testObject.SaveToEntity(store);
+
+        //    Assert.Equal(expectedUrl, testObject.ApiUrl);
+        //}
+
         [Theory]
-        [InlineData("www.example.com", "https://www.example.com")]
-        [InlineData("https://www.example.com", "https://www.example.com")]
-        [InlineData(" www.example.com", "https://www.example.com")]
-        [InlineData("www.example.com ", "https://www.example.com")]
-        [InlineData(" www.example.com ", "https://www.example.com")]
-        [InlineData("https://api.bigcommerce.com/stores/vplh1lw/v3/", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        [InlineData("https://store-vplh1lw.mybigcommerce.com/api/v2/", "https://store-vplh1lw.mybigcommerce.com/api/v2/")]
-        public void SaveToEntity_SetsStoreApi_WhenDataIsValidForBasic(string newUrl, string expectedUrl)
+        [InlineData(BigCommerceAuthenticationType.Oauth)]
+        [InlineData(BigCommerceAuthenticationType.Basic)]
+        public void SaveToEntity_SetsLicenseApi_WhenLicenseApiIsEmpty(BigCommerceAuthenticationType authenticationType)
         {
-            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+            CreateSuccessfulPersistenceStrategyFor(authenticationType);
 
             var store = new BigCommerceStoreEntity();
-            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Basic;
+            store.BigCommerceAuthentication = authenticationType;
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
-            testObject.LoadStore(store);
-            testObject.ApiUrl = newUrl;
+            testObject.ApiUrl = "https://store-vplh1lw.mybigcommerce.com/api/v2/";
 
             testObject.SaveToEntity(store);
 
-            Assert.Equal(expectedUrl, store.ApiUrl);
+            Assert.Equal("https://store-vplh1lw.mybigcommerce.com/api/v2/", store.Identifier);
         }
 
         [Theory]
-        [InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        [InlineData(" https://api.bigcommerce.com/stores/vplh1lw/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2")]
-        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
-        public void SaveToEntity_SetsStoreApi_WhenDataIsValidForOauth(string newUrl, string expectedUrl)
+        [InlineData(BigCommerceAuthenticationType.Oauth)]
+        [InlineData(BigCommerceAuthenticationType.Basic)]
+        public void SaveToEntity_DoesNotSetIdentifier_WhenLicenseApiIsAlreadySet(BigCommerceAuthenticationType authenticationType)
         {
-            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
+            CreateSuccessfulPersistenceStrategyFor(authenticationType);
 
             var store = new BigCommerceStoreEntity();
-            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
+            store.BigCommerceAuthentication = authenticationType;
+            store.Identifier = "foo";
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
-            testObject.LoadStore(store);
-            testObject.ApiUrl = newUrl;
+            testObject.ApiUrl = "https://store-vplh1lw.mybigcommerce.com/api/v3/";
 
             testObject.SaveToEntity(store);
 
-            Assert.Equal(expectedUrl, store.ApiUrl);
-        }
-
-        [Theory]
-        [InlineData("www.example.com", "www.example.com")]
-        [InlineData("https://www.example.com", "https://www.example.com")]
-        [InlineData(" www.example.com", " www.example.com")]
-        [InlineData("www.example.com ", "www.example.com ")]
-        [InlineData(" www.example.com ", " www.example.com ")]
-        public void SaveToEntity_SetsStoreApi_WhenDataIsNotValidForOauth(string newUrl, string expectedUrl)
-        {
-            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Oauth);
-
-            var store = new BigCommerceStoreEntity();
-            store.BigCommerceAuthentication = BigCommerceAuthenticationType.Oauth;
-            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
-
-            testObject.LoadStore(store);
-            testObject.ApiUrl = newUrl;
-
-            testObject.SaveToEntity(store);
-
-            Assert.Equal(expectedUrl, testObject.ApiUrl);
+            Assert.Equal("foo", store.Identifier);
         }
 
         [Theory]
@@ -275,6 +312,40 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             Assert.Equal(BigCommerceAuthenticationType.Oauth, testObject.AuthenticationType);
         }
 
+        [Theory]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        public void MigrateToOauth_TranslatesApiUrl_WhenUrlIsBasicLegacy(string original, string expected)
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = original });
+
+            testObject.MigrateToOauth.Execute(null);
+
+            Assert.Equal(expected, testObject.ApiUrl);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        [InlineData("http://www.example.com")]
+        public void MigrateToOauth_SetsApiUrlToEmptyString_WhenUrlIsNotasicLegacy(string original)
+        {
+            CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
+
+            var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
+            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = original });
+
+            testObject.MigrateToOauth.Execute(null);
+
+            Assert.Empty(testObject.ApiUrl);
+        }
+
         [Fact]
         public void MigrateToOauth_DelegatesToOauthStrategy_AfterChange()
         {
@@ -283,9 +354,10 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             var oauthStrategy = builder.For(BigCommerceAuthenticationType.Oauth);
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
-            testObject.LoadStore(new BigCommerceStoreEntity { ApiUrl = "https://api.bigcommerce.com/stores/vplh1lw/v3/" });
+            testObject.LoadStore(new BigCommerceStoreEntity());
 
             testObject.MigrateToOauth.Execute(null);
+            testObject.ApiUrl = "https://api.bigcommerce.com/stores/vplh1lw/v3/";
             testObject.SaveToEntity(new BigCommerceStoreEntity());
 
             basicStrategy.Verify(x => x.LoadStoreIntoViewModel(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAccountSettingsViewModel>()));

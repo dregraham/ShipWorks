@@ -1277,7 +1277,7 @@ CREATE TABLE [dbo].[BigCommerceStore]
 [BigCommerceAuthentication] [int] NOT NULL,
 [OauthClientId] [nvarchar](100) NOT NULL,
 [OauthToken] [nvarchar](100) NOT NULL,
-[LicenseUrl] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Identifier] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BigCommerceStore] on [dbo].[BigCommerceStore]'

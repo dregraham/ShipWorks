@@ -534,7 +534,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("BigCommerceStoreEntity", "BigCommerceAuthentication", "BigCommerceAuthentication", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("BigCommerceStoreEntity", "OauthClientId", "OauthClientId", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("BigCommerceStoreEntity", "OauthToken", "OauthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("BigCommerceStoreEntity", "LicenseUrl", "LicenseUrl", false, "NVarChar", 110, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("BigCommerceStoreEntity", "Identifier", "Identifier", false, "NVarChar", 110, 0, 0, false, "", null, typeof(System.String), 10);
 		}
 
 		/// <summary>Inits BuyDotComOrderItemEntity's mappings</summary>

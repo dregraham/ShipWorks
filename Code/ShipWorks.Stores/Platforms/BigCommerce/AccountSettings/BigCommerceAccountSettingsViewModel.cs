@@ -216,28 +216,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
                 storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
             }
 
-            // OAuth requires a different URL than basic auth, so if we are migrating we need to convert the URL
-            if (AuthenticationType == BigCommerceAuthenticationType.Oauth &&
-                !storeUrlToCheck.Contains("api.bigcommerce.com", StringComparison.InvariantCultureIgnoreCase))
-            {
-                // Old style:  https://store-vplh1lw.mybigcommerce.com/api/v2/
-                // New style:  https://api.bigcommerce.com/stores/vplh1lw/v2/
-
-                // First find the BC store identifier
-                int start = storeUrlToCheck.IndexOf("store-", StringComparison.InvariantCultureIgnoreCase) + 6;
-                int end = storeUrlToCheck.IndexOf(".mybigcommerce.com", StringComparison.InvariantCultureIgnoreCase);
-
-                if (start < 0 || end < 0 || (end - start) <= 0)
-                {
-                    return GenericResult.FromError<string>("The specified API Path is not a valid address.");
-                }
-
-                string storeIdentifier = storeUrlToCheck.Substring(start, end - start);
-
-                // Now format it correctly
-                storeUrlToCheck = $"https://api.bigcommerce.com/stores/{storeIdentifier}/v2/";
-            }
-
             // Now check the url to see if it's a valid address
             if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
             {
@@ -245,6 +223,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             }
 
             store.ApiUrl = storeUrlToCheck;
+
+            if (string.IsNullOrWhiteSpace(store.Identifier))
+            {
+                store.Identifier = store.ApiUrl;
+            }
 
             return GenericResult.FromSuccess(storeUrlToCheck);
         }
@@ -256,6 +239,37 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         {
             AuthenticationType = BigCommerceAuthenticationType.Oauth;
             persistenceStrategy = null;
+
+            ApiUrl = TranslateApiUrl(ApiUrl);
+        }
+
+        /// <summary>
+        /// Translate the Api URL from legacy to OAuth
+        /// </summary>
+        /// <remarks>
+        /// Old style:  https://store-vplh1lw.mybigcommerce.com/api/v2/
+        /// New style:  https://api.bigcommerce.com/stores/vplh1lw/v2/
+        /// </remarks>
+        private static string TranslateApiUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return string.Empty;
+            }
+
+            // First find the BC store identifier
+            int start = url.IndexOf("store-", StringComparison.InvariantCultureIgnoreCase) + 6;
+            int end = url.IndexOf(".mybigcommerce.com", StringComparison.InvariantCultureIgnoreCase);
+
+            if (start < 0 || end < 0 || (end - start) <= 0)
+            {
+                return string.Empty;
+            }
+
+            string storeIdentifier = url.Substring(start, end - start);
+
+            // Now format it correctly
+            return $"https://api.bigcommerce.com/stores/{storeIdentifier}/v2/";
         }
     }
 }
