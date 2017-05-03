@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // We dont have zone info for the given origin/destination combo
             if (zones == null || zones.None())
             {
-                throw new UpsLocalRatingException($"Unable to find zone using oringin postal code {origin} and destination postal code {destination}.");
+                throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin} and destination postal code {destination}.");
             }
 
             UpsRateTableEntity rateTable = Get(accountRepository.GetAccount(shipment.Shipment));

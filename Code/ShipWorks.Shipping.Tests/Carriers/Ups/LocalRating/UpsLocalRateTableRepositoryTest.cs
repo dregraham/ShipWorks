@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 () => testObject.GetServiceRates(upsShipment,
                     new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
 
-            Assert.Equal("Unable to find zone using oringin postal code 12345 and destination postal code 12345.", ex.Message);
+            Assert.Equal("Unable to find zone using origin postal code 12345 and destination postal code 12345.", ex.Message);
         }
 
         [Fact]

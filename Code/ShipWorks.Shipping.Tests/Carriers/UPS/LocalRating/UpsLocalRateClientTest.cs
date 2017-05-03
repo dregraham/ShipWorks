@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -112,6 +115,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             filter.Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
                 .Returns(eligibleServieTypes);
             mock.Provide<IEnumerable<IServiceFilter>>(new [] {filter.Object});
+
+            var apiRateClient = mock.CreateMock<IUpsRateClient>();
+            var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
+            indexMock.Setup(x => x[UpsRatingMethod.Api]).Returns(apiRateClient.Object);
+            mock.Provide(indexMock.Object);
 
             var testObject = mock.Create<UpsLocalRateClient>();
             testObject.GetRates(shipment);

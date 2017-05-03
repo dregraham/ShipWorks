@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
@@ -17,13 +19,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Calculate local rates
     /// </summary>
-    /// <seealso cref="ShipWorks.Shipping.Carriers.UPS.IUpsRateClient" />
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.Local)]
     public class UpsLocalRateClient : IUpsRateClient
     {
         private readonly IApiLogEntry apiLog;
         private readonly IUpsLocalRateTableRepository rateRepository;
         private readonly IEnumerable<IServiceFilter> serviceFilters;
         private readonly IUpsSurchargeFactory surchargeFactory;
+        private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateClient"/> class.
@@ -31,26 +34,51 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public UpsLocalRateClient(IEnumerable<IServiceFilter> serviceFilters,
             IUpsLocalRateTableRepository rateRepository,
             IUpsSurchargeFactory surchargeFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory)
         {
+            this.upsRateClientFactory = upsRateClientFactory;
             this.serviceFilters = serviceFilters;
             this.rateRepository = rateRepository;
             this.surchargeFactory = surchargeFactory;
             apiLog = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate");
         }
 
+
         /// <summary>
-        /// Gets rates for the given <paramref name="shipment" />
+        /// Gets rates for the given shipment
         /// </summary>
         public List<UpsServiceRate> GetRates(ShipmentEntity shipment)
         {
-            IEnumerable<UpsServiceType> serviceTypes = GetEligibleServices(shipment);
+            List<UpsServiceRate> localRates = GetRatesInternal(shipment);
+            if (localRates.Any())
+            {
+                return localRates;
+            }
 
-            IEnumerable<UpsLocalServiceRate> upsLocalServiceRates =
-                rateRepository.GetServiceRates(shipment.Ups, serviceTypes).ToList();
-            
-            ApplyRateSurcharges(shipment, upsLocalServiceRates);
-            return upsLocalServiceRates.Cast<UpsServiceRate>().ToList();
+            return upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+        }
+
+        /// <summary>
+        /// Gets rates for the given <paramref name="shipment" />
+        /// </summary>
+        private List<UpsServiceRate> GetRatesInternal(ShipmentEntity shipment)
+        {
+            try
+            {
+                IEnumerable<UpsServiceType> serviceTypes = GetEligibleServices(shipment);
+
+                IEnumerable<UpsLocalServiceRate> upsLocalServiceRates =
+                    rateRepository.GetServiceRates(shipment.Ups, serviceTypes).ToList();
+
+                ApplyRateSurcharges(shipment, upsLocalServiceRates);
+
+                return upsLocalServiceRates.Cast<UpsServiceRate>().ToList();
+            }
+            catch (UpsLocalRatingException)
+            {
+                return new List<UpsServiceRate>();
+            }
         }
 
         /// <summary>

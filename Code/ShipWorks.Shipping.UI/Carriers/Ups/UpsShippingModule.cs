@@ -16,10 +16,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
@@ -55,13 +51,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsApiTransitTimeClient>();
 
-            builder.RegisterType<UpsLocalRateClient>();
-            builder.RegisterType<UpsApiRateClient>();
-            builder.Register(GetUpsRateClient).As<IUpsRateClient>();
-
-            RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
-            RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
-
             builder.RegisterType<UpsClerk>()
                 .AsImplementedInterfaces();
 
@@ -90,17 +79,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             RegisterOltSpecificTypes(builder);
             RegisterWorldShipSpecificTypes(builder);
             RegisterPromoTypes(builder);
-        }
-
-        private IUpsRateClient GetUpsRateClient(IComponentContext context, IEnumerable<Parameter> parameters)
-        {
-            UpsAccountEntity account = parameters.TypedAs<UpsAccountEntity>();
-            if (account?.LocalRatingEnabled == true)
-            {
-                return context.Resolve<UpsLocalRateClient>();
-            }
-
-            return context.Resolve<UpsApiRateClient>();
         }
 
         /// <summary>
@@ -161,18 +139,5 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsPromoFootnoteViewModel>()
                 .AsImplementedInterfaces();
         }
-
-        /// <summary>
-        /// Register the rating service for the given shipment type
-        /// </summary>
-        private void RegisterRatingServiceFor(ShipmentTypeCode shipmentType, ContainerBuilder builder)
-        {
-            builder.RegisterType<UpsRatingService>()
-                .Keyed<IRatingService>(shipmentType)
-                .WithParameter(new ResolvedParameter(
-                    (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
-                    (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
-        }
-
     }
 }

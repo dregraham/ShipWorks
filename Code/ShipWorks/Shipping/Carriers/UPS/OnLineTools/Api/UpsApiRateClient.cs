@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// <summary>
     /// Wrapper for accessing UPS rates
     /// </summary>
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.Local)]
     public class UpsApiRateClient : IUpsRateClient
     {
         private ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;

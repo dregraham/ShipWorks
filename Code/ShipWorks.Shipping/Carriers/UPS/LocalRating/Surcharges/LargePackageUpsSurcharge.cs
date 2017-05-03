@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         private bool IsLargePackage(UpsShipmentEntity shipment)
         {
-            return shipment.Packages.Any(p => p.IsLargePackage);
+            return shipment.Packages.FirstOrDefault()?.IsLargePackage ?? false;
         }
     }
 }
