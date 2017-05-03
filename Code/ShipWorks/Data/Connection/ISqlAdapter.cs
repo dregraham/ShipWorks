@@ -38,6 +38,11 @@ namespace ShipWorks.Data.Connection
         int SaveEntityCollection(IEntityCollection2 stores);
 
         /// <summary>
+        /// Save the collection of entities to the database
+        /// </summary>
+        int SaveEntityCollection(IEntityCollection2 stores, bool refetchSavedEntitiesAfterSave, bool recurse);
+
+        /// <summary>
         /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
         /// Fetches the query specified on the adapter specified. Uses the TEntity type to
         /// produce an EntityCollection(Of TEntity) for the results to return
