@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 EntityQuery<BigCommerceStoreEntity> query = new QueryFactory().BigCommerceStore
-                    .Where(BigCommerceStoreFields.Identifier == string.Empty);
+                     .Where(BigCommerceStoreFields.Identifier == string.Empty);
 
                 IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<BigCommerceStoreEntity>(query).Result;
                 foreach (BigCommerceStoreEntity store in stores.OfType<BigCommerceStoreEntity>())
@@ -58,7 +58,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                     identifier.Set(store, store.ApiUrl);
                 }
 
-                sqlAdapter.SaveEntityCollection(stores);
+                sqlAdapter.SaveEntityCollection(stores, refetchSavedEntitiesAfterSave: true, recurse: false);
             }
         }
     }
