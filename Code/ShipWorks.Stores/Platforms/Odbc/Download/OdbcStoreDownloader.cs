@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
             
             if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {

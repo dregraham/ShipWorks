@@ -17,8 +17,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderEntity order)
         {
-            MethodConditions.EnsureArgumentIsNotNull(map, "map");
-            MethodConditions.EnsureArgumentIsNotNull(order, "order");
+            MethodConditions.EnsureArgumentIsNotNull(map, nameof(map));
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             if (order.IsNew)
             {

@@ -97,7 +97,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static bool IsUSInternationalTerritory(this IAddressAdapter address)
         {
-            MethodConditions.EnsureArgumentIsNotNull(address, "address");
+            MethodConditions.EnsureArgumentIsNotNull(address, nameof(address));
 
             return IsUSInternationalTerritory(address.CountryCode) ||
                 (string.Equals(address.CountryCode, "US", StringComparison.OrdinalIgnoreCase) && IsUSInternationalTerritory(address.StateProvCode));
@@ -108,7 +108,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static bool IsUSInternationalTerritory(this IAddressAdapter address, string territory)
         {
-            MethodConditions.EnsureArgumentIsNotNull(address, "address");
+            MethodConditions.EnsureArgumentIsNotNull(address, nameof(address));
 
             return address.CountryCode.Equals(territory, StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals(territory, StringComparison.OrdinalIgnoreCase));

@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         public SparkPayOrderUpdateTaskEditor(SparkPayOrderUpdateTask task)
         {
             InitializeComponent();
-            MethodConditions.EnsureArgumentIsNotNull(task);
+            MethodConditions.EnsureArgumentIsNotNull(task, nameof(task));
 
             this.task = task;
         }
