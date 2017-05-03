@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToAKAndPostalCodeIsNotValid()
+        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentPostalCodeIsNotValid()
         {
             UpsShipmentEntity upsShipment =
                 new UpsShipmentEntity
@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     Shipment = new ShipmentEntity()
                 };
 
-            upsShipment.Shipment.ShipStateProvCode = "AK";
+            upsShipment.Shipment.OriginPostalCode = "12345";
             upsShipment.Shipment.ShipPostalCode = "abcde";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
@@ -218,92 +218,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     new[] {UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround}));
 
 
-            Assert.Equal("Unable to find zone using destination postal code abcde" , ex.Message);
+            Assert.Equal("Unable to find zone using destination postal code abcde." , ex.Message);
         }
 
-        [Fact]
-        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToHIAndPostalCodeIsNotValid()
-        {
-            UpsShipmentEntity upsShipment =
-                new UpsShipmentEntity
-                {
-                    Packages = { new UpsPackageEntity() },
-                    Shipment = new ShipmentEntity()
-                };
-
-            upsShipment.Shipment.ShipStateProvCode = "HI";
-            upsShipment.Shipment.ShipPostalCode = "abcde";
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
-
-
-            Assert.Equal("Unable to find zone using destination postal code abcde", ex.Message);
-        }
-
-        [Fact]
-        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsToAKAndPostalCodeIsShorterThan5Chars()
-        {
-            UpsShipmentEntity upsShipment =
-                new UpsShipmentEntity
-                {
-                    Packages = { new UpsPackageEntity() },
-                    Shipment = new ShipmentEntity()
-                };
-
-            upsShipment.Shipment.ShipStateProvCode = "AK";
-            upsShipment.Shipment.ShipPostalCode = "1234";
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
-
-
-            Assert.Equal("Unable to find zone using destination postal code 1234", ex.Message);
-        }
-
-        [Fact]
-        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsNotToAKAndOriginPostalCodeIsShorterThan3Chars()
-        {
-            UpsShipmentEntity upsShipment =
-                new UpsShipmentEntity
-                {
-                    Packages = { new UpsPackageEntity() },
-                    Shipment = new ShipmentEntity()
-                };
-
-            upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.OriginPostalCode = "12";
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
-            
-            Assert.Equal("Unable to find zone using origin postal code 12.", ex.Message);
-        }
-
-        [Fact]
-        public void GetServiceRates_ThrowsUpsLocalRatingException_WhenShipmentIsNotToAKAndDestinationPostalCodeIsShorterThan3Chars()
-        {
-            UpsShipmentEntity upsShipment =
-                new UpsShipmentEntity
-                {
-                    Packages = { new UpsPackageEntity() },
-                    Shipment = new ShipmentEntity()
-                };
-
-            upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "12";
-            upsShipment.Shipment.OriginPostalCode = "123";
-
-            UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
-
-            Assert.Equal("Unable to find zone using destination postal code 12.", ex.Message);
-        }
-        
         [Fact]
         public void GetServiceRates_ThrowsUpsLocalRatingException_WhenZoneCannotBeFoundBetweenDestinationAndOrigin()
         {
@@ -315,14 +232,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 };
 
             upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "123";
-            upsShipment.Shipment.OriginPostalCode = "123";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
+
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
                 () => testObject.GetServiceRates(upsShipment,
                     new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
 
-            Assert.Equal("Unable to find zone using oringin postal code 123 and destination postal code 123.", ex.Message);
+            Assert.Equal("Unable to find zone using oringin postal code 12345 and destination postal code 12345.", ex.Message);
         }
 
         [Fact]
@@ -336,17 +264,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 };
 
             upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "123";
-            upsShipment.Shipment.OriginPostalCode = "123";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
 
             UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
             zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
             {
                 Zone = "ABCD",
-                OriginZipFloor = 123,
-                OriginZipCeiling = 123,
-                DestinationZipFloor = 123,
-                DestinationZipCeiling = 123
+                OriginZipFloor = 12345,
+                OriginZipCeiling = 12345,
+                DestinationZipFloor = 12345,
+                DestinationZipCeiling = 12345
             });
 
             Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
@@ -385,17 +313,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
 
             upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "123";
-            upsShipment.Shipment.OriginPostalCode = "123";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
             
             UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
             zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
             {
                 Zone = "ABC",
-                OriginZipFloor = 123,
-                OriginZipCeiling = 123,
-                DestinationZipFloor = 123,
-                DestinationZipCeiling = 123
+                OriginZipFloor = 12345,
+                OriginZipCeiling = 12345,
+                DestinationZipFloor = 12345,
+                DestinationZipCeiling = 12345
             });
 
             Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
@@ -444,26 +372,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
 
             upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "123";
-            upsShipment.Shipment.OriginPostalCode = "123";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
 
             UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
             zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
             {
                 Zone = "ABC",
-                OriginZipFloor = 456,
-                OriginZipCeiling = 456,
-                DestinationZipFloor = 456,
-                DestinationZipCeiling = 456
+                OriginZipFloor = 45678,
+                OriginZipCeiling = 45678,
+                DestinationZipFloor = 45678,
+                DestinationZipCeiling = 45678
             });
 
             zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
             {
                 Zone = "AAA",
-                OriginZipFloor = 123,
-                OriginZipCeiling = 123,
-                DestinationZipFloor = 123,
-                DestinationZipCeiling = 123
+                OriginZipFloor = 12345,
+                OriginZipCeiling = 12345,
+                DestinationZipFloor = 12345,
+                DestinationZipCeiling = 12345
             });
 
             Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
@@ -513,17 +441,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
 
             upsShipment.Shipment.ShipStateProvCode = "MO";
-            upsShipment.Shipment.ShipPostalCode = "123";
-            upsShipment.Shipment.OriginPostalCode = "123";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
 
             UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
             zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
             {
                 Zone = "ABC",
-                OriginZipFloor = 123,
-                OriginZipCeiling = 123,
-                DestinationZipFloor = 123,
-                DestinationZipCeiling = 123
+                OriginZipFloor = 12345,
+                OriginZipCeiling = 12345,
+                DestinationZipFloor = 12345,
+                DestinationZipCeiling = 12345
             });
 
             Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();

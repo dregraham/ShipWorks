@@ -125,37 +125,37 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             int originPostalCode;
             int destinationPostalCode;
             
-            if (origin.Length < 5 || !int.TryParse(origin.Substring(0, 5), out originPostalCode))
+            if (origin?.Length < 5 || !int.TryParse(origin?.Substring(0, 5), out originPostalCode))
             {
                 throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
             }
 
-            if (destination.Length < 5 || !int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
+            if (destination?.Length < 5 || !int.TryParse(destination?.Substring(0, 5), out destinationPostalCode))
             {
                 throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
             }
 
             UpsLocalRatingZoneFileEntity zoneFile = GetLatestZoneFile();
-
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                adapter.FetchEntityCollection(zoneFile.UpsLocalRatingZone, null);
-            }
-
-
-            UpsLocalRatingZoneEntity zone = zoneFile.UpsLocalRatingZone.FirstOrDefault(z => z.OriginZipFloor <= originPostalCode &&
+            // TODO: cache the zones so we dont have to reload every time
+            FetchCollection(zoneFile.UpsLocalRatingZone);
+            
+            IEnumerable<string> zones = zoneFile.UpsLocalRatingZone.Where(z => z.OriginZipFloor <= originPostalCode &&
                                                         z.OriginZipCeiling >= originPostalCode &&
                                                         z.DestinationZipFloor <= destinationPostalCode &&
-                                                        z.DestinationZipCeiling >= destinationPostalCode);
+                                                        z.DestinationZipCeiling >= destinationPostalCode).Select(z => z.Zone).ToArray();
             
-
             // We dont have zone info for the given origin/destination combo
-            if (zone == null)
+            if (zones == null || zones.None())
             {
                 throw new UpsLocalRatingException($"Unable to find zone using oringin postal code {origin} and destination postal code {destination}.");
             }
 
             UpsRateTableEntity rateTable = Get(accountRepository.GetAccount(shipment.Shipment));
+
+            // TODO: cache rates so that we dont have to load this data every time which is super slow
+            FetchCollection(rateTable.UpsPackageRate);
+            FetchCollection(rateTable.UpsLetterRate);
+            FetchCollection(rateTable.UpsPricePerPound);
 
             // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
             // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
@@ -163,43 +163,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
             {
-                return GetLetterRates(rateTable, serviceTypes, zone);
+                return GetLetterRates(rateTable, serviceTypes, zones);
             }
             
-            return GetPackageRates(rateTable, serviceTypes, zone, package);
-        }
-
-        private void FetchCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket = null)
-        {
-            try
-            {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.FetchEntityCollection(collectionToFill, filterBucket);
-                }
-            }
-            catch (Exception ex) when (ex is ORMException || ex is SqlException)
-            {
-                throw new UpsLocalRatingException($"Error retrieving collection:\r\n\r\n{ex.Message}", ex);
-            }
+            return GetPackageRates(rateTable, serviceTypes, zones, package);
         }
 
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone/servicetypes
         /// </summary>
-        private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
+        private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, IEnumerable<string> zones, UpsPackageEntity package)
         {
-
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                adapter.FetchEntityCollection(rateTable.UpsPackageRate, null);
-            }
-
-
             if (package.TotalWeight >= 150)
             {
                 // Get the base rate at 150
-                IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
+                IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate.Where(r => zones.Contains(r.Zone) &&
                                                                                               serviceTypes.Contains((UpsServiceType) r.Service) &&
                                                                                               r.WeightInPounds == 150);
                 // Add the price per pound for anything over 150
@@ -219,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 return result;
             }
-            IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate.Where(r => r.Zone == zone.Zone &&
+            IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate.Where(r => zones.Contains(r.Zone) &&
                                                                                           serviceTypes.Contains((UpsServiceType) r.Service)&&
                                                                                           r.WeightInPounds == package.BillableWeight);
             return GetServiceRates(rates);
@@ -228,9 +206,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all the letter rates from the rate table matching the service/zone
         /// </summary>
-        private static IEnumerable<UpsLocalServiceRate> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone)
+        private static IEnumerable<UpsLocalServiceRate> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, IEnumerable<string> zones)
         {
-            IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => r.Zone == zone.Zone &&
+            IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => zones.Contains(r.Zone) &&
                                                                                         serviceTypes.Contains((UpsServiceType)r.Service));
             return GetServiceRates(rates);
         }
@@ -298,6 +276,24 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Fetch a collection
+        /// </summary>
+        private void FetchCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket = null)
+        {
+            try
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.FetchEntityCollection(collectionToFill, filterBucket);
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error retrieving collection:\r\n\r\n{ex.Message}", ex);
+            }
         }
 
         /// <summary>
