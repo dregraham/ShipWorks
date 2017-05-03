@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void SaveRateToCollection(UpsServiceType upsServiceType, IRange weightCell, IRange headerCell, IRange rateCell)
         {
-            string zone = headerCell.Value;
+            string zone = headerCell.Value.PadLeft(3, '0');
             decimal rate = Convert.ToDecimal(rateCell.Number);
 
             // If weight has number, it represents a package weight. We store this in the UpsPackageRate table

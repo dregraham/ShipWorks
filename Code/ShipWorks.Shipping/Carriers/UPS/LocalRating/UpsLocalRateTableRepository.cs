@@ -124,41 +124,30 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             int originPostalCode;
             int destinationPostalCode;
-
-            UpsLocalRatingZoneEntity zone = null;
-
-            // Try and determin the zone if the shipment is to alaska or hawaii
-            if (shipment.Shipment.ShipStateProvCode == "HI" || shipment.Shipment.ShipStateProvCode == "AK")
+            
+            if (origin.Length < 5 || !int.TryParse(origin.Substring(0, 5), out originPostalCode))
             {
-                if (destination.Length < 5 || !int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
-                {
-                    throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}");
-                }
-
-                zone = GetLatestZoneFile()?
-                    .UpsLocalRatingZone.FirstOrDefault(z => z.DestinationZipFloor == destinationPostalCode &&
-                                                            z.DestinationZipCeiling == destinationPostalCode);
+                throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
             }
 
-            // Try every other zone
-            if (zone == null)
+            if (destination.Length < 5 || !int.TryParse(destination.Substring(0, 5), out destinationPostalCode))
             {
-                if (origin.Length < 3 || !int.TryParse(origin.Substring(0, 3), out originPostalCode))
-                {
-                    throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
-                }
-
-                if (destination.Length < 3 || !int.TryParse(destination.Substring(0, 3), out destinationPostalCode))
-                {
-                    throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
-                }
-
-                zone = GetLatestZoneFile()?
-                    .UpsLocalRatingZone.FirstOrDefault(z => z.OriginZipFloor <= originPostalCode &&
-                                                            z.OriginZipCeiling >= originPostalCode &&
-                                                            z.DestinationZipFloor <= destinationPostalCode &&
-                                                            z.DestinationZipCeiling >= destinationPostalCode);
+                throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
             }
+
+            UpsLocalRatingZoneFileEntity zoneFile = GetLatestZoneFile();
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                adapter.FetchEntityCollection(zoneFile.UpsLocalRatingZone, null);
+            }
+
+
+            UpsLocalRatingZoneEntity zone = zoneFile.UpsLocalRatingZone.FirstOrDefault(z => z.OriginZipFloor <= originPostalCode &&
+                                                        z.OriginZipCeiling >= originPostalCode &&
+                                                        z.DestinationZipFloor <= destinationPostalCode &&
+                                                        z.DestinationZipCeiling >= destinationPostalCode);
+            
 
             // We dont have zone info for the given origin/destination combo
             if (zone == null)
@@ -180,11 +169,33 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             return GetPackageRates(rateTable, serviceTypes, zone, package);
         }
 
+        private void FetchCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket = null)
+        {
+            try
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.FetchEntityCollection(collectionToFill, filterBucket);
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error retrieving collection:\r\n\r\n{ex.Message}", ex);
+            }
+        }
+
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone/servicetypes
         /// </summary>
-        private static IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
+        private IEnumerable<UpsLocalServiceRate> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, UpsLocalRatingZoneEntity zone, UpsPackageEntity package)
         {
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                adapter.FetchEntityCollection(rateTable.UpsPackageRate, null);
+            }
+
+
             if (package.TotalWeight >= 150)
             {
                 // Get the base rate at 150
@@ -271,6 +282,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (rateTable != null)
             {
+                FetchCollection(rateTable.UpsRateSurcharge);
+
                 foreach (UpsRateSurchargeEntity surcharge in rateTable.UpsRateSurcharge)
                 {
                     if (result.ContainsKey((UpsSurchargeType)surcharge.SurchargeType))

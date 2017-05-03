@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        private readonly UpsApiRateClient upsApiRateClient;
+        private readonly Func<UpsAccountEntity, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
 
@@ -34,14 +34,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public UpsRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
-            UpsApiRateClient upsApiRateClient,
+            Func<UpsAccountEntity, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
             IUpsPromoFactory promoFactory
             )
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
-            this.upsApiRateClient = upsApiRateClient;
+            this.upsRateClientFactory = upsRateClientFactory;
             this.shipmentType = shipmentType;
             this.promoFactory = promoFactory;
         }
@@ -58,13 +58,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             bool anyNegotiated = false;
             bool allNegotiated = false;
 
-            IEnumerable<UpsServiceRate> serviceRates;
-            IEnumerable<UpsTransitTime> transitTimes;
-
-            UpsAccountEntity account = null;
-
             try
             {
+                IEnumerable<UpsTransitTime> transitTimes;
+
+                UpsAccountEntity account = accountRepository.GetAccount(shipment);
+                IUpsRateClient rateClient = upsRateClientFactory(account);
+                IEnumerable<UpsServiceRate> serviceRates = rateClient.GetRates(shipment);
+
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
                 {
@@ -72,16 +73,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
-                    serviceRates = upsApiRateClient.GetRates(shipment, true);
                 }
                 else
                 {
-                    account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
-
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
-                    serviceRates = upsApiRateClient.GetRates(shipment, false);
-
+                    
                     // Determine if the user is hoping to get negotiated rates back
                     wantedNegotiated = account.RateType == (int) UpsRateType.Negotiated;
 

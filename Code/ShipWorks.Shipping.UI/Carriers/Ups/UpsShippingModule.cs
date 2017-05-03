@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         private IUpsRateClient GetUpsRateClient(IComponentContext context, IEnumerable<Parameter> parameters)
         {
             UpsAccountEntity account = parameters.TypedAs<UpsAccountEntity>();
-            if (account.LocalRatingEnabled)
+            if (account?.LocalRatingEnabled == true)
             {
                 return context.Resolve<UpsLocalRateClient>();
             }
