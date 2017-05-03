@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderEntity = new WalmartOrderEntity();
             orderLineType item = GenerateItem("item1", "name1", "sku1");
 
+            orderDto.customerOrderId = "123";
             orderDto.orderLines = new[] { item };
             orderDto.shippingInfo = new shippingInfoType
             {
@@ -61,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void LoadOrder_SetsCustomerOrderID_WhenOrderIsNew()
         {
             orderEntity.IsNew = true;
-            orderDto.customerOrderId = "123abcd";
+            orderDto.customerOrderId = "123";
 
             testObject.LoadOrder(orderDto, orderEntity);
 
@@ -93,17 +94,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void LoadOrder_SetsPurchaseOrderID_WhenOrderIsNew()
-        {
-            orderEntity.IsNew = true;
-            orderDto.purchaseOrderId = "PO123abcd";
-
-            testObject.LoadOrder(orderDto, orderEntity);
-
-            Assert.Equal(orderDto.purchaseOrderId, orderEntity.PurchaseOrderID);
-        }
-
-        [Fact]
         public void LoadOrder_SetsOrderDate_WhenOrderIsNew()
         {
             orderEntity.IsNew = true;
@@ -119,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             orderEntity.IsNew = true;
             orderDto.shippingInfo.estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12);
-
+            
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderDto.shippingInfo.estimatedDeliveryDate, orderEntity.EstimatedDeliveryDate);

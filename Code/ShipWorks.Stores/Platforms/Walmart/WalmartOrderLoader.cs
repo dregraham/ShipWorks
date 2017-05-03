@@ -35,8 +35,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             if (orderToSave.IsNew)
             {
+                long orderNumber;
+                if (!long.TryParse(downloadedOrder.customerOrderId, out orderNumber))
+                {
+                    throw new WalmartException($"CustomerOrderId '{downloadedOrder.customerOrderId}' could not be converted to an integer");
+                }
+
+                orderToSave.OrderNumber = orderNumber;
                 orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
-                orderToSave.PurchaseOrderID = downloadedOrder.purchaseOrderId;
                 orderToSave.OrderDate = downloadedOrder.orderDate;
                 orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
                 orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate;

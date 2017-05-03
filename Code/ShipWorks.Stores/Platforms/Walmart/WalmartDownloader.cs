@@ -142,14 +142,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
-            long orderNumber;
-            if (!long.TryParse(downloadedOrder.customerOrderId, out orderNumber))
-            {
-                throw new WalmartException($"CustomerOrderId '{downloadedOrder.customerOrderId}' could not be converted to an integer");
-            }
-
             WalmartOrderEntity orderToSave =
-                (WalmartOrderEntity) InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+                (WalmartOrderEntity) InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId));
 
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
