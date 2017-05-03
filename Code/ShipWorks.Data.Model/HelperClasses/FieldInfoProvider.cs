@@ -2558,10 +2558,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)ShopSiteStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Username", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Username, 50, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Password, 50, 0, 0);
-			this.AddElementFieldInfo("ShopSiteStoreEntity", "CgiUrl", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.CgiUrl, 350, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "ApiUrl", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.ApiUrl, 350, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "Authentication", typeof(Interapptive.Shared.Enums.ShopSiteAuthenticationType), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Authentication, 0, 0, 10);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthClientID", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthClientID, 100, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthSecretKey", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthSecretKey, 50, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Identifier, 350, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "AuthorizationCode", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.AuthorizationCode, 50, 0, 0);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()

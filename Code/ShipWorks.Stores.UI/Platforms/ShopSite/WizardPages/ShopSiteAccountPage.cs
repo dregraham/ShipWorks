@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite.WizardPages
             }
 
             store.StoreName = "ShopSite Store";
-            store.Website = new Uri(store.CgiUrl).Host;
+            store.Website = new Uri(store.ApiUrl).Host;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
 
             username.Text = shopSiteStore.Username;
             password.Text = SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username);
-            cgiUrl.Text = shopSiteStore.CgiUrl;
+            apiUrl.Text = shopSiteStore.ApiUrl;
             connectUnsecure.Checked = !shopSiteStore.RequireSSL;
         }
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
             }
 
             // Url to the module
-            string url = cgiUrl.Text.Trim();
+            string url = apiUrl.Text.Trim();
 
             // Check empty
             if (url.Length == 0)
@@ -86,12 +86,12 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
 
             shopSiteStore.Username = username.Text;
             shopSiteStore.Password = SecureText.Encrypt(password.Text, username.Text);
-            shopSiteStore.CgiUrl = url;
+            shopSiteStore.ApiUrl = url;
             shopSiteStore.RequireSSL = !connectUnsecure.Checked;
 
             if (shopSiteStore.Fields[(int) ShopSiteStoreFieldIndex.Username].IsChanged ||
                 shopSiteStore.Fields[(int) ShopSiteStoreFieldIndex.Password].IsChanged ||
-                shopSiteStore.Fields[(int) ShopSiteStoreFieldIndex.CgiUrl].IsChanged)
+                shopSiteStore.Fields[(int) ShopSiteStoreFieldIndex.ApiUrl].IsChanged)
             {
 
                 Cursor.Current = Cursors.WaitCursor;

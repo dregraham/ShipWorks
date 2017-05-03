@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             InitializeStoreDefaults(shopSiteStore);
 
-            shopSiteStore.CgiUrl = "";
+            shopSiteStore.ApiUrl = "";
             shopSiteStore.RequireSSL = true;
             shopSiteStore.RequestTimeout = 60;
             shopSiteStore.DownloadPageSize = 50;
@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         {
             get
             {
-                string identifier = ((ShopSiteStoreEntity) Store).CgiUrl.ToLowerInvariant();
+                string identifier = ((ShopSiteStoreEntity) Store).ApiUrl.ToLowerInvariant();
 
                 // Remove the db_xml.cgi part
                 identifier = identifier.Replace("db_xml.cgi", "");

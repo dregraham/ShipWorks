@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             string requiredScheme = store.RequireSSL ? "https://" : "http://";
 
             // If Url scheme not set, default to https
-            string url = store.CgiUrl;
+            string url = store.ApiUrl;
             if (url.IndexOf(Uri.SchemeDelimiter) == -1)
             {
                 url = requiredScheme + url;

@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         {
             this.connectUnsecure = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cgiUrl = new System.Windows.Forms.TextBox();
+            this.apiUrl = new System.Windows.Forms.TextBox();
             this.labelModuleUrl = new System.Windows.Forms.Label();
             this.password = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
@@ -56,13 +56,13 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
             this.label1.TabIndex = 0;
             this.label1.Text = "Enter your ShopSite Merchant ID and password.";
             //
-            // cgiUrl
+            // apiUrl
             //
-            this.cgiUrl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.cgiUrl.Location = new System.Drawing.Point(90, 126);
-            this.cgiUrl.Name = "cgiUrl";
-            this.cgiUrl.Size = new System.Drawing.Size(338, 21);
-            this.cgiUrl.TabIndex = 7;
+            this.apiUrl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.apiUrl.Location = new System.Drawing.Point(90, 126);
+            this.apiUrl.Name = "apiUrl";
+            this.apiUrl.Size = new System.Drawing.Size(338, 21);
+            this.apiUrl.TabIndex = 7;
             //
             // labelModuleUrl
             //
@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
             this.Controls.Add(this.infoTipUnsecure);
             this.Controls.Add(this.connectUnsecure);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cgiUrl);
+            this.Controls.Add(this.apiUrl);
             this.Controls.Add(this.labelModuleUrl);
             this.Controls.Add(this.password);
             this.Controls.Add(this.labelPassword);
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
 
         private System.Windows.Forms.CheckBox connectUnsecure;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox cgiUrl;
+        private System.Windows.Forms.TextBox apiUrl;
         private System.Windows.Forms.Label labelModuleUrl;
         private System.Windows.Forms.TextBox password;
         private System.Windows.Forms.Label labelPassword;

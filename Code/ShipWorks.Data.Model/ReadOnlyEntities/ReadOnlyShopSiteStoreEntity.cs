@@ -38,10 +38,15 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Username = source.Username;
             Password = source.Password;
-            CgiUrl = source.CgiUrl;
+            ApiUrl = source.ApiUrl;
             RequireSSL = source.RequireSSL;
             DownloadPageSize = source.DownloadPageSize;
             RequestTimeout = source.RequestTimeout;
+            Authentication = source.Authentication;
+            OauthClientID = source.OauthClientID;
+            OauthSecretKey = source.OauthSecretKey;
+            Identifier = source.Identifier;
+            AuthorizationCode = source.AuthorizationCode;
             
             
             
@@ -62,12 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Password { get; }
-        /// <summary> The CgiUrl property of the Entity ShopSiteStore<br/><br/>
+        /// <summary> The ApiUrl property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ShopSiteStore"."CgiUrl"<br/>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."ApiUrl"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String CgiUrl { get; }
+        public System.String ApiUrl { get; }
         /// <summary> The RequireSSL property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShopSiteStore"."RequireSSL"<br/>
@@ -86,6 +91,36 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 RequestTimeout { get; }
+        /// <summary> The Authentication property of the Entity ShopSiteStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."Authentication"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.ShopSiteAuthenticationType Authentication { get; }
+        /// <summary> The OauthClientID property of the Entity ShopSiteStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."OauthClientID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String OauthClientID { get; }
+        /// <summary> The OauthSecretKey property of the Entity ShopSiteStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."OauthSecretKey"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String OauthSecretKey { get; }
+        /// <summary> The Identifier property of the Entity ShopSiteStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."Identifier"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Identifier { get; }
+        /// <summary> The AuthorizationCode property of the Entity ShopSiteStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."AuthorizationCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String AuthorizationCode { get; }
         
         
         
