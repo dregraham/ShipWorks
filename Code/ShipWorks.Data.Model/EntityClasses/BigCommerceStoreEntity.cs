@@ -347,6 +347,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OauthClientId", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OauthToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Identifier", fieldHashtable);
 		}
 		#endregion
 
@@ -488,6 +490,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.OauthToken, true); }
 			set	{ SetValue((int)BigCommerceStoreFieldIndex.OauthToken, value); }
+		}
+
+		/// <summary> The Identifier property of the Entity BigCommerceStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BigCommerceStore"."Identifier"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 110<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Identifier
+		{
+			get { return (System.String)GetValue((int)BigCommerceStoreFieldIndex.Identifier, true); }
+			set	{ SetValue((int)BigCommerceStoreFieldIndex.Identifier, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

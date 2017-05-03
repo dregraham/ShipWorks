@@ -2057,6 +2057,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.OauthToken);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.Identifier field instance</summary>
+		public static EntityField2 Identifier
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.Identifier);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BuyDotComOrderItemEntity</summary>

@@ -983,6 +983,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_04_05_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_12_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_09_03_00.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_00.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlAdapter.cs" />
     <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />

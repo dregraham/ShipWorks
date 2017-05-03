@@ -45,6 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BigCommerceAuthentication = source.BigCommerceAuthentication;
             OauthClientId = source.OauthClientId;
             OauthToken = source.OauthToken;
+            Identifier = source.Identifier;
             
             
             
@@ -107,6 +108,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String OauthToken { get; }
+        /// <summary> The Identifier property of the Entity BigCommerceStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BigCommerceStore"."Identifier"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 110<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Identifier { get; }
         
         
         

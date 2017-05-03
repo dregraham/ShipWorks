@@ -906,6 +906,8 @@ namespace ShipWorks.Data.Model
 		OauthClientId,
 		///<summary>OauthToken. </summary>
 		OauthToken,
+		///<summary>Identifier. </summary>
+		Identifier,
 		/// <summary></summary>
 		AmountOfFields
 	}
