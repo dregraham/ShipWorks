@@ -7,12 +7,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 {
     public class LargePackageUpsSurcharge : IUpsSurcharge
     {
-        private readonly Dictionary<UpsSurchargeType, decimal> surcharges;
+        private readonly IDictionary<UpsSurchargeType, double> surcharges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LargePackageUpsSurcharge"/> class.
         /// </summary>
-        public LargePackageUpsSurcharge(Dictionary<UpsSurchargeType, decimal> surcharges)
+        public LargePackageUpsSurcharge(IDictionary<UpsSurchargeType, double> surcharges)
         {
             this.surcharges = surcharges;
         }
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             if (IsLargePackage(shipment))
             {
-                serviceRate.AddAmount(surcharges[UpsSurchargeType.LargePackage], "Large Package");
+                serviceRate.AddAmount((decimal) surcharges[UpsSurchargeType.LargePackage], "Large Package");
             }
         }
 

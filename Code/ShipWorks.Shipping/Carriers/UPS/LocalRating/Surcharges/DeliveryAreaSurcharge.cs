@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
@@ -14,16 +15,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
     /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges.IUpsSurcharge" />
     public class DeliveryAreaSurcharge : IUpsSurcharge
     {
-        private readonly Dictionary<UpsSurchargeType, decimal> surcharges;
-        private readonly IUpsLocalRateTableRepository rateTableRepository;
+        private readonly IDictionary<UpsSurchargeType, double> surcharges;
+        private readonly IUpsLocalRatingZoneFileEntity zoneFile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeliveryAreaSurcharge"/> class.
         /// </summary>
-        public DeliveryAreaSurcharge(Dictionary<UpsSurchargeType, decimal> surcharges, IUpsLocalRateTableRepository rateTableRepository)
+        public DeliveryAreaSurcharge(IDictionary<UpsSurchargeType, double> surcharges,
+            IUpsLocalRatingZoneFileEntity zoneFile)
         {
+            this.zoneFile = zoneFile;
             this.surcharges = surcharges;
-            this.rateTableRepository = rateTableRepository;
         }
 
         /// <summary>
@@ -33,11 +35,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <param name="serviceRate"></param>
         public void Apply(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate)
         {
-            UpsLocalRatingZoneFileEntity zoneFile = rateTableRepository.GetLatestZoneFile();
-
             int destinationZip = int.Parse(shipment.Shipment.ShipPostalCode);
 
-            UpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge =
+            IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge =
                 zoneFile.UpsLocalRatingDeliveryAreaSurcharge.FirstOrDefault(
                     das => das.DestinationZip == destinationZip);
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         private void AddSurcharge(UpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
         {
-            serviceRate.AddAmount(surcharges[surchargeType], EnumHelper.GetDescription(surchargeType));
+            serviceRate.AddAmount((decimal) surcharges[surchargeType], EnumHelper.GetDescription(surchargeType));
         }
     }
 }

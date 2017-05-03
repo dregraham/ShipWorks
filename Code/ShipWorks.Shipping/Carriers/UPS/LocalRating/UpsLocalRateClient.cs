@@ -59,12 +59,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private void ApplyRateSurcharges(ShipmentEntity shipment, IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
         {
             IDictionary<UpsSurchargeType, double> surcharges = rateRepository.GetSurcharges(shipment.Ups.UpsAccountID);
+            UpsLocalRatingZoneFileEntity zoneFile = rateRepository.GetLatestZoneFile();
+            IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges, zoneFile);
+
             StringBuilder sb = new StringBuilder();
 
             foreach (UpsLocalServiceRate serviceRate in upsLocalServiceRates)
             {
-                IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges);
-
                 foreach (IUpsSurcharge upsSurcharge in upsSurcharges)
                 {
                     upsSurcharge.Apply(shipment.Ups, serviceRate);

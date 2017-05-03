@@ -4,15 +4,12 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -93,7 +90,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             Mock<IUpsSurcharge> surcharge = mock.CreateMock<IUpsSurcharge>();
             mock.Mock<IUpsSurchargeFactory>()
-                .Setup(f => f.Get(It.IsAny<IDictionary<UpsSurchargeType, double>>()))
+                .Setup(f => f.Get(It.IsAny<IDictionary<UpsSurchargeType, double>>(), It.IsAny<UpsLocalRatingZoneFileEntity>()))
                 .Returns(new[] {surcharge.Object, surcharge.Object});
 
             var testObject = mock.Create<UpsLocalRateClient>();

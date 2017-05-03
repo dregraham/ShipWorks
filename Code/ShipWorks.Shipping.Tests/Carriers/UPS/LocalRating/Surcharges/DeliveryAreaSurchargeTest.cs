@@ -22,21 +22,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         private readonly UpsLocalServiceRate serviceRate;
         private readonly DeliveryAreaSurcharge testObject;
         private readonly AutoMock mock;
-        private readonly Dictionary<UpsSurchargeType, decimal> surcharges = new Dictionary<UpsSurchargeType, decimal>
+
+        private readonly Dictionary<UpsSurchargeType, double> surcharges = new Dictionary<UpsSurchargeType, double>
         {
-            {UpsSurchargeType.LargePackage, 67.50m},
-            {UpsSurchargeType.DeliveryAreaCommercialAir, 2.45m},
-            {UpsSurchargeType.DeliveryAreaResidentialAir, 3.70m},
-            {UpsSurchargeType.DeliveryAreaCommercialExtendedAir, 2.45m},
-            {UpsSurchargeType.DeliveryAreaResidentialExtendedAir, 4.00m},
-            {UpsSurchargeType.DeliveryAreaCommercialGround, 2.30m},
-            {UpsSurchargeType.DeliveryAreaResidentialGround, 3.15m},
-            {UpsSurchargeType.DeliveryAreaCommercialExtendedGround, 2.35m},
-            {UpsSurchargeType.DeliveryAreaResidentialExtendedGround, 4.00m},
-            {UpsSurchargeType.RemoteAreaAlaska, 22.50m},
-            {UpsSurchargeType.RemoteAreaHawaii, 6.75m},
-            {UpsSurchargeType.ResidentialAir, 3.65m},
-            {UpsSurchargeType.ResidentialGround, 3.25m}
+            {UpsSurchargeType.LargePackage, 67.50},
+            {UpsSurchargeType.DeliveryAreaCommercialAir, 2.45},
+            {UpsSurchargeType.DeliveryAreaResidentialAir, 3.70},
+            {UpsSurchargeType.DeliveryAreaCommercialExtendedAir, 2.45},
+            {UpsSurchargeType.DeliveryAreaResidentialExtendedAir, 4.00},
+            {UpsSurchargeType.DeliveryAreaCommercialGround, 2.30},
+            {UpsSurchargeType.DeliveryAreaResidentialGround, 3.15},
+            {UpsSurchargeType.DeliveryAreaCommercialExtendedGround, 2.35},
+            {UpsSurchargeType.DeliveryAreaResidentialExtendedGround, 4.00},
+            {UpsSurchargeType.RemoteAreaAlaska, 22.50},
+            {UpsSurchargeType.RemoteAreaHawaii, 6.75},
+            {UpsSurchargeType.ResidentialAir, 3.65},
+            {UpsSurchargeType.ResidentialGround, 3.25}
         };
 
         public DeliveryAreaSurchargeTest()
@@ -72,11 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(repo => repo.GetLatestZoneFile())
-                .Returns(zoneFile);
-
-            testObject = mock.Create<DeliveryAreaSurcharge>(new TypedParameter(typeof(Dictionary<UpsSurchargeType, decimal>), surcharges));
+            testObject = new DeliveryAreaSurcharge(surcharges, zoneFile);
         }
 
         [Fact]
@@ -124,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             testObject.Apply(shipment, serviceRate);
 
-            Assert.Equal(surcharges[surchargeType], serviceRate.Amount);
+            Assert.Equal((decimal) surcharges[surchargeType], serviceRate.Amount);
         }
 
         public void Dispose()
