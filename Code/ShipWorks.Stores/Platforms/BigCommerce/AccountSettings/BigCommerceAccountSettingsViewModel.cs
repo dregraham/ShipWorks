@@ -41,6 +41,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         string oauthClientID;
         string oauthToken;
         private IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy;
+        readonly IBigCommerceIdentifier identifier;
 
         /// <summary>
         /// Constructor
@@ -48,11 +49,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         public BigCommerceAccountSettingsViewModel(IMessageHelper messageHelper,
             IIndex<BigCommerceAuthenticationType, IBigCommerceAuthenticationPersistenceStrategy> persistenceStrategyFactory,
             IBigCommerceConnectionVerifier connectionVerifier,
+            IBigCommerceIdentifier identifier,
             Func<Type, ILog> createLogger)
         {
             this.connectionVerifier = connectionVerifier;
             this.persistenceStrategyFactory = persistenceStrategyFactory;
             this.messageHelper = messageHelper;
+            this.identifier = identifier;
             log = createLogger(GetType());
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -213,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             // Check for the url scheme, and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
             {
-                storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
+                storeUrlToCheck = "https://" + storeUrlToCheck;
             }
 
             // Now check the url to see if it's a valid address
@@ -223,11 +226,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             }
 
             store.ApiUrl = storeUrlToCheck;
-
-            if (string.IsNullOrWhiteSpace(store.Identifier))
-            {
-                store.Identifier = store.ApiUrl;
-            }
+            identifier.Set(store, storeUrlToCheck);
 
             return GenericResult.FromSuccess(storeUrlToCheck);
         }

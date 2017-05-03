@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
@@ -38,6 +39,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
         readonly IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex;
         readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
+        readonly IBigCommerceIdentifier identifier;
 
         /// <summary>
         /// Constructor
@@ -53,9 +55,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
             IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex,
             IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex,
-            IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex)
+            IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex,
+            IBigCommerceIdentifier identifier)
             : base(store)
         {
+            this.identifier = identifier;
             this.accountSettingsControlIndex = accountSettingsControlIndex;
             this.updateActionIndex = updateActionIndex;
             this.storeSettingsControlIndex = storeSettingsControlIndex;
@@ -79,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Since current customers can have the legacy implementation of BigCommerce, we need to support
         /// the old identifier as well, so use the same algorithm as before.
         /// </summary>
-        protected override string InternalLicenseIdentifier => TypedStore.Identifier;
+        protected override string InternalLicenseIdentifier => identifier.Get(TypedStore);
 
         /// <summary>
         /// Initial download policy of the store

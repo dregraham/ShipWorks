@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 
 namespace ShipWorks.Data.Connection
 {
@@ -29,5 +31,17 @@ namespace ShipWorks.Data.Connection
         /// the field specified is the field the expression and aggregate are applied on.
         /// </summary>
         object GetScalar(IEntityField2 field, IExpression expressionToExecute, AggregateFunction aggregateToApply, IPredicate filter);
+
+        /// <summary>
+        /// Save the collection of entities to the database
+        /// </summary>
+        int SaveEntityCollection(IEntityCollection2 stores);
+
+        /// <summary>
+        /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        /// Fetches the query specified on the adapter specified. Uses the TEntity type to
+        /// produce an EntityCollection(Of TEntity) for the results to return
+        /// </summary>
+        Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2;
     }
 }

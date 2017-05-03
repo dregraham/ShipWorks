@@ -159,6 +159,7 @@
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceConnectionVerifier.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceIdentifier.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticator.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactory.cs" />
