@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </remarks>
         public void LoadValue(OdbcRecord record)
         {
-            MethodConditions.EnsureArgumentIsNotNull(record);
+            MethodConditions.EnsureArgumentIsNotNull(record, nameof(record));
             Value = record.GetValue(Column.Name);
         }
 

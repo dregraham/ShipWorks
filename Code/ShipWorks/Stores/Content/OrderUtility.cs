@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static decimal CalculateTotal(OrderEntity order, bool includeCharges)
         {
-            MethodConditions.EnsureArgumentIsNotNull(order);
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             PopulateOrderDetails(order);
 

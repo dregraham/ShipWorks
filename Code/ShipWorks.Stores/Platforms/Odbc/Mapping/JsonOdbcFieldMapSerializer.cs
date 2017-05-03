@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <param name="map"></param>
         public JsonOdbcFieldMapSerializer(OdbcFieldMap map)
         {
-            MethodConditions.EnsureArgumentIsNotNull(map);
+            MethodConditions.EnsureArgumentIsNotNull(map, nameof(map));
             this.map = map;
         }
 

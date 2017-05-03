@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
 
             testObject.Update();
 
-            sqlAdapter.Verify(x => x.SaveEntityCollection(collection));
+            sqlAdapter.Verify(x => x.SaveEntityCollection(collection, true, false));
         }
 
         public void Dispose()

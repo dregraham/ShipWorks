@@ -3,6 +3,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
+    /// <summary>
+    /// OrderItemAttribute entity custom methods
+    /// </summary>
     public partial class OrderItemAttributeEntity
     {
         /// <summary>
@@ -13,9 +16,9 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </remarks>
         public OrderItemAttributeEntity(OrderItemEntity orderItem) : this()
         {
-            MethodConditions.EnsureArgumentIsNotNull(orderItem);
+            MethodConditions.EnsureArgumentIsNotNull(orderItem, nameof(orderItem));
 
-            ((IEntity2)orderItem).SetRelatedEntity(this, "OrderItemAttributes");
+            ((IEntity2) orderItem).SetRelatedEntity(this, "OrderItemAttributes");
 
             InitializeNullsToDefault();
         }
