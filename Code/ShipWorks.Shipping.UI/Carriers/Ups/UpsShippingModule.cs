@@ -16,6 +16,10 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
@@ -51,7 +55,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsApiTransitTimeClient>();
 
+            builder.RegisterType<UpsLocalRateClient>();
             builder.RegisterType<UpsApiRateClient>();
+            builder.Register(GetUpsRateClient).As<IUpsRateClient>();
 
             RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
             RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
@@ -84,6 +90,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             RegisterOltSpecificTypes(builder);
             RegisterWorldShipSpecificTypes(builder);
             RegisterPromoTypes(builder);
+        }
+
+        private IUpsRateClient GetUpsRateClient(IComponentContext context, IEnumerable<Parameter> parameters)
+        {
+            UpsAccountEntity account = parameters.TypedAs<UpsAccountEntity>();
+            if (account.LocalRatingEnabled)
+            {
+                return context.Resolve<UpsLocalRateClient>();
+            }
+
+            return context.Resolve<UpsApiRateClient>();
         }
 
         /// <summary>
