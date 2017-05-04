@@ -29,25 +29,26 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         private void InitializeComponent()
         {
             this.accountSettingsElementHost = new System.Windows.Forms.Integration.ElementHost();
+            this.shopSiteAccountSettings = new ShipWorks.Stores.UI.Platforms.ShopSite.ShopSiteAccountSettings();
             this.SuspendLayout();
-            // 
+            //
             // accountSettingsElementHost
-            // 
+            //
             this.accountSettingsElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.accountSettingsElementHost.Location = new System.Drawing.Point(0, 0);
             this.accountSettingsElementHost.Name = "accountSettingsElementHost";
-            this.accountSettingsElementHost.Size = new System.Drawing.Size(494, 189);
+            this.accountSettingsElementHost.Size = new System.Drawing.Size(494, 340);
             this.accountSettingsElementHost.TabIndex = 0;
             this.accountSettingsElementHost.Text = "accountSettingsElementHost";
-            this.accountSettingsElementHost.Child = new ShopSiteAccountSettings();
-            // 
+            this.accountSettingsElementHost.Child = this.shopSiteAccountSettings;
+            //
             // ShopSiteAccountSettingsControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.accountSettingsElementHost);
             this.Name = "ShopSiteAccountSettingsControl";
-            this.Size = new System.Drawing.Size(494, 189);
+            this.Size = new System.Drawing.Size(494, 340);
             this.ResumeLayout(false);
 
         }
@@ -55,5 +56,6 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost accountSettingsElementHost;
+        private ShipWorks.Stores.UI.Platforms.ShopSite.ShopSiteAccountSettings shopSiteAccountSettings;
     }
 }

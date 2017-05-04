@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using System.Windows.Media;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -26,6 +27,9 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         public ShopSiteAccountSettingsControl()
         {
             InitializeComponent();
+
+            // The background would sometimes go black if not explicitly set
+            shopSiteAccountSettings.Background = new SolidColorBrush(Color.FromRgb(this.BackColor.R, this.BackColor.G, this.BackColor.B));
         }
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         public void SetViewModel(ShopSiteAccountSettingsViewModel viewModel)
         {
             this.viewModel = viewModel;
-            ((ShopSiteAccountSettings) accountSettingsElementHost.Child).DataContext = viewModel;
+            shopSiteAccountSettings.DataContext = viewModel;
         }
 
         /// <summary>

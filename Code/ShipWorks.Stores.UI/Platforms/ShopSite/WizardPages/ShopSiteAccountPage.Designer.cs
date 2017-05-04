@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite.WizardPages
             this.accountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.accountSettingsControl.Location = new System.Drawing.Point(3, 3);
             this.accountSettingsControl.Name = "accountSettingsControl";
-            this.accountSettingsControl.Size = new System.Drawing.Size(516, 245);
+            this.accountSettingsControl.Size = new System.Drawing.Size(516, 340);
             this.accountSettingsControl.TabIndex = 0;
             //
             // ShopSiteAccountPage
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite.WizardPages
             this.Description = "Enter the following information about your online store.";
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "ShopSiteAccountPage";
-            this.Size = new System.Drawing.Size(522, 264);
+            this.Size = new System.Drawing.Size(522, 340);
             this.Title = "Store Setup";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);

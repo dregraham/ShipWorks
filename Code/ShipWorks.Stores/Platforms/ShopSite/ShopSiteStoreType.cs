@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -47,6 +48,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             InitializeStoreDefaults(shopSiteStore);
 
+            shopSiteStore.Authentication = ShopSiteAuthenticationType.Oauth;
             shopSiteStore.ApiUrl = "";
             shopSiteStore.RequireSSL = true;
             shopSiteStore.RequestTimeout = 60;
