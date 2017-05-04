@@ -14,12 +14,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Gets the specified surcharges to be applied to a shipment
         /// </summary>
-        public IEnumerable<IUpsSurcharge> Get(IDictionary<UpsSurchargeType, double> surchargeEntityLookup, IUpsLocalRatingZoneFileEntity zoneFileEntity)
+        public IEnumerable<IUpsSurcharge> Get(IDictionary<UpsSurchargeType, double> surchargeLookup, IUpsLocalRatingZoneFileEntity zoneFileEntity)
         {
             return new IUpsSurcharge[]
             {
-                new DeliveryAreaSurcharge(surchargeEntityLookup, zoneFileEntity), 
-                new LargePackageUpsSurcharge(surchargeEntityLookup)
+                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity), 
+                new LargePackageUpsSurcharge(surchargeLookup),
+                new FuelGroundSurcharge(surchargeLookup), 
             };
         }
     }
