@@ -340,6 +340,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteDownloader.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteException.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteStoreType.cs" />
