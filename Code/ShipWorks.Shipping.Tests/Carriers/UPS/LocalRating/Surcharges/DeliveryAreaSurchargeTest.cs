@@ -77,6 +77,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
+                Packages = { new UpsPackageEntity() },
                 Shipment = new ShipmentEntity
                 {
                     ShipPostalCode = StandardZip.ToString(),
@@ -108,6 +109,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
+                Packages = {new UpsPackageEntity()},
                 Service = (int) serviceType,
                 Shipment = new ShipmentEntity
                 {
@@ -120,6 +122,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             testObject.Apply(shipment, serviceRate);
 
             Assert.Equal((decimal) surcharges[surchargeType], serviceRate.Amount);
+        }
+
+        [Fact]
+        public void Apply_AppliesSurchargesCorrectly()
+        {
+            UpsShipmentEntity shipment = new UpsShipmentEntity
+            {
+                Packages = { new UpsPackageEntity(), new UpsPackageEntity(), new UpsPackageEntity() },
+                Service = (int) UpsServiceType.UpsGround,
+                Shipment = new ShipmentEntity
+                {
+                    ShipPostalCode = StandardZip.ToString(),
+                    ResidentialResult = true
+                }
+            };
+            var serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 0, false, null);
+
+            testObject.Apply(shipment, serviceRate);
+
+            Assert.Equal((decimal)surcharges[UpsSurchargeType.ResidentialGround] * shipment.Packages.Count, serviceRate.Amount);
         }
 
         public void Dispose()

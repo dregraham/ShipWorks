@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             {
                 if (isResidential)
                 {
-                    AddSurcharge(serviceRate,
+                    AddSurcharge(shipment, serviceRate,
                         isGround ? UpsSurchargeType.ResidentialGround : UpsSurchargeType.ResidentialAir);
                 }
             }
@@ -59,13 +59,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 {
                     case UpsDeliveryAreaSurchargeType.Us48Das:
                     case UpsDeliveryAreaSurchargeType.Us48DasExtended:
-                        AddDeliveryAreaSurcharge(serviceRate, deliveryAreaType, isResidential, isGround);
+                        AddDeliveryAreaSurcharge(shipment, serviceRate, deliveryAreaType, isResidential, isGround);
                         break;
                     case UpsDeliveryAreaSurchargeType.UsRemoteHi:
-                        AddSurcharge(serviceRate, UpsSurchargeType.RemoteAreaHawaii);
+                        AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaHawaii);
                         break;
                     case UpsDeliveryAreaSurchargeType.UsRemoteAk:
-                        AddSurcharge(serviceRate, UpsSurchargeType.RemoteAreaAlaska);
+                        AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaAlaska);
                         break;
                 }
             }
@@ -74,19 +74,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the delivery area surcharge.
         /// </summary>
-        private void AddDeliveryAreaSurcharge(IUpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
+        private void AddDeliveryAreaSurcharge(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
         {
             if (deliveryAreaSurchargeType == UpsDeliveryAreaSurchargeType.Us48Das)
             {
                 if (isResidential)
                 {
-                    AddSurcharge(serviceRate, isGround ?
+                    AddSurcharge(shipment, serviceRate, isGround ?
                         UpsSurchargeType.DeliveryAreaResidentialGround :
                         UpsSurchargeType.DeliveryAreaResidentialAir);
                 }
                 else
                 {
-                    AddSurcharge(serviceRate, isGround ?
+                    AddSurcharge(shipment, serviceRate, isGround ?
                         UpsSurchargeType.DeliveryAreaCommercialGround :
                         UpsSurchargeType.DeliveryAreaCommercialAir);
                 }
@@ -95,13 +95,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             {
                 if (isResidential)
                 {
-                    AddSurcharge(serviceRate, isGround ?
+                    AddSurcharge(shipment, serviceRate, isGround ?
                         UpsSurchargeType.DeliveryAreaResidentialExtendedGround :
                         UpsSurchargeType.DeliveryAreaResidentialExtendedAir);
                 }
                 else
                 {
-                    AddSurcharge(serviceRate, isGround ?
+                    AddSurcharge(shipment, serviceRate, isGround ?
                         UpsSurchargeType.DeliveryAreaCommercialExtendedGround :
                         UpsSurchargeType.DeliveryAreaCommercialExtendedAir);
                 }
@@ -111,9 +111,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the surcharge to the service rate
         /// </summary>
-        private void AddSurcharge(IUpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
+        private void AddSurcharge(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
         {
-            serviceRate.AddAmount((decimal) surcharges[surchargeType], EnumHelper.GetDescription(surchargeType));
+            decimal surchargeAmount = (decimal) surcharges[surchargeType] * shipment.Packages.Count;
+
+            serviceRate.AddAmount(surchargeAmount, EnumHelper.GetDescription(surchargeType));
         }
     }
 }
