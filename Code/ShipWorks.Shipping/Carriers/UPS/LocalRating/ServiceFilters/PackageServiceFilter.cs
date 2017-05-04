@@ -19,6 +19,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         {
             List<UpsServiceType> eligibleServices = services as List<UpsServiceType> ?? services.ToList();
 
+            // Multiple packages shipments cannot contain letter and a different package type
+            if (shipment.Packages.Any(p => p.PackagingType == (int) UpsPackagingType.Letter) &&
+                shipment.Packages.Any(p => p.PackagingType != (int) UpsPackagingType.Letter))
+            {
+                return Enumerable.Empty<UpsServiceType>();
+            }
+
             foreach (UpsPackageEntity package in shipment.Packages)
             {
                 if (package.PackagingType != (int) UpsPackagingType.Custom)

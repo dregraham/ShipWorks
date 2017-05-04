@@ -232,6 +232,69 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             }
         }
 
+        [Fact]
+        public void GetEligibleServices_EligibleServices_WhenMultiPackageLetter()
+        {
+            using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var testObject = mock.Create<PackageServiceFilter>();
+
+                UpsShipmentEntity shipment = new UpsShipmentEntity()
+                {
+                    Packages =
+                    {
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Letter},
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Letter}
+                    }
+                };
+
+                IEnumerable<UpsServiceType> eligibleServices = testObject.GetEligibleServices(shipment, services);
+                Assert.NotEmpty(eligibleServices);
+            }
+        }
+
+        [Fact]
+        public void GetEligibleServices_EligibleServices_WhenMultiPackage()
+        {
+            using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var testObject = mock.Create<PackageServiceFilter>();
+
+                UpsShipmentEntity shipment = new UpsShipmentEntity()
+                {
+                    Packages =
+                    {
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Custom},
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Custom}
+                    }
+                };
+
+                IEnumerable<UpsServiceType> eligibleServices = testObject.GetEligibleServices(shipment, services);
+                Assert.NotEmpty(eligibleServices);
+            }
+        }
+
+        [Fact]
+        public void GetEligibleServices_ReturnesEmptyList_WhenMultiPackageLetterAndPackage()
+        {
+            using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                var testObject = mock.Create<PackageServiceFilter>();
+
+                UpsShipmentEntity shipment = new UpsShipmentEntity()
+                {
+                    Packages =
+                    {
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Letter},
+                        new UpsPackageEntity() {PackagingType = (int) UpsPackagingType.Custom}
+                    }
+                };
+                
+                IEnumerable<UpsServiceType> eligibleServices = testObject.GetEligibleServices(shipment, services);
+                Assert.Empty(eligibleServices);
+            }
+        }
+
         private static UpsShipmentEntity CreateSinglePackageShipmentWithPackagingType(UpsPackagingType packagingType)
         {
             var shipment = new UpsShipmentEntity
