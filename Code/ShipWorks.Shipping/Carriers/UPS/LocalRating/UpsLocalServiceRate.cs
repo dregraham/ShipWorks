@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public void AddAmount(decimal amount, string surchargeName)
         {
-            addedSurcharges.Add(new KeyValuePair<string, decimal>(surchargeName,amount));
+            addedSurcharges.Add(new KeyValuePair<string, decimal>(surchargeName, amount));
             Amount += amount;
         }
 

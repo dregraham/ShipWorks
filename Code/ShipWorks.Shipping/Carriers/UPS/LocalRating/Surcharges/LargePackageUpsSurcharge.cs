@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
@@ -23,18 +22,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         public void Apply(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate)
         {
-            if (IsLargePackage(shipment))
+            int numberOfLargePackages = shipment.Packages.Count(p => p.IsLargePackage);
+            if (numberOfLargePackages > 0)
             {
-                serviceRate.AddAmount((decimal) surcharges[UpsSurchargeType.LargePackage], "Large Package");
-            }
-        }
+                decimal surcharge = numberOfLargePackages * (decimal) surcharges[UpsSurchargeType.LargePackage];
 
-        /// <summary>
-        /// Determines if any packages are considered large.
-        /// </summary>
-        private bool IsLargePackage(UpsShipmentEntity shipment)
-        {
-            return shipment.Packages.FirstOrDefault()?.IsLargePackage ?? false;
+                serviceRate.AddAmount(surcharge, $"{numberOfLargePackages} Large Package(s)");
+            }
         }
     }
 }
