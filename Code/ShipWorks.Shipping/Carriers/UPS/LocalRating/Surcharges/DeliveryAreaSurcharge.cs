@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the delivery area surcharge.
         /// </summary>
-        private void AddDeliveryAreaSurcharge(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
+        private void AddDeliveryAreaSurcharge(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
         {
             if (deliveryAreaSurchargeType == UpsDeliveryAreaSurchargeType.Us48Das)
             {
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the surcharge to the service rate
         /// </summary>
-        private void AddSurcharge(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
+        private void AddSurcharge(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
         {
             decimal surchargeAmount = (decimal) surcharges[surchargeType] * shipment.Packages.Count;
 
