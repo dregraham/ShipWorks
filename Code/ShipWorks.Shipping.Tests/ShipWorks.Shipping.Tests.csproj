@@ -186,6 +186,7 @@
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\SignatureSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\CarbonNeutralSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ShipperReleaseSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\VerbalConfirmationSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateClientTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepositoryTest.cs" />
