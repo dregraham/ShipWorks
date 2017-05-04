@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         }
 
         [Fact]
-        public void Apply_AppliesSurchargesCorrectly()
+        public void Apply_AppliesSurchargesCorrectly_WhenMultiPackage()
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
