@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Apply the surcharge to the service rate based on the shipment
         /// </summary>
-        public void Apply(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate)
+        public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
             if (serviceRate.Service == UpsServiceType.UpsGround)
             {

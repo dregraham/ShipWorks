@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Apply the large package surcharge if applicable.
         /// </summary>
-        public void Apply(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate)
+        public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
             int numberOfLargePackages = shipment.Packages.Count(p => p.IsLargePackage);
             if (numberOfLargePackages > 0)

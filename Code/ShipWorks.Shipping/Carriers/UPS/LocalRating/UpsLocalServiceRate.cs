@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Data structure for storing rating information for a UPS service with methods used when rating locally
     /// </summary>
-    public class UpsLocalServiceRate : UpsServiceRate
+    public class UpsLocalServiceRate : UpsServiceRate, IUpsLocalServiceRate
     {
         private readonly List<KeyValuePair<string, decimal>> addedSurcharges = new List<KeyValuePair<string, decimal>>();
         private readonly decimal initialAmount;

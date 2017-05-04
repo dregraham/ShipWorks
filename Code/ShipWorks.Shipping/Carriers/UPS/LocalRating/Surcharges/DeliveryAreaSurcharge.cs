@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         /// <param name="shipment"></param>
         /// <param name="serviceRate"></param>
-        public void Apply(UpsShipmentEntity shipment, UpsLocalServiceRate serviceRate)
+        public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
             int destinationZip = int.Parse(shipment.Shipment.ShipPostalCode);
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the delivery area surcharge.
         /// </summary>
-        private void AddDeliveryAreaSurcharge(UpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
+        private void AddDeliveryAreaSurcharge(IUpsLocalServiceRate serviceRate, UpsDeliveryAreaSurchargeType deliveryAreaSurchargeType, bool isResidential, bool isGround)
         {
             if (deliveryAreaSurchargeType == UpsDeliveryAreaSurchargeType.Us48Das)
             {
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Adds the surcharge to the service rate
         /// </summary>
-        private void AddSurcharge(UpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
+        private void AddSurcharge(IUpsLocalServiceRate serviceRate, UpsSurchargeType surchargeType)
         {
             serviceRate.AddAmount((decimal) surcharges[surchargeType], EnumHelper.GetDescription(surchargeType));
         }
