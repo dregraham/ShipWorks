@@ -58,6 +58,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
 
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
+
             builder.RegisterType<UpsSettingsRepository>()
                 .AsSelf()
                 .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools)
@@ -139,5 +142,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsPromoFootnoteViewModel>()
                 .AsImplementedInterfaces();
         }
+
+        /// <summary>
+        /// Register the rating service for the given shipment type
+        /// </summary>
+        private void RegisterRatingServiceFor(ShipmentTypeCode shipmentType, ContainerBuilder builder)
+        {
+            builder.RegisterType<UpsRatingService>()
+                .Keyed<IRatingService>(shipmentType)
+                .WithParameter(new ResolvedParameter(
+                    (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
+                    (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
+        }
+
     }
 }
