@@ -243,6 +243,7 @@
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\PackageServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\IUpsSurchargeFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\LargePackageUpsSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\SignatureSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\CarbonNeutralSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\AdditionalHandlingSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\ShipperReleaseSurcharge.cs" />

@@ -182,6 +182,7 @@
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelGroundSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\LargePackageUpsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SignatureSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\CarbonNeutralSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ShipperReleaseSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
