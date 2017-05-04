@@ -110,5 +110,22 @@ namespace ShipWorks.Data.Modal.Tests.Custom
 
             Assert.Equal(expectedValue, package.BillableWeight);
         }
+
+        [Theory]
+        [InlineData(10, 1, 100, 10)]
+        [InlineData(10, 12, 100, 12)]
+        [InlineData(127, 1, 1, 1)]
+        [InlineData(127, 1, 5, 5)]
+        public void SecondLongestSide(double length, double width, double height, int expectedValue)
+        {
+            var package = new UpsPackageEntity()
+            {
+                DimsLength = length,
+                DimsHeight = height,
+                DimsWidth = width
+            };
+
+            Assert.Equal(expectedValue, package.SecondLongestSize);
+        }
     }
 }

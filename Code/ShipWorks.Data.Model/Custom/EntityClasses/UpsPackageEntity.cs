@@ -40,6 +40,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// Get the second longest side from the dimensions
+        /// </summary>
+        public int SecondLongestSize
+        {
+            get { return Dimensions.OrderBy(d => d).ElementAt(1); }
+        }
+
+        /// <summary>
         /// Does UPS consider this a large package
         /// </summary>
         /// <remarks>
