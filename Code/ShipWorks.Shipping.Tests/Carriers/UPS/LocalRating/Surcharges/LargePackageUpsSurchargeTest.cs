@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -31,24 +31,73 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Apply_AddsLargePackageSurcharge_WhenLargePackage()
         {
-            var upsLocalServiceRate = new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 0, false, null);
+            var upsLocalServiceRate = mock.CreateMock<IUpsLocalServiceRate>();
             var shipment =
                 Create.Shipment().AsUps(u => u.WithPackage(builder => builder.Set(p => p.DimsLength = 200))).Build();
 
-            testObject.Apply(shipment.Ups, upsLocalServiceRate);
-            Assert.Equal((decimal) surcharges[UpsSurchargeType.LargePackage], upsLocalServiceRate.Amount);
+            testObject.Apply(shipment.Ups, upsLocalServiceRate.Object);
+
+            upsLocalServiceRate.Verify(
+                r => r.AddAmount((decimal) surcharges[UpsSurchargeType.LargePackage], "1 Large Package(s)"), Times.Once);
         }
 
         [Fact]
         public void Apply_DoesNotAddLargePackageSurcharge_WhenNotLargePackage()
         {
-            var upsLocalServiceRate = new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 10, false, null);
+            var upsLocalServiceRate = mock.CreateMock<IUpsLocalServiceRate>();
             var shipment =
                 Create.Shipment().AsUps(u => u.WithPackage(builder => builder.Set(p => p.DimsLength = 5))).Build();
 
-            testObject.Apply(shipment.Ups, upsLocalServiceRate);
+            testObject.Apply(shipment.Ups, upsLocalServiceRate.Object);
 
-            Assert.Equal(10, upsLocalServiceRate.Amount);
+            upsLocalServiceRate.Verify(r => r.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void Apply_AddsMultipleLargePackages_WhenMultipleLargePackages()
+        {
+            var upsLocalServiceRate = mock.CreateMock<IUpsLocalServiceRate>();
+            var shipment =
+                Create.Shipment().AsUps(u => u
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 200))
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 200))).Build();
+
+            testObject.Apply(shipment.Ups, upsLocalServiceRate.Object);
+
+            var expectedSurcharge = ((decimal) surcharges[UpsSurchargeType.LargePackage]) * 2;
+
+            upsLocalServiceRate.Verify(
+                r => r.AddAmount(expectedSurcharge, "2 Large Package(s)"), Times.Once);
+        }
+
+        [Fact]
+        public void Apply_AddsLargePackageSurcharge_WhenMultiplePackages_AndOneIsLarge()
+        {
+            var upsLocalServiceRate = mock.CreateMock<IUpsLocalServiceRate>();
+            var shipment =
+                Create.Shipment().AsUps(u => u
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 10))
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 200))).Build();
+
+            testObject.Apply(shipment.Ups, upsLocalServiceRate.Object);
+
+            upsLocalServiceRate.Verify(
+                r => r.AddAmount((decimal) surcharges[UpsSurchargeType.LargePackage], "1 Large Package(s)"), Times.Once);
+        }
+
+
+        [Fact]
+        public void Apply_DoesNotAddLargePackageSurcharge_WhenMultipleSmallPackages()
+        {
+            var upsLocalServiceRate = mock.CreateMock<IUpsLocalServiceRate>();
+            var shipment =
+                Create.Shipment().AsUps(u => u
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 10))
+                .WithPackage(builder => builder.Set(p => p.DimsLength = 10))).Build();
+
+            testObject.Apply(shipment.Ups, upsLocalServiceRate.Object);
+
+            upsLocalServiceRate.Verify(r => r.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
         }
 
         public void Dispose()
