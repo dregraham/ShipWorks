@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.UI;
 using ShipWorks.UI.Wizard;
 
@@ -29,6 +30,14 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite.WizardPages
         public ShopSiteAccountPage()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopSiteAccountPage(ShopSiteAccountSettingsViewModel viewModel) : this()
+        {
+            accountSettingsControl.SetViewModel(viewModel);
         }
 
         /// <summary>
