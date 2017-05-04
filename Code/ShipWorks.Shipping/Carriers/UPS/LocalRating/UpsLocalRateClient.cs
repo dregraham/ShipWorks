@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                 ApplyRateSurcharges(shipment, upsLocalServiceRates);
 
-                return upsLocalServiceRates.Cast<UpsServiceRate>().ToList();
+                return upsLocalServiceRates.Cast<UpsServiceRate>().OrderBy(r => r.Amount).ToList();
             }
             catch (UpsLocalRatingException)
             {
