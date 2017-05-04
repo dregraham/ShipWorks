@@ -44,6 +44,43 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
+        public void GetRates_DelegatesToApiClient_WhenCannotCalculateLocalRates()
+        {
+            var serviceRates = new UpsLocalServiceRate[0];
+            mock.Mock<IUpsLocalRateTableRepository>()
+                .Setup(r => r.GetServiceRates(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
+                .Returns(serviceRates);
+
+            var apiRateClient = mock.CreateMock<IUpsRateClient>();
+            var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
+            indexMock.Setup(x => x[UpsRatingMethod.Api]).Returns(apiRateClient.Object);
+            mock.Provide(indexMock.Object);
+
+            var testObject = mock.Create<UpsLocalRateClient>();
+            testObject.GetRates(shipment);
+
+            apiRateClient.Verify(c => c.GetRates(shipment), Times.Once);
+        }
+
+        [Fact]
+        public void GetRates_DelegatesToApiClient_WhenErrorIsThrownGettingLocalRates()
+        {
+            mock.Mock<IUpsLocalRateTableRepository>()
+                .Setup(r => r.GetServiceRates(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
+                .Throws<UpsLocalRatingException>();
+
+            var apiRateClient = mock.CreateMock<IUpsRateClient>();
+            var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
+            indexMock.Setup(x => x[UpsRatingMethod.Api]).Returns(apiRateClient.Object);
+            mock.Provide(indexMock.Object);
+
+            var testObject = mock.Create<UpsLocalRateClient>();
+            testObject.GetRates(shipment);
+
+            apiRateClient.Verify(c => c.GetRates(shipment), Times.Once);
+        }
+
+        [Fact]
         public void GetRates_CallsLogForEachServiceRate()
         {
             IEnumerable<UpsServiceType> eligibleServieTypes = new[]
