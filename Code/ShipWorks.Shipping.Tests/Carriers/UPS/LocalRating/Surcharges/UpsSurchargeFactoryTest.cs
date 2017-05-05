@@ -1,9 +1,5 @@
-﻿
-
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,7 +9,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
 
