@@ -29,14 +29,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             if (shipment.CarbonNeutral)
             {
+                int packageCount = shipment.Packages.Count;
+                
                 if (shipment.Service == (int) UpsServiceType.UpsGround)
                 {
-                    serviceRate.AddAmount((decimal)surcharges[UpsSurchargeType.CarbonNeutralGround],
+                    serviceRate.AddAmount((decimal)surcharges[UpsSurchargeType.CarbonNeutralGround] * packageCount,
                         EnumHelper.GetDescription(UpsSurchargeType.CarbonNeutralGround));
                 }
                 else
                 {
-                    serviceRate.AddAmount((decimal)surcharges[UpsSurchargeType.CarbonNeutralAir],
+                    serviceRate.AddAmount((decimal)surcharges[UpsSurchargeType.CarbonNeutralAir] * packageCount,
                         EnumHelper.GetDescription(UpsSurchargeType.CarbonNeutralAir));
                 }
             }

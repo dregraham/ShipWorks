@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         public void Apply_AddsCarbonNeutralAirAmountToServiceRate_WhenShipmentHasCarbonNeutralAndServiceIsAir()
         {
             UpsShipmentEntity shipment =
-                new UpsShipmentEntity() {CarbonNeutral = true, Service = (int) UpsServiceType.UpsNextDayAir};
+                new UpsShipmentEntity() {CarbonNeutral = true, Service = (int) UpsServiceType.UpsNextDayAir, Packages = { new UpsPackageEntity()}};
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
 
             testObject.Apply(shipment, serviceRate.Object);
@@ -45,12 +45,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         public void Apply_AddsCarbonNeutralGroundAmountToServiceRate_WhenShipmentHasCarbonNeutralAndServiceIsGround()
         {
             UpsShipmentEntity shipment =
-                new UpsShipmentEntity() { CarbonNeutral = true, Service = (int)UpsServiceType.UpsGround };
+                new UpsShipmentEntity() { CarbonNeutral = true, Service = (int)UpsServiceType.UpsGround, Packages = { new UpsPackageEntity()}};
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
 
             testObject.Apply(shipment, serviceRate.Object);
 
             serviceRate.Verify(r => r.AddAmount(999, EnumHelper.GetDescription(UpsSurchargeType.CarbonNeutralGround)));
+        }
+        
+        [Fact]
+        public void Apply_AddsCarbonNeutralGroundAmountToServiceRate_WhenShipmentHasCarbonNeutralAndServiceIsGroundAndMultiPackage()
+        {
+            UpsShipmentEntity shipment =
+                new UpsShipmentEntity() { CarbonNeutral = true, Service = (int)UpsServiceType.UpsGround, Packages = { new UpsPackageEntity(), new UpsPackageEntity()}};
+            Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
+
+            testObject.Apply(shipment, serviceRate.Object);
+
+            serviceRate.Verify(r => r.AddAmount(999 * 2, EnumHelper.GetDescription(UpsSurchargeType.CarbonNeutralGround)));
+        }
+
+        [Fact]
+        public void Apply_DoesNotAddsCarbonNeutralGroundAmountToServiceRate_WhenShipmentDoesNotHaveCarbonNeutral()
+        {
+            UpsShipmentEntity shipment =
+                new UpsShipmentEntity() { CarbonNeutral = false, Service = (int)UpsServiceType.UpsGround, Packages = { new UpsPackageEntity(), new UpsPackageEntity() } };
+            Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
+
+            testObject.Apply(shipment, serviceRate.Object);
+
+            serviceRate.Verify(r => r.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
         }
 
         public void Dispose()
