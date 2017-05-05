@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
 
     <!-- Imports -->
@@ -13,14 +13,14 @@
     <xsl:template match="ShipWorks">
 
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
 
     <!-- These styles are used on multiple td's so to avoid copy\paste errors they are defined once here.  We have to do this since GMail doesn't support <style> in the <head>.  -->
     <xsl:variable name="headerStyle" select="'border: 1px solid dimgray; background-color: #F3F3F3; font-weight: bold; padding: 3px;'" />
-        
+
     <html>
 
     <head>
@@ -31,15 +31,17 @@
         </style>
 
     </head>
-        
+
     <xsl:variable name="ordersWithShipments" select="//Order[count(Shipment[Status = 'Processed']) > 0]" />
 
     <body style="{$pageFont}">
-        
-        <h3>Shipping Profit and Loss - <xsl:value-of select="count($ordersWithShipments)" /> Orders</h3>
-        
-        <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
-        
+
+        <h3 style="font-size: 1.67em; margin-top: 0;">
+          Shipping Profit and Loss - <xsl:value-of select="count($ordersWithShipments)" /> Orders
+        </h3>
+
+        <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
+
             <tr>
                 <td style="{$headerStyle}; white-space: nowrap;">Order #</td>
                 <td style="{$headerStyle};">Requested Shipping</td>
@@ -51,43 +53,43 @@
                 <td style="{$headerStyle};">Profit/Loss</td>
 
             </tr>
-            
+
             <xsl:for-each select="$ordersWithShipments">
-            
+
             <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
             <xsl:variable name="rowStyle">
                 padding: 4px 8px 4px 8px;
                 vertical-align: top;
             <xsl:if test="position() != 1">border-top: 1px solid lightgrey;</xsl:if>
             </xsl:variable>
-                
+
             <xsl:variable name="shipments" select="Shipment[Status = 'Processed']" />
             <xsl:variable name="shippingCosts" select="sum($shipments/TotalCharges)" />
-                
-            <tr>            
+
+            <tr>
                 <td style="{$rowStyle};"><xsl:call-template name="OrderNumber"><xsl:with-param name="order" select="." /></xsl:call-template></td>
                 <td style="{$rowStyle};"><xsl:value-of select="RequestedShipping" /></td>
-                
+
                 <xsl:if test="count($shipments) = 1">
                     <td style="{$rowStyle};"><xsl:value-of select="sw:ToShortDate($shipments[1]/ProcessedDate)" /></td>
                     <td style="{$rowStyle};"><xsl:value-of select="$shipments[1]/ServiceUsed" /></td>
                     <td style="{$rowStyle};"><xsl:value-of select="$shipments[1]/TrackingNumber" /></td>
 				        </xsl:if>
-                
+
                 <xsl:if test="count($shipments) > 1">
                     <td style="{$rowStyle};" colspan="3">(<xsl:value-of select="count($shipments)" /> shipments)</td>
 				        </xsl:if>
-                
+
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(Charge[Type='SHIPPING']/Amount, '#,##0.00')" /></td>
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCosts, '#,##0.00#')" /></td>
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(Charge[Type='SHIPPING']/Amount - $shippingCosts, '#,##0.00#')" /></td>
             </tr>
-                
+
             </xsl:for-each>
-            
+
             <xsl:variable name="totalShippingCharges" select="sum($ordersWithShipments/Charge[Type='SHIPPING']/Amount)" />
             <xsl:variable name="totalShippingCost" select="sum(//Order/Shipment[Status = 'Processed']/TotalCharges)" />
-            
+
             <!--
                 Totals
             -->
@@ -102,9 +104,9 @@
                 <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCost, '#,##0.00#')" /></td>
                 <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCharges - $totalShippingCost, '#,##0.00#')" /></td>
             </tr>
-            
+
          </table>
-        
+
     </body>
 
     </html>

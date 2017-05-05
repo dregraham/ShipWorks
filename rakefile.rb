@@ -63,6 +63,12 @@ namespace :build do
 		zip.output_path = args.environment_path
 	end
 
+	desc "Zip the layout files"
+	zip :templates do |zip|
+		zip.dirs = ["./Code/ShipWorks.Res/Templates/Distribution/Source"]
+		zip.output_path = "./Code/ShipWorks.Res/Templates/Distribution/Source.zip"
+	end
+
 	desc "Build ShipWorks in the Debug configuration"
 	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
 		if args != nil and args.forCI != nil and args.forCI == 'true'

@@ -28,6 +28,7 @@ using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.SearchFit;
 using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
+using ShipWorks.Templates.Distribution;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -231,5 +232,15 @@ namespace ShipWorks.ApplicationCore.Options
         {
             endiciaTestServers.Enabled = endiciaTestServer.Checked;
         }
+
+        /// <summary>
+        /// Re-install built in templates
+        /// </summary>
+        /// <remarks>
+        /// This will overwrite all builtin templates with the version included in ShipWorks. It will not
+        /// affect copied or custom templates or user-created folders.
+        /// </remarks>
+        private void OnReinstallTemplates(object sender, EventArgs e) =>
+            BuiltinTemplates.ReinstallTemplates();
     }
 }

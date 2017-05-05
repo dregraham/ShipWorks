@@ -427,9 +427,12 @@
     <Compile Include="Actions\ActionManagerWrapper.cs" />
     <Compile Include="Actions\ActionPostponement.cs" />
     <Compile Include="Actions\ActionProcessedEvent.cs" />
+    <Compile Include="Actions\ActionProcessorFactory.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
     <Compile Include="Actions\ActionQueueGatewayErrorList.cs" />
+    <Compile Include="Actions\ActionQueueGatewayDefaultPrint.cs" />
     <Compile Include="Actions\ActionQueueGatewayStandard.cs" />
+    <Compile Include="Actions\ActionQueueGatewayType.cs" />
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
@@ -441,6 +444,7 @@
     <Compile Include="Actions\ComputerActionPolicy.cs" />
     <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
+    <Compile Include="Actions\IActionProcessorFactory.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
