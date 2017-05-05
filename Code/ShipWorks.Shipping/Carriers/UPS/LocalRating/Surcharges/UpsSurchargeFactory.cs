@@ -24,9 +24,26 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             return new IUpsSurcharge[]
             {
-                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService), 
                 new LargePackageUpsSurcharge(surchargeLookup),
-                new FuelGroundSurcharge(surchargeLookup), 
+                new ResidentialSurcharge(surchargeLookup),
+                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService), 
+
+                new FuelGroundSurcharge(surchargeLookup),
+                new SaturdayDeliverySurcharge(surchargeLookup),
+                new FuelAirSurcharge(surchargeLookup),
+
+                // Value adds
+                new ReturnsSurcharge(surchargeLookup),
+                new AdditionalHandlingSurcharge(surchargeLookup),
+                new CarbonNeutralSurcharge(surchargeLookup),
+                new CODSurcharge(surchargeLookup),
+                new DryIceSurcharge(surchargeLookup),
+                new ShipperReleaseSurcharge(surchargeLookup),
+                new SignatureSurcharge(surchargeLookup),
+                new VerbalConfirmationSurcharge(surchargeLookup), 
+                
+                // Third party billing is based on the shipments total price
+                new ThirdPartyBillingSurcharge(surchargeLookup)
             };
         }
     }
