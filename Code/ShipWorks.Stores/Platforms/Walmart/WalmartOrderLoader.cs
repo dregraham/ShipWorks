@@ -35,13 +35,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             if (orderToSave.IsNew)
             {
-                long orderNumber;
-                if (!long.TryParse(downloadedOrder.customerOrderId, out orderNumber))
+                long pruchaseOrderId;
+                if (!long.TryParse(downloadedOrder.purchaseOrderId, out pruchaseOrderId))
                 {
-                    throw new WalmartException($"CustomerOrderId '{downloadedOrder.customerOrderId}' could not be converted to an integer");
+                    throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to an number");
                 }
 
-                orderToSave.OrderNumber = orderNumber;
+                orderToSave.OrderNumber = pruchaseOrderId;
                 orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
                 orderToSave.OrderDate = downloadedOrder.orderDate;
                 orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void ClearExistingCharges(WalmartOrderEntity orderToSave)
         {
+            // Load existing charges and other detail from the database
             orderRepository.PopulateOrderDetails(orderToSave);
             foreach (OrderChargeEntity charge in orderToSave.OrderCharges)
             {

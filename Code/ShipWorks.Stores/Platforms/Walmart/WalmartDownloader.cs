@@ -142,6 +142,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
+            // See remarks in WalmartOrderIdentifier for why we use this vs OrderNumberIdentifier
             WalmartOrderEntity orderToSave =
                 (WalmartOrderEntity) InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId));
 

@@ -28,7 +28,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderEntity = new WalmartOrderEntity();
             orderLineType item = GenerateItem("item1", "name1", "sku1");
 
-            orderDto.customerOrderId = "123";
+            orderDto.purchaseOrderId = "123";
+            orderDto.customerOrderId = "456";
             orderDto.orderLines = new[] { item };
             orderDto.shippingInfo = new shippingInfoType
             {
@@ -58,19 +59,57 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal(orderDto.orderLines.First().charges.First().chargeAmount.amount, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().UnitPrice);
         }
 
-        [Fact]
-        public void LoadOrder_SetsCustomerOrderID_WhenOrderIsNew()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsCustomerOrderID_WhenOrderIsNew(bool isNew)
         {
-            orderEntity.IsNew = true;
-            orderDto.customerOrderId = "123";
+            const string previousValue = "100";
+            const string downloadedValue = "200";
+
+            string expectedValue = isNew ? downloadedValue : previousValue;
+            orderEntity.IsNew = isNew;
+
+            orderEntity.CustomerOrderID = previousValue;
+            orderDto.customerOrderId = downloadedValue;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.customerOrderId, orderEntity.CustomerOrderID);
+            Assert.Equal(expectedValue, orderEntity.CustomerOrderID);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsOrderNumberToPONumber_WhenOrderIsNew(bool isNew)
+        {
+            const long previousValue = 10;
+            const long downloadedValue = 42;
+
+            long expectedValue = isNew ? downloadedValue : previousValue;
+            orderEntity.IsNew = isNew;
+
+            orderDto.purchaseOrderId = downloadedValue.ToString();
+            orderEntity.OrderNumber = previousValue;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(expectedValue, orderEntity.OrderNumber);
         }
 
         [Fact]
-        public void LoadOrder_LoadsAddressesFromWalmartOrder()
+        public void LoadOrder_ThrowsWhenCannotParsePONumber_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.purchaseOrderId = "42A";
+
+            WalmartException walmartException = Assert.Throws<WalmartException>(() => testObject.LoadOrder(orderDto, orderEntity));
+            Assert.Equal("PurchaseOrderId '42A' could not be converted to an number",
+                walmartException.Message);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsAddressesFromWalmartOrder_WhenIsNew()
         {
             orderEntity.IsNew = true;
             testObject.LoadOrder(orderDto, orderEntity);
@@ -79,6 +118,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal("foo", orderEntity.BillFirstName);
             Assert.Equal("MO", orderEntity.BillStateProvCode);
             Assert.Equal("US", orderEntity.BillCountryCode);
+        }
+
+        [Fact]
+        public void LoadOrder_SkipsAddressesFromWalmartOrder_WhenNotNew()
+        {
+            orderEntity.IsNew = false;
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Null(orderEntity.BillUnparsedName);
+            Assert.Null(orderEntity.ShipUnparsedName);
         }
 
         [Fact]
@@ -93,52 +142,103 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal(billingAddress, shippingAddress);
         }
 
-        [Fact]
-        public void LoadOrder_SetsOrderDate_WhenOrderIsNew()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsOrderDate_WhenOrderIsNew(bool isNew)
         {
-            orderEntity.IsNew = true;
-            orderDto.orderDate = DateTime.UtcNow.AddDays(-12);
+            DateTime previousValue = DateTime.UtcNow.AddDays(-12);
+            DateTime downloadValue = DateTime.UtcNow;
+
+            DateTime expectedValue = isNew ? downloadValue : previousValue;
+            orderEntity.IsNew = isNew;
+
+            orderEntity.OrderDate = previousValue;
+            orderDto.orderDate = downloadValue;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.orderDate, orderEntity.OrderDate);
+            Assert.Equal(expectedValue, orderEntity.OrderDate);
         }
 
-        [Fact]
-        public void LoadOrder_SetsEstimatedDeliveryDate_WhenOrderIsNew()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsEstimatedDeliveryDate_WhenOrderIsNew(bool isNew)
         {
-            orderEntity.IsNew = true;
-            orderDto.shippingInfo.estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12);
+            DateTime previousValue = DateTime.UtcNow.AddDays(-12);
+            DateTime downloadValue = DateTime.UtcNow;
+
+            DateTime expectedValue = isNew ? downloadValue : previousValue;
+            orderEntity.IsNew = isNew;
+
+            orderEntity.EstimatedDeliveryDate = previousValue;
+            orderDto.shippingInfo.estimatedDeliveryDate = downloadValue;
             
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.shippingInfo.estimatedDeliveryDate, orderEntity.EstimatedDeliveryDate);
+            Assert.Equal(expectedValue, orderEntity.EstimatedDeliveryDate);
         }
 
-        [Fact]
-        public void LoadOrder_SetsEstimatedShipDate_WhenOrderIsNew()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsEstimatedShipDate_WhenOrderIsNew(bool isNew)
         {
-            orderEntity.IsNew = true;
-            orderDto.shippingInfo.estimatedShipDate = DateTime.UtcNow.AddDays(-12);
+            DateTime previousValue = DateTime.UtcNow.AddDays(-12);
+            DateTime downloadValue = DateTime.UtcNow;
+            DateTime expectedValue = isNew ? downloadValue : previousValue;
+
+            orderEntity.IsNew = isNew;
+            orderEntity.EstimatedShipDate = previousValue;
+
+            orderDto.shippingInfo.estimatedShipDate = downloadValue;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.shippingInfo.estimatedShipDate, orderEntity.EstimatedShipDate);
+            Assert.Equal(expectedValue, orderEntity.EstimatedShipDate);
         }
 
-        [Fact]
-        public void LoadOrder_SetsRequestedShipping_WhenOrderIsNew()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsRequestedShipping_WhenOrderIsNew(bool isNew)
         {
-            orderEntity.IsNew = true;
-            orderDto.shippingInfo.methodCode = shippingMethodCodeType.WhiteGlove;
+            const shippingMethodCodeType previousValue = shippingMethodCodeType.Express;
+            const shippingMethodCodeType downloadValue = shippingMethodCodeType.WhiteGlove;
+            shippingMethodCodeType expectedValue = isNew ? downloadValue : previousValue;
+
+            orderEntity.IsNew = isNew;
+            orderEntity.RequestedShipping = previousValue.ToString();
+
+            orderDto.shippingInfo.methodCode = downloadValue;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.shippingInfo.methodCode.ToString(), orderEntity.RequestedShipping);
+            Assert.Equal(expectedValue.ToString(), orderEntity.RequestedShipping);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_SetsRequestedShippingMethodCode_WhenOrderIsNew(bool isNew)
+        {
+            const shippingMethodCodeType previousValue = shippingMethodCodeType.Express;
+            const shippingMethodCodeType downloadValue = shippingMethodCodeType.WhiteGlove;
+            shippingMethodCodeType expectedValue = isNew ? downloadValue : previousValue;
+
+            orderEntity.IsNew = isNew;
+            orderEntity.RequestedShippingMethodCode = previousValue.ToString();
+
+            orderDto.shippingInfo.methodCode = downloadValue;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(expectedValue.ToString(), orderEntity.RequestedShippingMethodCode);
         }
 
         [Fact]
-        public void LoadOrder_DelegatesToOrderRepositoryPopulateOrderDetails_WhenOrderIsNotNew()
+        public void LoadOrder_PopulatesOrderDetailsFromDatabase_WhenOrderIsNotNew()
         {
             orderEntity.IsNew = false;
             testObject.LoadOrder(orderDto, orderEntity);
@@ -171,7 +271,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Random Charge").Amount, 123.121M);
+            Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Random Charge").Amount, 123.121M);
         }
 
         [Fact]
@@ -181,7 +281,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Tax").Amount, 4.99M);
+            Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Tax").Amount, 4.99M);
         }
 
         [Fact]
@@ -191,7 +291,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Refund").Amount, -7M);
+            Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Refund").Amount, -7M);
         }
 
         [Fact]

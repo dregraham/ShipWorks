@@ -8,6 +8,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// <summary>
     /// Uniquely identifies an Walmart order in the database
     /// </summary>
+    /// <remarks>
+    /// The reason we are using the order identifier instead of OrderNumberIdentifier
+    /// is that when the Walmart integration was first released we stored the customer order number as the
+    /// order number. We updated the integration to store PurchaseOrderNumber as the OrderNumber.
+    /// 
+    /// If we use the OrderNumberIdentifier with the PurchaseOrderNumber and downloaded an existing order, the
+    /// version in the order table would be ignored and a new order would be created.  Since there is an index on the PurchaseOrderId,
+    /// this should be just as efficient as using the OrderNumberIdentifier. 
+    /// </remarks>
     public class WalmartOrderIdentifier : OrderIdentifier
     {
         private readonly string purchaseOrderId;
