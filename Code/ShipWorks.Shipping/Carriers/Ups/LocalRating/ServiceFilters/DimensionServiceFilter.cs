@@ -16,7 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         public IEnumerable<UpsServiceType> GetEligibleServices(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> services)
         {
             if (shipment.Packages.Any(package => package.LongestSide > 108 ||
-                                                 package.Girth + package.LongestSide > 165))
+                                                 package.Girth + package.LongestSide > 165 ||
+                                                 package.TotalWeight > 150))
             {
                 return Enumerable.Empty<UpsServiceType>();
             }

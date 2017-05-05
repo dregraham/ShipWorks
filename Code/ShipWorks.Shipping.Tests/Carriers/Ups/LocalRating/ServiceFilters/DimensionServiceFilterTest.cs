@@ -47,6 +47,28 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             Assert.Equal(!emptyResult, result.Any());
         }
 
+        [Theory]
+        [InlineData(1, false)]
+        [InlineData(151, true)]
+        public void GetEligibleServices_ReturnsEmptyList_WhenPackageWeightAreNotValidForUPS(double weight, bool emptyResult)
+        {
+            IEnumerable<UpsServiceType> services = new List<UpsServiceType>()
+            {
+                UpsServiceType.Ups2DayAir,
+                UpsServiceType.UpsMailInnovationsExpedited,
+                UpsServiceType.Ups3DaySelect
+            };
+
+            UpsShipmentEntity shipment = new UpsShipmentEntity
+            {
+                Packages = {new UpsPackageEntity {DimsLength = 7, DimsWidth = 7, DimsHeight = 7, Weight = weight}}
+            };
+
+            IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, services);
+
+            Assert.Equal(!emptyResult, result.Any());
+        }
+
         [Fact]
         public void GetEligibleServices_ReturnsEmptyList_WhenPackageDimensionsAreNotValidForUPSWithMultiplePackages()
         {
