@@ -27,12 +27,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Apply_AddsShipperReleaseAmountToServiceRate_WhenShipmentHasShipperRelease()
         {
-            UpsShipmentEntity shipment = new UpsShipmentEntity(){ShipperRelease = true};
+            UpsShipmentEntity shipment = new UpsShipmentEntity(){ShipperRelease = true, Packages = { new UpsPackageEntity()}};
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
 
             testObject.Apply(shipment, serviceRate.Object);
 
             serviceRate.Verify(r => r.AddAmount(123, EnumHelper.GetDescription(UpsSurchargeType.ShipperRelease)));
+        }
+
+        [Fact]
+        public void Apply_AddsShipperReleaseAmountToServiceRate_WhenShipmentHasShipperReleaseAndMultiPackage()
+        {
+            UpsShipmentEntity shipment = new UpsShipmentEntity() { ShipperRelease = true, Packages = { new UpsPackageEntity(), new UpsPackageEntity() } };
+            Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
+
+            testObject.Apply(shipment, serviceRate.Object);
+
+            serviceRate.Verify(r => r.AddAmount(123 * 2, EnumHelper.GetDescription(UpsSurchargeType.ShipperRelease)));
         }
 
         [Fact]

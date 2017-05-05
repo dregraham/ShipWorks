@@ -28,7 +28,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             if (shipment.ShipperRelease)
             {
-                serviceRate.AddAmount((decimal) surcharges[UpsSurchargeType.ShipperRelease],
+                double surchargeAmount = surcharges[UpsSurchargeType.ShipperRelease] * shipment.Packages.Count;
+
+                serviceRate.AddAmount((decimal) surchargeAmount,
                     EnumHelper.GetDescription(UpsSurchargeType.ShipperRelease));
             }
         }
