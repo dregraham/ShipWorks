@@ -16,14 +16,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
     {
         private readonly IDictionary<UpsSurchargeType, double> surcharges;
         private readonly IUpsLocalRatingZoneFileEntity zoneFile;
+        private readonly IResidentialDeterminationService residentialDeterminationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeliveryAreaSurcharge"/> class.
         /// </summary>
         public DeliveryAreaSurcharge(IDictionary<UpsSurchargeType, double> surcharges,
-            IUpsLocalRatingZoneFileEntity zoneFile)
+            IUpsLocalRatingZoneFileEntity zoneFile, IResidentialDeterminationService residentialDeterminationService)
         {
             this.zoneFile = zoneFile;
+            this.residentialDeterminationService = residentialDeterminationService;
             this.surcharges = surcharges;
         }
 
@@ -40,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 zoneFile.UpsLocalRatingDeliveryAreaSurcharge.FirstOrDefault(
                     das => das.DestinationZip == destinationZip);
 
-            bool isResidential = shipment.Shipment.ResidentialResult;
+            bool isResidential = residentialDeterminationService.IsResidentialAddress(shipment.Shipment);
             bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
 
             if (deliveryAreaSurcharge == null)

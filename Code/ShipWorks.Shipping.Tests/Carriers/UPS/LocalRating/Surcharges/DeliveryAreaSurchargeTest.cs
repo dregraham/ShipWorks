@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         private const int RemoteHawaiiZip = 99950;
         private readonly DeliveryAreaSurcharge testObject;
         private readonly AutoMock mock;
+        private readonly Mock<IResidentialDeterminationService> residentialDeterminationService;
 
         private readonly Dictionary<UpsSurchargeType, double> surcharges = new Dictionary<UpsSurchargeType, double>
         {
@@ -37,6 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             {UpsSurchargeType.ResidentialAir, 3.65},
             {UpsSurchargeType.ResidentialGround, 3.25}
         };
+
 
         public DeliveryAreaSurchargeTest()
         {
@@ -69,7 +72,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            testObject = new DeliveryAreaSurcharge(surcharges, zoneFile);
+            residentialDeterminationService = mock.CreateMock<IResidentialDeterminationService>();
+            testObject = new DeliveryAreaSurcharge(surcharges, zoneFile, residentialDeterminationService.Object);
         }
 
         [Fact]
@@ -80,10 +84,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 Packages = { new UpsPackageEntity() },
                 Shipment = new ShipmentEntity
                 {
-                    ShipPostalCode = StandardZip.ToString(),
-                    ResidentialResult = false
+                    ShipPostalCode = StandardZip.ToString()
                 }
             };
+
+            residentialDeterminationService
+                .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
+                .Returns(false);
 
             var serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 0, false, null);
 
@@ -113,10 +120,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 Service = (int) serviceType,
                 Shipment = new ShipmentEntity
                 {
-                    ShipPostalCode = destZip,
-                    ResidentialResult = isResidential
+                    ShipPostalCode = destZip
                 }
             };
+
+            residentialDeterminationService
+                .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
+                .Returns(isResidential);
+
             var serviceRate = new UpsLocalServiceRate(serviceType, 0, false, null);
             
             testObject.Apply(shipment, serviceRate);
@@ -133,10 +144,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 Service = (int) UpsServiceType.UpsGround,
                 Shipment = new ShipmentEntity
                 {
-                    ShipPostalCode = StandardZip.ToString(),
-                    ResidentialResult = true
+                    ShipPostalCode = StandardZip.ToString()
                 }
             };
+
+            residentialDeterminationService
+                .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
+                .Returns(true);
+
             var serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 0, false, null);
 
             testObject.Apply(shipment, serviceRate);

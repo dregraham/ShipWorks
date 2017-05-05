@@ -11,6 +11,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
     [Component]
     public class UpsSurchargeFactory : IUpsSurchargeFactory
     {
+        private readonly IResidentialDeterminationService residentialDeterminationService;
+
+        public UpsSurchargeFactory(IResidentialDeterminationService residentialDeterminationService)
+        {
+            this.residentialDeterminationService = residentialDeterminationService;
+        }
         /// <summary>
         /// Gets the specified surcharges to be applied to a shipment
         /// </summary>
@@ -18,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             return new IUpsSurcharge[]
             {
-                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity), 
+                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService), 
                 new LargePackageUpsSurcharge(surchargeLookup),
                 new FuelGroundSurcharge(surchargeLookup), 
             };
