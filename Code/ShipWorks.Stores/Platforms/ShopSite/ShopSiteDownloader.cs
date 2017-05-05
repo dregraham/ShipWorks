@@ -1,37 +1,42 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 using System.Xml;
 using System.Xml.XPath;
+using Autofac;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
     /// <summary>
     /// Downloader for ShopSiteStores
     /// </summary>
+    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.ShopSite, ExternallyOwned = true)]
     public class ShopSiteDownloader : StoreDownloader
     {
-        int totalCount = 0;
+        private int totalCount = 0;
+        private readonly IShopSiteWebClient webClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(ShopSiteStoreEntity store)
+        public ShopSiteDownloader(StoreEntity store)
             : base(store)
         {
-
+            IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
+            MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
+            
+            webClient = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IShopSiteWebClient>(shopSiteStore.Authentication, TypedParameter.From(shopSiteStore));
         }
 
         /// <summary>
@@ -45,9 +50,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             try
             {
-                // Create the web client used for downloading
-                ShopSiteWebClient webClient = new ShopSiteWebClient(((ShopSiteStoreEntity) Store));
-
                 while (true)
                 {
                     // Check for cancel
@@ -56,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(webClient))
+                    if (!DownloadNextOrdersPage())
                     {
                         return;
                     }
@@ -75,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Download the next page of orders.
         /// </summary>
-        private bool DownloadNextOrdersPage(ShopSiteWebClient webClient)
+        private bool DownloadNextOrdersPage()
         {
             long lastOrderNumber = GetOrderNumberStartingPoint();
 

@@ -1,13 +1,6 @@
-using System;
-using System.Windows.Forms;
 using System.Windows.Media;
-using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ShopSite;
 
@@ -19,6 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.ShopSite, ExternallyOwned = true)]
     public partial class ShopSiteAccountSettingsControl : AccountSettingsControlBase
     {
+        private IShopSiteWebClient webClient;
         private ShopSiteAccountSettingsViewModel viewModel;
 
         /// <summary>
@@ -32,6 +26,15 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
             shopSiteAccountSettings.Background = new SolidColorBrush(Color.FromRgb(this.BackColor.R, this.BackColor.G, this.BackColor.B));
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopSiteAccountSettingsControl(IShopSiteWebClient shopSiteWebClient)
+        {
+            InitializeComponent();
+            webClient = shopSiteWebClient;
+        }
+        
         /// <summary>
         /// Set the view model on the control
         /// </summary>

@@ -20,15 +20,18 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
-    [KeyedComponent(typeof(StoreType), StoreTypeCode.ShopSite)]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ShopSite, ExternallyOwned = true)]
     public class ShopSiteStoreType : StoreType
     {
-        readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
+        private readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
+        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteStoreType(StoreEntity store, IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex)
+        public ShopSiteStoreType(StoreEntity store, 
+            IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex,
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
             : base(store)
         {
             if (store != null && !(store is ShopSiteStoreEntity))
@@ -37,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             this.accountSettingsControlIndex = accountSettingsControlIndex;
+            this.downloaderFactory = downloaderFactory;
         }
 
         /// <summary>
@@ -76,12 +80,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         }
 
         /// <summary>
-        /// Create a downloader for our current store instance
+        /// Create the downloader instance that is used to retrieve data from the store.
         /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new ShopSiteDownloader((ShopSiteStoreEntity) Store);
-        }
+        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
 
         /// <summary>
         /// Create the control that is used for editing the account settings in the Store Settings window.

@@ -1,30 +1,32 @@
 using System;
 using System.Net;
 using System.Xml;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
     /// <summary>
     /// Interface to connecting to ShopSite
     /// </summary>
-    [Component]
+    [KeyedComponent(typeof(IShopSiteWebClient), ShopSiteAuthenticationType.Basic)]
     public class ShopSiteWebClient : IShopSiteWebClient
     {
         // The store we are connecting to
-        readonly ShopSiteStoreEntity store;
+        private readonly IShopSiteStoreEntity shopSiteStore;
 
         /// <summary>
-        /// Create an instance of the web client for connecting to the specified store
+        /// Create this instance of the web client for connecting to the specified store
         /// </summary>
-        public ShopSiteWebClient(ShopSiteStoreEntity store)
+        public ShopSiteWebClient(IShopSiteStoreEntity store)
         {
-            this.store = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             postRequest.Variables.Add("startorder", startOrder.ToString());
-            postRequest.Variables.Add("maxorder", store.DownloadPageSize.ToString());
+            postRequest.Variables.Add("maxorder", shopSiteStore.DownloadPageSize.ToString());
             postRequest.Variables.Add("pay", "yes");
 
             return ProcessRequest(postRequest, "GetOrders");
@@ -60,12 +62,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.KeepAlive = false;
 
             // Add required parameters
-            postRequest.Variables.Add("version", "8.0");
+            postRequest.Variables.Add("version", "12.0");
 
             // Set the uri and parameters
-            postRequest.Uri = GetShopSiteCgiUri();
-            postRequest.Timeout = TimeSpan.FromSeconds(store.RequestTimeout);
-            postRequest.Credentials = new NetworkCredential(store.Username, SecureText.Decrypt(store.Password, store.Username));
+            postRequest.Uri = GetShopSiteApiUri();
+            postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
+            postRequest.Credentials = new NetworkCredential(shopSiteStore.Username, SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username));
 
             // Log the request
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.ShopSite, action);
@@ -108,12 +110,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Get the URI to use to connect to the ShopSite CGI script
         /// </summary>
-        private Uri GetShopSiteCgiUri()
+        public Uri GetShopSiteApiUri()
         {
-            string requiredScheme = store.RequireSSL ? "https://" : "http://";
+            string requiredScheme = shopSiteStore.RequireSSL ? "https://" : "http://";
 
             // If Url scheme not set, default to https
-            string url = store.ApiUrl;
+            string url = shopSiteStore.ApiUrl;
             if (url.IndexOf(Uri.SchemeDelimiter) == -1)
             {
                 url = requiredScheme + url;
@@ -127,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             Uri uri = new Uri(url);
 
             // Validate the secure scheme
-            if (store.RequireSSL && uri.Scheme != Uri.UriSchemeHttps)
+            if (shopSiteStore.RequireSSL && uri.Scheme != Uri.UriSchemeHttps)
             {
                 throw new ShopSiteException(
                     "The ShopSite Module URL protocol you entered is (" + uri.Scheme + "://).  For your security,\n" +
@@ -135,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             // Validate the unsecure scheme
-            if (!store.RequireSSL && uri.Scheme != Uri.UriSchemeHttp)
+            if (!shopSiteStore.RequireSSL && uri.Scheme != Uri.UriSchemeHttp)
             {
                 throw new ShopSiteException(
                     "The ShopSite Module URL protocol you entered is (" + uri.Scheme + "://).  To connect unsecure,\n" +

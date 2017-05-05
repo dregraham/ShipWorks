@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -156,8 +154,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 try
                 {
                     // Create the client for connecting to the module
-                    ShopSiteWebClient webClient = new ShopSiteWebClient(shopSiteStore);
-                    webClient.TestConnection();
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IShopSiteWebClient webClient = lifetimeScope.ResolveKeyed<IShopSiteWebClient>(shopSiteStore.Authentication, TypedParameter.From(shopSiteStore as IShopSiteStoreEntity));
+
+                        webClient.TestConnection();
+                    }
 
                     store.StoreName = "ShopSite Store";
                     store.Website = new Uri(url).Host;
