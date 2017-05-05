@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             {
                 int packageCount = shipment.Packages.Count;
                 
-                if (shipment.Service == (int) UpsServiceType.UpsGround)
+                if (serviceRate.Service == UpsServiceType.UpsGround)
                 {
                     serviceRate.AddAmount((decimal)surcharges[UpsSurchargeType.CarbonNeutralGround] * packageCount,
                         EnumHelper.GetDescription(UpsSurchargeType.CarbonNeutralGround));
