@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             UpsShipmentEntity shipment =
                 new UpsShipmentEntity() {CarbonNeutral = true, Service = (int) UpsServiceType.UpsNextDayAir, Packages = { new UpsPackageEntity()}};
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.SetupGet(r => r.Service).Returns(UpsServiceType.UpsNextDayAir);
 
             testObject.Apply(shipment, serviceRate.Object);
 
