@@ -56,7 +56,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 // Load existing charges and other detail from the database
                 orderRepository.PopulateOrderDetails(orderToSave);
                 ClearExistingCharges(orderToSave);
-                ClearExistingQuantities(orderToSave);
             }
 
             LoadItems(downloadedOrder.orderLines, orderToSave);
@@ -75,17 +74,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
             foreach (OrderChargeEntity charge in order.OrderCharges)
             {
                 charge.Amount = 0;
-            }
-        }
-
-        /// <summary>
-        /// Clears the existing quantities.
-        /// </summary>
-        private void ClearExistingQuantities(WalmartOrderEntity order)
-        {
-            foreach (OrderItemEntity orderItem in order.OrderItems)
-            {
-                orderItem.Quantity = 0;
             }
         }
 

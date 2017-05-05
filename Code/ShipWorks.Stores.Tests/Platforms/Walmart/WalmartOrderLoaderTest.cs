@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void LoadOrder_ExitingLineItemIsZero_WhenNotInDownloadedOrder()
+        public void LoadOrder_ExitingLineItemDoesNotChange_WhenNotInDownloadedOrder()
         {
             orderEntity.IsNew = false;
             orderEntity.OrderItems.Add(new WalmartOrderItemEntity() {LineNumber = "15", Quantity = 15});
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(0, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "15").Quantity);
+            Assert.Equal(15, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "15").Quantity);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsCustomerOrderID_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsCustomerOrderID_IfOrderIsNew(bool isNew)
         {
             const string previousValue = "100";
             const string downloadedValue = "200";
@@ -128,7 +128,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsOrderNumberToPONumber_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsOrderNumberToPONumber_IfOrderIsNew(bool isNew)
         {
             const long previousValue = 10;
             const long downloadedValue = 42;
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsOrderDate_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsOrderDate_IfOrderIsNew(bool isNew)
         {
             DateTime previousValue = DateTime.UtcNow.AddDays(-12);
             DateTime downloadValue = DateTime.UtcNow;
@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsEstimatedDeliveryDate_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsEstimatedDeliveryDate_IfOrderIsNew(bool isNew)
         {
             DateTime previousValue = DateTime.UtcNow.AddDays(-12);
             DateTime downloadValue = DateTime.UtcNow;
@@ -230,7 +230,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsEstimatedShipDate_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsEstimatedShipDate_IfOrderIsNew(bool isNew)
         {
             DateTime previousValue = DateTime.UtcNow.AddDays(-12);
             DateTime downloadValue = DateTime.UtcNow;
@@ -249,7 +249,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsRequestedShipping_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsRequestedShipping_IfOrderIsNew(bool isNew)
         {
             const shippingMethodCodeType previousValue = shippingMethodCodeType.Express;
             const shippingMethodCodeType downloadValue = shippingMethodCodeType.WhiteGlove;
@@ -268,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void LoadOrder_SetsRequestedShippingMethodCode_WhenOrderIsNew(bool isNew)
+        public void LoadOrder_SetsRequestedShippingMethodCode_IfOrderIsNew(bool isNew)
         {
             const shippingMethodCodeType previousValue = shippingMethodCodeType.Express;
             const shippingMethodCodeType downloadValue = shippingMethodCodeType.WhiteGlove;
@@ -307,10 +307,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.NotEqual(orderEntity.OrderCharges.FirstOrDefault().Amount, 99);
         }
 
-        [Fact]
-        public void LoadOrder_LoadsOrderCharges()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_LoadsOrderCharges(bool isNew)
         {
-            orderEntity.IsNew = false;
+            orderEntity.IsNew = isNew;
             orderEntity.OrderCharges.Add(new OrderChargeEntity()
             {
                 Amount = 99
@@ -321,30 +323,36 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Random Charge").Amount, 123.121M);
         }
 
-        [Fact]
-        public void LoadOrder_LoadsTax()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_LoadsTax(bool isNew)
         {
-            orderEntity.IsNew = false;
+            orderEntity.IsNew = isNew;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Tax").Amount, 4.99M);
         }
 
-        [Fact]
-        public void LoadOrder_LoadsRefunds()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_LoadsRefunds(bool isNew)
         {
-            orderEntity.IsNew = false;
+            orderEntity.IsNew = isNew;
 
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Refund").Amount, -7M);
         }
 
-        [Fact]
-        public void LoadOrder_DelegatesToCalculateTotal()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_DelegatesToCalculateTotal(bool isNew)
         {
-            orderEntity.IsNew = false;
+            orderEntity.IsNew = isNew;
             mock.Mock<IOrderChargeCalculator>()
                 .Setup(c => c.CalculateTotal(orderEntity))
                 .Returns(3.50M);

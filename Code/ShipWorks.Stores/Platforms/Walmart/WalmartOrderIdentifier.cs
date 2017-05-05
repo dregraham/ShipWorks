@@ -34,14 +34,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
-            MethodConditions.EnsureArgumentIsNotNull(order);
-
             WalmartOrderEntity walmartOrder = order as WalmartOrderEntity;
-
-            if (walmartOrder == null)
-            {
-                throw new InvalidOperationException("A non Walmart order was passed to the Walmart order identifier.");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(walmartOrder);
 
             walmartOrder.PurchaseOrderID = purchaseOrderId;
         }
