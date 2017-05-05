@@ -24,10 +24,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             return new IUpsSurcharge[]
             {
+                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService),
                 new LargePackageUpsSurcharge(surchargeLookup),
-                new ResidentialSurcharge(surchargeLookup),
-                new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService), 
-
+                
                 new FuelGroundSurcharge(surchargeLookup),
                 new SaturdayDeliverySurcharge(surchargeLookup),
                 new FuelAirSurcharge(surchargeLookup),
