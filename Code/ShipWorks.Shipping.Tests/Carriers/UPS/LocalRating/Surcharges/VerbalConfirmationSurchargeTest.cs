@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
@@ -72,6 +70,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             mock.Dispose();
         }
-
     }
 }
