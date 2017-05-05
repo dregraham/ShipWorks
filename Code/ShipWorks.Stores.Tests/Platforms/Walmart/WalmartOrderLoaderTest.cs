@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             orderDto = new Order();
             orderEntity = new WalmartOrderEntity();
-            orderLineType item = GenerateItem("item1", "name1", "sku1");
+            orderLineType item = GenerateItem("1", "name1", "sku1");
 
             orderDto.purchaseOrderId = "123";
             orderDto.customerOrderId = "456";
@@ -47,16 +47,63 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
+        public void LoadOrder_ExitingLineItemIsZero_WhenNotInDownloadedOrder()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() {LineNumber = "15", Quantity = 15});
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(0, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "15").Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_LineItemAdded_WhenNoMatchingLineItemFound()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "2").Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_LineItemUpdated_WhenMatchingLineItemFound()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 42 });
+
+            orderDto.orderLines.Single().lineNumber = "15";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "6";
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+            Assert.Equal(6, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "15").Quantity);
+        }
+
+
+        [Fact]
         public void LoadOrder_LoadsItemFromWalmartOrder()
         {
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(orderDto.orderLines.First().lineNumber, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().LineNumber);
-            Assert.Equal(orderDto.orderLines.First().item.productName, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Name);
-            Assert.Equal(orderDto.orderLines.First().item.sku, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().SKU);
-            Assert.Equal(orderDto.orderLines.First().orderLineStatuses.First().status.ToString(), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().OnlineStatus);
-            Assert.Equal(double.Parse(orderDto.orderLines.First().orderLineQuantity.amount), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Quantity);
-            Assert.Equal(orderDto.orderLines.First().charges.First().chargeAmount.amount, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().UnitPrice);
+            Assert.Equal(orderDto.orderLines.Single().lineNumber, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().LineNumber);
+            Assert.Equal(orderDto.orderLines.Single().item.productName, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().Name);
+            Assert.Equal(orderDto.orderLines.Single().item.sku, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().SKU);
+            Assert.Equal(orderDto.orderLines.Single().orderLineStatuses.Single().status.ToString(), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().OnlineStatus);
+            Assert.Equal(double.Parse(orderDto.orderLines.Single().orderLineQuantity.amount), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().Quantity);
+            Assert.Equal(orderDto.orderLines.Single().charges.Single(c => c.chargeType1 == "PRODUCT").chargeAmount.amount, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single().UnitPrice);
         }
 
         [Theory]
