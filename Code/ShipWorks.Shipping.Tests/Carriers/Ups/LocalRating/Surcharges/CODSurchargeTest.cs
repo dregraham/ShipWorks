@@ -43,6 +43,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         }
 
         [Fact]
+        public void Apply_AddsSurchargeAmount_WhenShipmentHasCODEnabledAndMultiPackage()
+        {
+            UpsShipmentEntity shipment = new UpsShipmentEntity
+            {
+                CodEnabled = true,
+                Packages = { new UpsPackageEntity(), new UpsPackageEntity() }
+            };
+
+            Mock<IUpsLocalServiceRate> localServiceRate = mock.Mock<IUpsLocalServiceRate>();
+
+            testObject.Apply(shipment, localServiceRate.Object);
+
+            localServiceRate.Verify(s => s.AddAmount(1.11m * 2, EnumHelper.GetDescription(UpsSurchargeType.CollectonDelivery)));
+        }
+
+        [Fact]
         public void Apply_DoesNotAddSurchargeAmount_WhenShipmentDoesNotHaveCODEnabled()
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity()
