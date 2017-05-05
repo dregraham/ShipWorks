@@ -449,6 +449,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
             item.UnitPrice = lineItem.GetValue<decimal>("price", 0.0m); 
             item.Weight = GetLineItemWeight(lineItem);
 
+            decimal lineDiscount = lineItem.GetValue("total_discount", 0.0m);
+            if (lineDiscount != 0)
+            {
+                LoadCharge(order, "Discount", $"SKU: {item.Code}", -lineDiscount);
+            }
+
             // Load the item option - which to Shopify is a "variant"
             LoadOption(item, lineItem);
 

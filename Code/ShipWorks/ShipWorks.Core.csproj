@@ -10883,6 +10883,7 @@
     <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
+    <None Include="Resources\Stores\Icons\geekseller.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />

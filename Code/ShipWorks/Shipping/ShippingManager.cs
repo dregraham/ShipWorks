@@ -48,7 +48,6 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Utility class for working with shipments
     /// </summary>
-    [NDependIgnoreLongTypes]
     public static class ShippingManager
     {
         // Logger

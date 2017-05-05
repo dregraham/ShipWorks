@@ -217,7 +217,7 @@
                                         <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}">Account:</TextBlock>
                                         <TextBlock Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibilityNegated}}"
                                            Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}" />
-                                        <TextBlock xml:space="preserve" Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibility}}" 
+                                        <TextBlock xml:space="preserve" Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibility}}"
                                                    Text=" (Rate Shopping), "/>
                                         <TextBlock Text="{Binding Text, ElementName=OriginDropDown}" />
                                     </StackPanel>

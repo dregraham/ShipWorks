@@ -73,7 +73,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves the state of the controls to the package entities.
         /// </summary>
         /// <param name="packages">The packages.</param>
-        [NDependIgnoreLongMethod]
         public void SaveToPackages(IEnumerable<FedExPackageEntity> packages)
         {
             foreach (FedExPackageEntity package in packages)
