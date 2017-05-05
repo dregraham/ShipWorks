@@ -238,7 +238,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void LoadOrder_PopulatesOrderDetailsFromDatabase_WhenOrderIsNotNew()
+        public void LoadOrder_PopulatesOrderDetailsFromOrderRepository_WhenOrderIsNotNew()
         {
             orderEntity.IsNew = false;
             testObject.LoadOrder(orderDto, orderEntity);

@@ -40,8 +40,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 {
                     throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to an number");
                 }
-
                 orderToSave.OrderNumber = pruchaseOrderId;
+                // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
                 orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
                 orderToSave.OrderDate = downloadedOrder.orderDate;
                 orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
