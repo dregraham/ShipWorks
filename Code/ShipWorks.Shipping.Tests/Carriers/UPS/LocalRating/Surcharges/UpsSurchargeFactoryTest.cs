@@ -33,17 +33,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Get_AllIUpsSurchargesAreReturned()
         {
-            var type = typeof(IUpsSurcharge);
-
             Assembly shippingAssembly = AssemblyProvider.GetAssemblies().SingleOrDefault(a => a.FullName.StartsWith("ShipWorks.Shipping,"));
             Assert.NotNull(shippingAssembly);
 
+            var iSurchargeType = typeof(IUpsSurcharge);
             IEnumerable<Type> surchargeTypes =
-                shippingAssembly.GetTypes().Where(p => type.IsAssignableFrom(p) && type != p).ToList();
+                shippingAssembly.GetTypes().Where(p => iSurchargeType.IsAssignableFrom(p) && iSurchargeType != p).ToList();
 
-            var testObject = mock.Create<UpsSurchargeFactory>();
             var surcharges = new Dictionary<UpsSurchargeType, double>();
             var zoneFiles = new UpsLocalRatingZoneFileEntity();
+
+            var testObject = mock.Create<UpsSurchargeFactory>();
             var retreivedSurcharges = testObject.Get(surcharges, zoneFiles).ToList();
 
             var missingSurchargeMessage = new StringBuilder();
