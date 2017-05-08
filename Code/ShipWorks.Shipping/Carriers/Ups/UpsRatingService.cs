@@ -66,7 +66,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 IUpsRateClient upsRateClient = GetRatingClient(account);
 
                 GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
-                string clientMessage = serviceRateResult.Message;
                 List<UpsServiceRate> serviceRates = serviceRateResult.Value;
 
                 // If there are no UPS Accounts then use the counter rates
@@ -94,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
-                AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, clientMessage);
+                AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, serviceRateResult.Message);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
