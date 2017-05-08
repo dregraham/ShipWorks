@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,15 +49,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
-        public List<UpsServiceRate> GetRates(ShipmentEntity shipment)
+        public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
             List<UpsServiceRate> localRates = GetRatesInternal(shipment);
-            if (localRates.Any())
-            {
-                return localRates;
-            }
 
-            return upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+            return localRates.Any() ? 
+                GenericResult.FromSuccess(localRates) : 
+                upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
         }
 
         /// <summary>

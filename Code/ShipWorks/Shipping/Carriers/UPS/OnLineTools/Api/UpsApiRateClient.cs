@@ -17,11 +17,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -78,11 +78,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
-        /// Get the rates for the given shipment
+        /// Get the rates for the given shipment along with any messaging.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A list of service rates from UPS.</returns>
-        public List<UpsServiceRate> GetRates(ShipmentEntity shipment)
+        public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
             List<UpsServiceRate> rates = new List<UpsServiceRate>();
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
@@ -138,7 +138,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw firstExceptionEncountered;
             }
 
-            return rates;
+            return GenericResult.FromSuccess(rates, GetMessage(shipment));
+        }
+
+        /// <summary>
+        /// Gets the message.
+        /// </summary>
+        private string GetMessage(ShipmentEntity shipment)
+        {
+            return shipment.ReturnShipment ?
+                "* Rates reflect the service charge only. This does not include additional fees for returns." :
+                string.Empty;
         }
 
         /// <summary>
@@ -172,28 +182,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return surePostServices;
-        }
-
-        /// <summary>
-        /// Gets rates for the shipment using counter rates if useCounterRates is true
-        /// </summary>
-        public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
-        {
-            // Create the appropriate settings, certificate inspector
-            if (useCounterRates)
-            {
-                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
-                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
-                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
-            }
-            else
-            {
-                settingsRepository = new UpsSettingsRepository();
-                certificateInspector = new TrustingCertificateInspector();
-                accountRepository = new UpsAccountRepository();
-            }
-
-            return GetRates(shipment);
         }
 
         /// <summary>

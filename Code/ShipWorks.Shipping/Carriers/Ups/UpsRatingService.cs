@@ -63,9 +63,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 IEnumerable<UpsTransitTime> transitTimes;
 
                 UpsAccountEntity account = accountRepository.GetAccount(shipment);
-
                 IUpsRateClient upsRateClient = GetRatingClient(account);
-                IEnumerable<UpsServiceRate> serviceRates = upsRateClient.GetRates(shipment);
+
+                GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+                string clientMessage = serviceRateResult.Message;
+                List<UpsServiceRate> serviceRates = serviceRateResult.Value;
 
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
@@ -92,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
-                AddMessageResult(shipment, wantedNegotiated, anyNegotiated, allNegotiated, rates);
+                AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, clientMessage);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
@@ -185,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Adds the message result.
         /// </summary>
-        private static void AddMessageResult(ShipmentEntity shipment, bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, IList<RateResult> rates)
+        private static void AddMessageResult(bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, IList<RateResult> rates, string clientMessage)
         {
             if (rates.None())
             {
@@ -210,9 +212,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            if (shipment.ReturnShipment)
+            if (!clientMessage.IsNullOrWhiteSpace())
             {
-                rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
+                rates.Add(new RateResult(clientMessage, ""));
             }
         }
 

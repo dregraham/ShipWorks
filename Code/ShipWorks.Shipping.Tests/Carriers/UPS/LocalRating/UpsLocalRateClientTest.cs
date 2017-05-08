@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 .Returns(serviceRates);
 
             var result = testObject.GetRates(shipment);
-            Assert.Equal(serviceRates[0], result.Single());
+            Assert.Equal(serviceRates[0], result.Value.Single());
         }
 
         [Fact]
