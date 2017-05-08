@@ -3,11 +3,12 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
 {
     /// <summary>
-    /// Get eligible servies based on the address
+    /// Get eligible services based on the address
     /// </summary>
     public class AddressServiceFilter : IServiceFilter
     {
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         /// <summary>
         /// Constructor
         /// </summary>
-        public AddressServiceFilter(IResidentialDeterminationService residentialDetermination, UpsShipmentType upsShipmentType)
+        public AddressServiceFilter(IResidentialDeterminationService residentialDetermination, UpsOltShipmentType upsShipmentType)
         {
             this.residentialDetermination = residentialDetermination;
             this.upsShipmentType = upsShipmentType;
