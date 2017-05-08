@@ -77,6 +77,12 @@
       <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.93.0\lib\net46\Apitron.PDF.Rasterizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mef, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Mef.4.0.0\lib\net45\Autofac.Integration.Mef.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -108,6 +114,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -158,6 +165,16 @@
     </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
+    <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
+    <Compile Include="ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ComponentRegistration\NamedComponentAttribute.cs" />
+    <Compile Include="ComponentRegistration\Ordering\OrderAttribute.cs" />
+    <Compile Include="ComponentRegistration\Ordering\OrderedRegistrationExtensions.cs" />
+    <Compile Include="ComponentRegistration\Ordering\OrderedRegistrationSource.cs" />
+    <Compile Include="ComponentRegistration\Ordering\OrderedResolutionExtensions.cs" />
+    <Compile Include="ComponentRegistration\Ordering\TypeExtensions.cs" />
+    <Compile Include="ComponentRegistration\RegistrationType.cs" />
+    <Compile Include="ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />

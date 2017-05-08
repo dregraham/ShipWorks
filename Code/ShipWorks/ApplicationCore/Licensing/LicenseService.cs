@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;

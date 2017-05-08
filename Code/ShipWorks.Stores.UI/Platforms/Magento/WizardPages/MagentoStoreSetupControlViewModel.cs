@@ -1,6 +1,5 @@
 ﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -13,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {

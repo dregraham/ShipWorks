@@ -6,7 +6,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan

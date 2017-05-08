@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration
+namespace Interapptive.Shared.ComponentRegistration
 {
     /// <summary>
     /// How should components be registered

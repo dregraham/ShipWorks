@@ -3,7 +3,7 @@
 
 using System;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// Contains extension methods for <see cref="Type"/>.

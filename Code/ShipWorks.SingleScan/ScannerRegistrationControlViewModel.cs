@@ -6,7 +6,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;

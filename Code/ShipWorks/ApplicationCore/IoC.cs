@@ -16,8 +16,6 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -43,6 +41,8 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 
 namespace ShipWorks.ApplicationCore
 {

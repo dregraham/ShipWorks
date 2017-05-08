@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shared.IO.KeyboardShortcuts;

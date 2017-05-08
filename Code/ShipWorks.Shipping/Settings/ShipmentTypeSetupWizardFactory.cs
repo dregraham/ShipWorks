@@ -1,5 +1,5 @@
 ﻿using Autofac.Features.Indexed;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Settings
 {

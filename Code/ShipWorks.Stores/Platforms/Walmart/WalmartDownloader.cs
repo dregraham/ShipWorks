@@ -5,7 +5,7 @@ using System.Net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

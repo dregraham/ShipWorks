@@ -9,7 +9,7 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Features.Metadata;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// Provides methods that simplify resolution of ordered services.
@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <returns>The component instances that provide the service.</returns>
         public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context, params Parameter[] parameters)
         {
-            return context.ResolveOrdered<TService>(parameters.AsEnumerable());
+            return ResolveOrdered<TService>(context, parameters.AsEnumerable());
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
             Type registeredType = typeof(IEnumerable<>).MakeGenericType(
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
             Meta<TService>[] resolved = (Meta<TService>[]) context.Resolve(registeredType, parameters);
-            return resolved.Where(HasOrderingMetadata)
-                           .OrderBy(GetOrderFromMetadata)
+            return resolved.Where(HasOrderingMetadata<TService>)
+                           .OrderBy(GetOrderFromMetadata<TService>)
                            .Select(t => t.Value)
-                           .ToArray()
+                           .ToArray<TService>()
                            .AsOrdered();
         }
 

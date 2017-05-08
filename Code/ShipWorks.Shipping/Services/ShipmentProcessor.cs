@@ -11,7 +11,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
