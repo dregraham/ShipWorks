@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonWalmartOrderEntity()
         {
             var testObject = new WalmartOrderIdentifier("1");
-            Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo(new OrderEntity()));
+            Assert.Throws<ArgumentNullException>(() => testObject.ApplyTo(new OrderEntity()));
         }
 
         [Fact]
