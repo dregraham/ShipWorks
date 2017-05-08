@@ -27,6 +27,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private const string SecondDayAirAMHeader = "2nd Day Air A.M.";
         private const string NextDayAirSaverHeader = "Next Day Air Saver";
         private const string NextDayAirHeader = "Next Day Air";
+        private const string NextDayAirEarlyHeader = "Next Day Air Early";
+
+        private const int numberOfServices = 7;
 
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
@@ -139,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
             int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
 
-            for (int column = 1; column <= 6; column++)
+            for (int column = 1; column <= numberOfServices; column++)
             {
                 string cellValue = row.Cells[column].Value.Trim();
 
@@ -230,6 +233,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             ValidateColumnHeader(SecondDayAirAMHeader, "E1", worksheet);
             ValidateColumnHeader(NextDayAirSaverHeader, "F1", worksheet);
             ValidateColumnHeader(NextDayAirHeader, "G1", worksheet);
+            ValidateColumnHeader(NextDayAirEarlyHeader, "H1", worksheet);
         }
 
         /// <summary>
@@ -271,6 +275,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     return UpsServiceType.UpsNextDayAirSaver;
                 case 6:
                     return UpsServiceType.UpsNextDayAir;
+                case 7:
+                    return UpsServiceType.UpsNextDayAirAM;
                 default:
                     throw new UpsLocalRatingException("Unknown service column");
             }
