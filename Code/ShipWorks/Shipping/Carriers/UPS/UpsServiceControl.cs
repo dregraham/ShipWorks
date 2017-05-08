@@ -813,14 +813,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// One of the values that affects rates has changed
-        /// </summary>
-        private void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-            RaiseRateCriteriaChanged();
-        }
-
-        /// <summary>
         /// Some aspect of the shipment that affects ShipSense has changed
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)

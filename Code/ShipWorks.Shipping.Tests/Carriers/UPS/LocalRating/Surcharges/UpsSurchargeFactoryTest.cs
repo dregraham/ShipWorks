@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,9 +32,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             Assembly shippingAssembly = AssemblyProvider.GetAssemblies().SingleOrDefault(a => a.ManifestModule.Name == "ShipWorks.Shipping.dll");
             Assert.NotNull(shippingAssembly);
 
-            var iSurchargeType = typeof(IUpsSurcharge);
             IEnumerable<Type> surchargeTypes =
-                shippingAssembly.GetTypes().Where(p => iSurchargeType.IsAssignableFrom(p) && iSurchargeType != p).ToList();
+                shippingAssembly.GetTypes().Where(TypeImplementsISurcharge).ToList();
 
             var surcharges = new Dictionary<UpsSurchargeType, double>();
             var zoneFiles = new UpsLocalRatingZoneFileEntity();
@@ -45,17 +45,29 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             foreach (Type surchargeType in surchargeTypes)
             {
 
-                if (retreivedSurcharges.Where(retrievedSurcharge => retrievedSurcharge.GetType() == surchargeType).None())
+                if (retreivedSurcharges.Where(retrievedSurcharge => retrievedSurcharge.GetType().FullName == surchargeType.FullName).None())
                 {
                     missingSurchargeMessage.AppendLine($"Missing {surchargeType.FullName}");
                 }
             }
 
-            string message = missingSurchargeMessage.ToString();
-            output.WriteLine(message);
-            Assert.Empty(message);
+            if (missingSurchargeMessage.Length>0)
+            {
+                output.WriteLine(missingSurchargeMessage.ToString());
+            }
+            else
+            {
+                output.WriteLine($"All {surchargeTypes.Count()} interfaces accounted for.");
+            }
+
+            Assert.Empty(missingSurchargeMessage.ToString());
             Assert.Equal(surchargeTypes.Count(), retreivedSurcharges.Count);
             Assert.Equal(surchargeTypes.Count(), retreivedSurcharges.Distinct().Count());
+        }
+
+        private static bool TypeImplementsISurcharge(Type type)
+        {
+            return type.GetInterfaces().Any(i => i.FullName == "ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges.IUpsSurcharge");
         }
 
         [Fact]

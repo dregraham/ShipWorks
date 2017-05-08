@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Shared
     {
         public static IEnumerable<Assembly> GetAssemblies()
         {
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = GetAssemblyPath();
             var comparison = StringComparison.InvariantCultureIgnoreCase;
 
             return Directory.GetFiles(path, "*.dll")
@@ -21,6 +21,14 @@ namespace ShipWorks.Tests.Shared
                 .Where(n => Path.GetFileName(n).IndexOf("Tests", 0, StringComparison.InvariantCultureIgnoreCase) == -1)
                 .Select(dll => Assembly.LoadFile(dll))
                 .OrderBy(a => a.FullName);
+        }
+
+        public static string GetAssemblyPath()
+        {
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
         }
     }
 }
