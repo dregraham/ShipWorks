@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Get_AllIUpsSurchargesAreReturned()
         {
-            Assembly shippingAssembly = AssemblyProvider.GetAssemblies().SingleOrDefault(a => a.FullName.StartsWith("ShipWorks.Shipping,"));
+            Assembly shippingAssembly = AssemblyProvider.GetAssemblies().SingleOrDefault(a => a.ManifestModule.Name == "ShipWorks.Shipping.dll");
             Assert.NotNull(shippingAssembly);
 
             var iSurchargeType = typeof(IUpsSurcharge);

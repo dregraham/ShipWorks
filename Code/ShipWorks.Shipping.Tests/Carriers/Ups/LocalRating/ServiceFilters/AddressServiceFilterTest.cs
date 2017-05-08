@@ -48,7 +48,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             mock.Mock<IResidentialDeterminationService>()
                 .Setup(r => r.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
                 .Returns(true);
-            UpsShipmentEntity shipment = new UpsShipmentEntity() { Shipment = new ShipmentEntity() };
+            UpsShipmentEntity shipment = new UpsShipmentEntity()
+            {
+                Shipment = new ShipmentEntity()
+                {
+                    OriginCountryCode = "US",
+                    ShipCountryCode = "CA"
+                }
+            };
 
             AddressServiceFilter testObject = mock.Create<AddressServiceFilter>();
             IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, upsServices);
