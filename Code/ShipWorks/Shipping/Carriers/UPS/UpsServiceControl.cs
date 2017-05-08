@@ -396,6 +396,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        protected override void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            base.OnReturnShipmentChanged(sender, e);
+
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
         /// Synchronizes the selected rate in the rate control.
         /// </summary>
         public override void SyncSelectedRate()
