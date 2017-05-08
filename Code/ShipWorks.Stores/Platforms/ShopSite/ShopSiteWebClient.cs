@@ -21,12 +21,62 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         // The store we are connecting to
         private readonly IShopSiteStoreEntity shopSiteStore;
 
+        private const string storeSettingMissingErrorMessage = "The ShopSite {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
+
         /// <summary>
         /// Create this instance of the web client for connecting to the specified store
         /// </summary>
         public ShopSiteWebClient(IShopSiteStoreEntity store)
         {
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+
+            ValidateApiAccessData(store);
+        }
+
+        /// <summary>
+        /// Validate API access data
+        /// </summary>
+        private static void ValidateApiAccessData(IShopSiteStoreEntity store)
+        {
+            if (store.Authentication == ShopSiteAuthenticationType.Basic)
+            {
+                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "CGI Path"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.Username))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Merchant ID"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.Password))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Password"));
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Authorization URL"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.OauthClientID))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Client ID"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.OauthSecretKey))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Secret Key"));
+                }
+
+                if (string.IsNullOrWhiteSpace(store?.AuthorizationCode))
+                {
+                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Authorization Code"));
+                }
+            }
         }
 
         /// <summary>
@@ -65,9 +115,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.Variables.Add("version", "12.0");
 
             // Set the uri and parameters
-            postRequest.Uri = GetShopSiteApiUri();
+            postRequest.Uri = new Uri(shopSiteStore.ApiUrl);
             postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
-            postRequest.Credentials = new NetworkCredential(shopSiteStore.Username, SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username));
 
             // Log the request
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.ShopSite, action);
@@ -105,46 +154,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopSiteException));
             }
-        }
-
-        /// <summary>
-        /// Get the URI to use to connect to the ShopSite CGI script
-        /// </summary>
-        public Uri GetShopSiteApiUri()
-        {
-            string requiredScheme = shopSiteStore.RequireSSL ? "https://" : "http://";
-
-            // If Url scheme not set, default to https
-            string url = shopSiteStore.ApiUrl;
-            if (url.IndexOf(Uri.SchemeDelimiter) == -1)
-            {
-                url = requiredScheme + url;
-            }
-
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                throw new ShopSiteException("The ShopSite CGI URl is not valid.");
-            }
-
-            Uri uri = new Uri(url);
-
-            // Validate the secure scheme
-            if (shopSiteStore.RequireSSL && uri.Scheme != Uri.UriSchemeHttps)
-            {
-                throw new ShopSiteException(
-                    "The ShopSite Module URL protocol you entered is (" + uri.Scheme + "://).  For your security,\n" +
-                    "you are required to use the (https://) protocol.");
-            }
-
-            // Validate the unsecure scheme
-            if (!shopSiteStore.RequireSSL && uri.Scheme != Uri.UriSchemeHttp)
-            {
-                throw new ShopSiteException(
-                    "The ShopSite Module URL protocol you entered is (" + uri.Scheme + "://).  To connect unsecure,\n" +
-                    "you are required to use the (http://) protocol.");
-            }
-
-            return uri;
         }
     }
 }

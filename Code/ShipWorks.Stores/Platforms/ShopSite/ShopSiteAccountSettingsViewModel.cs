@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
@@ -26,13 +27,16 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private string legacyMerchantID;
         private string legacyPassword;
         private bool legacyUseUnsecureHttp;
+        private readonly IShopSiteIdentifier identifier;
+        private ShopSiteAuthenticationType authenticationType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper)
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier)
         {
             this.messageHelper = messageHelper;
+            this.identifier = identifier;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
@@ -40,6 +44,16 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// The property has changed
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Authentication type to use for ShopSite requests
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShopSiteAuthenticationType AuthenticationType
+        {
+            get { return authenticationType; }
+            private set { handler.Set(nameof(AuthenticationType), ref authenticationType, value); }
+        }
 
         /// <summary>
         /// Url for the API
@@ -96,6 +110,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             LegacyPassword = SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username);
             LegacyCgiUrl = shopSiteStore.ApiUrl;
             LegacyUseUnsecureHttp = !shopSiteStore.RequireSSL;
+            AuthenticationType = shopSiteStore.Authentication;
         }
 
         /// <summary>
@@ -141,7 +156,10 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             shopSiteStore.Username = LegacyMerchantID;
             shopSiteStore.Password = SecureText.Encrypt(LegacyPassword, LegacyMerchantID);
+
             shopSiteStore.ApiUrl = url;
+            identifier.Set(shopSiteStore, url);
+
             shopSiteStore.RequireSSL = !LegacyUseUnsecureHttp;
 
             if (shopSiteStore.Fields[(int)ShopSiteStoreFieldIndex.Username].IsChanged ||

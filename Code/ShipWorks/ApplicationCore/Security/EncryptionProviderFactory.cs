@@ -4,6 +4,9 @@ using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.Security
 {
+    /// <summary>
+    /// Encryption provider for various other classes.
+    /// </summary>
     public class EncryptionProviderFactory : IEncryptionProviderFactory
     {
         private readonly IIndex<CipherContext, ICipherKey> cipherKeyFactory;
@@ -83,6 +86,15 @@ namespace ShipWorks.ApplicationCore.Security
         /// Creates the BigCommerce encryption provider
         /// </summary>
         public IEncryptionProvider CreateBigCommerceEncryptionProvider()
+        {
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
+            return new AesEncryptionProvider(cipherKey);
+        }
+
+        /// <summary>
+        /// Creates the ShopSite encryption provider
+        /// </summary>
+        public IEncryptionProvider CreateShopSiteEncryptionProvider()
         {
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
             return new AesEncryptionProvider(cipherKey);

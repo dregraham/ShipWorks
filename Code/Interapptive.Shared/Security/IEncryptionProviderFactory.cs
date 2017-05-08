@@ -45,5 +45,10 @@
         /// Creates the BigCommerce encryption provider
         /// </summary>
         IEncryptionProvider CreateBigCommerceEncryptionProvider();
+
+        /// <summary>
+        /// Creates the ShopSite encryption provider
+        /// </summary>
+        IEncryptionProvider CreateShopSiteEncryptionProvider();
     }
 }

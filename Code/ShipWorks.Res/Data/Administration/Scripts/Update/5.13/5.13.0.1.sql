@@ -2,20 +2,40 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-SET XACT_ABORT ON
+PRINT N'Altering [dbo].[BigCommerceStore]'
 GO
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'BigCommerceAuthentication') IS NULL
+ALTER TABLE [dbo].[BigCommerceStore] ADD[BigCommerceAuthentication] [int] NOT NULL CONSTRAINT [DF_BigCommerceStore_BigCommerceAuthentication] DEFAULT ((1))
+IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'OauthClientId') IS NULL
+ALTER TABLE [dbo].[BigCommerceStore] ADD[OauthClientId] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_OauthClientId] DEFAULT ('')
+IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'OauthToken') IS NULL
+ALTER TABLE [dbo].[BigCommerceStore] ADD[OauthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_OauthToken] DEFAULT ('')
+IF COL_LENGTH(N'[dbo].[BigCommerceStore]', N'Identifier') IS NULL
+ALTER TABLE [dbo].[BigCommerceStore] ADD[Identifier] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_BigCommerceStore_Identifier] DEFAULT ('')
 GO
-PRINT N'Altering [dbo].[ShopSiteStore]'
+PRINT N'Creating extended properties'
 GO
-ALTER TABLE [dbo].[ShopSiteStore] ADD
-[Authentication] [int] NOT NULL CONSTRAINT [DF_ShopSiteStore_AuthenticationType] DEFAULT ((0)),
-[OauthClientID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShopSiteStore_ClientID] DEFAULT (''),
-[OauthSecretKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShopSiteStore_SecretKey] DEFAULT (''),
-[Identifier] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShopSiteStore_AuthorizationUrl] DEFAULT (''),
-[AuthorizationCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShopSiteStore_AuthorizationCode] DEFAULT ('')
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditFormat', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'BigCommerceAuthentication'))
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'BigCommerceAuthentication'
 GO
-EXEC sp_rename N'[dbo].[ShopSiteStore].[CgiUrl]', N'ApiUrl', N'COLUMN'
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditName', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'BigCommerceAuthentication'))
+EXEC sp_addextendedproperty N'AuditName', N'BigCommerce Authentication Type', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'BigCommerceAuthentication'
 GO
-UPDATE ShopSiteStore set [Identifier] = [ApiUrl]
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditFormat', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthClientId'))
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthClientId'
+GO
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditName', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthClientId'))
+EXEC sp_addextendedproperty N'AuditName', N'OAuth Client ID', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthClientId'
+GO
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditFormat', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'))
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'
+GO
+IF NOT EXISTS (SELECT 1 FROM fn_listextendedproperty(N'AuditName', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'))
+EXEC sp_addextendedproperty N'AuditName', N'OAuth Token', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'OauthToken'
+GO
+
+UPDATE BigCommerceStore SET BigCommerceAuthentication = 0
+GO
+
+ALTER TABLE [dbo].[BigCommerceStore] DROP CONSTRAINT [DF_BigCommerceStore_Identifier]
 GO

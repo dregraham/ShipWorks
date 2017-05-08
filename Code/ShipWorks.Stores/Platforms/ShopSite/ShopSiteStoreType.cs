@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -11,9 +8,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.ShopSite;
-using ShipWorks.UI;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -25,13 +19,15 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     {
         private readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+        private readonly IShopSiteIdentifier identifier;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShopSiteStoreType(StoreEntity store, 
             IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
+            IShopSiteIdentifier identifier)
             : base(store)
         {
             if (store != null && !(store is ShopSiteStoreEntity))
@@ -41,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             this.accountSettingsControlIndex = accountSettingsControlIndex;
             this.downloaderFactory = downloaderFactory;
+            this.identifier = identifier;
         }
 
         /// <summary>
@@ -57,6 +54,11 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             shopSiteStore.RequireSSL = true;
             shopSiteStore.RequestTimeout = 60;
             shopSiteStore.DownloadPageSize = 50;
+            shopSiteStore.Authentication = ShopSiteAuthenticationType.Oauth;
+            shopSiteStore.AuthorizationCode = string.Empty;
+            shopSiteStore.Identifier = string.Empty;
+            shopSiteStore.OauthClientID = string.Empty;
+            shopSiteStore.OauthSecretKey = string.Empty;
 
             return shopSiteStore;
         }
@@ -93,39 +95,16 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        override public StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.ShopSite;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.ShopSite;
 
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        override protected string InternalLicenseIdentifier
-        {
-            get
-            {
-                string identifier = ((ShopSiteStoreEntity) Store).ApiUrl.ToLowerInvariant();
-
-                // Remove the db_xml.cgi part
-                identifier = identifier.Replace("db_xml.cgi", "");
-
-                return identifier;
-            }
-        }
+        protected override string InternalLicenseIdentifier => identifier.Get((ShopSiteStoreEntity) Store);
 
         /// <summary>
         /// Initial download policy of the store
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy => new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber);
     }
 }
