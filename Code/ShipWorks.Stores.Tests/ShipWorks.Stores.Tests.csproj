@@ -240,6 +240,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdaterTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSignerTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartShipmentUploadTaskTest.cs" />
