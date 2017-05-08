@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             Assert.NotNull(createdOrder);
             Assert.Equal("5", createdOrder.CustomerOrderID);
             Assert.Equal("6", createdOrder.PurchaseOrderID);
-            Assert.Equal(5, createdOrder.OrderNumber);
+            Assert.Equal(6, createdOrder.OrderNumber);
             mock.Mock<IWalmartWebClient>().Verify(c=>c.GetOrders(It.IsAny<WalmartStoreEntity>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -160,8 +160,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             }
 
             Assert.Equal(2, createdOrders.Count);
-            Assert.Equal(1, createdOrders.Count(o => o.OrderNumber == 5));
-            Assert.Equal(1, createdOrders.Count(o => o.OrderNumber == 42));
+            Assert.Equal(1, createdOrders.Count(o => o.OrderNumber == 6));
+            Assert.Equal(1, createdOrders.Count(o => o.OrderNumber == 55));
         }
 
         private static ordersListType CreateSingleOrderListType(string customerOrderId, string purchaseOrderId, string nextCursor)

@@ -308,6 +308,7 @@
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderIdentifier.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
