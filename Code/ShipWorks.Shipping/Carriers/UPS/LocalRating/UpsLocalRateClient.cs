@@ -45,39 +45,67 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             apiLog = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate");
         }
 
-
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
         public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
-            List<UpsServiceRate> localRates = CalculateRates(shipment);
+            StringBuilder logMessage = new StringBuilder();
 
-            return localRates.Any() ? 
-                GenericResult.FromSuccess(localRates) : 
-                upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+            List<UpsLocalServiceRate> localRates = CalculateRates(shipment, logMessage).ToList();
+
+            GenericResult<List<UpsServiceRate>> rateResult;
+            if (localRates.Any())
+            {
+                localRates.ForEach(rate=>rate.Log(logMessage));
+                List<UpsServiceRate> serviceRates = localRates.Cast<UpsServiceRate>().OrderBy(r => r.Amount).ToList();
+                rateResult = GenericResult.FromSuccess(serviceRates);
+            }
+            else
+            {
+                logMessage.AppendLine("No local rates available. Delegating to API.");
+                rateResult = upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+            }
+
+            apiLog.LogResponse(logMessage.ToString(), "txt");
+            
+            return rateResult;
         }
 
         /// <summary>
         /// Gets rates for the given <paramref name="shipment" />
         /// </summary>
-        private List<UpsServiceRate> CalculateRates(ShipmentEntity shipment)
+        private IEnumerable<UpsLocalServiceRate> CalculateRates(ShipmentEntity shipment, StringBuilder logMessage)
         {
             try
             {
-                IEnumerable<UpsServiceType> serviceTypes = GetEligibleServices(shipment);
+                IEnumerable<UpsLocalServiceRate> upsLocalServiceRates = 
+                    rateRepository.GetServiceRates(shipment.Ups).ToList();
 
-                IEnumerable<UpsLocalServiceRate> upsLocalServiceRates =
-                    rateRepository.GetServiceRates(shipment.Ups, serviceTypes).ToList();
+                upsLocalServiceRates = ApplyServiceFilters(shipment, upsLocalServiceRates);
 
                 ApplyRateSurcharges(shipment, upsLocalServiceRates);
 
-                return upsLocalServiceRates.Cast<UpsServiceRate>().OrderBy(r => r.Amount).ToList();
+                return upsLocalServiceRates;
             }
-            catch (UpsLocalRatingException)
+            catch (UpsLocalRatingException ex)
             {
-                return new List<UpsServiceRate>();
+                logMessage.AppendLine($"Error calculating local rates:\n{ex.Message}");
+                return new List<UpsLocalServiceRate>();
             }
+        }
+
+        private IEnumerable<UpsLocalServiceRate> ApplyServiceFilters(ShipmentEntity shipment,
+            IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
+        {
+            IEnumerable<UpsServiceType> eligibleServices = upsLocalServiceRates.Select(r => r.Service);
+
+            foreach (IServiceFilter serviceFilter in serviceFilters)
+            {
+                eligibleServices = serviceFilter.GetEligibleServices(shipment.Ups, eligibleServices);
+            }
+
+            return upsLocalServiceRates.Where(r => eligibleServices.Contains(r.Service));
         }
 
         /// <summary>
@@ -89,42 +117,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsLocalRatingZoneFileEntity zoneFile = rateRepository.GetLatestZoneFile();
             IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges, zoneFile);
 
-            StringBuilder sb = new StringBuilder();
-
             foreach (UpsLocalServiceRate serviceRate in upsLocalServiceRates)
             {
                 foreach (IUpsSurcharge upsSurcharge in upsSurcharges)
                 {
                     upsSurcharge.Apply(shipment.Ups, serviceRate);
                 }
-
-                serviceRate.Log(sb);
             }
-
-            apiLog.LogResponse(sb.ToString(), "txt");
-        }
-
-        /// <summary>
-        /// Gets the eligible services.
-        /// </summary>
-        private IEnumerable<UpsServiceType> GetEligibleServices(ShipmentEntity shipment)
-        {
-            IEnumerable<UpsServiceType> eligibleServieTypes = new[]
-            {
-                UpsServiceType.UpsGround,
-                UpsServiceType.Ups3DaySelect,
-                UpsServiceType.Ups2DayAir,
-                UpsServiceType.Ups2DayAirAM,
-                UpsServiceType.UpsNextDayAirSaver,
-                UpsServiceType.UpsNextDayAir
-            };
-
-            foreach (IServiceFilter serviceFilter in serviceFilters)
-            {
-                eligibleServieTypes = serviceFilter.GetEligibleServices(shipment.Ups, eligibleServieTypes);
-            }
-
-            return eligibleServieTypes;
         }
     }
 }

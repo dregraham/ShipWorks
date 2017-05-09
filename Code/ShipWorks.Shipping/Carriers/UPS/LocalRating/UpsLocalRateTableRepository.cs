@@ -109,9 +109,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
+        /// Get all of the UpsLocalServiceRates applicable to the shipment
         /// </summary>
-        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes)
+        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
         {
             string origin = shipment.Shipment.OriginPostalCode;
             string destination = shipment.Shipment.ShipPostalCode;
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                                                         z.DestinationZipFloor <= destinationPostalCode &&
                                                         z.DestinationZipCeiling >= destinationPostalCode).Select(z => z.Zone).ToArray();
             
-            // We dont have zone info for the given origin/destination combo
+            // We don't have zone info for the given origin/destination combo
             if (zones == null || zones.None())
             {
                 throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin} and destination postal code {destination}.");
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
             // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
-            Dictionary < UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
+            Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
 
             foreach (UpsPackageEntity package in shipment.Packages)
             {
@@ -161,11 +161,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 
                 if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
                 {
-                    rates = GetLetterRates(rateTable, serviceTypes, zones);
+                    rates = GetLetterRates(rateTable, zones);
                 }
                 else
                 {
-                    rates = GetPackageRates(rateTable, serviceTypes, zones, package);
+                    rates = GetPackageRates(rateTable, zones, package);
                 }
 
                 AddPackageRateToResult(result, rates);
@@ -195,14 +195,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone/servicetypes
         /// </summary>
-        private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, IEnumerable<string> zones, UpsPackageEntity package)
+        private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, IEnumerable<string> zones, UpsPackageEntity package)
         {
             if (package.TotalWeight >= 150)
             {
                 // Get the base rate at 150
-                IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate.Where(r => zones.Contains(r.Zone) &&
-                                                                                              serviceTypes.Contains((UpsServiceType) r.Service) &&
-                                                                                              r.WeightInPounds == 150);
+                IEnumerable<UpsPackageRateEntity> baseRates = rateTable.UpsPackageRate
+                    .Where(r => zones.Contains(r.Zone) && r.WeightInPounds == 150).ToList();
+
                 // Add the price per pound for anything over 150
                 Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
                 foreach (UpsPackageRateEntity baseRate in baseRates)
@@ -220,19 +220,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 return result;
             }
-            IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate.Where(r => zones.Contains(r.Zone) &&
-                                                                                          serviceTypes.Contains((UpsServiceType) r.Service)&&
-                                                                                          r.WeightInPounds == package.BillableWeight);
+            IEnumerable<UpsPackageRateEntity> rates = rateTable.UpsPackageRate
+                .Where(r => zones.Contains(r.Zone) && r.WeightInPounds == package.BillableWeight).ToList();
             return rates.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
         }
 
         /// <summary>
         /// Get all the letter rates from the rate table matching the service/zone
         /// </summary>
-        private static Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<UpsServiceType> serviceTypes, IEnumerable<string> zones)
+        private static Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, IEnumerable<string> zones)
         {
-            IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => zones.Contains(r.Zone) &&
-                                                                                        serviceTypes.Contains((UpsServiceType)r.Service));
+            IEnumerable<UpsLetterRateEntity> rates = rateTable.UpsLetterRate.Where(r => zones.Contains(r.Zone));
             return rates.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
         }
 
