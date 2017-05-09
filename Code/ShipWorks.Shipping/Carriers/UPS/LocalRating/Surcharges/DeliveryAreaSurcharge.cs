@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
@@ -15,17 +20,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
     public class DeliveryAreaSurcharge : IUpsSurcharge
     {
         private readonly IDictionary<UpsSurchargeType, double> surcharges;
-        private readonly IUpsLocalRatingZoneFileEntity zoneFile;
+        private readonly UpsLocalRatingZoneFileEntity zoneFile;
         private readonly IResidentialDeterminationService residentialDeterminationService;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeliveryAreaSurcharge"/> class.
         /// </summary>
         public DeliveryAreaSurcharge(IDictionary<UpsSurchargeType, double> surcharges,
-            IUpsLocalRatingZoneFileEntity zoneFile, IResidentialDeterminationService residentialDeterminationService)
+            UpsLocalRatingZoneFileEntity zoneFile, IResidentialDeterminationService residentialDeterminationService, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.zoneFile = zoneFile;
             this.residentialDeterminationService = residentialDeterminationService;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.surcharges = surcharges;
         }
 
@@ -38,10 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         {
             int destinationZip = int.Parse(shipment.Shipment.ShipPostalCode);
 
-            IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge =
-                zoneFile.UpsLocalRatingDeliveryAreaSurcharge.FirstOrDefault(
-                    das => das.DestinationZip == destinationZip);
-
+            IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge = GetDeliveryAreaSurcharge(destinationZip);
             bool isResidential = residentialDeterminationService.IsResidentialAddress(shipment.Shipment);
             bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
 
@@ -71,6 +75,33 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the delivery area surcharge from the database
+        /// </summary>
+        private IUpsLocalRatingDeliveryAreaSurchargeEntity GetDeliveryAreaSurcharge(int destinationZip)
+        {
+            if (zoneFile.UpsLocalRatingDeliveryAreaSurcharge.All(d => d.DestinationZip != destinationZip))
+            {
+                RelationPredicateBucket bucket = new RelationPredicateBucket();
+                bucket.PredicateExpression.Add(UpsLocalRatingDeliveryAreaSurchargeFields.DestinationZip == destinationZip);
+
+                try
+                {
+                    using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                    {
+                        adapter.FetchEntityCollection(zoneFile.UpsLocalRatingDeliveryAreaSurcharge, bucket);
+                    }
+                }
+                catch (Exception ex) when (ex is ORMException || ex is SqlException)
+                {
+                    throw new UpsLocalRatingException($"Error retrieving collection:\r\n\r\n{ex.Message}", ex);
+                }
+            }
+
+            return zoneFile.UpsLocalRatingDeliveryAreaSurcharge.FirstOrDefault(
+                das => das.DestinationZip == destinationZip);
         }
 
         /// <summary>

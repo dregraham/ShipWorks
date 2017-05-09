@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
@@ -72,8 +73,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
+            var sqlAdapter = mock.Mock<ISqlAdapterFactory>();
+
             residentialDeterminationService = mock.CreateMock<IResidentialDeterminationService>();
-            testObject = new DeliveryAreaSurcharge(surcharges, zoneFile, residentialDeterminationService.Object);
+            testObject = new DeliveryAreaSurcharge(surcharges, zoneFile, residentialDeterminationService.Object, sqlAdapter.Object);
         }
 
         [Fact]

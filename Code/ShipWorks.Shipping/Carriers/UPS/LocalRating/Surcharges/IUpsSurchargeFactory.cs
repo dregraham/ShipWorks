@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Gets the specified surcharges to be applied to a shipment
         /// </summary>
-        IEnumerable<IUpsSurcharge> Get(IDictionary<UpsSurchargeType, double> surchargeLookup, IUpsLocalRatingZoneFileEntity zoneFileEntity);
+        IEnumerable<IUpsSurcharge> Get(IDictionary<UpsSurchargeType, double> surchargeLookup, UpsLocalRatingZoneFileEntity zoneFileEntity);
     }
 }
