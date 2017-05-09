@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
         /// </summary>
-        IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes);
+        IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment);
 
         /// <summary>
         /// Get the surcharges for the given account

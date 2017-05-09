@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
         /// </summary>
-        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> serviceTypes)
+        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
         {
             string origin = shipment.Shipment.OriginPostalCode;
             string destination = shipment.Shipment.ShipPostalCode;
@@ -141,7 +141,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             UpsRateTableEntity rateTable = Get(accountRepository.GetAccount(shipment.Shipment));
-            UpsServiceType[] services = serviceTypes.ToArray();
             string[] zonesArray = zones.ToArray();
 
             // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
@@ -153,11 +152,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 
                 if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
                 {
-                    rates = GetLetterRates(rateTable, services, zonesArray);
+                    rates = GetLetterRates(rateTable, zonesArray);
                 }
                 else
                 {
-                    rates = GetPackageRates(rateTable, services, zonesArray, package);
+                    rates = GetPackageRates(rateTable, zonesArray, package);
                 }
 
                 AddPackageRateToResult(result, rates);
@@ -200,14 +199,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone/servicetypes
         /// </summary>
-        private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, UpsServiceType[] serviceTypes, string[] zones, UpsPackageEntity package)
+        private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, string[] zones, UpsPackageEntity package)
         {
             if (package.TotalWeight >= 150)
             {
-                PopulatePackageRates(rateTable.UpsPackageRate, zones, serviceTypes.Cast<int>(), 150);
+                PopulatePackageRates(rateTable.UpsPackageRate, zones, 150);
 
                 // Add the price per pound for anything over 150
-                PopulatePricePerPoundRates(rateTable.UpsPricePerPound, zones, serviceTypes.Cast<int>());
+                PopulatePricePerPoundRates(rateTable.UpsPricePerPound, zones);
                 Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
                 foreach (UpsPackageRateEntity baseRate in rateTable.UpsPackageRate)
                 {
@@ -225,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 return result;
             }
-            PopulatePackageRates(rateTable.UpsPackageRate, zones, serviceTypes.Cast<int>(), package.BillableWeight);
+            PopulatePackageRates(rateTable.UpsPackageRate, zones, package.BillableWeight);
             
             return rateTable.UpsPackageRate.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
         }
@@ -233,22 +232,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Populate the price per pound collection
         /// </summary>
-        private void PopulatePricePerPoundRates(EntityCollection<UpsPricePerPoundEntity> pricePerPoundRates, IEnumerable<string> zones, IEnumerable<int> services)
+        private void PopulatePricePerPoundRates(EntityCollection<UpsPricePerPoundEntity> pricePerPoundRates, IEnumerable<string> zones)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPricePerPoundFields.Service, null, services));
-            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsPricePerPoundFields.Zone, null, zones));
+            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPricePerPoundFields.Zone, null, zones));
             FetchCollection(pricePerPoundRates, bucket);
         }
 
         /// <summary>
         /// Populate the package rates
         /// </summary>
-        private void PopulatePackageRates(EntityCollection<UpsPackageRateEntity> packageRates, IEnumerable<string> zones, IEnumerable<int> services, int weight)
+        private void PopulatePackageRates(EntityCollection<UpsPackageRateEntity> packageRates, IEnumerable<string> zones, int weight)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.PredicateExpression.Add(UpsPackageRateFields.WeightInPounds == weight);
-            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsPackageRateFields.Service, null, services));
             bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
             FetchCollection(packageRates, bucket);
         }
@@ -256,20 +253,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Populate the letter rates
         /// </summary>
-        private void PopulateLetterRates(EntityCollection<UpsLetterRateEntity> letterRates, IEnumerable<string> zones, IEnumerable<int> services)
+        private void PopulateLetterRates(EntityCollection<UpsLetterRateEntity> letterRates, IEnumerable<string> zones)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPackageRateFields.Service, null, services));
-            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
+            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
             FetchCollection(letterRates, bucket);
         }
 
         /// <summary>
         /// Get all the letter rates from the rate table matching the service/zone
         /// </summary>
-        private Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, UpsServiceType[] serviceTypes, string[] zones)
+        private Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, string[] zones)
         {
-            PopulateLetterRates(rateTable.UpsLetterRate, zones, serviceTypes.Cast<int>());
+            PopulateLetterRates(rateTable.UpsLetterRate, zones);
             return rateTable.UpsLetterRate.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
         }
 
