@@ -226,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             }
 
             store.ApiUrl = storeUrlToCheck;
-            identifier.Set(store, storeUrlToCheck);
+            identifier.Set(store);
 
             return GenericResult.FromSuccess(storeUrlToCheck);
         }

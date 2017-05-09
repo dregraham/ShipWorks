@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             var store = new BigCommerceStoreEntity { Identifier = "Foo" };
             var testObject = mock.Create<BigCommerceIdentifier>();
 
-            var result = testObject.Set(store, "Bar");
+            var result = testObject.Set(store);
 
             Assert.Equal("Foo", result.Identifier);
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             var store = new BigCommerceStoreEntity { ApiUrl = input };
             var testObject = mock.Create<BigCommerceIdentifier>();
 
-            testObject.Set(store, "Bar");
+            testObject.Set(store);
 
             encryptionProvider.Verify(x => x.Encrypt(cleansed));
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             var store = new BigCommerceStoreEntity { ApiUrl = "stuff" };
             var testObject = mock.Create<BigCommerceIdentifier>();
 
-            var result = testObject.Set(store, "Bar");
+            var result = testObject.Set(store);
 
             Assert.Equal(input, result.Identifier);
         }
