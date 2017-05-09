@@ -65,7 +65,7 @@ namespace Interapptive.Shared.ComponentRegistration.Ordering
         private static IComponentRegistration CreateOrderedRegistration<TService>()
         {
             return RegistrationBuilder
-                .ForDelegate((c, ps) => OrderedResolutionExtensions.ResolveOrdered<TService>((IComponentContext) c, (IEnumerable<Parameter>) ps))
+                .ForDelegate((c, ps) => c.ResolveOrdered<TService>(ps))
                 .ExternallyOwned()
                 .CreateRegistration();
         }

@@ -27,7 +27,7 @@ namespace Interapptive.Shared.ComponentRegistration.Ordering
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, string key, IComparable order)
         {
-            return OrderBy<TLimit, TActivatorData, TRegistrationStyle>(registration, key, _ => order);
+            return registration.OrderBy(key, _ => order);
         }
 
         /// <summary>
@@ -56,8 +56,9 @@ namespace Interapptive.Shared.ComponentRegistration.Ordering
         public static IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> OrderByMetadata<TLimit, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> registration, Type service)
         {
-            OrderAttribute orderAttribute = Enumerable.OfType<OrderAttribute>(registration.ActivatorData.ImplementationType
-                    .GetCustomAttributes(typeof(OrderAttribute), false))
+            OrderAttribute orderAttribute = registration.ActivatorData.ImplementationType
+                .GetCustomAttributes(typeof(OrderAttribute), false)
+                .OfType<OrderAttribute>()
                 .Where(x => x.Service == service)
                 .FirstOrDefault();
 
