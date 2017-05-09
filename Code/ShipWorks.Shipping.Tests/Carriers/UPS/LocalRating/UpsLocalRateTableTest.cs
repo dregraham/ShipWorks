@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
@@ -15,10 +12,8 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Syncfusion.XlsIO;
 
@@ -205,8 +200,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void LoadRates_ThrowsUpsLocalRatingException_WhenStreamIsNull()
         {
-            var testObject = mock.Create<UpsLocalRateTable>();
-
             var exception = Assert.Throws<UpsLocalRatingException>(() => testObject.LoadRates(null));
             Assert.Equal("Error loading rate file from stream.", exception.Message);
         }
@@ -225,12 +218,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     var reader2 = mock.CreateMock<IUpsRateExcelReader>();
                     mock.Provide<IEnumerable<IUpsRateExcelReader>>(new[] {reader1.Object, reader2.Object});
 
-                    var testObject = mock.Create<UpsLocalRateTable>();
+                    var localTestObject = mock.Create<UpsLocalRateTable>();
+                    localTestObject.LoadRates(stream);
 
-                    testObject.LoadRates(stream);
-
-                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
-                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), localTestObject), Times.Once);
+                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), localTestObject), Times.Once);
                 }
             }
         }
@@ -249,12 +241,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     var reader2 = mock.CreateMock<IUpsZoneExcelReader>();
                     mock.Provide<IEnumerable<IUpsZoneExcelReader>>(new[] { reader1.Object, reader2.Object });
 
-                    var testObject = mock.Create<UpsLocalRateTable>();
+                    var localTestObject = mock.Create<UpsLocalRateTable>();
+                    localTestObject.LoadZones(stream);
 
-                    testObject.LoadZones(stream);
-
-                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
-                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), testObject), Times.Once);
+                    reader1.Verify(r => r.Read(It.IsAny<IWorksheets>(), localTestObject), Times.Once);
+                    reader2.Verify(r => r.Read(It.IsAny<IWorksheets>(), localTestObject), Times.Once);
                 }
             }
         }
@@ -275,7 +266,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                         .Setup(r => r.Save(It.IsAny<UpsLocalRatingZoneFileEntity>()))
                         .Callback<UpsLocalRatingZoneFileEntity>(entity => zoneFileEntity = entity);
 
-                    var testObject = mock.Create<UpsLocalRateTable>();
                     testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity> { new UpsLocalRatingDeliveryAreaSurchargeEntity() });
                     testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity> { new UpsLocalRatingZoneEntity() });
                     testObject.LoadZones(stream);
@@ -289,13 +279,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void LoadZones_ThrowsUpsLocalRatingException_WhenStreamIsNull()
         {
-            var testObject = mock.Create<UpsLocalRateTable>();
-
             var exception = Assert.Throws<UpsLocalRatingException>(() => testObject.LoadZones(null));
             Assert.Equal("Error loading zone file from stream.", exception.Message);
         }
 
-        private void ReplaceRatesAndSurcharges(UpsLocalRateTable testObject)
+        private static void ReplaceRatesAndSurcharges(UpsLocalRateTable testObject)
         {
             List<UpsPackageRateEntity> packageRates = new List<UpsPackageRateEntity> { new UpsPackageRateEntity(2) };
             List<UpsLetterRateEntity> letterRate = new List<UpsLetterRateEntity> { new UpsLetterRateEntity(3) };
