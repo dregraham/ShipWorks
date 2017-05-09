@@ -2042,8 +2042,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process the given list of shipments
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private async Task Process(IEnumerable<ShipmentEntity> shipments)
         {
             Cursor.Current = Cursors.WaitCursor;

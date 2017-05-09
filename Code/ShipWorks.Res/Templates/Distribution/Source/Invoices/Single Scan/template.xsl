@@ -17,7 +17,7 @@
     <xsl:variable name="thumbnailHeight" select="'50px'" />
 
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
@@ -181,7 +181,7 @@
           <!--
             Line Items
         -->
-          <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+          <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
 
             <tr>
 
@@ -276,7 +276,7 @@
 
           </table>
 
-          <hr size="1" align="left" style="color: lightgrey;  width:{$pageWidth}; margin: 0px 0px 5px 0px;" />
+          <div style="border-top: 1px solid grey; width:{$pageWidth}; height: 1px; margin: 0px 0px 10px 0px; *margin-bottom: 1;"></div>
 
           <!--
             Totals
@@ -334,65 +334,66 @@
             </tr>
           </table>
 
-          <div style="margin-top: 6px; margin-left: 8px; ">
+          <div style="width:{$pageWidth};">
+            <div style="margin-top: 6px; margin-left: 8px; ">
 
-            <!--
-                Shipment information and tracking
-            -->
-            <xsl:if test="count($order/Shipment[Status = 'Processed']) &gt; 0">
+              <!--
+                  Shipment information and tracking
+              -->
+              <xsl:if test="count($order/Shipment[Status = 'Processed']) &gt; 0">
 
-              <b>Shipping</b>
+                <b>Shipping</b>
+                <div style="margin: 3 0 10 8;">
+
+                  <xsl:for-each select="$order/Shipment[Status = 'Processed']">
+
+                    Shipped on <b>
+                      <xsl:value-of select="sw:ToShortDate(ShippedDate)" />
+                    </b>
+                    using <b>
+                      <xsl:value-of select="ServiceUsed" />
+                    </b>:
+
+                    <!-- Shared Snippet -->
+                    <b>
+                      <xsl:call-template name="TrackingLink" />
+                    </b>
+                    <br />
+                  </xsl:for-each>
+
+                </div>
+
+              </xsl:if>
+
+
+              <!--
+                  Notes
+              -->
+              <b>Notes</b>
               <div style="margin: 3 0 10 8;">
 
-                <xsl:for-each select="$order/Shipment[Status = 'Processed']">
+                <xsl:if test="not(count($order/Note[Visibility='Public']))">
+                  <i>None</i>
+                </xsl:if>
 
-                  Shipped on <b>
-                    <xsl:value-of select="sw:ToShortDate(ShippedDate)" />
-                  </b>
-                  using <b>
-                    <xsl:value-of select="ServiceUsed" />
-                  </b>:
-
-                  <!-- Shared Snippet -->
-                  <b>
-                    <xsl:call-template name="TrackingLink" />
-                  </b>
+                <xsl:for-each select="$order/Note[Visibility='Public']">
+                  <xsl:value-of select="Text" />
                   <br />
                 </xsl:for-each>
 
               </div>
 
-            </xsl:if>
-
-
-            <!--
-                Notes
-            -->
-            <b>Notes</b>
-            <div style="width:{$pageWidth}; margin: 3 0 10 8;">
-
-              <xsl:if test="not(count($order/Note[Visibility='Public']))">
-                <i>None</i>
-              </xsl:if>
-
-              <xsl:for-each select="$order/Note[Visibility='Public']">
-                <xsl:value-of select="Text" />
-                <br />
-              </xsl:for-each>
-
-            </div>
-
-            <b>Thank you!</b>
-            <div style="width:{$pageWidth}; margin: 3 0 10 8;">
-              Thank you for your purchase from <xsl:value-of select="Store/Address/Company" />!<br />
-              If you have questions about your order please visit us online at <a href="{Store/Address/Website}">
-                <xsl:value-of select="Store/Address/Website" />
-              </a> or email us at <a href="mailto:{Store/Address/Email}">
-                <xsl:value-of select="Store/Address/Email" />
-              </a>.
+              <b>Thank you!</b>
+              <div style="margin: 3 0 10 8;">
+                Thank you for your purchase from <xsl:value-of select="Store/Address/Company" />!<br />
+                If you have questions about your order please visit us online at <a href="{Store/Address/Website}">
+                  <xsl:value-of select="Store/Address/Website" />
+                </a> or email us at <a href="mailto:{Store/Address/Email}">
+                  <xsl:value-of select="Store/Address/Email" />
+                </a>.
+              </div>
             </div>
           </div>
-
           <!--
             This is the end of the test ensuring a single order
         -->

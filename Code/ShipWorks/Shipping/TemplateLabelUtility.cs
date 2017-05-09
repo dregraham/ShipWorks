@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using ShipWorks.ApplicationCore;
 using System.IO;
 using System.Drawing.Imaging;
+using log4net;
 
 namespace ShipWorks.Shipping
 {
@@ -14,11 +12,15 @@ namespace ShipWorks.Shipping
     /// </summary>
     public static class TemplateLabelUtility
     {
+        private static ILog log = LogManager.GetLogger(typeof(TemplateLabelUtility));
+
         /// <summary>
         /// Generate a rotated version of the label found at the specified path
         /// </summary>
         public static string GenerateRotatedLabel(RotateFlipType rotate, string originalPath)
         {
+            string newFilename = string.Empty;
+
             string rotateName = Enum.GetName(typeof(RotateFlipType), rotate);
 
             // For some reason, the "GetName" doesnt always return the right thing for this.  Probably
@@ -34,10 +36,11 @@ namespace ShipWorks.Shipping
 
             string filename = Path.GetFileNameWithoutExtension(originalPath);
             string extension = Path.GetExtension(originalPath);
-            string newFilename = filename + "-" + rotateName + extension;
+            newFilename = filename + "-" + rotateName + extension;
+            string fullNewFilenameAndPath = Path.Combine(DataPath.CurrentResources, newFilename);
 
             // If we have already create this image, dont do it again
-            if (File.Exists(Path.Combine(DataPath.CurrentResources, newFilename)))
+            if (File.Exists(fullNewFilenameAndPath))
             {
                 return newFilename;
             }
@@ -48,13 +51,71 @@ namespace ShipWorks.Shipping
                 image.RotateFlip(rotate);
 
                 // Save it out to the file
-                using (FileStream fileStream = new FileStream(Path.Combine(DataPath.CurrentResources, newFilename), FileMode.Create))
-                {
-                    image.Save(fileStream, GetImageFormat(extension));
-                }
+                SaveImageToDisk(fullNewFilenameAndPath, image, extension);
             }
 
             return newFilename;
+        }
+
+        /// <summary>
+        /// Save the image to disk
+        /// </summary>
+        private static void SaveImageToDisk(string fullFilenameAndPath, Image image, string extension)
+        {
+            int attempts = 0;
+            while (!File.Exists(fullFilenameAndPath) && attempts++ <= 10)
+            {
+                try
+                {
+                    using (FileStream fileStream = new FileStream(fullFilenameAndPath, FileMode.Create))
+                    {
+                        image.Save(fileStream, GetImageFormat(extension));
+                    }
+                    return;
+                }
+                catch (IOException ex)
+                {
+                    log.ErrorFormat($"IOException occurred while trying to save the image to disk.", ex);
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat($"Unknown exception occurred while trying to save the image to disk.", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save the image to disk
+        /// </summary>
+        public static Image LoadImageFromDisk(string fullFilenameAndPath)
+        {
+            if (!File.Exists(fullFilenameAndPath))
+            {
+                throw new FileNotFoundException("The image file was not found on disk.", fullFilenameAndPath);
+            }
+
+            int attempts = 0;
+            Exception lastException = new ArgumentException($"Unable to load image from disk: {fullFilenameAndPath}");
+
+            while (File.Exists(fullFilenameAndPath) && attempts++ <= 10)
+            {
+                try
+                {
+                    return Image.FromFile(Path.Combine(DataPath.CurrentResources, fullFilenameAndPath));
+                }
+                catch (IOException ex)
+                {
+                    lastException = ex;
+                    log.ErrorFormat($"IOException occurred while trying to load the image disk.", ex);
+                }
+                catch (Exception ex)
+                {
+                    lastException = ex;
+                    log.ErrorFormat($"Unknown exception occurred while trying to load the image to disk.", ex);
+                }
+            }
+
+            throw lastException;
         }
 
         /// <summary>

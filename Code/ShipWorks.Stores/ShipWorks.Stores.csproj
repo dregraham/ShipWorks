@@ -173,6 +173,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientEndpoints.cs" />
@@ -392,6 +393,7 @@
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderIdentifier.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />

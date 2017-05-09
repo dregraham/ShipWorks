@@ -1,4 +1,4 @@
-﻿<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
 
     <!-- Imports -->
     <xsl:import href="System\Snippets" />
@@ -32,17 +32,41 @@
 
         <style>
             body, table { <xsl:value-of select="$pageFont" /> }
+            table {
+              margin-bottom: 4px;
+              *margin-bottom: 0px;
+            }
+            div.shipping-summary {
+              border: 1px solid dimgray;
+              padding: 3px;
+            }
+            div.shipping-summary td {
+              padding: 2px;
+              *padding: 1px;
+              vertical-align: top;
+            }
+            div.shipping-summary td.details {
+              white-space: nowrap;
+              padding-left: 2px;
+            }
+            td.address-header {
+              font-weight: bold;
+              border-bottom: 1px solid dimgray;
+              background-color: #F3F3F3;
+              padding: 2px 5px;
+              *padding: 1px 5px;
+            }
         </style>
 
     </head>
     <body style="{$pageFont}">
 
         <TemplatePartition>
-                  
+
         <xsl:variable name="order" select="Customer/Order[1]" />
-        <table style="width:{$pageWidth};">
+        <table style="width: {$pageWidth};">
             <tr>
-                <td style="width:100%; color: white; background-color: #C0C0C0; text-align: center; font: bold 12pt; border: 1px solid black; padding: 1px;">
+                <td style="width:100%; color: white; background-color: #C0C0C0; text-align: center; font-weight: bold; font-size: 12pt; border: 1px solid black; padding: 1px;">
                     Invoice
                 </td>
             </tr>
@@ -51,10 +75,10 @@
         <!--
             Store Address \ Order Number
         -->
-        <table style="width:{$pageWidth}; margin: 6px 0px;">
+        <table style="width:{$pageWidth}; margin: 10px 0px; *margin: 6px 0px;">
             <tr>
 
-            <td style="width: 100%;">
+            <td style="vertical-align: top; width: 100%;">
 
                 <!-- Shared Snippet -->
                 <xsl:call-template name="StoreHeading">
@@ -64,46 +88,39 @@
             </td>
 
             <td style="vertical-align: top;">
-                <table style="border: 1px solid dimgray;">
-                <tr>
-                    <td>
+                <div class="shipping-summary">
+                  <table style="font-weight: bold;" cellspacing="0">
+                      <tr>
+                          <td>Order:</td>
+                          <td class="details">
 
-                    <table style="font-weight: bold;" cellspacing="0">
-                        <tr>
-                            <td style="padding-right: 2px; vertical-align: top;">Order:</td>
-                            <td style="white-space: nowrap;">
+                              <!-- Shared Snippet -->
+                              <xsl:call-template name="OrderNumber">
+                                  <xsl:with-param name="order" select="$order" />
+                              </xsl:call-template>
 
-                                <!-- Shared Snippet -->
-                                <xsl:call-template name="OrderNumber">
-                                    <xsl:with-param name="order" select="$order" />
-                                </xsl:call-template>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Placed:</td>
+                          <td class="details">
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-right: 2px;">Placed:</td>
-                            <td style="white-space: nowrap;">
+                              <!-- Builtin ShipWorks function -->
+                              <xsl:value-of select="sw:ToShortDate($order/Date)" />
 
-                                <!-- Builtin ShipWorks function -->
-                                <xsl:value-of select="sw:ToShortDate($order/Date)" />
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Shipping:</td>
+                          <td class="details">
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-right: 2px; vertical-align:top;">Shipping:</td>
-                            <td style="white-space: nowrap;">
+                              <!-- Builtin ShipWorks function -->
+                              <xsl:value-of select="$order/RequestedShipping" />
 
-                                <!-- Builtin ShipWorks function -->
-                                <xsl:value-of select="$order/RequestedShipping" />
-
-                            </td>
-                        </tr>
-                    </table>
-
-                    </td>
-                </tr>
-                </table>
-
+                          </td>
+                      </tr>
+                  </table>
+                </div>
             </td>
             </tr>
         </table>
@@ -118,7 +135,7 @@
 
                 <table style="width: 100%;" cellspacing="0">
                     <tr>
-                        <td style="font-weight: bold; border-bottom: 1px solid dimgray; background-color: #F3F3F3; padding: 1px 5px;">
+                        <td class="address-header">
                             Ship To
                         </td>
                     </tr>
@@ -143,7 +160,7 @@
 
                 <table style="width: 100%;" cellspacing="0">
                     <tr>
-                        <td style="font-weight: bold; border-bottom: 1px solid dimgray; background-color: #F3F3F3; padding: 1px 5px;">
+                        <td class="address-header">
                             Bill To
                         </td>
                     </tr>
@@ -169,7 +186,7 @@
         <!--
             Line Items
         -->
-        <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+        <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
 
             <tr>
 
@@ -264,17 +281,17 @@
 
         </table>
 
-        <hr size="1" align="center" style="color: lightgrey;  width:{$pageWidth}; margin: 0px 0px 5px 0px;" />
+        <div style="border-top: 1px solid grey; width:{$pageWidth}; height: 1px; margin: 0px 0px 10px 0px; *margin-bottom: 1;"></div>
 
         <!--
             Totals
         -->
         <table style="width:{$pageWidth};" cellspacing="0">
-            
-            <!-- 
+
+            <!--
                 Subtotal
             -->
-            
+
                 <tr>
                     <td style="{$orderChargeStyle}; width: 100%;">
                         Subtotal:
@@ -283,11 +300,11 @@
                         <xsl:value-of select="format-number(sum($order/Item/Total), '#,##0.00')" />
                     </td>
                 </tr>
-            
+
             <!--
                 Order Charges
             -->
-            
+
             <xsl:for-each select="$order/Charge">
                 <tr>
                     <td style="{$orderChargeStyle}; width: 100%;">
@@ -310,7 +327,7 @@
                 </td>
             </tr>
         </table>
-            
+
         <!--
             Order Information section
         -->
@@ -319,65 +336,65 @@
                 <td style="{$orderDetailHeaderStyle};">Order Information</td>
             </tr>
         </table>
-                        
+
         <div style="margin-top: 6px; margin-left: 8px; ">
-            
+
             <!--
                 Shipment information and tracking
             -->
             <xsl:if test="count($order/Shipment[Status = 'Processed']) &gt; 0">
-                
+
                 <b>Shipping</b>
                 <div style="margin: 3 0 10 8;" >
-                    
+
                     <xsl:for-each select="$order/Shipment[Status = 'Processed']">
-                        
+
                             Shipped on <b><xsl:value-of select="sw:ToShortDate(ShippedDate)" /></b>
-                            using <b><xsl:value-of select="ServiceUsed" /></b>: 
-                        
+                            using <b><xsl:value-of select="ServiceUsed" /></b>:
+
                             <!-- Shared Snippet -->
                             <b><xsl:call-template name="TrackingLink" /></b>
                             <br />
                     </xsl:for-each>
-                    
+
                 </div>
-                
+
             </xsl:if>
-                
-                
+
+
             <!--
                 Notes
             -->
             <b>Notes</b>
             <div style="width:{$pageWidth}; margin: 3 0 10 8;" >
-                
+
                 <xsl:if test="not(count($order/Note[Visibility='Public']))">
                     <i>None</i>
                 </xsl:if>
-                
+
                 <xsl:for-each select="$order/Note[Visibility='Public']">
                     <xsl:value-of select="Text" />
                     <br />
                 </xsl:for-each>
-    
-            </div>      
-            
+
+            </div>
+
             <b>Thank you!</b>
             <div style="width:{$pageWidth}; margin: 3 0 10 8;" >
                 Thank you for your purchase from <xsl:value-of select="Store/Address/Company" />!<br />
                 If you have questions about your order please visit us online at <a href="{Store/Address/Website}"><xsl:value-of select="Store/Address/Website" /></a> or email us at <a href="mailto:{Store/Address/Email}"><xsl:value-of select="Store/Address/Email" /></a>.
             </div>
         </div>
-            
+
         </TemplatePartition>
-        
-        <!-- 
+
+        <!--
             Ouput shipping label
         -->
         <xsl:variable name="labels" select="(//Primary | //Supplemental)/Label[@orientation = 'wide']" />
-        
+
         <xsl:for-each select="$labels">
-                
+
             <xsl:variable name="shipment" select="../../../.." />
 
             <TemplatePartition>
@@ -389,11 +406,11 @@
                                 <xsl:when test="$shipment/ShipmentType = 'FedEx'">
                                     <img src="{.}" style="width:576; height:384;" />
                                 </xsl:when>
-                                
+
                                 <xsl:when test="$shipment/ShipmentType = 'UPS'">
                                     <img src="{.}" style="width:576; height:384;" />
                                 </xsl:when>
-                                
+
                                 <xsl:otherwise>
                                     <img src="{.}" style="width:{@widthInches}in; height:{@heightInches}in;" />
                                 </xsl:otherwise>
@@ -401,7 +418,7 @@
                         </td>
                     </tr>
                 </table>
-                    
+
 
                 </center>
             </TemplatePartition>
@@ -416,7 +433,7 @@
         </xsl:if>
 
 </body>
-      
+
 </html>
 
 </xsl:template>

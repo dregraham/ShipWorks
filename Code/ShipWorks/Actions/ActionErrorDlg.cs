@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Common.Threading;
@@ -245,43 +247,46 @@ namespace ShipWorks.Actions
             progressItem.Starting();
             progressItem.CanCancel = false;
 
-            ActionProcessor processor = new ActionProcessor(new ActionQueueGatewayErrorList(queueList));
-            processor.ActionProcessed += (sender, e) =>
-                {
-                    if (e.Result == ActionRunnerResult.WrongComputer)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ActionProcessor processor = lifetimeScope.Resolve<IActionProcessorFactory>().CreateError(queueList);
+                processor.ActionProcessed += (sender, e) =>
                     {
-                        wrongComputerCount++;
-                    }
-
-                    else if (e.Result == ActionRunnerResult.Ran)
-                    {
-                        if (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success)
+                        if (e.Result == ActionRunnerResult.WrongComputer)
                         {
-                            successCount++;
+                            wrongComputerCount++;
                         }
-                    }
 
-                    else if (e.Result != ActionRunnerResult.Postponed)
-                    {
-                        notRanCount++;
-                    }
+                        else if (e.Result == ActionRunnerResult.Ran)
+                        {
+                            if (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success)
+                            {
+                                successCount++;
+                            }
+                        }
 
-                    // If it completed, or couldn't be run, then remove it from the list to be processed.
-                    if ((e.Result == ActionRunnerResult.Ran && (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success || e.QueueAtFinish.Status == (int) ActionQueueStatus.Error) ||
-                         (e.Result == ActionRunnerResult.WrongComputer || e.Result == ActionRunnerResult.Missing || e.Result == ActionRunnerResult.NoTasks || e.Result == ActionRunnerResult.Locked)))
-                    {
-                        queueList.Remove(e.QueueID);
-                    }
+                        else if (e.Result != ActionRunnerResult.Postponed)
+                        {
+                            notRanCount++;
+                        }
 
-                    timesProcessed++;
+                        // If it completed, or couldn't be run, then remove it from the list to be processed.
+                        if ((e.Result == ActionRunnerResult.Ran && (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success || e.QueueAtFinish.Status == (int) ActionQueueStatus.Error) ||
+                             (e.Result == ActionRunnerResult.WrongComputer || e.Result == ActionRunnerResult.Missing || e.Result == ActionRunnerResult.NoTasks || e.Result == ActionRunnerResult.Locked)))
+                        {
+                            queueList.Remove(e.QueueID);
+                        }
 
-                    // We use queueList.count for the actual remaining count when retrying.  This will not increase when one is postponed
-                    progressItem.Detail = string.Format("Retrying {0} of {1}...", Math.Min(timesProcessed, attemptCount), attemptCount);
-                    progressItem.PercentComplete = Math.Min((timesProcessed * 100) / attemptCount, 100);
-                };
+                        timesProcessed++;
 
-            // Start processing
-            processor.ProcessQueues();
+                        // We use queueList.count for the actual remaining count when retrying.  This will not increase when one is postponed
+                        progressItem.Detail = string.Format("Retrying {0} of {1}...", Math.Min(timesProcessed, attemptCount), attemptCount);
+                        progressItem.PercentComplete = Math.Min((timesProcessed * 100) / attemptCount, 100);
+                    };
+
+                // Start processing
+                processor.ProcessQueues();
+            }
 
             // Progress complete
             progressItem.Completed();

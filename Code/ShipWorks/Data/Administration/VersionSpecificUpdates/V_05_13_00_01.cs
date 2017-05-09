@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     /// <summary>
     /// Update the LicenseUrl for BigCommerce so that we don't have to calculate it each time
     /// </summary>
-    public class V_05_13_00_00 : IVersionSpecificUpdate
+    public class V_05_13_00_01 : IVersionSpecificUpdate
     {
         readonly ISqlAdapterFactory sqlAdapterFactory;
         readonly IBigCommerceIdentifier identifier;
@@ -26,7 +26,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// <summary>
         /// Constructor
         /// </summary>
-        public V_05_13_00_00(ISqlAdapterFactory sqlAdapterFactory, IBigCommerceIdentifier identifier)
+        public V_05_13_00_01(ISqlAdapterFactory sqlAdapterFactory, IBigCommerceIdentifier identifier)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.identifier = identifier;

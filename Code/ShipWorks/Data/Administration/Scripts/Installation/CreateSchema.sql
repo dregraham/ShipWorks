@@ -4233,7 +4233,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL,
-[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

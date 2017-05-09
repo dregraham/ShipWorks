@@ -13,11 +13,11 @@ using Xunit;
 
 namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
 {
-    public class V_05_13_00_00_Test : IDisposable
+    public class V_05_13_00_01_Test : IDisposable
     {
         readonly AutoMock mock;
 
-        public V_05_13_00_00_Test()
+        public V_05_13_00_01_Test()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         [Fact]
         public void AppliesTo_ReturnsCorrectVersion()
         {
-            var testObject = mock.Create<V_05_13_00_00>();
+            var testObject = mock.Create<V_05_13_00_01>();
             var result = testObject.AppliesTo;
             Assert.Equal(new Version(5, 13, 0, 0), result);
         }
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         [Fact]
         public void AlwaysRuns_ReturnsFalse()
         {
-            var testObject = mock.Create<V_05_13_00_00>();
+            var testObject = mock.Create<V_05_13_00_01>();
             var result = testObject.AlwaysRun;
             Assert.False(result);
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create());
             sqlAdapter.Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(mock.CreateMock<IEntityCollection2>().Object);
-            var testObject = mock.Create<V_05_13_00_00>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create())
                 .Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_13_00_00>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create());
             sqlAdapter.Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_13_00_00>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 

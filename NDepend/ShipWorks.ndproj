@@ -2,86 +2,91 @@
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
+    <Name>Interapptive.Shared</Name>
+    <Name>ShipWorks.Core</Name>
+    <Name>ShipWorks</Name>
+    <Name>ShipWorks.Res</Name>
     <Name>ShipWorks.Shared</Name>
     <Name>ShipWorks.Shipping</Name>
     <Name>ShipWorks.Shipping.UI</Name>
-    <Name>ShipWorks.ThirdPartyApi</Name>
-    <Name>ShipWorks</Name>
-    <Name>ShipWorks.Stores.UI</Name>
+    <Name>ShipWorks.SingleScan</Name>
     <Name>ShipWorks.Stores</Name>
+    <Name>ShipWorks.Stores.UI</Name>
+    <Name>ShipWorks.ThirdPartyApi</Name>
     <Name>ShipWorks.UI</Name>
-    <Name>ShipWorks.Core</Name>
-    <Name>Interapptive.Shared</Name>
   </Assemblies>
   <FrameworkAssemblies>
-    <Name>System.Data</Name>
-    <Name>System</Name>
-    <Name>System.Xml</Name>
-    <Name>System.Windows.Forms</Name>
-    <Name>System.Drawing</Name>
-    <Name>System.Core</Name>
-    <Name>System.Web.Services</Name>
-    <Name>System.Xml.Linq</Name>
-    <Name>System.ServiceProcess</Name>
-    <Name>System.Configuration.Install</Name>
-    <Name>System.ComponentModel.DataAnnotations</Name>
-    <Name>System.Data.DataSetExtensions</Name>
-    <Name>log4net</Name>
-    <Name>Apitron.PDF.Rasterizer</Name>
-    <Name>Newtonsoft.Json</Name>
-    <Name>SD.LLBLGen.Pro.ORMSupportClasses.NET20</Name>
-    <Name>ComponentFactory.Krypton.Toolkit</Name>
-    <Name>SandDock</Name>
-    <Name>ShipWorks.Data.Model</Name>
-    <Name>Autofac</Name>
-    <Name>Rebex.Mail</Name>
-    <Name>Common.Logging.Core</Name>
-    <Name>Microsoft.Web.Services3</Name>
-    <Name>Common.Logging</Name>
-    <Name>Quartz</Name>
     <Name>mscorlib</Name>
-    <Name>System.Reactive.Linq</Name>
-    <Name>System.Reactive.Interfaces</Name>
-    <Name>System.Reactive.Core</Name>
-    <Name>PresentationFramework</Name>
+    <Name>System</Name>
+    <Name>System.Design</Name>
+    <Name>System.Drawing</Name>
+    <Name>System.Windows.Forms</Name>
+    <Name>System.Web.Services</Name>
+    <Name>System.Xml</Name>
+    <Name>System.Web</Name>
+    <Name>System.Core</Name>
+    <Name>System.ComponentModel.Composition</Name>
+    <Name>System.Configuration</Name>
+    <Name>System.Data</Name>
     <Name>System.Xaml</Name>
-    <Name>PresentationCore</Name>
-    <Name>WindowsFormsIntegration</Name>
-    <Name>System.Reactive.PlatformServices</Name>
-    <Name>System.Reactive.Windows.Threading</Name>
-    <Name>ShipWorks.SqlServer</Name>
-    <Name>System.Runtime</Name>
-    <Name>System.Threading.Tasks</Name>
-    <Name>Microsoft.Threading.Tasks</Name>
     <Name>WindowsBase</Name>
-    <Name>GalaSoft.MvvmLight</Name>
-    <Name>System.Windows.Interactivity</Name>
-    <Name>Divelements.SandRibbon</Name>
-    <Name>Divelements.SandGrid</Name>
-    <Name>ShipWorks.Data.Adapter</Name>
+    <Name>PresentationFramework</Name>
+    <Name>PresentationCore</Name>
+    <Name>System.ComponentModel.DataAnnotations</Name>
+    <Name>System.Management</Name>
+    <Name>System.Xml.Linq</Name>
     <Name>System.Transactions</Name>
+    <Name>Microsoft.VisualBasic</Name>
+    <Name>System.Configuration.Install</Name>
+    <Name>WindowsFormsIntegration</Name>
+    <Name>System.Runtime.Caching</Name>
+    <Name>System.Web.Extensions</Name>
+    <Name>System.ServiceProcess</Name>
+    <Name>System.DirectoryServices.AccountManagement</Name>
+    <Name>System.Data.DataSetExtensions</Name>
+    <Name>Apitron.PDF.Rasterizer</Name>
+    <Name>HtmlAgilityPack</Name>
+    <Name>Divelements.SandRibbon</Name>
+    <Name>ComponentFactory.Krypton.Toolkit</Name>
+    <Name>Autofac</Name>
+    <Name>Divelements.SandGrid</Name>
     <Name>ActiproSoftware.SyntaxEditor.Net20</Name>
     <Name>ActiproSoftware.SyntaxEditor.Addons.Web.Net20</Name>
-    <Name>System.Design</Name>
+    <Name>Common.Logging.Core</Name>
+    <Name>Common.Logging</Name>
+    <Name>Common.Logging.Log4Net1213</Name>
+    <Name>GalaSoft.MvvmLight.Platform</Name>
+    <Name>BouncyCastle.Crypto</Name>
+    <Name>log4net</Name>
+    <Name>Rebex.Mail</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>Microsoft.ApplicationInsights</Name>
+    <Name>SD.LLBLGen.Pro.ORMSupportClasses</Name>
+    <Name>SandDock</Name>
     <Name>Rebex.Networking</Name>
     <Name>Rebex.Common</Name>
     <Name>Rebex.Net.Imap</Name>
     <Name>Rebex.Net.Pop3</Name>
     <Name>Rebex.Net.SecureSocket</Name>
     <Name>RestSharp</Name>
-    <Name>System.Runtime.Caching</Name>
+    <Name>Microsoft.Web.Services3</Name>
     <Name>Rebex.Ftp</Name>
     <Name>Rebex.Sftp</Name>
     <Name>Rebex.Net.Smtp</Name>
-    <Name>System.Web.Extensions</Name>
-    <Name>SpreadsheetGear</Name>
-    <Name>System.Management</Name>
-    <Name>System.DirectoryServices.AccountManagement</Name>
+    <Name>Microsoft.WindowsAzure.Storage</Name>
     <Name>NAudio</Name>
-    <Name>System.Web</Name>
-    <Name>System.Configuration</Name>
-    <Name>SD.LLBLGen.Pro.DQE.SqlServer.NET20</Name>
-    <Name>Microsoft.Threading.Tasks.Extensions.Desktop</Name>
+    <Name>Quartz</Name>
+    <Name>SD.Tools.OrmProfiler.Interceptor</Name>
+    <Name>SD.LLBLGen.Pro.DQE.SqlServer</Name>
+    <Name>ShipWorks.Data.Model</Name>
+    <Name>System.Reactive.Interfaces</Name>
+    <Name>System.Reactive.Linq</Name>
+    <Name>System.Reactive.Core</Name>
+    <Name>System.Reactive.PlatformServices</Name>
+    <Name>SpreadsheetGear</Name>
+    <Name>System.Reactive.Windows.Threading</Name>
+    <Name>System.Reactive.Windows.Forms</Name>
+    <Name>System.Windows.Interactivity</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -4219,7 +4224,7 @@ from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.S
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 88 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+warnif count > 16 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
  m.NbParameters > 5  &&
   !(m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute") ||
     m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute"))
@@ -4228,7 +4233,7 @@ warnif count > 88 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Con
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 43 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+warnif count > 2 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
  t.NbLinesOfCode > 500 &&
   !t.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute")
  orderby t.NbLinesOfCode
@@ -4245,7 +4250,7 @@ select new { m }
 
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreComplexMethod attributes reached</Name>
-warnif count > 73
+warnif count > 61
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreComplexMethod*") 
@@ -4254,7 +4259,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
-warnif count > 57
+warnif count > 65
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreTooManyParams*") 
@@ -4263,7 +4268,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongTypes attributes reached</Name>
-warnif count > 40
+warnif count > 38
 
 from m in JustMyCode.Types.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongTypes*") 
@@ -4271,7 +4276,7 @@ from m in JustMyCode.Types.Where(m=>
 orderby m.FullName
 select new { m }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreLongMethod attributes reached</Name>
-warnif count > 370
+warnif count > 324
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreLongMethod*") 

@@ -77,7 +77,6 @@ namespace ShipWorks.Shipping.Services
         /// <param name="chosenRateResult">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessingAction">Execute after a counter rate carrier was configured</param>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
         public async Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipmentsToProcess,
             ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction)

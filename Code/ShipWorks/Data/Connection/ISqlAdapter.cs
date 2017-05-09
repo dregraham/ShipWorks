@@ -48,5 +48,28 @@ namespace ShipWorks.Data.Connection
         /// produce an EntityCollection(Of TEntity) for the results to return
         /// </summary>
         Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2;
+
+        /// <summary>
+        /// Fetches one or more entities which match the filter information in the filterBucket
+        /// into the EntityCollection passed. The entity collection object has to contain
+        /// an entity factory object which will be the factory for the entity instances to
+        /// be fetched. This overload returns all found entities and doesn't apply sorting
+        /// </summary>
+        /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        ///     of the type created by the factory in the passed in EntityCollection instance.</param>
+        void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket);
+
+        /// <summary>
+        /// Fetches one or more entities which match the filter information in the filterBucket
+        /// into the EntityCollection passed. The entity collection object has to contain
+        /// an entity factory object which will be the factory for the entity instances to
+        /// be fetched. This overload returns all found entities and doesn't apply sorting
+        /// </summary>
+        /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        ///     of the type created by the factory in the passed in EntityCollection instance.</param>
+        /// <param name="maxRowsToReturn">Maximum number of rows to return</param>
+        void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket, int maxRowsToReturn);
     }
 }

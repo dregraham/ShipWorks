@@ -138,7 +138,6 @@ namespace ShipWorks.Data.Administration
         /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
         /// customer or production scenarios.
         /// </summary>
-        [NDependIgnoreLongMethod]
         public static void UpdateDatabase(IProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installedSchema = GetInstalledSchemaVersion();
