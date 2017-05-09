@@ -45,14 +45,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             {
                 case UpsReturnServiceType.ElectronicReturnLabel:
                     return UpsSurchargeType.UpsReturnsElectronicReturnLabel;
+
                 case UpsReturnServiceType.PrintReturnLabel:
                     return UpsSurchargeType.UpsReturnsPrintReturnLabel;
+
                 case UpsReturnServiceType.PrintAndMail:
                     return UpsSurchargeType.UpsReturnsPrintandMail;
+
                 case UpsReturnServiceType.ReturnPlus1:
                     return UpsSurchargeType.UpsReturnsReturnsPlusOneAttempt;
+
                 case UpsReturnServiceType.ReturnPlus3:
                     return UpsSurchargeType.UpsReturnsReturnsPlusThreeAttempts;
+
                 default:
                     throw new UpsLocalRatingException($"Unknown return type {EnumHelper.GetDescription(returnServiceType)}.");
             }

@@ -13,10 +13,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
     {
         private readonly IResidentialDeterminationService residentialDeterminationService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UpsSurchargeFactory(IResidentialDeterminationService residentialDeterminationService)
         {
             this.residentialDeterminationService = residentialDeterminationService;
         }
+
         /// <summary>
         /// Gets the specified surcharges to be applied to a shipment
         /// </summary>

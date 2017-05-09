@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
@@ -41,7 +40,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Returns true if charge applies
         /// </summary>
-        private static bool ChargeApplies(UpsPackageEntity package)
-            => package.VerbalConfirmationEnabled;
+        private static bool ChargeApplies(UpsPackageEntity package) => package.VerbalConfirmationEnabled;
     }
 }

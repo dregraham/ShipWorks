@@ -8,11 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
@@ -24,107 +20,76 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsLocalRateClient : IUpsRateClient
     {
         private readonly IApiLogEntry apiLog;
-        private readonly IUpsLocalRateTableRepository rateRepository;
-        private readonly IEnumerable<IServiceFilter> serviceFilters;
-        private readonly IUpsSurchargeFactory surchargeFactory;
+        private readonly IUpsLocalRateTable localRateTable;
         private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateClient"/> class.
         /// </summary>
-        public UpsLocalRateClient(IEnumerable<IServiceFilter> serviceFilters,
-            IUpsLocalRateTableRepository rateRepository,
-            IUpsSurchargeFactory surchargeFactory,
+        public UpsLocalRateClient(IUpsLocalRateTable localRateTable,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory)
         {
+            this.localRateTable = localRateTable;
             this.upsRateClientFactory = upsRateClientFactory;
-            this.serviceFilters = serviceFilters;
-            this.rateRepository = rateRepository;
-            this.surchargeFactory = surchargeFactory;
             apiLog = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate");
         }
-
 
         /// <summary>
         /// Gets rates for the given shipment
         /// </summary>
         public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
-            List<UpsServiceRate> localRates = GetRatesInternal(shipment);
+            GenericResult<IEnumerable<UpsLocalServiceRate>> calculatedRateResult = localRateTable.CalculateRates(shipment);
 
-            return localRates.Any() ? 
-                GenericResult.FromSuccess(localRates) : 
-                upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+            GenericResult<List<UpsServiceRate>> rateResult;
+            if (calculatedRateResult.Failure)
+            {
+                LogFailure(calculatedRateResult.Message);
+                rateResult = GetRatesFromApi(shipment);
+            }
+            else
+            {
+                List<UpsLocalServiceRate> localRates = calculatedRateResult.Value.ToList();
+
+                LogSuccess(localRates);
+                rateResult = GenerateLocalRateResults(localRates);
+            }
+
+            return rateResult;
         }
 
         /// <summary>
-        /// Gets rates for the given <paramref name="shipment" />
+        /// Generates the return value for GetRates from a list of UpsLocalServiceRates.
         /// </summary>
-        private List<UpsServiceRate> GetRatesInternal(ShipmentEntity shipment)
+        private static GenericResult<List<UpsServiceRate>> GenerateLocalRateResults(List<UpsLocalServiceRate> localRates)
         {
-            try
-            {
-                IEnumerable<UpsServiceType> serviceTypes = GetEligibleServices(shipment);
-
-                IEnumerable<UpsLocalServiceRate> upsLocalServiceRates =
-                    rateRepository.GetServiceRates(shipment.Ups, serviceTypes).ToList();
-
-                ApplyRateSurcharges(shipment, upsLocalServiceRates);
-
-                return upsLocalServiceRates.Cast<UpsServiceRate>().OrderBy(r => r.Amount).ToList();
-            }
-            catch (UpsLocalRatingException)
-            {
-                return new List<UpsServiceRate>();
-            }
+            List<UpsServiceRate> serviceRates = localRates.Cast<UpsServiceRate>().OrderBy(r => r.Amount).ToList();
+            return GenericResult.FromSuccess(serviceRates);
         }
 
         /// <summary>
-        /// Gets the rates.
+        /// Logs Successfully retrieved rates.
         /// </summary>
-        private void ApplyRateSurcharges(ShipmentEntity shipment, IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
+        private void LogSuccess(List<UpsLocalServiceRate> localRates)
         {
-            IDictionary<UpsSurchargeType, double> surcharges = rateRepository.GetSurcharges(shipment.Ups.UpsAccountID);
-            UpsLocalRatingZoneFileEntity zoneFile = rateRepository.GetLatestZoneFile();
-            IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges, zoneFile);
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (UpsLocalServiceRate serviceRate in upsLocalServiceRates)
-            {
-                foreach (IUpsSurcharge upsSurcharge in upsSurcharges)
-                {
-                    upsSurcharge.Apply(shipment.Ups, serviceRate);
-                }
-
-                serviceRate.Log(sb);
-            }
-
-            apiLog.LogResponse(sb.ToString(), "txt");
+            StringBuilder logMessage = new StringBuilder();
+            localRates.ForEach(rate => rate.Log(logMessage));
+            apiLog.LogResponse(logMessage.ToString(), "txt");
         }
 
         /// <summary>
-        /// Gets the eligible services.
+        /// Logs rate failure.
         /// </summary>
-        private IEnumerable<UpsServiceType> GetEligibleServices(ShipmentEntity shipment)
+        private void LogFailure(string errorMessage)
         {
-            IEnumerable<UpsServiceType> eligibleServieTypes = new[]
-            {
-                UpsServiceType.UpsGround,
-                UpsServiceType.Ups3DaySelect,
-                UpsServiceType.Ups2DayAir,
-                UpsServiceType.Ups2DayAirAM,
-                UpsServiceType.UpsNextDayAirSaver,
-                UpsServiceType.UpsNextDayAir
-            };
+            string completeErrorMessage = $"Error when calculating rates:\n\n{errorMessage}\n\nDelegating to UPS API.";
+            apiLog.LogResponse(completeErrorMessage, "txt");
+        }
 
-            foreach (IServiceFilter serviceFilter in serviceFilters)
-            {
-                eligibleServieTypes = serviceFilter.GetEligibleServices(shipment.Ups, eligibleServieTypes);
-            }
-
-            return eligibleServieTypes;
+        private GenericResult<List<UpsServiceRate>> GetRatesFromApi(ShipmentEntity shipment)
+        {
+            return upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
         }
     }
 }

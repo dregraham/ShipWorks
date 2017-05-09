@@ -4,9 +4,14 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
@@ -18,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     [Component]
     public class UpsLocalRateTable : IUpsLocalRateTable
     {
-        private readonly IUpsLocalRateTableRepository localRateTableRepository;
+        private readonly IUpsLocalRateTableRepository rateRepository;
         private readonly IEnumerable<IUpsRateExcelReader> upsRateExcelReaders;
         private readonly IUpsImportedRateValidator importedRateValidator;
         private readonly IEnumerable<IUpsZoneExcelReader> zoneExcelReaders;
@@ -29,16 +34,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> deliveryAreaSurcharges;
         private IEnumerable<UpsLocalRatingZoneEntity> zones;
         private byte[] zoneFileContent;
+        private readonly IEnumerable<IServiceFilter> serviceFilters;
+        private readonly IUpsSurchargeFactory surchargeFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
-        public UpsLocalRateTable(IUpsLocalRateTableRepository localRateTableRepository,
+        public UpsLocalRateTable(IUpsLocalRateTableRepository rateRepository,
             IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
             IEnumerable<IUpsZoneExcelReader> zoneExcelReaders,
-            IUpsImportedRateValidator importedRateValidator)
+            IUpsImportedRateValidator importedRateValidator,
+            IEnumerable<IServiceFilter> serviceFilters,
+            IUpsSurchargeFactory surchargeFactory)
         {
-            this.localRateTableRepository = localRateTableRepository;
+            this.surchargeFactory = surchargeFactory;
+            this.serviceFilters = serviceFilters;
+            this.rateRepository = rateRepository;
             this.upsRateExcelReaders = upsRateExcelReaders;
             this.zoneExcelReaders = zoneExcelReaders;
             this.importedRateValidator = importedRateValidator;
@@ -92,8 +103,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsLocalRatingZoneFileEntity zoneFile;
             try
             {
-                rateTable = localRateTableRepository.Get(upsAccount);
-                zoneFile = localRateTableRepository.GetLatestZoneFile();
+                rateTable = rateRepository.Get(upsAccount);
+                zoneFile = rateRepository.GetLatestZoneFile();
             }
             catch (Exception e) when (e is ORMException || e is SqlException)
             {
@@ -137,8 +148,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 throw new UpsLocalRatingException($"The selected file does not contain any rates.");
             }
 
-            localRateTableRepository.Save(newRateTable, accountEntity);
-            localRateTableRepository.CleanupRates();
+            rateRepository.Save(newRateTable, accountEntity);
+            rateRepository.CleanupRates();
 
             RateUploadDate = newRateTable.UploadDate;
         }
@@ -157,8 +168,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             zoneFile.UpsLocalRatingZone.AddRange(zones);
             zoneFile.FileContent = zoneFileContent;
 
-            localRateTableRepository.Save(zoneFile);
-            localRateTableRepository.CleanupZones();
+            rateRepository.Save(zoneFile);
+            rateRepository.CleanupZones();
 
             ZoneUploadDate = zoneFile.UploadDate;
         }
@@ -236,6 +247,61 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges)
         {
             deliveryAreaSurcharges = localRatingDeliveryAreaSurcharges;
+        }
+
+        /// <summary>
+        /// Calculates shipment rates. Success is true only when rates are found.
+        /// </summary>
+        public GenericResult<IEnumerable<UpsLocalServiceRate>> CalculateRates(ShipmentEntity shipment)
+        {
+            try
+            {
+                IEnumerable<UpsLocalServiceRate> upsLocalServiceRates =
+                    rateRepository.GetServiceRates(shipment.Ups).ToList();
+
+                upsLocalServiceRates = ApplyServiceFilters(shipment, upsLocalServiceRates);
+
+                ApplyRateSurcharges(shipment, upsLocalServiceRates);
+
+                return upsLocalServiceRates.Any() ? 
+                    GenericResult.FromSuccess(upsLocalServiceRates) : 
+                    GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>("No local rates found.");
+            }
+            catch (UpsLocalRatingException ex)
+            {
+                return GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>(ex);
+            }
+        }
+
+        private IEnumerable<UpsLocalServiceRate> ApplyServiceFilters(ShipmentEntity shipment,
+            IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
+        {
+            IEnumerable<UpsServiceType> eligibleServices = upsLocalServiceRates.Select(r => r.Service);
+
+            foreach (IServiceFilter serviceFilter in serviceFilters)
+            {
+                eligibleServices = serviceFilter.GetEligibleServices(shipment.Ups, eligibleServices);
+            }
+
+            return upsLocalServiceRates.Where(r => eligibleServices.Contains(r.Service));
+        }
+
+        /// <summary>
+        /// Gets the rates.
+        /// </summary>
+        private void ApplyRateSurcharges(ShipmentEntity shipment, IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
+        {
+            IDictionary<UpsSurchargeType, double> surcharges = rateRepository.GetSurcharges(shipment.Ups.UpsAccountID);
+            UpsLocalRatingZoneFileEntity zoneFile = rateRepository.GetLatestZoneFile();
+            IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges, zoneFile);
+
+            foreach (UpsLocalServiceRate serviceRate in upsLocalServiceRates)
+            {
+                foreach (IUpsSurcharge upsSurcharge in upsSurcharges)
+                {
+                    upsSurcharge.Apply(shipment.Ups, serviceRate);
+                }
+            }
         }
     }
 }

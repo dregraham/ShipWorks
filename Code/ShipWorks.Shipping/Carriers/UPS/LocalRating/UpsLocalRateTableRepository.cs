@@ -217,7 +217,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     decimal rate = baseRate.Rate;
                     if (pricePerPoundRate != null)
                     {
-                        rate = rate + pricePerPoundRate.Rate;
+                        int poundsOver150 = Convert.ToInt32(Math.Ceiling(package.TotalWeight - 150));
+                        rate = rate + pricePerPoundRate.Rate * poundsOver150;
                     }
 
                     result.Add((UpsServiceType)baseRate.Service, rate);

@@ -2,6 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
 using System.IO;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -14,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// The date of the rate upload
         /// </summary>
         DateTime? RateUploadDate { get; }
-
 
         /// <summary>
         /// The date the zones were uploaded
@@ -67,5 +67,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Replaces the delivery area surcharges.
         /// </summary>
         void ReplaceDeliveryAreaSurcharges(IEnumerable<UpsLocalRatingDeliveryAreaSurchargeEntity> localRatingDeliveryAreaSurcharges);
+
+        /// <summary>
+        /// Calculates shipment rates. Success is true only when rates are found.
+        /// </summary>
+        GenericResult<IEnumerable<UpsLocalServiceRate>> CalculateRates(ShipmentEntity shipment);
     }
 }
