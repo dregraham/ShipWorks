@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add a surcharge collection to the surcharge table
         /// </summary>
-        void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges);
+        void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> newSurcharges);
 
         /// <summary>
         /// Adds the rates to the rate tables

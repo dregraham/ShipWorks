@@ -55,6 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.importedRateValidator = importedRateValidator;
         }
 
+        #region Import Local Rating Data
+
         /// <summary>
         /// Date of the rates upload
         /// </summary>
@@ -197,9 +199,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Replace current surcharge collection with surcharges from the new rate table
         /// </summary>
-        public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> surcharges)
+        public void ReplaceSurcharges(IEnumerable<UpsRateSurchargeEntity> newSurcharges)
         {
-            this.surcharges = surcharges;
+            surcharges = newSurcharges;
         }
 
         /// <summary>
@@ -249,6 +251,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             deliveryAreaSurcharges = localRatingDeliveryAreaSurcharges;
         }
 
+        #endregion Import Local Rating Data
+
+        #region Calculate Rates
+
         /// <summary>
         /// Calculates shipment rates. Success is true only when rates are found.
         /// </summary>
@@ -291,9 +297,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void ApplyRateSurcharges(ShipmentEntity shipment, IEnumerable<UpsLocalServiceRate> upsLocalServiceRates)
         {
-            IDictionary<UpsSurchargeType, double> surcharges = rateRepository.GetSurcharges(shipment.Ups.UpsAccountID);
+            IDictionary<UpsSurchargeType, double> surchargeAmounts = rateRepository.GetSurcharges(shipment.Ups.UpsAccountID);
             UpsLocalRatingZoneFileEntity zoneFile = rateRepository.GetLatestZoneFile();
-            IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surcharges, zoneFile);
+            IEnumerable<IUpsSurcharge> upsSurcharges = surchargeFactory.Get(surchargeAmounts, zoneFile);
 
             foreach (UpsLocalServiceRate serviceRate in upsLocalServiceRates)
             {
@@ -303,5 +309,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
             }
         }
+
+        #endregion Calculate Rates
     }
 }
