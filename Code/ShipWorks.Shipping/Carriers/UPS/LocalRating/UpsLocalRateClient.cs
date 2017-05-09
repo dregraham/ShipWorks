@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
-            List<UpsServiceRate> localRates = GetRatesInternal(shipment);
+            List<UpsServiceRate> localRates = CalculateRates(shipment);
 
             return localRates.Any() ? 
                 GenericResult.FromSuccess(localRates) : 
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Gets rates for the given <paramref name="shipment" />
         /// </summary>
-        private List<UpsServiceRate> GetRatesInternal(ShipmentEntity shipment)
+        private List<UpsServiceRate> CalculateRates(ShipmentEntity shipment)
         {
             try
             {

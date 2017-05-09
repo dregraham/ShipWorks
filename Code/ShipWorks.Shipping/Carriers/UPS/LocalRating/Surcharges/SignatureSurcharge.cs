@@ -54,12 +54,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 case UpsDeliveryConfirmationType.NoSignature:
                     signatureSurcharge = UpsSurchargeType.NoSignature;
                     break;
+
                 case UpsDeliveryConfirmationType.Signature:
                     signatureSurcharge = UpsSurchargeType.SignatureRequired;
                     break;
+
                 case UpsDeliveryConfirmationType.AdultSignature:
                     signatureSurcharge = UpsSurchargeType.AdultSignatureRequired;
                     break;
+
                 default:
                     signatureSurcharge = null;
                     break;

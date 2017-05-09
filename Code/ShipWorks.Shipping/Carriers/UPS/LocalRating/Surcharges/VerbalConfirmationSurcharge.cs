@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <summary>
         /// Returns true if charge applies
         /// </summary>
-        private static bool ChargeApplies(UpsPackageEntity package)
-            => package.VerbalConfirmationEnabled;
+        private static bool ChargeApplies(UpsPackageEntity package) => package.VerbalConfirmationEnabled;
     }
 }

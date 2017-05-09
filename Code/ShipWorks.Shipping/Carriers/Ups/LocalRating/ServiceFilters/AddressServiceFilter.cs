@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         }
 
         /// <summary>
-        /// Get eligible servies based on the address
+        /// Get eligible services based on the address
         /// </summary>
         public IEnumerable<UpsServiceType> GetEligibleServices(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> services)
         {
