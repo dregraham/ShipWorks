@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 });
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment, new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
             Assert.Equal(1088, result.First().Amount);
         }
@@ -269,8 +269,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             upsShipment.Shipment.ShipPostalCode = "abcde";
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] {UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround}));
+                () => testObject.GetServiceRates(upsShipment));
 
 
             Assert.Equal("Unable to find zone using destination postal code abcde." , ex.Message);
@@ -302,8 +301,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(
-                () => testObject.GetServiceRates(upsShipment,
-                    new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+                () => testObject.GetServiceRates(upsShipment));
 
             Assert.Equal("Unable to find zone using origin postal code 12345 and destination postal code 12345.", ex.Message);
         }
@@ -342,7 +340,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 });
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            Assert.Empty(testObject.GetServiceRates(upsShipment, new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround }));
+            Assert.Empty(testObject.GetServiceRates(upsShipment));
         }
 
         [Fact]
@@ -391,8 +389,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 });
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
-                new[] {UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround});
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
             Assert.Equal(result.First().Amount, 99);
         }
@@ -459,8 +456,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 });
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
-                new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
             Assert.Equal(result.First().Amount, 12);
         }
@@ -519,8 +515,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                 });
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment,
-                new[] { UpsServiceType.Ups2DayAir, UpsServiceType.UpsGround });
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
             Assert.Equal(result.First().Amount, 1011);
         }
