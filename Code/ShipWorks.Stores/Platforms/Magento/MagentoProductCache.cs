@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 

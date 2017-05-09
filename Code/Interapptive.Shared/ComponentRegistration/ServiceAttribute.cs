@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration
+namespace Interapptive.Shared.ComponentRegistration
 {
 
     /// <summary>

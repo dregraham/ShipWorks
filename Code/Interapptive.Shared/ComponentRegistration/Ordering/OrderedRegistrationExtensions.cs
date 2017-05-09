@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Autofac.Builder;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// An Autofac extension that provides control over the order in which multiple dependencies are resolved.
@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, string key, IComparable order)
         {
-            return registration.OrderBy(key, _ => order);
+            return OrderBy<TLimit, TActivatorData, TRegistrationStyle>(registration, key, _ => order);
         }
 
         /// <summary>
@@ -56,9 +56,8 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         public static IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> OrderByMetadata<TLimit, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> registration, Type service)
         {
-            OrderAttribute orderAttribute = registration.ActivatorData.ImplementationType
-                .GetCustomAttributes(typeof(OrderAttribute), false)
-                .OfType<OrderAttribute>()
+            OrderAttribute orderAttribute = Enumerable.OfType<OrderAttribute>(registration.ActivatorData.ImplementationType
+                    .GetCustomAttributes(typeof(OrderAttribute), false))
                 .Where(x => x.Service == service)
                 .FirstOrDefault();
 

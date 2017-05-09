@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// Provides support for <see cref="IOrderedEnumerable{TElement}"/>.
@@ -64,7 +65,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         private static IComponentRegistration CreateOrderedRegistration<TService>()
         {
             return RegistrationBuilder
-                .ForDelegate((c, ps) => c.ResolveOrdered<TService>(ps))
+                .ForDelegate((c, ps) => OrderedResolutionExtensions.ResolveOrdered<TService>((IComponentContext) c, (IEnumerable<Parameter>) ps))
                 .ExternallyOwned()
                 .CreateRegistration();
         }

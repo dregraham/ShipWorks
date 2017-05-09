@@ -5,7 +5,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Builder;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration
+namespace Interapptive.Shared.ComponentRegistration
 {
     /// <summary>
     /// Register a component for implemented interfaces
@@ -48,7 +48,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        internal static void Register(ContainerBuilder builder,
+        public static void Register(ContainerBuilder builder,
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
             params Assembly[] assemblies)
         {
