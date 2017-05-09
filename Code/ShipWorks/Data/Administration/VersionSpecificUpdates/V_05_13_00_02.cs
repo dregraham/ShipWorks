@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// <summary>
         /// Which version does this update apply to
         /// </summary>
-        public Version AppliesTo => new Version(5, 13, 0, 1);
+        public Version AppliesTo => new Version(5, 13, 0, 2);
 
         /// <summary>
         /// Should the update always be run

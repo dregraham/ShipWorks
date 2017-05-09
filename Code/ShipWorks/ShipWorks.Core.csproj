@@ -424,9 +424,12 @@
     <Compile Include="Actions\ActionManagerWrapper.cs" />
     <Compile Include="Actions\ActionPostponement.cs" />
     <Compile Include="Actions\ActionProcessedEvent.cs" />
+    <Compile Include="Actions\ActionProcessorFactory.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
     <Compile Include="Actions\ActionQueueGatewayErrorList.cs" />
+    <Compile Include="Actions\ActionQueueGatewayDefaultPrint.cs" />
     <Compile Include="Actions\ActionQueueGatewayStandard.cs" />
+    <Compile Include="Actions\ActionQueueGatewayType.cs" />
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
@@ -438,6 +441,7 @@
     <Compile Include="Actions\ComputerActionPolicy.cs" />
     <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
+    <Compile Include="Actions\IActionProcessorFactory.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -983,8 +987,8 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_04_05_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_12_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_09_03_00.cs" />
-    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlAdapter.cs" />
     <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />
@@ -1702,6 +1706,12 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
@@ -10740,6 +10750,7 @@
     <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
+    <None Include="Resources\Stores\Icons\geekseller.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />

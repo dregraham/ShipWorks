@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
 using System.ComponentModel;
+using System.Reflection;
+using System.Text;
 
 namespace ShipWorks.Stores
 {
@@ -356,7 +356,7 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("lemonstand")]
         LemonStand = 68,
 
-		[Description("SparkPay")]
+        [Description("SparkPay")]
         [StoreTypeIdentity("SPARKPAY", "SPK")]
         [StoreTypeIcon("sparkpay")]
         SparkPay = 69,
@@ -371,7 +371,7 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("amosoft")]
         Amosoft = 71,
 
-		[Description("SellerCloud")]
+        [Description("SellerCloud")]
         [StoreTypeIdentity("SELLERCLOUD", "SCD")]
         [StoreTypeIcon("sellercloud")]
         SellerCloud = 73,
@@ -381,7 +381,7 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("infiplex")]
         InfiPlex = 74,
 
-		[Description("Walmart")]
+        [Description("Walmart")]
         [StoreTypeIdentity("WALMART", "WAL")]
         [StoreTypeIcon("walmart")]
         Walmart = 75,
@@ -389,6 +389,11 @@ namespace ShipWorks.Stores
         [Description("SellerActive")]
         [StoreTypeIdentity("SELLERACTIVE", "SEA")]
         [StoreTypeIcon("selleractive")]
-        SellerActive = 76
+        SellerActive = 76,
+
+        [Description("GeekSeller")]
+        [StoreTypeIdentity("GEEKSELLER", "GEE")]
+        [StoreTypeIcon("geekseller")]
+        GeekSeller = 78
     }
 }

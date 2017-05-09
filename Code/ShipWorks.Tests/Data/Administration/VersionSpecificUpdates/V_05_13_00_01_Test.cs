@@ -7,7 +7,7 @@ using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.ShopSite;
+using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -25,15 +25,15 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         [Fact]
         public void AppliesTo_ReturnsCorrectVersion()
         {
-            var testObject = mock.Create<V_05_13_00_02>();
+            var testObject = mock.Create<V_05_13_00_01>();
             var result = testObject.AppliesTo;
-            Assert.Equal(new Version(5, 13, 0, 1), result);
+            Assert.Equal(new Version(5, 13, 0, 0), result);
         }
 
         [Fact]
         public void AlwaysRuns_ReturnsFalse()
         {
-            var testObject = mock.Create<V_05_13_00_02>();
+            var testObject = mock.Create<V_05_13_00_01>();
             var result = testObject.AlwaysRun;
             Assert.False(result);
         }
@@ -43,32 +43,32 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         {
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
-            sqlAdapter.Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+            sqlAdapter.Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(mock.CreateMock<IEntityCollection2>().Object);
-            var testObject = mock.Create<V_05_13_00_02>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 
-            sqlAdapter.Verify(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()));
+            sqlAdapter.Verify(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()));
         }
 
         [Fact]
         public void Update_DelegatesToIdentifier_ForEachStore()
         {
-            var store1 = new ShopSiteStoreEntity { ApiUrl = "Foo" };
-            var store2 = new ShopSiteStoreEntity { ApiUrl = "Bar" };
-            var collection = new ShopSiteStoreCollection { store1, store2 };
+            var store1 = new BigCommerceStoreEntity { ApiUrl = "Foo" };
+            var store2 = new BigCommerceStoreEntity { ApiUrl = "Bar" };
+            var collection = new BigCommerceStoreCollection { store1, store2 };
 
             mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create())
-                .Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+                .Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_13_00_02>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 
-            mock.Mock<IShopSiteIdentifier>().Verify(x => x.Set(store1, "Foo"));
-            mock.Mock<IShopSiteIdentifier>().Verify(x => x.Set(store2, "Bar"));
+            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store1, "Foo"));
+            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store2, "Bar"));
         }
 
         [Fact]
@@ -77,9 +77,9 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
             var collection = mock.CreateMock<IEntityCollection2>().Object;
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
-            sqlAdapter.Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+            sqlAdapter.Setup(x => x.FetchQueryAsync<BigCommerceStoreEntity>(It.IsAny<EntityQuery<BigCommerceStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_13_00_02>();
+            var testObject = mock.Create<V_05_13_00_01>();
 
             testObject.Update();
 

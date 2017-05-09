@@ -4002,6 +4002,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerKey);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.UseParallelActionQueue field instance</summary>
+		public static EntityField2 UseParallelActionQueue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.UseParallelActionQueue);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

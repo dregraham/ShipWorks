@@ -273,7 +273,7 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = action.TriggerType == (int) ActionTriggerType.Scheduled ? (int) ActionQueueType.Scheduled : (int) ActionQueueType.UserInterface;
+            entity.ActionQueueType = (int) DetermineActionQueueType(action); ;
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.EntityID = objectID;
@@ -299,6 +299,28 @@ namespace ShipWorks.Actions
             adapter.SaveAndRefetch(entity);
 
             return entity.ActionQueueID;
+        }
+
+        /// <summary>
+        /// Determines the action queue type based on the action.
+        /// </summary>
+        public static ActionQueueType DetermineActionQueueType(ActionEntity action)
+        {
+            string internalOwner = action.InternalOwner;
+
+            bool isDefaultPrintAction = (action.TriggerType == (int) ActionTriggerType.ShipmentProcessed &&
+                                            internalOwner?.StartsWith("Ship") == true &&
+                                            internalOwner?.EndsWith("Print") == true) ||
+                                        (action.TriggerType == (int) ActionTriggerType.None &&
+                                            internalOwner?.StartsWith("FinishProcessingBatch") == true);
+
+            ActionQueueType actionQueueType = isDefaultPrintAction ?
+                ActionQueueType.DefaultPrint :
+                action.TriggerType == (int) ActionTriggerType.Scheduled ?
+                    ActionQueueType.Scheduled :
+                    (int) ActionQueueType.UserInterface;
+
+            return actionQueueType;
         }
 
         /// <summary>

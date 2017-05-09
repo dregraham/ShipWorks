@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Kicks off download for the store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -175,41 +175,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderEntity">The order entity.</param>
         public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
-            // Yahoo gives a list of all that statuses an order has had. Typically, the
-            // most recent one is the last in the list. However, if you manually change
-            // an order status on Yahoo's backend, it comes down as the first status in
-            // the list. So here we grab the first status, if it's 0 that means it hasn't
-            // been updated manually, so take the last one instead. If not, that is the
-            // manually updated status, so keep it
-            string code = order.StatusList.OrderStatus.First().StatusID;
-
-            if (code.Equals("0"))
-            {
-                code = order.StatusList.OrderStatus.Last().StatusID;
-            }
-
-            orderEntity.OnlineStatusCode = code;
-
-            int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
-
-            if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count())
-            {
-                orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
-            }
-            else
-            {
-                string status = webClient.GetCustomOrderStatus(statusID)
-                        .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
-                        .Code;
-
-                if (status != null)
-                {
-                    orderEntity.OnlineStatus = status;
-                }
-
-            }
-
-            orderEntity.RequestedShipping = $"{order.CartShipmentInfo.Shipper} {order.ShipMethod}";
+            orderEntity.OnlineStatusCode = GetOnlineStatusCode(order);
+            orderEntity.OnlineStatus = GetOnlineStatus(orderEntity);
+            orderEntity.RequestedShipping = GetRequestedShipping(order);
             orderEntity.OrderDate = ParseYahooDateTime(order.CreationTime);
             orderEntity.OnlineLastModified = ParseYahooDateTime(order.LastUpdatedTime);
             orderEntity.OrderNumber = order.OrderID;
@@ -224,6 +192,65 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderPayments(orderEntity, order);
 
             return orderEntity;
+        }
+
+        /// <summary>
+        /// Get Online Status
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderEntity"></param>
+        /// <returns></returns>
+        private string GetOnlineStatusCode(YahooOrder order)
+        {
+            string code = order.StatusList.OrderStatus.First().StatusID;
+
+            return code.Equals("0") ?
+                order.StatusList.OrderStatus.Last().StatusID :
+                code;
+        }
+
+        /// <summary>
+        /// Get the online status code for this order
+        /// </summary>
+        /// <remarks>
+        /// Yahoo gives a list of all that statuses an order has had. Typically, the
+        /// most recent one is the last in the list. However, if you manually change
+        /// an order status on Yahoo's back-end, it comes down as the first status in
+        /// the list. So here we grab the first status, if it's 0 that means it hasn't
+        /// been updated manually, so take the last one instead. If not, that is the
+        /// manually updated status, so keep it
+        /// </remarks>
+        private string GetOnlineStatus(YahooOrderEntity order)
+        {
+            int statusID = int.Parse(order.OnlineStatusCode.ToString());
+
+            if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count())
+            {
+                return EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
+            }
+
+            string status = webClient.GetCustomOrderStatus(statusID)
+                .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
+                .Code;
+
+            if (status != null)
+            {
+                return status;
+            }
+
+            return order.OnlineStatus;
+        }
+
+        /// <summary>
+        /// Get the requested shipping method
+        /// </summary>
+        /// <remarks>We've seen CartShipmentInfo not included in the response from Yahoo</remarks>
+        private string GetRequestedShipping(YahooOrder order)
+        {
+            IEnumerable<string> requestedShippingPieces = new[] { order.CartShipmentInfo?.Shipper, order.ShipMethod }
+                .Where(x => !string.IsNullOrWhiteSpace(x));
+
+            return string.Join(" ", requestedShippingPieces);
         }
 
         /// <summary>

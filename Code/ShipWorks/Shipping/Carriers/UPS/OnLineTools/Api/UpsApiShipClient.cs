@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
-using ShipWorks.Data;
-using Interapptive.Shared.Utility;
-using System.Text.RegularExpressions;
-using System.Xml.XPath;
 using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared;
-using ShipWorks.UI;
 using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             if (shipment.ReturnShipment && !isSurePost)
             {
                 xmlWriter.WriteStartElement("ReturnService");
-                xmlWriter.WriteElementString("Code", UpsApiCore.GetReturnServiceCode((UpsReturnServiceType)ups.ReturnService));
+                xmlWriter.WriteElementString("Code", UpsApiCore.GetReturnServiceCode((UpsReturnServiceType) ups.ReturnService));
                 xmlWriter.WriteEndElement();
             }
 
@@ -140,8 +140,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 }
 
                 // Trial and error to figure out when InvoiceLineTotal is required:
-                //                                  From			
-                //                          US		                CA/PR	
+                //                                  From
+                //                          US		                CA/PR
                 //              Return	    Not Return	    Return      Not Return
                 //=================================================================
                 //To	US	 |  Not Allowed	Not Allowed	    Required	Not Allowed
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             else
             {
                 companyOrName = new PersonName(recipient).FullName;
-                
+
                 // SurePost displays the Attention field on the label, not company, so ve sure to set it.
                 if (isSurePost)
                 {
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attention, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
             xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient.Email));
-            UpsApiCore.WriteAddressXml(xmlWriter, recipient, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddress" : (string) null );
+            UpsApiCore.WriteAddressXml(xmlWriter, recipient, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddress" : (string) null);
             xmlWriter.WriteEndElement();
 
             // ShipFrom
@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Rate Information
                 xmlWriter.WriteStartElement("RateInformation");
 
-                // Requesting Negotiated Rates 
+                // Requesting Negotiated Rates
                 xmlWriter.WriteElementString("NegotiatedRatesIndicator", "");
 
                 // Close element
@@ -248,14 +248,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             WriteDomesticBilling(ups, account, xmlWriter);
             WriteInternationalBilling(ups, account, xmlWriter);
 
-            // Commercial invoice requires Sold To 
+            // Commercial invoice requires Sold To
             if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
             {
+                PersonAdapter soldTo = recipient.CopyToNew();
+                soldTo.PostalCode = soldTo.PostalCode?.Replace("-", string.Empty);
+
                 xmlWriter.WriteStartElement("SoldTo");
                 xmlWriter.WriteElementString("CompanyName", companyOrName);
                 xmlWriter.WriteElementString("AttentionName", attention);
-                xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
-                UpsApiCore.WriteAddressXml(xmlWriter, recipient);
+                xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(soldTo.Phone, @"\D", ""));
+                UpsApiCore.WriteAddressXml(xmlWriter, soldTo);
                 xmlWriter.WriteEndElement();
             }
 
@@ -318,61 +321,61 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 if (ups.PayorType == (int) UpsPayorType.Sender || UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service))
                 {
                     xmlWriter.WriteStartElement("ItemizedPaymentInformation");
-                        // Write the transportation shipment charge
-                        xmlWriter.WriteStartElement("ShipmentCharge");
-                            xmlWriter.WriteElementString("Type", "01");
-                            xmlWriter.WriteStartElement("BillShipper");
-                                xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
-                            xmlWriter.WriteEndElement();
-                        xmlWriter.WriteEndElement();
+                    // Write the transportation shipment charge
+                    xmlWriter.WriteStartElement("ShipmentCharge");
+                    xmlWriter.WriteElementString("Type", "01");
+                    xmlWriter.WriteStartElement("BillShipper");
+                    xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
 
-                        // Now write the tax/duty shipment charge
-                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+                    // Now write the tax/duty shipment charge
+                    WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
 
                     xmlWriter.WriteEndElement();
                 }
                 else if (ups.PayorType == (int) UpsPayorType.ThirdParty)
                 {
                     xmlWriter.WriteStartElement("ItemizedPaymentInformation");
-                        // Write the transportation shipment charge
-                        xmlWriter.WriteStartElement("ShipmentCharge");
-                            xmlWriter.WriteElementString("Type", "01");
-                            xmlWriter.WriteStartElement("BillThirdParty");
-                                xmlWriter.WriteStartElement("BillThirdPartyShipper");
-                                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
-                                    xmlWriter.WriteStartElement("ThirdParty");
-                                        xmlWriter.WriteStartElement("Address");
-                                            xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
-                                            xmlWriter.WriteElementString("CountryCode", ups.PayorCountryCode);
-                                        xmlWriter.WriteEndElement();
-                                    xmlWriter.WriteEndElement();
-                                xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                        xmlWriter.WriteEndElement();
+                    // Write the transportation shipment charge
+                    xmlWriter.WriteStartElement("ShipmentCharge");
+                    xmlWriter.WriteElementString("Type", "01");
+                    xmlWriter.WriteStartElement("BillThirdParty");
+                    xmlWriter.WriteStartElement("BillThirdPartyShipper");
+                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                    xmlWriter.WriteStartElement("ThirdParty");
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                    xmlWriter.WriteElementString("CountryCode", ups.PayorCountryCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
 
-                        // Now write the tax/duty shipment charge
-                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+                    // Now write the tax/duty shipment charge
+                    WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
 
                     xmlWriter.WriteEndElement();
                 }
                 else
                 {
                     xmlWriter.WriteStartElement("ItemizedPaymentInformation");
-                        // Write the transportation shipment charge
-                        xmlWriter.WriteStartElement("ShipmentCharge");
-                            xmlWriter.WriteElementString("Type", "01");
-                    
-                            xmlWriter.WriteStartElement("BillReceiver");
-                                xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
-                                xmlWriter.WriteStartElement("Address");
-                                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
-                                xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
+                    // Write the transportation shipment charge
+                    xmlWriter.WriteStartElement("ShipmentCharge");
+                    xmlWriter.WriteElementString("Type", "01");
 
-                        xmlWriter.WriteEndElement();
+                    xmlWriter.WriteStartElement("BillReceiver");
+                    xmlWriter.WriteElementString("AccountNumber", ups.PayorAccount);
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.PayorPostalCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
 
-                        // Now write the tax/duty shipment charge
-                        WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
+                    xmlWriter.WriteEndElement();
+
+                    // Now write the tax/duty shipment charge
+                    WriteInternationalBillingDutiesTaxesShipmentCharge(ups, account, xmlWriter);
 
                     xmlWriter.WriteEndElement();
                 }
@@ -385,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         [NDependIgnoreLongMethod]
         private static void WriteInternationalBillingDutiesTaxesShipmentCharge(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
-            UpsShipmentChargeType upsShipmentChargeType = (UpsShipmentChargeType)ups.ShipmentChargeType;
+            UpsShipmentChargeType upsShipmentChargeType = (UpsShipmentChargeType) ups.ShipmentChargeType;
 
             if (UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
             {
@@ -393,7 +396,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 return;
             }
 
-            // If the user didn't enter an account number for billing the receiver, just return 
+            // If the user didn't enter an account number for billing the receiver, just return
             if (upsShipmentChargeType == UpsShipmentChargeType.BillReceiver && (string.IsNullOrWhiteSpace(ups.ShipmentChargeAccount) || string.IsNullOrWhiteSpace(ups.ShipmentChargePostalCode)))
             {
                 return;
@@ -401,37 +404,37 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Now write the tax/duty shipment charge
             xmlWriter.WriteStartElement("ShipmentCharge");
-                xmlWriter.WriteElementString("Type", "02");
+            xmlWriter.WriteElementString("Type", "02");
 
-                switch (upsShipmentChargeType)
-                {
-                    case UpsShipmentChargeType.BillShipper:
-                        xmlWriter.WriteStartElement("BillShipper");
-                            xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
-                        xmlWriter.WriteEndElement();
-                        break;
-                    case UpsShipmentChargeType.BillReceiver:
-                        xmlWriter.WriteStartElement("BillReceiver");
-                            xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
-                            xmlWriter.WriteStartElement("Address");
-                                xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
-                            xmlWriter.WriteEndElement();
-                        xmlWriter.WriteEndElement();
-                        break;
-                    case UpsShipmentChargeType.BillThirdParty:
-                        xmlWriter.WriteStartElement("BillThirdParty");
-                        xmlWriter.WriteStartElement("BillThirdPartyConsignee");
-                                xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
-                                xmlWriter.WriteStartElement("ThirdParty");
-                                    xmlWriter.WriteStartElement("Address");
-                                        xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
-                                        xmlWriter.WriteElementString("CountryCode", ups.ShipmentChargeCountryCode);
-                                    xmlWriter.WriteEndElement();
-                                xmlWriter.WriteEndElement();
-                            xmlWriter.WriteEndElement();
-                        xmlWriter.WriteEndElement();
-                        break;
-                }
+            switch (upsShipmentChargeType)
+            {
+                case UpsShipmentChargeType.BillShipper:
+                    xmlWriter.WriteStartElement("BillShipper");
+                    xmlWriter.WriteElementString("AccountNumber", account.AccountNumber);
+                    xmlWriter.WriteEndElement();
+                    break;
+                case UpsShipmentChargeType.BillReceiver:
+                    xmlWriter.WriteStartElement("BillReceiver");
+                    xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    break;
+                case UpsShipmentChargeType.BillThirdParty:
+                    xmlWriter.WriteStartElement("BillThirdParty");
+                    xmlWriter.WriteStartElement("BillThirdPartyConsignee");
+                    xmlWriter.WriteElementString("AccountNumber", ups.ShipmentChargeAccount);
+                    xmlWriter.WriteStartElement("ThirdParty");
+                    xmlWriter.WriteStartElement("Address");
+                    xmlWriter.WriteElementString("PostalCode", ups.ShipmentChargePostalCode);
+                    xmlWriter.WriteElementString("CountryCode", ups.ShipmentChargeCountryCode);
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.WriteEndElement();
+                    break;
+            }
             xmlWriter.WriteEndElement();
         }
 
@@ -493,7 +496,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private static void WriteReturnShipmentOptions(UpsAccountEntity account, UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
             // only the Electronic Return return type needs recipient information
-            if (ups.Shipment.ReturnShipment && ups.ReturnService == (int)UpsReturnServiceType.ElectronicReturnLabel)
+            if (ups.Shipment.ReturnShipment && ups.ReturnService == (int) UpsReturnServiceType.ElectronicReturnLabel)
             {
                 // Start LabelDelivery
                 xmlWriter.WriteStartElement("LabelDelivery");
@@ -532,8 +535,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         [NDependIgnoreLongMethod]
         private static void WriteInternationalFormsXml(UpsAccountEntity account, UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
-            bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType)ups.Service);
-            bool isMailInnovations = UpsUtility.IsUpsMiService((UpsServiceType)ups.Service);
+            bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service);
+            bool isMailInnovations = UpsUtility.IsUpsMiService((UpsServiceType) ups.Service);
             bool isMilitarySurePost = isSurePost && PostalUtility.IsMilitaryState(ups.Shipment.ShipStateProvCode);
 
             // Has to be internation or Military SurePost
@@ -629,7 +632,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             else if (isSurePost || isMailInnovations)
             {
                 // Write any Postal CN22 info needed
-                WritePostalCN22(ups, xmlWriter);   
+                WritePostalCN22(ups, xmlWriter);
             }
         }
 
@@ -648,12 +651,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 if (serviceType == UpsServiceType.UpsSurePostLessThan1Lb)
                 {
                     // If it's SurePost less than a pound, set the sub class
-                    xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType)ups.Subclassification));
+                    xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType) ups.Subclassification));
                 }
 
-                // The documentation didn't give us a value for Carrier Leave if No Response.  It only says that if no endorsement is specified, 
+                // The documentation didn't give us a value for Carrier Leave if No Response.  It only says that if no endorsement is specified,
                 // UPS will default to Carrier Leave if No Response.  So only write the endorsement if CarrierLeaveIfNoResponse is not selected.
-                if ((UspsEndorsementType)ups.Endorsement != UspsEndorsementType.CarrierLeaveIfNoResponse)
+                if ((UspsEndorsementType) ups.Endorsement != UspsEndorsementType.CarrierLeaveIfNoResponse)
                 {
                     xmlWriter.WriteElementString("USPSEndorsement", EnumHelper.GetApiValue((UspsEndorsementType) ups.Endorsement));
                 }
@@ -668,13 +671,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void WriteMiShipmentValues(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
-            UpsServiceType serviceType = (UpsServiceType)ups.Service;
+            UpsServiceType serviceType = (UpsServiceType) ups.Service;
 
             // Only write the fields if the service is an MI service
             if (UpsUtility.IsUpsMiService(serviceType))
             {
-				// No Service Selected is the only valid value for international.
-                UspsEndorsementType uspsEndorsementType = (UspsEndorsementType)ups.Endorsement;
+                // No Service Selected is the only valid value for international.
+                UspsEndorsementType uspsEndorsementType = (UspsEndorsementType) ups.Endorsement;
                 if (serviceType == UpsServiceType.UpsMailInnovationsIntEconomy ||
                     serviceType == UpsServiceType.UpsMailInnovationsIntPriority)
                 {
@@ -682,10 +685,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 }
 
                 xmlWriter.WriteElementString("USPSEndorsement", EnumHelper.GetApiValue(uspsEndorsementType));
-                
-                xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType)ups.Subclassification));
-                
-                xmlWriter.WriteElementString("IrregularIndicator", EnumHelper.GetApiValue((UpsIrregularIndicatorType)ups.IrregularIndicator));
+
+                xmlWriter.WriteElementString("SubClassification", EnumHelper.GetApiValue((UpsPostalSubclassificationType) ups.Subclassification));
+
+                xmlWriter.WriteElementString("IrregularIndicator", EnumHelper.GetApiValue((UpsIrregularIndicatorType) ups.IrregularIndicator));
 
                 // Blanks are not allowed
                 string costCenter = UpsApiCore.ProcessUspsTokenField(ups.CostCenter, ups.ShipmentID, string.Empty);
@@ -708,7 +711,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         [NDependIgnoreLongMethod]
         private static void WritePostalCN22(UpsShipmentEntity ups, XmlTextWriter xmlWriter)
         {
-            UpsServiceType serviceType = (UpsServiceType)ups.Service;
+            UpsServiceType serviceType = (UpsServiceType) ups.Service;
 
             if (!ups.Shipment.CustomsItemsLoaded)
             {
@@ -751,8 +754,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Start CN22Form
             xmlWriter.WriteStartElement("CN22Form");
-                
-            // 6 = 4x6 
+
+            // 6 = 4x6
             // 1 = 8.5x11
             xmlWriter.WriteElementString("LabelSize", "6");
 
@@ -766,7 +769,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
             else
             {
-                xmlWriter.WriteElementString("LabelPrintType", "gif");   
+                xmlWriter.WriteElementString("LabelPrintType", "gif");
             }
 
             UpsCN22GoodsType cn22Type = ups.CustomsDocumentsOnly ? UpsCN22GoodsType.Documents : UpsCN22GoodsType.Other;
@@ -781,7 +784,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // UPS only allows 1 customs item for MI shipments
             int maximumAllowedCustomsItems = UpsUtility.IsUpsMiService(serviceType) ? 1 : 3;
-            
+
             foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(maximumAllowedCustomsItems))
             {
                 // Start InternationalForms
@@ -801,14 +804,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                 // Get the settings for this shipment/package type so we can determine weight unit of measure and declared value setting
                 // Before calling this method, the shipment/package type should be validated so that a setting is always found if we make it this far.
-                UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType)ups.Service &&
-                                                            s.PackageType == (UpsPackagingType)ups.Packages[0].PackagingType);
+                UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType) ups.Service &&
+                                                            s.PackageType == (UpsPackagingType) ups.Packages[0].PackagingType);
 
                 weight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, upsSetting.WeightUnitOfMeasure, weight);
 
                 // Weight unit of measure values are lbs and ozs
                 xmlWriter.WriteElementString("Code", upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Pounds ? "LBS" : "OZS");
-                    
+
                 // Close UnitOfMeasurement
                 xmlWriter.WriteEndElement();
 
@@ -817,7 +820,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Close CN22ContentWeight
                 xmlWriter.WriteEndElement();
 
-                decimal totalValue = shipmentCustomsItem.UnitValue * (decimal)shipmentCustomsItem.Quantity;
+                decimal totalValue = shipmentCustomsItem.UnitValue * (decimal) shipmentCustomsItem.Quantity;
                 xmlWriter.WriteElementString("CN22ContentTotalValue", totalValue.ToString("N2"));
 
                 // Currently only USD is supported
@@ -826,7 +829,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Close CN22Content
                 xmlWriter.WriteEndElement();
             }
-            
+
             // Close CN22Form
             xmlWriter.WriteEndElement();
 
@@ -927,7 +930,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
-        /// Add all the recipients of a particular notification type to the XML 
+        /// Add all the recipients of a particular notification type to the XML
         /// </summary>
         private static void AppendEmailNotificationTypeXml(UpsShipmentEntity ups, XmlTextWriter xmlWriter, List<string> recipients, string upsCode, ref bool headerWritten)
         {
@@ -1033,7 +1036,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
             else
             {
-                shipment.BilledType = (int)BilledType.ActualWeight; 
+                shipment.BilledType = (int) BilledType.ActualWeight;
             }
 
             // Get all the packages for the shipment
@@ -1076,11 +1079,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         }
                     }
 
-                    // Now that the USPS tracking number should be correct, we need to update the 
+                    // Now that the USPS tracking number should be correct, we need to update the
                     // main tracking number to be the USPS tracking number.
                     // From Bryan Cazan @ UPS:
-                    //   For domestic MI tracking, please use the USPSPICNumber as the tracking number that is passed on to marketplaces. 
-                    //   Please ignore the 8000 number given. That number will cause issues with tracking for customers. 
+                    //   For domestic MI tracking, please use the USPSPICNumber as the tracking number that is passed on to marketplaces.
+                    //   Please ignore the 8000 number given. That number will cause issues with tracking for customers.
                     if (!string.IsNullOrWhiteSpace(currentPackage.UspsTrackingNumber))
                     {
                         currentPackage.TrackingNumber = currentPackage.UspsTrackingNumber;
@@ -1088,7 +1091,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     }
                 }
 
-                if (shipment.ReturnShipment && !UpsUtility.ReturnServiceHasLabels((UpsReturnServiceType)shipment.Ups.ReturnService))
+                if (shipment.ReturnShipment && !UpsUtility.ReturnServiceHasLabels((UpsReturnServiceType) shipment.Ups.ReturnService))
                 {
                     // no labels
                 }

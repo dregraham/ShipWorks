@@ -332,7 +332,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
                 .Do(x =>
                 {
-                    // Since the content weight can be set from a keyboard shortcut, 
+                    // Since the content weight can be set from a keyboard shortcut,
                     // it may get changed without getting focus. So we'll force a save to ensure the
                     // change makes it to the DB
                     if (x == "ContentWeight" && !isSaving)
@@ -508,6 +508,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             lastSelectedShipmentID = null;
             SelectedShipments = null;
+
+            // long.MinValue is not special, it's just meant to clear the field since it is not a valid account id
+            AccountId = long.MinValue;
+            OriginAddressType = long.MinValue;
         }
 
         /// <summary>

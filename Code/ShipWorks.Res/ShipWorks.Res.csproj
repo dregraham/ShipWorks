@@ -288,7 +288,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\interapptive_public.snk" />
-    <EmbeddedResource Include="Templates\Distribution\Source\Source.zip" />
+    <EmbeddedResource Include="Templates\Distribution\Source.zip" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
@@ -407,6 +407,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.11\5.11.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.12\5.12.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.2.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />

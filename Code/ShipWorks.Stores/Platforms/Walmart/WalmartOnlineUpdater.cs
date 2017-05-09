@@ -43,9 +43,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Upload carrier and tracking information for the given orders
         /// </summary>
-        public void UpdateShipmentDetails(long orderKey)
+        public void UpdateShipmentDetails(long orderID)
         {
-            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderKey);
+            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderID);
 
             // Check to see if shipment exists and order has shippable line item
             if (shipment != null)

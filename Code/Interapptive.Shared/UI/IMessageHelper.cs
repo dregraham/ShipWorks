@@ -68,6 +68,10 @@ namespace Interapptive.Shared.UI
         /// Show a message
         /// </summary>
         void ShowMessage(string message);
+
+        /// <summary>
+        /// Set the cursor, then set it back when the result is disposed
+        /// </summary>
         IDisposable SetCursor(Cursor waitCursor);
     }
 }
