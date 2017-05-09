@@ -7,11 +7,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Common.Logging;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
@@ -38,15 +40,17 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private string oAuthAuthorizationCode;
         private IShopSiteAuthenticationPersistenceStrategy persistenceStrategy;
         private bool legacyUseUnsecureHttp;
+        private readonly IShopSiteIdentifier identifier;
         private ShopSiteAuthenticationType authenticationType;
 
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper)
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier)
         {
             this.messageHelper = messageHelper;
+            this.identifier = identifier;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
@@ -59,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Authentication type to use for BigCommerce requests
+        /// Authentication type to use for ShopSite requests
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ShopSiteAuthenticationType AuthenticationType
@@ -72,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// Url for the API
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ApiUrl //rename to ApiUrl
+        public string ApiUrl 
         {
             get { return apiUrl; }
             set { handler.Set(nameof(ApiUrl), ref apiUrl, value); }
@@ -265,6 +269,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             shopSiteStore.ApiUrl = url;
+            identifier.Set(shopSiteStore, url);
+
             shopSiteStore.RequireSSL = !LegacyUseUnsecureHttp;
 
             if (shopSiteStore.Fields[(int)ShopSiteStoreFieldIndex.Username].IsChanged ||
@@ -276,8 +282,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 try
                 {
                     // Create the client for connecting to the module
-                    ShopSiteWebClient webClient = new ShopSiteWebClient(shopSiteStore);
-                    webClient.TestConnection();
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IShopSiteWebClient webClient = lifetimeScope.ResolveKeyed<IShopSiteWebClient>(shopSiteStore.Authentication, TypedParameter.From(shopSiteStore as IShopSiteStoreEntity));
+
+                        webClient.TestConnection();
+                    }
 
                     store.StoreName = "ShopSite Store";
                     store.Website = new Uri(url).Host;
