@@ -57,6 +57,6 @@
 
         <TextBlock Grid.Row="4" TextAlignment="Right">Authorization URL:</TextBlock>
         <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding OAuthAuthorizationUrl, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding ApiUrl, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

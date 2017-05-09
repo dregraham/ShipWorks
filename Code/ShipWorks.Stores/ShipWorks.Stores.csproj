@@ -344,11 +344,15 @@
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteIdentifier.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\ShopSite\Dto\AccessResponse.cs" />
     <Compile Include="Platforms\ShopSite\Dto\ErrorResponse.cs" />
-    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteAuthenticationPersistenceStrategy.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteDownloader.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteException.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteLegacyAuthenticationPersistenceStrategy.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteStoreType.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthWebClient.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteWebClient.cs" />

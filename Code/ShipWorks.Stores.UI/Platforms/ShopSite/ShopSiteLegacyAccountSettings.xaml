@@ -59,7 +59,7 @@
 
         <TextBlock Grid.Row="4" TextAlignment="Right">CGI URL:</TextBlock>
         <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding LegacyCgiUrl, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding ApiUrl, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="5"
                     Grid.Column="1">
