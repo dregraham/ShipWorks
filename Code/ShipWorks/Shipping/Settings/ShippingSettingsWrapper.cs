@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;

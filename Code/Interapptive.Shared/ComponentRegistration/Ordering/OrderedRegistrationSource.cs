@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// Provides support for <see cref="IOrderedEnumerable{TElement}"/>.

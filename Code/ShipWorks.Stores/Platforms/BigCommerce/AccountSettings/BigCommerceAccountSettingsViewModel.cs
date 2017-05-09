@@ -14,7 +14,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;

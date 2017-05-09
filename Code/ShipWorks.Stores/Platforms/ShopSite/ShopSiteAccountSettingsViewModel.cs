@@ -7,7 +7,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;

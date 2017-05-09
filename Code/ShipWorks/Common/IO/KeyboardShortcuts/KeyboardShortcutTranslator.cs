@@ -4,8 +4,8 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Users;
 

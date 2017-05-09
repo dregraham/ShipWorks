@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Autofac.Builder;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
+namespace Interapptive.Shared.ComponentRegistration.Ordering
 {
     /// <summary>
     /// An Autofac extension that provides control over the order in which multiple dependencies are resolved.

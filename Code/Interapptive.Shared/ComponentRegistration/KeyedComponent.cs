@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 
-namespace ShipWorks.ApplicationCore.ComponentRegistration
+namespace Interapptive.Shared.ComponentRegistration
 {
     /// <summary>
     /// Register a component keyed for specific service
@@ -41,7 +41,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        internal static void Register(ContainerBuilder builder,
+        public static void Register(ContainerBuilder builder,
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
             params Assembly[] assemblies)
         {

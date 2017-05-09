@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Transactions;
 using Interapptive.Shared.Data;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
