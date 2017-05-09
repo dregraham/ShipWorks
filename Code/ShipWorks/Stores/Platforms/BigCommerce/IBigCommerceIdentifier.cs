@@ -21,6 +21,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Set the identifier on the given store
         /// </summary>
-        BigCommerceStoreEntity Set(BigCommerceStoreEntity store, string apiUrl);
+        BigCommerceStoreEntity Set(BigCommerceStoreEntity store);
     }
 }

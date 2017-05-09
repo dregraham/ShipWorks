@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Set the identifier on the given store
         /// </summary>
-        public BigCommerceStoreEntity Set(BigCommerceStoreEntity store, string apiUrl)
+        public BigCommerceStoreEntity Set(BigCommerceStoreEntity store)
         {
             if (string.IsNullOrWhiteSpace(store.Identifier))
             {

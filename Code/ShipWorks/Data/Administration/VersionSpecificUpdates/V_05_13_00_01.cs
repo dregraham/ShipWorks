@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<BigCommerceStoreEntity>(query).Result;
                 foreach (BigCommerceStoreEntity store in stores.OfType<BigCommerceStoreEntity>())
                 {
-                    identifier.Set(store, store.ApiUrl);
+                    identifier.Set(store);
                 }
 
                 sqlAdapter.SaveEntityCollection(stores, refetchSavedEntitiesAfterSave: true, recurse: false);

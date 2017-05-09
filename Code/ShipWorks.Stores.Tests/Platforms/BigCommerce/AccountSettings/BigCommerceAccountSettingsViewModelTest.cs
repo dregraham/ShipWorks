@@ -141,7 +141,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             testObject.SaveToEntity(store);
 
-            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store, "https://store-vplh1lw.mybigcommerce.com/api/v2/"));
+            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store));
         }
 
         [Theory]

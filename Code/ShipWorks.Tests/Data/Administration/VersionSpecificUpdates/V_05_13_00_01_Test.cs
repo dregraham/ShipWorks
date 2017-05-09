@@ -67,8 +67,8 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
 
             testObject.Update();
 
-            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store1, "Foo"));
-            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store2, "Bar"));
+            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store1));
+            mock.Mock<IBigCommerceIdentifier>().Verify(x => x.Set(store2));
         }
 
         [Fact]
