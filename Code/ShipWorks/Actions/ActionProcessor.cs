@@ -26,13 +26,14 @@ namespace ShipWorks.Actions
     /// </summary>
     public class ActionProcessor
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ActionProcessor));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ActionProcessor));
+        private readonly TimeSpan maxWaitForPostponed = TimeSpan.FromSeconds(15);
 
         // Makes sure the database doesn't change while running actions
-        static ApplicationBusyToken busyToken;
-        static object runningLock = new object();
+        private static ApplicationBusyToken busyToken;
+        private static object runningLock = new object();
 
-        ActionQueueGateway gateway;
+        private ActionQueueGateway gateway;
 
         /// <summary>
         /// Raised each time an action is attempted to be processed, regardless of the outcome
@@ -261,9 +262,8 @@ namespace ShipWorks.Actions
                             log.InfoFormat("Waiting for more actions to fill in postponed setups.");
 
                             Stopwatch timer = Stopwatch.StartNew();
-                            TimeSpan maxWait = TimeSpan.FromSeconds(15);
 
-                            while (timer.Elapsed < maxWait && queueList.Count == 0)
+                            while (timer.Elapsed < maxWaitForPostponed && queueList.Count == 0)
                             {
                                 Thread.Sleep(TimeSpan.FromSeconds(2));
                                 queueList = GetNextQueuePage(lastQueueID);
