@@ -194,67 +194,53 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             //TODO Fix this unit test
 
-            //UpsAccountEntity account = new UpsAccountEntity { UpsRateTable = new UpsRateTableEntity() };
-            //account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
-            //{
-            //    Zone = "ABC",
-            //    Rate = 999,
-            //    WeightInPounds = 150,
-            //    Service = (int)UpsServiceType.UpsGround
-            //});
+            UpsAccountEntity account = new UpsAccountEntity { UpsRateTable = new UpsRateTableEntity() };
 
-            //account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
-            //{
-            //    Zone = "ABC",
-            //    Rate = 77,
-            //    WeightInPounds = 1,
-            //    Service = (int)UpsServiceType.Ups2DayAir
-            //});
+            account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
+            {
+                Zone = "ABC",
+                Rate = 77,
+                WeightInPounds = 20,
+                Service = (int)UpsServiceType.Ups2DayAir
+            });
 
-            //account.UpsRateTable.UpsPricePerPound.Add(new UpsPricePerPoundEntity()
-            //{
-            //    Zone = "ABC",
-            //    Rate = 12,
-            //    Service = (int)UpsServiceType.UpsGround
-            //});
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity { Weight = 20, PackagingType = (int)UpsPackagingType.Custom }, new UpsPackageEntity { Weight = 1, PackagingType = (int)UpsPackagingType.Custom } },
+                    Shipment = new ShipmentEntity()
+                };
 
-            //UpsShipmentEntity upsShipment =
-            //    new UpsShipmentEntity
-            //    {
-            //        Packages = { new UpsPackageEntity { Weight = 151, PackagingType = (int)UpsPackagingType.Custom }, new UpsPackageEntity { Weight = 1, PackagingType = (int)UpsPackagingType.Custom } },
-            //        Shipment = new ShipmentEntity()
-            //    };
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
 
-            //Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
-            //accountRepo.Setup(a => a.GetAccount(It.Is<ShipmentEntity>(s => Equals(s, upsShipment.Shipment)))).Returns(account);
+            upsShipment.Shipment.ShipStateProvCode = "MO";
+            upsShipment.Shipment.ShipPostalCode = "12345";
+            upsShipment.Shipment.OriginPostalCode = "12345";
 
-            //upsShipment.Shipment.ShipStateProvCode = "MO";
-            //upsShipment.Shipment.ShipPostalCode = "12345";
-            //upsShipment.Shipment.OriginPostalCode = "12345";
+            UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
+            zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
+            {
+                Zone = "ABC",
+                OriginZipFloor = 12345,
+                OriginZipCeiling = 12345,
+                DestinationZipFloor = 12345,
+                DestinationZipCeiling = 12345
+            });
 
-            //UpsLocalRatingZoneFileEntity zoneFile = new UpsLocalRatingZoneFileEntity { UploadDate = DateTime.UtcNow };
-            //zoneFile.UpsLocalRatingZone.Add(new UpsLocalRatingZoneEntity
-            //{
-            //    Zone = "ABC",
-            //    OriginZipFloor = 12345,
-            //    OriginZipCeiling = 12345,
-            //    DestinationZipFloor = 12345,
-            //    DestinationZipCeiling = 12345
-            //});
+            Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
+            adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
+                .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
+                {
+                    UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
 
-            //Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
-            //adapter.Setup(a => a.FetchEntityCollection(It.IsAny<UpsLocalRatingZoneFileCollection>(), null))
-            //    .Callback<IEntityCollection2, IRelationPredicateBucket>((c, a) =>
-            //    {
-            //        UpsLocalRatingZoneFileCollection c2 = (UpsLocalRatingZoneFileCollection)c;
+                    c2.Items.Add(zoneFile);
+                });
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            //        c2.Items.Add(zoneFile);
-            //    });
-            //mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
+            IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
-            //IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
-
-            //Assert.Equal(1088, result.First().Amount);
+            Assert.Equal(154, result.First().Amount);
         }
 
         [Fact]
