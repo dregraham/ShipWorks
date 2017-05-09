@@ -11110,7 +11110,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApplicationCore\ComponentRegistration\Ordering\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>

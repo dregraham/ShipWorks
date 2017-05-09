@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Web;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Net
@@ -14,7 +8,7 @@ namespace Interapptive.Shared.Net
     public class HttpVariableRequestSubmitter : HttpRequestSubmitter, IHttpVariableRequestSubmitter
     {
         // The variables to be posted
-        HttpVariableCollection variables = new HttpVariableCollection();
+        IHttpVariableCollection variables = new HttpVariableCollection();
 
         // Casing to be used for query string encoding
         QueryStringEncodingCasing encodingCasing = QueryStringEncodingCasing.Default;
@@ -31,7 +25,7 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// The variables to be posted
         /// </summary>
-        public HttpVariableCollection Variables
+        public IHttpVariableCollection Variables
         {
             get { return variables; }
         }

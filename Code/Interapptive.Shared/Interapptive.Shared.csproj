@@ -194,6 +194,7 @@
     <Compile Include="Metrics\TrackedEvent.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
+    <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />

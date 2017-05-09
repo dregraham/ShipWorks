@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes a soap request and packages the result as if it were our Generic response
         /// </summary>
-        private GenericModuleResponse ProcessSoapRequest(string api, HttpVariableCollection parameters, params string[] paramOrder)
+        private GenericModuleResponse ProcessSoapRequest(string api, IHttpVariableCollection parameters, params string[] paramOrder)
         {
             try
             {
