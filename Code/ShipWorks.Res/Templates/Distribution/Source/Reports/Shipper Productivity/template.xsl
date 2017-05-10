@@ -16,7 +16,7 @@
   <xsl:template match="ShipWorks">
 
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
@@ -37,11 +37,11 @@
 
       <body style="{$pageFont}">
 
-        <h3>
+        <h3 style="font-size: 1.67em; margin-top: 0;">
           Shipper Productivity (by User) - <xsl:value-of select="count(//Shipment[Processed = 'true'])" /> Shipments
         </h3>
 
-        <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+        <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
 
           <tr>
             <td style="{$headerStyle}; white-space: nowrap;">User</td>

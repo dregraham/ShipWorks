@@ -24,7 +24,7 @@
       </head>
       <body style="{$pageFont}">
 
-        <h3>
+        <h3 style="font-size: 1.67em; margin-top: 0;">
           Shipping Cost by Carrier - <xsl:value-of select="count(//Order)" /> Orders
         </h3>
 
@@ -41,7 +41,7 @@
         <xsl:variable name="iParcel" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'i-parcel']/TotalCharges)" />
         <xsl:variable name="amazon" select="sum(//Shipment[Status = 'Processed' and ShipmentType = 'Amazon']/TotalCharges)"/>
         <xsl:variable name="total" select="sum(//Shipment[Status = 'Processed']/TotalCharges)" />
-        <table style="width:4in; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+        <table style="width:4in; margin: 0px 0px 0px 0px; border-collapse: collapse;" cellspacing="0">
           <tr>
             <td style="{$rowStyle};">'Other'</td>
             <td style="{$rowStyle};" align="right">

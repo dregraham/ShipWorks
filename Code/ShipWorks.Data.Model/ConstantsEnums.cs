@@ -1712,6 +1712,8 @@ namespace ShipWorks.Data.Model
 		AuditDeletedOrders,
 		///<summary>CustomerKey. </summary>
 		CustomerKey,
+		///<summary>UseParallelActionQueue. </summary>
+		UseParallelActionQueue,
 		/// <summary></summary>
 		AmountOfFields
 	}

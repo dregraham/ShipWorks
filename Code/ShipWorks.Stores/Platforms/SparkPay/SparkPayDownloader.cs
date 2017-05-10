@@ -1,15 +1,15 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Stores.Platforms.SparkPay.DTO;
-using ShipWorks.Data.Administration.Retry;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -29,14 +29,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             : base(store)
         {
             this.webClient = webClient;
-            this.store = (SparkPayStoreEntity)store;
+            this.store = (SparkPayStoreEntity) store;
             statusProvider = statusProviderFactory(this.store);
         }
 
         /// <summary>
         /// Downloads orders for the given store using the newest last modified or store default or 30.
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -76,6 +76,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             }
         }
 
+        /// <summary>
+        /// Load all downloaded orders
+        /// </summary>
         private void LoadOrders(IEnumerable<Order> sparkPayOrders)
         {
             if (Progress.IsCancelRequested || !sparkPayOrders.Any())
@@ -89,6 +92,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             }
         }
 
+        /// <summary>
+        /// Load an individual order
+        /// </summary>
         private void LoadOrder(Order sparkPayOrder)
         {
             if (Progress.IsCancelRequested || sparkPayOrder == null)
@@ -98,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(sparkPayOrder.Id.Value));
 
-            order.OnlineStatus = statusProvider.GetCodeName((int)sparkPayOrder.OrderStatusId);
+            order.OnlineStatus = statusProvider.GetCodeName((int) sparkPayOrder.OrderStatusId);
             order.OnlineStatusCode = sparkPayOrder.OrderStatusId.ToString();
             order.OnlineLastModified = sparkPayOrder.UpdatedAt.GetValueOrDefault(DateTime.UtcNow).UtcDateTime;
             order.RequestedShipping = sparkPayOrder.SelectedShippingMethod;
@@ -132,17 +138,17 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             if (payment != null)
             {
-                OrderPaymentDetailEntity detail = new OrderPaymentDetailEntity {Order = order};
+                OrderPaymentDetailEntity detail = new OrderPaymentDetailEntity { Order = order };
 
                 if (payment.PaymentType == "CreditCard")
                 {
                     detail.Label = payment.PaymentMethodName;
-                    detail.Value = payment.CardType;
+                    detail.Value = payment?.CardType ?? string.Empty;
                 }
                 else
                 {
                     detail.Label = payment.PaymentMethodName;
-                    detail.Value = "";
+                    detail.Value = string.Empty;
                 }
             }
         }
@@ -256,7 +262,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             if (sparkPayOrder.OrderBillingAddressId == null)
             {
                 billAddress = shipAddress;
-            }else if (sparkPayOrder.OrderBillingAddressId != null)
+            }
+            else if (sparkPayOrder.OrderBillingAddressId != null)
             {
                 billAddress = sparkPayOrder.OrderBillingAddressId == sparkPayOrder.OrderShippingAddressId ?
                     shipAddress :

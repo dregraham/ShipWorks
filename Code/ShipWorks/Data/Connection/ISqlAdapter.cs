@@ -25,14 +25,14 @@ namespace ShipWorks.Data.Connection
         bool FetchEntity(IEntity2 entity);
 
         /// <summary>
-        /// Fetches one or more entities which match the filter information in the filterBucket into the EntityCollection passed.
-        /// The entity collection object has to contain an entity factory object which will be the factory for the entity instances
-        /// to be fetched.
-        /// This overload returns all found entities and doesn't apply sorting
+        /// Fetches one or more entities which match the filter information in the filterBucket
+        /// into the EntityCollection passed. The entity collection object has to contain
+        /// an entity factory object which will be the factory for the entity instances to
+        /// be fetched. This overload returns all found entities and doesn't apply sorting
         /// </summary>
         /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
-        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned of the type created by
-        /// the factory in the passed in EntityCollection instance.</param>
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        ///     of the type created by the factory in the passed in EntityCollection instance.</param>
         void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket);
 
         /// <summary>
@@ -47,6 +47,18 @@ namespace ShipWorks.Data.Connection
         /// Saves the entity.
         /// </summary>
         bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, bool recurse);
+
+        /// <summary>
+        /// Fetches one or more entities which match the filter information in the filterBucket
+        /// into the EntityCollection passed. The entity collection object has to contain
+        /// an entity factory object which will be the factory for the entity instances to
+        /// be fetched. This overload returns all found entities and doesn't apply sorting
+        /// </summary>
+        /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        ///     of the type created by the factory in the passed in EntityCollection instance.</param>
+        /// <param name="maxRowsToReturn">Maximum number of rows to return</param>
+        void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket, int maxRowsToReturn);
 
         /// <summary>
         /// Fetches one or more entities which match the filter information in the filterBucket into the EntityCollection passed.

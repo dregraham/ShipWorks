@@ -185,6 +185,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionProcessorFactoryTest.cs" />
+    <Compile Include="Actions\ActionDispatcherTest.cs" />
     <Compile Include="Actions\ComputerActionPolicyTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\DayComboFormatterTest.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleTest.cs" />

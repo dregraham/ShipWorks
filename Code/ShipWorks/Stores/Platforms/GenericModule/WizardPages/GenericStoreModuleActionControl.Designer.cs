@@ -137,7 +137,7 @@
         private System.Windows.Forms.CheckBox shipmentUpdate;
         private ShipWorks.Templates.Tokens.TemplateTokenTextBox commentToken;
         private System.Windows.Forms.CheckBox statusUpdate;
-        private System.Windows.Forms.ComboBox comboStatus;
+        protected System.Windows.Forms.ComboBox comboStatus;
         private System.Windows.Forms.Label labelComment;
     }
 }

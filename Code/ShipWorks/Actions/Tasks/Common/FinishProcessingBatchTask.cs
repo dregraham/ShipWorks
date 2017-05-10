@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using Microsoft.ApplicationInsights.DataContracts;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -47,6 +51,7 @@ namespace ShipWorks.Actions.Tasks.Common
                     Math.Max(data.ShipmentCount - data.ShipmentErrorCount, 0));
                 eventTelemetry.Properties.Add("Shipping.Printing.Labels.Workflow", data.WorkflowName);
                 eventTelemetry.Properties.Add("Shipping.Printing.Labels.ProcessingTaskCount", data.ProcessingTaskCount.ToString());
+                eventTelemetry.Properties.Add(Telemetry.ParallelActionQueueUsed, data.ParallelActionQueueUsed.ToString());
 
                 Telemetry.TrackEvent(eventTelemetry);
             }
@@ -82,6 +87,19 @@ namespace ShipWorks.Actions.Tasks.Common
         public class ExtraData
         {
             /// <summary>
+            /// Constructor
+            /// </summary>
+            public ExtraData()
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IConfigurationData configData = lifetimeScope.Resolve<IConfigurationData>();
+                    IConfigurationEntity configurationEntity = configData.FetchReadOnly();
+                    ParallelActionQueueUsed = configurationEntity.UseParallelActionQueue;
+                }
+            }
+
+            /// <summary>
             /// Time the batch started
             /// </summary>
             public DateTime StartingTime { get; set; }
@@ -105,6 +123,11 @@ namespace ShipWorks.Actions.Tasks.Common
             /// Number of taskes used to process the shipments
             /// </summary>
             public int ProcessingTaskCount { get; set; }
+
+            /// <summary>
+            /// Was the parallel action queue used
+            /// </summary>
+            public bool ParallelActionQueueUsed { get; set; }
         }
     }
 }

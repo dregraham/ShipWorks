@@ -10,7 +10,7 @@
     <xsl:template match="ShipWorks">
 
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
@@ -30,27 +30,27 @@
     </head>
 
     <body style="{$pageFont}">
-        
-        <h3>Order Status Summary</h3>
-        
-          <table style="width:{$pageWidth}; margin: 10px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+
+        <h3 style="font-size: 1.67em; margin-top: 0;">Order Status Summary</h3>
+
+          <table style="width:{$pageWidth}; margin: 10px 0px 0px 0px; border-collapse: collapse;" cellspacing="0">
             <tr>
                 <td style="{$headerStyle};">Order</td>
                 <td style="{$headerStyle};">Date</td>
                 <td style="{$headerStyle};">Name</td>
                 <td style="{$headerStyle};">Status</td>
             </tr>
-            
+
             <!-- Group by order number -->
             <xsl:for-each select="Customer/Order">
                 <xsl:sort select="Number" order="descending" data-type="number" />
-                 
+
                 <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
                 <xsl:variable name="rowStyle">
                     padding: 4px 8px 4px 8px;
                     <xsl:if test="position() != 1">border-top: 1px solid lightgrey;</xsl:if>
-                </xsl:variable>   
-                
+                </xsl:variable>
+
                 <tr>
                     <td style="{$rowStyle}">
                         <!-- Shared Snippet -->
@@ -62,11 +62,11 @@
                     <td style="{$rowStyle}"><xsl:value-of select="Address[@type='bill']/LastName" />, <xsl:value-of select="Address[@type='bill']/FirstName" /></td>
                     <td style="{$rowStyle}"><xsl:value-of select="Status" /></td>
                 </tr>
-                                                
+
             </xsl:for-each>
-            
-        </table>           
-       
+
+        </table>
+
     </body>
 
     </html>

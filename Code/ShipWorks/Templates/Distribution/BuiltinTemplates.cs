@@ -48,7 +48,7 @@ namespace ShipWorks.Templates.Distribution
                 }
             }
 
-            // Fake it if runnning under development, otherwise they'd try to install themselves everytime
+            // Fake it if running under development, otherwise they'd try to install themselves every time
             if (swVersion.Major == 0)
             {
                 // Has to be set to the biggest number we check below
@@ -155,7 +155,7 @@ namespace ShipWorks.Templates.Distribution
             Directory.CreateDirectory(sourceDirectory);
 
             string sourceFile = Path.Combine(sourceDirectory, "source.zip");
-            using (Stream stream = Assembly.Load("ShipWorks.Res").GetManifestResourceStream("ShipWorks.Res.Templates.Distribution.Source.Source.zip"))
+            using (Stream stream = Assembly.Load("ShipWorks.Res").GetManifestResourceStream("ShipWorks.Res.Templates.Distribution.Source.zip"))
             {
                 StreamUtility.WriteToFile(stream, sourceFile);
             }
@@ -179,5 +179,10 @@ namespace ShipWorks.Templates.Distribution
 
             return templates;
         }
+
+        /// <summary>
+        /// Reinstall all the builtin templates
+        /// </summary>
+        internal static void ReinstallTemplates() => PerformInitialInstall();
     }
 }

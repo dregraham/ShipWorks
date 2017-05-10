@@ -322,6 +322,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AuditDeletedOrders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomerKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("UseParallelActionQueue", fieldHashtable);
 		}
 		#endregion
 
@@ -508,6 +510,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.CustomerKey, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.CustomerKey, value); }
+		}
+
+		/// <summary> The UseParallelActionQueue property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."UseParallelActionQueue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean UseParallelActionQueue
+		{
+			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.UseParallelActionQueue, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.UseParallelActionQueue, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="customsItem">The customs item.</param>
         /// <param name="changedWeights">The changed weights.</param>
         /// <param name="changedValues">The changed values.</param>
-        protected override void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, Dictionary<ShipmentEntity, bool> changedWeights, Dictionary<ShipmentEntity, bool> changedValues)
+        protected override void SaveCustomsItem(ShipmentCustomsItemEntity customsItem, List<long> changedWeights, List<long> changedValues)
         {
             base.SaveCustomsItem(customsItem, changedWeights, changedValues);
 

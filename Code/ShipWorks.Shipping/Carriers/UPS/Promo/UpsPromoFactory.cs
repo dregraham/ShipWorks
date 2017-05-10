@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public IUpsPromo Get(UpsAccountEntity account, bool existingAccount)
         {
-            return new TelemetricUpsPromo(telemetryEventFunc("Ups.Promo"), GetUpsPromo(account), existingAccount);
+            return new TelemetricUpsPromo(telemetryEventFunc, GetUpsPromo(account), existingAccount);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             if (upsPromoPolicy.IsEligible(promo))
             {
                 // At this point if we are shoing a footnote we know its for an existing account
-                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEventFunc("Ups.Promo"), promo, true);
+                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEventFunc, promo, true);
 
                 // Create promo footnote factory
                 UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);
