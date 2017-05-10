@@ -4,15 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
@@ -30,7 +28,6 @@ using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using Syncfusion.XlsIO;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -49,11 +46,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         public CompareLocalRatesToApiRatesTest(DatabaseFixtureWithReusableContext db, ITestOutputHelper output)
         {
             this.output = output;
-
-            if (db.IsContextInitialized(ContextName))
-            {
-                context = InitializeDataContext(db);
-            }
+            InitializeDataContext(db);
         }
 
         [Fact]
@@ -114,10 +107,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(UpsPackagingType.BoxExpress)]
         public void UseDifferentPackaging(UpsPackagingType packagingType)
         {
-            RunTest(s =>
-            {
-                s.Ups.Packages[0].PackagingType = (int) packagingType;
-            });
+            RunTest(s => s.Ups.Packages[0].PackagingType = (int) packagingType);
         }
 
         [Theory]
@@ -137,6 +127,110 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         public void ShipperReleaseTest(bool shipperRelease)
         {
             RunTest(s => s.Ups.ShipperRelease = shipperRelease);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CarbonNeutralTest(bool carbonNeutral)
+        {
+            RunTest(s => s.Ups.CarbonNeutral = carbonNeutral);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void AdditionalHandlingTest(bool additionalHandling)
+        {
+            RunTest(s => s.Ups.Packages[0].AdditionalHandlingEnabled = additionalHandling);
+        }
+
+        [Theory]
+        [InlineData(true, UpsDryIceRegulationSet.Iata, false, 0)]
+        [InlineData(true, UpsDryIceRegulationSet.Cfr, false, 5.6)]
+        [InlineData(false, UpsDryIceRegulationSet.Iata, false, 10)]
+        [InlineData(false, UpsDryIceRegulationSet.Cfr, false, 10)]
+        [InlineData(true, UpsDryIceRegulationSet.Cfr, false, 5.5)]
+        [InlineData(true, UpsDryIceRegulationSet.Cfr, true, 10)]
+        public void DryIceTest(bool enabled,
+            UpsDryIceRegulationSet regulationSet,
+            bool forMedical,
+            double weight)
+        {
+            RunTest(s =>
+            {
+                UpsPackageEntity package = s.Ups.Packages[0];
+                package.DryIceEnabled = enabled;
+                package.DryIceWeight = weight;
+                package.DryIceIsForMedicalUse = forMedical;
+                package.DryIceRegulationSet = (int) regulationSet;
+            });
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void VerbalConfirmationTest(bool verbalConfirmation)
+        {
+            RunTest(s => s.Ups.Packages[0].VerbalConfirmationEnabled = verbalConfirmation);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CollectOnDeliveryTest(bool cod)
+        {
+            RunTest(s => s.Ups.CodEnabled = cod);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SaturdayDelivery(bool saturdayDelivery)
+        {
+            RunTest(s=>s.Ups.SaturdayDelivery = saturdayDelivery);
+        }
+
+        [Theory]
+        [InlineData(UpsPayorType.Receiver)]
+        [InlineData(UpsPayorType.Sender)]
+        [InlineData(UpsPayorType.ThirdParty)]
+        public void ThirdPartyBilling(UpsPayorType payorType)
+        {
+            RunTest(s => s.Ups.PayorType = (int) payorType);
+        }
+
+        [Theory]
+        // US 48 DAS
+        [InlineData("MA", "01007")]
+        // US 48 DAS Extended
+        [InlineData("MA", "01005")]
+        // Remote HI
+        [InlineData("HI", "96703")]
+        //Remote AK
+        [InlineData("AK", "99546")]
+        public void RemoteArea(string state, string zip)
+        {
+            RunTest(s =>
+            {
+                s.ShipStateProvCode = state;
+                s.ShipPostalCode = zip;
+            });
+        }
+
+        [Fact]
+        public void ResidentialTest()
+        {
+            RunTest(s =>
+            {
+                s.ShipCompany = string.Empty;
+                s.ShipStreet1 = "4012 Shenandoah Ave";
+                s.ShipStreet2 = string.Empty;
+                s.ShipCity = "St Louis";
+                s.ShipStateProvCode = "MO";
+                s.ShipPostalCode = "63110";
+                s.ShipResidentialStatus = (int) ResidentialDeterminationType.Residential;
+            });
         }
 
         private void RunTest(Action<ShipmentEntity> setter)
@@ -275,62 +369,79 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             return client.GetRates(shipment);
         }
 
-        private DataContext InitializeDataContext(DatabaseFixtureWithReusableContext db)
+        private void InitializeDataContext(DatabaseFixtureWithReusableContext db)
         {
-            context = db.GetReusableDataContext(x => ContainerInitializer.Initialize(x),
-                ShipWorksInitializer.GetShipWorksInstance(), ContextName);
-
-            context.UpdateShippingSetting(s =>
+            context = db.GetExistingContext(ContextName);
+            if (context == null)
             {
-                s.UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
-                s.UpsInsuranceProvider = 1;
-                s.UpsInsurancePennyOne = false;
-            });
+                context = db.GetNewDataContext(x => ContainerInitializer.Initialize(x),
+                    ShipWorksInitializer.GetShipWorksInstance(), ContextName);
 
-            var certInspector = new TrustingCertificateInspector();
-            context.Mock.Provide<ICertificateInspector>(certInspector);
-            context.Mock.Provide<ICarrierSettingsRepository>(new UpsSettingsRepository());
+                context.UpdateShippingSetting(s =>
+                {
+                    s.UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
+                    s.UpsInsuranceProvider = 1;
+                    s.UpsInsurancePennyOne = false;
+                });
 
-            localRatingAccountID = SetupLocalRating().UpsAccountID;
-            apiRatingAccountID = SetupApi().UpsAccountID;
+                var certInspector = new TrustingCertificateInspector();
+                context.Mock.Provide<ICertificateInspector>(certInspector);
+                context.Mock.Provide<ICarrierSettingsRepository>(new UpsSettingsRepository());
 
-            // When a constructor has an IEnumberable<IUpsServiceType>, mock returns all expected IServiceFilter's and a mocked version.
-            // The mocked version was filtering out all the service types, so this converts the mocked version into a passthrough.
-            // Ideally, it wouldn't be returned at all but I found no way of doing this...
-            context.Mock.SetupDefaultMocksForEnumerable<IServiceFilter>(item =>
-                item.Setup(x => x.GetEligibleServices(It.IsAny<UpsShipmentEntity>(), It.IsAny<IEnumerable<UpsServiceType>>()))
-                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types));
+                localRatingAccountID = SetupLocalRating().UpsAccountID;
+                apiRatingAccountID = SetupApi().UpsAccountID;
 
-            return context;
+                // When a constructor has an IEnumberable<IUpsServiceType>, mock returns all expected IServiceFilter's and a mocked version.
+                // The mocked version was filtering out all the service types, so this converts the mocked version into a passthrough.
+                // Ideally, it wouldn't be returned at all but I found no way of doing this...
+                context.Mock.SetupDefaultMocksForEnumerable<IServiceFilter>(item =>
+                    item.Setup(
+                            x =>
+                                x.GetEligibleServices(It.IsAny<UpsShipmentEntity>(),
+                                    It.IsAny<IEnumerable<UpsServiceType>>()))
+                        .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types));
+            }
+            else
+            {
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    UpsAccountCollection accounts = new UpsAccountCollection();
+                    adapter.FetchEntityCollection(accounts, null);
+
+                    apiRatingAccountID = accounts.Single(a => a.Description == "API").UpsAccountID;
+                    localRatingAccountID = accounts.Single(a => a.Description == "Local").UpsAccountID;
+                }
+            }
         }
 
         private UpsAccountEntity SetupLocalRating()
         {
             UpsAccountEntity upsAccountEntity = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>()
-                            .Set(a =>
-                            {
-                                a.AccountNumber = "TT9723";
-                                a.UserID = "7de7b76b15ed443e";
-                                a.Password = "11d0e976";
-                                a.RateType = 0;
-                                a.InvoiceAuth = false;
-                                a.FirstName = "API";
-                                a.MiddleName = string.Empty;
-                                a.LastName = "Rates";
-                                a.Company = "Shipworks";
-                                a.Street1 = "1 S Memorial Drive";
-                                a.Street2 = "Suite 2000";
-                                a.Street3 = string.Empty;
-                                a.City = "St Louis";
-                                a.StateProvCode = "MO";
-                                a.CountryCode = "US";
-                                a.Phone = "314-555-1212";
-                                a.Email = "junk@shipworks.com";
-                                a.Website = "www.shipworks.com";
-                                a.PromoStatus = 0;
-                                a.LocalRatingEnabled = true;
-                                a.UpsRateTableID = null;
-                            }).Save();
+                .Set(a =>
+                {
+                    a.Description = "Local";
+                    a.AccountNumber = "TT9723";
+                    a.UserID = "7de7b76b15ed443e";
+                    a.Password = "11d0e976";
+                    a.RateType = 0;
+                    a.InvoiceAuth = false;
+                    a.FirstName = "API";
+                    a.MiddleName = string.Empty;
+                    a.LastName = "Rates";
+                    a.Company = "Shipworks";
+                    a.Street1 = "1 S Memorial Drive";
+                    a.Street2 = "Suite 2000";
+                    a.Street3 = string.Empty;
+                    a.City = "St Louis";
+                    a.StateProvCode = "MO";
+                    a.CountryCode = "US";
+                    a.Phone = "314-555-1212";
+                    a.Email = "junk@shipworks.com";
+                    a.Website = "www.shipworks.com";
+                    a.PromoStatus = 0;
+                    a.LocalRatingEnabled = true;
+                    a.UpsRateTableID = null;
+                }).Save();
 
             Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLocalRatingViewModel));
 
@@ -356,6 +467,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             return Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>()
                 .Set(a =>
                 {
+                    a.Description = "API";
                     a.AccountNumber = "TT9723";
                     a.UserID = "7de7b76b15ed443e";
                     a.Password = "11d0e976";

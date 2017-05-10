@@ -20,21 +20,27 @@ namespace ShipWorks.Tests.Shared.Database
         private DataContext context;
         private string previousContextName = string.Empty;
 
-        public bool IsContextInitialized(string contextName)
+        /// <summary>
+        /// Gets the existing context based on contextName - null if none exists
+        /// </summary>
+        public DataContext GetExistingContext(string contextName)
         {
-            return context == null || previousContextName == contextName;
+            return context == null || previousContextName != contextName ? null : context;
         }
 
         /// <summary>
         /// Returns the datacontext. A new one is created if contextName differs from previous contextName or context hasn't been resolved.
         /// </summary>
-        public DataContext GetReusableDataContext(Action<IContainer> initializeContainer, Guid instance, string contextName)
+        public DataContext GetNewDataContext(Action<IContainer> initializeContainer, Guid instance, string contextName)
         {
-            if (IsContextInitialized(contextName))
+            if (GetExistingContext(contextName) != null)
             {
-                previousContextName = contextName;
-                context = CreateReusableDataContext(initializeContainer, instance);
+                throw new InvalidOperationException("Cannot get a new data context when an existing one of the same context name already exists");
             }
+
+            previousContextName = contextName;
+            context = CreateReusableDataContext(initializeContainer, instance);
+
             return context;
         }
 
