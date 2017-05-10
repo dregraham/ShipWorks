@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-using Interapptive.Shared.Threading;
+﻿using System.Xml;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {

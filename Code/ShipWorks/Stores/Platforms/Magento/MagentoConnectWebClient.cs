@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets status codes
         /// </summary>
-        private GenericModuleResponse ProcessGetStatusCodes(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessGetStatusCodes(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("getStatusCodes", request.Variables);
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes a GetModule request
         /// </summary>
-        private GenericModuleResponse ProcessGetModule(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessGetModule(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("getModule", request.Variables);
         }
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes a GetStore request
         /// </summary>
-        private GenericModuleResponse ProcessGetStore(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessGetStore(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("getStore", request.Variables);
         }
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes the getCount api call
         /// </summary>
-        private GenericModuleResponse ProcessGetCount(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessGetCount(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("getCount", request.Variables, "start", "storeCode");
         }
@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes the getOrders api call
         /// </summary>
-        private GenericModuleResponse ProcessGetOrders(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessGetOrders(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("getOrders", request.Variables, "start", "maxcount", "storecode");
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes the updateOrder api call
         /// </summary>
-        private GenericModuleResponse ProcessUpdateOrder(HttpVariableRequestSubmitter request)
+        private GenericModuleResponse ProcessUpdateOrder(IHttpVariableRequestSubmitter request)
         {
             return ProcessSoapRequest("updateOrder", request.Variables, "order", "command", "comments", "tracking", "carrier", "sendemail");
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Interapptive.Shared.Net
 {
     /// <summary>

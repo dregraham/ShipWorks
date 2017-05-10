@@ -1,13 +1,12 @@
 using System;
-using System.Net;
 using System.Xml;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
@@ -20,15 +19,20 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     {
         // The store we are connecting to
         private readonly IShopSiteStoreEntity shopSiteStore;
-
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory;
         private const string storeSettingMissingErrorMessage = "The ShopSite {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
 
         /// <summary>
         /// Create this instance of the web client for connecting to the specified store
         /// </summary>
-        public ShopSiteWebClient(IShopSiteStoreEntity store)
+        public ShopSiteWebClient(IShopSiteStoreEntity store,
+                                 Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory, 
+                                 Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            this.apiLogEntryFactory = MethodConditions.EnsureArgumentIsNotNull(apiLogEntryFactory, nameof(apiLogEntryFactory));
+            this.variableRequestSubmitterFactory = MethodConditions.EnsureArgumentIsNotNull(variableRequestSubmitterFactory, nameof(variableRequestSubmitterFactory));
 
             ValidateApiAccessData(store);
         }
@@ -38,44 +42,24 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private static void ValidateApiAccessData(IShopSiteStoreEntity store)
         {
-            if (store.Authentication == ShopSiteAuthenticationType.Basic)
+            if (store.Authentication == ShopSiteAuthenticationType.Oauth)
             {
-                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "CGI Path"));
-                }
-
-                if (string.IsNullOrWhiteSpace(store?.Username))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Merchant ID"));
-                }
-
-                if (string.IsNullOrWhiteSpace(store?.Password))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Password"));
-                }
+                throw new ShopSiteException($"Store '{store.StoreName}', is configured to use OAuth authentication but the Basic web client is being used.");
             }
-            else
+
+            if (string.IsNullOrWhiteSpace(store?.ApiUrl))
             {
-                if (string.IsNullOrWhiteSpace(store?.ApiUrl))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Authorization URL"));
-                }
+                throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "CGI Path"));
+            }
 
-                if (string.IsNullOrWhiteSpace(store?.OauthClientID))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Client ID"));
-                }
+            if (string.IsNullOrWhiteSpace(store?.Username))
+            {
+                throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Merchant ID"));
+            }
 
-                if (string.IsNullOrWhiteSpace(store?.OauthSecretKey))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Secret Key"));
-                }
-
-                if (string.IsNullOrWhiteSpace(store?.AuthorizationCode))
-                {
-                    throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Authorization Code"));
-                }
+            if (string.IsNullOrWhiteSpace(store?.Password))
+            {
+                throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Password"));
             }
         }
 
@@ -84,7 +68,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public void TestConnection()
         {
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            IHttpVariableRequestSubmitter postRequest = variableRequestSubmitterFactory();
+
             postRequest.Variables.Add("maxorder", "1");
 
             ProcessRequest(postRequest, "TestConnection");
@@ -95,10 +80,11 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public XmlDocument GetOrders(long startOrder)
         {
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("startorder", startOrder.ToString());
+            IHttpVariableRequestSubmitter postRequest = variableRequestSubmitterFactory();
+
             postRequest.Variables.Add("maxorder", shopSiteStore.DownloadPageSize.ToString());
             postRequest.Variables.Add("pay", "yes");
+            postRequest.Variables.Add("startorder", startOrder.ToString());
 
             return ProcessRequest(postRequest, "GetOrders");
         }
@@ -106,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Send the given request to the ShopShite CGI url
         /// </summary>
-        private XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest, string action)
+        private XmlDocument ProcessRequest(IHttpVariableRequestSubmitter postRequest, string action)
         {
             // Communication with ShopSite is unreliable at best with KeepAlive on
             postRequest.KeepAlive = false;
@@ -119,8 +105,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
 
             // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.ShopSite, action);
-            logger.LogRequest(postRequest);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShopSite, action);
+            apiLogEntry.LogRequest(postRequest);
 
             // Execute the request
             try
@@ -130,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                     string resultXml = postResponse.ReadResult();
 
                     // Log the response
-                    logger.LogResponse(resultXml);
+                    apiLogEntry.LogResponse(resultXml);
 
                     // As of 12/22/09 I saw HTML being returned as the XML response if the username as bad that contained this message...
                     if (resultXml.Contains("Your User Name could not be determined"))

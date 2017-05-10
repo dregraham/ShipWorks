@@ -1,3 +1,4 @@
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Net
@@ -5,6 +6,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Http post request that posts name\value pairs.
     /// </summary>
+    [Component]
     public class HttpVariableRequestSubmitter : HttpRequestSubmitter, IHttpVariableRequestSubmitter
     {
         // The variables to be posted
