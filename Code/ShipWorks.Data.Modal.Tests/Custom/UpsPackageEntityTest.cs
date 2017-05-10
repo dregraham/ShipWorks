@@ -98,6 +98,8 @@ namespace ShipWorks.Data.Modal.Tests.Custom
         [InlineData(10.1, 10, 1, 100, 11)]
         [InlineData(5, 127, 1, 1, 90)]
         [InlineData(95, 127, 1, 1, 95)]
+        [InlineData(1, 12, 12, 12, 11)]
+        [InlineData(1, 12, 12, 13, 14)]
         public void BillableWeight(double weight, double length, double width, double height, int expectedValue)
         {
             var package = new UpsPackageEntity()

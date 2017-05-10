@@ -72,7 +72,9 @@ namespace ShipWorks.Data.Model.EntityClasses
             get
             {
                 int area = Dimensions[0] * Dimensions[1] * Dimensions[2];
-                int dimensionalWeight = (int) Math.Ceiling(area / 166D);
+
+                int dimensionalWeight = (int)Math.Ceiling(area / (area <= 1728 ? 166D : 139D));
+                // int dimensionalWeight = (int) Math.Ceiling(area / 166D);
 
                 if (IsLargePackage)
                 {
