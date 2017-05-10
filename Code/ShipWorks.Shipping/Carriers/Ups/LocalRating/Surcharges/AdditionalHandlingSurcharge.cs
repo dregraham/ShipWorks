@@ -46,10 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// </summary>
         private static bool NeedsAdditionalHandling(UpsPackageEntity package)
         {
-            return package.AdditionalHandlingEnabled || 
-                package.LongestSide > 48 || 
-                package.SecondLongestSize > 30 ||
-                package.TotalWeight > 70;
+            return (package.AdditionalHandlingEnabled ||
+                    package.LongestSide > 48 ||
+                    package.SecondLongestSize > 30 ||
+                    package.TotalWeight > 70) && 
+                    !package.IsLargePackage;
         }
     }
 }
