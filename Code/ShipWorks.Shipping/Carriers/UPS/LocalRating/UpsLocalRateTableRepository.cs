@@ -211,8 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 foreach (UpsPackageRateEntity baseRate in rateTable.UpsPackageRate)
                 {
                     UpsPricePerPoundEntity pricePerPoundRate =
-                        rateTable.UpsPricePerPound.FirstOrDefault(
-                            r => r.Service == baseRate.Service && r.Zone == baseRate.Zone);
+                        rateTable.UpsPricePerPound.FirstOrDefault(r => r.Service == baseRate.Service && r.Zone == baseRate.Zone);
                     
                     decimal rate = baseRate.Rate;
                     if (pricePerPoundRate != null)
