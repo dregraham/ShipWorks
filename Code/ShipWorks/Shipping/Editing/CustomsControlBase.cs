@@ -8,10 +8,13 @@ using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
@@ -33,7 +36,7 @@ namespace ShipWorks.Shipping.Editing
         // Keeps track of the selected row, if any
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldn't currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendShipSenseFieldEvent = 0;
 
         /// <summary>
@@ -123,7 +126,7 @@ namespace ShipWorks.Shipping.Editing
             itemsGrid.SelectionChanged += this.OnItemsGridChangeSelectedRow;
 
             // Each bucket represents a row that we will created.  if Description for a bucket is not null, it means EVERY shipment
-            // so far has at least one content item with that description.  Number of buckets = MAX(CustomContents.Count) accross all shipments.
+            // so far has at least one content item with that description.  Number of buckets = MAX(CustomContents.Count) across all shipments.
             List<RowBucket> buckets = new List<RowBucket>();
             loadedShipments = shipments.Where(s => CustomsManager.IsCustomsRequired(s)).ToList();
 
@@ -237,7 +240,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void RefreshItems()
         {
-            // Helps to retain selections when a shipment is synched with ShipSense; this retains
+            // Helps to retain selections when a shipment is synced with ShipSense; this retains
             // any rows that were selected prior to the sync.
 
             // Make note of any rows that are selected in the grid, so we can re-select them
@@ -393,7 +396,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             // Update the content weights and values for all affected shipments
-            UpdateContentWeight(loadedShipments.Where(s => changedWeights.Contains(s.ShipmentID )));
+            UpdateContentWeight(loadedShipments.Where(s => changedWeights.Contains(s.ShipmentID)));
             UpdateCustomsValue(loadedShipments.Where(s => changedValues.Contains(s.ShipmentID)));
         }
 
@@ -487,7 +490,7 @@ namespace ShipWorks.Shipping.Editing
         {
             foreach (ShipmentEntity shipment in shipments)
             {
-                shipment.CustomsValue = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
+                shipment.CustomsValue = CalculateCustomsValue(shipment);
             }
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -497,6 +500,19 @@ namespace ShipWorks.Shipping.Editing
                     customsValue.ApplyMultiAmount(shipment.CustomsValue);
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculate the total customs value for the given shipment
+        /// </summary>
+        /// <remarks>
+        /// This method will clamp the value it returns to the max value that can be stored in a field
+        /// </remarks>
+        private decimal CalculateCustomsValue(IShipmentEntity shipment)
+        {
+            decimal value = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
+
+            return Math.Min(value, SqlUtility.MoneyMaxValue);
         }
 
         /// <summary>

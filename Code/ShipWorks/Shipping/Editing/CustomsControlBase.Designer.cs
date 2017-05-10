@@ -2,12 +2,12 @@
 {
     partial class CustomsControlBase
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,14 +22,14 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sectionGeneral = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.label1 = new System.Windows.Forms.Label();
             this.customsValue = new ShipWorks.UI.Controls.MoneyTextBox();
@@ -98,6 +98,7 @@
             131072});
             this.customsValue.IgnoreSet = false;
             this.customsValue.Location = new System.Drawing.Point(61, 7);
+            this.customsValue.MaxLength = 14;
             this.customsValue.Name = "customsValue";
             this.customsValue.Size = new System.Drawing.Size(100, 21);
             this.customsValue.TabIndex = 0;
@@ -130,7 +131,7 @@
             this.gridColumnDescription});
             this.itemsGrid.Location = new System.Drawing.Point(8, 10);
             this.itemsGrid.Name = "itemsGrid";
-            this.itemsGrid.Renderer = windowsXPRenderer1;
+            this.itemsGrid.Renderer = windowsXPRenderer2;
             this.itemsGrid.Size = new System.Drawing.Size(486, 116);
             this.itemsGrid.TabIndex = 0;
             this.itemsGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnItemsGridChangeSelectedRow);
@@ -188,6 +189,7 @@
             this.weight.AutoSize = true;
             this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
+            this.weight.ConfigureTelemetryEntityCounts = null;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(105, 79);
             this.weight.Name = "weight";
@@ -207,6 +209,7 @@
             131072});
             this.value.IgnoreSet = false;
             this.value.Location = new System.Drawing.Point(105, 105);
+            this.value.MaxLength = 14;
             this.value.Name = "value";
             this.value.Size = new System.Drawing.Size(95, 21);
             this.value.TabIndex = 7;
@@ -273,6 +276,7 @@
             // quantity
             // 
             this.quantity.Location = new System.Drawing.Point(105, 24);
+            this.quantity.MaxLength = 14;
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(95, 21);
             this.quantity.TabIndex = 1;
