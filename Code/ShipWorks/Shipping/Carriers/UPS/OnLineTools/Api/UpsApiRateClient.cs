@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// <summary>
     /// Wrapper for accessing UPS rates
     /// </summary>
+    [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.Api)]
     public class UpsApiRateClient : IUpsRateClient
     {

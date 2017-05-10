@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -45,12 +46,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Apply_CallsAddAmountWithAirFuelSurchargeText()
         {
-            UpsLocalServiceRate serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsNextDayAir, 100, true, null);
-            testObject.Apply(null, serviceRate);
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.Setup(r => r.Service).Returns(UpsServiceType.Ups2DayAir);
+            serviceRate.Setup(r => r.Amount).Returns(100);
 
-            var stringBuilder = new StringBuilder();
-            serviceRate.Log(stringBuilder);
-            Assert.Contains("Air Fuel Surcharge", stringBuilder.ToString());
+            testObject.Apply(null, serviceRate.Object);
+
+            serviceRate.Verify(r => r.AddAmount(5.25M, "Air Fuel Surcharge of 0.0525"), Times.Once);
         }
 
         public void Dispose()

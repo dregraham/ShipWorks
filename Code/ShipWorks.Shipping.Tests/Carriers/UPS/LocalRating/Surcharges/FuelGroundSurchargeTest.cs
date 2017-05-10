@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
@@ -48,12 +49,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Apply_CallsAddAmountWithGroundFuelSurchargeText()
         {
-            UpsLocalServiceRate serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 100, true, null);
-            testObject.Apply(null, serviceRate);
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.Setup(r => r.Service).Returns(UpsServiceType.UpsGround);
+            serviceRate.Setup(r => r.Amount).Returns(100);
 
-            var stringBuilder = new StringBuilder();
-            serviceRate.Log(stringBuilder);
-            Assert.Contains("Ground Fuel Surcharge", stringBuilder.ToString());
+            testObject.Apply(null, serviceRate.Object);
+
+            serviceRate.Verify(r => r.AddAmount(5.25M, "Ground Fuel Surcharge of 0.0525"), Times.Once);
         }
 
         public void Dispose()

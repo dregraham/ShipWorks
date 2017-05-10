@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 decimal fuelSurchargeRate = (decimal) surcharges[UpsSurchargeType.FuelAir];
                 decimal fuelSurcharge = Math.Round(serviceRate.Amount * fuelSurchargeRate, 2);
 
-                serviceRate.AddAmount(fuelSurcharge, "Air Fuel Surcharge");
+                serviceRate.AddAmount(fuelSurcharge, $"Air Fuel Surcharge of {fuelSurchargeRate}");
             }
         }
     }
