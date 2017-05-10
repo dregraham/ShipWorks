@@ -76,8 +76,67 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
         [Fact]
         public void AdditionalHandling()
-        {
+        { 
             RunTest(s=>s.Ups.Packages[0].DimsLength=61);
+        }
+
+        [Fact]
+        public void UseBillableWeightWhenDimensionalWeightDeviserIs139()
+        {
+            // Dimensional weight is 7lbs
+            RunTest(s =>
+            {
+                var package = s.Ups.Packages[0];
+                package.DimsLength = 10;
+                package.DimsWidth = 10;
+                package.DimsHeight = 10;
+                package.DimsWeight = 5;
+            });
+        }
+
+        [Fact]
+        public void UseActualWeightWhenDimensionalWeightDeviserIs139()
+        {
+            // Billable weight is 7lbs
+            RunTest(s =>
+            {
+                var package = s.Ups.Packages[0];
+                package.DimsLength = 10;
+                package.DimsWidth = 10;
+                package.DimsHeight = 10;
+                package.DimsWeight = 10;
+            });
+        }
+
+        [Theory]
+        [InlineData(UpsPackagingType.Custom)]
+        [InlineData(UpsPackagingType.Letter)]
+        [InlineData(UpsPackagingType.BoxExpress)]
+        public void UseDifferentPackaging(UpsPackagingType packagingType)
+        {
+            RunTest(s =>
+            {
+                s.Ups.Packages[0].PackagingType = (int) packagingType;
+            });
+        }
+
+        [Theory]
+        [InlineData(UpsDeliveryConfirmationType.None)]
+        [InlineData(UpsDeliveryConfirmationType.AdultSignature)]
+        [InlineData(UpsDeliveryConfirmationType.NoSignature)]
+        [InlineData(UpsDeliveryConfirmationType.Signature)]
+        public void UseDifferentConfirmations(UpsDeliveryConfirmationType deliveryConfirmationType)
+        {
+            RunTest(s=>s.Ups.DeliveryConfirmation = (int) deliveryConfirmationType);
+        }
+
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ShipperReleaseTest(bool shipperRelease)
+        {
+            RunTest(s => s.Ups.ShipperRelease = shipperRelease);
         }
 
         private void RunTest(Action<ShipmentEntity> setter)
@@ -155,17 +214,26 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             if (extraLocalRates.Any())
             {
                 output.WriteLine($"LocalRates returned the following unsupported services:\n\n{string.Join("\n", extraLocalRates)}");
+                return false;
             }
             
             // Filter out api rates that LocalRates cannot handle
             apiRates = apiRates.Where(r => localServiceTypes.Contains(r.Service)).ToList();
 
-            var missingLocalRateServices =
+            var apiRatesNotInLocalRates =
                 apiRates.Where(apiRate => localRates.None(localRate => localRate.Service == apiRate.Service)).Select(r=>r.Service).ToList();
-
-            if (missingLocalRateServices.Any())
+            if (apiRatesNotInLocalRates.Any())
             {
-                output.WriteLine($"LocalRates returned the following unsupported services:\n\n{string.Join("\n", missingLocalRateServices)}");
+                output.WriteLine($"LocalRates client did not return services(s) returned by the api client. Missing services:\n\n{string.Join("\n", apiRatesNotInLocalRates)}");
+                return false;
+            }
+
+            var localRatesNotInApiRates =
+                localRates.Where(localRate => apiRates.None(apiRate => apiRate.Service == localRate.Service)).Select(r => r.Service).ToList();
+            if (localRatesNotInApiRates.Any())
+            {
+                output.WriteLine($"Api client did not return service(s) returned by the local client. Missing services:\n\n{string.Join("\n", localRatesNotInApiRates)}");
+                return false;
             }
 
             var allMatched = true;

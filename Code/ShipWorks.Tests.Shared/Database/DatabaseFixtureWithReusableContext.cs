@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         private DataContext CreateReusableDataContext(Action<IContainer> initializeContainer, Guid instance)
         {
-            var newContext = base.CreateDataContext(initializeContainer);
+            var newContext = CreateDataContext(initializeContainer);
 
             newContext.Mock.Provide<Control>(new Control());
             newContext.Mock.Provide<Func<Control>>(() => new Control());
