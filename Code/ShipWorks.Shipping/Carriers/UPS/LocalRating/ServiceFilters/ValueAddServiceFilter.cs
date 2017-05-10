@@ -24,6 +24,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         /// </summary>
         private bool IsServiceEligible(UpsShipmentEntity shipment, UpsServiceType service)
         {
+            // NextDayAirEarly does not work with delivery confirmation 
+            if (service == UpsServiceType.UpsNextDayAirAM)
+            {
+                if (shipment.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.NoSignature ||
+                    shipment.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.Signature)
+                {
+                    return false;
+                }
+            }
+
+            // VerbalConfirmation is only compatible with UpsNextDayAirEarly
+            if (shipment.Packages.Any(p => p.VerbalConfirmationEnabled) && service != UpsServiceType.UpsNextDayAirAM)
+            {
+                return false;
+            }
+
             if (shipment.SaturdayDelivery && !IsSaturdayService(service))
             {
                 return false;
@@ -36,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
 
             return true;
         }
-
+        
         /// <summary>
         /// Determines whether [is return service] [the specified service].
         /// </summary>

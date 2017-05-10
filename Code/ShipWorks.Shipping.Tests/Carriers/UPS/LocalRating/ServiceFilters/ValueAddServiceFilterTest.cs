@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Tests.Shared;
@@ -93,6 +94,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new []{UpsServiceType.UpsGround}).ToList();
 
             Assert.Equal(UpsServiceType.UpsGround, eligibleServiceTypes.Single());
+        }
+
+        [Fact]
+        public void GetEligibleServices_ReturnsServicesWithoutNextDayAirAM_WhenShipmentHasDeliveryConfirmation()
+        {
+            var testObject = mock.Create<ValueAddServiceFilter>();
+
+            var shipment = Create.Shipment().AsUps().Build();
+            shipment.Ups.DeliveryConfirmation = (int) UpsDeliveryConfirmationType.NoSignature;
+
+            var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
+
+            Assert.Equal(UpsServiceType.UpsGround, eligibleServiceTypes.Single());
+        }
+
+        [Fact]
+        public void GetEligibleServices_ReturnsNextDayAirAM_WhenShipmentHasVerbalConfirmationEnabled()
+        {
+            var testObject = mock.Create<ValueAddServiceFilter>();
+
+            var shipment = Create.Shipment().AsUps().Build();
+            shipment.Ups.Packages.Add(new UpsPackageEntity() {VerbalConfirmationEnabled = true});
+
+            var eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
+
+            Assert.Equal(UpsServiceType.UpsNextDayAirAM, eligibleServiceTypes.Single());
         }
 
         private static void ConfirmExpectedServices(IReadOnlyCollection<UpsServiceType> expectedServiceTypes,
