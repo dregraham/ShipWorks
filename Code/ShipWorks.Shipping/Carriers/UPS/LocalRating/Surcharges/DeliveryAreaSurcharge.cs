@@ -43,36 +43,41 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
         /// <param name="serviceRate"></param>
         public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
-            int destinationZip = int.Parse(shipment.Shipment.ShipPostalCode);
+            string shipPostalCode = shipment.Shipment.ShipPostalCode;
+            int destinationZip;
 
-            IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge = GetDeliveryAreaSurcharge(destinationZip);
-            bool isResidential = residentialDeterminationService.IsResidentialAddress(shipment.Shipment);
-            bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
-
-            if (deliveryAreaSurcharge == null)
+            if (shipPostalCode.Length >= 5 && int.TryParse(shipPostalCode.Substring(0, 5), out destinationZip))
             {
-                if (isResidential)
+                IUpsLocalRatingDeliveryAreaSurchargeEntity deliveryAreaSurcharge =
+                    GetDeliveryAreaSurcharge(destinationZip);
+                bool isResidential = residentialDeterminationService.IsResidentialAddress(shipment.Shipment);
+                bool isGround = serviceRate.Service == (int) UpsServiceType.UpsGround;
+
+                if (deliveryAreaSurcharge == null)
                 {
-                    AddSurcharge(shipment, serviceRate,
-                        isGround ? UpsSurchargeType.ResidentialGround : UpsSurchargeType.ResidentialAir);
+                    if (isResidential)
+                    {
+                        AddSurcharge(shipment, serviceRate,
+                            isGround ? UpsSurchargeType.ResidentialGround : UpsSurchargeType.ResidentialAir);
+                    }
                 }
-            }
-            else
-            {
-                UpsDeliveryAreaSurchargeType deliveryAreaType =
-                    (UpsDeliveryAreaSurchargeType) deliveryAreaSurcharge.DeliveryAreaType;
-                switch (deliveryAreaType)
+                else
                 {
-                    case UpsDeliveryAreaSurchargeType.Us48Das:
-                    case UpsDeliveryAreaSurchargeType.Us48DasExtended:
-                        AddDeliveryAreaSurcharge(shipment, serviceRate, deliveryAreaType, isResidential, isGround);
-                        break;
-                    case UpsDeliveryAreaSurchargeType.UsRemoteHi:
-                        AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaHawaii);
-                        break;
-                    case UpsDeliveryAreaSurchargeType.UsRemoteAk:
-                        AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaAlaska);
-                        break;
+                    UpsDeliveryAreaSurchargeType deliveryAreaType =
+                        (UpsDeliveryAreaSurchargeType) deliveryAreaSurcharge.DeliveryAreaType;
+                    switch (deliveryAreaType)
+                    {
+                        case UpsDeliveryAreaSurchargeType.Us48Das:
+                        case UpsDeliveryAreaSurchargeType.Us48DasExtended:
+                            AddDeliveryAreaSurcharge(shipment, serviceRate, deliveryAreaType, isResidential, isGround);
+                            break;
+                        case UpsDeliveryAreaSurchargeType.UsRemoteHi:
+                            AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaHawaii);
+                            break;
+                        case UpsDeliveryAreaSurchargeType.UsRemoteAk:
+                            AddSurcharge(shipment, serviceRate, UpsSurchargeType.RemoteAreaAlaska);
+                            break;
+                    }
                 }
             }
         }

@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 Service = (int) serviceType,
                 Shipment = new ShipmentEntity
                 {
-                    ShipPostalCode = destZip
+                    ShipPostalCode = destZip.PadLeft(5,'0')
                 }
             };
 
