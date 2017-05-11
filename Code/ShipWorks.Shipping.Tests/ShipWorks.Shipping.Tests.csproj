@@ -179,11 +179,13 @@
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\AddressServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\DimensionServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ShipmentServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\AdditionalHandlingSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DryIceSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelAirSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ReturnsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayPickupSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ThirdPartyBillingSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelGroundSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\LargePackageUpsSurchargeTest.cs" />
