@@ -55,8 +55,8 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         [Fact]
         public void Update_DelegatesToIdentifier_ForEachStore()
         {
-            var store1 = new ShopSiteStoreEntity { ApiUrl = "Foo" };
-            var store2 = new ShopSiteStoreEntity { ApiUrl = "Bar" };
+            var store1 = new ShopSiteStoreEntity { ApiUrl = "Foo", Password = "pwd", Username = "pwd" };
+            var store2 = new ShopSiteStoreEntity { ApiUrl = "Bar", Password = "pwd", Username = "pwd" };
             var collection = new ShopSiteStoreCollection { store1, store2 };
 
             mock.FromFactory<ISqlAdapterFactory>()
