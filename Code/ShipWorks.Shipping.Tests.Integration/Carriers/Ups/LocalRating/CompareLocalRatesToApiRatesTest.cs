@@ -30,6 +30,7 @@ using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -57,15 +58,19 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             RunTest(s => { });
         }
 
-        [Fact]
-        public void LargePackage()
+        [Theory]
+        [InlineData(100, 20, 10, 10)] // Dimensional Weight is 144
+        [InlineData(71, 23, 7, 10)] //Dimensional Weight is 69, but UPS business rules should have it rated at 90 because it is a large package
+        [InlineData(80, 20, 20, 10)] // Billable Weight is 231 - over the 150 limit, but dimensional.
+        public void LargePackage(double length, double width, double height, double weight)
         {
             RunTest(s =>
             {
                 var package = s.Ups.Packages[0];
-                package.DimsLength = 100;
-                package.DimsWidth = 10;
-                package.DimsHeight = 10;
+                package.DimsLength = length;
+                package.DimsWidth = width;
+                package.DimsHeight = height;
+                package.DimsWeight = weight;
             });
         }
 
@@ -204,6 +209,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             RunTest(s=>s.Ups.SaturdayDelivery = saturdayDelivery);
         }
 
+        [Fact]
+        public void ShipOnASaturday()
+        {
+            RunTest(s=>s.ShipDate = DateTime.Now.Next(DayOfWeek.Saturday));
+        }
+
         [Theory]
         [InlineData(UpsPayorType.Receiver)]
         [InlineData(UpsPayorType.Sender)]
@@ -254,9 +265,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             Assert.True(localResult.Success);
             Assert.True(apiResult.Success);
 
-            Assert.NotNull(localResult.Value.FirstOrDefault());
-            Assert.Equal(localResult.Value.Cast<UpsLocalServiceRate>().Count(), localResult.Value.Count);
 
+            var firstLocalResult = localResult.Value?.FirstOrDefault();
+            Assert.NotNull(firstLocalResult);
+
+            // If this fails, rates were likely from the API.
+            Assert.IsType<UpsLocalServiceRate>(firstLocalResult); 
+
+            Assert.Equal(localResult.Value.Cast<UpsLocalServiceRate>().Count(), localResult.Value.Count);
+            
             Assert.True(ValidateResult(localResult.Value.Cast<UpsLocalServiceRate>().ToList(), apiResult.Value));
         }
 
@@ -303,6 +320,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
         private bool ValidateResult(List<UpsLocalServiceRate> localRates, List<UpsServiceRate> apiRates)
         {
+            bool valid = true;
+
             var localServiceTypes = new[]
             {
                 UpsServiceType.UpsGround,
@@ -320,8 +339,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
             if (extraLocalRates.Any())
             {
-                output.WriteLine($"LocalRates returned the following unsupported services:\n\n{string.Join("\n", extraLocalRates)}");
-                return false;
+                output.WriteLine($"LocalRates returned the following unsupported services:\n\n{string.Join("\n", extraLocalRates)}\n");
+                valid = false;
             }
             
             // Filter out api rates that LocalRates cannot handle
@@ -331,22 +350,25 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                 apiRates.Where(apiRate => localRates.None(localRate => localRate.Service == apiRate.Service)).Select(r=>r.Service).ToList();
             if (apiRatesNotInLocalRates.Any())
             {
-                output.WriteLine($"LocalRates client did not return services(s) returned by the api client. Missing services:\n\n{string.Join("\n", apiRatesNotInLocalRates)}");
-                return false;
+                output.WriteLine($"LocalRates client did not return services(s) returned by the api client. Missing services:\n\n{string.Join("\n", apiRatesNotInLocalRates)}\n");
+                valid = false;
             }
 
             var localRatesNotInApiRates =
                 localRates.Where(localRate => apiRates.None(apiRate => apiRate.Service == localRate.Service)).Select(r => r.Service).ToList();
             if (localRatesNotInApiRates.Any())
             {
-                output.WriteLine($"Api client did not return service(s) returned by the local client. Missing services:\n\n{string.Join("\n", localRatesNotInApiRates)}");
-                return false;
+                output.WriteLine($"Api client did not return service(s) returned by the local client. Missing services:\n\n{string.Join("\n", localRatesNotInApiRates)}\n");
+                valid = false;
             }
 
-            var allMatched = true;
             foreach (var localRate in localRates)
             {
-                var apiRate = apiRates.Single(r => r.Service == localRate.Service);
+                var apiRate = apiRates.FirstOrDefault(r => r.Service == localRate.Service);
+                if (apiRate == null)
+                {
+                    continue;
+                }
 
                 if (apiRate.Amount != localRate.Amount)
                 {
@@ -356,11 +378,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                     localRate.Log(sb);
                     output.WriteLine($"Local Rate Calculation:\n{sb}\nEnd Local Rate Calculation");
 
-                    allMatched = false;
+                    valid = false;
                 }
             }
 
-            return allMatched;
+            return valid;
         }
 
         private IUpsRateClient CreateLocalClient()

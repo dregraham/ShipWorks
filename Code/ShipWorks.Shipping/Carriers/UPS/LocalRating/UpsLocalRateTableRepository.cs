@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
             // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
-            Dictionary < UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
+            Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
             foreach (UpsPackageEntity package in shipment.Packages)
             {
                 Dictionary<UpsServiceType, decimal> rates;
@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, string[] zones, UpsPackageEntity package)
         {
-            if (package.TotalWeight >= 150)
+            if (package.BillableWeight >= 150)
             {
                 PopulatePackageRates(rateTable.UpsPackageRate, zones, 150);
 
@@ -216,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     decimal rate = baseRate.Rate;
                     if (pricePerPoundRate != null)
                     {
-                        int poundsOver150 = Convert.ToInt32(Math.Ceiling(package.TotalWeight - 150));
+                        int poundsOver150 = package.BillableWeight - 150;
                         rate = rate + pricePerPoundRate.Rate * poundsOver150;
                     }
 

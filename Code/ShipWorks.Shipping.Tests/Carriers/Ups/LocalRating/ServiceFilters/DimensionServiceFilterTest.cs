@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
         [InlineData(1, 2, 109, true)]
         [InlineData(10, 10, 100, false)]
         [InlineData(30, 10, 100, true)]
+        [InlineData(80, 20, 20, false)]
         public void GetEligibleServices_ReturnsEmptyList_WhenPackageDimensionsAreNotValidForUPS(double length, double width, double height, bool emptyResult)
         {
             IEnumerable<UpsServiceType> services = new List<UpsServiceType>()
@@ -44,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 
             IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, services);
             
-            Assert.Equal(!emptyResult, result.Any());
+            Assert.Equal(emptyResult, result.None());
         }
 
         [Theory]
