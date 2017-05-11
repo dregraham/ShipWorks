@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Interapptive.Shared.Security;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
@@ -51,6 +52,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 foreach (ShopSiteStoreEntity store in stores.OfType<ShopSiteStoreEntity>())
                 {
                     identifier.Set(store, store.ApiUrl);
+                    store.Password = SecureText.Encrypt(store.Password, store.Username);
                 }
 
                 sqlAdapter.SaveEntityCollection(stores, refetchSavedEntitiesAfterSave: true, recurse: false);

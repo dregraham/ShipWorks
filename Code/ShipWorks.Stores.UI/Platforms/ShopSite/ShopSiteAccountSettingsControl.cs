@@ -29,6 +29,14 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
+        public ShopSiteAccountSettingsControl(ShopSiteAccountSettingsViewModel viewModel) : this()
+        {
+            SetViewModel(viewModel);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShopSiteAccountSettingsControl(IShopSiteWebClient shopSiteWebClient)
         {
             InitializeComponent();

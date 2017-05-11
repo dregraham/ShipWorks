@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
+using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
@@ -34,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         
         private bool legacyUseUnsecureHttp;
 
+        readonly IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> persistenceStrategyFactory;
         private IShopSiteAuthenticationPersistenceStrategy persistenceStrategy;
         private ShopSiteAuthenticationType authenticationType;
 
@@ -41,11 +43,15 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier, IShopSiteConnectionVerifier connectionVerifier)
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, 
+            IShopSiteIdentifier identifier, 
+            IShopSiteConnectionVerifier connectionVerifier,
+            IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> persistenceStrategyFactory)
         {
             this.messageHelper = messageHelper;
             this.identifier = identifier;
             this.connectionVerifier = connectionVerifier;
+            this.persistenceStrategyFactory = persistenceStrategyFactory;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
@@ -140,13 +146,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Get the current persistence strategy
         /// </summary>
-        /*private IShopSiteAuthenticationPersistenceStrategy PersistenceStrategy
+        private IShopSiteAuthenticationPersistenceStrategy PersistenceStrategy
         {
             get
             {
-                return null;  //persistenceStrategy ?? (persistenceStrategy)
+                return persistenceStrategy ?? (persistenceStrategy = persistenceStrategyFactory[AuthenticationType]);
             }
-        }*/
+        }
 
         /// <summary>
         /// Migrate from Legacy to OAuth
@@ -273,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
              
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                return connectionVerifier.Verify(shopSiteStore, persistenceStrategy);
+                return connectionVerifier.Verify(shopSiteStore, PersistenceStrategy);
             }
         }
 
