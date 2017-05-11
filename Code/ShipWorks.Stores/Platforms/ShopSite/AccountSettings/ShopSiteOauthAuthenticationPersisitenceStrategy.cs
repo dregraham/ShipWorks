@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Enums;
+﻿using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -40,8 +34,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             viewModel.LegacyPassword = string.Empty;
             viewModel.OAuthClientID = store.OauthClientID;
             viewModel.OAuthSecretKey = store.OauthSecretKey;
-            //Auth code
-            //API URL
+            viewModel.OAuthAuthorizationCode = store.AuthorizationCode; 
         }
 
         /// <summary>
@@ -69,8 +62,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             store.OauthClientID = viewModel.OAuthClientID.Trim();
             store.OauthSecretKey = viewModel.OAuthSecretKey.Trim();
             store.Authentication = ShopSiteAuthenticationType.Oauth;
-            //Auth code
-            //API URL
+            store.AuthorizationCode = viewModel.OAuthAuthorizationCode;
 
             return GenericResult.FromSuccess(store);
         }

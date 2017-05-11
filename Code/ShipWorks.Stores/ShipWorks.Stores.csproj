@@ -344,6 +344,8 @@
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
+    <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteIdentifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\ShopSite\Dto\AccessResponse.cs" />

@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Autofac;
-using Common.Logging;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -31,6 +22,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     {
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
+        private readonly IShopSiteIdentifier identifier;
+        private readonly IShopSiteConnectionVerifier connectionVerifier;
 
         private string apiUrl;
         private string legacyMerchantID;
@@ -38,21 +31,23 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private string oAuthClientID;
         private string oAuthSecretKey;
         private string oAuthAuthorizationCode;
-        private IShopSiteAuthenticationPersistenceStrategy persistenceStrategy;
+        
         private bool legacyUseUnsecureHttp;
-        private readonly IShopSiteIdentifier identifier;
+
+        private IShopSiteAuthenticationPersistenceStrategy persistenceStrategy;
         private ShopSiteAuthenticationType authenticationType;
 
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier)
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier, IShopSiteConnectionVerifier connectionVerifier)
         {
             this.messageHelper = messageHelper;
             this.identifier = identifier;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.connectionVerifier = connectionVerifier;
 
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
             MigrateToOauth = new RelayCommand(MigrateToOauthAction);
         }
@@ -145,13 +140,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Get the current persistence strategy
         /// </summary>
-        private IShopSiteAuthenticationPersistenceStrategy PersistenceStrategy
+        /*private IShopSiteAuthenticationPersistenceStrategy PersistenceStrategy
         {
             get
             {
-                return null; //persistenceStrategy ?? ()
+                return null;  //persistenceStrategy ?? (persistenceStrategy)
             }
-        }
+        }*/
 
         /// <summary>
         /// Migrate from Legacy to OAuth
@@ -183,14 +178,27 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             OAuthClientID = shopSiteStore.OauthClientID;
             OAuthSecretKey = SecureText.Decrypt(shopSiteStore.OauthSecretKey, shopSiteStore.OauthClientID);
             OAuthAuthorizationCode = shopSiteStore.AuthorizationCode;
-
-
         }
 
         /// <summary>
         /// Save the UI values to the given store.  Nothing is saved to the database.
         /// </summary>
         public bool SaveToEntity(StoreEntity store)
+        {
+            IResult result = PerformSave(store);
+
+            if (result.Failure)
+            {
+                messageHelper.ShowError(result.Message);
+            }
+
+            return result.Success;
+        }
+
+        /// <summary>
+        /// Perform the actual save
+        /// </summary>
+        private IResult PerformSave(StoreEntity store)
         {
             ShopSiteStoreEntity shopSiteStore = store as ShopSiteStoreEntity;
             if (shopSiteStore == null)
@@ -204,14 +212,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Check empty
             if (url.IsNullOrWhiteSpace() && AuthenticationType == ShopSiteAuthenticationType.Basic)
             {
-                messageHelper.ShowMessage("Enter the URL of the CGI script.");
-                return false;
+                return Result.FromError("Enter the URL of the CGI script.");
             }
 
             else if (url.IsNullOrWhiteSpace() && AuthenticationType == ShopSiteAuthenticationType.Oauth)
             {
-                messageHelper.ShowMessage("Please enter an OAuth URL");
-                return false;
+                return Result.FromError("Please enter an OAuth URL");
             }
 
             // Default to https if not specified
@@ -223,32 +229,15 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Check valid
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                messageHelper.ShowError("The specified URL is not a valid web address.");
-                return false;
+                return Result.FromError("The specified URL is not a valid web address.");
             }
-
-            // Has to point to the CGI
-           /* if (!url.EndsWith("db_xml.cgi") && AuthenticationType == ShopSiteAuthenticationType.Basic)
-            {
-                messageHelper.ShowInformation("A valid URL to the CGI script should end with 'db_xml.cgi'.");
-                return false;
-            }
-
-            else if (!url.EndsWith(".cgi") && AuthenticationType == ShopSiteAuthenticationType.Oauth)
-            {
-                messageHelper.ShowInformation("A valid URL to the CGI script should end with '.cgi'.");
-                return false;
-            }*/
-
-
 
             // Has to point to the CGI
             if (AuthenticationType == ShopSiteAuthenticationType.Basic)
             {
                 if (!url.EndsWith("db_xml.cgi"))
                 {
-                    messageHelper.ShowInformation("A valid URL to the CGI script should end with 'db_xml.cgi'.");
-                    return false;
+                    return Result.FromError("A valid URL to the CGI script should end with 'db_xml.cgi'.");
                 }
 
                 shopSiteStore.Username = LegacyMerchantID;
@@ -259,8 +248,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             {
                 if (!url.EndsWith(".cgi"))
                 {
-                    messageHelper.ShowInformation("A valid URL to the CGI script should end with '.cgi'.");
-                    return false;
+                    return Result.FromError("A valid URL to the CGI script should end with '.cgi'.");
                 }
 
                 shopSiteStore.OauthClientID = OAuthClientID;
@@ -273,39 +261,23 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             shopSiteStore.RequireSSL = !LegacyUseUnsecureHttp;
 
-            if (shopSiteStore.Fields[(int)ShopSiteStoreFieldIndex.Username].IsChanged ||
-                shopSiteStore.Fields[(int)ShopSiteStoreFieldIndex.Password].IsChanged ||
-                shopSiteStore.Fields[(int)ShopSiteStoreFieldIndex.ApiUrl].IsChanged)
+            if (string.IsNullOrEmpty(store.StoreName))
             {
-                Cursor.Current = Cursors.WaitCursor;
-
-                try
-                {
-                    // Create the client for connecting to the module
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        IShopSiteWebClient webClient = lifetimeScope.ResolveKeyed<IShopSiteWebClient>(shopSiteStore.Authentication, TypedParameter.From(shopSiteStore as IShopSiteStoreEntity));
-
-                        webClient.TestConnection();
-                    }
-
-                    store.StoreName = "ShopSite Store";
-                    store.Website = new Uri(url).Host;
-
-                    return true;
-                }
-                catch (ShopSiteException ex)
-                {
-                    messageHelper.ShowError(ex.Message);
-
-                    return false;
-                }
+                store.StoreName = "ShopSite Store";
             }
-            else
+
+            if (string.IsNullOrEmpty(store.Website))
             {
-                return true;
+                store.Website = new Uri(url).Host;
+            }
+             
+            using (messageHelper.SetCursor(Cursors.WaitCursor))
+            {
+                return connectionVerifier.Verify(shopSiteStore, persistenceStrategy);
             }
         }
+
+
 
         /// <summary>
         /// Validate and format the API url

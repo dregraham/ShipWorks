@@ -248,6 +248,7 @@
     <Compile Include="Platforms\ShopSite\ShopSiteWebClientTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteStoreTypeTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteIdentifierTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
