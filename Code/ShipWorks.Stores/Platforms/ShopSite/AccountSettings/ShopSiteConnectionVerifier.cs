@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
@@ -18,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
     [Component]
     public class ShopSiteConnectionVerifier : IShopSiteConnectionVerifier
     {
-        readonly IIndex<ShopSiteAuthenticationType, IShopSiteWebClient> webClientFactory;
+        private readonly IShopSiteWebClientFactory webClientFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteConnectionVerifier(IIndex<ShopSiteAuthenticationType, IShopSiteWebClient> webClientFactory,
+        public ShopSiteConnectionVerifier(IShopSiteWebClientFactory webClientFactory,
             Func<Type, ILog> createLogger)
         {
             this.webClientFactory = webClientFactory;
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
         {
             try
             {
-                IShopSiteWebClient webClient = webClientFactory[store.Authentication];
+                IShopSiteWebClient webClient = webClientFactory.Create(store);
                 webClient.TestConnection();
 
                 return Result.FromSuccess();
