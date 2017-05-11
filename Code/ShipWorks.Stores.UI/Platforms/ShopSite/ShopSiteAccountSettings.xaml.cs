@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
     /// </summary>
     public partial class ShopSiteAccountSettings : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShopSiteAccountSettings()
         {
             InitializeComponent();

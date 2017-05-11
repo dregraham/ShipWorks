@@ -28,7 +28,7 @@
                     Orientation="Horizontal"
                     Visibility="{Binding AuthenticationType,
                     Converter={StaticResource VisibleWhenEqualToParameter},
-                    ConverterParameter={x:Static int:BigCommerceAuthenticationType.Basic}}">
+                    ConverterParameter={x:Static int:ShopSiteAuthenticationType.Basic}}">
             <Button
                     Width="150"
                     HorizontalAlignment="Left"
@@ -47,7 +47,7 @@
             </Image>
             <TextBlock TextAlignment="Left" VerticalAlignment="Center"
                        Margin="6, 0, 0, 0">
-                <Hyperlink NavigateUri="http://www.shipworks.com" ui:Link.OpenInBrowser="true">More info...</Hyperlink>
+                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000102342-converting-shopsite-store-to-the-oauth-api" ui:Link.OpenInBrowser="true">More info...</Hyperlink>
             </TextBlock>
         </StackPanel>
 

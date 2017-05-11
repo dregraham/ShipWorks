@@ -12,7 +12,6 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.ShopSite, ExternallyOwned = true)]
     public partial class ShopSiteAccountSettingsControl : AccountSettingsControlBase
     {
-        private IShopSiteWebClient webClient;
         private ShopSiteAccountSettingsViewModel viewModel;
 
         /// <summary>
@@ -21,9 +20,6 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         public ShopSiteAccountSettingsControl()
         {
             InitializeComponent();
-
-            // The background would sometimes go black if not explicitly set
-            shopSiteAccountSettings.Background = new SolidColorBrush(Color.FromRgb(this.BackColor.R, this.BackColor.G, this.BackColor.B));
         }
 
         /// <summary>
@@ -32,15 +28,6 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         public ShopSiteAccountSettingsControl(ShopSiteAccountSettingsViewModel viewModel) : this()
         {
             SetViewModel(viewModel);
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ShopSiteAccountSettingsControl(IShopSiteWebClient shopSiteWebClient)
-        {
-            InitializeComponent();
-            webClient = shopSiteWebClient;
         }
         
         /// <summary>
@@ -55,8 +42,12 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         /// <summary>
         /// Load the account settings UI from the given store
         /// </summary>
-        public override void LoadStore(StoreEntity store) =>
+        public override void LoadStore(StoreEntity store)
+        {
+            base.LoadStore(store);
+
             viewModel.LoadStore(store);
+        }
 
         /// <summary>
         /// Save the UI values to the given store.  Nothing is saved to the database.

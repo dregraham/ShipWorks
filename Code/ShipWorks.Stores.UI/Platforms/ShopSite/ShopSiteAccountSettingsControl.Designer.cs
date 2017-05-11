@@ -13,9 +13,9 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
             this.accountSettingsElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.accountSettingsElementHost.Location = new System.Drawing.Point(0, 0);
             this.accountSettingsElementHost.Name = "accountSettingsElementHost";
-            this.accountSettingsElementHost.Size = new System.Drawing.Size(494, 340);
+            this.accountSettingsElementHost.Size = new System.Drawing.Size(494, 440);
             this.accountSettingsElementHost.TabIndex = 0;
             this.accountSettingsElementHost.Text = "accountSettingsElementHost";
             this.accountSettingsElementHost.Child = this.shopSiteAccountSettings;
