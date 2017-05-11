@@ -216,8 +216,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     stream.Position = 0;
                     var reader1 = mock.CreateMock<IUpsRateExcelReader>();
                     var reader2 = mock.CreateMock<IUpsRateExcelReader>();
-                    mock.Provide<IEnumerable<IUpsRateExcelReader>>(new[] {reader1.Object, reader2.Object});
-
+                    var excelReaderFactory = mock.Mock<IUpsLocalRateExcelReaderFactory>();
+                    excelReaderFactory.Setup(e => e.CreateRateExcelReaders())
+                        .Returns(new[] {reader1.Object, reader2.Object});
+                    
                     var localTestObject = mock.Create<UpsLocalRateTable>();
                     localTestObject.LoadRates(stream);
 
@@ -239,7 +241,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     stream.Position = 0;
                     var reader1 = mock.CreateMock<IUpsZoneExcelReader>();
                     var reader2 = mock.CreateMock<IUpsZoneExcelReader>();
-                    mock.Provide<IEnumerable<IUpsZoneExcelReader>>(new[] { reader1.Object, reader2.Object });
+
+                    var excelReaderFactory = mock.Mock<IUpsLocalRateExcelReaderFactory>();
+                    excelReaderFactory.Setup(e => e.CreateZoneExcelReaders())
+                        .Returns(new[] { reader1.Object, reader2.Object });
 
                     var localTestObject = mock.Create<UpsLocalRateTable>();
                     localTestObject.LoadZones(stream);

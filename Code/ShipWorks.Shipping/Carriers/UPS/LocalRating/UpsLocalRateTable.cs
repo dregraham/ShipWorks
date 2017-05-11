@@ -41,8 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Initializes a new instance of the <see cref="UpsLocalRateTable"/> class.
         /// </summary>
         public UpsLocalRateTable(IUpsLocalRateTableRepository rateRepository,
-            IEnumerable<IUpsRateExcelReader> upsRateExcelReaders,
-            IEnumerable<IUpsZoneExcelReader> zoneExcelReaders,
+            IUpsLocalRateExcelReaderFactory excelReaderFactory,
             IUpsImportedRateValidator importedRateValidator,
             IEnumerable<IServiceFilter> serviceFilters,
             IUpsSurchargeFactory surchargeFactory)
@@ -50,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             this.surchargeFactory = surchargeFactory;
             this.serviceFilters = serviceFilters;
             this.rateRepository = rateRepository;
-            this.upsRateExcelReaders = upsRateExcelReaders;
-            this.zoneExcelReaders = zoneExcelReaders;
+            upsRateExcelReaders = excelReaderFactory.CreateRateExcelReaders();
+            zoneExcelReaders = excelReaderFactory.CreateZoneExcelReaders();
             this.importedRateValidator = importedRateValidator;
         }
 
