@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private static void ValidateApiAccessData(IShopSiteStoreEntity store)
         {
-            if (store.Authentication == ShopSiteAuthenticationType.Basic)
+            if (store.ShopSiteAuthentication == ShopSiteAuthenticationType.Basic)
             {
                 throw new ShopSiteException($"Store '{store.StoreName}', is configured to use Basic authentication but the OAuth web client is being used.");
             }
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Secret Key"));
             }
 
-            if (string.IsNullOrWhiteSpace(store?.AuthorizationCode))
+            if (string.IsNullOrWhiteSpace(store?.OauthAuthorizationCode))
             {
                 throw new ShopSiteException(string.Format(storeSettingMissingErrorMessage, "Authorization Code"));
             }
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             IHttpVariableRequestSubmitter postRequest = variableRequestSubmitterFactory();
             postRequest.Variables.Add("grant_type", "authorization_code");
-            postRequest.Variables.Add("code", shopSiteStore.AuthorizationCode);
+            postRequest.Variables.Add("code", shopSiteStore.OauthAuthorizationCode);
             postRequest.Variables.Add("client_credentials", clientCredentials);
             postRequest.Variables.Add("signature", signature);
 

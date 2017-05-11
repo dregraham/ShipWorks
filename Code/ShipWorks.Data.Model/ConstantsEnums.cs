@@ -8558,16 +8558,16 @@ namespace ShipWorks.Data.Model
 		DownloadPageSize,
 		///<summary>RequestTimeout. </summary>
 		RequestTimeout,
-		///<summary>Authentication. </summary>
-		Authentication,
+		///<summary>ShopSiteAuthentication. </summary>
+		ShopSiteAuthentication,
 		///<summary>OauthClientID. </summary>
 		OauthClientID,
 		///<summary>OauthSecretKey. </summary>
 		OauthSecretKey,
 		///<summary>Identifier. </summary>
 		Identifier,
-		///<summary>AuthorizationCode. </summary>
-		AuthorizationCode,
+		///<summary>OauthAuthorizationCode. </summary>
+		OauthAuthorizationCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

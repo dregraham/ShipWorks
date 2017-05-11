@@ -342,7 +342,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestTimeout", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Authentication", fieldHashtable);
+			_fieldsCustomProperties.Add("ShopSiteAuthentication", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OauthClientID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -350,7 +350,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Identifier", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AuthorizationCode", fieldHashtable);
+			_fieldsCustomProperties.Add("OauthAuthorizationCode", fieldHashtable);
 		}
 		#endregion
 
@@ -464,14 +464,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShopSiteStoreFieldIndex.RequestTimeout, value); }
 		}
 
-		/// <summary> The Authentication property of the Entity ShopSiteStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShopSiteStore"."Authentication"<br/>
+		/// <summary> The ShopSiteAuthentication property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."ShopSiteAuthentication"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual Interapptive.Shared.Enums.ShopSiteAuthenticationType Authentication
+		public virtual Interapptive.Shared.Enums.ShopSiteAuthenticationType ShopSiteAuthentication
 		{
-			get { return (Interapptive.Shared.Enums.ShopSiteAuthenticationType)GetValue((int)ShopSiteStoreFieldIndex.Authentication, true); }
-			set	{ SetValue((int)ShopSiteStoreFieldIndex.Authentication, value); }
+			get { return (Interapptive.Shared.Enums.ShopSiteAuthenticationType)GetValue((int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, value); }
 		}
 
 		/// <summary> The OauthClientID property of the Entity ShopSiteStore<br/><br/></summary>
@@ -486,7 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The OauthSecretKey property of the Entity ShopSiteStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthSecretKey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String OauthSecretKey
 		{
@@ -504,14 +504,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShopSiteStoreFieldIndex.Identifier, value); }
 		}
 
-		/// <summary> The AuthorizationCode property of the Entity ShopSiteStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShopSiteStore"."AuthorizationCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The OauthAuthorizationCode property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthAuthorizationCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String AuthorizationCode
+		public virtual System.String OauthAuthorizationCode
 		{
-			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.AuthorizationCode, true); }
-			set	{ SetValue((int)ShopSiteStoreFieldIndex.AuthorizationCode, value); }
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

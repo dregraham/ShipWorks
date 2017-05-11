@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store,
                 () => mock.Create<IHttpVariableRequestSubmitter>(),
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.ApiUrl = url;
             store.Password = pwd;
             store.Username = username;
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.Username = "username";
             store.Password = "pwd";
@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.Username = "username";
             store.Password = "pwd";
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.Username = "username";
             store.Password = "pwd";
@@ -148,7 +148,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.Username = "username";
             store.Password = "pwd";

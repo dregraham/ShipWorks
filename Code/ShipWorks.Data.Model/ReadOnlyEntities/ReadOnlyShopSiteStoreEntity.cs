@@ -42,11 +42,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequireSSL = source.RequireSSL;
             DownloadPageSize = source.DownloadPageSize;
             RequestTimeout = source.RequestTimeout;
-            Authentication = source.Authentication;
+            ShopSiteAuthentication = source.ShopSiteAuthentication;
             OauthClientID = source.OauthClientID;
             OauthSecretKey = source.OauthSecretKey;
             Identifier = source.Identifier;
-            AuthorizationCode = source.AuthorizationCode;
+            OauthAuthorizationCode = source.OauthAuthorizationCode;
             
             
             
@@ -91,12 +91,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 RequestTimeout { get; }
-        /// <summary> The Authentication property of the Entity ShopSiteStore<br/><br/>
+        /// <summary> The ShopSiteAuthentication property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ShopSiteStore"."Authentication"<br/>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."ShopSiteAuthentication"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public Interapptive.Shared.Enums.ShopSiteAuthenticationType Authentication { get; }
+        public Interapptive.Shared.Enums.ShopSiteAuthenticationType ShopSiteAuthentication { get; }
         /// <summary> The OauthClientID property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShopSiteStore"."OauthClientID"<br/>
@@ -106,7 +106,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The OauthSecretKey property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ShopSiteStore"."OauthSecretKey"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String OauthSecretKey { get; }
         /// <summary> The Identifier property of the Entity ShopSiteStore<br/><br/>
@@ -115,12 +115,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Identifier { get; }
-        /// <summary> The AuthorizationCode property of the Entity ShopSiteStore<br/><br/>
+        /// <summary> The OauthAuthorizationCode property of the Entity ShopSiteStore<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ShopSiteStore"."AuthorizationCode"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "ShopSiteStore"."OauthAuthorizationCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String AuthorizationCode { get; }
+        public System.String OauthAuthorizationCode { get; }
         
         
         

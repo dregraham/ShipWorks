@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             viewModel.LegacyPassword = string.Empty;
             viewModel.OAuthClientID = store.OauthClientID;
             viewModel.OAuthSecretKey = store.OauthSecretKey;
-            viewModel.OAuthAuthorizationCode = store.AuthorizationCode; 
+            viewModel.OAuthAuthorizationCode = store.OauthAuthorizationCode; 
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             store.Password = string.Empty;
             store.OauthClientID = viewModel.OAuthClientID.Trim();
             store.OauthSecretKey = viewModel.OAuthSecretKey.Trim();
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
-            store.AuthorizationCode = viewModel.OAuthAuthorizationCode;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
+            store.OauthAuthorizationCode = viewModel.OAuthAuthorizationCode;
 
             return GenericResult.FromSuccess(store);
         }

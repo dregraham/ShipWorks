@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private static void ValidateApiAccessData(IShopSiteStoreEntity store)
         {
-            if (store.Authentication == ShopSiteAuthenticationType.Oauth)
+            if (store.ShopSiteAuthentication == ShopSiteAuthenticationType.Oauth)
             {
                 throw new ShopSiteException($"Store '{store.StoreName}', is configured to use OAuth authentication but the Basic web client is being used.");
             }

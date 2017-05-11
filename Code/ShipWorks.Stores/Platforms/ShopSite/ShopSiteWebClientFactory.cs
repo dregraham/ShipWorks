@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public IShopSiteWebClient Create(IShopSiteStoreEntity store)
         {
-            return lifetimeScope.ResolveKeyed<IShopSiteWebClient>(store.Authentication, TypedParameter.From(store));
+            return lifetimeScope.ResolveKeyed<IShopSiteWebClient>(store.ShopSiteAuthentication, TypedParameter.From(store));
         }
 
         /// <summary>

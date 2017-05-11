@@ -32,11 +32,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = url;
             store.OauthClientID = clientID;
             store.OauthSecretKey = secretKey;
-            store.AuthorizationCode = authCode;
+            store.OauthAuthorizationCode = authCode;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => 
                     new ShopSiteOauthAccessTokenWebClient(store,
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() =>
                 new ShopSiteOauthAccessTokenWebClient(store,
@@ -67,11 +67,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(x => x.ReadResult())
@@ -93,11 +93,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Queue<string> responses = new Queue<string>();
             responses.Enqueue(ShopSiteResponseHelper.GetAccessTokenResponse());
@@ -124,17 +124,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetAccessTokenResponse(), store);
 
             int callOrder = 0;
             submitter.Setup(x => x.Variables.Add("grant_type", "authorization_code")).Callback(() => Assert.Equal(callOrder++, 0));
-            submitter.Setup(x => x.Variables.Add("code", store.AuthorizationCode)).Callback(() => Assert.Equal(callOrder++, 1));
+            submitter.Setup(x => x.Variables.Add("code", store.OauthAuthorizationCode)).Callback(() => Assert.Equal(callOrder++, 1));
             submitter.Setup(x => x.Variables.Add("client_credentials", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 2));
             submitter.Setup(x => x.Variables.Add("signature", It.IsAny<string>())).Callback(() => Assert.Equal(callOrder++, 3));
 
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             webClient.FetchAuthAccessResponse();
 
             submitter.Verify(s => s.Variables.Add("grant_type", "authorization_code"), Times.Once);
-            submitter.Verify(s => s.Variables.Add("code", store.AuthorizationCode), Times.Once);
+            submitter.Verify(s => s.Variables.Add("code", store.OauthAuthorizationCode), Times.Once);
             submitter.Verify(s => s.Variables.Add("client_credentials", It.IsAny<string>()), Times.Once);
             submitter.Verify(s => s.Variables.Add("signature", It.IsAny<string>()), Times.Once);
 

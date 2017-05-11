@@ -171,13 +171,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             LegacyPassword = SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username);
             ApiUrl = shopSiteStore.ApiUrl;
 
-            AuthenticationType = shopSiteStore.Authentication; 
+            AuthenticationType = shopSiteStore.ShopSiteAuthentication; 
 
             LegacyUseUnsecureHttp = !shopSiteStore.RequireSSL;
 
             OAuthClientID = shopSiteStore.OauthClientID;
             OAuthSecretKey = SecureText.Decrypt(shopSiteStore.OauthSecretKey, shopSiteStore.OauthClientID);
-            OAuthAuthorizationCode = shopSiteStore.AuthorizationCode;
+            OAuthAuthorizationCode = shopSiteStore.OauthAuthorizationCode;
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
                 shopSiteStore.OauthClientID = OAuthClientID;
                 shopSiteStore.OauthSecretKey = SecureText.Encrypt(OAuthSecretKey, OAuthClientID);
-                shopSiteStore.AuthorizationCode = OAuthAuthorizationCode;
+                shopSiteStore.OauthAuthorizationCode = OAuthAuthorizationCode;
             }
 
             shopSiteStore.ApiUrl = url;

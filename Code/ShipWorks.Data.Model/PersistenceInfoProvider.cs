@@ -650,7 +650,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditNewOrders", "AuditNewOrders", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditDeletedOrders", "AuditDeletedOrders", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
 			this.AddElementFieldMapping("ConfigurationEntity", "CustomerKey", "CustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -2697,11 +2697,11 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "RequireSSL", "RequireSSL", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "DownloadPageSize", "DownloadPageSize", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "RequestTimeout", "RequestTimeout", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
-			this.AddElementFieldMapping("ShopSiteStoreEntity", "Authentication", "Authentication", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+			this.AddElementFieldMapping("ShopSiteStoreEntity", "ShopSiteAuthentication", "ShopSiteAuthentication", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthClientID", "OauthClientID", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthSecretKey", "OauthSecretKey", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthSecretKey", "OauthSecretKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("ShopSiteStoreEntity", "Identifier", "Identifier", false, "NVarChar", 350, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("ShopSiteStoreEntity", "AuthorizationCode", "AuthorizationCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("ShopSiteStoreEntity", "OauthAuthorizationCode", "OauthAuthorizationCode", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
 		}
 
 		/// <summary>Inits SparkPayStoreEntity's mappings</summary>

@@ -69,8 +69,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             store.Password = viewModel.LegacyPassword.Trim();
             store.OauthClientID = string.Empty;
             store.OauthSecretKey = string.Empty;
-            store.Authentication = ShopSiteAuthenticationType.Basic;
-            store.AuthorizationCode = string.Empty;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
+            store.OauthAuthorizationCode = string.Empty;
             store.ApiUrl = string.Empty;
 
             return GenericResult.FromSuccess(store);

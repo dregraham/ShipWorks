@@ -50,13 +50,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             InitializeStoreDefaults(shopSiteStore);
 
-            shopSiteStore.Authentication = ShopSiteAuthenticationType.Oauth;
+            shopSiteStore.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             shopSiteStore.ApiUrl = "";
             shopSiteStore.RequireSSL = true;
             shopSiteStore.RequestTimeout = 60;
             shopSiteStore.DownloadPageSize = 50;
-            shopSiteStore.Authentication = ShopSiteAuthenticationType.Oauth;
-            shopSiteStore.AuthorizationCode = string.Empty;
+            shopSiteStore.OauthAuthorizationCode = string.Empty;
             shopSiteStore.Identifier = string.Empty;
             shopSiteStore.OauthClientID = string.Empty;
             shopSiteStore.OauthSecretKey = string.Empty;

@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Basic;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() =>
                 new ShopSiteOauthWebClient(store,
@@ -51,11 +51,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = url;
             store.OauthClientID = clientID;
             store.OauthSecretKey = secretKey;
-            store.AuthorizationCode = authCode;
+            store.OauthAuthorizationCode = authCode;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => 
                     new ShopSiteOauthWebClient(store,
@@ -70,11 +70,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetTestConnectionXml(), store);
             IShopSiteWebClient webClient = CreateWebClient(submitter, store);
@@ -89,11 +89,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetTestConnectionXml(), store);
 
@@ -126,11 +126,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetOrdersXml(), store);
 
@@ -146,11 +146,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
-            store.Authentication = ShopSiteAuthenticationType.Oauth;
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
             store.OauthSecretKey = "secretKey";
             store.OauthClientID = "clientID";
-            store.AuthorizationCode = "authCode";
+            store.OauthAuthorizationCode = "authCode";
 
             Mock<IHttpVariableRequestSubmitter> submitter = CreateMockedSubmitter(ShopSiteResponseHelper.GetOrdersXml(), store);
 

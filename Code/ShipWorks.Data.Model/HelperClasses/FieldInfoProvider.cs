@@ -2563,11 +2563,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
-			this.AddElementFieldInfo("ShopSiteStoreEntity", "Authentication", typeof(Interapptive.Shared.Enums.ShopSiteAuthenticationType), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Authentication, 0, 0, 10);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "ShopSiteAuthentication", typeof(Interapptive.Shared.Enums.ShopSiteAuthenticationType), false, false, false, false,  (int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, 0, 0, 10);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthClientID", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthClientID, 100, 0, 0);
-			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthSecretKey", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthSecretKey, 50, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthSecretKey", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthSecretKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopSiteStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.Identifier, 350, 0, 0);
-			this.AddElementFieldInfo("ShopSiteStoreEntity", "AuthorizationCode", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.AuthorizationCode, 50, 0, 0);
+			this.AddElementFieldInfo("ShopSiteStoreEntity", "OauthAuthorizationCode", typeof(System.String), false, false, false, false,  (int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, 100, 0, 0);
 		}
 		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
 		private void InitSparkPayStoreEntityInfos()

@@ -19987,10 +19987,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.RequestTimeout);}
 		}
-		/// <summary>Creates a new ShopSiteStoreEntity.Authentication field instance</summary>
-		public static EntityField2 Authentication
+		/// <summary>Creates a new ShopSiteStoreEntity.ShopSiteAuthentication field instance</summary>
+		public static EntityField2 ShopSiteAuthentication
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.Authentication);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ShopSiteAuthentication);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.OauthClientID field instance</summary>
 		public static EntityField2 OauthClientID
@@ -20007,10 +20007,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.Identifier);}
 		}
-		/// <summary>Creates a new ShopSiteStoreEntity.AuthorizationCode field instance</summary>
-		public static EntityField2 AuthorizationCode
+		/// <summary>Creates a new ShopSiteStoreEntity.OauthAuthorizationCode field instance</summary>
+		public static EntityField2 OauthAuthorizationCode
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.AuthorizationCode);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.OauthAuthorizationCode);}
 		}
 	}
 
