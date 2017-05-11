@@ -14,8 +14,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentState(int index, Exception exception, CancellationTokenSource cancellationSource)
+        public ProcessShipmentState(int index, ShipmentEntity shipment, Exception exception, CancellationTokenSource cancellationSource)
         {
+            OriginalShipment = shipment;
             Exception = exception;
             Index = index;
             CancellationSource = cancellationSource;
