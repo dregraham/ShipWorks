@@ -1,11 +1,10 @@
 using System;
 using System.Xml;
-using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -36,6 +35,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             ValidateApiAccessData(store);
         }
+
+        /// <summary>
+        /// Progress reporter associated with the client
+        /// </summary>
+        /// <remarks>
+        /// If this is null, the client cannot be canceled and progress will not be reported
+        /// </remarks>
+        public IProgressReporter ProgressReporter { get; set; }
 
         /// <summary>
         /// Validate API access data

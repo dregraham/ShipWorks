@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     /// <summary>
     /// Downloader for ShopSiteStores
     /// </summary>
-    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.ShopSite, ExternallyOwned = true)]
+    [Component(RegistrationType.Self)]
     public class ShopSiteDownloader : StoreDownloader
     {
         private int totalCount = 0;
@@ -30,13 +30,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(StoreEntity store)
-            : base(store)
+        public ShopSiteDownloader(IShopSiteStoreEntity store, IShopSiteWebClientFactory webClientFactory)
+            : base(store as StoreEntity)
         {
-            IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
+            IShopSiteStoreEntity shopSiteStore = store;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
-            
-            webClient = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IShopSiteWebClient>(shopSiteStore.Authentication, TypedParameter.From(shopSiteStore));
+
+            webClient = webClientFactory.Create(shopSiteStore);
         }
 
         /// <summary>

@@ -346,6 +346,7 @@
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />
+    <Compile Include="Platforms\ShopSite\IShopSiteWebClientFactory.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteIdentifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\ShopSite\Dto\AccessResponse.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Platforms\ShopSite\ShopSiteStoreType.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthWebClient.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteWebClient.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteWebClientFactory.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayOrderUpdateTask.cs" />
     <Compile Include="Platforms\SparkPay\CoreExtensions\Actions\SparkPayShipmentUploadTask.cs" />
     <Compile Include="Platforms\SparkPay\DTO\Address.cs" />
