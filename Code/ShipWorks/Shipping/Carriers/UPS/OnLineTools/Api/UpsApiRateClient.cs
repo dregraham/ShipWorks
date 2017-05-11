@@ -6,6 +6,7 @@ using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,11 +18,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -85,6 +86,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <returns>A list of service rates from UPS.</returns>
         public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
+            ConfigureRatingDependencies();
+
             List<UpsServiceRate> rates = new List<UpsServiceRate>();
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
 
@@ -140,6 +143,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return GenericResult.FromSuccess(rates, GetMessage(shipment));
+        }
+
+        /// <summary>
+        /// Setup dependencies needed for rating a shipment
+        /// </summary>
+        private void ConfigureRatingDependencies()
+        {
+            if (accountRepository.Accounts.None())
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
         }
 
         /// <summary>
