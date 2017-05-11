@@ -158,20 +158,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Execute the request
             try
             {
-                using (IHttpResponseReader postResponse = postRequest.GetResponse())
-                {
-                    string resultXml = postResponse.ReadResult();
-
-                    // Log the response
-                    apiLogEntry.LogResponse(resultXml);
-
-                    resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
-
-                    XmlDocument xmlResponse = new XmlDocument { XmlResolver = new XmlUrlResolver() };
-                    xmlResponse.LoadXml(resultXml);
-
-                    return xmlResponse;
-                }
+                return MakeRequest(postRequest, apiLogEntry);
             }
             catch (XmlException ex)
             {
@@ -180,6 +167,27 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopSiteException));
+            }
+        }
+
+        /// <summary>
+        /// Make the request to ShopSite
+        /// </summary>
+        private static XmlDocument MakeRequest(IHttpVariableRequestSubmitter postRequest, IApiLogEntry apiLogEntry)
+        {
+            using (IHttpResponseReader postResponse = postRequest.GetResponse())
+            {
+                string resultXml = postResponse.ReadResult();
+
+                // Log the response
+                apiLogEntry.LogResponse(resultXml);
+
+                resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
+
+                XmlDocument xmlResponse = new XmlDocument {XmlResolver = new XmlUrlResolver()};
+                xmlResponse.LoadXml(resultXml);
+
+                return xmlResponse;
             }
         }
 
