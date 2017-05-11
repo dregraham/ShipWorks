@@ -12,20 +12,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Create the rate excel readers
         /// </summary>
-        /// <returns></returns>
         public IEnumerable<IUpsRateExcelReader> CreateRateExcelReaders()
         {
             return new IUpsRateExcelReader[]
             {
                 new ServiceUpsRateExcelReader(),
-                new ServiceUpsRateExcelReader()
+                new SurchargeUpsRateExcelReader()
             };
         }
 
         /// <summary>
         /// Create the zone excel readers
         /// </summary>
-        /// <returns></returns>
         public IEnumerable<IUpsZoneExcelReader> CreateZoneExcelReaders()
         {
             return new IUpsZoneExcelReader[]
