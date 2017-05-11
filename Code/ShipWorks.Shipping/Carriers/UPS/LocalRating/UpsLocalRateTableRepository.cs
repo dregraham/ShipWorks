@@ -201,32 +201,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, string[] zones, UpsPackageEntity package)
         {
-            if (package.BillableWeight >= 150)
+            if (package.BillableWeight > 150)
             {
-                PopulatePackageRates(rateTable.UpsPackageRate, zones, 150);
-
                 // Add the price per pound for anything over 150
                 PopulatePricePerPoundRates(rateTable.UpsPricePerPound, zones);
-                Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
-                foreach (UpsPackageRateEntity baseRate in rateTable.UpsPackageRate)
-                {
-                    UpsPricePerPoundEntity pricePerPoundRate =
-                        rateTable.UpsPricePerPound.FirstOrDefault(r => r.Service == baseRate.Service && r.Zone == baseRate.Zone);
-                    
-                    decimal rate = baseRate.Rate;
-                    if (pricePerPoundRate != null)
-                    {
-                        int poundsOver150 = package.BillableWeight - 150;
-                        rate = rate + pricePerPoundRate.Rate * poundsOver150;
-                    }
 
-                    result.Add((UpsServiceType)baseRate.Service, rate);
-                }
-                return result;
+                return rateTable.UpsPricePerPound
+                    .ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate * package.BillableWeight);
             }
             PopulatePackageRates(rateTable.UpsPackageRate, zones, package.BillableWeight);
             
-            return rateTable.UpsPackageRate.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
+            return rateTable.UpsPackageRate.ToDictionary(r => (UpsServiceType)r.Service, r => r.Rate);
         }
 
         /// <summary>
@@ -266,35 +251,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, string[] zones)
         {
             PopulateLetterRates(rateTable.UpsLetterRate, zones);
-            return rateTable.UpsLetterRate.Select(GetRate).ToDictionary(r => r.Key, r => r.Value);
+            return rateTable.UpsLetterRate.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
         }
-
-        /// <summary>
-        /// Get a key/val rate from the rate entity
-        /// </summary>
-        private static KeyValuePair<UpsServiceType, decimal> GetRate(object rate)
-        {
-            UpsPackageRateEntity packageRate = rate as UpsPackageRateEntity;
-            if (packageRate != null)
-            {
-                return new KeyValuePair<UpsServiceType, decimal>((UpsServiceType)packageRate.Service, packageRate.Rate);
-            }
-
-            UpsLetterRateEntity letterRate = rate as UpsLetterRateEntity;
-            if (letterRate != null)
-            {
-                return new KeyValuePair<UpsServiceType, decimal>((UpsServiceType)letterRate.Service, letterRate.Rate);
-            }
-
-            UpsPricePerPoundEntity perPoundRate = rate as UpsPricePerPoundEntity;
-            if (perPoundRate != null)
-            {
-                return new KeyValuePair<UpsServiceType, decimal>((UpsServiceType)perPoundRate.Service, perPoundRate.Rate);
-            }
-
-            throw new UpsLocalRatingException("Unknown RateType");
-        }
-        
+       
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
