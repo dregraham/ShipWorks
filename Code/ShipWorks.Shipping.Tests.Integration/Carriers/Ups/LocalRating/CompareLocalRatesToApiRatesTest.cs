@@ -438,8 +438,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                     continue;
                 }
 
-                if ((apiRate.Service != UpsServiceType.UpsNextDayAirAM && apiRate.Amount != localRate.Amount) ||
-                    (apiRate.Service == UpsServiceType.UpsNextDayAirAM && Math.Abs((apiRate.Amount - 31.42M) - localRate.Amount) > .02M))
+                if (apiRate.Amount != localRate.Amount)
                 {
                     output.WriteLine($"{apiRate.Service} - Difference = {Math.Abs(apiRate.Amount - localRate.Amount)}");
                     output.WriteLine($"API: {apiRate.Amount} Local: {localRate.Amount}");

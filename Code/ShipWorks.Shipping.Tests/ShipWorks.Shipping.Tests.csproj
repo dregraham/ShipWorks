@@ -184,6 +184,7 @@
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DryIceSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelAirSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\NdaEarlyOver150LbsSurcharge.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ReturnsSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayPickupSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\ThirdPartyBillingSurchargeTest.cs" />

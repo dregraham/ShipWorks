@@ -238,6 +238,7 @@
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeliveryAreaSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\CODSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\FuelGroundSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\NdaEarlyOver150LbsSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\ReturnsSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\SaturdayPickupSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\ThirdPartyBillingSurcharge.cs" />
