@@ -281,11 +281,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Email
             WriteEmailNotificationXml(ups, xmlWriter);
 
-            if (ups.CarbonNeutral)
-            {
-                // Element just needs to be present
-                xmlWriter.WriteElementString("UPScarbonneutralIndicator", string.Empty);
-            }
+            UpsApiCore.WriteCarbonNeutralXml(xmlWriter, ups);
 
             // Write out Delivery Confirmation, if valid
             UpsDeliveryConfirmationElementWriter upsDeliveryConfirmationElementWriter = new UpsDeliveryConfirmationElementWriter(xmlWriter);
