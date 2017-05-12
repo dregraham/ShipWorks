@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateAvailablePackageTypes(shipments);
             LoadShipmentDetails();
 
-            // Start the dimensiosn control listening to weight changes
+            // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
 
             // Load the dimensions
@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 }
             }
 
-            // Start the dimensiosn control listening to weight changes
+            // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
         }
 
@@ -324,7 +324,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         void OnRecipientDestinationChanged(object sender, EventArgs e)
         {

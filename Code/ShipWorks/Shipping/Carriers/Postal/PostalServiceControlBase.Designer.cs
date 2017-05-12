@@ -205,7 +205,7 @@
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(90, 91);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300D;
+            this.weight.RangeMax = 9999D;
             this.weight.RangeMin = 0D;
             this.weight.ShowShortcutInfo = true;
             this.weight.Size = new System.Drawing.Size(238, 24);
