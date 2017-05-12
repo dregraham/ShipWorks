@@ -851,7 +851,7 @@ namespace ShipWorks
                     .Union(ShippingSettings.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error("Error collecting ShipWorks telemetry data.", ex);
                 return values;
@@ -2231,6 +2231,8 @@ namespace ShipWorks
             // Update the grid to show the new node
             gridControl.ActiveFilterNode = ((FilterTree) sender).SelectedFilterNode;
 
+            DeselectFilterNodeFromOtherContextFilterTree(sender);
+
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to
             // update UI, b\c its already blank.
             if (UserSession.IsLoggedOn)
@@ -2240,6 +2242,28 @@ namespace ShipWorks
 
                 // Update the detail view UI
                 UpdateDetailViewSettingsUI();
+            }
+        }
+
+        /// <summary>
+        /// Deselect the filter node from the context that is not active
+        /// </summary>
+        private void DeselectFilterNodeFromOtherContextFilterTree(object sender)
+        {
+            // When a search is ending, we get two selection modifications and we don't
+            // want to deselect anything for the search related one
+            if (gridControl.IsSearchEnding)
+            {
+                return;
+            }
+
+            FilterTree otherTree = sender == orderFilterTree ? customerFilterTree : orderFilterTree;
+
+            if (otherTree.SelectedFilterNode != null)
+            {
+                otherTree.SelectedFilterNodeChanged -= OnSelectedFilterNodeChanged;
+                otherTree.SelectedFilterNode = null;
+                otherTree.SelectedFilterNodeChanged += OnSelectedFilterNodeChanged;
             }
         }
 
@@ -2360,30 +2384,18 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            FilterTarget target = FilterTarget.Orders;
+            long initialID = settings.FilterInitialUseLastActive ?
+                settings.CustomerFilterLastActive : settings.FilterInitialSpecified;
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
-            if (!settings.FilterInitialUseLastActive)
-            {
-                long initialID = settings.FilterInitialSpecified;
+            FilterTarget target = filterNode?.Filter.FilterTarget != null ?
+                (FilterTarget) filterNode.Filter.FilterTarget :
+                FilterTarget.Orders;
+            FilterTree filterTree = target == FilterTarget.Orders ?
+                orderFilterTree : customerFilterTree;
 
-                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
-
-                if (filterNode?.Filter.FilterTarget != null)
-                {
-                    target = (FilterTarget) filterNode.Filter.FilterTarget;
-                }
-            }
-
-            if (target == FilterTarget.Customers)
-            {
-                customerFilterTree.Focus();
-                customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
-            }
-            else
-            {
-                orderFilterTree.Focus();
-                orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
-            }
+            filterTree.Focus();
+            filterTree.SelectInitialFilter(settings, target);
         }
 
         /// <summary>
@@ -2811,7 +2823,6 @@ namespace ShipWorks
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
-
         }
 
         /// <summary>
