@@ -10,9 +10,9 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         private int[] Dimensions => new[]
         {
-            (int) Math.Round(DimsLength, 0),
-            (int) Math.Round(DimsHeight, 0),
-            (int) Math.Round(DimsWidth, 0)
+            (int) Math.Round(DimsLength, 0, MidpointRounding.AwayFromZero),
+            (int) Math.Round(DimsHeight, 0, MidpointRounding.AwayFromZero),
+            (int) Math.Round(DimsWidth, 0, MidpointRounding.AwayFromZero)
         };
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace ShipWorks.Data.Model.EntityClasses
             {
                 int area = Dimensions[0] * Dimensions[1] * Dimensions[2];
 
-                int dimensionalWeight = (int)Math.Ceiling(area / (area <= 1728 ? 166D : 139D));
-                // int dimensionalWeight = (int) Math.Ceiling(area / 166D);
-
+                double divisor = area <= 1728 ? 166D : 139D;
+                int dimensionalWeight = (int) Math.Ceiling(area / divisor);
+                
                 if (IsLargePackage)
                 {
                     dimensionalWeight = Math.Max(dimensionalWeight, 90);

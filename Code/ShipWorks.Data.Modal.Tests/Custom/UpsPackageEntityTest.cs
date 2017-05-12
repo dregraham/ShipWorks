@@ -18,6 +18,8 @@ namespace ShipWorks.Data.Modal.Tests.Custom
         [InlineData(8, 8, 8, 8)]
         [InlineData(9, 9, 1, 9)]
         [InlineData(0, 0, 0, 0)]
+        [InlineData(2.49, 2, 2, 2)]
+        [InlineData(2.5, 2, 2, 3)]
         public void LongestSide_IsExpectedValue(double length, double width, double height, double expectedValue)
         {
             var package = new UpsPackageEntity()

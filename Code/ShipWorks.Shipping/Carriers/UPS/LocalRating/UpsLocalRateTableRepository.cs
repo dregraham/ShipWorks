@@ -110,8 +110,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Get all of the UpsLocalServiceRates applicable to the shipment/servicetypes
+        /// Get all of the UpsLocalServiceRates applicable to the shipment
         /// </summary>
+        /// <returns>
+        /// All possible service rates are returned based on weight, dimensions, origin and zone.
+        /// The service may not be valid for the shipment due to other factors and should be 
+        /// filtered out.
+        /// </returns>
         public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
         {
             string origin = shipment.Shipment.OriginPostalCode;
