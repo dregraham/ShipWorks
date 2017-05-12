@@ -31,11 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
             {
                 return false;
             }
-            
-            if (shipment.CodEnabled && (service == UpsServiceType.Ups3DaySelect || service == UpsServiceType.UpsGround))
-            {
-                return false;
-            }
 
             // VerbalConfirmation is only compatible with UpsNextDayAirEarly
             if (shipment.Packages.Any(p => p.VerbalConfirmationEnabled) && service != UpsServiceType.UpsNextDayAirAM)
