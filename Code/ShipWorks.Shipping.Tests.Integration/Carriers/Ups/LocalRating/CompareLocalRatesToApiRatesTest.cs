@@ -286,9 +286,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [Theory]
         [InlineData(UpsPayorType.Receiver)]
         [InlineData(UpsPayorType.Sender)]
-        [InlineData(UpsPayorType.ThirdParty)]
         public void ThirdPartyBilling(UpsPayorType payorType)
         {
+            // Third party billing rates returned by api do not seem to include the third party billing surcharge
             RunTest(s => s.Ups.PayorType = (int) payorType);
         }
 
