@@ -454,13 +454,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         public void GetServiceRates_ReturnsPricePerPound_WhenShipmentIsMoreThan150LBS()
         {
             UpsAccountEntity account = new UpsAccountEntity { UpsRateTable = new UpsRateTableEntity() };
-            account.UpsRateTable.UpsPackageRate.Add(new UpsPackageRateEntity
-            {
-                Zone = "ABC",
-                Rate = 999,
-                WeightInPounds = 150,
-                Service = (int)UpsServiceType.UpsGround
-            });
 
             account.UpsRateTable.UpsPricePerPound.Add(new UpsPricePerPoundEntity()
             {
@@ -505,7 +498,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             IEnumerable<UpsLocalServiceRate> result = testObject.GetServiceRates(upsShipment);
 
-            Assert.Equal(result.First().Amount, 1011);
+            Assert.Equal(result.First().Amount, 1812);
         }
 
         public void Dispose()

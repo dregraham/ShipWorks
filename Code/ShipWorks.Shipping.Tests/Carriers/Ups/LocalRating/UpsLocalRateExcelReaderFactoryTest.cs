@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
@@ -16,11 +17,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             testObject = new UpsLocalRateExcelReaderFactory();
             
-            rateExcelReaders = AppDomain.CurrentDomain.GetAssemblies()
+            rateExcelReaders = AssemblyProvider.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(r => typeof(IUpsRateExcelReader).IsAssignableFrom(r) && r != typeof(IUpsRateExcelReader));
             
-            zoneExcelReaders = AppDomain.CurrentDomain.GetAssemblies()
+            zoneExcelReaders = AssemblyProvider.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(r => typeof(IUpsZoneExcelReader).IsAssignableFrom(r) && r != typeof(IUpsZoneExcelReader));
         }
