@@ -80,6 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 typeof(NdaEarlyOver150LbsSurcharge),
                 typeof(FuelGroundSurcharge),
                 typeof(SaturdayDeliverySurcharge),
+                typeof(SaturdayPickupSurcharge),
                 typeof(FuelAirSurcharge),
                 typeof(ReturnsSurcharge),
                 typeof(AdditionalHandlingSurcharge),

@@ -2,7 +2,6 @@
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
@@ -38,6 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 
                 new FuelGroundSurcharge(surchargeLookup),
                 new SaturdayDeliverySurcharge(surchargeLookup),
+                new SaturdayPickupSurcharge(surchargeLookup), 
                 new FuelAirSurcharge(surchargeLookup),
 
                 // Value adds
