@@ -273,7 +273,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(false)]
         public void SaturdayDelivery(bool saturdayDelivery)
         {
-            RunTest(s=>s.Ups.SaturdayDelivery = saturdayDelivery);
+            RunTest(s=>
+            {
+                s.Ups.SaturdayDelivery = saturdayDelivery;
+                s.ShipDate = DateTime.Now.Next(DayOfWeek.Friday);
+                s.Ups.Service = (int) UpsServiceType.UpsNextDayAir;
+            });
         }
 
         [Fact]
