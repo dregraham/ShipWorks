@@ -10,25 +10,15 @@ namespace ShipWorks.Tests.Shared
     {
         public static IEnumerable<Assembly> GetAssemblies()
         {
-            string path = GetAssemblyPath();
             var comparison = StringComparison.InvariantCultureIgnoreCase;
 
-            return Directory.GetFiles(path, "*.dll")
+            return AppDomain.CurrentDomain.GetAssemblies()
                 // has Interapptive or ShipWorks
-                .Where(n => Path.GetFileName(n).IndexOf("Interapptive", StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                            Path.GetFileName(n).IndexOf("Shipworks", comparison) >= 0)
+                .Where(n => n.FullName.IndexOf("Interapptive", StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                            n.FullName.IndexOf("Shipworks", comparison) >= 0)
                 // doesn't have tests
-                .Where(n => Path.GetFileName(n).IndexOf("Tests", 0, StringComparison.InvariantCultureIgnoreCase) == -1)
-                .Select(dll => Assembly.LoadFile(dll))
+                .Where(n => n.FullName.IndexOf("Tests", 0, StringComparison.InvariantCultureIgnoreCase) == -1)
                 .OrderBy(a => a.FullName);
-        }
-
-        public static string GetAssemblyPath()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
         }
     }
 }

@@ -192,6 +192,10 @@
     <Compile Include="ShippingPanel\ShipmentViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+      <Project>{41528BDA-8C69-4CA9-B358-BC4E6A62D6F2}</Project>
+      <Name>ShipWorks.Tests.Integration.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj">
       <Project>{329fdd27-99c6-48d6-9205-280cfda3c735}</Project>
       <Name>Interapptive.Shared.Tests</Name>
@@ -231,10 +235,6 @@
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
       <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>
       <Name>ShipWorks.Stores.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Tests.Integration\ShipWorks.Tests.Integration.csproj">
-      <Project>{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}</Project>
-      <Name>ShipWorks.Tests.Integration</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>

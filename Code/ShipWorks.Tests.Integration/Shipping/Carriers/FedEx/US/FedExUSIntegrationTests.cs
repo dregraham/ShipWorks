@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground;

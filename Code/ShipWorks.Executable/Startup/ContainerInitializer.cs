@@ -39,7 +39,6 @@ namespace ShipWorks.Startup
                 typeof(LemonStandStoreModule).Assembly,
                 typeof(EnumImageConverter).Assembly,
                 typeof(MagentoTwoRestClient).Assembly,
-                typeof(NoneLabelService).Assembly,
                 typeof(ScannerService).Assembly);
     }
 }
