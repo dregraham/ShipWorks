@@ -32,6 +32,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -259,7 +260,19 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (isThisPanelVisible)
             {
-                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
+                IEnumerable<long> keys = entityGrid.Selection.Keys;
+                ICarrierShipmentAdapter shipmentAdapter = null;
+
+                if (keys.IsCountEqualTo(1))
+                {
+                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(x => keys.Contains(x.ShipmentID));
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        shipmentAdapter = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
+                    }
+                }
+
+                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, keys, shipmentAdapter));
             }
         }
 
