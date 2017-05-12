@@ -326,7 +326,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IsLoadingShipment = false;
 
             shipmentChangedSubscription = PropertyChangeStream
-                .Where(x => x != nameof(IsLoading) && x != nameof(BestRateShipmentViewModel.RatesLoaded) && x != nameof(DomesticInternationalText))
+                .Where(x => x != nameof(IsLoading) && 
+                x != nameof(BestRateShipmentViewModel.RatesLoaded) &&
+                            x != nameof(DomesticInternationalText) &&
+                            x != nameof(ShipmentType) &&
+                            x != nameof(ShipmentTypeCode))
                 .Merge(ShipmentViewModel.PropertyChangeStream)
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
