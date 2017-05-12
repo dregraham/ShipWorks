@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
         }
 
         [Fact]
-        public void GetEligibleServices_ReturnsAllButUpsGround_WhenShipDateIsSaturday()
+        public void GetEligibleServices_ReturnsAllButUpsGroundAnd3DaySelect_WhenShipDateIsSaturday()
         {
             UpsShipmentEntity upsShipment =
                 new UpsShipmentEntity {Shipment = new ShipmentEntity {ShipDate = new DateTime(2017, 5, 13)}};
@@ -24,6 +24,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             Assert.DoesNotContain(UpsServiceType.UpsGround,
                 testObject.GetEligibleServices(upsShipment,
                     new[] {UpsServiceType.UpsGround, UpsServiceType.Ups2DayAir, UpsServiceType.Ups3DaySelect}));
+
+            Assert.DoesNotContain(UpsServiceType.Ups3DaySelect,
+                testObject.GetEligibleServices(upsShipment,
+                    new[] { UpsServiceType.UpsGround, UpsServiceType.Ups2DayAir, UpsServiceType.Ups3DaySelect }));
         }
 
         [Fact]

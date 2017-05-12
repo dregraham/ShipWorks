@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         {
             // Remove ground when the ship date is saturday
             return shipment.Shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday
-                ? services.Except(new[] {UpsServiceType.UpsGround})
+                ? services.Except(new[] {UpsServiceType.UpsGround, UpsServiceType.Ups3DaySelect})
                 : services;
         }
     }
