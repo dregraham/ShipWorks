@@ -122,6 +122,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             Assert.Equal(UpsServiceType.UpsNextDayAirAM, eligibleServiceTypes.Single());
         }
 
+        [Fact]
+        public void GetEligibleServices_RemovesUpsGround_WhenShipmentHasCodEnabled()
+        {
+            ValueAddServiceFilter testObject = mock.Create<ValueAddServiceFilter>();
+
+            ShipmentEntity shipment = Create.Shipment().AsUps().Build();
+            shipment.Ups.CodEnabled = true;
+
+            List<UpsServiceType> eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
+            
+            Assert.DoesNotContain(UpsServiceType.UpsGround, eligibleServiceTypes);
+        }
+
+        [Fact]
+        public void GetEligibleServices_RemovesUps3DaySelect_WhenShipmentHasCodEnabled()
+        {
+            ValueAddServiceFilter testObject = mock.Create<ValueAddServiceFilter>();
+
+            ShipmentEntity shipment = Create.Shipment().AsUps().Build();
+            shipment.Ups.CodEnabled = true;
+
+            List<UpsServiceType> eligibleServiceTypes = testObject.GetEligibleServices(shipment.Ups, new[] { UpsServiceType.Ups3DaySelect, UpsServiceType.UpsGround, UpsServiceType.UpsNextDayAirAM }).ToList();
+
+            Assert.DoesNotContain(UpsServiceType.Ups3DaySelect, eligibleServiceTypes);
+        }
+
         private static void ConfirmExpectedServices(IReadOnlyCollection<UpsServiceType> expectedServiceTypes,
             IReadOnlyCollection<UpsServiceType> eligibleServiceTypes)
         {
