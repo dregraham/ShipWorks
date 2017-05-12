@@ -1,4 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -9,12 +15,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -266,7 +266,7 @@ namespace ShipWorks.Shipping.Editing
 
             UpdateResidentialDisplay(anyNeedResidential);
 
-            // Load residential stuff only if neccearry
+            // Load residential stuff only if necessary
             if (anyNeedResidential)
             {
                 bool anyFedex = shipments.Any(s => s.ShipmentType == (int) ShipmentTypeCode.FedEx);
@@ -419,7 +419,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Load the options for selecting residential determinatino based on if any are fedex.  For now only fedex offers residential\commercial
+        /// Load the options for selecting residential determination based on if any are fedex.  For now only fedex offers residential\commercial
         /// address lookup.
         /// </summary>
         private void LoadResidentialDeterminationOptions(bool anyFedEx)
@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Somtimes the weight can change through other means, like through the customs editor.  This should be overriden by derived controls to update the
+        /// Sometimes the weight can change through other means, like through the customs editor.  This should be overriden by derived controls to update the
         /// displayed weight.
         /// </summary>
         public virtual void RefreshContentWeight()
@@ -458,7 +458,7 @@ namespace ShipWorks.Shipping.Editing
 
                 if (sectionLabelOptions.Visible)
                 {
-                    labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
+                    labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage) v, shipment));
                 }
 
                 // Residential
@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Resume raising the event that the rate critiera has changed.  This function does not raise the event
+        /// Resume raising the event that the rate criteria has changed.  This function does not raise the event
         /// </summary>
         protected void ResumeRateCriteriaChangeEvent()
         {

@@ -70,6 +70,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.ContextMenuStrip = this.contextMenu;
             this.textBox.Location = new System.Drawing.Point(0, 0);
+            this.textBox.MaxLength = 15;
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(287, 21);
             this.textBox.TabIndex = 0;
@@ -131,13 +132,13 @@
             this.menuPoundsOunces.Text = "Pounds && Ounces";
             this.menuPoundsOunces.Click += new System.EventHandler(this.OnPoundsOunces);
             // 
-            // liveWeight
+            // weightInfo
             // 
             this.weightInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.weightInfo.AutoSize = true;
             this.weightInfo.ForeColor = System.Drawing.SystemColors.GrayText;
             this.weightInfo.Location = new System.Drawing.Point(315, 3);
-            this.weightInfo.Name = "liveWeight";
+            this.weightInfo.Name = "weightInfo";
             this.weightInfo.Size = new System.Drawing.Size(103, 13);
             this.weightInfo.TabIndex = 2;
             this.weightInfo.Text = "12 lb 2 oz <Ctrl-W>";
