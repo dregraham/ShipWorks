@@ -416,6 +416,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.ShipmentChargeCountryCode = GetDefaultCountry();
             profile.Ups.ShipmentChargePostalCode = string.Empty;
             profile.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillReceiver;
+
+            profile.Ups.CustomsDescription = string.Empty;
         }
 
         /// <summary>
@@ -568,6 +570,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargePostalCode, ups, UpsShipmentFields.ShipmentChargePostalCode);
             ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeCountryCode, ups, UpsShipmentFields.ShipmentChargeCountryCode);
             ShippingProfileUtility.ApplyProfileValue(source.ShipmentChargeAccount, ups, UpsShipmentFields.ShipmentChargeAccount);
+
+            ShippingProfileUtility.ApplyProfileValue(source.CustomsDescription, ups, UpsShipmentFields.CustomsDescription);
 
             if (changedPackageWeights)
             {

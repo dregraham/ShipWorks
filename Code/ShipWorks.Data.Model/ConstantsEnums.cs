@@ -9318,6 +9318,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargeCountryCode,
 		///<summary>UspsPackageID. </summary>
 		UspsPackageID,
+		///<summary>CustomsDescription. </summary>
+		CustomsDescription,
 		/// <summary></summary>
 		AmountOfFields
 	}
