@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
+using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -38,12 +40,35 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         }
 
         [Fact]
-        public void LoadStoreIntoViewModel_CopiesBasicAuthenticationInformation_IntoViewModel()
+        public void LoadStoreIntoViewModel_DelegatesToEncryptionProvider_ToDecryptPassword()
         {
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(x => x.CreateSecureTextEncryptionProvider("foo"))
+                .Setup(x => x.Decrypt("bar"))
+                .Verifiable();
+
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             var store = mock.CreateMock<IShopSiteStoreEntity>();
             store.SetupGet(x => x.Username).Returns("foo");
             store.SetupGet(x => x.Password).Returns("bar");
+
+            var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
+            testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
+
+            mock.VerifyAll = true;
+        }
+
+        [Fact]
+        public void LoadStoreIntoViewModel_CopiesBasicAuthenticationInformation_IntoViewModel()
+        {
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(x => x.CreateSecureTextEncryptionProvider(It.IsAny<string>()))
+                .Setup(x => x.Decrypt(It.IsAny<string>()))
+                .Returns("bar");
+
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            var store = mock.CreateMock<IShopSiteStoreEntity>();
+            store.SetupGet(x => x.Username).Returns("foo");
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
@@ -141,11 +166,35 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         [InlineData(" bar")]
         [InlineData("bar ")]
         [InlineData(" bar ")]
-        public void SaveDataToStoreFromViewModel_WithValidApiToken_SetsTokenOnStore(string apiToken)
+        public void SaveDataToStoreFromViewModel_DelegatesToEncryptionProvider_ToEncryptPassword(string apiToken)
         {
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(x => x.CreateSecureTextEncryptionProvider("foo"))
+                .Setup(x => x.Encrypt("bar"))
+                .Verifiable();
+
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
             viewModel.SetupGet(x => x.LegacyPassword).Returns(apiToken);
+
+            var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
+
+            var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+
+            mock.VerifyAll = true;
+        }
+
+        [Fact]
+        public void SaveDataToStoreFromViewModel_WithValidApiToken_SetsTokenOnStore()
+        {
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(x => x.CreateSecureTextEncryptionProvider(It.IsAny<string>()))
+                .Setup(x => x.Encrypt(It.IsAny<string>()))
+                .Returns("bar");
+
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            viewModel.SetupGet(x => x.LegacyMerchantID).Returns("foo");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("baz");
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
@@ -201,6 +250,26 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
             var result = testObject.ConnectionVerificationNeeded(store);
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public void ValidateApiUrl_ReturnsFailure_WhenUrlDoesNotEndWithCorrectFile()
+        {
+            var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
+
+            var result = testObject.ValidateApiUrl("http://www.google.com/");
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void ValidateApiUrl_ReturnsSuccess_WhenUrlEndsWithCorrectFile()
+        {
+            var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
+
+            var result = testObject.ValidateApiUrl("http://www.google.com/start.cgi");
+
+            Assert.True(result.Success);
         }
 
         /// <summary>

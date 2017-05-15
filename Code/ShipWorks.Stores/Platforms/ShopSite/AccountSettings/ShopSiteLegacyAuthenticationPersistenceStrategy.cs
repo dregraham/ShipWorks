@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
@@ -20,6 +21,16 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     [KeyedComponent(typeof(IShopSiteAuthenticationPersistenceStrategy), ShopSiteAuthenticationType.Basic)]
     public class ShopSiteLegacyAuthenticationPersistenceStrategy : IShopSiteAuthenticationPersistenceStrategy
     {
+        readonly IEncryptionProviderFactory encryptionFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopSiteLegacyAuthenticationPersistenceStrategy(IEncryptionProviderFactory encryptionFactory)
+        {
+            this.encryptionFactory = encryptionFactory;
+        }
+
         /// <summary>
         /// Test whether connection verification is needed
         /// </summary>
@@ -38,11 +49,10 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             MethodConditions.EnsureArgumentIsNotNull(viewModel, nameof(viewModel));
 
             viewModel.LegacyMerchantID = store.Username;
-            viewModel.LegacyPassword = store.Password;
+            viewModel.LegacyPassword = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Decrypt(store.Password);
             viewModel.OAuthClientID = string.Empty;
             viewModel.OAuthSecretKey = string.Empty;
             viewModel.OAuthAuthorizationCode = string.Empty;
-            viewModel.ApiUrl = string.Empty;
         }
 
         /// <summary>
@@ -66,12 +76,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             store.Username = viewModel.LegacyMerchantID.Trim();
-            store.Password = viewModel.LegacyPassword.Trim();
+            store.Password = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Encrypt(viewModel.LegacyPassword.Trim());
+
             store.OauthClientID = string.Empty;
             store.OauthSecretKey = string.Empty;
-            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
             store.OauthAuthorizationCode = string.Empty;
-            store.ApiUrl = string.Empty;
+
+            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
 
             return GenericResult.FromSuccess(store);
         }
