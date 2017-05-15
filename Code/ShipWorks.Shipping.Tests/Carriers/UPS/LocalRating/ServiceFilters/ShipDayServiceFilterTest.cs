@@ -6,13 +6,13 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 {
-    public class ShipmentServiceFilterTest
+    public class ShipDayServiceFilterTest
     {
-        private readonly ShipmentServiceFilter testObject;
+        private readonly ShipDayServiceFilter testObject;
 
-        public ShipmentServiceFilterTest()
+        public ShipDayServiceFilterTest()
         {
-            testObject = new ShipmentServiceFilter();
+            testObject = new ShipDayServiceFilter();
         }
 
         [Fact]

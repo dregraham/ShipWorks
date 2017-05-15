@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 new DeliveryAreaSurcharge(surchargeLookup, zoneFileEntity, residentialDeterminationService, sqlAdapterFactory),
                 new LargePackageUpsSurcharge(surchargeLookup),
                 new NdaEarlyOver150LbsSurcharge(surchargeLookup),
-
                 new FuelGroundSurcharge(surchargeLookup),
                 new SaturdayDeliverySurcharge(surchargeLookup),
                 new SaturdayPickupSurcharge(surchargeLookup), 

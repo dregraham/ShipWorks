@@ -10,7 +10,8 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 {
-    public class AddressServiceFilterTest : IDisposable
+    public class 
+        AddressServiceFilterTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly List<UpsServiceType> upsServices;
@@ -40,6 +41,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
             IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, upsServices);
 
             Assert.DoesNotContain(UpsServiceType.Ups2DayAirAM, result);
+        }
+
+        [Fact]
+        public void GetEligibleServices_ReturnsServicesWithUps2DayAirAM_WhenShipmentIsCommercial()
+        {
+            mock.Mock<IResidentialDeterminationService>()
+                .Setup(r => r.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
+                .Returns(false);
+            UpsShipmentEntity shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
+
+            AddressServiceFilter testObject = mock.Create<AddressServiceFilter>();
+            IEnumerable<UpsServiceType> result = testObject.GetEligibleServices(shipment, upsServices);
+
+            Assert.Contains(UpsServiceType.Ups2DayAirAM, result);
         }
 
         [Fact]

@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
     /// <summary>
     /// Get eligible services based on the shipment
     /// </summary>
-    public class ShipmentServiceFilter : IServiceFilter
+    public class ShipDayServiceFilter : IServiceFilter
     {
         /// <summary>
         /// Get eligible services based on the shipment

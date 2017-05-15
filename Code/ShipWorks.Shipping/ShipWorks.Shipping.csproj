@@ -233,7 +233,7 @@
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateExcelReaderFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalServiceRate.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ShipmentServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ShipDayServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\AddressServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeliveryAreaSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\CODSurcharge.cs" />

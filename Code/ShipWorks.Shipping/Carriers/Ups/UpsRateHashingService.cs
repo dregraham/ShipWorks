@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.AddShipmentField(UpsShipmentFields.Service);
                 ratingField.AddShipmentField(UpsShipmentFields.DeliveryConfirmation);
                 ratingField.AddShipmentField(UpsShipmentFields.ReturnService);
+                ratingField.AddShipmentField(UpsShipmentFields.CarbonNeutral);
 
                 ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
                 ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
