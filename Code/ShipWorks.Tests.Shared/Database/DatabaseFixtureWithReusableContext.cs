@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 
 namespace ShipWorks.Tests.Shared.Database
 {
+    /// <summary>
+    /// Fixture that will create a database that can be used to test against, with a reusable context
+    /// </summary>
+    /// <seealso cref="ShipWorks.Tests.Shared.Database.DatabaseFixture" />
     public class DatabaseFixtureWithReusableContext : DatabaseFixture
     {
         private DataContext context;
@@ -51,7 +49,7 @@ namespace ShipWorks.Tests.Shared.Database
         {
             var newContext = CreateDataContext(initializeContainer);
 
-            newContext.Mock.Provide<Control>(new Control());
+            newContext.Mock.Provide(new Control());
             newContext.Mock.Provide<Func<Control>>(() => new Control());
             newContext.Mock.Override<ITangoWebClient>();
             newContext.Mock.Override<IMessageHelper>();

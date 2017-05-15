@@ -5,6 +5,10 @@ using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 {
+    /// <summary>
+    /// Surcharge for packages exceeding UPS "Large Package" measurements
+    /// </summary>
+    /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges.IUpsSurcharge" />
     public class LargePackageUpsSurcharge : IUpsSurcharge
     {
         private readonly IDictionary<UpsSurchargeType, double> surcharges;

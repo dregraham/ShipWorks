@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Media.Animation;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -35,6 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
         private const string MissingServiceHeaderErrorMessage = "{0} is missing the required {1} header at {2}.";
         private const string InvalidZoneErrorMessage = "Invalid zone in Worksheet {0}, cell {1}. Zones must be 3 digit numbers.";
+        private const string InvalidZoneWorksheetNameErrorMessage = "The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'";
+        private const string UnknownServiceColumnErrorMessage = "Unknown service column";
 
         /// <summary>
         /// Constructor
@@ -57,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (!zipWorkSheets.Any())
             {
-                throw new UpsLocalRatingException("The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'");
+                throw new UpsLocalRatingException(InvalidZoneWorksheetNameErrorMessage);
             }
 
             foreach (IWorksheet worksheet in zipWorkSheets)
@@ -278,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 case 7:
                     return UpsServiceType.UpsNextDayAirAM;
                 default:
-                    throw new UpsLocalRatingException("Unknown service column");
+                    throw new UpsLocalRatingException(UnknownServiceColumnErrorMessage);
             }
         }
     }

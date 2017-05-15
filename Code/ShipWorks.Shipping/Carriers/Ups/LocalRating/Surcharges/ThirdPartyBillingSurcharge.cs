@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             if (shipment.PayorType == (int) UpsPayorType.ThirdParty)
             {
                 decimal thirdPartyBillingSurchargeRate = (decimal) surcharges[UpsSurchargeType.ThirdpartyBilling];
-                decimal thridPartyBillingSurcharge = Math.Round(serviceRate.Amount * thirdPartyBillingSurchargeRate, 2);
+                decimal thridPartyBillingSurcharge = Math.Round(serviceRate.Amount * thirdPartyBillingSurchargeRate, 2, MidpointRounding.AwayFromZero);
 
                 serviceRate.AddAmount(thridPartyBillingSurcharge, EnumHelper.GetDescription(UpsSurchargeType.ThirdpartyBilling));
             }

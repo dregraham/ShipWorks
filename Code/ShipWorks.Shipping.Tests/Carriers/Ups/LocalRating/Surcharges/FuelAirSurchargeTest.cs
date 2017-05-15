@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
@@ -14,15 +13,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 {
     public class FuelAirSurchargeTest : IDisposable
     {
-        readonly AutoMock mock;
-        private readonly IDictionary<UpsSurchargeType, double> surcharges;
+        private readonly AutoMock mock;
         private readonly FuelAirSurcharge testObject;
         
         public FuelAirSurchargeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            surcharges = new Dictionary<UpsSurchargeType, double> {[UpsSurchargeType.FuelAir] = .0525};
-            testObject = new FuelAirSurcharge(surcharges);
+            testObject = new FuelAirSurcharge(new Dictionary<UpsSurchargeType, double> { [UpsSurchargeType.FuelAir] = .0525 });
         }
 
         [Fact]

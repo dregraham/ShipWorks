@@ -1,11 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -17,15 +13,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 {
     public class FuelGroundSurchargeTest : IDisposable
     {
-        readonly AutoMock mock;
-        private readonly IDictionary<UpsSurchargeType, double> surcharges;
+        private readonly AutoMock mock;
         private readonly FuelGroundSurcharge testObject;
         
         public FuelGroundSurchargeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            surcharges = new Dictionary<UpsSurchargeType, double> {[UpsSurchargeType.FuelGround] = .0525};
-            testObject = new FuelGroundSurcharge(surcharges);
+            testObject = new FuelGroundSurcharge(new Dictionary<UpsSurchargeType, double> { [UpsSurchargeType.FuelGround] = .0525 });
         }
 
         [Fact]
@@ -62,6 +56,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             mock.Dispose();
         }
-
     }
 }

@@ -40,8 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             {UpsSurchargeType.ResidentialAir, 3.65},
             {UpsSurchargeType.ResidentialGround, 3.25}
         };
-
-
+        
         public DeliveryAreaSurchargeTest()
         {
             var zoneFile = new UpsLocalRatingZoneFileEntity

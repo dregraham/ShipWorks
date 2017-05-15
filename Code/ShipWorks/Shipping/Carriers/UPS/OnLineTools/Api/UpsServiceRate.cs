@@ -21,12 +21,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// The guaranteed days automatic delivery if provided by Ups
         /// </summary>
-        public int? GuaranteedDaysToDelivery { get; private set; }
+        public int? GuaranteedDaysToDelivery { get; }
 
         /// <summary>
         /// The service the rate is for
         /// </summary>
-        public UpsServiceType Service { get; private set; }
+        public UpsServiceType Service { get; }
 
         /// <summary>
         /// The cost to ship with the service
@@ -36,6 +36,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Indicates if the rate is a negotiated "Account Based Rate" (ABR)
         /// </summary>
-        public bool Negotiated { get; private set; }
+        public bool Negotiated { get; }
     }
 }

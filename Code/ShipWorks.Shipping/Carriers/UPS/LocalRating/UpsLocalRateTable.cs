@@ -369,7 +369,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Applies the service filters to base service rates
         /// </summary>
         private IEnumerable<UpsLocalServiceRate> ApplyServiceFilters(ShipmentEntity shipment,
             List<UpsLocalServiceRate> upsLocalServiceRates)

@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 {
     public class ReturnsSurchargeTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
         private readonly ReturnsSurcharge testObject;
 
         private static readonly Dictionary<UpsSurchargeType, double> surcharges =

@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRateClient>();
             GenericResult<List<UpsServiceRate>> rateResult = testObject.GetRates(shipment);
 
-            Assert.Equal(calculated.OrderBy(r=>r.Amount), rateResult.Value);
+            Assert.Equal(calculated.OrderBy(r => r.Amount), rateResult.Value);
         }
 
         [Fact]
@@ -137,13 +137,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.GetRates(shipment);
 
             string expectedError = "Error when calculating rates:\n\nNo rates.\n\nDelegating to UPS API.";
-            mock.Mock<IApiLogEntry>().Verify(l=>l.LogResponse(expectedError, "txt"));
+            mock.Mock<IApiLogEntry>().Verify(l => l.LogResponse(expectedError, "txt"));
         }
 
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }

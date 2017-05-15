@@ -70,8 +70,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             serviceRate.Verify(r => r.AddAmount(123, EnumHelper.GetDescription(UpsSurchargeType.AdditionalHandling)));
         }
-
-
+        
         [Fact]
         public void Apply_AddsAdditionalHandlingSurcharge_WhenSecondLongestSideIsGreaterThan30()
         {

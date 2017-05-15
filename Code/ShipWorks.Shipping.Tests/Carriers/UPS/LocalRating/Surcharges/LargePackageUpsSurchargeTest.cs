@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         public LargePackageUpsSurchargeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            surcharges = new Dictionary<UpsSurchargeType, double>()
+            surcharges = new Dictionary<UpsSurchargeType, double>
             {
                 {UpsSurchargeType.LargePackage, 42}
             };
@@ -84,8 +84,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
             upsLocalServiceRate.Verify(
                 r => r.AddAmount((decimal) surcharges[UpsSurchargeType.LargePackage], "1 Large Package(s)"), Times.Once);
         }
-
-
+        
         [Fact]
         public void Apply_DoesNotAddLargePackageSurcharge_WhenMultipleSmallPackages()
         {
@@ -104,6 +103,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             mock.Dispose();
         }
-
     }
 }

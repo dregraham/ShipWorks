@@ -8,6 +8,9 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class UpsPackageEntity
     {
+        /// <summary>
+        /// Gets the dimensions of the package, rounded to the nearest int
+        /// </summary>
         private int[] Dimensions => new[]
         {
             (int) Math.Round(DimsLength, 0, MidpointRounding.AwayFromZero),
