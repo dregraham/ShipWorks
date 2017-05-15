@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
@@ -18,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 {
     public class SignatureSurchargeTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
         private readonly Dictionary<UpsSurchargeType, double> surcharges;
 
         public SignatureSurchargeTest()
@@ -77,6 +75,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             mock.Dispose();
         }
-
     }
 }

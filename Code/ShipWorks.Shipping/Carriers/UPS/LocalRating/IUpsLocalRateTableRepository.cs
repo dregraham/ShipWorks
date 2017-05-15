@@ -33,17 +33,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Gets the UpsRateTable for the given account
         /// </summary>
-        UpsRateTableEntity Get(UpsAccountEntity accountEntity);
+        UpsRateTableEntity GetRateTable(UpsAccountEntity accountEntity);
 
         /// <summary>
-        /// Get all of the UpsLocalServiceRates applicable to the shipment
+        /// Gets the letter rates.
         /// </summary>
-        IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment);
+        Dictionary<UpsServiceType, decimal> GetLetterRates(long accountID, IEnumerable<string> zones);
+
+        /// <summary>
+        /// Populate the price per pound collection
+        /// </summary>
+        Dictionary<UpsServiceType, decimal> GetPricePerPoundRates(long accountID, IEnumerable<string> zones);
+        
+        /// <summary>
+        /// Populate the package rates
+        /// </summary>
+        Dictionary<UpsServiceType, decimal> GetPackageRates(long accountID, IEnumerable<string> zones, int weight);
 
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
         IDictionary<UpsSurchargeType, double> GetSurcharges(long accountId);
+
+        /// <summary>
+        /// Get Zones for origin and destination zip codes.
+        /// </summary>
+        IEnumerable<string> GetZones(int originZip, int destinationZip);
 
         /// <summary>
         /// Removes Zone Files that are not the newest zone file

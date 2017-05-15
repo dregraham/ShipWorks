@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
@@ -14,7 +15,6 @@ using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
@@ -24,14 +24,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         private readonly AutoMock mock;
         private readonly UpsAccountEntity upsAccount;
         private readonly UpsLocalRateTable testObject;
-        private readonly ShipmentEntity shipment;
 
         public UpsLocalRateTableTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             upsAccount = new UpsAccountEntity();
             testObject = mock.Create<UpsLocalRateTable>();
-            shipment = Create.Shipment().AsUps().Build();
         }
 
         #region "Replacing And Saving Rates"
@@ -41,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             testObject.Load(upsAccount);
 
-            mock.Mock<IUpsLocalRateTableRepository>().Verify(r => r.Get(upsAccount));
+            mock.Mock<IUpsLocalRateTableRepository>().Verify(r => r.GetRateTable(upsAccount));
         }
 
         [Fact]
@@ -109,19 +107,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             ReplaceRatesAndSurcharges(testObject);
 
             var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
-            rateTableRepo.Setup(r => r.Get(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
+            rateTableRepo.Setup(r => r.GetRateTable(It.IsAny<UpsAccountEntity>())).Returns(new UpsRateTableEntity(42));
 
             testObject.Load(upsAccount);
             testObject.SaveRates(upsAccount);
             rateTableRepo
                 .Verify(r => r.Save(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 0), upsAccount), Times.Once);
         }
-        
+
         [Fact]
         public void SaveZones_SetsUploadDate()
         {
-            testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity>{new UpsLocalRatingDeliveryAreaSurchargeEntity()});
-            testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity>{new UpsLocalRatingZoneEntity()});
+            testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity> { new UpsLocalRatingDeliveryAreaSurchargeEntity() });
+            testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity> { new UpsLocalRatingZoneEntity() });
 
             Assert.Null(testObject.ZoneUploadDate);
             testObject.SaveZones();
@@ -156,9 +154,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             testObject.ReplaceDeliveryAreaSurcharges(new List<UpsLocalRatingDeliveryAreaSurchargeEntity> { new UpsLocalRatingDeliveryAreaSurchargeEntity() });
             testObject.ReplaceZones(new List<UpsLocalRatingZoneEntity> { new UpsLocalRatingZoneEntity() });
 
-            int callOrder =0;
-            int saveCalled=0;
-            int cleanupCalled=0;
+            int callOrder = 0;
+            int saveCalled = 0;
+            int cleanupCalled = 0;
 
             var rateTableRepo = mock.Mock<IUpsLocalRateTableRepository>();
             rateTableRepo.Setup(r => r.Save(It.IsAny<UpsLocalRatingZoneFileEntity>()))
@@ -218,8 +216,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     var reader2 = mock.CreateMock<IUpsRateExcelReader>();
                     var excelReaderFactory = mock.Mock<IUpsLocalRateExcelReaderFactory>();
                     excelReaderFactory.Setup(e => e.CreateRateExcelReaders())
-                        .Returns(new[] {reader1.Object, reader2.Object});
-                    
+                        .Returns(new[] { reader1.Object, reader2.Object });
+
                     var localTestObject = mock.Create<UpsLocalRateTable>();
                     localTestObject.LoadRates(stream);
 
@@ -303,42 +301,238 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
         #region Calculate Rates
 
-        [Fact]
-        public void Calculate_ReturnsRatesFromRepository()
-        {
-            var serviceRates = new[] { new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 3.50M, false, 1) };
 
-            mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(r => r.GetServiceRates(shipment.Ups))
-                .Returns(serviceRates);
+        [Fact]
+        public void CalculateRates_ThrowsUpsLocalRatingException_WhenShipmentPostalCodeIsNotValid()
+        {
+            UpsShipmentEntity upsShipment =
+                new UpsShipmentEntity
+                {
+                    Packages = { new UpsPackageEntity() },
+                    Shipment = new ShipmentEntity()
+                };
+
+            upsShipment.Shipment.OriginPostalCode = "12345";
+            upsShipment.Shipment.ShipPostalCode = "abcde";
+
+            var result = testObject.CalculateRates(upsShipment.Shipment);
+
+            Assert.True(result.Failure);
+            Assert.Equal("Unable to find zone using destination postal code abcde.", result.Message);
+        }
+
+        [Fact]
+        public void CalculateRates_ReturnsRateListWithRatesFromAllPackages_WhenShipmentHasMultiplePackages()
+        {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
+            shipment.Ups.Packages.AddRange(Enumerable.Repeat(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Custom,
+                Weight = 10
+            }, 2));
 
             // Define a service filter to return all services it receives
             mock.Mock<IServiceFilter>()
                 .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
                 .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types);
 
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] {"123"};
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
+
+            repo.Setup(r => r.GetPackageRates(42, zones, 10))
+                .Returns(new Dictionary<UpsServiceType, decimal> {{UpsServiceType.UpsGround, 15}});
+
             var result = testObject.CalculateRates(shipment);
-            Assert.Equal(serviceRates[0], result.Value.Single());
+
+            Assert.True(result.Success);
+            Assert.Equal(30, result.Value.Single().Amount);
+            Assert.Equal(UpsServiceType.UpsGround, result.Value.Single().Service);
+
+        }
+
+        [Fact]
+        public void CalculateRates_ReturnsLetterRate_WhenPackageTypeIsLetter()
+        {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
+            shipment.Ups.Packages.Add(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Letter,
+                Weight = .1
+            });
+
+            // Define a service filter to return all services it receives
+            mock.Mock<IServiceFilter>()
+                .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
+                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types);
+
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] {"123"};
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
+
+            repo.Setup(r => r.GetLetterRates(42, zones))
+                .Returns(new Dictionary<UpsServiceType, decimal> {{UpsServiceType.UpsGround, 15}});
+
+            var result = testObject.CalculateRates(shipment);
+
+            Assert.True(result.Success);
+            Assert.Equal(15, result.Value.Single().Amount);
+            Assert.Equal(UpsServiceType.UpsGround, result.Value.Single().Service);
+        }
+
+        [Fact]
+        public void CalculateRates_ReturnsPricePerPound_WhenShipmentIsMoreThan150LBS()
+        {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
+            shipment.Ups.Packages.Add(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Letter,
+                Weight = 151
+            });
+
+            // Define a service filter to return all services it receives
+            mock.Mock<IServiceFilter>()
+                .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
+                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types);
+
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] { "123" };
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
+
+            repo.Setup(r => r.GetPricePerPoundRates(42, zones))
+                .Returns(new Dictionary<UpsServiceType, decimal> { { UpsServiceType.UpsGround, 10 } });
+
+            var result = testObject.CalculateRates(shipment);
+
+            Assert.True(result.Success);
+            Assert.Equal(151 * 10, result.Value.Single().Amount);
+            Assert.Equal(UpsServiceType.UpsGround, result.Value.Single().Service);
+        }
+
+        [Fact]
+        public void CalculateRates_ReturnsFailedGenericResult_WhenNoRatesExistForZone()
+        {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
+            shipment.Ups.Packages.Add(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Letter,
+                Weight = 151
+            });
+
+            // Define a service filter to return all services it receives
+            mock.Mock<IServiceFilter>()
+                .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
+                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types);
+
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] { "123" };
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
+
+            repo.Setup(r => r.GetPricePerPoundRates(42, zones))
+                .Returns(new Dictionary<UpsServiceType, decimal>());
+
+            var result = testObject.CalculateRates(shipment);
+
+            Assert.True(result.Failure);
+            Assert.Equal("No local rates found.", result.Message);
+
+        }
+
+        [Fact]
+        public void CalculateRates_ReturnsFailedGenericResult_WhenZoneCannotBeFoundBetweenDestinationAndOrigin()
+        {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(new string[0]);
+
+            var result = testObject.CalculateRates(shipment);
+
+            Assert.True(result.Failure);
+            Assert.Equal("Unable to find zone using origin postal code 12345 and destination postal code 45678.", result.Message);
         }
 
         [Fact]
         public void Calculate_SurchargesAppliedToRates()
         {
-            var serviceRates = new[]
+            var shipment = new ShipmentEntity()
             {
-                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 3.50M, false, 1),
-                new UpsLocalServiceRate(UpsServiceType.UpsGround, 3.50M, false, 1)
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
             };
 
-            mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(r => r.GetServiceRates(shipment.Ups))
-                .Returns(serviceRates);
+            shipment.Ups.Packages.Add(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Letter,
+                Weight = .1
+            });
 
             // Define a service filter to return all services it receives
             mock.Mock<IServiceFilter>()
                 .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
                 .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types);
 
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] { "123" };
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
+
+            repo.Setup(r => r.GetLetterRates(42, zones))
+                .Returns(new Dictionary<UpsServiceType, decimal> { { UpsServiceType.UpsGround, 15 }, {UpsServiceType.Ups2DayAir, 40} });
+            
             Mock<IUpsSurcharge> surcharge = mock.CreateMock<IUpsSurcharge>();
             mock.Mock<IUpsSurchargeFactory>()
                 .Setup(f => f.Get(It.IsAny<IDictionary<UpsSurchargeType, double>>(), It.IsAny<UpsLocalRatingZoneFileEntity>()))
@@ -346,65 +540,73 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             testObject.CalculateRates(shipment);
 
-            surcharge.Verify(s => s.Apply(shipment.Ups, serviceRates[0]), Times.Exactly(2));
-            surcharge.Verify(s => s.Apply(shipment.Ups, serviceRates[1]), Times.Exactly(2));
+            surcharge.Verify(s => s.Apply(shipment.Ups, It.Is<IUpsLocalServiceRate>(r => r.Service == UpsServiceType.UpsGround && r.Amount == 15)), Times.Exactly(2));
+            surcharge.Verify(s => s.Apply(shipment.Ups, It.Is<IUpsLocalServiceRate>(r => r.Service == UpsServiceType.Ups2DayAir && r.Amount == 40)), Times.Exactly(2));
         }
 
         [Fact]
         public void CalculateRates_FiltersOutRates_WithServicesExcludedInServiceFilter()
         {
-            var serviceRates = new[]
+            var shipment = new ShipmentEntity()
             {
-                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 3.50M, false, 1),
-                new UpsLocalServiceRate(UpsServiceType.UpsGround, 3.50M, false, 1)
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
             };
 
-            mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(r => r.GetServiceRates(shipment.Ups))
-                .Returns(serviceRates);
+            shipment.Ups.Packages.Add(new UpsPackageEntity()
+            {
+                PackagingType = (int) UpsPackagingType.Letter,
+                Weight = .1
+            });
 
-            var filterredServiceTypes = new[] { UpsServiceType.UpsGround };
+            // Define a service filter to return all services it receives
             mock.Mock<IServiceFilter>()
                 .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
-                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => filterredServiceTypes);
+                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>(
+                    (_, types) => types.Where(t => t != UpsServiceType.Ups2DayAir));
 
-            var rateResults = testObject.CalculateRates(shipment);
-            var expectedRateResults =
-                serviceRates.Where(r => r.Service == UpsServiceType.UpsGround);
+            var repo = mock.Mock<IUpsLocalRateTableRepository>();
+            string[] zones = new[] {"123"};
+            repo.Setup(r => r.GetZones(12345, 45678))
+                .Returns(zones);
 
-            Assert.Equal(expectedRateResults, rateResults.Value);
+            repo.Setup(r => r.GetLetterRates(42, zones))
+                .Returns(new Dictionary<UpsServiceType, decimal>
+                {
+                    {UpsServiceType.UpsGround, 15},
+                    {UpsServiceType.Ups2DayAir, 40}
+                });
+
+            var result = testObject.CalculateRates(shipment);
+            Assert.True(result.Success);
+            Assert.Equal(UpsServiceType.UpsGround, result.Value.Single().Service);
         }
+
 
         [Fact]
         public void CalculateRates_ReturnsGenericResultWithFailure_WhenRepoThrowsUpsLocalRatingException()
         {
+            var shipment = new ShipmentEntity()
+            {
+                Ups = new UpsShipmentEntity()
+                {
+                    UpsAccountID = 42,
+                },
+                OriginPostalCode = "12345",
+                ShipPostalCode = "45678",
+            };
+
             mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(r => r.GetServiceRates(shipment.Ups))
+                .Setup(r => r.GetZones(12345, 45678))
                 .Throws(new UpsLocalRatingException("my error"));
 
             var result = testObject.CalculateRates(shipment);
             Assert.True(result.Failure);
             Assert.Equal("my error", result.Message);
-        }
-
-        [Fact]
-        public void CalculateRates_ReturnsGenericResultWithFailure_WhenNoRatesReturned()
-        {
-            var serviceRates = new UpsLocalServiceRate[0];
-            var filterredServiceTypes = new UpsServiceType[0];
-
-            mock.Mock<IUpsLocalRateTableRepository>()
-                .Setup(r => r.GetServiceRates(shipment.Ups))
-                .Returns(serviceRates);
-
-            mock.Mock<IServiceFilter>()
-                .Setup(f => f.GetEligibleServices(shipment.Ups, It.IsAny<IEnumerable<UpsServiceType>>()))
-                .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => filterredServiceTypes);
-
-            var result = testObject.CalculateRates(shipment);
-
-            Assert.True(result.Failure);
-            Assert.Equal("No local rates found.", result.Message);
         }
 
         #endregion Calculate Rates

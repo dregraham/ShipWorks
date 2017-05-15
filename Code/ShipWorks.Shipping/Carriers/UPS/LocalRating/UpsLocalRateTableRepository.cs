@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <returns>
         /// Returns associated rate table.  If no rate table exists for the account, null is returned.
         /// </returns>
-        public UpsRateTableEntity Get(UpsAccountEntity accountEntity)
+        public UpsRateTableEntity GetRateTable(UpsAccountEntity accountEntity)
         {
             UpsRateTableEntity rateTable = null;
 
@@ -110,184 +109,106 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
 
         /// <summary>
-        /// Get all of the UpsLocalServiceRates applicable to the shipment
+        /// Get Zones for origin and destination zip codes.
         /// </summary>
-        /// <returns>
-        /// All possible service rates are returned based on weight, dimensions, origin and zone.
-        /// The service may not be valid for the shipment due to other factors and should be 
-        /// filtered out.
-        /// </returns>
-        public IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
+        public IEnumerable<string> GetZones(int originZip, int destinationZip)
         {
-            string origin = shipment.Shipment.OriginPostalCode;
-            string destination = shipment.Shipment.ShipPostalCode;
-
-            int originPostalCode;
-            int destinationPostalCode;
-            
-            if (origin?.Length < 5 || !int.TryParse(origin?.Substring(0, 5), out originPostalCode))
-            {
-                throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin}.");
-            }
-
-            if (destination?.Length < 5 || !int.TryParse(destination?.Substring(0, 5), out destinationPostalCode))
-            {
-                throw new UpsLocalRatingException($"Unable to find zone using destination postal code {destination}.");
-            }
-
             UpsLocalRatingZoneFileEntity zoneFile = GetLatestZoneFile();
-            PopulateZones(zoneFile.UpsLocalRatingZone, originPostalCode, destinationPostalCode);
-            IEnumerable<string> zones = zoneFile.UpsLocalRatingZone.Select(z => z.Zone).ToArray();
-            
-            // We dont have zone info for the given origin/destination combo
-            if (zones == null || zones.None())
-            {
-                throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin} and destination postal code {destination}.");
-            }
 
-            UpsRateTableEntity rateTable = Get(accountRepository.GetAccount(shipment.Shipment));
-            string[] zonesArray = zones.ToArray();
-
-            // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
-            // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
-            Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
-            foreach (UpsPackageEntity package in shipment.Packages)
-            {
-                Dictionary<UpsServiceType, decimal> rates;
-                
-                if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
-                {
-                    rates = GetLetterRates(rateTable, zonesArray);
-                }
-                else
-                {
-                    rates = GetPackageRates(rateTable, zonesArray, package);
-                }
-
-                AddPackageRateToResult(result, rates);
-            }
-
-            return result.Select(rate => new UpsLocalServiceRate(rate.Key, rate.Value, true, null));
-        }
-
-        /// <summary>
-        /// Populate the zones collection
-        /// </summary>
-        private void PopulateZones(EntityCollection<UpsLocalRatingZoneEntity> zones, int originPostalCode, int destinationPostalCode)
-        {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(UpsLocalRatingZoneFields.OriginZipFloor <= originPostalCode);
-            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.OriginZipCeiling >= originPostalCode);
-            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.DestinationZipFloor <= destinationPostalCode);
-            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.DestinationZipCeiling >= destinationPostalCode);
-            FetchCollection(zones, bucket);
-        }
+            bucket.PredicateExpression.Add(UpsLocalRatingZoneFields.OriginZipFloor <= originZip);
+            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.OriginZipCeiling >= originZip);
+            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.DestinationZipFloor <= destinationZip);
+            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.DestinationZipCeiling >= destinationZip);
+            bucket.PredicateExpression.AddWithAnd(UpsLocalRatingZoneFields.ZoneFileID == zoneFile.ZoneFileID);
 
-        /// <summary>
-        /// Add the set or package rates to the rate result
-        /// </summary>
-        private static void AddPackageRateToResult(Dictionary<UpsServiceType, decimal> rateResult, Dictionary<UpsServiceType, decimal> packageRates)
-        {
-            foreach (KeyValuePair<UpsServiceType, decimal> rate in packageRates)
-            {
-                if (rateResult.ContainsKey(rate.Key))
-                {
-                    rateResult[rate.Key] = rateResult[rate.Key] + rate.Value;
-                }
-                else
-                {
-                    rateResult.Add(rate.Key, rate.Value);
-                }
-            }
-        }
+            FetchCollection(zoneFile.UpsLocalRatingZone, bucket);
 
-        /// <summary>
-        /// Get all of the price per pound rates for the given package/zone/servicetypes
-        /// </summary>
-        private Dictionary<UpsServiceType, decimal> GetPackageRates(UpsRateTableEntity rateTable, string[] zones, UpsPackageEntity package)
-        {
-            if (package.BillableWeight > 150)
-            {
-                // Add the price per pound for anything over 150
-                PopulatePricePerPoundRates(rateTable.UpsPricePerPound, zones);
-
-                return rateTable.UpsPricePerPound
-                    .ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate * package.BillableWeight);
-            }
-            PopulatePackageRates(rateTable.UpsPackageRate, zones, package.BillableWeight);
-            
-            return rateTable.UpsPackageRate.ToDictionary(r => (UpsServiceType)r.Service, r => r.Rate);
-        }
-
-        /// <summary>
-        /// Populate the price per pound collection
-        /// </summary>
-        private void PopulatePricePerPoundRates(EntityCollection<UpsPricePerPoundEntity> pricePerPoundRates, IEnumerable<string> zones)
-        {
-            RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPricePerPoundFields.Zone, null, zones));
-            FetchCollection(pricePerPoundRates, bucket);
+            return zoneFile.UpsLocalRatingZone.Select(x => x.Zone);
         }
 
         /// <summary>
         /// Populate the package rates
         /// </summary>
-        private void PopulatePackageRates(EntityCollection<UpsPackageRateEntity> packageRates, IEnumerable<string> zones, int weight)
+        public Dictionary<UpsServiceType, decimal> GetPackageRates(long accountID, IEnumerable<string> zones, int weight)
         {
+            long rateTableID = GetRateTableIdForAccount(accountID);
+
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.PredicateExpression.Add(UpsPackageRateFields.WeightInPounds == weight);
             bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
+            bucket.PredicateExpression.AddWithAnd(UpsPackageRateFields.UpsRateTableID == rateTableID);
+
+            UpsPackageRateCollection packageRates = new UpsPackageRateCollection();
             FetchCollection(packageRates, bucket);
+
+            return packageRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
         }
 
         /// <summary>
-        /// Populate the letter rates
+        /// Populate the price per pound collection
         /// </summary>
-        private void PopulateLetterRates(EntityCollection<UpsLetterRateEntity> letterRates, IEnumerable<string> zones)
+        public Dictionary<UpsServiceType, decimal> GetPricePerPoundRates(long accountID,  IEnumerable<string> zones)
         {
+            long rateTableID = GetRateTableIdForAccount(accountID);
+
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPricePerPoundFields.Zone, null, zones));
+            bucket.PredicateExpression.AddWithAnd(UpsPricePerPoundFields.UpsRateTableID == rateTableID);
+
+            UpsPricePerPoundCollection pricePerPoundRates = new UpsPricePerPoundCollection();
+            FetchCollection(pricePerPoundRates, bucket);
+
+            return pricePerPoundRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
+        }
+
+        public Dictionary<UpsServiceType, decimal> GetLetterRates(long accountID, IEnumerable<string> zones)
+        {
+            long rateTableID = GetRateTableIdForAccount(accountID);
+
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
+            bucket.PredicateExpression.AddWithAnd(UpsLetterRateFields.UpsRateTableID == rateTableID);
+
+            UpsLetterRateCollection letterRates = new UpsLetterRateCollection();
             FetchCollection(letterRates, bucket);
+
+            return letterRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
         }
 
         /// <summary>
-        /// Get all the letter rates from the rate table matching the service/zone
+        /// Gets the rate table identifier for account.
         /// </summary>
-        private Dictionary<UpsServiceType, decimal> GetLetterRates(UpsRateTableEntity rateTable, string[] zones)
+        private long GetRateTableIdForAccount(long accountID)
         {
-            PopulateLetterRates(rateTable.UpsLetterRate, zones);
-            return rateTable.UpsLetterRate.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
+            UpsAccountEntity account = accountRepository.GetAccount(accountID);
+
+            if (account == null)
+            {
+                throw new UpsLocalRatingException("Cannot find account associated with accountID.");
+            }
+
+            if (account.UpsRateTableID == null)
+            {
+                throw new UpsLocalRatingException("Account not associated with rate table.");
+            }
+
+            return account.UpsRateTableID.Value;
         }
-       
+
         /// <summary>
         /// Get the surcharges for the given account
         /// </summary>
         public IDictionary<UpsSurchargeType, double> GetSurcharges(long accountId)
         {
-            Dictionary<UpsSurchargeType, double> result =
-                new Dictionary<UpsSurchargeType, double>();
+            long rateTableID = GetRateTableIdForAccount(accountId);
 
-            UpsAccountEntity account = accountRepository.GetAccount(accountId);
-            UpsRateTableEntity rateTable = Get(account);
+            UpsRateSurchargeCollection surcharges = new UpsRateSurchargeCollection();
 
-            if (rateTable != null)
-            {
-                FetchCollection(rateTable.UpsRateSurcharge);
+            FetchCollection(surcharges,
+                new RelationPredicateBucket(UpsRateSurchargeFields.UpsRateTableID == rateTableID));
 
-                foreach (UpsRateSurchargeEntity surcharge in rateTable.UpsRateSurcharge)
-                {
-                    if (result.ContainsKey((UpsSurchargeType)surcharge.SurchargeType))
-                    {
-                        result[(UpsSurchargeType)surcharge.SurchargeType] = surcharge.Amount;
-                    }
-                    else
-                    {
-                        result.Add((UpsSurchargeType)surcharge.SurchargeType, surcharge.Amount);
-                    }
-                }
-            }
-
-            return result;
+            return surcharges.ToDictionary(s => (UpsSurchargeType) s.SurchargeType, s => s.Amount);
         }
 
         /// <summary>
