@@ -2,12 +2,12 @@
 {
     partial class iParcelProfilePackageControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -38,9 +38,9 @@
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // groupBox
-            // 
+            //
             this.groupBox.Controls.Add(this.kryptonBorderEdge);
             this.groupBox.Controls.Add(this.dimensionsState);
             this.groupBox.Controls.Add(this.weightState);
@@ -55,9 +55,9 @@
             this.groupBox.TabIndex = 0;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Package {0}";
-            // 
+            //
             // kryptonBorderEdge
-            // 
+            //
             this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
@@ -67,9 +67,9 @@
             this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 97);
             this.kryptonBorderEdge.TabIndex = 83;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            // 
+            //
             // dimensionsState
-            // 
+            //
             this.dimensionsState.AutoSize = true;
             this.dimensionsState.Checked = true;
             this.dimensionsState.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -79,9 +79,9 @@
             this.dimensionsState.TabIndex = 2;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
-            // 
+            //
             // weightState
-            // 
+            //
             this.weightState.AutoSize = true;
             this.weightState.Checked = true;
             this.weightState.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -91,21 +91,21 @@
             this.weightState.TabIndex = 0;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
-            // 
+            //
             // weight
-            // 
+            //
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.weight.Location = new System.Drawing.Point(129, 23);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(218, 21);
+            this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 1;
             this.weight.Weight = 0D;
-            // 
+            //
             // labelWeight
-            // 
+            //
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
             this.labelWeight.Location = new System.Drawing.Point(78, 26);
@@ -113,9 +113,9 @@
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 75;
             this.labelWeight.Text = "Weight:";
-            // 
+            //
             // labelDimensions
-            // 
+            //
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
             this.labelDimensions.Location = new System.Drawing.Point(59, 55);
@@ -123,9 +123,9 @@
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 77;
             this.labelDimensions.Text = "Dimensions:";
-            // 
+            //
             // dimensionsControl
-            // 
+            //
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
             this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
@@ -133,9 +133,9 @@
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 3;
-            // 
+            //
             // packageControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;

@@ -42,16 +42,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.serviceLevelLabel = new System.Windows.Forms.Label();
             this.serviceLevel = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             //
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //
             // personControl
             //
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Size = new System.Drawing.Size(431, 330);
             //
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //
             // sectionFrom
             //
-            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFrom.Collapsed = true;
             //
@@ -110,9 +110,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //
             // originControl
             //
-            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
             | ShipWorks.Data.Controls.PersonFields.Street)
             | ShipWorks.Data.Controls.PersonFields.City)
             | ShipWorks.Data.Controls.PersonFields.State)
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             | ShipWorks.Data.Controls.PersonFields.Phone)
             | ShipWorks.Data.Controls.PersonFields.Website)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
-            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.originControl.Location = new System.Drawing.Point(3, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
@@ -152,12 +152,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // weight
             //
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.weight.Location = new System.Drawing.Point(92, 35);
             this.weight.Name = "weight";
             this.weight.RangeMax = 1000D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(238, 21);
+            this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 68;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.dimensionsControl.Location = new System.Drawing.Point(92, 62);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
@@ -219,10 +219,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             //
             // insuranceControl
             //
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.insuranceControl.Location = new System.Drawing.Point(23, 167);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(647, 50);
@@ -241,21 +241,21 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).EndInit();
             this.ResumeLayout(false);
 
         }
