@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
@@ -19,12 +20,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     /// View model for ShopSite account settings
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class ShopSiteAccountSettingsViewModel : INotifyPropertyChanged
+    public class ShopSiteAccountSettingsViewModel : IShopSiteAccountSettingsViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
         private readonly IShopSiteIdentifier identifier;
         private readonly IShopSiteConnectionVerifier connectionVerifier;
+        private readonly IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> loadPersistenceStrategy;
 
         private string apiUrl;
         private string legacyMerchantID;
@@ -43,15 +45,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, 
-            IShopSiteIdentifier identifier, 
-            IShopSiteConnectionVerifier connectionVerifier,
-            IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> persistenceStrategyFactory)
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier, IShopSiteConnectionVerifier connectionVerifier, 
+            IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> loadPersistenceStrategy)
         {
             this.messageHelper = messageHelper;
             this.identifier = identifier;
             this.connectionVerifier = connectionVerifier;
-            this.persistenceStrategyFactory = persistenceStrategyFactory;
+            this.loadPersistenceStrategy = loadPersistenceStrategy;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         {
             get
             {
-                return persistenceStrategy ?? (persistenceStrategy = persistenceStrategyFactory[AuthenticationType]);
+                return persistenceStrategy ?? (persistenceStrategy = loadPersistenceStrategy[AuthenticationType]);
             }
         }
 
@@ -163,11 +163,11 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Load the account settings UI from the given store
         /// </summary>
-        public void LoadStore(StoreEntity store)
+        public void LoadStore(IShopSiteStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
             ShopSiteStoreEntity shopSiteStore = store as ShopSiteStoreEntity;
+
             if (shopSiteStore == null)
             {
                 throw new ArgumentException("A non ShopSite store was passed to osc account settings.");
@@ -175,10 +175,10 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             LegacyMerchantID = shopSiteStore.Username;
             LegacyPassword = SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username);
+
             ApiUrl = shopSiteStore.ApiUrl;
 
             AuthenticationType = shopSiteStore.ShopSiteAuthentication; 
-
             LegacyUseUnsecureHttp = !shopSiteStore.RequireSSL;
 
             OAuthClientID = shopSiteStore.OauthClientID;
@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Save the UI values to the given store.  Nothing is saved to the database.
         /// </summary>
-        public bool SaveToEntity(StoreEntity store)
+        public bool SaveToEntity(ShopSiteStoreEntity store)
         {
             IResult result = PerformSave(store);
 
@@ -204,99 +204,81 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Perform the actual save
         /// </summary>
-        private IResult PerformSave(StoreEntity store)
+        private IResult PerformSave(ShopSiteStoreEntity store)
         {
-            ShopSiteStoreEntity shopSiteStore = store as ShopSiteStoreEntity;
-            if (shopSiteStore == null)
+            GenericResult<string> storeUrlToCheck = SaveApiUrlToStore(store, ApiUrl);
+            //ShopSiteStoreEntity shopSiteStore = store;
+            if (storeUrlToCheck.Failure)
             {
-                throw new ArgumentException("A non ShopSite store was passed to ShopSite account settings.");
+                return storeUrlToCheck;
             }
 
-            // Url to the module
-            string url = ApiUrl?.Trim();
-
-            // Check empty
-            if (url.IsNullOrWhiteSpace() && AuthenticationType == ShopSiteAuthenticationType.Basic)
+            IResult persistenceResult = PersistenceStrategy.SaveDataToStoreFromViewModel(store, this);
+            if (persistenceResult.Failure)
             {
-                return Result.FromError("Enter the URL of the CGI script.");
+                return persistenceResult;
             }
 
-            else if (url.IsNullOrWhiteSpace() && AuthenticationType == ShopSiteAuthenticationType.Oauth)
-            {
-                return Result.FromError("Please enter an OAuth URL");
-            }
+            store.RequireSSL = !LegacyUseUnsecureHttp;
 
-            // Default to https if not specified
-            if (url.IndexOf(Uri.SchemeDelimiter) == -1)
-            {
-                url = "https://" + url;
-            }
-
-            // Check valid
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                return Result.FromError("The specified URL is not a valid web address.");
-            }
-
-            // Has to point to the CGI
-            if (AuthenticationType == ShopSiteAuthenticationType.Basic)
-            {
-                if (!url.EndsWith("db_xml.cgi"))
-                {
-                    return Result.FromError("A valid URL to the CGI script should end with 'db_xml.cgi'.");
-                }
-
-                shopSiteStore.Username = LegacyMerchantID;
-                shopSiteStore.Password = SecureText.Encrypt(LegacyPassword, LegacyMerchantID);
-            }
-
-            else if (AuthenticationType == ShopSiteAuthenticationType.Oauth)
-            {
-                if (!url.EndsWith(".cgi"))
-                {
-                    return Result.FromError("A valid URL to the CGI script should end with '.cgi'.");
-                }
-
-                shopSiteStore.OauthClientID = OAuthClientID;
-                shopSiteStore.OauthSecretKey = SecureText.Encrypt(OAuthSecretKey, OAuthClientID);
-                shopSiteStore.OauthAuthorizationCode = OAuthAuthorizationCode;
-            }
-
-            shopSiteStore.ApiUrl = url;
-            identifier.Set(shopSiteStore, url);
-
-            shopSiteStore.RequireSSL = !LegacyUseUnsecureHttp;
-
+            //Move to calling method
             if (string.IsNullOrEmpty(store.StoreName))
             {
                 store.StoreName = "ShopSite Store";
             }
 
+            // Move to calling method
             if (string.IsNullOrEmpty(store.Website))
             {
-                store.Website = new Uri(url).Host;
+                store.Website = new Uri(ApiUrl).Host;
             }
-             
+
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                return connectionVerifier.Verify(shopSiteStore, PersistenceStrategy);
+                return connectionVerifier.Verify(store, PersistenceStrategy);
             }
         }
-
-
 
         /// <summary>
         /// Validate and format the API url
         /// </summary>
         private GenericResult<string> SaveApiUrlToStore(ShopSiteStoreEntity store, string url)
         {
-            if (string.IsNullOrWhiteSpace(url))
+            ShopSiteStoreEntity shopSiteStore = store;
+            if (shopSiteStore == null)
             {
-                return GenericResult.FromError<string>("Please enter the API path of your ShopSite store");
+                throw new ArgumentException("Please enter the API path of your ShopSite Store.");
             }
 
-            //Trim and convert to v2 url
-            string storeUrlToCheck = url.Trim().Replace("/v3", "/v2");
+            //Trim URL
+            string storeUrlToCheck = url?.Trim();
+
+            if (AuthenticationType == ShopSiteAuthenticationType.Basic)
+            {
+                if (string.IsNullOrWhiteSpace(storeUrlToCheck))
+                {
+                    return GenericResult.FromError<string>("Please enter the path of your ShopSite store");
+                }
+
+                if (!storeUrlToCheck.EndsWith("start.cgi"))
+                {
+                    return GenericResult.FromError<string>(
+                        "A valid URl to the CGI script should end with '/start.cgi'.");
+                } 
+            }
+
+            else if (AuthenticationType == ShopSiteAuthenticationType.Oauth)
+            {
+                if (string.IsNullOrWhiteSpace(storeUrlToCheck))
+                {
+                    return GenericResult.FromError<string>("Please enter the OAuth URL");
+                }
+
+                if (!storeUrlToCheck.EndsWith("/authorize.cgi"))
+                {
+                    return GenericResult.FromError<string>("A valid URL to the CGI script should end with '/authorize.cgi'.");
+                } 
+            }
 
             // Check for the url scheme and add https if not present
             if (storeUrlToCheck.IndexOf(Uri.SchemeDelimiter, StringComparison.OrdinalIgnoreCase) == -1)
@@ -304,14 +286,18 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
             }
 
+            shopSiteStore.ApiUrl = storeUrlToCheck;
+            identifier.Set(shopSiteStore, storeUrlToCheck);
+
             // Now check the url to see if it is a valid address
             if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
             {
-                return GenericResult.FromError<string>("The specified API path is not a valid address");
+                return GenericResult.FromError<string>("The specified URL is not a valid address");
             }
 
             store.ApiUrl = storeUrlToCheck;
 
+            // Move to calling method
             if (string.IsNullOrWhiteSpace(store.Identifier))
             {
                 store.Identifier = store.ApiUrl;
@@ -320,42 +306,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             return GenericResult.FromSuccess(storeUrlToCheck);
         }
 
+        /// <summary>
+        /// Migrate from basic to OAuth
+        /// </summary>
         private void MigrateToOauthAction()
         {
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
             persistenceStrategy = null;
-
-            ApiUrl = TranslateApiUrl(ApiUrl);
-        }
-
-        /// <summary>
-        /// Translate the Api URl from legacy to OAuth
-        /// </summary>
-        /// <remarks>
-        /// Old style:
-        /// New style:
-        /// </remarks>
-        private static string TranslateApiUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return string.Empty;
-            }
-
-            // First find the store identifier
-            int start = url.IndexOf("", StringComparison.InvariantCultureIgnoreCase) + 6;
-            int end = url.IndexOf("", StringComparison.InvariantCultureIgnoreCase);
-
-            if (start < 0 || end < 0 || (end - start) <= 0)
-            {
-                return string.Empty;
-            }
-
-            string storeIdentifier = url.Substring(start, end - start);
-
-            // Now format it correctly    
-            return $"http://";
-           
-        }
+        }       
     }
 }

@@ -42,17 +42,13 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         /// <summary>
         /// Load the account settings UI from the given store
         /// </summary>
-        public override void LoadStore(StoreEntity store)
-        {
-            base.LoadStore(store);
-
+        public void LoadStore(ShopSiteStoreEntity store) =>
             viewModel.LoadStore(store);
-        }
 
         /// <summary>
         /// Save the UI values to the given store.  Nothing is saved to the database.
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store) =>
+        public bool SaveToEntity(ShopSiteStoreEntity store) =>
             viewModel.SaveToEntity(store);
     }
 }

@@ -56,13 +56,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // To make a call to the store, we need to valid the username
             if (string.IsNullOrWhiteSpace(viewModel.LegacyMerchantID))
             {
-                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter a username");
+                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter a username for your ShopSite Store.");
             }
 
             // To make a call to the store, we need to validate the password
             if (string.IsNullOrWhiteSpace(viewModel.LegacyPassword))
             {
-                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter a password");
+                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter a password for your ShopSite Store.");
             }
 
             store.Username = viewModel.LegacyMerchantID.Trim();

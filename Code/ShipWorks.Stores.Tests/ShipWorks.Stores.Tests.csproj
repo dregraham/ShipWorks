@@ -242,6 +242,7 @@
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\ShopSite\Responses\ShopSiteResponseHelper.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthAccessTokenWebClientTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthWebClientTest.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Platforms\ShopSite\ShopSiteStoreTypeTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteIdentifierTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthAuthenticationPersistenceStrategyTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsViewModelTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />

@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             // To make a call to the store, we need a valid api user name, so check that next.
             if (string.IsNullOrWhiteSpace(viewModel.OAuthClientID))
             {
-                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter the Client ID for your BigCommerce store.");
+                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter the Client ID for your ShopSite store.");
             }
 
             // Check the api token
