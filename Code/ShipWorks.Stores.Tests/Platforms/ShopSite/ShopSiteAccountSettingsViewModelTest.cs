@@ -2,7 +2,6 @@
 using System.Reactive;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -12,7 +11,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Users.Logon;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ShopSite
@@ -78,7 +76,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [InlineData(null, "Please enter the path of your ShopSite store")]
         [InlineData("", "Please enter the path of your ShopSite store")]
         [InlineData("  ", "Please enter the path of your ShopSite store")]
-        //[InlineData("http://www.something.com/path", "The specified URL is not a valid address")]
         public void SaveToEntity_WithInvalidApiUrl_CausesError(string apiUrl, string errorMessage)
         {
             mock.CreateKeyedMockOf<IShopSiteAuthenticationPersistenceStrategy>()
