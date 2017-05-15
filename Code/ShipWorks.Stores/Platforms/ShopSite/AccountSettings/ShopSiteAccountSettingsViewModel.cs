@@ -167,7 +167,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             ApiUrl = store.ApiUrl;
             AuthenticationType = store.ShopSiteAuthentication;
-
             PersistenceStrategy.LoadStoreIntoViewModel(store, this);
         }
 
@@ -205,13 +204,11 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             store.RequireSSL = !LegacyUseUnsecureHttp;
 
-            //Move to calling method
             if (string.IsNullOrEmpty(store.StoreName))
             {
                 store.StoreName = "ShopSite Store";
             }
 
-            // Move to calling method
             if (string.IsNullOrEmpty(store.Website))
             {
                 store.Website = new Uri(ApiUrl).Host;
