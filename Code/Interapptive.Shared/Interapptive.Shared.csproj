@@ -201,7 +201,10 @@
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
+    <Compile Include="Security\DatabaseSpecificEncryptionProvider.cs" />
     <Compile Include="Security\EncryptionException.cs" />
+    <Compile Include="Security\IDatabaseSpecificCipherKey.cs" />
+    <Compile Include="Security\IDatabaseSpecificEncryptionProvider.cs" />
     <Compile Include="Security\StreamCipherKey.cs" />
     <Compile Include="Security\ICipherKey.cs" />
     <Compile Include="Security\IEncryptionProvider.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
+using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -37,19 +39,37 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         }
 
         [Fact]
+        public void LoadStoreIntoViewModel_DelegatesToEncryptionProvider_ToDecryptSecretKey()
+        {
+            var store = mock.CreateMock<IShopSiteStoreEntity>();
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            store.SetupGet(x => x.OauthClientID).Returns("Username");
+            store.SetupGet(x => x.OauthSecretKey).Returns("EncryptedPassword");
+            store.SetupGet(x => x.OauthAuthorizationCode).Returns("Code");
+
+            testObject.LoadStoreIntoViewModel(store.Object, mock.Create<IShopSiteAccountSettingsViewModel>());
+
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().Verify(x => x.Decrypt("EncryptedPassword"));
+        }
+
+        [Fact]
         public void LoadStoreIntoViewModel_LoadOauthAuthenticationInformation_IntoViewModel()
         {
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().Setup(x => x.Decrypt(It.IsAny<string>())).Returns("Password");
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             var store = mock.CreateMock<IShopSiteStoreEntity>();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
             store.SetupGet(x => x.OauthClientID).Returns("Username");
-            store.SetupGet(x => x.OauthSecretKey).Returns("Password");
+            store.SetupGet(x => x.OauthSecretKey).Returns("EncryptedPassword");
+            store.SetupGet(x => x.OauthAuthorizationCode).Returns("Code");
 
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
 
             viewModel.VerifySet(x => x.OAuthClientID = "Username");
             viewModel.VerifySet(x => x.OAuthSecretKey = "Password");
+            viewModel.VerifySet(x => x.OAuthAuthorizationCode = "Code");
         }
 
         [Fact]
@@ -91,6 +111,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.OAuthClientID).Returns(clientID);
             viewModel.SetupGet(x => x.OAuthSecretKey).Returns("Password");
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns("baz");
 
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
@@ -109,6 +130,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.OAuthClientID).Returns("Username");
             viewModel.SetupGet(x => x.OAuthSecretKey).Returns(oauthToken);
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns("baz");
 
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
@@ -118,24 +140,23 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             Assert.Equal("Please enter an OAuth Token.", result.Message);
         }
 
-
         [Theory]
-        [InlineData("bar")]
-        [InlineData(" bar")]
-        [InlineData("bar ")]
-        [InlineData(" bar ")]
-        public void SaveDataToStoreFromViewModel_WithValidOauthClientID_SetsClientIDOnStore(string oauthClientID)
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        public void SaveDataToStoreFromViewModel_WithInvalidAuthorizationCode_CausesError(string authCode)
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
-            viewModel.SetupGet(x => x.OAuthClientID).Returns(oauthClientID);
-            viewModel.SetupGet(x => x.OAuthSecretKey).Returns("foo");
+            viewModel.SetupGet(x => x.OAuthClientID).Returns("Username");
+            viewModel.SetupGet(x => x.OAuthSecretKey).Returns("encrypted_bar");
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns(authCode);
 
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
             var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
 
-            Assert.True(result.Success);
-            Assert.Equal("bar", result.Value.OauthClientID);
+            Assert.False(result.Success);
+            Assert.Equal("Please enter an Authorization Code.", result.Message);
         }
 
         [Theory]
@@ -143,11 +164,49 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [InlineData(" bar")]
         [InlineData("bar ")]
         [InlineData(" bar ")]
-        public void SaveDataToStoreFromViewModel_WithValidOauthToken_SetsTokenOnStore(string oauthToken)
+        public void SaveDataToStoreFromViewModel_DelegatesToEncryptionProvider_ToEncryptSecretKey(string secretKey)
         {
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             viewModel.SetupGet(x => x.OAuthClientID).Returns("foo");
-            viewModel.SetupGet(x => x.OAuthSecretKey).Returns(oauthToken);
+            viewModel.SetupGet(x => x.OAuthSecretKey).Returns(secretKey);
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns("baz");
+
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().Verify(x => x.Encrypt("bar"));
+        }
+
+        [Theory]
+        [InlineData("foo")]
+        [InlineData(" foo")]
+        [InlineData("foo ")]
+        [InlineData(" foo ")]
+        public void SaveDataToStoreFromViewModel_WithValidOauthClientID_SetsClientIDOnStore(string clientID)
+        {
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            viewModel.SetupGet(x => x.OAuthClientID).Returns(clientID);
+            viewModel.SetupGet(x => x.OAuthSecretKey).Returns("encrypted_bar");
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns("baz");
+
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+
+            Assert.True(result.Success);
+            Assert.Equal("foo", result.Value.OauthClientID);
+        }
+
+        [Fact]
+        public void SaveDataToStoreFromViewModel_WithValidOauthSecretKey_SetsSecretKeyOnStore()
+        {
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().SetReturnsDefault("bar");
+
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            viewModel.SetupGet(x => x.OAuthClientID).Returns("foo");
+            viewModel.SetupGet(x => x.OAuthSecretKey).Returns("encrypted_bar");
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns("baz");
 
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
@@ -155,6 +214,26 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 
             Assert.True(result.Success);
             Assert.Equal("bar", result.Value.OauthSecretKey);
+        }
+
+        [Theory]
+        [InlineData("baz")]
+        [InlineData(" baz")]
+        [InlineData("baz ")]
+        [InlineData(" baz ")]
+        public void SaveDataToStoreFromViewModel_WithValidOauthAuthorizationCode_SetsAuthorizationCodeOnStore(string authCode)
+        {
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            viewModel.SetupGet(x => x.OAuthClientID).Returns("foo");
+            viewModel.SetupGet(x => x.OAuthSecretKey).Returns("encrypted_bar");
+            viewModel.SetupGet(x => x.OAuthAuthorizationCode).Returns(authCode);
+
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+
+            Assert.True(result.Success);
+            Assert.Equal("baz", result.Value.OauthAuthorizationCode);
         }
 
         [Fact]
@@ -175,13 +254,33 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         public void ConnectionVerificationNeeded_ReturnsTrue_WhenBasicDataHasChanged(ShopSiteStoreFieldIndex changedField)
         {
             var store = CreateShopSiteStore(clientID: "foo", token: "bar");
-            store.Fields[(int)changedField].IsChanged = true;
+            store.Fields[(int) changedField].IsChanged = true;
 
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
             var result = testObject.ConnectionVerificationNeeded(store);
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public void ValidateApiUrl_ReturnsFailure_WhenUrlDoesNotEndWithCorrectFile()
+        {
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            var result = testObject.ValidateApiUrl("http://www.google.com/");
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void ValidateApiUrl_ReturnsSuccess_WhenUrlEndsWithCorrectFile()
+        {
+            var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
+
+            var result = testObject.ValidateApiUrl("http://www.google.com/authorize.cgi");
+
+            Assert.True(result.Success);
         }
 
         /// <summary>

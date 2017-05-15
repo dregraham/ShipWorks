@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +17,23 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
     [KeyedComponent(typeof(IShopSiteAuthenticationPersistenceStrategy), ShopSiteAuthenticationType.Oauth)]
     public class ShopSiteOauthAuthenticationPersisitenceStrategy : IShopSiteAuthenticationPersistenceStrategy
     {
+        private readonly IDictionary<Func<IShopSiteAccountSettingsViewModel, string>, string> viewModelValidations =
+            new Dictionary<Func<IShopSiteAccountSettingsViewModel, string>, string>
+            {
+                { x => x.OAuthClientID, "Please enter the Client ID for your ShopSite store." },
+                { x => x.OAuthSecretKey, "Please enter an OAuth Token."},
+                { x => x.OAuthAuthorizationCode, "Please enter an Authorization Code."}
+            };
+        private readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopSiteOauthAuthenticationPersisitenceStrategy(IDatabaseSpecificEncryptionProvider encryptionProvider)
+        {
+            this.encryptionProvider = encryptionProvider;
+        }
+
         /// <summary>
         /// Test whether connection verification is needed
         /// </summary>
@@ -33,8 +53,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
 
             viewModel.LegacyMerchantID = string.Empty;
             viewModel.LegacyPassword = string.Empty;
+
             viewModel.OAuthClientID = store.OauthClientID;
-            viewModel.OAuthSecretKey = store.OauthSecretKey;
+            viewModel.OAuthSecretKey = encryptionProvider.Decrypt(store.OauthSecretKey);
             viewModel.OAuthAuthorizationCode = store.OauthAuthorizationCode;
         }
 
@@ -46,24 +67,22 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             MethodConditions.EnsureArgumentIsNotNull(viewModel, nameof(viewModel));
 
-            // To make a call to the store, we need a valid api user name, so check that next.
-            if (string.IsNullOrWhiteSpace(viewModel.OAuthClientID))
+            foreach (KeyValuePair<Func<IShopSiteAccountSettingsViewModel, string>, string> validation in viewModelValidations)
             {
-                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter the Client ID for your ShopSite store.");
-            }
-
-            // Check the api token
-            if (string.IsNullOrWhiteSpace(viewModel.OAuthSecretKey))
-            {
-                return GenericResult.FromError<ShopSiteStoreEntity>("Please enter an OAuth Token.");
+                if (string.IsNullOrWhiteSpace(validation.Key(viewModel)))
+                {
+                    return GenericResult.FromError<ShopSiteStoreEntity>(validation.Value);
+                }
             }
 
             store.Username = string.Empty;
             store.Password = string.Empty;
+
             store.OauthClientID = viewModel.OAuthClientID.Trim();
-            store.OauthSecretKey = viewModel.OAuthSecretKey.Trim();
+            store.OauthSecretKey = encryptionProvider.Encrypt(viewModel.OAuthSecretKey.Trim());
+            store.OauthAuthorizationCode = viewModel.OAuthAuthorizationCode.Trim();
+
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
-            store.OauthAuthorizationCode = viewModel.OAuthAuthorizationCode;
 
             return GenericResult.FromSuccess(store);
         }

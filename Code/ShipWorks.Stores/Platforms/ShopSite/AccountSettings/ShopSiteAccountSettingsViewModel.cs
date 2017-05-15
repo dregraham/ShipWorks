@@ -169,13 +169,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             AuthenticationType = store.ShopSiteAuthentication;
 
             PersistenceStrategy.LoadStoreIntoViewModel(store, this);
-            //LegacyMerchantID = store.Username;
-            //LegacyPassword = SecureText.Decrypt(store.Password, store.Username);
-            //LegacyUseUnsecureHttp = !store.RequireSSL;
-
-            //OAuthClientID = store.OauthClientID;
-            //OAuthSecretKey = SecureText.Decrypt(store.OauthSecretKey, store.OauthClientID);
-            //OAuthAuthorizationCode = store.OauthAuthorizationCode;
         }
 
         /// <summary>

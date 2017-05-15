@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
-            var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+            testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
 
             mock.VerifyAll = true;
         }

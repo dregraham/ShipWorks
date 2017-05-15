@@ -1,4 +1,5 @@
 ﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Administration;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.ApplicationCore.Security
     /// <summary>
     /// Encryption provider for various other classes.
     /// </summary>
+    [Component]
     public class EncryptionProviderFactory : IEncryptionProviderFactory
     {
         private readonly IIndex<CipherContext, ICipherKey> cipherKeyFactory;
@@ -79,24 +81,6 @@ namespace ShipWorks.ApplicationCore.Security
         public IEncryptionProvider CreateWalmartEncryptionProvider()
         {
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.Walmart];
-            return new AesEncryptionProvider(cipherKey);
-        }
-
-        /// <summary>
-        /// Creates the BigCommerce encryption provider
-        /// </summary>
-        public IEncryptionProvider CreateBigCommerceEncryptionProvider()
-        {
-            ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
-            return new AesEncryptionProvider(cipherKey);
-        }
-
-        /// <summary>
-        /// Creates the ShopSite encryption provider
-        /// </summary>
-        public IEncryptionProvider CreateShopSiteEncryptionProvider()
-        {
-            ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
             return new AesEncryptionProvider(cipherKey);
         }
     }

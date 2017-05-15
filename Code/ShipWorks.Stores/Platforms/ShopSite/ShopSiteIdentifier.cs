@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -13,14 +13,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     [Component]
     public class ShopSiteIdentifier : IShopSiteIdentifier
     {
-        readonly IEncryptionProviderFactory encryptionFactory;
+        readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteIdentifier(IEncryptionProviderFactory encryptionFactory)
+        public ShopSiteIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider)
         {
-            this.encryptionFactory = encryptionFactory;
+            this.encryptionProvider = encryptionProvider;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public string Get(IShopSiteStoreEntity typedStore)
         {
-            return encryptionFactory.CreateShopSiteEncryptionProvider().Decrypt(typedStore.Identifier);
+            return encryptionProvider.Decrypt(typedStore.Identifier);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             if (string.IsNullOrWhiteSpace(store.Identifier))
             {
                 string cleansedIdentifier = CleanseIdentifier(store.ApiUrl);
-                store.Identifier = encryptionFactory.CreateShopSiteEncryptionProvider().Encrypt(cleansedIdentifier);
+                store.Identifier = encryptionProvider.Encrypt(cleansedIdentifier);
             }
 
             return store;

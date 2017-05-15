@@ -3,15 +3,15 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite.Dto;
-using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -21,21 +21,25 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     [Component]
     public class ShopSiteOauthAccessTokenWebClient : IShopSiteOauthAccessTokenWebClient
     {
+        private const string storeSettingMissingErrorMessage = "The ShopSite {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
+
         // The store we are connecting to
         private readonly IShopSiteStoreEntity shopSiteStore;
-        private readonly ILifetimeScope lifetimeScope;
         private readonly Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory;
-        private const string storeSettingMissingErrorMessage = "The ShopSite {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Create this instance of the web client for connecting to the specified store
         /// </summary>
-        public ShopSiteOauthAccessTokenWebClient(IShopSiteStoreEntity store, 
-            ILifetimeScope lifetimeScope, 
+        public ShopSiteOauthAccessTokenWebClient(IShopSiteStoreEntity store,
+            IDatabaseSpecificEncryptionProvider encryptionProvider,
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory)
         {
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            this.lifetimeScope = MethodConditions.EnsureArgumentIsNotNull(lifetimeScope, nameof(lifetimeScope));
+            this.encryptionProvider = encryptionProvider;
+            this.apiLogEntryFactory = apiLogEntryFactory;
             this.variableRequestSubmitterFactory = variableRequestSubmitterFactory;
 
             ValidateApiAccessData(store);
@@ -80,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             string nonceString = GenerateNonce();
             string rawCredentials = shopSiteStore.OauthClientID + ":" + nonceString;
             string clientCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(rawCredentials));
-            string signature = CreateSignature(SecureText.Decrypt(shopSiteStore.OauthSecretKey, shopSiteStore.OauthClientID), clientCredentials);
+            string signature = CreateSignature(encryptionProvider.Decrypt(shopSiteStore.OauthSecretKey), clientCredentials);
 
             IHttpVariableRequestSubmitter postRequest = variableRequestSubmitterFactory();
             postRequest.Variables.Add("grant_type", "authorization_code");
@@ -104,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
 
             // Log the request
-            IApiLogEntry apiLogEntry = lifetimeScope.Resolve<IApiLogEntry>(TypedParameter.From(ApiLogSource.ShopSite), TypedParameter.From(action));
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShopSite, action);
             apiLogEntry.LogRequest(postRequest);
 
             // Execute the request
@@ -140,12 +144,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Create a Base64 encoded string based on the given key
         /// </summary>
-        // We have to use SHA1 for ShopSite, so disable this warning.
-        #pragma warning disable CA5350
+        /// <remarks>
+        /// We have to use SHA1 for ShopSite, so disable this warning.
+        /// </remarks>
+#pragma warning disable CA5350
         private static string CreateSignature(string key, string valueToEncode)
         {
             byte[] keyBytes = key.Select(x => Convert.ToByte(x)).ToArray();
-            
+
             using (HMACSHA1 hmac = new HMACSHA1(keyBytes, true))
             {
                 byte[] signed = hmac.ComputeHash(Encoding.ASCII.GetBytes(valueToEncode));

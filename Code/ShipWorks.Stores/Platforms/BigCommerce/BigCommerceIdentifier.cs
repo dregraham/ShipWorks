@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -17,21 +17,21 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [Component]
     public class BigCommerceIdentifier : IBigCommerceIdentifier
     {
-        readonly IEncryptionProviderFactory encryptionFactory;
+        readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceIdentifier(IEncryptionProviderFactory encryptionFactory)
+        public BigCommerceIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider)
         {
-            this.encryptionFactory = encryptionFactory;
+            this.encryptionProvider = encryptionProvider;
         }
 
         /// <summary>
         /// Get the identifier from the given store
         /// </summary>
         public string Get(IBigCommerceStoreEntity typedStore) =>
-            encryptionFactory.CreateBigCommerceEncryptionProvider().Decrypt(typedStore.Identifier);
+            encryptionProvider.Decrypt(typedStore.Identifier);
 
         /// <summary>
         /// Set the identifier on the given store
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             if (string.IsNullOrWhiteSpace(store.Identifier))
             {
                 string cleansedIdentifier = CleanseIdentifier(store.ApiUrl);
-                store.Identifier = encryptionFactory.CreateBigCommerceEncryptionProvider().Encrypt(cleansedIdentifier);
+                store.Identifier = encryptionProvider.Encrypt(cleansedIdentifier);
             }
 
             return store;

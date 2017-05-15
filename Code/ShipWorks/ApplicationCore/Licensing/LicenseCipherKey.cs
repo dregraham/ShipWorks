@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Security;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -7,7 +9,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// An ICipherKey implementation specific to the customer licensing.
     /// </summary>
     /// <seealso cref="Interapptive.Shared.Security.ICipherKey" />
-    public class LicenseCipherKey : ICipherKey
+    [Component]
+    [KeyedComponent(typeof(ICipherKey), CipherContext.License)]
+    public class LicenseCipherKey : IDatabaseSpecificCipherKey, ICipherKey
     {
         private readonly IDatabaseIdentifier databaseIdentifier;
 
@@ -23,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the initialization vector.
         /// </summary>
-        public byte[] InitializationVector => 
+        public byte[] InitializationVector =>
             new byte[] { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
 
         /// <summary>

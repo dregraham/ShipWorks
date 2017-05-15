@@ -150,7 +150,7 @@ namespace ShipWorks
             heartBeat = new UIHeartbeat(this);
 
             // Persist size\position of the window
-            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
 
@@ -851,7 +851,7 @@ namespace ShipWorks
                     .Union(ShippingSettings.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error("Error collecting ShipWorks telemetry data.", ex);
                 return values;
@@ -1383,7 +1383,7 @@ namespace ShipWorks
         private void UpdatePanelState()
         {
             IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
-            IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
+            controls.Select(x => UpdatePanelState(x)).ToList();
         }
 
         /// <summary>

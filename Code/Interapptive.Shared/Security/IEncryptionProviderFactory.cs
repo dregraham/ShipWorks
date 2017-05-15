@@ -40,15 +40,5 @@
         /// Creates the walmart encryption provider.
         /// </summary>
         IEncryptionProvider CreateWalmartEncryptionProvider();
-
-        /// <summary>
-        /// Creates the BigCommerce encryption provider
-        /// </summary>
-        IEncryptionProvider CreateBigCommerceEncryptionProvider();
-
-        /// <summary>
-        /// Creates the ShopSite encryption provider
-        /// </summary>
-        IEncryptionProvider CreateShopSiteEncryptionProvider();
     }
 }

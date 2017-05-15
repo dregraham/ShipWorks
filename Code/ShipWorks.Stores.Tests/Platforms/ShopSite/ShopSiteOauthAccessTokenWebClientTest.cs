@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Core;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
+using ShipWorks.Stores.Tests.Platforms.ShopSite.Responses;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using Autofac;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Tests.Platforms.ShopSite.Responses;
 
 namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 {
@@ -24,10 +26,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         }
 
         [Theory]
-        [InlineData("",        "clientID", "secretKey", "authCode", "Authorization URL")]
-        [InlineData("www.com", "",         "secretKey", "authCode", "Client ID")]
-        [InlineData("www.com", "clientID", "",          "authCode", "Secret Key")]
-        [InlineData("www.com", "clientID", "secretKey", "",         "Authorization Code")]
+        [InlineData("", "clientID", "secretKey", "authCode", "Authorization URL")]
+        [InlineData("www.com", "", "secretKey", "authCode", "Client ID")]
+        [InlineData("www.com", "clientID", "", "authCode", "Secret Key")]
+        [InlineData("www.com", "clientID", "secretKey", "", "Authorization Code")]
         public void Constructor_ReturnsException_WhenOauthAuthAndMissingInfo(string url, string clientID, string secretKey, string authCode, string expectedValue)
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
@@ -38,10 +40,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.OauthSecretKey = secretKey;
             store.OauthAuthorizationCode = authCode;
 
-            ShopSiteException ex = Assert.Throws<ShopSiteException>(() => 
-                    new ShopSiteOauthAccessTokenWebClient(store,
-                                               mock.Container.BeginLifetimeScope(), 
-                                               () => new HttpVariableRequestSubmitter()));
+            var resolutionException = Assert.Throws<DependencyResolutionException>(() => mock.Create<ShopSiteOauthAccessTokenWebClient>(TypedParameter.From<IShopSiteStoreEntity>(store)));
+            var ex = resolutionException.GetBaseException() as ShopSiteException;
 
             Assert.Contains($"{expectedValue} is missing or invalid", ex.Message);
         }
@@ -55,21 +55,23 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() =>
                 new ShopSiteOauthAccessTokenWebClient(store,
-                    mock.Container.BeginLifetimeScope(),
+                    mock.Create<IDatabaseSpecificEncryptionProvider>(),
+                    (x, y) => mock.Create<IApiLogEntry>(),
                     () => new HttpVariableRequestSubmitter()));
 
             Assert.Contains("configured to use Basic authentication but the OAuth", ex.Message);
-
         }
 
         [Fact]
         public void FetchAuthAccessResponse_ReturnsException_WhenInvalidAccessResponseReceived()
         {
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().SetReturnsDefault("secretKey");
+
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
-            store.OauthSecretKey = "secretKey";
+            store.OauthSecretKey = "encrypted_secretKey";
             store.OauthClientID = "clientID";
             store.OauthAuthorizationCode = "authCode";
 
@@ -91,11 +93,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void FetchAuthAccessResponse_DelegatesToHttpVariableRequestSubmitter()
         {
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().SetReturnsDefault("secretKey");
+
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
-            store.OauthSecretKey = "secretKey";
+            store.OauthSecretKey = "encrypted_secretKey";
             store.OauthClientID = "clientID";
             store.OauthAuthorizationCode = "authCode";
 
@@ -122,11 +126,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void FetchAuthAccessResponse_AddsHttpVariableInTheCorrectOrder()
         {
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().SetReturnsDefault("secretKey");
+
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
             store.StoreName = "Test store";
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
             store.ApiUrl = "https://www.foo.com/authorize.cgi";
-            store.OauthSecretKey = "secretKey";
+            store.OauthSecretKey = "encrypted_secretKey";
             store.OauthClientID = "clientID";
             store.OauthAuthorizationCode = "authCode";
 
@@ -167,7 +173,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
 
         private IShopSiteOauthAccessTokenWebClient CreateWebClient(Mock<IHttpVariableRequestSubmitter> submitter, ShopSiteStoreEntity store)
         {
-            return mock.Create<ShopSiteOauthAccessTokenWebClient>(TypedParameter.From((IShopSiteStoreEntity) store), 
+            return mock.Create<ShopSiteOauthAccessTokenWebClient>(TypedParameter.From((IShopSiteStoreEntity) store),
                 TypedParameter.From(submitter.Object));
         }
     }
