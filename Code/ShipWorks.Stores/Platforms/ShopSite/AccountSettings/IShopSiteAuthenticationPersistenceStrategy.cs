@@ -10,6 +10,9 @@ using ShipWorks.Stores.Platforms.ShopSite.AccountSettings;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
+    /// <summary>
+    /// Authentication persistence strategy
+    /// </summary>
     public interface IShopSiteAuthenticationPersistenceStrategy
     {
         /// <summary>
@@ -22,7 +25,15 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         void LoadStoreIntoViewModel(IShopSiteStoreEntity store, IShopSiteAccountSettingsViewModel viewModel);
 
+        /// <summary>
+        /// Save the view model data into the given store
+        /// </summary>
         GenericResult<ShopSiteStoreEntity> SaveDataToStoreFromViewModel(ShopSiteStoreEntity store,
             IShopSiteAccountSettingsViewModel viewModel);
+
+        /// <summary>
+        /// Validate the api url
+        /// </summary>
+        IResult ValidateApiUrl(string apiUrl);
     }
 }

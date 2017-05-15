@@ -1,6 +1,7 @@
-﻿using Interapptive.Shared.Enums;
-using Interapptive.Shared.Utility;
+﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
         public bool ConnectionVerificationNeeded(ShopSiteStoreEntity store)
         {
             return store.Fields[(int) ShopSiteStoreFieldIndex.OauthClientID].IsChanged ||
-                store.Fields[(int)ShopSiteStoreFieldIndex.OauthSecretKey].IsChanged;
+                store.Fields[(int) ShopSiteStoreFieldIndex.OauthSecretKey].IsChanged;
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             viewModel.LegacyPassword = string.Empty;
             viewModel.OAuthClientID = store.OauthClientID;
             viewModel.OAuthSecretKey = store.OauthSecretKey;
-            viewModel.OAuthAuthorizationCode = store.OauthAuthorizationCode; 
+            viewModel.OAuthAuthorizationCode = store.OauthAuthorizationCode;
         }
 
         /// <summary>
@@ -65,6 +66,19 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
             store.OauthAuthorizationCode = viewModel.OAuthAuthorizationCode;
 
             return GenericResult.FromSuccess(store);
+        }
+
+        /// <summary>
+        /// Validate the api url
+        /// </summary>
+        public IResult ValidateApiUrl(string apiUrl)
+        {
+            if (apiUrl.EndsWith("/authorize.cgi"))
+            {
+                return Result.FromSuccess();
+            }
+
+            return Result.FromError("A valid URL to the CGI script should end with '/authorize.cgi'.");
         }
     }
 }

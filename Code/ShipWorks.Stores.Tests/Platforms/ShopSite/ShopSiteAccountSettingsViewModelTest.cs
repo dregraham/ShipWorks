@@ -53,9 +53,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.SetupGet(x => x.Username).Returns("Username");
             store.SetupGet(x => x.Password).Returns("Password");
 
-            testObject.LoadStore(new ShopSiteStoreEntity());
-
-
+            testObject.LoadStore(store.Object);
+            
             testObject.MigrateToOauth.Execute(null);
 
             Assert.Equal(ShopSiteAuthenticationType.Oauth, testObject.AuthenticationType);

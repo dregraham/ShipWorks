@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -74,6 +74,19 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             store.ApiUrl = string.Empty;
 
             return GenericResult.FromSuccess(store);
+        }
+
+        /// <summary>
+        /// Validate the api url
+        /// </summary>
+        public IResult ValidateApiUrl(string apiUrl)
+        {
+            if (apiUrl.EndsWith("start.cgi"))
+            {
+                return Result.FromSuccess();
+            }
+
+            return GenericResult.FromError<string>("A valid URl to the CGI script should end with '/start.cgi'.");
         }
     }
 }

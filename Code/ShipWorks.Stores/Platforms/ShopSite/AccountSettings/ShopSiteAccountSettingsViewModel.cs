@@ -4,11 +4,11 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -34,18 +34,16 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private string oAuthClientID;
         private string oAuthSecretKey;
         private string oAuthAuthorizationCode;
-        
+
         private bool legacyUseUnsecureHttp;
 
-        readonly IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> persistenceStrategyFactory;
         private IShopSiteAuthenticationPersistenceStrategy persistenceStrategy;
         private ShopSiteAuthenticationType authenticationType;
-
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier, IShopSiteConnectionVerifier connectionVerifier, 
+        public ShopSiteAccountSettingsViewModel(IMessageHelper messageHelper, IShopSiteIdentifier identifier, IShopSiteConnectionVerifier connectionVerifier,
             IIndex<ShopSiteAuthenticationType, IShopSiteAuthenticationPersistenceStrategy> loadPersistenceStrategy)
         {
             this.messageHelper = messageHelper;
@@ -77,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// Url for the API
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ApiUrl 
+        public string ApiUrl
         {
             get { return apiUrl; }
             set { handler.Set(nameof(ApiUrl), ref apiUrl, value); }
@@ -166,24 +164,18 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         public void LoadStore(IShopSiteStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            ShopSiteStoreEntity shopSiteStore = store as ShopSiteStoreEntity;
 
-            if (shopSiteStore == null)
-            {
-                throw new ArgumentException("A non ShopSite store was passed to osc account settings.");
-            }
+            ApiUrl = store.ApiUrl;
+            AuthenticationType = store.ShopSiteAuthentication;
 
-            LegacyMerchantID = shopSiteStore.Username;
-            LegacyPassword = SecureText.Decrypt(shopSiteStore.Password, shopSiteStore.Username);
+            PersistenceStrategy.LoadStoreIntoViewModel(store, this);
+            //LegacyMerchantID = store.Username;
+            //LegacyPassword = SecureText.Decrypt(store.Password, store.Username);
+            //LegacyUseUnsecureHttp = !store.RequireSSL;
 
-            ApiUrl = shopSiteStore.ApiUrl;
-
-            AuthenticationType = shopSiteStore.ShopSiteAuthentication; 
-            LegacyUseUnsecureHttp = !shopSiteStore.RequireSSL;
-
-            OAuthClientID = shopSiteStore.OauthClientID;
-            OAuthSecretKey = SecureText.Decrypt(shopSiteStore.OauthSecretKey, shopSiteStore.OauthClientID);
-            OAuthAuthorizationCode = shopSiteStore.OauthAuthorizationCode;
+            //OAuthClientID = store.OauthClientID;
+            //OAuthSecretKey = SecureText.Decrypt(store.OauthSecretKey, store.OauthClientID);
+            //OAuthAuthorizationCode = store.OauthAuthorizationCode;
         }
 
         /// <summary>
@@ -206,8 +198,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private IResult PerformSave(ShopSiteStoreEntity store)
         {
-            GenericResult<string> storeUrlToCheck = SaveApiUrlToStore(store, ApiUrl);
-            //ShopSiteStoreEntity shopSiteStore = store;
+            IResult storeUrlToCheck = SaveApiUrlToStore(store, ApiUrl);
             if (storeUrlToCheck.Failure)
             {
                 return storeUrlToCheck;
@@ -242,42 +233,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Validate and format the API url
         /// </summary>
-        private GenericResult<string> SaveApiUrlToStore(ShopSiteStoreEntity store, string url)
+        private IResult SaveApiUrlToStore(ShopSiteStoreEntity store, string url)
         {
-            ShopSiteStoreEntity shopSiteStore = store;
-            if (shopSiteStore == null)
-            {
-                throw new ArgumentException("Please enter the API path of your ShopSite Store.");
-            }
-
-            //Trim URL
             string storeUrlToCheck = url?.Trim();
 
-            if (AuthenticationType == ShopSiteAuthenticationType.Basic)
+            if (string.IsNullOrWhiteSpace(storeUrlToCheck))
             {
-                if (string.IsNullOrWhiteSpace(storeUrlToCheck))
-                {
-                    return GenericResult.FromError<string>("Please enter the path of your ShopSite store");
-                }
-
-                if (!storeUrlToCheck.EndsWith("start.cgi"))
-                {
-                    return GenericResult.FromError<string>(
-                        "A valid URl to the CGI script should end with '/start.cgi'.");
-                } 
-            }
-
-            else if (AuthenticationType == ShopSiteAuthenticationType.Oauth)
-            {
-                if (string.IsNullOrWhiteSpace(storeUrlToCheck))
-                {
-                    return GenericResult.FromError<string>("Please enter the OAuth URL");
-                }
-
-                if (!storeUrlToCheck.EndsWith("/authorize.cgi"))
-                {
-                    return GenericResult.FromError<string>("A valid URL to the CGI script should end with '/authorize.cgi'.");
-                } 
+                return Result.FromError("Please enter the path of your ShopSite store");
             }
 
             // Check for the url scheme and add https if not present
@@ -286,24 +248,21 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 storeUrlToCheck = string.Format("https://{0}", storeUrlToCheck);
             }
 
-            shopSiteStore.ApiUrl = storeUrlToCheck;
-            identifier.Set(shopSiteStore, storeUrlToCheck);
-
-            // Now check the url to see if it is a valid address
             if (!Uri.IsWellFormedUriString(storeUrlToCheck, UriKind.Absolute))
             {
-                return GenericResult.FromError<string>("The specified URL is not a valid address");
+                return Result.FromError("The specified URL is not a valid address");
+            }
+
+            IResult isValidUrl = PersistenceStrategy.ValidateApiUrl(storeUrlToCheck);
+            if (isValidUrl.Failure)
+            {
+                return isValidUrl;
             }
 
             store.ApiUrl = storeUrlToCheck;
+            identifier.Set(store, storeUrlToCheck);
 
-            // Move to calling method
-            if (string.IsNullOrWhiteSpace(store.Identifier))
-            {
-                store.Identifier = store.ApiUrl;
-            }
-
-            return GenericResult.FromSuccess(storeUrlToCheck);
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -313,6 +272,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         {
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
             persistenceStrategy = null;
-        }       
+        }
     }
 }
