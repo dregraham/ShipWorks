@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Startup;
@@ -500,6 +501,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
         private IUpsRateClient CreateApiClient()
         {
+
+            context.Mock.Mock<UpsShipmentType>()
+                .Setup(x => x.GetExcludedServiceTypes(It.IsAny<IExcludedServiceTypeRepository>()))
+                .Returns(new[]
+                {
+                    (int) UpsServiceType.UpsSurePost1LbOrGreater,
+                    (int) UpsServiceType.UpsSurePostBoundPrintedMatter,
+                    (int) UpsServiceType.UpsSurePostLessThan1Lb,
+                    (int) UpsServiceType.UpsSurePostMedia
+                });
+
             return context.Mock.Create<UpsApiRateClient>();
         }
 
