@@ -47,8 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Paypal
                 var serializer = new XmlSerializer(
                     typeof(GetTransactionDetailsResponseType),
                     new XmlRootAttribute("GetTransactionDetailsResponse") { Namespace = "urn:ebay:api:PayPalAPI" });
-                var responseObj =
-                      (GetTransactionDetailsResponseType) serializer.Deserialize(responseXml.CreateReader());
+                serializer.Deserialize(responseXml.CreateReader());
             }
         }
 
