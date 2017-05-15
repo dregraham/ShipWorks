@@ -8,7 +8,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -76,55 +75,91 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Theory]
-        [InlineData("63110", "MO", "42431", "KY", "55", "20", "19")] // Bill Weight = 151
-        [InlineData("63110", "MO", "37501", "TN", "53", "20", "20")] // Bill Weight = 153
-        [InlineData("63110", "MO", "32533", "FL", "50", "21", "20")] // Bill Weight = 152
-        [InlineData("63110", "MO", "15825", "PA", "53", "21", "19")] // Bill Weight = 153
-        [InlineData("63110", "MO", "33027", "FL", "56", "20", "19")] // Bill Weight = 154
-        [InlineData("63110", "MO", "89434", "NV", "60", "20", "18")] // Bill Weight = 156
-        [InlineData("00401", "NY", "81324", "CO", "61", "18", "19")] // Bill Weight = 151
-        [InlineData("63110", "MO", "96701", "HI", "62", "20", "20")] // Bill Weight = 179
-        [InlineData("63110", "MO", "42431", "KY", "63", "20", "20")] // Bill Weight = 182
-        [InlineData("63110", "MO", "37501", "TN", "64", "20", "20")] // Bill Weight = 185
-        [InlineData("63110", "MO", "32533", "FL", "65", "20", "20")] // Bill Weight = 188
-        [InlineData("63110", "MO", "15825", "PA", "66", "20", "20")] // Bill Weight = 190
-        [InlineData("63110", "MO", "33027", "FL", "67", "20", "20")] // Bill Weight = 193
-        [InlineData("63110", "MO", "89434", "NV", "68", "20", "20")] // Bill Weight = 196
-        [InlineData("00401", "NY", "81324", "CO", "69", "20", "20")] // Bill Weight = 199
-        [InlineData("63110", "MO", "96701", "HI", "70", "20", "20")] // Bill Weight = 202
-        [InlineData("63110", "MO", "42431", "KY", "71", "20", "20")] // Bill Weight = 205
-        [InlineData("63110", "MO", "37501", "TN", "72", "20", "20")] // Bill Weight = 208
-        [InlineData("63110", "MO", "32533", "FL", "73", "20", "20")] // Bill Weight = 211
-        [InlineData("63110", "MO", "15825", "PA", "74", "20", "20")] // Bill Weight = 213
-        [InlineData("63110", "MO", "33027", "FL", "75", "20", "20")] // Bill Weight = 216
-        [InlineData("63110", "MO", "89434", "NV", "76", "20", "20")] // Bill Weight = 219
-        [InlineData("00401", "NY", "81324", "CO", "77", "20", "20")] // Bill Weight = 222
-        [InlineData("63110", "MO", "96701", "HI", "78", "18", "18")] // Bill Weight = 182
-        [InlineData("63110", "MO", "42431", "KY", "77", "18", "18")] // Bill Weight = 180
-        [InlineData("63110", "MO", "37501", "TN", "78", "18", "18")] // Bill Weight = 182
-        [InlineData("63110", "MO", "32533", "FL", "79", "18", "18")] // Bill Weight = 185
-        [InlineData("63110", "MO", "15825", "PA", "80", "18", "18")] // Bill Weight = 187
-        [InlineData("63110", "MO", "33027", "FL", "81", "18", "18")] // Bill Weight = 189
-        [InlineData("63110", "MO", "89434", "NV", "71", "28", "19")] // Bill Weight = 272
-        [InlineData("00401", "NY", "81324", "CO", "69", "29", "19")] // Bill Weight = 274
-        [InlineData("63110", "MO", "96701", "HI", "67", "29", "20")] // Bill Weight = 280
-        [InlineData("63110", "MO", "42431", "KY", "67", "28", "21")] // Bill Weight = 284
-        [InlineData("63110", "MO", "37501", "TN", "59", "30", "23")] // Bill Weight = 293
-        [InlineData("63110", "MO", "32533", "FL", "57", "30", "24")] // Bill Weight = 296
-        [InlineData("63110", "MO", "15825", "PA", "55", "30", "25")] // Bill Weight = 297
-        [InlineData("63110", "MO", "33027", "FL", "67", "22", "20")] // Bill Weight = 213
-        [InlineData("63110", "MO", "89434", "NV", "68", "23", "20")] // Bill Weight = 226
-        [InlineData("00401", "NY", "81324", "CO", "69", "24", "20")] // Bill Weight = 239
-        [InlineData("63110", "MO", "96701", "HI", "70", "25", "20")] // Bill Weight = 252
-        [InlineData("63110", "MO", "42431", "KY", "71", "26", "20")] // Bill Weight = 266
-        [InlineData("63110", "MO", "37501", "TN", "72", "27", "19")] // Bill Weight = 266
-        [InlineData("63110", "MO", "32533", "FL", "73", "28", "18")] // Bill Weight = 265
-        [InlineData("63110", "MO", "15825", "PA", "74", "30", "15")] // Bill Weight = 240
-        [InlineData("63110", "MO", "33027", "FL", "75", "30", "10")] // Bill Weight = 162
-        [InlineData("63110", "MO", "89434", "NV", "76", "31", "10")] // Bill Weight = 170
-        [InlineData("00401", "NY", "81324", "CO", "77", "32", "10")] // Bill Weight = 178
-        [InlineData("63110", "MO", "96701", "HI", "78", "31", "12")] // Bill Weight = 209
+        [InlineData("63110", "MO", "15825", "PA", "53", "21", "19")] //BillWeight=153
+        [InlineData("63110", "MO", "15825", "PA", "55", "30", "25")] //BillWeight=297
+        [InlineData("63110", "MO", "15825", "PA", "66", "20", "20")] //BillWeight=190
+        [InlineData("63110", "MO", "15825", "PA", "74", "20", "20")] //BillWeight=213
+        [InlineData("63110", "MO", "15825", "PA", "74", "30", "15")] //BillWeight=240
+        [InlineData("63110", "MO", "15825", "PA", "80", "18", "18")] //BillWeight=187
+        [InlineData("63110", "MO", "32533", "FL", "50", "21", "20")] //BillWeight=152
+        [InlineData("63110", "MO", "32533", "FL", "57", "30", "24")] //BillWeight=296
+        [InlineData("63110", "MO", "32533", "FL", "65", "20", "20")] //BillWeight=188
+        [InlineData("63110", "MO", "32533", "FL", "73", "20", "20")] //BillWeight=211
+        [InlineData("63110", "MO", "32533", "FL", "73", "28", "18")] //BillWeight=265
+        [InlineData("63110", "MO", "32533", "FL", "79", "18", "18")] //BillWeight=185
+        [InlineData("63110", "MO", "33027", "FL", "56", "20", "19")] //BillWeight=154
+        [InlineData("63110", "MO", "33027", "FL", "67", "20", "20")] //BillWeight=193
+        [InlineData("63110", "MO", "33027", "FL", "67", "22", "20")] //BillWeight=213
+        [InlineData("63110", "MO", "33027", "FL", "75", "20", "20")] //BillWeight=216
+        [InlineData("63110", "MO", "33027", "FL", "75", "30", "10")] //BillWeight=162
+        [InlineData("63110", "MO", "33027", "FL", "81", "18", "18")] //BillWeight=189
+        [InlineData("63110", "MO", "37501", "TN", "53", "20", "20")] //BillWeight=153
+        [InlineData("63110", "MO", "37501", "TN", "59", "30", "23")] //BillWeight=293
+        [InlineData("63110", "MO", "37501", "TN", "64", "20", "20")] //BillWeight=185
+        [InlineData("63110", "MO", "37501", "TN", "72", "20", "20")] //BillWeight=208
+        [InlineData("63110", "MO", "37501", "TN", "72", "27", "19")] //BillWeight=266
+        [InlineData("63110", "MO", "37501", "TN", "78", "18", "18")] //BillWeight=182
+        [InlineData("63110", "MO", "42431", "KY", "55", "20", "19")] //BillWeight=151
+        [InlineData("63110", "MO", "42431", "KY", "63", "20", "20")] //BillWeight=182
+        [InlineData("63110", "MO", "42431", "KY", "67", "28", "21")] //BillWeight=284
+        [InlineData("63110", "MO", "42431", "KY", "71", "20", "20")] //BillWeight=205
+        [InlineData("63110", "MO", "42431", "KY", "71", "26", "20")] //BillWeight=266
+        [InlineData("63110", "MO", "42431", "KY", "77", "18", "18")] //BillWeight=180
+        [InlineData("63110", "MO", "89434", "NV", "60", "20", "18")] //BillWeight=156
+        [InlineData("63110", "MO", "89434", "NV", "68", "20", "20")] //BillWeight=196
+        [InlineData("63110", "MO", "89434", "NV", "68", "23", "20")] //BillWeight=226
+        [InlineData("63110", "MO", "89434", "NV", "71", "28", "19")] //BillWeight=272
+        [InlineData("63110", "MO", "89434", "NV", "76", "20", "20")] //BillWeight=219
+        [InlineData("63110", "MO", "89434", "NV", "76", "31", "10")] //BillWeight=170
         public void NDATests(string originZip, string originState, string shipZip, string shipState, double length, double width, double height)
+        {
+            RunTest(s =>
+            {
+                var package = s.Ups.Packages[0];
+                package.DimsLength = length;
+                package.DimsWidth = width;
+                package.DimsHeight = height;
+
+                s.ShipStateProvCode = shipState;
+                s.ShipPostalCode = shipZip;
+
+                s.OriginStateProvCode = originState;
+                s.OriginPostalCode = originZip;
+            });
+        }
+
+        [Theory(Skip = "Zip combo does not support Ups2DayAirAM or UpsNextDayAirSaver")]
+        [InlineData("00544", "NY", "81324", "CO", "61", "18", "19")] //BillWeight=151
+        [InlineData("00544", "NY", "81324", "CO", "69", "20", "20")] //BillWeight=199
+        [InlineData("00544", "NY", "81324", "CO", "69", "24", "20")] //BillWeight=239
+        [InlineData("00544", "NY", "81324", "CO", "69", "29", "19")] //BillWeight=274
+        [InlineData("00544", "NY", "81324", "CO", "77", "20", "20")] //BillWeight=222
+        [InlineData("00544", "NY", "81324", "CO", "77", "32", "10")] //BillWeight=178
+        public void FromNyTests(string originZip, string originState, string shipZip, string shipState, double length, double width, double height)
+        {
+            RunTest(s =>
+            {
+                var package = s.Ups.Packages[0];
+                package.DimsLength = length;
+                package.DimsWidth = width;
+                package.DimsHeight = height;
+
+                s.ShipStateProvCode = shipState;
+                s.ShipPostalCode = shipZip;
+
+                s.OriginStateProvCode = originState;
+                s.OriginPostalCode = originZip;
+            });
+        }
+
+        [Theory(Skip = "HI doesn't appear to support NextDayAirAm")]
+        [InlineData("63110", "MO", "96701", "HI", "62", "20", "20")] //BillWeight=179
+        [InlineData("63110", "MO", "96701", "HI", "67", "29", "20")] //BillWeight=280
+        [InlineData("63110", "MO", "96701", "HI", "70", "20", "20")] //BillWeight=202
+        [InlineData("63110", "MO", "96701", "HI", "70", "25", "20")] //BillWeight=252
+        [InlineData("63110", "MO", "96701", "HI", "78", "18", "18")] //BillWeight=182
+        [InlineData("63110", "MO", "96701", "HI", "78", "31", "12")] //BillWeight=209
+        public void ToHiTests(string originZip, string originState, string shipZip, string shipState, double length, double width, double height)
         {
             RunTest(s =>
             {
@@ -268,7 +303,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             });
         }
 
-        [Theory]
+        [Theory(Skip = "The zipcode being used doesn't support Saturday Delivery UpsGround and Ups3DaySelect.")]
         [InlineData(true)]
         [InlineData(false)]
         public void SaturdayDelivery(bool saturdayDelivery)
@@ -502,7 +537,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
                 localRatingAccountID = SetupLocalRatingAccount().UpsAccountID;
                 apiRatingAccountID = SetupApiAccount().UpsAccountID;
-                UpdateStore(context);
+                UpdateStore();
 
                 // When a constructor has an IEnumberable<IUpsServiceType>, mock returns all expected IServiceFilter's and a mocked version.
                 // The mocked version was filtering out all the service types, so this converts the mocked version into a passthrough.
@@ -530,9 +565,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         /// <summary>
         /// Updates the store so it is a usable ShipWorks store
         /// </summary>
-        private static void UpdateStore(DataContext newContext)
+        private void UpdateStore()
         {
-            Modify.Store(newContext.Store)
+            Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
                 .Set(x => x.StoreTypeCode, StoreTypeCode.GenericModule)
                 .Set(x => x.License, "I5TKE-5RXP3-NGMEN-ZXHMX-GENERIC-BRIAN@INTERAPPTIVE.COM")
