@@ -52,7 +52,6 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 foreach (ShopSiteStoreEntity store in stores.OfType<ShopSiteStoreEntity>())
                 {
                     identifier.Set(store, store.ApiUrl);
-                    store.Password = SecureText.Encrypt(store.Password, store.Username);
                 }
 
                 sqlAdapter.SaveEntityCollection(stores, refetchSavedEntitiesAfterSave: true, recurse: false);

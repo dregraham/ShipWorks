@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
         string OAuthSecretKey { get; set; }
 
         /// <summary>
-        /// Authorication Code for OAuth access
+        /// Authorization Code for OAuth access
         /// </summary>
         string OAuthAuthorizationCode { get; set; }
 
@@ -41,5 +41,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite.AccountSettings
         /// </summary>
         string ApiUrl { get; set; }
 
+        /// <summary>
+        /// Using unsecure connections for legacy accounts
+        /// </summary>
+        bool LegacyUseUnsecureHttp { get; set; }
     }
 }

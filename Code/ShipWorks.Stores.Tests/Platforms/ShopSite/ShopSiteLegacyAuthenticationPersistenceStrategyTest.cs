@@ -69,12 +69,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
             var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
             var store = mock.CreateMock<IShopSiteStoreEntity>();
             store.SetupGet(x => x.Username).Returns("foo");
+            store.SetupGet(x => x.RequireSSL).Returns(false);
 
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
             testObject.LoadStoreIntoViewModel(store.Object, viewModel.Object);
 
             viewModel.VerifySet(x => x.LegacyMerchantID = "foo");
             viewModel.VerifySet(x => x.LegacyPassword = "bar");
+            viewModel.VerifySet(x => x.LegacyUseUnsecureHttp = true);
         }
 
         [Fact]
@@ -88,6 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
 
             viewModel.VerifySet(x => x.OAuthClientID = string.Empty);
             viewModel.VerifySet(x => x.OAuthSecretKey = string.Empty);
+            viewModel.VerifySet(x => x.OAuthAuthorizationCode = string.Empty);
         }
 
         [Fact]
@@ -204,6 +207,24 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
             Assert.Equal("bar", result.Value.Password);
         }
 
+        [Theory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public void SaveDataToStoreFromViewModel_SetsRequireSSL(bool useUnsecureConnection, bool requireSSL)
+        {
+            var viewModel = mock.CreateMock<IShopSiteAccountSettingsViewModel>();
+            viewModel.SetupGet(x => x.LegacyMerchantID).Returns("bar");
+            viewModel.SetupGet(x => x.LegacyPassword).Returns("foo");
+            viewModel.SetupGet(x => x.LegacyUseUnsecureHttp).Returns(useUnsecureConnection);
+
+            var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
+
+            var result = testObject.SaveDataToStoreFromViewModel(new ShopSiteStoreEntity(), viewModel.Object);
+
+            Assert.True(result.Success);
+            Assert.Equal(requireSSL, result.Value.RequireSSL);
+        }
+
         [Fact]
         public void SaveDataToStoreFromViewModel_WithValidBasicData_ClearsOauthData()
         {
@@ -223,6 +244,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
 
             Assert.Equal(string.Empty, result.Value.OauthClientID);
             Assert.Equal(string.Empty, result.Value.OauthSecretKey);
+            Assert.Equal(string.Empty, result.Value.OauthAuthorizationCode);
         }
 
         [Fact]
@@ -267,7 +289,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite.AccountSettings
         {
             var testObject = mock.Create<ShopSiteLegacyAuthenticationPersistenceStrategy>();
 
-            var result = testObject.ValidateApiUrl("http://www.google.com/start.cgi");
+            var result = testObject.ValidateApiUrl("http://www.google.com/db_xml.cgi");
 
             Assert.True(result.Success);
         }

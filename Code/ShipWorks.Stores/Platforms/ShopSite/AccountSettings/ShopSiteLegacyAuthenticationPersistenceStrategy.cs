@@ -50,6 +50,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             viewModel.LegacyMerchantID = store.Username;
             viewModel.LegacyPassword = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Decrypt(store.Password);
+            viewModel.LegacyUseUnsecureHttp = !store.RequireSSL;
+
             viewModel.OAuthClientID = string.Empty;
             viewModel.OAuthSecretKey = string.Empty;
             viewModel.OAuthAuthorizationCode = string.Empty;
@@ -77,6 +79,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             store.Username = viewModel.LegacyMerchantID.Trim();
             store.Password = encryptionFactory.CreateSecureTextEncryptionProvider(store.Username).Encrypt(viewModel.LegacyPassword.Trim());
+            store.RequireSSL = !viewModel.LegacyUseUnsecureHttp;
 
             store.OauthClientID = string.Empty;
             store.OauthSecretKey = string.Empty;
@@ -92,12 +95,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public IResult ValidateApiUrl(string apiUrl)
         {
-            if (apiUrl.EndsWith("start.cgi"))
+            if (apiUrl.EndsWith("db_xml.cgi"))
             {
                 return Result.FromSuccess();
             }
 
-            return GenericResult.FromError<string>("A valid URl to the CGI script should end with '/start.cgi'.");
+            return GenericResult.FromError<string>("A valid URl to the CGI script should end with '/db_xml.cgi'.");
         }
     }
 }
