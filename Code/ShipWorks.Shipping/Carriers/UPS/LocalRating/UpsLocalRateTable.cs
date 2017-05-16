@@ -357,8 +357,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             foreach (UpsLocalServiceRate packageRate in packageRates)
             {
-                IUpsLocalServiceRate matchedRate = results.SingleOrDefault(r=>r.Service == packageRate.Service);
-                if (matchedRate!=null)
+                IUpsLocalServiceRate matchedRate = results.SingleOrDefault(r => r.Service == packageRate.Service);
+                if (matchedRate != null)
                 {
                     matchedRate.AddAmount(packageRate);
                 }
