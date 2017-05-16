@@ -152,6 +152,9 @@ namespace ShipWorks.Stores.Content
 
             Activated += this.OnFormActivated;
             OnFormActivated(this, EventArgs.Empty);
+
+            // Need to send this so that the shipments panel in the history tab has the loaded order
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { order.OrderID }));
         }
 
         /// <summary>
