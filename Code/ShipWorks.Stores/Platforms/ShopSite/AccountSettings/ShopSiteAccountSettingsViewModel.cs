@@ -261,6 +261,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private void MigrateToOauthAction()
         {
             AuthenticationType = ShopSiteAuthenticationType.Oauth;
+            ApiUrl = string.Empty;
+
             persistenceStrategy = null;
         }
     }
