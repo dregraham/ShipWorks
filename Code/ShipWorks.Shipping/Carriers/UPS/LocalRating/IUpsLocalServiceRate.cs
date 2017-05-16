@@ -3,12 +3,20 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
+    /// <summary>
+    /// Interface for UpsLocalServiceRates
+    /// </summary>
     public interface IUpsLocalServiceRate
     {
         /// <summary>
         /// Adds the amount.
         /// </summary>
         void AddAmount(decimal amount, string surchargeName);
+
+        /// <summary>
+        /// Merges the specified package rate.
+        /// </summary>
+        void AddAmount(UpsLocalServiceRate packageRate);
 
         /// <summary>
         /// Logs the specified log.

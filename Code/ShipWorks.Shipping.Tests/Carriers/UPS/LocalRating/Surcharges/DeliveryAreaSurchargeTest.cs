@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -94,11 +95,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
                 .Returns(false);
 
-            var serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 0, false, null);
-
-            testObject.Apply(shipment, serviceRate);
-
-            Assert.Equal(0, serviceRate.Amount);
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            
+            testObject.Apply(shipment, serviceRate.Object);
+            
+            serviceRate.Verify(r=>r.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -130,11 +131,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
                 .Returns(isResidential);
 
-            var serviceRate = new UpsLocalServiceRate(serviceType, 0, false, null);
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.Setup(r => r.Service).Returns(serviceType);
             
-            testObject.Apply(shipment, serviceRate);
+            testObject.Apply(shipment, serviceRate.Object);
 
-            Assert.Equal((decimal) surcharges[surchargeType], serviceRate.Amount);
+            var expectedAmount = (decimal) surcharges[surchargeType];
+            var expectedSurchargeName = EnumHelper.GetDescription(surchargeType);
+            serviceRate.Verify(r => r.AddAmount(expectedAmount, expectedSurchargeName), Times.Once);
         }
 
         [Fact]
@@ -154,11 +158,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 .Setup(s => s.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
                 .Returns(true);
 
-            var serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 0, false, null);
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.Setup(r => r.Service).Returns(UpsServiceType.UpsGround);
+            serviceRate.Setup(r => r.Amount).Returns(100);
 
-            testObject.Apply(shipment, serviceRate);
+            testObject.Apply(shipment, serviceRate.Object);
 
-            Assert.Equal((decimal)surcharges[UpsSurchargeType.ResidentialGround] * shipment.Packages.Count, serviceRate.Amount);
+            var expectedAmount = (decimal) surcharges[UpsSurchargeType.ResidentialGround] * shipment.Packages.Count;
+            var expectedSurchargeName = EnumHelper.GetDescription(UpsSurchargeType.ResidentialGround);
+            serviceRate.Verify(r=>r.AddAmount(expectedAmount, expectedSurchargeName), Times.Once);
         }
 
         public void Dispose()

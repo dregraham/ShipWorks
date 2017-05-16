@@ -287,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// The service may not be valid for the shipment due to other factors and should be 
         /// filtered out.
         /// </returns>
-        private IEnumerable<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
+        private List<UpsLocalServiceRate> GetServiceRates(UpsShipmentEntity shipment)
         {
             string origin = shipment.Shipment.OriginPostalCode;
             string destination = shipment.Shipment.ShipPostalCode;
@@ -313,12 +313,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 throw new UpsLocalRatingException($"Unable to find zone using origin postal code {origin} and destination postal code {destination}.");
             }
 
+            List<UpsLocalServiceRate> results = new List<UpsLocalServiceRate>();
+
             // If Package = Letter and Billable Weight ≤ 8 oz. use Letter rate.
             // If Package = Letter and Billable Weight > 8 oz.OR Package ≠ Letter use rate by weight.
-            Dictionary<UpsServiceType, decimal> result = new Dictionary<UpsServiceType, decimal>();
             foreach (UpsPackageEntity package in shipment.Packages)
             {
-                Dictionary<UpsServiceType, decimal> rates;
+                IEnumerable<UpsLocalServiceRate> rates;
 
                 if (package?.PackagingType == (int) UpsPackagingType.Letter && package.TotalWeight <= .5)
                 {
@@ -329,22 +330,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     rates = GetPackageRates(shipment.UpsAccountID, applicableZones, package);
                 }
 
-                ConsolidateRatesForMultiplePackages(result, rates);
+                ConsolidateRatesForMultiplePackages(results, rates);
             }
 
-            return result.Select(rate => new UpsLocalServiceRate(rate.Key, rate.Value, true, null));
+            return results;
         }
 
         /// <summary>
         /// Get all of the price per pound rates for the given package/zone
         /// </summary>
-        public Dictionary<UpsServiceType, decimal> GetPackageRates(long accountID, IEnumerable<string> applicableZones, UpsPackageEntity package)
+        public IEnumerable<UpsLocalServiceRate> GetPackageRates(long accountID, IEnumerable<string> applicableZones, UpsPackageEntity package)
         {
             if (package.BillableWeight > 150)
             {
                 // Add the price per pound for anything over 150
-                return rateRepository.GetPricePerPoundRates(accountID, applicableZones)
-                    .ToDictionary(r => r.Key, r => r.Value * package.BillableWeight);
+                return rateRepository.GetPricePerPoundRates(accountID, applicableZones, package.BillableWeight);
             }
 
             return rateRepository.GetPackageRates(accountID, applicableZones, package.BillableWeight);
@@ -353,17 +353,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Add the set or package rates to the rate result
         /// </summary>
-        private static void ConsolidateRatesForMultiplePackages(Dictionary<UpsServiceType, decimal> rateResult, Dictionary<UpsServiceType, decimal> packageRates)
+        private static void ConsolidateRatesForMultiplePackages(List<UpsLocalServiceRate> results, IEnumerable<UpsLocalServiceRate> packageRates)
         {
-            foreach (KeyValuePair<UpsServiceType, decimal> rate in packageRates)
+            foreach (UpsLocalServiceRate packageRate in packageRates)
             {
-                if (rateResult.ContainsKey(rate.Key))
+                IUpsLocalServiceRate matchedRate = results.SingleOrDefault(r=>r.Service == packageRate.Service);
+                if (matchedRate!=null)
                 {
-                    rateResult[rate.Key] = rateResult[rate.Key] + rate.Value;
+                    matchedRate.AddAmount(packageRate);
                 }
                 else
                 {
-                    rateResult.Add(rate.Key, rate.Value);
+                    results.Add(packageRate);
                 }
             }
         }

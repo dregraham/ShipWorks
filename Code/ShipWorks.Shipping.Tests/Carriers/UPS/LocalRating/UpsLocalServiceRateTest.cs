@@ -20,54 +20,55 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void AddAmount_AmountIsAddedToBaseAmount()
+        public void AddSurcharge_AmountIsAddedToBaseAmount()
         {
-            UpsLocalServiceRate testObject = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
+            UpsLocalServiceRate testObject = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 10.10M, "3");
             testObject.AddAmount(.42M, "blah");
 
             Assert.Equal(10.52M, testObject.Amount);
         }
 
-        [Fact]
-        public void Log_LogsBaseAmount()
+        [Theory]
+        [InlineData("Service Rate : $10.10")]
+        [InlineData("Total : $10.52")]
+        [InlineData("\tblah : $0.42")]
+        [InlineData("Rate Calculation for Ups3DaySelect")]
+        public void Log_LogSinglePackage(string textToFind)
         {
-            UpsLocalServiceRate testObject = 
-                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
-            testObject.Log(logEntry);
-            Assert.Contains("Initial Value : $10.10", logEntry.ToString());
-        }
-
-        [Fact]
-        public void Log_LogsService()
-        {
-            UpsLocalServiceRate testObject =
-                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
-            testObject.Log(logEntry);
-            Assert.Contains("Rate Calculation for Ups3DaySelect", logEntry.ToString());
-        }
-
-        [Fact]
-        public void Log_LogsAddedSurcharge()
-        {
-            UpsLocalServiceRate testObject =
-                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
+            UpsLocalServiceRate testObject = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 10.10M, "3");
 
             testObject.AddAmount(.42M, "blah");
             testObject.Log(logEntry);
 
-            Assert.Contains("\tAdded for 'blah' : $0.42", logEntry.ToString());
+            Assert.Contains(textToFind, logEntry.ToString());
         }
 
         [Fact]
-        public void Logs_Total()
+        public void Merge_AmountIsAddedToAmount()
         {
-            UpsLocalServiceRate testObject =
-                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 10.10M, false, 3);
+            UpsLocalServiceRate testObject = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 10.10M, "3");
+            UpsLocalServiceRate packageToAdd = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 20.10M, "77");
 
-            testObject.AddAmount(.42M, "blah");
+            testObject.AddAmount(packageToAdd);
+
+            Assert.Equal(30.20M, testObject.Amount);
+        }
+
+        [Theory]
+        [InlineData("Package 1:")]
+        [InlineData("Package 2:")]
+        [InlineData("Billable Weight : 77")]
+        [InlineData("Service Rate : $20.10")]
+
+        public void Log_LogsSecondPackage(string textToFind)
+        {
+            UpsLocalServiceRate testObject = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 10.10M, "3");
+            UpsLocalServiceRate packageToAdd = new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "4", 20.10M, "77");
+
+            testObject.AddAmount(packageToAdd);
             testObject.Log(logEntry);
 
-            Assert.Contains("Total : $10.52", logEntry.ToString());
+            Assert.Contains(textToFind, logEntry.ToString());
         }
 
         public void Dispose()

@@ -38,17 +38,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Gets the letter rates.
         /// </summary>
-        Dictionary<UpsServiceType, decimal> GetLetterRates(long accountID, IEnumerable<string> zones);
+        IEnumerable<UpsLocalServiceRate> GetLetterRates(long accountID, IEnumerable<string> zones);
 
         /// <summary>
         /// Populate the price per pound collection
         /// </summary>
-        Dictionary<UpsServiceType, decimal> GetPricePerPoundRates(long accountID, IEnumerable<string> zones);
-        
+        IEnumerable<UpsLocalServiceRate> GetPricePerPoundRates(long accountID, IEnumerable<string> zones, int packageBillableWeight);
+
         /// <summary>
         /// Populate the package rates
         /// </summary>
-        Dictionary<UpsServiceType, decimal> GetPackageRates(long accountID, IEnumerable<string> zones, int weight);
+        IEnumerable<UpsLocalServiceRate> GetPackageRates(long accountID, IEnumerable<string> zones, int weight);
 
         /// <summary>
         /// Get the surcharges for the given account

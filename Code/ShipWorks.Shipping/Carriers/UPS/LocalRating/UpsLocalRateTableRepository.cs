@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Populate the package rates
         /// </summary>
-        public Dictionary<UpsServiceType, decimal> GetPackageRates(long accountID, IEnumerable<string> zones, int weight)
+        public IEnumerable<UpsLocalServiceRate> GetPackageRates(long accountID, IEnumerable<string> zones, int weight)
         {
             long rateTableID = GetRateTableIdForAccount(accountID);
 
@@ -142,13 +142,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsPackageRateCollection packageRates = new UpsPackageRateCollection();
             FetchCollection(packageRates, bucket);
 
-            return packageRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
+            return packageRates.Select(r => new UpsLocalServiceRate((UpsServiceType) r.Service, r.Zone, r.Rate, weight.ToString()));
         }
 
         /// <summary>
         /// Populate the price per pound collection
         /// </summary>
-        public Dictionary<UpsServiceType, decimal> GetPricePerPoundRates(long accountID,  IEnumerable<string> zones)
+        /// <remarks>
+        /// Rate amount is price per pound * weight
+        /// </remarks>
+        public IEnumerable<UpsLocalServiceRate> GetPricePerPoundRates(long accountID, IEnumerable<string> zones, int billableWeight)
         {
             long rateTableID = GetRateTableIdForAccount(accountID);
 
@@ -159,10 +162,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsPricePerPoundCollection pricePerPoundRates = new UpsPricePerPoundCollection();
             FetchCollection(pricePerPoundRates, bucket);
 
-            return pricePerPoundRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
+            return pricePerPoundRates.Select(r => new UpsLocalServiceRate((UpsServiceType) r.Service, r.Zone, r.Rate * billableWeight, billableWeight.ToString()));
         }
 
-        public Dictionary<UpsServiceType, decimal> GetLetterRates(long accountID, IEnumerable<string> zones)
+        public IEnumerable<UpsLocalServiceRate> GetLetterRates(long accountID, IEnumerable<string> zones)
         {
             long rateTableID = GetRateTableIdForAccount(accountID);
 
@@ -173,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsLetterRateCollection letterRates = new UpsLetterRateCollection();
             FetchCollection(letterRates, bucket);
 
-            return letterRates.ToDictionary(r => (UpsServiceType) r.Service, r => r.Rate);
+            return letterRates.Select(r => new UpsLocalServiceRate((UpsServiceType) r.Service, r.Zone, r.Rate, "Letter"));
         }
 
         /// <summary>

@@ -31,11 +31,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void GetRates_ReturnsRatesFromLocalRateTable()
         {
-            var calculated = new[]
-            {
-                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 1, true, 0),
-                new UpsLocalServiceRate(UpsServiceType.UpsGround, 2, true, 0)
-            };
+            var rate1 = new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, "1", 10, "x");
+            var rate2 = new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 10, "x");
+            var calculated = new[] {rate1, rate2};
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(r => r.CalculateRates(shipment))
@@ -51,11 +49,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void GetRates_CallsLogResponse_WithLogsFromEachService()
         {
-            var calculated = new[]
-            {
-                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 1, true, 0),
-                new UpsLocalServiceRate(UpsServiceType.UpsGround, 2, true, 0)
-            };
+            var rate1 = new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, "1", 10, "x");
+            var rate2 = new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 10, "x");
+            var calculated = new[] { rate1, rate2 };
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(r => r.CalculateRates(shipment))
@@ -83,9 +79,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             var calculated = new[]
             {
-                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, 2, true, 0),
-                new UpsLocalServiceRate(UpsServiceType.UpsGround, 3, true, 0),
-                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, 1, true, 0)
+                new UpsLocalServiceRate(UpsServiceType.Ups2DayAir, "1", 2, "x"),
+                new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 3, "x"),
+                new UpsLocalServiceRate(UpsServiceType.Ups3DaySelect, "1", 1, "x")
             };
 
             mock.Mock<IUpsLocalRateTable>()

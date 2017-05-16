@@ -25,31 +25,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [Fact]
         public void Apply_FuelGroundSurchargeIsAppliedToServiceRate_WhenRateIsGround()
         {
-            UpsLocalServiceRate serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsGround, 100, true, null);
-            testObject.Apply(null, serviceRate);
-
-            Assert.Equal(105.25M, serviceRate.Amount);
-        }
-
-        [Fact]
-        public void Apply_FuelGroundSurchargeIsNotAppliedToServiceRate_WhenRateIsNotGround()
-        {
-            UpsLocalServiceRate serviceRate = new UpsLocalServiceRate(UpsServiceType.UpsNextDayAir, 100, true, null);
-            testObject.Apply(null, serviceRate);
-
-            Assert.Equal(100M, serviceRate.Amount);
-        }
-
-        [Fact]
-        public void Apply_CallsAddAmountWithGroundFuelSurchargeText()
-        {
             var serviceRate = mock.Mock<IUpsLocalServiceRate>();
             serviceRate.Setup(r => r.Service).Returns(UpsServiceType.UpsGround);
             serviceRate.Setup(r => r.Amount).Returns(100);
 
             testObject.Apply(null, serviceRate.Object);
 
-            serviceRate.Verify(r => r.AddAmount(5.25M, "Ground Fuel Surcharge of 0.0525"), Times.Once);
+            serviceRate.Verify(s => s.AddAmount(5.25M, "Ground Fuel Surcharge of 0.0525"));
+        }
+
+        [Fact]
+        public void Apply_FuelGroundSurchargeIsNotAppliedToServiceRate_WhenRateIsNotGround()
+        {
+            var serviceRate = mock.Mock<IUpsLocalServiceRate>();
+            serviceRate.SetupGet(s => s.Service).Returns(UpsServiceType.UpsNextDayAir);
+
+            testObject.Apply(null, serviceRate.Object);
+
+            serviceRate.Verify(s => s.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
         }
 
         public void Dispose()
