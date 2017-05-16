@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weight.Name = "weight";
             this.weight.RangeMax = 9999D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(238, 21);
+            this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 68;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
