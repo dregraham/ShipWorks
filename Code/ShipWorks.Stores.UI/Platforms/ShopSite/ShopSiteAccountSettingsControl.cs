@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         {
             SetViewModel(viewModel);
         }
-        
+
         /// <summary>
         /// Set the view model on the control
         /// </summary>
@@ -42,13 +42,13 @@ namespace ShipWorks.Stores.UI.Platforms.ShopSite
         /// <summary>
         /// Load the account settings UI from the given store
         /// </summary>
-        public void LoadStore(ShopSiteStoreEntity store) =>
-            viewModel.LoadStore(store);
+        public override void LoadStore(StoreEntity store) =>
+            viewModel.LoadStore(store as ShopSiteStoreEntity);
 
         /// <summary>
         /// Save the UI values to the given store.  Nothing is saved to the database.
         /// </summary>
-        public bool SaveToEntity(ShopSiteStoreEntity store) =>
-            viewModel.SaveToEntity(store);
+        public override bool SaveToEntity(StoreEntity store) =>
+            viewModel.SaveToEntity(store as ShopSiteStoreEntity);
     }
 }
