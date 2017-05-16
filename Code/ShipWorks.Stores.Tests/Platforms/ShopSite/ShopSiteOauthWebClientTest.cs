@@ -6,6 +6,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
                     mock.Create<IDatabaseSpecificEncryptionProvider>(),
                     (s) => mock.Create<IShopSiteOauthAccessTokenWebClient>(TypedParameter.From(s)),
                     () => new HttpVariableRequestSubmitter(),
-                    (x, y) => mock.Create<IApiLogEntry>()));
+                    mock.Create<ILogEntryFactory>()));
 
             Assert.Contains("configured to use Basic authentication but the OAuth", ex.Message);
 
