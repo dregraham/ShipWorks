@@ -18,17 +18,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static readonly Regex fiveDigitZipRangeRegex = new Regex("^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$");
         private static readonly Regex threeDigitZipRangeRegex = new Regex("^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$");
         private static readonly Regex threeDigitNumberRegex = new Regex("^\\s*[0-9]{3}\\s*$");
-
-        private const string DestinationZipHeader = "Dest. ZIP";
-        private const string GroundHeader = "Ground";
-        private const string ThreeDaySelectHeader = "3 Day Select";
-        private const string SecondDayAirHeader = "2nd Day Air";
-        private const string SecondDayAirAMHeader = "2nd Day Air A.M.";
-        private const string NextDayAirSaverHeader = "Next Day Air Saver";
-        private const string NextDayAirHeader = "Next Day Air";
-        private const string NextDayAirEarlyHeader = "Next Day Air Early";
-
-        private const int numberOfServices = 7;
+        private static readonly Dictionary<string, string> ColumnHeaders = new Dictionary<string, string>
+        {
+            { "A1", "Dest. ZIP"},
+            { "B1", "Ground"},
+            { "C1", "3 Day Select"},
+            { "D1", "2nd Day Air"},
+            { "E1", "2nd Day Air A.M."},
+            { "F1", "Next Day Air Saver"},
+            { "G1", "Next Day Air"},
+            { "H1", "Next Day Air Early"}
+        }; 
 
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static void ValidateCell(IRange cell)
         {
             bool valid = cell.EntireRow.IsBlank ||
-                         cell.Value == DestinationZipHeader ||
+                         cell.Value == ColumnHeaders["A1"] ||
                          threeDigitZipRangeRegex.IsMatch(cell.Value) ||
                          threeDigitNumberRegex.IsMatch(cell.Value);
             
@@ -143,7 +143,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
             int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
 
-            for (int column = 1; column <= numberOfServices; column++)
+            // -1 because we want to exclude the dest. zip column
+            for (int column = 1; column <= ColumnHeaders.Count - 1; column++)
             {
                 string cellValue = row.Cells[column].Value.Trim();
 
@@ -227,14 +228,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ValidateWorksheetHeaders(IWorksheet worksheet)
         {
-            ValidateColumnHeader(DestinationZipHeader, "A1", worksheet);
-            ValidateColumnHeader(GroundHeader, "B1", worksheet);
-            ValidateColumnHeader(ThreeDaySelectHeader, "C1", worksheet);
-            ValidateColumnHeader(SecondDayAirHeader, "D1", worksheet);
-            ValidateColumnHeader(SecondDayAirAMHeader, "E1", worksheet);
-            ValidateColumnHeader(NextDayAirSaverHeader, "F1", worksheet);
-            ValidateColumnHeader(NextDayAirHeader, "G1", worksheet);
-            ValidateColumnHeader(NextDayAirEarlyHeader, "H1", worksheet);
+            foreach (KeyValuePair<string, string> header in ColumnHeaders)
+            {
+                ValidateColumnHeader(header.Value, header.Key, worksheet);
+            }
         }
 
         /// <summary>
