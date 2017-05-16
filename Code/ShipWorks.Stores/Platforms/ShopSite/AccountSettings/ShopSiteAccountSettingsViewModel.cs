@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             if (string.IsNullOrEmpty(store.Website))
             {
-                store.Website = new Uri(ApiUrl).Host;
+                store.Website = new Uri(store.ApiUrl).Host;
             }
 
             using (messageHelper.SetCursor(Cursors.WaitCursor))
