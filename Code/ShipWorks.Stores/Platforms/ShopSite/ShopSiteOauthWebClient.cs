@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
         // The store we are connecting to
         private readonly IShopSiteStoreEntity shopSiteStore;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory;
         private readonly IShopSiteOauthAccessTokenWebClient accessTokenWebClient;
         private readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             IDatabaseSpecificEncryptionProvider encryptionProvider,
             Func<IShopSiteStoreEntity, IShopSiteOauthAccessTokenWebClient> accessTokenWebClientFactory,
             Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            ILogEntryFactory apiLogEntryFactory)
         {
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             accessTokenWebClient = accessTokenWebClientFactory(shopSiteStore);
@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.Variables.Add("nonce", nonceString);
 
             // Log the request
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShopSite, action);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(ApiLogSource.ShopSite, action, LogActionType.Other);
             apiLogEntry.LogRequest(postRequest);
 
             // Execute the request

@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         // The store we are connecting to
         private readonly IShopSiteStoreEntity shopSiteStore;
         private readonly Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public ShopSiteOauthAccessTokenWebClient(IShopSiteStoreEntity store,
             IDatabaseSpecificEncryptionProvider encryptionProvider,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            ILogEntryFactory apiLogEntryFactory,
             Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory)
         {
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
 
             // Log the request
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShopSite, action);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(ApiLogSource.ShopSite, action, LogActionType.Other);
             apiLogEntry.LogRequest(postRequest);
 
             // Execute the request
