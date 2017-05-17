@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
@@ -26,12 +32,6 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using Quartz.Util;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Management
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
-    partial class AddStoreWizard : WizardForm, IStoreWizard
+    partial class AddStoreWizard : WizardForm, IAddStoreWizard, IStoreWizard
     {
         private readonly ILifetimeScope scope;
 

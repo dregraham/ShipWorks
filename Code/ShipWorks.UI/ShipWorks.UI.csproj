@@ -207,6 +207,11 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
+    <Compile Include="Dialogs\NewUserExperience.xaml.cs">
+      <DependentUpon>NewUserExperience.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewUserExperienceSection.cs" />
+    <Compile Include="Dialogs\NewUserExperienceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -301,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WebBrowser\WebBrowserDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\NewUserExperience.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

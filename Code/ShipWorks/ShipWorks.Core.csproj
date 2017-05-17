@@ -969,6 +969,8 @@
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Data\Administration\INewUserExperience.cs" />
+    <Compile Include="Data\Administration\INewUserExperienceViewModel.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
@@ -1307,6 +1309,7 @@
     <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
