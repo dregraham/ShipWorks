@@ -653,6 +653,8 @@ namespace ShipWorks
 
                     return;
                 }
+
+                QueueLogonAction(ShowNewUserExperience);
             }
             else
             {
@@ -751,6 +753,19 @@ namespace ShipWorks
         /// Queue an action to run at the end of the logon process
         /// </summary>
         public void QueueLogonAction(Action action) => logonActions.Enqueue(action);
+
+        /// <summary>
+        /// Show the New User Experience dialog
+        /// </summary>
+        public void ShowNewUserExperience()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                INewUserExperience newUserExperience = lifetimeScope.Resolve<INewUserExperience>();
+                newUserExperience.LoadOwner(this);
+                newUserExperience.ShowDialog();
+            }
+        }
 
         /// <summary>
         /// Send the state of each panel as a message
