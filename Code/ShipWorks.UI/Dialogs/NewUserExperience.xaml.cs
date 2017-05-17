@@ -13,8 +13,13 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.UI.Dialogs
 {
@@ -30,6 +35,60 @@ namespace ShipWorks.UI.Dialogs
         public NewUserExperience()
         {
             InitializeComponent();
+
+            Loaded += NewUserExperience_Loaded;
+        }
+
+        private void NewUserExperience_Loaded(object sender, RoutedEventArgs e)
+        {
+            CarrierSetup.Visibility = Visibility.Collapsed;
+        }
+
+        private void ClickUspsButton(object sender, RoutedEventArgs e)
+        {
+            ShowShippingWizard(ShipmentTypeCode.Usps);
+        }
+
+        private void ClickFedExButton(object sender, RoutedEventArgs e)
+        {
+            ShowShippingWizard(ShipmentTypeCode.FedEx);
+        }
+
+        private void ClickUpsButton(object sender, RoutedEventArgs e)
+        {
+            ShowShippingWizard(ShipmentTypeCode.UpsOnLineTools);
+        }
+
+        private void ShowShippingWizard(ShipmentTypeCode shipmentType)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var win32Window = new NativeWindow();
+                win32Window.AssignHandle(new WindowInteropHelper(this).Handle);
+
+                var wizard = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>().Create(shipmentType);
+                wizard.ShowDialog(win32Window);
+            }
+        }
+
+        private void HideCarrierSetup(object sender, RoutedEventArgs e)
+        {
+            CarrierSetup.Visibility = Visibility.Collapsed;
+
+            var win32Window = new NativeWindow();
+            win32Window.AssignHandle(new WindowInteropHelper(this).Handle);
+
+            AddStoreWizard.RunWizard(win32Window);
+        }
+
+        private void ShowCarrierSetup(object sender, RoutedEventArgs e)
+        {
+            CarrierSetup.Visibility = Visibility.Visible;
+        }
+
+        private void StartUsingShipWorks(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         /// <summary>
