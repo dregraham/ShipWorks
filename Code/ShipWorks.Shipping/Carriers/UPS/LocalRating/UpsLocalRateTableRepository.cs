@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             long rateTableID = GetRateTableIdForAccount(accountID);
 
             RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsPackageRateFields.Zone, null, zones));
+            bucket.PredicateExpression.Add(new FieldCompareRangePredicate(UpsLetterRateFields.Zone, null, zones));
             bucket.PredicateExpression.AddWithAnd(UpsLetterRateFields.UpsRateTableID == rateTableID);
 
             UpsLetterRateCollection letterRates = new UpsLetterRateCollection();
