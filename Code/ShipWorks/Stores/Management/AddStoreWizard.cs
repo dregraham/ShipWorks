@@ -232,7 +232,11 @@ namespace ShipWorks.Stores.Management
                 complete = RunWizard(originalWizard);
 
                 // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
-                if (!complete)
+                if (complete)
+                {
+                    Program.MainForm.QueueLogonAction(Program.MainForm.ShowNewUserExperience);
+                }
+                else
                 {
                     UserSession.Logoff(false);
                 }
@@ -252,7 +256,6 @@ namespace ShipWorks.Stores.Management
         /// The store currently being configured by the wizard
         /// </summary>
         public StoreEntity Store => store;
-
 
         /// <summary>
         /// The store that was being configured when the wizard is abandoned
