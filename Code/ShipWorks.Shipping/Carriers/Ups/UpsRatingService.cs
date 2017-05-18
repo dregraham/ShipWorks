@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the ups rate client.
         /// </summary>
-        private IUpsRateClient GetRatingClient(UpsAccountEntity account)
+        protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
         {
             UpsRatingMethod ratingMethod;
             if (account==null)
