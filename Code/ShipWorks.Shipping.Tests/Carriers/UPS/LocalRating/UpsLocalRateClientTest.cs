@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             apiRateClient.Setup(c => c.GetRates(shipment)).Returns(apiGetRatesResponse);
 
             var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
-            indexMock.Setup(x => x[UpsRatingMethod.Api]).Returns(apiRateClient.Object);
+            indexMock.Setup(x => x[UpsRatingMethod.ApiOnly]).Returns(apiRateClient.Object);
             mock.Provide(indexMock.Object);
 
             var testObject = mock.Create<UpsLocalRateClient>();
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 
             var apiRateClient = mock.CreateMock<IUpsRateClient>();
             var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
-            indexMock.Setup(x => x[UpsRatingMethod.Api]).Returns(apiRateClient.Object);
+            indexMock.Setup(x => x[UpsRatingMethod.ApiOnly]).Returns(apiRateClient.Object);
             mock.Provide(indexMock.Object);
 
             var testObject = mock.Create<UpsLocalRateClient>();

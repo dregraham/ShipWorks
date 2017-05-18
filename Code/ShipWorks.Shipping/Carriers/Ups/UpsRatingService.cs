@@ -128,11 +128,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpsRatingMethod ratingMethod;
             if (account==null)
             {
-                ratingMethod = UpsRatingMethod.Api;
+                ratingMethod = UpsRatingMethod.ApiOnly;
             }
             else
             {
-                ratingMethod = account.LocalRatingEnabled ? UpsRatingMethod.Local : UpsRatingMethod.Api;
+                ratingMethod = account.LocalRatingEnabled ?
+                    UpsRatingMethod.LocalWithApiFailover :
+                    UpsRatingMethod.ApiOnly;
             }
 
             return upsRateClientFactory[ratingMethod];

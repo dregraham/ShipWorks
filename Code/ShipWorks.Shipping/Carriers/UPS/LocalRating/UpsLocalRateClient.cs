@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
         private GenericResult<List<UpsServiceRate>> GetRatesFromApi(ShipmentEntity shipment)
         {
-            return upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
+            return upsRateClientFactory[UpsRatingMethod.ApiOnly].GetRates(shipment);
         }
     }
 }
