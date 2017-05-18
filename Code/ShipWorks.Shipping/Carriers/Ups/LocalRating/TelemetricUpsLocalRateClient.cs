@@ -38,8 +38,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             {
                 GenericResult<List<UpsServiceRate>> serviceRates = rateClient.GetRates(shipment);
 
-                telemetryEvent.AddProperty("Results.Quantity", rateClient.LocalRates.Count().ToString());
-                telemetryEvent.AddProperty("Results.AvailableServices", string.Join(",", rateClient.LocalRates.Select(r => EnumHelper.GetDescription(r.Service)).ToList()));
+                telemetryEvent.AddProperty("Results.Quantity", serviceRates.Value.Count.ToString());
+                telemetryEvent.AddProperty("Results.AvailableServices", string.Join(",", serviceRates.Value.Select(r => EnumHelper.GetDescription(r.Service)).ToList()));
                 telemetryEvent.AddProperty("Shipment.Origin.StateProvince", shipment.OriginStateProvCode);
                 telemetryEvent.AddProperty("Shipment.Origin.PostalCode", shipment.OriginPostalCode);
                 telemetryEvent.AddProperty("Shipment.Destination.StateProvince", shipment.ShipStateProvCode);
