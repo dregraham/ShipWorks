@@ -206,6 +206,7 @@
     <Compile Include="Carriers\UPS\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\SurchargeUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalServiceRateTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalWithApiFailOverRatingClientTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ValueAddServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
