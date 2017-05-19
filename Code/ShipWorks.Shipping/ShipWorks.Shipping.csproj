@@ -235,6 +235,7 @@
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalServiceRate.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ShipDayServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\AddressServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeclaredValueSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeliveryAreaSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\CODSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\FuelGroundSurcharge.cs" />
