@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void LogFailure(string errorMessage)
         {
-            string completeErrorMessage = $"Error when calculating rates:\n\n{errorMessage}\n\nDelegating to UPS API.";
+            string completeErrorMessage = $"Error when calculating rates:\n\n{errorMessage}";
             apiLog.LogResponse(completeErrorMessage, "txt");
         }
     }

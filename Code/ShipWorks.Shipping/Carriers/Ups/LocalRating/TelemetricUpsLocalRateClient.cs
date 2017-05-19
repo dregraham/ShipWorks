@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -17,15 +18,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalWithApiFailover)]
     public class TelemetricUpsLocalRateClient : IUpsRateClient
     {
-        private readonly UpsLocalRateClient rateClient;
+        private readonly IUpsRateClient rateClient;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TelemetricUpsLocalRateClient"/> class.
         /// </summary>
-        public TelemetricUpsLocalRateClient(UpsLocalRateClient rateClient, Func<string, ITrackedDurationEvent> telemetryFactory)
+        public TelemetricUpsLocalRateClient(IIndex<UpsRatingMethod, IUpsRateClient> clientFactory, Func<string, ITrackedDurationEvent> telemetryFactory)
         {
-            this.rateClient = rateClient;
+
+            this.rateClient = clientFactory[UpsRatingMethod.LocalOnly];
             this.telemetryFactory = telemetryFactory;
         }
 

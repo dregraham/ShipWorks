@@ -95,29 +95,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void GetRates_DelegatesToApiClient_WhenCannotCalculateLocalRates()
-        {
-            mock.Mock<IUpsLocalRateTable>()
-                .Setup(r => r.CalculateRates(shipment))
-                .Returns(() => GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>("No rates."));
-
-            var apiGetRatesResponse = GenericResult.FromError<List<UpsServiceRate>>("Api Error");
-
-            var apiRateClient = mock.CreateMock<IUpsRateClient>();
-            apiRateClient.Setup(c => c.GetRates(shipment)).Returns(apiGetRatesResponse);
-
-            var indexMock = new Mock<IIndex<UpsRatingMethod, IUpsRateClient>>();
-            indexMock.Setup(x => x[UpsRatingMethod.ApiOnly]).Returns(apiRateClient.Object);
-            mock.Provide(indexMock.Object);
-
-            var testObject = mock.Create<UpsLocalRateClient>();
-            var rateResult = testObject.GetRates(shipment);
-
-            apiRateClient.Verify(c => c.GetRates(shipment), Times.Once);
-            Assert.Equal(apiGetRatesResponse, rateResult);
-        }
-
-        [Fact]
         public void GetRates_LogsMessageFromLocalRateTable_WhenCalculateRatesReturnsFailure()
         {
             mock.Mock<IUpsLocalRateTable>()
@@ -132,7 +109,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             var testObject = mock.Create<UpsLocalRateClient>();
             testObject.GetRates(shipment);
 
-            string expectedError = "Error when calculating rates:\n\nNo rates.\n\nDelegating to UPS API.";
+            string expectedError = "Error when calculating rates:\n\nNo rates.";
             mock.Mock<IApiLogEntry>().Verify(l => l.LogResponse(expectedError, "txt"));
         }
 
