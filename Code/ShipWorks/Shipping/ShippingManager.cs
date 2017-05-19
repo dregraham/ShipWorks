@@ -731,11 +731,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
-            // We're going to confirm the shipping address with the store as some stores may change
-            // the shipping address depending on the shipping program being used (such as eBay's
-            // Global Shipping Program), so we want to get rates for the location the package will be shipped
-            // We want to retain the buyer's address on the original shipment object, so we're going to use
-            // a cloned shipment to confirm the shipping address with the store. This way the original
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 return lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment, shipmentType).Value;

@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Rating service for UPS when in best rates.
     /// </summary>
-    public class UpsBestRateRatingService : UpsRatingService
+    public class UpsBestRateRatingService : UpsRatingService, IUpsBestRateRatingService
     {
         private readonly ILicenseService licenseService;
 

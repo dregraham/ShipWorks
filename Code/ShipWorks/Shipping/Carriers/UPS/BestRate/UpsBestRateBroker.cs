@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared;
+using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -43,12 +45,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             base(shipmentType, accountRepository, "UPS")
         {
             SettingsRepository = upsSettingsRepository;
+            GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
         }
 
         /// <summary>
         /// Gets or sets the settings repository.
         /// </summary>
-        protected ICarrierSettingsRepository SettingsRepository { get; private set; }
+        protected ICarrierSettingsRepository SettingsRepository { get; }
 
         /// <summary>
         /// Gets a list of UPS rates
@@ -75,80 +78,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             }
 
             return bestRates;
-        }
-
-        /// <summary>
-        /// Gets the service type description.
-        /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
-        private static string GetServiceTypeDescription(RateResult rateResult)
-        {
-            BestRateResultTag bestRateResultTag = (BestRateResultTag) rateResult.Tag;
-            UpsServiceType upsServiceType = (UpsServiceType) bestRateResultTag.OriginalTag;
-
-            switch (upsServiceType)
-            {
-                case UpsServiceType.UpsGround:
-                    return "Ground";
-
-                case UpsServiceType.Ups3DaySelectFromCanada:
-                case UpsServiceType.Ups3DaySelect:
-                    return "Three Day";
-
-                case UpsServiceType.Ups2ndDayAirIntra:
-                case UpsServiceType.Ups2DayAir:
-                    return "Two Day";
-
-                case UpsServiceType.Ups2DayAirAM:
-                    return "Two Day Morning";
-
-                case UpsServiceType.UpsExpress:
-                case UpsServiceType.UpsNextDayAir:
-                    return "One Day";
-
-                case UpsServiceType.UpsExpressSaver:
-                case UpsServiceType.UpsNextDayAirSaver:
-                    return "One Day Anytime";
-
-                case UpsServiceType.UpsExpressEarlyAm:
-                case UpsServiceType.UpsNextDayAirAM:
-                    return "One Day Morning";
-
-                case UpsServiceType.WorldwideExpress:
-                    return "Faster International";
-
-                case UpsServiceType.UpsCaWorldWideExpress:
-                case UpsServiceType.UpsCaWorldWideExpressPlus:
-                case UpsServiceType.WorldwideExpressPlus:
-                    return "Fast International Morning";
-
-                case UpsServiceType.UpsCaWorldWideExpressSaver:
-                case UpsServiceType.UpsExpedited:
-                case UpsServiceType.WorldwideExpedited:
-                    return "International";
-
-                case UpsServiceType.WorldwideSaver:
-                    return "International Afternoon";
-
-                case UpsServiceType.UpsStandard:
-                    return "International Ground";
-
-
-                case UpsServiceType.UpsSurePostLessThan1Lb:
-                    return "Hybrid Mail Less than 1 LB";
-
-                case UpsServiceType.UpsSurePost1LbOrGreater:
-                    return "Hybrid Mail 1 LB or Greater";
-
-                case UpsServiceType.UpsSurePostBoundPrintedMatter:
-                    return "Hybrid Mail Bound Printed Matter";
-
-                case UpsServiceType.UpsSurePostMedia:
-                    return "Hybrid Mail Media";
-
-                default:
-                    return "Service";
-            }
         }
 
         /// <summary>
@@ -285,6 +214,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         protected override string AccountDescription(UpsAccountEntity account)
         {
             return account.Description;
+        }
+        
+        /// <summary>
+        /// Gets the rates function.
+        /// </summary>
+        private RateGroup GetRatesFunction(ShipmentEntity shipment)
+        {
+            RateGroup rates;
+
+            // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                UpdateShipmentForCurrentBrokerType(shipment);
+
+                IUpsBestRateRatingService ratingService = lifetimeScope.ResolveKeyed<IUpsBestRateRatingService>(ShipmentType.ShipmentTypeCode);
+
+                rates = ratingService.GetRates(shipment);
+            }
+
+            rates.Carrier = shipment.ShipmentTypeCode;
+
+            return rates;
         }
     }
 }

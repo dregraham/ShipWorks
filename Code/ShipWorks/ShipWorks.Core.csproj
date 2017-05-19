@@ -1244,6 +1244,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingControl.cs" />
