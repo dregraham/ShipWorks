@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             return testObject;
         }
-
+        
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -397,6 +397,80 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             Assert.Equal(ShipmentTypeCode.OnTrac, testObject.ShipmentType);
         }
 
+        [Fact]
+        public void SetShipmentType_DoesNotSendShipmentChangedMessage_WhenChanged()
+        {
+            mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
+                x.SetupGet(a => a.ShipmentTypeCode).Returns(ShipmentTypeCode.OnTrac));
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Mock<IMessenger> messenger = mock.Mock<IMessenger>();
+            messenger.ResetCalls();
+            testObject.ShipmentType = ShipmentTypeCode.OnTrac;
+
+            Assert.Equal(ShipmentTypeCode.OnTrac, testObject.ShipmentType);
+
+            messenger.Verify(s => s.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void SetIsLoading_DoesNotSendShipmentChangedMessage_WhenChanged()
+        {
+            mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
+                x.SetupGet(a => a.ShipmentTypeCode).Returns(ShipmentTypeCode.OnTrac));
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Mock<IMessenger> messenger = mock.Mock<IMessenger>();
+            messenger.ResetCalls();
+
+            bool newValue = !testObject.IsLoading;
+            testObject.IsLoading = newValue;
+
+            Assert.Equal(newValue, testObject.IsLoading);
+
+            messenger.Verify(s => s.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void SetAllowEditing_DoesNotSendShipmentChangedMessage_WhenChanged()
+        {
+            mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
+                x.SetupGet(a => a.ShipmentTypeCode).Returns(ShipmentTypeCode.OnTrac));
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Mock<IMessenger> messenger = mock.Mock<IMessenger>();
+            messenger.ResetCalls();
+
+            bool newValue = !testObject.AllowEditing;
+            testObject.AllowEditing = newValue;
+
+            Assert.Equal(newValue, testObject.AllowEditing);
+
+            messenger.Verify(s => s.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void SetDomesticInternationalText_DoesNotSendShipmentChangedMessage_WhenChanged()
+        {
+            mock.WithCarrierShipmentAdapterFromChangeShipment(x =>
+                x.SetupGet(a => a.ShipmentTypeCode).Returns(ShipmentTypeCode.OnTrac));
+
+            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
+
+            Mock<IMessenger> messenger = mock.Mock<IMessenger>();
+            messenger.ResetCalls();
+
+            string newValue = Guid.NewGuid().ToString("N");
+            testObject.DomesticInternationalText = newValue;
+
+            Assert.Equal(newValue, testObject.DomesticInternationalText);
+
+            messenger.Verify(s => s.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
+        }
+        
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
