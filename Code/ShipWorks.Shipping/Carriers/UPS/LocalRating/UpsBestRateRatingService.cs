@@ -43,8 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 .Select(entry => entry.Value)
                 .ToList();
 
-            licenseService.GetLicenses()
-                .ForEach(l => l.ApplyShippingPolicy(ShipmentTypeCode.BestRate, availableRatingMethods));
+            licenseService.GetLicenses()?.FirstOrDefault()?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, availableRatingMethods);
 
             UpsRatingMethod methodToUse;
             if (account.LocalRatingEnabled)
