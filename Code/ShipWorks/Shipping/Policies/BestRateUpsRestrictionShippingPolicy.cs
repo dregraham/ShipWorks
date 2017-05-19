@@ -61,18 +61,11 @@ namespace ShipWorks.Shipping.Policies
                 throw new ArgumentException(@"target not of type ListList<UpsRatingMethod>", "target");
             }
 
-            List<UpsRatingMethod> availableRatingMethods = target as List<UpsRatingMethod>;
+            List<UpsRatingMethod> availableRatingMethods = (List<UpsRatingMethod>) target;
 
-            if (availableRatingMethods != null)
+            if (isRestricted)
             {
-                if (isRestricted)
-                {
-                    availableRatingMethods.RemoveAll(r => r != UpsRatingMethod.LocalOnly);
-                }
-                else
-                {
-                    availableRatingMethods.RemoveAll(r => r != UpsRatingMethod.LocalWithApiFailover);
-                }
+                availableRatingMethods.RemoveAll(r => r != UpsRatingMethod.LocalOnly);
             }
         }
     }
