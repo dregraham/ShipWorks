@@ -1,8 +1,10 @@
 using System;
+using System.Net;
 using System.Xml;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -21,14 +23,17 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory;
         private const string storeSettingMissingErrorMessage = "The ShopSite {0} is missing or invalid.  Please enter your {0} by going to Manage > Stores > Your Store > Edit > Store Connection.  You will find instructions on how to find the {0} there.";
+        private readonly IEncryptionProviderFactory encryptionFactory;
 
         /// <summary>
         /// Create this instance of the web client for connecting to the specified store
         /// </summary>
         public ShopSiteWebClient(IShopSiteStoreEntity store,
-                                 Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory, 
+                                 IEncryptionProviderFactory encryptionFactory,
+                                 Func<IHttpVariableRequestSubmitter> variableRequestSubmitterFactory,
                                  Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
+            this.encryptionFactory = encryptionFactory;
             shopSiteStore = MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             this.apiLogEntryFactory = MethodConditions.EnsureArgumentIsNotNull(apiLogEntryFactory, nameof(apiLogEntryFactory));
             this.variableRequestSubmitterFactory = MethodConditions.EnsureArgumentIsNotNull(variableRequestSubmitterFactory, nameof(variableRequestSubmitterFactory));
@@ -110,6 +115,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Set the uri and parameters
             postRequest.Uri = new Uri(shopSiteStore.ApiUrl);
             postRequest.Timeout = TimeSpan.FromSeconds(shopSiteStore.RequestTimeout);
+            postRequest.Credentials = new NetworkCredential(shopSiteStore.Username,
+                encryptionFactory.CreateSecureTextEncryptionProvider(shopSiteStore.Username).Decrypt(shopSiteStore.Password));
 
             // Log the request
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShopSite, action);
