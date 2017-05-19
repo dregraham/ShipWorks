@@ -1532,7 +1532,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
-    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
