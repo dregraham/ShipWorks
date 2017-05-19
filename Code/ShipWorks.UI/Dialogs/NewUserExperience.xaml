@@ -3,11 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sw="http://schemas.shipworks.com/sw"
+        xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
         xmlns:local="clr-namespace:ShipWorks.UI.Dialogs"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Title="What's next?" Height="530" Width="600">
+        Title="What's next?"
+        SizeToContent="Height"
+        Width="600">
+    <Window.Resources>
+        <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -22,7 +29,7 @@
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
             <Style TargetType="Button">
-                <Setter Property="Background" Value="White"></Setter>
+                <Setter Property="Background" Value="White" />
             </Style>
         </Grid.Resources>
         <TextBlock Grid.Row="0"
@@ -30,44 +37,51 @@
                    TextWrapping="Wrap">
             We can get all your stores and shipping accounts set up right now. Or, if you're ready to start now, we can always get those added later.
         </TextBlock>
-        <Grid Grid.Row="1" Margin="10 0" Background="White">
+
+        <Grid Grid.Row="1" Margin="10 0 10 20" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Click="HideCarrierSetup" Background="White">
+            <Button Grid.Column="0"
+                    Command="{Binding AddStore}">
                 <StackPanel>
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold">Add another store</TextBlock>
                     <Image Margin="0 10" Width="130" Source="shopping_cart_add.png"/>
                 </StackPanel>
             </Button>
-            <Button Grid.Column="1" Click="ShowCarrierSetup" Background="White">
+            <Button Grid.Column="1"
+                    Command="{Binding SelectShippingSetup}">
                 <StackPanel>
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold">Add a shipping account</TextBlock>
                     <Image Margin="0 10" Width="130" Source="box_closed_add_large.png" />
                 </StackPanel>
             </Button>
-            <Button Grid.Column="2" Click="StartUsingShipWorks" Background="White">
-                <StackPanel Orientation="Vertical">
+            <Button Grid.Column="2"
+                    Command="{Binding UseShipWorks}">
+                <StackPanel VerticalAlignment="Top">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold">Start using ShipWorks</TextBlock>
                     <Image Margin="0 10" Width="130" Source="ShipWorks-small-logo.jpg" />
                 </StackPanel>
             </Button>
         </Grid>
-        <Grid x:Name="CarrierSetup" Grid.Row="2" Margin="10 20">
+
+        <Grid Grid.Row="2" Margin="10 0 10 20"
+              Visibility="{Binding SelectedSection,
+                    Converter={StaticResource VisibleWhenEqualToParameter},
+                    ConverterParameter={x:Static local:NewUserExperienceSection.AddShippingAccount}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
             <TextBlock>Which carrier do you ship with?</TextBlock>
+
             <Grid Grid.Row="1">
                 <Grid.Resources>
-                    <Style TargetType="StackPanel">
+                    <Style TargetType="Image">
                         <Setter Property="Margin" Value="0 30" />
-                    </Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="TextWrapping" Value="Wrap" />
                     </Style>
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
@@ -75,20 +89,22 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Click="ClickUspsButton">
-                    <StackPanel>
-                        <Image Source="https://lh6.ggpht.com/VNMoMLGHmVFrRv_8aGzZSwkJZctmP8H0z-O1sDOmjD3TkkL-Geoxpqnlne7AF6LbI_Br=w300" Height="128" Width="131"></Image>
-                    </StackPanel>
+                <Button Grid.Column="0"
+                        Command="{Binding ShowShippingSetupWizard}"
+                        CommandParameter="{x:Static sw:ShipmentTypeCode.Usps}">
+                    <Image Source="https://lh6.ggpht.com/VNMoMLGHmVFrRv_8aGzZSwkJZctmP8H0z-O1sDOmjD3TkkL-Geoxpqnlne7AF6LbI_Br=w300"
+                           Height="128" Width="131" />
                 </Button>
-                <Button Grid.Column="1" Click="ClickFedExButton">
-                    <StackPanel VerticalAlignment="Top">
-                        <Image Source="http://www.shipstation.com/wp-content/uploads/2017/01/fedex_logo_feature.png"></Image>
-                    </StackPanel>
+                <Button Grid.Column="1"
+                        Command="{Binding ShowShippingSetupWizard}"
+                        CommandParameter="{x:Static sw:ShipmentTypeCode.FedEx}">
+                    <Image Source="http://www.shipstation.com/wp-content/uploads/2017/01/fedex_logo_feature.png" />
                 </Button>
-                <Button Grid.Column="2" Click="ClickUpsButton">
-                    <StackPanel>
-                        <Image Source="http://images.shipworks.com/assets/ups-ground-shipping.png" Height="128" Width="131"></Image>
-                    </StackPanel>
+                <Button Grid.Column="2"
+                        Command="{Binding ShowShippingSetupWizard}"
+                        CommandParameter="{x:Static sw:ShipmentTypeCode.UpsOnLineTools}">
+                    <Image Source="http://images.shipworks.com/assets/ups-ground-shipping.png"
+                           Height="128" Width="131" />
                 </Button>
             </Grid>
         </Grid>

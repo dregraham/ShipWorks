@@ -3394,6 +3394,8 @@ namespace ShipWorks
         /// </summary>
         private void OnManageStores(object sender, EventArgs e)
         {
+            ShowNewUserExperience();
+
             using (StoreManagerDlg dlg = new StoreManagerDlg())
             {
                 dlg.ShowDialog(this);
