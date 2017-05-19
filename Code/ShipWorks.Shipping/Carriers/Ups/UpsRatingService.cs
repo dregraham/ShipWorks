@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
+        protected readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
 
@@ -143,8 +143,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Adds the footnote factory.
         /// </summary>
-        private void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
+        protected virtual void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
         {
+            // promoFactory will be null when this is a UpsBestRateRatingService, that is why we are overriding the method
             UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFactory.GetFootnoteFactory(account);
 
             if (upsPromoFootnoteFactory != null)
