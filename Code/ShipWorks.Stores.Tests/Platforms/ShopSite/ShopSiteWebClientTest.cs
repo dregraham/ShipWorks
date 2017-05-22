@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Moq;
@@ -7,6 +8,8 @@ using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using Autofac;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Tests.Platforms.ShopSite.Responses;
 
@@ -30,6 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store,
+                mock.Create<IEncryptionProviderFactory>(),
                 () => mock.Create<IHttpVariableRequestSubmitter>(),
                 (x, y) => mock.Create<IApiLogEntry>()));
 
@@ -50,7 +54,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.Password = pwd;
             store.Username = username;
 
-            ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store, 
+            ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store,
+                 mock.Create<IEncryptionProviderFactory>(),
                 () => mock.Create<IHttpVariableRequestSubmitter>(),
                 (x, y) => mock.Create<IApiLogEntry>()));
 
