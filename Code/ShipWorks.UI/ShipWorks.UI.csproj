@@ -143,6 +143,7 @@
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
+    <Compile Include="Controls\AnimatedContentControl.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -207,11 +208,18 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
+    <Compile Include="Dialogs\MainOptions.xaml.cs">
+      <DependentUpon>MainOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\NewUserExperience.xaml.cs">
       <DependentUpon>NewUserExperience.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\NewUserExperienceSection.cs" />
     <Compile Include="Dialogs\NewUserExperienceViewModel.cs" />
+    <Compile Include="Dialogs\SectionToControlConverter.cs" />
+    <Compile Include="Dialogs\ShippingOptions.xaml.cs">
+      <DependentUpon>ShippingOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -309,7 +317,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\MainOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\NewUserExperience.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ShippingOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -350,6 +366,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Controls\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\AnimatedContentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
