@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// Calculate local rates
     /// </summary>
     [Component(RegistrationType.Self)]
-    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalOnly)]
     public class UpsLocalRateClient : IUpsRateClient
     {
         private readonly IApiLogEntry apiLog;

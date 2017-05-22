@@ -1,37 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
+namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 {
     public class TelemetricUpsLocalRateClientTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly ShipmentEntity shipment;
-        private readonly Mock<IUpsRateClient> localRateClient;
+        private readonly Mock<IUpsLocalRateTable> upsLocalRateTable;
 
         public TelemetricUpsLocalRateClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-
-            localRateClient = mock.CreateMock<IUpsRateClient>();
-            Mock<IIndex<UpsRatingMethod, IUpsRateClient>> repo = mock.CreateMock<IIndex<UpsRatingMethod, IUpsRateClient>>();
-            repo.Setup(x => x[UpsRatingMethod.LocalOnly])
-                .Returns(localRateClient.Object);
-            mock.Provide(repo.Object);
-
+            
             shipment = new ShipmentEntity()
             {
                 OriginPostalCode = "12345",
@@ -43,13 +33,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     Packages = {new UpsPackageEntity {DimsLength = 1, DimsHeight = 1, DimsWidth = 1, Weight = 1}}
                 }
             };
+
+            upsLocalRateTable = mock.Mock<IUpsLocalRateTable>();
         }
 
         [Fact]
         public void GetRates_AddsShipmentPropertiesToTelemetryEvent()
         {
-            localRateClient.Setup(c => c.GetRates(shipment))
-                .Returns(GenericResult.FromSuccess(new List<UpsServiceRate>()));
+            upsLocalRateTable.Setup(r => r.CalculateRates(shipment))
+                .Returns(GenericResult.FromSuccess<IEnumerable<UpsLocalServiceRate>>(new List<UpsLocalServiceRate>()));
 
             TelemetricUpsLocalRateClient testObject = mock.Create<TelemetricUpsLocalRateClient>();
             testObject.GetRates(shipment);
@@ -63,8 +55,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void GetRates_AddsRateResultProperties_WhenRateResultIsEmpty()
         {
-            localRateClient.Setup(c => c.GetRates(shipment))
-                .Returns(GenericResult.FromSuccess(new List<UpsServiceRate>()));
+            upsLocalRateTable.Setup(r => r.CalculateRates(shipment))
+                .Returns(GenericResult.FromSuccess<IEnumerable<UpsLocalServiceRate>>(new List<UpsLocalServiceRate>()));
 
             TelemetricUpsLocalRateClient testObject = mock.Create<TelemetricUpsLocalRateClient>();
             testObject.GetRates(shipment);
@@ -76,13 +68,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void GetRates_AddsRateResultProperties_WhenRateResultHasOneResult()
         {
-            List<UpsServiceRate> result = new List<UpsServiceRate>
+            List<UpsLocalServiceRate> result = new List<UpsLocalServiceRate>
             {
                 new UpsLocalServiceRate(UpsServiceType.UpsGround, "abcd", 12, "123")
             };
 
-            localRateClient.Setup(c => c.GetRates(shipment))
-                .Returns(GenericResult.FromSuccess(result));
+            upsLocalRateTable.Setup(r => r.CalculateRates(shipment))
+                .Returns(GenericResult.FromSuccess<IEnumerable<UpsLocalServiceRate>>(result));
 
             TelemetricUpsLocalRateClient testObject = mock.Create<TelemetricUpsLocalRateClient>();
             testObject.GetRates(shipment);
@@ -94,14 +86,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void GetRates_AddsRateResultProperties_WhenRateResultHasMultipleResults()
         {
-            List<UpsServiceRate> result = new List<UpsServiceRate>
+            List<UpsLocalServiceRate> result = new List<UpsLocalServiceRate>
             {
                 new UpsLocalServiceRate(UpsServiceType.UpsGround, "abcd", 12, "123"),
                 new UpsLocalServiceRate(UpsServiceType.UpsNextDayAir, "abcd", 12, "123"),
                 new UpsLocalServiceRate(UpsServiceType.Ups2DayAirAM, "abcd", 12, "123")
             };
-            localRateClient.Setup(c => c.GetRates(shipment))
-                .Returns(GenericResult.FromSuccess(result));
+            upsLocalRateTable.Setup(r => r.CalculateRates(shipment))
+                .Returns(GenericResult.FromSuccess<IEnumerable<UpsLocalServiceRate>>(result));
 
             TelemetricUpsLocalRateClient testObject = mock.Create<TelemetricUpsLocalRateClient>();
             testObject.GetRates(shipment);
