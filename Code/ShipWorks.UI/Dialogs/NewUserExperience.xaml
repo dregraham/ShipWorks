@@ -15,10 +15,10 @@
         Width="700">
     <Window.Resources>
         <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+        <vc:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="True" />
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -32,14 +32,11 @@
                 <Setter Property="Padding" Value="10" />
             </Style>
         </Grid.Resources>
-        <TextBlock Grid.Row="0"
-                   Margin="10"
-                   FontSize="16"
-                   TextWrapping="Wrap">
-            We can get all your stores and shipping accounts set up right now. Or, if you're ready to start now, we can always get those added later.
-        </TextBlock>
 
-        <Grid Grid.Row="1" Margin="0 0 0 10" Background="White">
+        <Grid Grid.Row="0" Margin="0 0 0 10" Background="White"
+              Visibility="{Binding SelectedSection,
+                    Converter={StaticResource VisibleWhenNotEqualToParameter},
+                    ConverterParameter={x:Static local:NewUserExperienceSection.AddShippingAccount}}">
             <Grid.Resources>
                 <Style TargetType="Image">
                     <Setter Property="Margin" Value="0 10" />
@@ -52,12 +49,26 @@
                     <Setter Property="FontSize" Value="16" />
                 </Style>
             </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Grid.ColumnSpan="3"
+                       FontSize="16"
+                       FontWeight="Normal"
+                       TextWrapping="Wrap">
+                We can get all your stores and shipping accounts set up right now. Or, if you're ready to start now, we can always get those added later.
+            </TextBlock>
+
             <Button Grid.Column="0"
+                    Grid.Row="1"
                     Command="{Binding AddStore}">
                 <StackPanel>
                     <TextBlock>Add another store</TextBlock>
@@ -65,6 +76,7 @@
                 </StackPanel>
             </Button>
             <Button Grid.Column="1"
+                    Grid.Row="1"
                     Command="{Binding SelectShippingSetup}">
                 <StackPanel>
                     <TextBlock>Add a shipping carrier</TextBlock>
@@ -72,6 +84,7 @@
                 </StackPanel>
             </Button>
             <Button Grid.Column="2"
+                    Grid.Row="1"
                     Command="{Binding UseShipWorks}">
                 <StackPanel VerticalAlignment="Top">
                     <TextBlock>Start using ShipWorks</TextBlock>
@@ -80,7 +93,7 @@
             </Button>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="0 0 0 10"
+        <Grid Grid.Row="1" Margin="0 0 0 10"
               Visibility="{Binding SelectedSection,
                     Converter={StaticResource VisibleWhenEqualToParameter},
                     ConverterParameter={x:Static local:NewUserExperienceSection.AddShippingAccount}}">
@@ -99,23 +112,28 @@
                     </Style>
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"
+                <Button BorderBrush="Transparent"
+                        Command="{Binding DeselectShippingSetup}">
+                    &lt;
+                </Button>
+                <Button Grid.Column="1"
                         Command="{Binding ShowShippingSetupWizard}"
                         CommandParameter="{x:Static sw:ShipmentTypeCode.Usps}">
                     <Image Source="https://lh6.ggpht.com/VNMoMLGHmVFrRv_8aGzZSwkJZctmP8H0z-O1sDOmjD3TkkL-Geoxpqnlne7AF6LbI_Br=w300"
                            Width="96" />
                 </Button>
-                <Button Grid.Column="1"
+                <Button Grid.Column="2"
                         Command="{Binding ShowShippingSetupWizard}"
                         CommandParameter="{x:Static sw:ShipmentTypeCode.FedEx}">
                     <Image Source="http://www.shipstation.com/wp-content/uploads/2017/01/fedex_logo_feature.png"
                            Width="183"/>
                 </Button>
-                <Button Grid.Column="2"
+                <Button Grid.Column="3"
                         Command="{Binding ShowShippingSetupWizard}"
                         CommandParameter="{x:Static sw:ShipmentTypeCode.UpsOnLineTools}">
                     <Image Source="http://images.shipworks.com/assets/ups-ground-shipping.png"

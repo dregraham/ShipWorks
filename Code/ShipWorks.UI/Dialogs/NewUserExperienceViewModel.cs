@@ -43,6 +43,7 @@ namespace ShipWorks.UI.Dialogs
 
             AddStore = new RelayCommand(AddStoreAction);
             SelectShippingSetup = new RelayCommand(SelectShippingSetupAction);
+            DeselectShippingSetup = new RelayCommand(DeselectShippingSetupAction);
             ShowShippingSetupWizard = new RelayCommand<ShipmentTypeCode>(OpenShippingSetupWizardAction);
             UseShipWorks = new RelayCommand(UseShipWorksAction);
 
@@ -63,6 +64,11 @@ namespace ShipWorks.UI.Dialogs
         /// Customer wants to setup a shipping account
         /// </summary>
         public ICommand SelectShippingSetup { get; }
+
+        /// <summary>
+        /// Customer wants to close shipping account setup
+        /// </summary>
+        public ICommand DeselectShippingSetup { get; }
 
         /// <summary>
         /// Start using ShipWorks
@@ -104,6 +110,14 @@ namespace ShipWorks.UI.Dialogs
         private void SelectShippingSetupAction()
         {
             SelectedSection = NewUserExperienceSection.AddShippingAccount;
+        }
+
+        /// <summary>
+        /// Select the shipping setup section
+        /// </summary>
+        private void DeselectShippingSetupAction()
+        {
+            SelectedSection = NewUserExperienceSection.AddStore;
         }
 
         /// <summary>
