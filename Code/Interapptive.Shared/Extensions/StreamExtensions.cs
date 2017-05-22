@@ -26,7 +26,7 @@ namespace Interapptive.Shared.Extensions
         /// <exception cref="IOException"></exception>
         public static byte[] ToArray(this Stream stream)
         {
-            MethodConditions.EnsureArgumentIsNotNull(stream);
+            MethodConditions.EnsureArgumentIsNotNull(stream, nameof(stream));
 
             using (MemoryStream memstream = new MemoryStream())
             {
