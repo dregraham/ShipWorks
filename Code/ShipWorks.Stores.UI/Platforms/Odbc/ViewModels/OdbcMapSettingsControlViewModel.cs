@@ -211,8 +211,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <param name="store">Odbc Store Entity</param>
         public void Load(IOdbcDataSource dataSource, IOdbcSchema odbcSchema, string columnSourceFromStore, OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(dataSource);
-            MethodConditions.EnsureArgumentIsNotNull(odbcSchema);
+            MethodConditions.EnsureArgumentIsNotNull(dataSource, nameof(dataSource));
+            MethodConditions.EnsureArgumentIsNotNull(odbcSchema, nameof(odbcSchema));
 
             try
             {

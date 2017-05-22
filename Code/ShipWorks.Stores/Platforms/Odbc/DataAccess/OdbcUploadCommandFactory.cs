@@ -39,8 +39,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IOdbcUploadCommand CreateUploadCommand(OdbcStoreEntity store, ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, "store");
-            MethodConditions.EnsureArgumentIsNotNull(shipment, "shipment");
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             switch (store.UploadStrategy)
             {

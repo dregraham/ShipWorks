@@ -14,6 +14,8 @@ namespace ShipWorks.Actions
     {
         UserInterface = 0,
 
-        Scheduled = 1
+        Scheduled = 1,
+
+        DefaultPrint = 2
     }
 }

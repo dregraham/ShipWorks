@@ -1,5 +1,13 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using HtmlAgilityPack;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -9,14 +17,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using HtmlAgilityPack;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -237,8 +237,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         return;
                     }
                 }
-                ordersProcessed ++;
-                Progress.PercentComplete = ordersProcessed/totalCount;
+                ordersProcessed++;
+                Progress.PercentComplete = ordersProcessed / totalCount;
             }
         }
 
@@ -247,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
         {
-            MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, "order");
+            MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, nameof(threeDCartOrder));
 
             // If this order does not have sub orders, set the order total to that which we received from 3dcart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             order.OnlineLastModified = DateTimeUtility.ConvertTimeToUtcForTimeZone(threeDCartOrder.LastUpdate, threeDCartStore.StoreTimeZone);
             order.OnlineStatusCode = threeDCartOrder.OrderStatusID;
-            order.OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus)threeDCartOrder.OrderStatusID);
+            order.OnlineStatus = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) threeDCartOrder.OrderStatusID);
 
             LoadAddress(order, threeDCartOrder, threeDCartShipment);
 
@@ -357,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private void AdjustAndSetOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
             decimal total = new OrderManager().CalculateOrderTotal(order);
-             
+
             var items = order.OrderItems;
 
             bool hasKitItems = items.Any(x => x.Name.StartsWith("KIT ITEM:", StringComparison.OrdinalIgnoreCase));
@@ -392,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void LoadItem(OrderEntity order, ThreeDCartOrderItem threeDCartItem)
         {
-            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity)InstantiateOrderItem(order);
+            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
 
             item.Code = threeDCartItem.ItemID;
             item.SKU = item.Code;

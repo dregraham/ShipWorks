@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Actions
 {
@@ -26,6 +31,16 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
+        /// Indiciates if any new queue's arrive in the gateway while the gateway is being processed
+        /// </summary>
+        public override bool CanNewQueuesArrive => false;
+
+        /// <summary>
+        /// This is a Error Action Queue Gateway
+        /// </summary>
+        public override ActionQueueGatewayType GatewayType => ActionQueueGatewayType.Error;
+
+        /// <summary>
         /// Get the next set of queue ID's to process
         /// </summary>
         public override List<long> GetNextQueuePage(long lastQueueID)
@@ -46,11 +61,11 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Indiciates if any new queue's arrive in the gateway while the gateway is being processed
+        /// Checks the queue to see if there's any work to do.
         /// </summary>
-        public override bool CanNewQueuesArrive
+        public override bool AnyWorkToDo(DbConnection sqlConnection)
         {
-            get { return false; }
+            return queueList.Any();
         }
     }
 }

@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Obfuscation(Exclude = false)]
         public void LoadExternalField(OdbcRecord record)
         {
-            MethodConditions.EnsureArgumentIsNotNull(record);
+            MethodConditions.EnsureArgumentIsNotNull(record, nameof(record));
             ExternalField.LoadValue(record);
         }
 
@@ -82,8 +82,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void LoadShipWorksField(IEntity2 entity, IOdbcFieldValueResolver valueResolver)
         {
-            MethodConditions.EnsureArgumentIsNotNull(entity);
-            MethodConditions.EnsureArgumentIsNotNull(valueResolver);
+            MethodConditions.EnsureArgumentIsNotNull(entity, nameof(entity));
+            MethodConditions.EnsureArgumentIsNotNull(valueResolver, nameof(valueResolver));
 
             ShipWorksField.LoadValue(entity, valueResolver);
         }

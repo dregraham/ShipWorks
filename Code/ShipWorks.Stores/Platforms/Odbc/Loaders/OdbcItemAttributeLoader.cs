@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// </summary>
         public void Load(IOdbcFieldMap map, OrderItemEntity item, int index)
         {
-            MethodConditions.EnsureArgumentIsNotNull(item);
+            MethodConditions.EnsureArgumentIsNotNull(item, nameof(item));
 
             IEnumerable<IOdbcFieldMapEntry> itemAttributeEntries =
                 map.FindEntriesBy(OrderItemAttributeFields.Name)

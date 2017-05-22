@@ -33,8 +33,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
-            MethodConditions.EnsureArgumentIsNotNull(adapter);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter));
 
             // If custom's aren't required, then forget it
             if (!IsCustomsRequired(shipment))
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static void GenerateCustomsItems(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             // If custom's aren't required, then forget it
             if (shipment.Processed || shipment.CustomsGenerated || !IsCustomsRequired(shipment))

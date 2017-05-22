@@ -1273,12 +1273,22 @@ CREATE TABLE [dbo].[BigCommerceStore]
 [ApiToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
 [WeightUnitOfMeasure] [int] NOT NULL,
-[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
+[BigCommerceAuthentication] [int] NOT NULL,
+[OauthClientId] [nvarchar](100) NOT NULL,
+[OauthToken] [nvarchar](100) NOT NULL,
+[Identifier] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BigCommerceStore] on [dbo].[BigCommerceStore]'
 GO
 ALTER TABLE [dbo].[BigCommerceStore] ADD CONSTRAINT [PK_BigCommerceStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+ALTER TABLE [dbo].[BigCommerceStore] ADD  CONSTRAINT [DF_BigCommerceStore_BigCommerceAuthentication]  DEFAULT ((1)) FOR [BigCommerceAuthentication]
+GO
+ALTER TABLE [dbo].[BigCommerceStore] ADD  CONSTRAINT [DF_BigCommerceStore_OauthClientId]  DEFAULT ('') FOR [OauthClientId]
+GO
+ALTER TABLE [dbo].[BigCommerceStore] ADD  CONSTRAINT [DF_BigCommerceStore_OauthToken]  DEFAULT ('') FOR [OauthToken]
 GO
 PRINT N'Creating [dbo].[BuyDotComStore]'
 GO
@@ -4223,7 +4233,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL,
-[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -5929,6 +5940,18 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Api User Name', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'0' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'BigCommerceAuthentication'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditName', @value=N'BigCommerce Authentication Type' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'BigCommerceAuthentication'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'0' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'OauthClientId'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditName', @value=N'OAuth Client ID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'OauthClientId'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'0' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'OauthToken'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditName', @value=N'OAuth Token' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BigCommerceStore', @level2type=N'COLUMN',@level2name=N'OauthToken'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Customer', 'COLUMN', N'BillCountryCode'
 GO

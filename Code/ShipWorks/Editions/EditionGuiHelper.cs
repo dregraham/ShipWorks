@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Drawing;
-using ShipWorks.Properties;
-using System.Windows.Forms;
+using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Properties;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using IContainer = System.ComponentModel.IContainer;
@@ -197,6 +197,12 @@ namespace ShipWorks.Editions
             public void UpdateUI()
             {
                 if (DesignModeDetector.IsDesignerHosted())
+                {
+                    return;
+                }
+
+                // We aren't enforcing the filter limit anymore since it was a Freemium thing that we no longer offer
+                if (feature == EditionFeature.FilterLimit)
                 {
                     return;
                 }

@@ -1,6 +1,7 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Tests.Shared.EntityBuilders
 {
@@ -50,6 +51,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public static StoreEntityBuilder<T> Store<T>() where T : StoreEntity, new() =>
             new StoreEntityBuilder<T>();
+
+        /// <summary>
+        /// Create a store entity
+        /// </summary>
+        public static StoreEntityBuilder<T> Store<T>(StoreTypeCode type) where T : StoreEntity, new() =>
+            (StoreEntityBuilder<T>) new StoreEntityBuilder<T>().Set(x => x.StoreTypeCode, type);
 
         /// <summary>
         /// Create a carrier account

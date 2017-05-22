@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Loading
 
                 foreach (IEnumerable<long> orderIDs in orderByDescending.SplitIntoChunksOf(100))
                 {
-                    IEnumerable<OrderEntity> orders = orderManager.LoadOrders(orderIDs, fullOrderPrefetchPath.Value);
+                    IEnumerable<OrderEntity> orders = orderManager.LoadOrders(orderIDs, FullOrderPrefetchPath.Value);
 
                     // Only ensure filter counts are up to date if there are any orders that have NO shipments already.
                     // This is because the filter counts need to be up to date so that the correct profile can be used
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Create the pre-fetch path used to load an order
         /// </summary>
-        private static readonly Lazy<IPrefetchPath2> fullOrderPrefetchPath = new Lazy<IPrefetchPath2>(() =>
+        public static readonly Lazy<IPrefetchPath2> FullOrderPrefetchPath = new Lazy<IPrefetchPath2>(() =>
         {
             IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.OrderEntity);
 

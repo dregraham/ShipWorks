@@ -168,8 +168,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Order);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Order, nameof(shipment.Order));
 
             if (shipment.Ups == null)
             {

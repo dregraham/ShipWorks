@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Communication.Throttling
         public object Response { get; set; }
 
         /// <summary>
-        /// The timespn
+        /// The timespan
         /// </summary>
         public TimeSpan RetryInterval { get; set; }
     }
