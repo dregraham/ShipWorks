@@ -14,13 +14,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         ApiOnly,
 
         /// <summary>
-        /// This describes the method of calculating rates in Shipworks using the rating tables, 
+        /// This describes the method of calculating rates in ShipWorks using the rating tables, 
         /// failing over to the API if local rating returns no rates
         /// </summary>
         LocalWithApiFailover,
 
         /// <summary>
-        /// This describes the method of calculating rates in Shipworks using the rating tables
+        /// This describes the method of calculating rates in ShipWorks using the rating tables
         /// </summary>
         LocalOnly
     }

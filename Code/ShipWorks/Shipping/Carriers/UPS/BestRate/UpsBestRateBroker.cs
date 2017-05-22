@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             base(shipmentType, accountRepository, "UPS")
         {
             SettingsRepository = upsSettingsRepository;
-            GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
+            GetRatesAction = (shipment, type) => GetUpsRates(shipment);
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Gets the rates function.
         /// </summary>
-        private RateGroup GetRatesFunction(ShipmentEntity shipment)
+        private RateGroup GetUpsRates(ShipmentEntity shipment)
         {
             RateGroup rates;
 

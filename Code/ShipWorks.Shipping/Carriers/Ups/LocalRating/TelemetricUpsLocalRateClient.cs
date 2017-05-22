@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Client for local rating with telemetry
     /// </summary>
-    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalWithApiFailover)]
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalOnly)]
     public class TelemetricUpsLocalRateClient : IUpsRateClient
     {
         private readonly IUpsRateClient rateClient;

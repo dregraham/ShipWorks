@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -43,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 .Select(entry => entry.Value)
                 .ToList();
 
+            // Filter out any rating methods unavailable to the user
             licenseService.GetLicenses()?.FirstOrDefault()?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, availableRatingMethods);
 
             UpsRatingMethod methodToUse;
@@ -60,8 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 else
                 {
-                    throw new UpsException(
-                        $"To get rates for account {account.Description}, local rating must be enabled.");
+                    throw new UpsException($"To get rates for account {account.Description}, local rating must be enabled.");
                 }
             }
 
