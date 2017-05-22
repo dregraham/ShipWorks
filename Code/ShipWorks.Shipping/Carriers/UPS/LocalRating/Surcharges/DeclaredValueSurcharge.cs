@@ -10,15 +10,24 @@ using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
 {
+    /// <summary>
+    /// Calculates and applies any applicable declared value surcharge
+    /// </summary>
     public class DeclaredValueSurcharge : IUpsSurcharge
     {
         private readonly IDictionary<UpsSurchargeType, double> surcharges;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DeclaredValueSurcharge(IDictionary<UpsSurchargeType, double> surcharges)
         {
             this.surcharges = surcharges;
         }
 
+        /// <summary>
+        /// Apply the surcharge to the service rate based on the shipment
+        /// </summary>
         public void Apply(UpsShipmentEntity shipment, IUpsLocalServiceRate serviceRate)
         {
             for (int index = 0; index < shipment.Packages.Count; index++)
@@ -28,6 +37,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             }
         }
 
+        /// <summary>
+        /// Calculates the declared value.
+        /// </summary>
         private void CalculateDeclaredValue(UpsPackageEntity package, int packageNumber, IUpsLocalServiceRate serviceRate)
         {
             decimal declaredValue = package.DeclaredValue;
@@ -51,6 +63,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             }
         }
 
+        /// <summary>
+        /// Adds the amount.
+        /// </summary>
         private void AddAmount(UpsSurchargeType surchargeType, decimal amount, IUpsLocalServiceRate serviceRate, int packageNumber)
         {
             string surchargeTypeDescription = EnumHelper.GetDescription(surchargeType);
