@@ -87,7 +87,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     OriginPostalCode = "12345",
                     OriginStateProvCode = "MO",
                     ShipPostalCode = "67890",
-                    ShipStateProvCode = "MO"
+                    ShipStateProvCode = "MO",
+                    Order = new OrderEntity(42)
                 },
                 Packages = { new UpsPackageEntity { DimsLength = 1, DimsHeight = 1, DimsWidth = 1, Weight = 1 } }
             };
@@ -113,7 +114,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
                     OriginPostalCode = "12345",
                     OriginStateProvCode = "MO",
                     ShipPostalCode = "67890",
-                    ShipStateProvCode = "MO"
+                    ShipStateProvCode = "MO",
+                    Order = new OrderEntity(42)
                 },
                 Packages = { new UpsPackageEntity { DimsLength = 1, DimsHeight = 1, DimsWidth = 1, Weight = 1 } }
             };
