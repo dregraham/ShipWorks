@@ -4,54 +4,95 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-PRINT N'Creating [dbo].[UpsLocalRatingZoneFile]'
+PRINT N'Creating [dbo].[UpsRateTable]'
 GO
-CREATE TABLE [dbo].[UpsLocalRatingZoneFile](
-	[ZoneFileID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UploadDate] [DateTime2] NOT NULL,
-	[FileContent] [varbinary](max) NOT NULL)
+CREATE TABLE [dbo].[UpsRateTable](
+	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UploadDate][DateTime2] NOT NULL)
 GO
-PRINT N'Creating primary key [PK_UpsLocalRatingZoneFile] on [dbo].[UpsLocalRatingZoneFile]'
+PRINT N'Creating primary key [PK_UpsRateTable] on [dbo].[UpsRateTable]'
 GO
-ALTER TABLE [dbo].[UpsLocalRatingZoneFile] ADD CONSTRAINT [PK_UpsLocalRatingZoneFile] PRIMARY KEY CLUSTERED ([ZoneFileID])
+ALTER TABLE [UpsRateTable] ADD CONSTRAINT [PK_UpsRateTable] PRIMARY KEY CLUSTERED ([UpsRateTableID])
 GO
-
-PRINT N'Creating [dbo].[UpsLocalRatingZone]'
+PRINT N'Creating [dbo].[UpsPackageRate]'
 GO
-CREATE TABLE [dbo].[UpsLocalRatingZone](
-	[ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
-	[ZoneFileID] [bigint] NOT NULL,
-	[OriginZipFloor] [int] NOT NULL,
-	[OriginZipCeiling] [int] NOT NULL,
-	[DestinationZipFloor] [int] NOT NULL,
-	[DestinationZipCeiling] [int] NOT NULL,
-	[Service] [int] NOT NULL,
-	[Zone] [varchar](3) NOT NULL)
+CREATE TABLE [dbo].[UpsPackageRate](
+	[UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[WeightInPounds][int] NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
 GO
-PRINT N'Creating primary key [PK_UpsLocalRatingZone] on [dbo].[UpsLocalRatingZone]'
+PRINT N'Creating primary key [PK_UpsPackageRate] on [dbo].[UpsPackageRate]'
 GO
-ALTER TABLE [dbo].[UpsLocalRatingZone] ADD CONSTRAINT [PK_UpsLocalRatingZone] PRIMARY KEY CLUSTERED ([ZoneID])
+ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [PK_UpsPackageRate] PRIMARY KEY CLUSTERED ([UpsPackageRateID])
 GO
-PRINT N'Adding foreign keys to [dbo].[UpsLocalRatingZone]'
-GO
-ALTER TABLE [dbo].[UpsLocalRatingZone] ADD CONSTRAINT [FK_UpsLocalRatingZone_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
+PRINT N'Adding foreign keys to [dbo].[UpsPackageRate]'
+ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [FK_UpsPackageRate_UpsPackageRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
 ON DELETE CASCADE
 GO
 
-PRINT N'Creating [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
+PRINT N'Creating [dbo].[UpsLetterRate]'
 GO
-CREATE TABLE [dbo].UpsLocalRatingDeliveryAreaSurcharge(
-	[DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
-	[ZoneFileID] [bigint] NOT NULL,
-	[DestinationZip] [int] NOT NULL,
-	[DeliveryAreaType] [int] NOT NULL)
+CREATE TABLE [dbo].[UpsLetterRate](
+	[UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
 GO
-PRINT N'Creating primary key [PK_UpsLocalRatingDeliveryAreaSurcharge] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
+PRINT N'Creating primary key [PK_UpsLetterRate] on [dbo].[UpsLetterRate]'
 GO
-ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [PK_UpsLocalRatingDeliveryAreaSurcharge] PRIMARY KEY CLUSTERED ([DeliveryAreaSurchargeID])
+ALTER TABLE [dbo].[UpsLetterRate] ADD CONSTRAINT [PK_UpsLetterRate] PRIMARY KEY CLUSTERED ([UpsLetterRateID])
 GO
-PRINT N'Adding foreign keys to [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
-GO
-ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
+PRINT N'Adding foreign keys to [dbo].[UpsLetterRate]'
+ALTER TABLE [dbo].[UpsLetterRate] ADD CONSTRAINT [FK_UpsLetterRate_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
 ON DELETE CASCADE
 GO
+
+PRINT N'Creating [dbo].[UpsPricePerPound]'
+GO
+CREATE TABLE [dbo].[UpsPricePerPound](
+	[UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
+GO
+PRINT N'Creating primary key [PK_UpsPricePerPound] on [dbo].[UpsPricePerPound]'
+GO
+ALTER TABLE [dbo].[UpsPricePerPound] ADD CONSTRAINT [PK_UpsPricePerPound] PRIMARY KEY CLUSTERED ([UpsPricePerPoundID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsRate]'
+ALTER TABLE [dbo].[UpsPricePerPound] ADD CONSTRAINT [FK_UpsPricePerPound_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[UpsRateSurcharge]'
+GO
+CREATE TABLE [dbo].[UpsRateSurcharge](
+	[UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[SurchargeType][int] NOT NULL,
+	[Amount][float] NOT NULL)
+GO
+PRINT N'Creating primary key [PK_UpsRateSurcharge] on [dbo].[UpsRateSurcharge]'
+GO
+ALTER TABLE [dbo].[UpsRateSurcharge] ADD CONSTRAINT [PK_UpsRateSurcharge] PRIMARY KEY CLUSTERED ([UpsRateSurchargeID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsRateSurcharge]'
+GO
+ALTER TABLE [dbo].[UpsRateSurcharge] ADD CONSTRAINT [FK_UpsRateSurcharge_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+ON DELETE CASCADE
+GO
+
+
+PRINT N'Adding [UpsRateTableID] to [dbo].[UpsAccount]'
+GO
+IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name= N'UpsRateTableID' AND Object_ID = Object_ID(N'UpsAccount'))
+BEGIN
+	ALTER TABLE [dbo].[UpsAccount]
+	Add [UpsRateTableID][bigint] NULL
+	ALTER TABLE [dbo].[UpsAccount] ADD CONSTRAINT [FK_UpsAccount_UpsRateTable] FOREIGN KEY([UpsRateTableID]) REFERENCES [dbo].[UpsRateTable] ([UpsRateTableID])
+END
