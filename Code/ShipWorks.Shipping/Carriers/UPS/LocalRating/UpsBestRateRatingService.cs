@@ -5,10 +5,10 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Ups.Promo;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
             ILicenseService licenseService)
-            : base(accountRepository, transitTimeClient, upsRateClientFactory, shipmentType, null)
+            : base(accountRepository, transitTimeClient, upsRateClientFactory, shipmentType, new NullPromoFactory())
         {
             this.licenseService = licenseService;
         }
@@ -65,14 +65,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
 
             return upsRateClientFactory[methodToUse];
-        }
-
-        /// <summary>
-        /// Adds the footnote factory.
-        /// </summary>
-        protected override void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
-        {
-            // do nothing
         }
     }
 }
