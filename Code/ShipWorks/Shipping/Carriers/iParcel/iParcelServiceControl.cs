@@ -266,14 +266,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// One of the values that affects rates has changed
-        /// </summary>
-        private void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-            RaiseRateCriteriaChanged();
-        }
-
-        /// <summary>
         /// A rate has been selected
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)

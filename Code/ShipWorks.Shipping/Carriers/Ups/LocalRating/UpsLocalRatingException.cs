@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
     /// <summary>
     /// An exception for Ups Local Rating related errors
     /// </summary>
-    public class UpsLocalRatingException : Exception
+    public class UpsLocalRatingException : UpsException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingException" /> class.

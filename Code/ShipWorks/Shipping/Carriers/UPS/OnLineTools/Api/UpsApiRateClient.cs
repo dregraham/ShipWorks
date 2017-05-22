@@ -6,10 +6,12 @@ using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,7 +29,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// <summary>
     /// Wrapper for accessing UPS rates
     /// </summary>
-    public class UpsApiRateClient
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.Api)]
+    public class UpsApiRateClient : IUpsRateClient
     {
         private ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly ILog log;
@@ -76,12 +80,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
-        /// Get the rates for the given shipment
+        /// Get the rates for the given shipment along with any messaging.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A list of service rates from UPS.</returns>
-        public List<UpsServiceRate> GetRates(ShipmentEntity shipment)
+        public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
+            ConfigureRatingDependencies();
+
             List<UpsServiceRate> rates = new List<UpsServiceRate>();
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
 
@@ -136,7 +142,36 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw firstExceptionEncountered;
             }
 
-            return rates;
+            return GenericResult.FromSuccess(rates, GetMessage(shipment));
+        }
+
+        /// <summary>
+        /// Setup dependencies needed for rating a shipment
+        /// </summary>
+        private void ConfigureRatingDependencies()
+        {
+            if (accountRepository.Accounts.None())
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+        }
+
+        /// <summary>
+        /// Gets the message.
+        /// </summary>
+        private string GetMessage(ShipmentEntity shipment)
+        {
+            return shipment.ReturnShipment ?
+                "* Rates reflect the service charge only. This does not include additional fees for returns." :
+                string.Empty;
         }
 
         /// <summary>
@@ -170,28 +205,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return surePostServices;
-        }
-
-        /// <summary>
-        /// Gets rates for the shipment using counter rates if useCounterRates is true
-        /// </summary>
-        public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
-        {
-            // Create the appropriate settings, certificate inspector
-            if (useCounterRates)
-            {
-                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
-                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
-                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
-            }
-            else
-            {
-                settingsRepository = new UpsSettingsRepository();
-                certificateInspector = new TrustingCertificateInspector();
-                accountRepository = new UpsAccountRepository();
-            }
-
-            return GetRates(shipment);
         }
 
         /// <summary>
@@ -276,6 +289,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 xmlWriter.WriteElementString("SaturdayDelivery", "");
             }
+
+            UpsApiCore.WriteCarbonNeutralXml(xmlWriter, ups);
 
             if (shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday)
             {

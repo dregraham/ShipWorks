@@ -17,7 +17,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         readonly AutoMock mock;
         readonly UpsZoneExcelReader testObject;
         readonly ExcelEngine excelEngine;
-        
+        private int numberOfSupportedServices = 7;
+
         public UpsZoneExcelReaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -56,8 +57,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
-            AddRow(worksheet, new[] { "0a4-0b5", "005", "305", "205", "-", "135", "-" });
+            AddRow(worksheet, new[] { "0a4-0b5", "005", "305", "205", "-", "135", "-", "-" });
             
             UpsLocalRatingException ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
             Assert.Equal("Worksheet 12345-12345 has an invalid destination zip value 0a4-0b5.", ex.Message);
@@ -79,8 +81,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
-            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-" });
+            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-", "-" });
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
@@ -108,8 +111,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
-            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-" });
+            AddRow(worksheet, new[] { "004-005", "005", "305", "205", "-", "135", "-", "-" });
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
@@ -132,14 +136,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
             
-            AddRow(worksheet, new []{"004-005","005","305","205","245","135","105"});
+            AddRow(worksheet, new []{"004-005","005","305","205","245","135","105", "105"});
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
             rateTable.Verify(r => r.ReplaceZones(
                 It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == 12345 &&
+                    z => z.Count == numberOfSupportedServices && z.All(a => a.OriginZipFloor == 12345 &&
                                                     a.OriginZipCeiling == 12345 &&
                                                     a.DestinationZipFloor == 00400 &&
                                                     a.DestinationZipCeiling == 00599))));
@@ -161,14 +166,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
-            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135", "105" });
+            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135", "105", "105" });
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
             rateTable.Verify(r => r.ReplaceZones(
                 It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == 12345 &&
+                    z => z.Count == numberOfSupportedServices && z.All(a => a.OriginZipFloor == 12345 &&
                                                     a.OriginZipCeiling == 12345 &&
                                                     a.DestinationZipFloor == 00400 &&
                                                     a.DestinationZipCeiling == 00499))));
@@ -230,15 +236,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
             AddRow(worksheet, Enumerable.Repeat(string.Empty, 7).ToArray());
-            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135", "105" });
+            AddRow(worksheet, new[] { "004", "005", "305", "205", "245", "135", "105", "105" });
 
             testObject.Read(workbook.Worksheets, rateTable.Object);
 
             rateTable.Verify(r => r.ReplaceZones(
                 It.Is<List<UpsLocalRatingZoneEntity>>(
-                    z => z.Count == 6 && z.All(a => a.OriginZipFloor == 12345 &&
+                    z => z.Count == numberOfSupportedServices && z.All(a => a.OriginZipFloor == 12345 &&
                                                     a.OriginZipCeiling == 12345 &&
                                                     a.DestinationZipFloor == 00400 &&
                                                     a.DestinationZipCeiling == 00499))));
@@ -260,8 +267,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             worksheet.Range["E1"].Text = "2nd Day Air A.M.";
             worksheet.Range["F1"].Text = "Next Day Air Saver";
             worksheet.Range["G1"].Text = "Next Day Air";
+            worksheet.Range["H1"].Text = "Next Day Air Early";
 
-            AddRow(worksheet, new[] { "", "005", "305", "205", "245", "135", "105" });
+            AddRow(worksheet, new[] { "", "005", "305", "205", "245", "135", "105", "105" });
             // reset A2 (which was empty string from line above) to a numeric value.
             worksheet.Range["A2"].Value2 = 4;
 

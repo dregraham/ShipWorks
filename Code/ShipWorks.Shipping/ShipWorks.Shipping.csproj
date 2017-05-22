@@ -231,18 +231,48 @@
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateExcelReaderFactory.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\IUpsLocalServiceRate.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ShipDayServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\AddressServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeliveryAreaSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\CODSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\FuelGroundSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\NdaEarlyOver150LbsSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\ReturnsSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\SaturdayPickupSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\ThirdPartyBillingSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\SaturdayDeliverySurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\VerbalConfirmationSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\FuelAirSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\IUpsSurcharge.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\DimensionServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ValueAddServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\IServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\PackageServiceFilter.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\IUpsSurchargeFactory.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\LargePackageUpsSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\DryIceSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\SignatureSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\CarbonNeutralSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\AdditionalHandlingSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\ShipperReleaseSurcharge.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Surcharges\UpsSurchargeFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsDeliveryAreaSurchargeType.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsExcelReaderFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTable.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateTableRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceUpsRateExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\SurchargeUpsRateExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateTable.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateTableRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingException.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalServiceRate.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
@@ -460,6 +490,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

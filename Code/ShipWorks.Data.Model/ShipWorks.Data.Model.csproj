@@ -190,6 +190,7 @@
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\UpsPackageEntity.cs" />
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.Interface.cs" />

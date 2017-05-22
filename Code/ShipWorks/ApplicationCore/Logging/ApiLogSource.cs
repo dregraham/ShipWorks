@@ -48,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Logging
         OrderDeskCart,
         LiveSite,
         Zenventory,
-		Fortune3,
+        Fortune3,
         OpenCart,
         CloudConversion,
 
@@ -98,19 +98,19 @@ namespace ShipWorks.ApplicationCore.Logging
         ChannelSale,
         SureDone,
         nopCommerce,
-		LimeLightCRM,
+        LimeLightCRM,
 
-		[ApiPrivateLogSource]
+        [ApiPrivateLogSource]
         InsureShip,
 
         SellerExpress,
         PowersportsSupport,
         CsCart,
         PrestaShop,
-		LoadedCommerce,
+        LoadedCommerce,
         NoMoreRack,
         StageBloc,
-		Groupon,
+        Groupon,
         RevolutionParts,
         InstaStore,
         OrderBot,
@@ -122,10 +122,12 @@ namespace ShipWorks.ApplicationCore.Logging
         [ApiPrivateLogSource]
         FedExFims,
         Odbc,
-		Amosoft,
+        Amosoft,
         SellerCloud,
         InfiPlex,
         Walmart,
-		SellerActive
+		SellerActive,
+		GeekSeller,
+        UpsLocalRating
     }
 }

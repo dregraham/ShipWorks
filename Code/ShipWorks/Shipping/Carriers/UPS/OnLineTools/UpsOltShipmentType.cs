@@ -9,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Creates the Returns control
         /// </summary>
-        public override Editing.ReturnsControlBase CreateReturnsControl()
+        public override ReturnsControlBase CreateReturnsControl()
         {
             return new UpsOltReturnsControl();
         }

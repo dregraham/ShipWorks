@@ -51,17 +51,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsApiTransitTimeClient>();
 
-            builder.RegisterType<UpsApiRateClient>();
-
-            RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
-            RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
-
             builder.RegisterType<UpsClerk>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<UpsResponseFactory>()
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
+
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
+            RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
 
             builder.RegisterType<UpsSettingsRepository>()
                 .AsSelf()

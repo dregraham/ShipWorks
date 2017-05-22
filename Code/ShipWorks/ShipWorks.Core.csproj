@@ -427,9 +427,12 @@
     <Compile Include="Actions\ActionManagerWrapper.cs" />
     <Compile Include="Actions\ActionPostponement.cs" />
     <Compile Include="Actions\ActionProcessedEvent.cs" />
+    <Compile Include="Actions\ActionProcessorFactory.cs" />
     <Compile Include="Actions\ActionQueueGateway.cs" />
     <Compile Include="Actions\ActionQueueGatewayErrorList.cs" />
+    <Compile Include="Actions\ActionQueueGatewayDefaultPrint.cs" />
     <Compile Include="Actions\ActionQueueGatewayStandard.cs" />
+    <Compile Include="Actions\ActionQueueGatewayType.cs" />
     <Compile Include="Actions\ActionQueueStatus.cs" />
     <Compile Include="Actions\ActionQueueStepStatus.cs" />
     <Compile Include="Actions\ActionProcessingContext.cs" />
@@ -441,6 +444,7 @@
     <Compile Include="Actions\ComputerActionPolicy.cs" />
     <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
+    <Compile Include="Actions\IActionProcessorFactory.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -1241,12 +1245,14 @@
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingControl.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
@@ -1704,6 +1710,12 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
@@ -10881,6 +10893,7 @@
     <None Include="Resources\sparkpay.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
+    <None Include="Resources\Stores\Icons\geekseller.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />

@@ -74,6 +74,10 @@
       <HintPath>..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Reactive.Testing, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net46\Microsoft.Reactive.Testing.dll</HintPath>
       <Private>True</Private>
@@ -172,12 +176,37 @@
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\AddressServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\DimensionServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ShipDayServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\AdditionalHandlingSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DryIceSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelAirSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\NdaEarlyOver150LbsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ReturnsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayPickupSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ThirdPartyBillingSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelGroundSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\LargePackageUpsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\CODSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayDeliverySurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SignatureSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\CarbonNeutralSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ShipperReleaseSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\UpsSurchargeFactoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\VerbalConfirmationSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
-    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepoTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateClientTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateExcelReaderFactoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepositoryTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\SurchargeUpsRateExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalServiceRateTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\UpsZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ValueAddServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapterTest.cs" />

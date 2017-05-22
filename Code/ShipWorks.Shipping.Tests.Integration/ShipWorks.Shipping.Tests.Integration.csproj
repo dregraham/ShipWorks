@@ -171,11 +171,13 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
     <Compile Include="Carriers\CarrierAccountRepositoryRegistrationTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\CompareLocalRatesToApiRatesTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsImportedRateValidatorTest.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentTypeTest.cs" />
+    <Compile Include="DatabaseFixtureWithReusableContextCollection.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,6 +192,10 @@
     <Compile Include="ShippingPanel\ShipmentViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+      <Project>{41528BDA-8C69-4CA9-B358-BC4E6A62D6F2}</Project>
+      <Name>ShipWorks.Tests.Integration.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared.Tests\Interapptive.Shared.Tests.csproj">
       <Project>{329fdd27-99c6-48d6-9205-280cfda3c735}</Project>
       <Name>Interapptive.Shared.Tests</Name>

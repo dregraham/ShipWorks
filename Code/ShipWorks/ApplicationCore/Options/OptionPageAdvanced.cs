@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
@@ -67,6 +68,8 @@ namespace ShipWorks.ApplicationCore.Options
 
             autoCreateShipments.Checked = settings.AutoCreateShipments;
 
+            useParallelActionProcessing.Checked = config.UseParallelActionQueue;
+
             SetupShipmentEditLimit(settings);
         }
 
@@ -105,6 +108,8 @@ namespace ShipWorks.ApplicationCore.Options
 
             config.AuditNewOrders = auditNewOrders.Checked;
             config.AuditDeletedOrders = auditDeletedOrders.Checked;
+
+            config.UseParallelActionQueue = useParallelActionProcessing.Checked;
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;

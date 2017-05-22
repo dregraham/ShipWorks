@@ -4223,7 +4223,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL,
-[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -5946,6 +5947,11 @@ ALTER TABLE [dbo].[UpsPackageRate] ADD CONSTRAINT [FK_UpsPackageRate_UpsPackageR
 ON DELETE CASCADE
 GO
 
+PRINT N'Creating index [IX_UpsPackageRate_WeightInPounds_Zone] on [dbo].[UpsPackageRate]'
+GO
+CREATE NONCLUSTERED INDEX [IX_UpsPackageRate_WeightInPounds_Zone] ON [dbo].[UpsPackageRate] ([WeightInPounds],[Zone]) INCLUDE ([UpsPackageRateID], [UpsRateTableID], [Service], [Rate])
+GO
+
 PRINT N'Creating [dbo].[UpsLetterRate]'
 GO
 CREATE TABLE [dbo].[UpsLetterRate](
@@ -6055,6 +6061,11 @@ PRINT N'Adding foreign keys to [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 ALTER TABLE [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ADD CONSTRAINT [FK_UpsLocalRatingDeliveryAreaSurcharge_UpsLocalRatingZoneFile] FOREIGN KEY([ZoneFileID]) REFERENCES [dbo].[UpsLocalRatingZoneFile] ([ZoneFileID])
 ON DELETE CASCADE
+GO
+
+PRINT N'Creating index [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
+GO
+CREATE NONCLUSTERED INDEX [IX_UpsLocalRatingDeliveryAreaSurcharge_DestinationZip] ON [dbo].[UpsLocalRatingDeliveryAreaSurcharge] ([DestinationZip]) INCLUDE ([DeliveryAreaSurchargeID],	[ZoneFileID], [DeliveryAreaType])
 GO
 
 PRINT N'Creating extended properties'

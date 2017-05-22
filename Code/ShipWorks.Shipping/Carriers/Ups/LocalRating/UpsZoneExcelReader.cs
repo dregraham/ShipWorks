@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Media.Animation;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -19,19 +18,24 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static readonly Regex fiveDigitZipRangeRegex = new Regex("^\\s*[0-9]{5}\\s*-\\s*[0-9]{5}\\s*$");
         private static readonly Regex threeDigitZipRangeRegex = new Regex("^\\s*[0-9]{3}\\s*-\\s*[0-9]{3}\\s*$");
         private static readonly Regex threeDigitNumberRegex = new Regex("^\\s*[0-9]{3}\\s*$");
-
-        private const string DestinationZipHeader = "Dest. ZIP";
-        private const string GroundHeader = "Ground";
-        private const string ThreeDaySelectHeader = "3 Day Select";
-        private const string SecondDayAirHeader = "2nd Day Air";
-        private const string SecondDayAirAMHeader = "2nd Day Air A.M.";
-        private const string NextDayAirSaverHeader = "Next Day Air Saver";
-        private const string NextDayAirHeader = "Next Day Air";
+        private static readonly Dictionary<string, string> ColumnHeaders = new Dictionary<string, string>
+        {
+            { "A1", "Dest. ZIP"},
+            { "B1", "Ground"},
+            { "C1", "3 Day Select"},
+            { "D1", "2nd Day Air"},
+            { "E1", "2nd Day Air A.M."},
+            { "F1", "Next Day Air Saver"},
+            { "G1", "Next Day Air"},
+            { "H1", "Next Day Air Early"}
+        }; 
 
         private const string InvalidOriginZipErrorMessage = "Invalid origin zip {0}.";
         private const string InvalidDestinationZipErrorMessage = "Worksheet {0} has an invalid destination zip value {1}.";
         private const string MissingServiceHeaderErrorMessage = "{0} is missing the required {1} header at {2}.";
         private const string InvalidZoneErrorMessage = "Invalid zone in Worksheet {0}, cell {1}. Zones must be 3 digit numbers.";
+        private const string InvalidZoneWorksheetNameErrorMessage = "The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'";
+        private const string UnknownServiceColumnErrorMessage = "Unknown service column";
 
         /// <summary>
         /// Constructor
@@ -54,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (!zipWorkSheets.Any())
             {
-                throw new UpsLocalRatingException("The zone file contains no worksheets that follow the zone worksheet naming convention of '#####-#####'");
+                throw new UpsLocalRatingException(InvalidZoneWorksheetNameErrorMessage);
             }
 
             foreach (IWorksheet worksheet in zipWorkSheets)
@@ -101,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private static void ValidateCell(IRange cell)
         {
             bool valid = cell.EntireRow.IsBlank ||
-                         cell.Value == DestinationZipHeader ||
+                         cell.Value == ColumnHeaders["A1"] ||
                          threeDigitZipRangeRegex.IsMatch(cell.Value) ||
                          threeDigitNumberRegex.IsMatch(cell.Value);
             
@@ -139,7 +143,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             int destinationZipCeiling = GetDestinationZipCeiling(row.Cells[0]);
             int destinationZipFloor = GetDestinationZipFloor(row.Cells[0]);
 
-            for (int column = 1; column <= 6; column++)
+            // -1 because we want to exclude the dest. zip column
+            for (int column = 1; column <= ColumnHeaders.Count - 1; column++)
             {
                 string cellValue = row.Cells[column].Value.Trim();
 
@@ -223,13 +228,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private static void ValidateWorksheetHeaders(IWorksheet worksheet)
         {
-            ValidateColumnHeader(DestinationZipHeader, "A1", worksheet);
-            ValidateColumnHeader(GroundHeader, "B1", worksheet);
-            ValidateColumnHeader(ThreeDaySelectHeader, "C1", worksheet);
-            ValidateColumnHeader(SecondDayAirHeader, "D1", worksheet);
-            ValidateColumnHeader(SecondDayAirAMHeader, "E1", worksheet);
-            ValidateColumnHeader(NextDayAirSaverHeader, "F1", worksheet);
-            ValidateColumnHeader(NextDayAirHeader, "G1", worksheet);
+            foreach (KeyValuePair<string, string> header in ColumnHeaders)
+            {
+                ValidateColumnHeader(header.Value, header.Key, worksheet);
+            }
         }
 
         /// <summary>
@@ -271,8 +273,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     return UpsServiceType.UpsNextDayAirSaver;
                 case 6:
                     return UpsServiceType.UpsNextDayAir;
+                case 7:
+                    return UpsServiceType.UpsNextDayAirAM;
                 default:
-                    throw new UpsLocalRatingException("Unknown service column");
+                    throw new UpsLocalRatingException(UnknownServiceColumnErrorMessage);
             }
         }
     }

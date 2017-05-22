@@ -100,6 +100,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
         FuelAir = 31,
 
         [Description("Fuel - Ground")]
-        FuelGround = 32
+        FuelGround = 32,
+
+        [Description("Saturday Pickup")]
+        SaturdayPickup = 33,
+
+        [Description("NDA Early Over 150 LBS")]
+        NdaEarlyOver150Lbs = 34
     }
 }

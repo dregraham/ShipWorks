@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
 
     <!-- Imports -->
@@ -17,7 +17,7 @@
 
     <!-- These styles are used on multiple td's so to avoid copy\paste errors they are defined once here.  We have to do this since GMail doesn't support <style> in the <head>.  -->
     <xsl:variable name="rowStyle" select="'padding: 4px 8px 4px 8px;vertical-align: top; border-top: 1px solid lightgrey;'" />
-        
+
     <html>
 
     <head>
@@ -30,16 +30,16 @@
     </head>
 
     <body style="{$pageFont}">
-        
-        <h3>Order Charges Breakdown - <xsl:value-of select="count(//Order)" /> Orders</h3>
-        
+
+        <h3 style="font-size: 1.67em; margin-top: 0;">Order Charges Breakdown - <xsl:value-of select="count(//Order)" /> Orders</h3>
+
         <xsl:variable name="total"     select="sum(//Order/Total)" />
         <xsl:variable name="lineItems" select="sum(//Order/Item/Total)" />
         <xsl:variable name="shipping"  select="sum(//Order/Charge[Type='SHIPPING']/Amount)" />
         <xsl:variable name="insurance" select="sum(//Order/Charge[Type='INSURANCE']/Amount)" />
         <xsl:variable name="tax"       select="sum(//Order/Charge[Type='TAX']/Amount)" />
-        
-        <table style="width:4in; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
+
+        <table style="width:4in; margin: 0px 0px 0px 0px; border-collapse: collapse;" cellspacing="0">
 
             <tr>
                 <td style="{$rowStyle};">Line Items:</td>

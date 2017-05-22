@@ -35,8 +35,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             if (orderToSave.IsNew)
             {
+                long pruchaseOrderId;
+                if (!long.TryParse(downloadedOrder.purchaseOrderId, out pruchaseOrderId))
+                {
+                    throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to an number");
+                }
+                orderToSave.OrderNumber = pruchaseOrderId;
+                // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
                 orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
-                orderToSave.PurchaseOrderID = downloadedOrder.purchaseOrderId;
                 orderToSave.OrderDate = downloadedOrder.orderDate;
                 orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
                 orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate;
@@ -47,6 +53,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
             else
             {
+                // Load existing charges and other detail from the database
+                orderRepository.PopulateOrderDetails(orderToSave);
                 ClearExistingCharges(orderToSave);
             }
 
@@ -61,10 +69,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Clears the existing charges.
         /// </summary>
-        private void ClearExistingCharges(WalmartOrderEntity orderToSave)
+        private void ClearExistingCharges(WalmartOrderEntity order)
         {
-            orderRepository.PopulateOrderDetails(orderToSave);
-            foreach (OrderChargeEntity charge in orderToSave.OrderCharges)
+            foreach (OrderChargeEntity charge in order.OrderCharges)
             {
                 charge.Amount = 0;
             }

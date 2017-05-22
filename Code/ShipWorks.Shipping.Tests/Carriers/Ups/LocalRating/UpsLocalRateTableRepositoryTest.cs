@@ -7,20 +7,23 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
-    public class UpsLocalRateTableRepoTest : IDisposable
+    public class UpsLocalRateTableRepositoryTest : IDisposable
     {
         readonly AutoMock mock;
         readonly UpsLocalRateTableRepository testObject;
 
-        public UpsLocalRateTableRepoTest()
+        public UpsLocalRateTableRepositoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -28,33 +31,33 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Get_ReturnsUpsAccountEntityUpsRateTable_WhenAccountEntityRateTableIsNotNull()
+        public void GetRateTable_ReturnsUpsAccountEntityUpsRateTable_WhenAccountEntityRateTableIsNotNull()
         {
             UpsRateTableEntity rateTable = new UpsRateTableEntity();
             UpsAccountEntity account = new UpsAccountEntity() { UpsRateTable = rateTable };
             
-            Assert.Equal(testObject.Get(account), rateTable);
+            Assert.Equal(testObject.GetRateTable(account), rateTable);
         }
 
         [Fact]
-        public void Get_ReturnsUpsAccountEntityUpsRateTable_WhenAccountEntityRateTableIDIsNotNull()
+        public void GetRateTable_ReturnsUpsAccountEntityUpsRateTable_WhenAccountEntityRateTableIDIsNotNull()
         {
             UpsAccountEntity account = new UpsAccountEntity() { UpsRateTable = null, UpsRateTableID = 123 };
             Mock<ISqlAdapter> adapter = mock.Mock<ISqlAdapter>();
 
             mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(adapter);
 
-            testObject.Get(account);
+            testObject.GetRateTable(account);
 
             adapter.Verify(s => s.FetchEntity(It.Is<UpsRateTableEntity>(t => t.UpsRateTableID == 123)));
         }
 
         [Fact]
-        public void Get_ReturnsNull_WhenUpsRateTableAndUpsRateTableIDAreNull()
+        public void GetRateTable_ReturnsNull_WhenUpsRateTableAndUpsRateTableIDAreNull()
         {
             UpsAccountEntity account = new UpsAccountEntity() { UpsRateTable = null, UpsRateTableID = null };
 
-            Assert.Null(testObject.Get(account));
+            Assert.Null(testObject.GetRateTable(account));
         }
 
         [Fact]
@@ -141,6 +144,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             
             Assert.Equal(file1, testObject.GetLatestZoneFile());
         }
+
+        [Fact]
+        public void GetSurcharges_GetsAccountFromAccountRepository()
+        {
+            UpsAccountEntity account = new UpsAccountEntity() {UpsRateTableID = 42};
+
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<long>(l => l == 123123))).Returns(account);
+            
+            testObject.GetSurcharges(123123);
+
+            accountRepo.Verify(r => r.GetAccount(123123));
+        }
+
+        [Fact]
+        public void GetSurcharges_ReturnsEmptySurcharges_WhenAccountHasNoRateTable()
+        {
+            UpsAccountEntity account = new UpsAccountEntity() {UpsRateTableID = 42};
+            
+            Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(a => a.GetAccount(It.Is<long>(l => l == 123123))).Returns(account);
+
+            IDictionary<UpsSurchargeType, double> result = testObject.GetSurcharges(123123);
+            Assert.Empty(result);
+        }
+        
+      
+
+       
+
+
+        
 
         public void Dispose()
         {

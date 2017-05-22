@@ -78,7 +78,8 @@ namespace ShipWorks.Tests.Core
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
                 "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant(),
-                "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant()
+                "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
             };
 
         /// <summary>
@@ -133,6 +134,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.ApplicationCore.Logging.LogActionType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Nudges.NudgeOptionActionType".ToUpperInvariant(),
                 "ShipWorks.Common.IO.Hardware.Printers.PrinterTechnology".ToUpperInvariant(),
+                "ShipWorks.Common.IO.KeyboardShortcuts.KeyboardShortcutModifiers".ToUpperInvariant(),
                 "ShipWorks.Common.Net.FileDownloadStatus".ToUpperInvariant(),
                 "ShipWorks.Common.Threading.BackgroundResultStatus".ToUpperInvariant(),
                 "ShipWorks.Common.Threading.ProgressItemStatus".ToUpperInvariant(),
@@ -140,6 +142,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Data.Administration.DetailedDatabaseSetupWizard+SetupMode".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.SimpleDatabaseSetupWizard+ElevatedPreparationType".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.SqlDatabaseStatus".ToUpperInvariant(),
+                "ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles.SqlServerEditionType".ToUpper(),
                 "ShipWorks.Data.Administration.SqlServerSetup.SqlServerInstallerPurpose".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.SqlServerSetup.WindowsInstallerInstaller+InstallerPlatformTarget".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.ConnectionMonitorStatus".ToUpperInvariant(),
@@ -173,6 +176,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.Content.Editors.ChoiceLabelUsage".ToUpperInvariant(),
                 "ShipWorks.Filters.Content.SqlGeneration.SqlGenerationScopeType".ToUpperInvariant(),
                 "ShipWorks.Filters.Controls.FilterScope".ToUpperInvariant(),
+                "ShipWorks.Filters.Content.FilterDefinitionSourceType".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
@@ -181,15 +185,19 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.Account.EndiciaAccountType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.PostalCustomsForm".ToUpperInvariant(),
+                "ShipWorks.Shipping.Carriers.Postal.Usps.GlobalPostServiceAvailability".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.Enums.UpsEmailNotificationType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Carriers.Ups.LocalRating.UpsDeliveryAreaSurchargeType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsApiResponseStatus".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsOnLineToolType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsRatingMethod".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipStatusType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Editing.Rating.RatingExceptionType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl+DisplayMode".ToUpperInvariant(),
                 "ShipWorks.Shipping.InitialShippingTabDisplay".ToUpperInvariant(),
                 "ShipWorks.Shipping.Settings.ShipmentBlankPhoneOption".ToUpperInvariant(),
                 "ShipWorks.Shipping.Settings.ShipmentTypeSettingsControl+Page".ToUpperInvariant(),
+                "ShipWorks.Shipping.UI.ShippingPanel.OpenShippingDialogType".ToUpperInvariant(),
                 "ShipWorks.Stores.ComputerDownloadAllowed".ToUpperInvariant(),
                 "ShipWorks.Stores.Content.Panels.PanelDataMode".ToUpperInvariant(),
                 "ShipWorks.Stores.InitialDownloadRestrictionType".ToUpperInvariant(),
