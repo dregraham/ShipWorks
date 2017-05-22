@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public JsonOdbcFieldMapIOFactory(Func<Type, ILog> logFactory)
         {
-            MethodConditions.EnsureArgumentIsNotNull(logFactory);
+            MethodConditions.EnsureArgumentIsNotNull(logFactory, nameof(logFactory));
             this.logFactory = logFactory;
         }
 

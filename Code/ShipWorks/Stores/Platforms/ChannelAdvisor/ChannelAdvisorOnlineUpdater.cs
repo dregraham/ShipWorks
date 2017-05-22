@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,8 +12,6 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -20,10 +20,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// </summary>
     public class ChannelAdvisorOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorOnlineUpdater));
 
-        // the store instance 
+        // the store instance
         private readonly ChannelAdvisorStoreEntity store;
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     ChannelAdvisorClient client = new ChannelAdvisorClient(store);
 
-                    client.UploadShipmentDetails((int)order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
+                    client.UploadShipmentDetails((int) order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
                 }
                 catch (ChannelAdvisorException ex)
                 {
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     }
                     else
                     {
-                        // rethrow the existing exception 
+                        // rethrow the existing exception
                         throw;
                     }
 
@@ -130,11 +130,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
                     // From CA support:
-                    // Thank you for contacting ChannelAdvisor Support. For UPS Mail Innovations, the default carrier code is UPS 
-                    // and the class code is MI. 
+                    // Thank you for contacting ChannelAdvisor Support. For UPS Mail Innovations, the default carrier code is UPS
+                    // and the class code is MI.
                     if (!string.IsNullOrWhiteSpace(track))
                     {
-                        tempTracking =  track;
+                        tempTracking = track;
                     }
                     tempCarrierCode = "UPS";
                     tempServiceClass = "MI";
@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             serviceClass = tempServiceClass;
         }
 
-                /// <summary>
+        /// <summary>
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
@@ -167,8 +167,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
-            ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
-            
+            ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
+
             if (type == ShipmentTypeCode.Amazon)
             {
                 return GetAmazonShipmentClassCode(shipment);
@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
-                    return GetPostalShipmentClassCode(shipment, store); 
+                    return GetPostalShipmentClassCode(shipment, store);
 
                 case ShipmentTypeCode.OnTrac:
                     return GetOntracShipmentClassCode(shipment);
@@ -220,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetIParcelShipmentClassCode(ShipmentEntity shipment)
         {
-            switch ((iParcelServiceType)shipment.IParcel.Service)
+            switch ((iParcelServiceType) shipment.IParcel.Service)
             {
                 case iParcelServiceType.Immediate:
                     return "Immediate";
@@ -258,13 +258,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             fedExServiceTypeClassCode.Add(FedExServiceType.StandardOvernight, "OVERNIGHT");
             fedExServiceTypeClassCode.Add(FedExServiceType.OneRateStandardOvernight, "OVERNIGHT");
-            
+
             fedExServiceTypeClassCode.Add(FedExServiceType.FedExExpressSaver, "EXPSAVER");
             fedExServiceTypeClassCode.Add(FedExServiceType.OneRateExpressSaver, "EXPSAVER");
-            
+
             fedExServiceTypeClassCode.Add(FedExServiceType.FirstFreight, "OVERNIGHTFREIGHT");
             fedExServiceTypeClassCode.Add(FedExServiceType.FedEx1DayFreight, "OVERNIGHTFREIGHT");
-            
+
             fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT");
 
             fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriority, "INTLPRIORITY");
@@ -280,9 +280,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             fedExServiceTypeClassCode.Add(FedExServiceType.SmartPost, "SmartPost");
 
-            FedExServiceType fedExServiceType = (FedExServiceType)shipment.FedEx.Service;
+            FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
 
-            if (fedExServiceTypeClassCode.ContainsKey((FedExServiceType)shipment.FedEx.Service))
+            if (fedExServiceTypeClassCode.ContainsKey((FedExServiceType) shipment.FedEx.Service))
             {
                 return fedExServiceTypeClassCode[fedExServiceType];
             }
@@ -364,7 +364,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetPostalShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
-            PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
+            PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
             switch (postalServiceType)
             {
                 case PostalServiceType.ExpressMail:
@@ -423,7 +423,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the ontrac shipment class code.
         /// </summary>
         private static string GetOntracShipmentClassCode(ShipmentEntity shipment) =>
-            EnumHelper.GetDescription((OnTracServiceType)shipment.OnTrac.Service);
+            EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
 
         /// <summary>
         /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.
@@ -444,14 +444,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 return "None";
             }
 
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.Amazon:
                     return GetAmazonCarrierName(shipment);
 
                 case ShipmentTypeCode.FedEx:
                     return "FEDEX";
-                
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
@@ -475,17 +475,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     }
                     else
                     {
-                        return "USPS"; 
+                        return "USPS";
                     }
-                
+
                 case ShipmentTypeCode.OnTrac:
                     return "OnTrac";
-					
-				case ShipmentTypeCode.iParcel:
+
+                case ShipmentTypeCode.iParcel:
                     return "i-Parcel";
 
                 case ShipmentTypeCode.Other:
-                        return shipment.Other.Carrier;
+                    return shipment.Other.Carrier;
 
                 default:
                     return "None";
@@ -499,8 +499,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <returns></returns>
         private static string GetAmazonCarrierName(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
 
             string carrierName = shipment.Amazon.CarrierName.ToUpperInvariant();
 
@@ -525,8 +525,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <returns></returns>
         private static string GetAmazonShipmentClassCode(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
 
             // Check to see if it's USPS
             string shippingServiceName = GetAmazonShipmentClassCodeUsps(shipment.Amazon.ShippingServiceName);

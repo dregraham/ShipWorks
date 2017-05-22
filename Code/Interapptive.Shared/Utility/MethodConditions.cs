@@ -20,13 +20,5 @@ namespace Interapptive.Shared.Utility
 
             return testObject;
         }
-
-        /// <summary>
-        /// Throw an ArgumentNullException if the specified object is null
-        /// </summary>
-        public static T EnsureArgumentIsNotNull<T>([Obfuscation(Exclude = true)] T testObject) where T : class
-        {
-            return EnsureArgumentIsNotNull(testObject, nameof(testObject));
-        }
     }
 }

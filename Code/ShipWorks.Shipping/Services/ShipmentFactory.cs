@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Services
         public ShipmentEntity Create(long orderId)
         {
             OrderEntity order = dataProvider.GetEntity(orderId) as OrderEntity;
-            MethodConditions.EnsureArgumentIsNotNull(order, "order");
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             return Create(order);
         }

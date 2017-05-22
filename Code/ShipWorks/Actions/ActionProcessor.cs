@@ -5,10 +5,14 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Autofac;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
@@ -22,13 +26,14 @@ namespace ShipWorks.Actions
     /// </summary>
     public class ActionProcessor
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ActionProcessor));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ActionProcessor));
+        private readonly TimeSpan maxWaitForPostponed = TimeSpan.FromSeconds(15);
 
         // Makes sure the database doesn't change while running actions
-        static ApplicationBusyToken busyToken;
-        static object runningLock = new object();
+        private static ApplicationBusyToken busyToken;
+        private static object runningLock = new object();
 
-        ActionQueueGateway gateway;
+        private ActionQueueGateway gateway;
 
         /// <summary>
         /// Raised each time an action is attempted to be processed, regardless of the outcome
@@ -47,6 +52,11 @@ namespace ShipWorks.Actions
 
             this.gateway = gateway;
         }
+
+        /// <summary>
+        /// The type of gateway this action processor will be using.
+        /// </summary>
+        public ActionQueueGatewayType GatewayType => gateway.GatewayType;
 
         /// <summary>
         /// Run any tasks that have been queued for running.  This method does not wait for the work to complete, the work is put on a background thread.
@@ -80,33 +90,30 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Worker thread for running action tasks
         /// </summary>
-        private static void WorkerThread(object state)
+        private static async void WorkerThread(object state)
         {
             try
             {
-                bool anyWorkToDo = false;
-
-                SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.WorkerThread cleaning up queues.");
-                sqlAdapterRetry.ExecuteWithRetry(() =>
-                    {
-                        using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
-                        {
-                            anyWorkToDo = AnyWorkToDo(sqlConnection);
-                            if (anyWorkToDo)
-                            {
-                                CleanupQueues(sqlConnection);
-                            }
-                        }
-                    });
-
-                if (!anyWorkToDo)
+                using (new LoggedStopwatch(log, "ActionRunTime"))
                 {
-                    return;
-                }
+                    List<Task> actionProcessorTasks = new List<Task>();
 
-                log.InfoFormat("Starting action processor");
-                ActionProcessor processor = new ActionProcessor(new ActionQueueGatewayStandard());
-                processor.ProcessQueues();
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        foreach (ActionProcessor actionProcessor in lifetimeScope.Resolve<IActionProcessorFactory>().CreateStandard())
+                        {
+                            actionProcessorTasks.Add(Task.Run(() =>
+                            {
+                                if (actionProcessor.AnyWorkToDo())
+                                {
+                                    actionProcessor.ProcessQueues();
+                                }
+                            }));
+                        }
+
+                        await Task.WhenAll(actionProcessorTasks);
+                    }
+                }
             }
             finally
             {
@@ -119,32 +126,27 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Checks the queue to see if there's any work to do.
+        /// See if there is any work to do, and if so, cleanup any abandoned queues
         /// </summary>
-        private static bool AnyWorkToDo(DbConnection sqlConnection)
+        /// <returns>True if there is work to do</returns>
+        private bool AnyWorkToDo()
         {
-            // First see if there are any to process
-            using (DbCommand cmd = DbCommandProvider.Create(sqlConnection))
+            bool anyWorkToDo = false;
+
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.WorkerThread cleaning up queues.");
+            sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                // Only process the scheduled actions based on the action manager configuration
-                cmd.CommandText = "SELECT TOP(1) ActionQueueID FROM ActionQueue WHERE ActionQueueType = @ExecutionModeActionQueueType";
-                cmd.AddParameterWithValue("@ExecutionModeActionQueueType", (int) ActionManager.ExecutionModeActionQueueType);
-
-                // If the UI isn't running somehwere, and we are the background process, go ahead and do UI actions too since it's not open
-                if (!Program.ExecutionMode.IsUISupported && !UserInterfaceExecutionMode.IsProcessRunning)
+                using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
                 {
-                    // Additionally process UI actions if the UI is not running
-                    cmd.CommandText += " OR ActionQueueType = @UIActionQueueType";
-                    cmd.AddParameterWithValue("@UIActionQueueType", (int) ActionQueueType.UserInterface);
+                    anyWorkToDo = gateway.AnyWorkToDo(sqlConnection);
+                    if (anyWorkToDo)
+                    {
+                        CleanupQueues(sqlConnection);
+                    }
                 }
+            });
 
-                if (DbCommandProvider.ExecuteScalar(cmd) == null)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return anyWorkToDo;
         }
 
         /// <summary>
@@ -207,6 +209,8 @@ namespace ShipWorks.Actions
                     // Make's sure we keep getting the next page of queues during a single iteration.
                     long lastQueueID = 0;
 
+                    log.Debug($"Processing Queues for {EnumHelper.GetDescription(GatewayType)}");
+
                     // Fetch all queued actions
                     List<long> queueList = GetNextQueuePage(lastQueueID);
 
@@ -258,9 +262,8 @@ namespace ShipWorks.Actions
                             log.InfoFormat("Waiting for more actions to fill in postponed setups.");
 
                             Stopwatch timer = Stopwatch.StartNew();
-                            TimeSpan maxWait = TimeSpan.FromSeconds(15);
 
-                            while (timer.Elapsed < maxWait && queueList.Count == 0)
+                            while (timer.Elapsed < maxWaitForPostponed && queueList.Count == 0)
                             {
                                 Thread.Sleep(TimeSpan.FromSeconds(2));
                                 queueList = GetNextQueuePage(lastQueueID);

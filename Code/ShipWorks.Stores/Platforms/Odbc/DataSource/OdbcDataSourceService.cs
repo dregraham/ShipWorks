@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         public IOdbcDataSource GetImportDataSource(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             IOdbcDataSource dataSource = dataSourceFactory();
             dataSource.Restore(store.ImportConnectionString);
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// </summary>
         public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, "Odbc Store");
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload)
             {

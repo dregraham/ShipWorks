@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Store", "Walmart")]
     public class WalmartDownloaderTest : IDisposable
     {
         private readonly AutoMock mock;
@@ -46,20 +47,20 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                     mock.Override<IWalmartWebClient>();
                     mock.Override<IDateTimeProvider>();
                 });
-            
+
             mock = context.Mock;
             mockProgressReporter = mock.Mock<IProgressReporter>();
 
             store = Create.Store<WalmartStoreEntity>()
                            .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                            .Set(x => x.StoreName, "Walmart Store")
-                           .Set(x=>x.StoreTypeCode = StoreTypeCode.Walmart)
+                           .Set(x => x.StoreTypeCode = StoreTypeCode.Walmart)
                            .Save();
 
             Create.Entity<StatusPresetEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.StatusTarget = 0)
-                .Set(x=>x.StatusText = "status")
+                .Set(x => x.StatusText = "status")
                 .Set(x => x.IsDefault = true)
                 .Save();
 
@@ -81,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
                 .Save().DownloadID;
-            
+
             mock.Mock<IWalmartWebClient>()
                 .Setup(c => c.GetOrders(store, It.IsAny<DateTime>()))
                 .Returns(() => firstBatch);
@@ -103,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         {
             testObject.Download(mockProgressReporter.Object, 0, dbConnection);
 
-            mockProgressReporter.VerifySet(reporter=>reporter.Detail = "No orders to download.", Times.Once);
+            mockProgressReporter.VerifySet(reporter => reporter.Detail = "No orders to download.", Times.Once);
         }
 
         [Fact]
@@ -115,9 +116,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Returns(utcNow);
 
             testObject.Download(mockProgressReporter.Object, 0, dbConnection);
-            
+
             mock.Mock<IWalmartWebClient>()
-                .Verify(client=>client.GetOrders(store, utcNow.AddDays(-5)), Times.Once);
+                .Verify(client => client.GetOrders(store, utcNow.AddDays(-5)), Times.Once);
         }
 
         [Fact]
@@ -137,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             Assert.Equal("5", createdOrder.CustomerOrderID);
             Assert.Equal("6", createdOrder.PurchaseOrderID);
             Assert.Equal(6, createdOrder.OrderNumber);
-            mock.Mock<IWalmartWebClient>().Verify(c=>c.GetOrders(It.IsAny<WalmartStoreEntity>(), It.IsAny<string>()), Times.Never);
+            mock.Mock<IWalmartWebClient>().Verify(c => c.GetOrders(It.IsAny<WalmartStoreEntity>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]

@@ -36,10 +36,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static string AdjustedCountryCode(this ShipmentEntity shipment, string addressPrefix)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, "shipment");
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new PersonAdapter(shipment, addressPrefix)
-                .AdjustedCountryCode((ShipmentTypeCode)shipment.ShipmentType);
+                .AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static string AdjustedCountryCode(this IAddressAdapter person, ShipmentTypeCode shipmentType)
         {
-            MethodConditions.EnsureArgumentIsNotNull(person, "person");
+            MethodConditions.EnsureArgumentIsNotNull(person, nameof(person));
 
             IAddressAdapter copiedPerson = CreateAddressCopy(person);
 
@@ -55,8 +55,8 @@ namespace ShipWorks.Shipping
             copiedPerson.StateProvCode = copiedPerson.StateProvCode.ToUpperInvariant();
 
             IEnumerable<Func<IAddressAdapter, string>> methods;
-            return adjustmentMethods.Value.TryGetValue(shipmentType, out methods) ? 
-                ApplyAdjustments(methods, copiedPerson) : 
+            return adjustmentMethods.Value.TryGetValue(shipmentType, out methods) ?
+                ApplyAdjustments(methods, copiedPerson) :
                 copiedPerson.CountryCode;
         }
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static string ReplaceUnitedStatesWithInternationalTerritoryCountryCode(IAddressAdapter person)
         {
-            return person.CountryCode == "US" && person.IsUSInternationalTerritory() ? 
+            return person.CountryCode == "US" && person.IsUSInternationalTerritory() ?
                 person.StateProvCode : person.CountryCode;
         }
 

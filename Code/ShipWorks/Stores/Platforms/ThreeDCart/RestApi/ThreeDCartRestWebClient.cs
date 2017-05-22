@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         public ThreeDCartRestWebClient(ThreeDCartStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, "store");
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             secureUrl = store.StoreUrl;
             token = store.ApiUserKey;

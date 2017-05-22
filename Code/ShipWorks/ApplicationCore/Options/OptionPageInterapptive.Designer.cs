@@ -66,6 +66,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelInsurance = new System.Windows.Forms.Label();
             this.useInsureShipTestServer = new System.Windows.Forms.CheckBox();
             this.sears = new System.Windows.Forms.CheckBox();
+            this.reinstallTemplates = new System.Windows.Forms.Button();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -322,7 +323,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // purgeLabels
             // 
-            this.purgeLabels.Location = new System.Drawing.Point(154, 707);
+            this.purgeLabels.Location = new System.Drawing.Point(154, 708);
             this.purgeLabels.Name = "purgeLabels";
             this.purgeLabels.Size = new System.Drawing.Size(118, 23);
             this.purgeLabels.TabIndex = 25;
@@ -454,11 +455,22 @@ namespace ShipWorks.ApplicationCore.Options
             this.sears.Text = "Sears";
             this.sears.UseVisualStyleBackColor = true;
             // 
+            // reinstallTemplates
+            // 
+            this.reinstallTemplates.Location = new System.Drawing.Point(154, 737);
+            this.reinstallTemplates.Name = "reinstallTemplates";
+            this.reinstallTemplates.Size = new System.Drawing.Size(119, 23);
+            this.reinstallTemplates.TabIndex = 38;
+            this.reinstallTemplates.Text = "Reinstall Templates";
+            this.reinstallTemplates.UseVisualStyleBackColor = true;
+            this.reinstallTemplates.Click += new System.EventHandler(this.OnReinstallTemplates);
+            // 
             // OptionPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.reinstallTemplates);
             this.Controls.Add(this.sears);
             this.Controls.Add(this.useInsureShipTestServer);
             this.Controls.Add(this.labelInsurance);
@@ -546,5 +558,6 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Label labelInsurance;
         private System.Windows.Forms.CheckBox useInsureShipTestServer;
         private System.Windows.Forms.CheckBox sears;
+        private System.Windows.Forms.Button reinstallTemplates;
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Drawing.Printing;
-using Interapptive.Shared.UI;
-using ShipWorks.Templates.Printing;
-using ShipWorks.Common.IO.Hardware.Printers;
-using System.Reflection;
 using Interapptive.Shared;
+using Interapptive.Shared.UI;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Templates.Printing;
 
 namespace ShipWorks.Templates.Media
 {
@@ -381,7 +381,30 @@ namespace ShipWorks.Templates.Media
             panelSource.Visible = showPaperSource;
             panelCalibrate.Visible = showPrinterCalibration;
 
-            Height = Controls.OfType<Panel>().Where(p => p.Visible).Select(p => p.Bottom).DefaultIfEmpty().Max();
+            Height = Controls.OfType<Panel>().Where(PanelShouldBeVisible).Select(p => p.Bottom).DefaultIfEmpty().Max();
+        }
+
+        /// <summary>
+        /// Get whether the given panel should be visible
+        /// </summary>
+        /// <remarks>
+        /// We can't just rely on the Visible property because it will be false if the container is false. And unfortunately,
+        /// this is the scenario when updating the printer display when changing the template type to label since we're
+        /// on the general screen which means this control is not visible.
+        /// </remarks>
+        private bool PanelShouldBeVisible(Panel panel)
+        {
+            if (panel == panelSource)
+            {
+                return showPaperSource;
+            }
+
+            if (panel == panelCalibrate)
+            {
+                return showPrinterCalibration;
+            }
+
+            return true;
         }
 
         /// <summary>

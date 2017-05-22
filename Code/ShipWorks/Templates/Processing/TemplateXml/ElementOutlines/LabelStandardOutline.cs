@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.IO;
 using ShipWorks.ApplicationCore;
@@ -65,10 +62,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
                     // Start out assuming the label as-is is the orientation we need
                     string labelPath = resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(imageFormat));
-                    
+
                     try
                     {
-                        labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                        labelImage = TemplateLabelUtility.LoadImageFromDisk(Path.Combine(DataPath.CurrentResources, labelPath));
                     }
                     catch (OutOfMemoryException)
                     {
@@ -76,7 +73,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                         // and try to load again. If it fails again, just let it bubble up as this is a 
                         // legitimate exception
                         resource.RegenerateAlternateFile(TemplateLabelUtility.GetFileExtension(imageFormat));
-                        labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                        labelImage = TemplateLabelUtility.LoadImageFromDisk(Path.Combine(DataPath.CurrentResources, labelPath));
                     }
 
                     // We need one orientation, but the original label is the other
@@ -87,7 +84,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
                         // We don't need the tall image, just the wide
                         labelImage.Dispose();
-                        labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                        labelImage = TemplateLabelUtility.LoadImageFromDisk(Path.Combine(DataPath.CurrentResources, labelPath));
                     }
 
                     imageInfo = new LabelImageInfo();

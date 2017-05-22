@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public override StoreDownloader CreateDownloader()
         {
             OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore);
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
             return downloaderFactory(odbcStore);
         }
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore);
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
             if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {

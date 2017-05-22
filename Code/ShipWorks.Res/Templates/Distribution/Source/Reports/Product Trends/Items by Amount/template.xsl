@@ -1,12 +1,12 @@
 ﻿<!DOCTYPE xsl:stylesheet [
-    
+
     <!-- This is the lookup key value for the grouping table -->
     <!ENTITY itemKey "sw:GetOrderItemKeyValue(., $optionSpecific)">
-    
+
     <!-- This is the collection of items in a single grouping -->
     <!ENTITY itemGroup "key($keyTable, &itemKey;)" >
 ]>
-    
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
 
     <!-- Imports -->
@@ -33,13 +33,13 @@
             <xsl:value-of select="'items-non-specific'" />
         </xsl:if>
     </xsl:variable>
-    
+
     <!-- Start of template -->
     <xsl:template match="/"><xsl:apply-templates /></xsl:template>
     <xsl:template match="ShipWorks">
-        
+
     <!-- Width defined by the template PageSettings -->
-    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, ' in')" />
+    <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
 
     <!-- Default font.  Specified as a variable since GMail and Outlook behave differently. -->
     <xsl:variable name="pageFont" select="'font-family: Arial; font-size: 8pt;'" />
@@ -48,7 +48,7 @@
     <xsl:variable name="orderDetailHeaderStyle" select="'border: 1px solid dimgray; background-color: #F3F3F3; font-weight: bold; padding: 3px;'" />
     <xsl:variable name="orderDetailAttributeStyle" select="'color: #808080; padding: 0px 8px 2px 2px;'" />
     <xsl:variable name="orderChargeStyle" select="'white-space: nowrap; text-align: right; padding: 1px 8px 3px 16px;'" />
-        
+
     <html>
 
     <head>
@@ -61,11 +61,13 @@
     </head>
 
     <body style="{$pageFont}">
-        
-        <h3>Items by Amount - <xsl:value-of select="count(Customer/Order)" /> Orders</h3>
-        
-        <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
-        
+
+        <h3 style="font-size: 1.67em; margin-top: 0;">
+          Items by Amount - <xsl:value-of select="count(Customer/Order)" /> Orders
+        </h3>
+
+        <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
+
             <tr>
                 <xsl:if test="$showThumbnails">
                     <td style="width: 50px; {$orderDetailHeaderStyle};">Image</td>
@@ -82,42 +84,42 @@
                 <xsl:sort select="sum(&itemGroup;/Total)" order="descending" data-type="number" />
                 <xsl:call-template name="outputItemGroup" />
             </xsl:for-each>
-                            
+
             <!--
                 Totals
             -->
             <tr>
                 <xsl:variable name="rowStyle" select="'padding: 4px 8px 4px 8px; border-top: 1px solid rgb(160, 160, 160);'" />
-                
+
                 <xsl:if test="$showThumbnails"><td style="{$rowStyle}"></td></xsl:if>
                 <td style="{$rowStyle}"></td>
                 <td style="{$rowStyle}" align="right"><b>Totals:</b></td>
                 <td style="{$rowStyle}" align="right"><xsl:value-of select="sum(Customer/Order/Item/Quantity)" /></td>
                 <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number(sum(Customer/Order/Item/Total), '#,##0.00')" /></td>
             </tr>
-            
+
          </table>
-        
+
     </body>
 
     </html>
 
     </xsl:template>
-    
+
     <!--                                                            -->
     <!-- Outputs totals for a single item                           -->
     <!--                                                            -->
     <xsl:template name="outputItemGroup">
         <xsl:variable name="groupQuantity" select="sum(&itemGroup;/Quantity)" />
         <xsl:variable name="groupTotal" select="sum(&itemGroup;/Total)" />
-    
+
         <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
         <xsl:variable name="orderDetailContentStyle">
             padding: 4px 8px 4px 8px;
             vertical-align: top;
         <xsl:if test="position() != 1">border-top: 1px solid lightgrey;</xsl:if>
-        </xsl:variable>    
-    
+        </xsl:variable>
+
         <tr>
             <xsl:if test="$showThumbnails">
                 <td style="{$orderDetailContentStyle};">
@@ -126,7 +128,7 @@
                     </xsl:if>
                 </td>
             </xsl:if>
-            
+
             <td style="{$orderDetailContentStyle}; white-space: nowrap;"><xsl:value-of select="Code" /></td>
             <td style="{$orderDetailContentStyle};"><xsl:value-of select="Name" />
                 <xsl:if test="$optionSpecific">
@@ -143,8 +145,8 @@
             <td style="{$orderDetailContentStyle};" align="right"><xsl:value-of select="$groupQuantity" /></td>
             <td style="{$orderDetailContentStyle};" align="right">$<xsl:value-of select="format-number($groupTotal, '#,##0.00')" /></td>
         </tr>
-    
-    </xsl:template>    
-    
-    
+
+    </xsl:template>
+
+
 </xsl:stylesheet>

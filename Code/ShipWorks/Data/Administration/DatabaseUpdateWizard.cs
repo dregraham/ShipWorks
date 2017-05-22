@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Administration
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpdateWizard));
-        
+
         // Version of the database installed
         Version installed;
 
@@ -668,7 +668,7 @@ namespace ShipWorks.Data.Administration
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // Bring the upgrading message up and dislabe and the browsing buttons
+            // Bring the upgrading message up and disable and the browsing buttons
             panelUpgradingDatabase.Visible = true;
             panelUpgradingDatabase.BringToFront();
             NextEnabled = false;
@@ -698,7 +698,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Method meant to be called from an asycn invoker to update the database in the background
+        /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
         private void AsyncUpdateDatabase(IProgressProvider progressProvider)
         {

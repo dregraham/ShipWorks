@@ -4,6 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -82,6 +83,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -128,6 +132,64 @@
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
+      <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.Designer.cs">
+      <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.Designer.cs">
+      <DependentUpon>BigCommerceAllStoreSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.Designer.cs">
+      <DependentUpon>BigCommerceDownloadCriteriaControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceLegacyAccountSettings.xaml.cs">
+      <DependentUpon>BigCommerceLegacyAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceOAuthAccountSettings.xaml.cs">
+      <DependentUpon>BigCommerceOAuthAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.Designer.cs">
+      <DependentUpon>BigCommerceStoreSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateEditorFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.Designer.cs">
+      <DependentUpon>BigCommerceOrderUpdateTaskEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.Designer.cs">
+      <DependentUpon>BigCommerceAccountPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.Designer.cs">
+      <DependentUpon>BigCommerceOnlineUpdateActionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
+      <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -349,6 +411,30 @@
     <Compile Include="StoreModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.resx">
+      <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.resx">
+      <DependentUpon>BigCommerceAllStoreSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.resx">
+      <DependentUpon>BigCommerceDownloadCriteriaControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceStoreSettingsControl.resx">
+      <DependentUpon>BigCommerceStoreSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.resx">
+      <DependentUpon>BigCommerceOrderUpdateTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.resx">
+      <DependentUpon>BigCommerceAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.resx">
+      <DependentUpon>BigCommerceOnlineUpdateActionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
+      <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.resx">
       <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -461,6 +547,18 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\BigCommerce\BigCommerceLegacyAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\BigCommerce\BigCommerceOAuthAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Platforms\Magento\MagentoAccountSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

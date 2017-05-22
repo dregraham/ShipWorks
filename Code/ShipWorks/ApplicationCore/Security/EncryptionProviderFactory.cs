@@ -78,5 +78,14 @@ namespace ShipWorks.ApplicationCore.Security
             ICipherKey cipherKey = cipherKeyFactory[CipherContext.Walmart];
             return new AesEncryptionProvider(cipherKey);
         }
+
+        /// <summary>
+        /// Creates the BigCommerce encryption provider
+        /// </summary>
+        public IEncryptionProvider CreateBigCommerceEncryptionProvider()
+        {
+            ICipherKey cipherKey = cipherKeyFactory[CipherContext.License];
+            return new AesEncryptionProvider(cipherKey);
+        }
     }
 }
