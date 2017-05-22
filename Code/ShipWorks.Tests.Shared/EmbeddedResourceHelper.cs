@@ -10,6 +10,26 @@ namespace ShipWorks.Tests.Shared
     public static class EmbeddedResourceHelper
     {
         /// <summary>
+        /// Get a string from the resource at the path relative to the assembly namespace
+        /// </summary>
+        public static string GetEmbeddedResourceString(this Assembly assembly, string path)
+        {
+            string resourcePath = assembly.GetName().Name + "." + path;
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            {
+                if (stream == null)
+                {
+                    throw new InvalidOperationException($"Error getting resource {resourcePath}");
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the embedded resource string.
         /// </summary>
         public static string GetEmbeddedResourceString(string embeddedResourceName)
@@ -42,7 +62,7 @@ namespace ShipWorks.Tests.Shared
             {
                 throw new InvalidOperationException("Error getting the embedded resource");
             }
-            
+
             return stream;
         }
     }

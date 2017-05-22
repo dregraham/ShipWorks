@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         public OrderItemEntity(OrderEntity order)
             : this()
         {
-            MethodConditions.EnsureArgumentIsNotNull(order);
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             ((IEntity2) order).SetRelatedEntity(this, "OrderItems");
 

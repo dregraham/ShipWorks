@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <param name="shipmentTypeCode"></param>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>        
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     .Select(entry => new KeyValuePair<string, UpsServiceType>(entry.Value, (UpsServiceType) entry.Key)).ToList();
             }
 
-            // Make it visible if any of them have saturday dates
+            // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
 
             // Show COD only if all have it
@@ -513,7 +513,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
@@ -671,7 +671,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Update the description of the section basedon the configured options
+        /// Update the description of the section based on the configured options
         /// </summary>
         private void UpdateSectionDescription()
         {
@@ -757,7 +757,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Changing whether COD is selectecd
+        /// Changing whether COD is selected
         /// </summary>
         void OnChangeCodEnabled(object sender, EventArgs e)
         {
@@ -783,7 +783,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Update the displayed availability of the saturday delivery option
+        /// Update the displayed availability of the Saturday delivery option
         /// </summary>
         private void UpdateSaturdayAvailability()
         {
@@ -805,7 +805,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Changing the state of the saturday delivery flag
+        /// Changing the state of the Saturday delivery flag
         /// </summary>
         private void OnSaturdayDeliveryChanged(object sender, EventArgs e)
         {
@@ -933,6 +933,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             UpdateBillingSectionDisplay();
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>

@@ -52,6 +52,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
+        // List of property names to exclude when checking PropertyChangeStream
+        private readonly HashSet<string> PropertyChangedStreamFieldsToIgnore = new HashSet<string>
+        {
+            nameof(AllowEditing),
+            nameof(ShipmentType),
+            nameof(IsLoading),
+            nameof(BestRateShipmentViewModel.RatesLoaded),
+            nameof(DomesticInternationalText)
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShippingPanelViewModel"/> class.
         /// </summary>
@@ -136,7 +146,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Expose a stream of property changes
         /// </summary>
         public virtual IObservable<string> PropertyChangeStream => handler.Where(x => !internalFields.Contains(x));
-
+        
         /// <summary>
         /// Gets the shipment from the current adapter
         /// </summary>
@@ -326,7 +336,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IsLoadingShipment = false;
 
             shipmentChangedSubscription = PropertyChangeStream
-                .Where(x => x != nameof(IsLoading) && x != nameof(BestRateShipmentViewModel.RatesLoaded) && x != nameof(DomesticInternationalText))
+                .Where(x => !PropertyChangedStreamFieldsToIgnore.Contains(x))
                 .Merge(ShipmentViewModel.PropertyChangeStream)
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))

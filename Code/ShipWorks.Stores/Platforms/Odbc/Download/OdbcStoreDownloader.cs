@@ -1,8 +1,5 @@
-﻿using Interapptive.Shared.Business;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
@@ -82,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, "OdbcStore");
+            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
             
             if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {

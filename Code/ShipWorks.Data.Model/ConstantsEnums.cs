@@ -900,6 +900,14 @@ namespace ShipWorks.Data.Model
 		WeightUnitOfMeasure,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>BigCommerceAuthentication. </summary>
+		BigCommerceAuthentication,
+		///<summary>OauthClientId. </summary>
+		OauthClientId,
+		///<summary>OauthToken. </summary>
+		OauthToken,
+		///<summary>Identifier. </summary>
+		Identifier,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9422,6 +9430,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargeCountryCode,
 		///<summary>UspsPackageID. </summary>
 		UspsPackageID,
+		///<summary>CustomsDescription. </summary>
+		CustomsDescription,
 		/// <summary></summary>
 		AmountOfFields
 	}

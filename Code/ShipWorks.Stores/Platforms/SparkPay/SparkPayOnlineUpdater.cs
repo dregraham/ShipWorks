@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (!shipment.Order.IsManual)
             {

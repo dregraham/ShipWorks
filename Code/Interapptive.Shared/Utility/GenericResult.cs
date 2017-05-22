@@ -44,7 +44,7 @@ namespace Interapptive.Shared.Utility
     /// <remarks>
     /// Used to return an object or message
     /// </remarks>
-    public struct GenericResult<T>
+    public struct GenericResult<T> : IResult
     {
         /// <summary>
         /// Constructor

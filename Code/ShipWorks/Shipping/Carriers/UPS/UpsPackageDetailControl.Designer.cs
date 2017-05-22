@@ -140,6 +140,7 @@
             this.dryIceDetails.Size = new System.Drawing.Size(351, 75);
             this.dryIceDetails.State = false;
             this.dryIceDetails.TabIndex = 1;
+            this.dryIceDetails.RateCriteriaChanged += new System.EventHandler(this.OnPackageDetailsChanged);
             // 
             // UpsPackageDetailControl
             // 

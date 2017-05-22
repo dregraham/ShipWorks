@@ -44,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceRegulationSet);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceWeight);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceIsForMedicalUse);
                 ratingField.PackageFields.Add(UpsPackageFields.AdditionalHandlingEnabled);
 

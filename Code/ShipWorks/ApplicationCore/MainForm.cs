@@ -851,7 +851,7 @@ namespace ShipWorks
                     .Union(ShippingSettings.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error("Error collecting ShipWorks telemetry data.", ex);
                 return values;
@@ -2721,8 +2721,9 @@ namespace ShipWorks
             dockableWindowOrderFilters.Open();
             orderFilterTree.Focus();
 
-            // Ensure the customer grid is active
+            // Ensure the order grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(customer));
         }
 

@@ -1,0 +1,3 @@
+<typeImports>
+    <typeImport typeName="Interapptive.Shared.Enums.BigCommerceAuthenticationType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
+</typeImports> 
