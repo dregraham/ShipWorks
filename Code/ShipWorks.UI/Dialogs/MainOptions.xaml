@@ -42,7 +42,7 @@
                        FontSize="16"
                        FontWeight="Normal"
                        TextWrapping="Wrap">
-                We can get all your stores and shipping accounts set up right now. Or, if you're ready to start now, we can always get those added later.
+                You can get all of your stores and shipping accounts set up right now.  Or, if you’re ready to start using ShipWorks, you can easily add those later.
         </TextBlock>
 
         <Button Grid.Column="0"
