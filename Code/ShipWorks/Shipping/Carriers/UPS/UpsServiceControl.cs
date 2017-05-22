@@ -933,6 +933,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             UpdateBillingSectionDisplay();
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>

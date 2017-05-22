@@ -654,6 +654,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.shipperRelease.Size = new System.Drawing.Size(15, 14);
             this.shipperRelease.TabIndex = 9;
             this.shipperRelease.UseVisualStyleBackColor = false;
+            this.shipperRelease.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // shipperReleaseLabel
             // 

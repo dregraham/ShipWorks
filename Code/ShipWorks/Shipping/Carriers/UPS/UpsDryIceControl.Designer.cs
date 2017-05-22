@@ -68,6 +68,7 @@
             this.medicalUse.TabIndex = 2;
             this.medicalUse.Text = "Medical Use";
             this.medicalUse.UseVisualStyleBackColor = true;
+            this.medicalUse.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelDryIce
             // 
@@ -124,6 +125,7 @@
             this.weight.Size = new System.Drawing.Size(218, 21);
             this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
+            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // UpsDryIceControl
             // 
