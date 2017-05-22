@@ -84,9 +84,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             base.RefreshContent();
 
-            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes
-                    .Where(c => !ExcludedShipmentTypes.Contains(c.ShipmentTypeCode)),
-                typeCode => !ShippingSettings.Fetch().BestRateExcludedTypes.Contains(typeCode));
+            IEnumerable<ShipmentType> availableBestRateShipmentTypes = ShipmentTypeManager.ShipmentTypes
+                .Where(c => !ExcludedShipmentTypes.Contains(c.ShipmentTypeCode));
+
+            panelProviders.LoadProviders(availableBestRateShipmentTypes, IsBestRateExcludedType);
+        }
+
+        /// <summary>
+        /// Determines whether ShipmentTypeCode has been excluded in shipping settings.
+        /// </summary>
+        private static bool IsBestRateExcludedType(ShipmentTypeCode typeCode)
+        {
+            return !ShippingSettings.Fetch().BestRateExcludedTypes.Contains(typeCode);
         }
     }
 }
