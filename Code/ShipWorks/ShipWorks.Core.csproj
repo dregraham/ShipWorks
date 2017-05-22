@@ -293,9 +293,6 @@
       <HintPath>..\..\Components\Rebex.Sftp.dll</HintPath>
       <Aliases>rebex2015</Aliases>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\Components\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SandDock.dll</HintPath>
@@ -990,6 +987,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_04_05_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_12_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_09_03_00.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlAdapter.cs" />
     <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />
@@ -1303,6 +1301,7 @@
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
+    <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />
@@ -1688,7 +1687,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3325,64 +3324,7 @@
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.Designer.cs">
       <DependentUpon>AmazonMwsDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.Designer.cs">
-      <DependentUpon>BigCommerceDownloadCriteriaControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceMaxIncompleteOrdersReachedException.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceStoreType.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.Designer.cs">
-      <DependentUpon>BigCommerceAllStoreSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceDigitalItemCondition.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventDateCondition.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventNameCondition.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\Enums\BigCommerceOnlineOrderStatus.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\Enums\BigCommerceProductType.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\Enums\BigCommerceWebClientApiCall.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClientEndpoints.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClientRequestThrottle.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClientRequestThrottledException.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClientThrottleWaitCancelException.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceAddress.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceAddShipment.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceBillingAddress.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceConfigurableField.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceCoupon.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceCoupons.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceGetOrderCountResponse.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceImage.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceItem.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceOrder.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceApiOrderStatus.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceProduct.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceProductDiscount.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceProductImage.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceProductOption.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceProducts.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceShipment.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceShippingAddresses.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\DTO\BigCommerceUpdateOrderStatusRequest.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleQuotaDefinition.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceStoreSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceStoreSettingsControl.Designer.cs">
-      <DependentUpon>BigCommerceStoreSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
-      <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4278,42 +4220,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.Designer.cs">
       <DependentUpon>SellerVantageAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTask.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.Designer.cs">
-      <DependentUpon>BigCommerceOrderUpdateTaskEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceShipmentUploadTask.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceAccountSettingsControl.Designer.cs">
-      <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceConstants.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceDownloader.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceException.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceOnlineUpdater.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClient.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\BigCommerceWebClientOrderSearchCriteria.cs" />
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.Designer.cs">
-      <DependentUpon>BigCommerceAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.Designer.cs">
-      <DependentUpon>BigCommerceOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorHelper.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorLegacyClient.cs" />
@@ -8255,30 +8161,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsDownloadCriteriaPage.resx">
       <DependentUpon>AmazonMwsDownloadCriteriaPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\BigCommerceAccountSettingsControl.resx">
-      <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\BigCommerceDownloadCriteriaControl.resx">
-      <DependentUpon>BigCommerceDownloadCriteriaControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\BigCommerceAllStoreSettingsControl.resx">
-      <DependentUpon>BigCommerceAllStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.resx">
-      <DependentUpon>BigCommerceOrderUpdateTaskEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\BigCommerceStoreSettingsControl.resx">
-      <DependentUpon>BigCommerceStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceAccountPage.resx">
-      <DependentUpon>BigCommerceAccountPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceOnlineUpdateActionControl.resx">
-      <DependentUpon>BigCommerceOnlineUpdateActionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
-      <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.resx">
       <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>

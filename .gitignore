@@ -192,3 +192,4 @@ Build/ShipWorks*.*.*.*
 *GhostDoc.xml
 /NDepend/NDependOut
 /Installer/InnoSetup.iss
+test.bat

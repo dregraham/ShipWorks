@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            MethodConditions.EnsureArgumentIsNotNull(downloadDetail, "downloadDetail");
+            MethodConditions.EnsureArgumentIsNotNull(downloadDetail, nameof(downloadDetail));
 
             downloadDetail.ExtraStringData1 = yahooOrderID;
         }

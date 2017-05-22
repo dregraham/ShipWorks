@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <exception cref="ShipWorksOdbcException">ShipWorks was unable to read the ODBC Map.</exception>
         public JsonOdbcFieldMapReader(string serializedMap, ILog log)
         {
-            MethodConditions.EnsureArgumentIsNotNull(serializedMap);
+            MethodConditions.EnsureArgumentIsNotNull(serializedMap, nameof(serializedMap));
 
             this.log = log;
 

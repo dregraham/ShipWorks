@@ -242,7 +242,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public void Load(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             LoadColumnSource(store);
             LoadMap(store);
@@ -405,7 +405,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public void Save(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             IOdbcFieldMap map = CreateMap();
             try

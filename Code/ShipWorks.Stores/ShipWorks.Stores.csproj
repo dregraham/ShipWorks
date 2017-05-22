@@ -72,9 +72,21 @@
       <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -86,6 +98,9 @@
     </Reference>
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
@@ -116,6 +131,10 @@
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -127,6 +146,7 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Communication\DownloadStartingPoint.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
@@ -134,7 +154,72 @@
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersisitenceStrategy.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceConnectionVerifier.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceIdentifier.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticator.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersisitenceStrategy.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceConstants.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceDownloader.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceMaxIncompleteOrdersReachedException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientEndpoints.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceOrderSearchCriteriaFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceWebClientOrderSearchCriteria.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottle.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientRequestThrottledException.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceWebClientThrottleWaitCancelException.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTask.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceShipmentUploadTask.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Actions\IBigCommerceOrderUpdateEditorFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceDigitalItemCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventDateCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\CoreExtensions\Filters\OrderItems\BigCommerceEventNameCondition.cs" />
+    <Compile Include="Platforms\BigCommerce\Downloading\IBigCommerceOrderSearchCriteriaFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddress.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceAddShipment.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceApiOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceBillingAddress.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceConfigurableField.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceCoupon.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceCoupons.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceGetOrderCountResponse.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceImage.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceItem.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceOrder.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProduct.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductDiscount.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductImage.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProductOption.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceProducts.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceShipment.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceShippingAddresses.cs" />
+    <Compile Include="Platforms\BigCommerce\DTO\BigCommerceUpdateOrderStatusRequest.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceOnlineOrderStatus.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceProductType.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientApiCall.cs" />
+    <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
+    <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAuthenticationPersistenceStrategy.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceRestClientFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
+    <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />

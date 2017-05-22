@@ -38,8 +38,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
         /// </remarks>
         public void Load(IOdbcFieldMap map, OrderEntity order, IEnumerable<OdbcRecord> records)
         {
-            MethodConditions.EnsureArgumentIsNotNull(map, "map");
-            MethodConditions.EnsureArgumentIsNotNull(order, "order");
+            MethodConditions.EnsureArgumentIsNotNull(map, nameof(map));
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             // Load the first record into the map
             map.CopyToEntity(order);

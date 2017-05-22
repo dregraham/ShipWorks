@@ -952,7 +952,7 @@ namespace ShipWorks.Data.Grid.Paging
                     // Raise the event, which will trigger stuff
                     base.OnSelectionChanged(e);
 
-                    log.DebugFormat("SELECTION CHNAGED {0}", sw.Elapsed.TotalSeconds);
+                    log.DebugFormat("SELECTION CHANGED {0}", sw.Elapsed.TotalSeconds);
 
                     Update();
                 }

@@ -29,8 +29,8 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public void Encrypt(Stream sourceStream, Stream outputStream)
         {
-            MethodConditions.EnsureArgumentIsNotNull(sourceStream);
-            MethodConditions.EnsureArgumentIsNotNull(outputStream);
+            MethodConditions.EnsureArgumentIsNotNull(sourceStream, nameof(sourceStream));
+            MethodConditions.EnsureArgumentIsNotNull(outputStream, nameof(outputStream));
 
             //Set Rijndael symmetric encryption algorithm
             using (RijndaelManaged rijndaelManaged = GetRijndaelManaged())
@@ -50,8 +50,8 @@ namespace Interapptive.Shared.Security
         /// </summary>
         public void Decrypt(Stream sourceStream, Stream outputStream)
         {
-            MethodConditions.EnsureArgumentIsNotNull(sourceStream);
-            MethodConditions.EnsureArgumentIsNotNull(outputStream);
+            MethodConditions.EnsureArgumentIsNotNull(sourceStream, nameof(sourceStream));
+            MethodConditions.EnsureArgumentIsNotNull(outputStream, nameof(outputStream));
 
             //Set Rijndael symmetric encryption algorithm
             using (RijndaelManaged rijndaelManaged = GetRijndaelManaged())
@@ -94,8 +94,8 @@ namespace Interapptive.Shared.Security
             //"What it does is repeatedly hash the user password along with the salt." High iteration counts.
             Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(cipherKey.Key, cipherKey.InitializationVector, 50000);
 
-            rijndaelManaged.Key = key.GetBytes(rijndaelManaged.KeySize/8);
-            rijndaelManaged.IV = key.GetBytes(rijndaelManaged.BlockSize/8);
+            rijndaelManaged.Key = key.GetBytes(rijndaelManaged.KeySize / 8);
+            rijndaelManaged.IV = key.GetBytes(rijndaelManaged.BlockSize / 8);
 
             return key;
         }

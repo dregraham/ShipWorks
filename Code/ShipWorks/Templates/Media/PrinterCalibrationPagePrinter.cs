@@ -192,7 +192,6 @@ namespace ShipWorks.Templates.Media
         /// <summary>
         /// Generate the html that will output the centered cross
         /// </summary>
-        [NDependIgnoreLongMethod]
         private string GenerateCalibrateHtml(double pageWidth, double pageHeight)
         {
             StringBuilder sb = new StringBuilder();
@@ -208,38 +207,26 @@ namespace ShipWorks.Templates.Media
             decimal yStart = yMiddle - 1m;
 
             // Add the main x in the middle
-            AppendHtmlLine(sb, xMiddle, yStart, xMiddle, yMiddle + 1m, "B");
-            AppendHtmlLine(sb, xStart, yMiddle, xMiddle + 1m, yMiddle, "A");
+            AppendHtmlLine(sb, new LineLocation(xMiddle, yStart, xMiddle, yMiddle + 1m), "B");
+            AppendHtmlLine(sb, new LineLocation(xStart, yMiddle, xMiddle + 1m, yMiddle), "A");
 
             // Do all the lines on the x axis
-            for (decimal x = -.9m; x <= .9m; x += .1m)
-            {
-                if (x != 0)
-                {
-                    decimal height;
-                    string label;
-
-                    if ((Math.Abs(x * 10) % 2) == 0)
-                    {
-                        height = .1m;
-                        label = ((int) (x * 10)).ToString();
-                    }
-                    else
-                    {
-                        height = .05m;
-                        label = "";
-                    }
-
-                    if (x == .2m)
-                    {
-                        label = "";
-                    }
-
-                    AppendHtmlLine(sb, xMiddle + x, yMiddle - height, xMiddle + x, yMiddle + height, label);
-                }
-            }
+            ProcessXaxis(sb, xMiddle, yMiddle);
 
             // Do all the lines on the y axis
+            ProcessYaxis(sb, xMiddle, yMiddle);
+
+            sb.Append("</body>");
+            sb.Append("</html>");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Add lines for the X-axis
+        /// </summary>
+        private void ProcessYaxis(StringBuilder sb, decimal xMiddle, decimal yMiddle)
+        {
             for (decimal y = -.9m; y <= .9m; y += .1m)
             {
                 if (y != 0)
@@ -263,24 +250,51 @@ namespace ShipWorks.Templates.Media
                         label = "";
                     }
 
-                    AppendHtmlLine(sb, xMiddle - width, yMiddle + y, xMiddle + width, yMiddle + y, label);
+                    AppendHtmlLine(sb, new LineLocation(xMiddle - width, yMiddle + y, xMiddle + width, yMiddle + y), label);
                 }
             }
+        }
 
-            sb.Append("</body>");
-            sb.Append("</html>");
+        /// <summary>
+        /// Add lines for the X-axis
+        /// </summary>
+        private void ProcessXaxis(StringBuilder sb, decimal xMiddle, decimal yMiddle)
+        {
+            for (decimal x = -.9m; x <= .9m; x += .1m)
+            {
+                if (x != 0)
+                {
+                    decimal height;
+                    string label;
 
-            return sb.ToString();
+                    if ((Math.Abs(x * 10) % 2) == 0)
+                    {
+                        height = .1m;
+                        label = ((int) (x * 10)).ToString();
+                    }
+                    else
+                    {
+                        height = .05m;
+                        label = "";
+                    }
+
+                    if (x == .2m)
+                    {
+                        label = "";
+                    }
+
+                    AppendHtmlLine(sb, new LineLocation(xMiddle + x, yMiddle - height, xMiddle + x, yMiddle + height), label);
+                }
+            }
         }
 
         /// <summary>
         /// Append an HTML line via an absolte position div
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        private void AppendHtmlLine(StringBuilder sb, decimal xStart, decimal yStart, decimal xStop, decimal yStop, string label)
+        private void AppendHtmlLine(StringBuilder sb, LineLocation lineLocation, string label)
         {
-            decimal width = xStop - xStart;
-            decimal height = yStop - yStart;
+            decimal width = lineLocation.Xstop - lineLocation.Xstart;
+            decimal height = lineLocation.Ystop - lineLocation.Ystart;
 
             decimal length = width > 0 ? width : height;
             string lengthSide = width > 0 ? "width" : "height";
@@ -293,14 +307,14 @@ namespace ShipWorks.Templates.Media
                             border-{4}: 1px solid black;'>
                     &nbsp;
                 </div>",
-                xStart, yStart,
+                lineLocation.Xstart, lineLocation.Ystart,
                 lengthSide, length,
                 borderSide);
 
             if (!string.IsNullOrEmpty(label))
             {
-                decimal labelX = (width > 0) ? xStart + width + .10m : xStart - .03m;
-                decimal labelY = (width > 0) ? yStart - .06m : yStart + height + .05m;
+                decimal labelX = (width > 0) ? lineLocation.Xstart + width + .10m : lineLocation.Xstart - .03m;
+                decimal labelY = (width > 0) ? lineLocation.Ystart - .06m : lineLocation.Ystart + height + .05m;
 
                 sb.AppendFormat(@"
                 <div style='position: absolute; padding: 0; margin: 0; 
@@ -310,6 +324,43 @@ namespace ShipWorks.Templates.Media
                 </div>",
                     labelX, labelY, label);
             }
+        }
+
+        /// <summary>
+        /// Struct for holding X and Y start/stop
+        /// </summary>
+        private struct LineLocation
+        {
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            public LineLocation(decimal xStart, decimal yStart, decimal xStop, decimal yStop)
+            {
+                Xstart = xStart;
+                Ystart = yStart;
+                Xstop = xStop;
+                Ystop = yStop;
+            }
+
+            /// <summary>
+            ///  X Start
+            /// </summary>
+            public decimal Xstart { get; }
+
+            /// <summary>
+            ///  Y Start
+            /// </summary>
+            public decimal Ystart { get; }
+
+            /// <summary>
+            ///  X Stop
+            /// </summary>
+            public decimal Xstop { get; }
+
+            /// <summary>
+            ///  Y Stop
+            /// </summary>
+            public decimal Ystop { get; }
         }
     }
 }

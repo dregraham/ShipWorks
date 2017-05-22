@@ -37,12 +37,13 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
         {
-            var input = new ProcessShipmentState(0, new ShippingException(), new CancellationTokenSource());
+            var input = new ProcessShipmentState(0, new ShipmentEntity(), new ShippingException(), new CancellationTokenSource());
 
             var result = testObject.PrepareShipment(input);
 
             Assert.False(result.Success);
             Assert.Equal(input.Exception, result.Exception);
+            Assert.Equal(input.OriginalShipment, result.OriginalShipment);
         }
 
         [Fact]
@@ -115,7 +116,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void PrepareShipment_ReturnsException_WhenValidateLicenseReturnsError()
         {
-            StoreEntity store = new StoreEntity() { Enabled = true};
+            StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(store, defaultInput.LicenseCheckCache))

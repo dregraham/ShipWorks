@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Metrics;
+using RestSharp;
 using ShipWorks.Stores.Services;
 
 namespace ShipWorks.Stores.UI
@@ -34,6 +35,9 @@ namespace ShipWorks.Stores.UI
 
             builder.RegisterType<OrderChargeCalculator>()
                 .As<IOrderChargeCalculator>();
+
+            builder.RegisterType<RestClient>()
+                .As<IRestClient>();
 
             builder.RegisterType<StoreSettingsTrackedDurationEvent>()
                 .As<IStoreSettingsTrackedDurationEvent>();
