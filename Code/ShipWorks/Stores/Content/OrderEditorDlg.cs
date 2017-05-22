@@ -32,20 +32,20 @@ namespace ShipWorks.Stores.Content
     [NDependIgnoreLongTypes]
     public partial class OrderEditorDlg : Form
     {
-        long orderID;
+        private readonly long orderID;
 
-        OrderEntity order;
-        CustomerEntity customer;
+        private OrderEntity order;
+        private CustomerEntity customer;
 
-        Guid itemsLayoutID = new Guid("{1FCDA8BC-40A4-449c-A1A2-83F737840DEF}");
-        Guid chargesLayoutID = new Guid("{3A128D19-98CF-4d22-96D0-4F3432E56079}");
-        Guid notesLayoutID = new Guid("{E512C8D1-F7A2-4a2c-9339-0ABB5D2DEFA4}");
-        Guid shipmentLayoutID = new Guid("{BBA5C927-F1C1-428d-8FED-1610C53C5B3B}");
-        Guid emailLayoutID = new Guid("{3BB5B706-9C72-4bc3-83F8-75AE44587997}");
-        Guid printLayoutID = new Guid("{EB59D1CE-6AD7-47ef-8DC9-0FB7AA844D30}");
-        Guid auditLayoutID = new Guid("{7279A34F-1607-4e4c-8D50-4502C05F4817}");
+        private readonly Guid itemsLayoutID = new Guid("{1FCDA8BC-40A4-449c-A1A2-83F737840DEF}");
+        private readonly Guid chargesLayoutID = new Guid("{3A128D19-98CF-4d22-96D0-4F3432E56079}");
+        private readonly Guid notesLayoutID = new Guid("{E512C8D1-F7A2-4a2c-9339-0ABB5D2DEFA4}");
+        private readonly Guid shipmentLayoutID = new Guid("{BBA5C927-F1C1-428d-8FED-1610C53C5B3B}");
+        private readonly Guid emailLayoutID = new Guid("{3BB5B706-9C72-4bc3-83F8-75AE44587997}");
+        private readonly Guid printLayoutID = new Guid("{EB59D1CE-6AD7-47ef-8DC9-0FB7AA844D30}");
+        private readonly Guid auditLayoutID = new Guid("{7279A34F-1607-4e4c-8D50-4502C05F4817}");
 
-        static List<long> openOrders = new List<long>();
+        private static readonly List<long> openOrders = new List<long>();
 
         /// <summary>
         /// Constructor
@@ -87,33 +87,24 @@ namespace ShipWorks.Stores.Content
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            invoiceControl.Initialize(itemsLayoutID, chargesLayoutID);
-
-            emailControl.Initialize(emailLayoutID, GridColumnDefinitionSet.EmailOutboundPanel, (GridColumnLayout layout) =>
-            {
-                layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
-                layout.AllColumns[EmailOutboundFields.ContextID].Position = 1;
-            });
-
-            printResultControl.Initialize(printLayoutID, GridColumnDefinitionSet.PrintResult, (GridColumnLayout layout) =>
-            {
-
-            });
-
-            shipmentsControl.Initialize(shipmentLayoutID, GridColumnDefinitionSet.ShipmentPanel, (GridColumnLayout layout) =>
-            {
-                layout.AllColumns[ShipmentFields.ShipDate].Visible = true;
-            });
-
-            noteControl.Initialize(notesLayoutID, GridColumnDefinitionSet.Notes, null);
-
-            noteControl.LoadState();
-            shipmentsControl.LoadState();
-            emailControl.LoadState();
-            printResultControl.LoadState();
+            InitializeControls();
 
             openOrders.Add(orderID);
 
+            CheckPermissions();
+
+            Activated += OnFormActivated;
+            OnFormActivated(this, EventArgs.Empty);
+
+            // Need to send this so that the shipments panel in the history tab has the loaded order
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { order.OrderID }));
+        }
+
+        /// <summary>
+        /// Check the user permissions and hide controls accordingly
+        /// </summary>
+        private void CheckPermissions()
+        {
             // See if the user can edit the order as a whole
             if (!UserSession.Security.HasPermission(PermissionType.OrdersModify, orderID))
             {
@@ -134,7 +125,7 @@ namespace ShipWorks.Stores.Content
                 linkStatus.Font = Font;
                 linkStatus.ForeColor = SystemColors.WindowText;
                 linkStatus.Cursor = Cursors.Default;
-                linkStatus.Click -= this.OnLinkLocalStatus;
+                linkStatus.Click -= OnLinkLocalStatus;
             }
 
             if (!UserSession.Security.HasPermission(PermissionType.ManageUsers))
@@ -149,9 +140,32 @@ namespace ShipWorks.Stores.Content
                 // Lock the control into displaying stuff for this order
                 auditControl.LockOrderSearchCriteria(orderID);
             }
+        }
 
-            Activated += this.OnFormActivated;
-            OnFormActivated(this, EventArgs.Empty);
+        /// <summary>
+        /// Initializes the controls contained within this dialog
+        /// </summary>
+        private void InitializeControls()
+        {
+            invoiceControl.Initialize(itemsLayoutID, chargesLayoutID);
+
+            emailControl.Initialize(emailLayoutID, GridColumnDefinitionSet.EmailOutboundPanel, layout =>
+            {
+                layout.AllColumns[EmailOutboundFields.ContextID].Visible = false;
+                layout.AllColumns[EmailOutboundFields.ContextID].Position = 1;
+            });
+
+            printResultControl.Initialize(printLayoutID, GridColumnDefinitionSet.PrintResult, layout => { });
+
+            shipmentsControl.Initialize(shipmentLayoutID, GridColumnDefinitionSet.ShipmentPanel,
+                layout => { layout.AllColumns[ShipmentFields.ShipDate].Visible = true; });
+
+            noteControl.Initialize(notesLayoutID, GridColumnDefinitionSet.Notes, null);
+
+            noteControl.LoadState();
+            shipmentsControl.LoadState();
+            emailControl.LoadState();
+            printResultControl.LoadState();
         }
 
         /// <summary>
@@ -164,7 +178,7 @@ namespace ShipWorks.Stores.Content
                 panelHeader.Visible = false;
                 optionControl.Visible = false;
 
-                Activated -= new EventHandler(OnFormActivated);
+                Activated -= OnFormActivated;
 
                 BeginInvoke((MethodInvoker) delegate
                 {
@@ -271,7 +285,7 @@ namespace ShipWorks.Stores.Content
             MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            command.ExecuteAsync(this, new long[] { orderID }, OnAsyncSetStatusCompleted);
+            command.ExecuteAsync(this, new[] { orderID }, OnAsyncSetStatusCompleted);
         }
 
         /// <summary>

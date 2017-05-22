@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         public override void ApplyTo(OrderEntity order)
         {
             WalmartOrderEntity walmartOrder = order as WalmartOrderEntity;
-            MethodConditions.EnsureArgumentIsNotNull(walmartOrder);
+            MethodConditions.EnsureArgumentIsNotNull(walmartOrder, nameof(walmartOrder));
 
             walmartOrder.PurchaseOrderID = purchaseOrderId;
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            MethodConditions.EnsureArgumentIsNotNull(downloadDetail);
+            MethodConditions.EnsureArgumentIsNotNull(downloadDetail, nameof(downloadDetail));
 
             downloadDetail.ExtraStringData1 = purchaseOrderId;
         }

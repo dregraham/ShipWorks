@@ -1,6 +1,4 @@
-﻿using ShipWorks.Stores.Platforms.BigCommerce;
-
-namespace ShipWorks.Stores.Platforms.ThreeDCart
+﻿namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     partial class ThreeDCartStoreSettingsControl
     {

@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public void Load(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             
             LoadColumnSource(store);
             LoadMap(store.UploadMap);
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public void Save(OdbcStoreEntity store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store);
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             IOdbcFieldMap map = CreateMap();
 

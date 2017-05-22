@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shared
         /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
         /// </summary>
         /// <typeparam name="TInput">The type of input.</typeparam>
-        /// <typeparam name="TOutput">The type the func will return.</typeparam>
+        /// <typeparam name="TOutput">The type the funct will return.</typeparam>
         /// <param name="mock">The mock.</param>
         /// <param name="functionOutput">The actual output of the function.</param>
         /// <remarks>
@@ -227,5 +227,17 @@ namespace ShipWorks.Tests.Shared
                 action(item);
             }
         }
+
+        /// <summary>
+        /// Get a keyed mock creator for the given service
+        /// </summary>
+        public static IKeyedMockCreator<T> CreateKeyedMockOf<T>(this AutoMock mock) where T : class =>
+            new KeyedMockCreator<T>(mock);
+
+        /// <summary>
+        /// Get a mock from a given factory method
+        /// </summary>
+        public static IMockFactory<T> FromFactory<T>(this AutoMock mock) where T : class =>
+            new MockFactory<T>(mock);
     }
 }

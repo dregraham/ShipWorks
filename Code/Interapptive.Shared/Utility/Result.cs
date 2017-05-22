@@ -1,9 +1,11 @@
-﻿namespace Interapptive.Shared.Utility
+﻿using System;
+
+namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Represents the result of an operation
     /// </summary>
-    public struct Result
+    public struct Result : IResult
     {
         /// <summary>
         /// Constructor
@@ -39,5 +41,10 @@
         /// Get an error result
         /// </summary>
         public static Result FromError(string message) => new Result(false, message);
+
+        /// <summary>
+        /// Get an error result
+        /// </summary>
+        public static Result FromError(Exception ex) => new Result(false, ex.Message);
     }
 }

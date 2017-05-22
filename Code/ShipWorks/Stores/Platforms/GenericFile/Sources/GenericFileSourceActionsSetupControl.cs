@@ -78,28 +78,29 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
 
             if (successAction == GenericFileSuccessAction.Move)
             {
-                if (!CheckValidFolder(successFolder.Text, "sucess move folder"))
+                if (!CheckValidFolder(successFolder.Text, "folder into which files should be moved after successfully importing all orders"))
                 {
                     return false;
                 }
 
                 if (sourceFolder == successFolder.Text)
                 {
-                    MessageHelper.ShowError(this, "The success move folder must be different than the import folder.");
+                    MessageHelper.ShowError(this, "The success move folder must be different than the import folder");
                     return false;
                 }
             }
 
             if (errorAction == GenericFileErrorAction.Move)
             {
-                if (!CheckValidFolder(errorFolder.Text, "error move folder"))
+                //if (!CheckValidFolder(errorFolder.Text, "error move folder"))
+                if (!CheckValidFolder(errorFolder.Text, "folder into which files should be moved after an error occurs while importing orders"))
                 {
                     return false;
                 }
 
                 if (sourceFolder == errorFolder.Text)
                 {
-                    MessageHelper.ShowError(this, "The error move folder must be different than the import folder.");
+                    MessageHelper.ShowError(this, "The error move folder must be different than the import folder");
                     return false;
                 }
             }

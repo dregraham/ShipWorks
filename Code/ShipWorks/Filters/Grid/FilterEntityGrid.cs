@@ -125,7 +125,7 @@ namespace ShipWorks.Filters.Grid
         }
 
         /// <summary>
-        /// Syncronize the grid to display the most up-to-date records for the current ActiveFilterNode
+        /// Synchronize the grid to display the most up-to-date records for the current ActiveFilterNode
         /// </summary>
         public override void UpdateGridRows()
         {
@@ -134,7 +134,7 @@ namespace ShipWorks.Filters.Grid
 
         /// <summary>
         /// Update the grid to display the most up-to-date records for the specified filter node.  Returns false if there were no changes
-        /// found that requiered an update.
+        /// found that required an update.
         /// </summary>
         [NDependIgnoreLongMethod]
         private bool UpdateFiltering(bool forceReload)
@@ -175,7 +175,7 @@ namespace ShipWorks.Filters.Grid
                 }
             }
 
-            // If the node or definition didnt change, see if the contents of the current definition changed
+            // If the node or definition didn't change, see if the contents of the current definition changed
             if (!definitionChanged && !forceReload)
             {
                 if (lastKnownCount.CountVersion == currentCount.CountVersion)
@@ -223,7 +223,7 @@ namespace ShipWorks.Filters.Grid
             if (definitionChanged)
             {
                 // Clearing the virtual selection could put some rows in the to-be-removed list - but since we are selecting a new definition, we are starting from 
-                // scratch, and those shouldnt be there
+                // scratch, and those shouldn't be there
                 ClearVirtualSelectionAll(false);
 
                 // Open a new gateway with the updated count

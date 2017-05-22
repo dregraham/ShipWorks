@@ -170,6 +170,10 @@ namespace ShipWorks.UI.Controls
                         SetCurrentWeight(value);
                         ClearError();
                     }
+                    else
+                    {
+                        SetCurrentWeight(value.Clamp(RangeMin, RangeMax));
+                    }
 
                     FormatWeightText();
                 }
@@ -412,6 +416,8 @@ namespace ShipWorks.UI.Controls
 
             if (parsedWeight.HasValue)
             {
+                parsedWeight = parsedWeight.Value.Clamp(RangeMin, RangeMax);
+
                 SetCurrentWeight(parsedWeight.Value);
                 ClearError();
             }

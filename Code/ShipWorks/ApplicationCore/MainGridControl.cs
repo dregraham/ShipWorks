@@ -824,9 +824,7 @@ namespace ShipWorks.ApplicationCore
                 }
             }
         }
-
-
-
+        
         /// <summary>
         /// Raise the search query changed event
         /// </summary>

@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void ShowPostProcessingMessage(IEnumerable<ShipmentEntity> processedShipments)
         {
-            MethodConditions.EnsureArgumentIsNotNull(processedShipments);
+            MethodConditions.EnsureArgumentIsNotNull(processedShipments, nameof(processedShipments));
 
             bool hasGlobalPost = processedShipments.Any(IsProcessedGlobalPost);
 

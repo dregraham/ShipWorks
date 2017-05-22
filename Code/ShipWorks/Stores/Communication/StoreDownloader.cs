@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
@@ -14,6 +15,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -53,6 +55,9 @@ namespace ShipWorks.Stores.Communication
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected StoreDownloader([Obfuscation(Exclude = true)] StoreEntity store, StoreType storeType)
         {
             if (store == null)
@@ -104,7 +109,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// The progress reporting interface used to report progress and check cancelation.
+        /// The progress reporting interface used to report progress and check cancellation.
         /// </summary>
         public IProgressReporter Progress
         {
@@ -169,32 +174,10 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual DateTime? GetOnlineLastModifiedStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OnlineLastModified,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
-
-                log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
-
-                // If we don't have a max, but do have a days-back policy, use the days back
-                if (dateTime == null && store.InitialDownloadDays != null)
-                {
-                    // Also add on 2 hours just to make sure we are in range
-                    dateTime = DateTime.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OnlineLastModified) adjusted by download policy = {0:u}", dateTime);
-                }
-
-                // Dates pulled from the database are always UTC
-                if (dateTime != null && dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-                }
-
-                return dateTime;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return startingPoint.OnlineLastModified(store);
             }
         }
 
@@ -204,32 +187,10 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected DateTime? GetOrderDateStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderDate,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
-
-                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
-
-                log.InfoFormat("MAX(OrderDate) = {0:u}", dateTime);
-
-                // If we don't have a max, but do have a days-back policy, use the days back
-                if (dateTime == null && store.InitialDownloadDays != null)
-                {
-                    // Also add on 2 hours just to make sure we are in range
-                    dateTime = DateTime.UtcNow.AddDays(-store.InitialDownloadDays.Value).AddHours(2);
-                    log.InfoFormat("MAX(OrderDate) adjusted by download policy = {0:u}", dateTime);
-                }
-
-                // Dates pulled from the database are always UTC
-                if (dateTime != null && dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
-                }
-
-                return dateTime;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return startingPoint.OrderDate(store);
             }
         }
 
@@ -255,9 +216,9 @@ namespace ShipWorks.Stores.Communication
                     {
                         // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
                         // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
-                        // to backoff by one to include it.
+                        // to back off by one to include it.
                         orderNumber = Math.Max(0, store.InitialDownloadOrder.Value - 1);
-                        log.InfoFormat("Max(OrderNumber) - applying initial download polcy.");
+                        log.InfoFormat("Max(OrderNumber) - applying initial download policy.");
                     }
                     else
                     {
@@ -276,7 +237,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
+        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
         /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
         protected long GetNextOrderNumber()
@@ -390,7 +351,7 @@ namespace ShipWorks.Stores.Communication
             OrderItemEntity item = storeType.CreateOrderItemInstance();
             item.Order = order;
 
-            // Downloaded items are assumed not manua
+            // Downloaded items are assumed not manual
             item.IsManual = false;
 
             // Initialize the rest of the fields
@@ -452,7 +413,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.
         /// </summary>
-        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate,
+        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime? noteDate,
             NoteVisibility visibility, bool ignoreDuplicateText = false)
         {
             if (string.IsNullOrWhiteSpace(noteText))
@@ -499,7 +460,7 @@ namespace ShipWorks.Stores.Communication
             NoteEntity note = new NoteEntity();
             note.Order = order;
             note.UserID = null;
-            note.Edited = noteDate;
+            note.Edited = noteDate ?? order.OrderDate;
             note.Source = (int) NoteSource.Downloaded;
             note.Visibility = (int) visibility;
             note.Text = noteText;
@@ -551,7 +512,7 @@ namespace ShipWorks.Stores.Communication
                 ApplyAddressCasing(order);
             }
 
-            // if the downloaders specified they Parsed the name, also put the name in the unparsed field
+            // if the downloaders specified they parsed the name, also put the name in the unparsed field
             PersonAdapter ship = new PersonAdapter(order, "Ship");
             PersonAdapter bill = new PersonAdapter(order, "Bill");
 

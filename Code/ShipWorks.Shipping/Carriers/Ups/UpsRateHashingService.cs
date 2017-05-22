@@ -30,7 +30,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.AddShipmentField(UpsShipmentFields.DeliveryConfirmation);
                 ratingField.AddShipmentField(UpsShipmentFields.ReturnService);
                 ratingField.AddShipmentField(UpsShipmentFields.CarbonNeutral);
-
+                ratingField.AddShipmentField(UpsShipmentFields.ShipperRelease);
+                ratingField.AddShipmentField(UpsShipmentFields.PayorType);
+                
                 ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
                 ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
                 ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
@@ -42,8 +44,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceRegulationSet);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceWeight);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
                 ratingField.PackageFields.Add(UpsPackageFields.DryIceIsForMedicalUse);
+                ratingField.PackageFields.Add(UpsPackageFields.AdditionalHandlingEnabled);
 
                 return ratingField;
             }

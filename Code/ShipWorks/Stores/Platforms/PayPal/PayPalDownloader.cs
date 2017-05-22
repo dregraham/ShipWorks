@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using ShipWorks.Stores.Content;
-using System.Data.SqlTypes;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         private PayPalStoreEntity PayPalStore
         {
-            get { return (PayPalStoreEntity)Store; }
+            get { return (PayPalStoreEntity) Store; }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                         startDate = PayPalStore.LastTransactionDate;
                     }
 
-                    // Add a second so we don't download hte last ones over and over
+                    // Add a second so we don't download the last ones over and over
                     startDate = startDate.Value.AddSeconds(1);
                 }
 
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
-        /// Download PayPal transactiosn that occur in the given date range
+        /// Download PayPal transactions that occur in the given date range
         /// </summary>
         private void DownloadTransactions(PayPalWebClient client, DateTime rangeStart, DateTime rangeEnd)
         {
@@ -142,12 +142,12 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 }
                 catch (PayPalException ex)
                 {
-                    // PayPal doesn't document the transaction types we can't get the detials on, so we're just ignoring
+                    // PayPal doesn't document the transaction types we can't get the details on, so we're just ignoring
                     // transactions that cause these errors
-                    if (ex.Errors.Any( e => e.Code == "10007" || e.Code == "10004"))
+                    if (ex.Errors.Any(e => e.Code == "10007" || e.Code == "10004"))
                     {
                         // just ignoring these errors
-                        log.ErrorFormat("Caught and ignoring exception while loading PayPal transaction '{0}'." , transaction.TransactionID);
+                        log.ErrorFormat("Caught and ignoring exception while loading PayPal transaction '{0}'.", transaction.TransactionID);
 
                         // mark that we saw this transaction
                         if (transaction.Timestamp > PayPalStore.LastTransactionDate)
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     }
                     else if (ex.Errors.Any(e => e.Code == "10001"))
                     {
-                        // known paypal issue where retrying often results in success
+                        // known PayPal issue where retrying often results in success
                         log.Error("Internal Error reported by PayPal.");
                         throw new DownloadException("PayPal reported an Internal Error. Wait a moment and try to download again.", ex);
                     }
@@ -183,14 +183,15 @@ namespace ShipWorks.Stores.Platforms.PayPal
             log.InfoFormat("Preparing to load PayPal transaction '{0}'.", transactionID);
 
             PaymentTransactionType transaction = GetOrderTransaction(client, transactionID);
+            DateTime? paymentDate = transaction.PaymentInfo.PaymentDate?.ToUniversalTime();
 
             if (ShouldImportTransaction(transaction))
             {
-                PayPalOrderEntity order = (PayPalOrderEntity)InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
+                PayPalOrderEntity order = (PayPalOrderEntity) InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
 
                 order.TransactionID = transaction.PaymentInfo.TransactionID;
                 order.PayPalFee = GetAmount(transaction.PaymentInfo.FeeAmount);
-                order.PaymentStatus = (int)PayPalUtility.GetPaymentStatus(transaction.PaymentInfo.PaymentStatus);
+                order.PaymentStatus = (int) PayPalUtility.GetPaymentStatus(transaction.PaymentInfo.PaymentStatus);
 
                 // Load Address info
                 LoadAddressInfo(order, transaction);
@@ -205,10 +206,10 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
 
                 // update the last valid transaction date field
-                if (PayPalStore.LastValidTransactionDate < transaction.PaymentInfo.PaymentDate.ToUniversalTime())
+                if (paymentDate.HasValue && PayPalStore.LastValidTransactionDate < paymentDate)
                 {
-                    log.InfoFormat("Updating the store's LastValidTransactionDate to '{0}'.", transaction.PaymentInfo.PaymentDate.ToUniversalTime());
-                    PayPalStore.LastValidTransactionDate = transaction.PaymentInfo.PaymentDate.ToUniversalTime();
+                    log.InfoFormat("Updating the store's LastValidTransactionDate to '{0}'.", paymentDate);
+                    PayPalStore.LastValidTransactionDate = paymentDate.Value;
                 }
             }
             else
@@ -217,10 +218,10 @@ namespace ShipWorks.Stores.Platforms.PayPal
             }
 
             // update the paypallasttransactiondate field
-            if (PayPalStore.LastTransactionDate < transaction.PaymentInfo.PaymentDate.ToUniversalTime())
+            if (paymentDate.HasValue && PayPalStore.LastTransactionDate < paymentDate)
             {
-                log.InfoFormat("Updating the store's LastTransactionDate to '{0}'.", transaction.PaymentInfo.PaymentDate.ToUniversalTime());
-                PayPalStore.LastTransactionDate = transaction.PaymentInfo.PaymentDate.ToUniversalTime();
+                log.InfoFormat("Updating the store's LastTransactionDate to '{0}'.", paymentDate);
+                PayPalStore.LastTransactionDate = paymentDate.Value;
             }
 
             // save the store if changes were made
@@ -232,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         private void LoadNewOrder(PayPalOrderEntity order, PaymentTransactionType transaction)
         {
-            order.OrderDate = transaction.PaymentInfo.PaymentDate.ToUniversalTime();
+            order.OrderDate = GetOrderDate(transaction.PaymentInfo.PaymentDate);
             order.RequestedShipping = transaction.PaymentInfo.ShippingMethod ?? "";
 
             // no customer ids
@@ -253,12 +254,30 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
+        /// Get the date we should use for the current order
+        /// </summary>
+        /// <remarks>
+        /// PayPal sometimes gives us an empty PaymentDate, which is what we use for the order date. In this scenario,
+        /// we've decided to use the date of the newest order in the database as the order date since the thought is
+        /// that this transaction had to have come after that or it would have been included in a previous download.
+        /// </remarks>
+        private DateTime GetOrderDate(DateTime? transactionDate)
+        {
+            if (transactionDate.HasValue)
+            {
+                return transactionDate.Value.ToUniversalTime();
+            }
+
+            return GetOrderDateStartingPoint() ?? SqlDateTimeProvider.Current.GetUtcDate();
+        }
+
+        /// <summary>
         /// Gets the order to download
         /// </summary>
         /// <remarks>
-        /// Paypal refunds come down as seperate orders, with little value information wise. These orders have
-        /// a parent transaction id, while real ones do not. Since we dont redownload modified orders, we
-        /// will take these refund orders as a sign to redownload the original order for modifications.
+        /// PayPal refunds come down as separate orders, with little value information wise. These orders have
+        /// a parent transaction id, while real ones do not. Since we don't re-download modified orders, we
+        /// will take these refund orders as a sign to re-download the original order for modifications.
         /// </remarks>
         private PaymentTransactionType GetOrderTransaction(PayPalWebClient client, string transactionID)
         {
@@ -276,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
-        /// Loads payment information from the paypal transaction
+        /// Loads payment information from the PayPal transaction
         /// </summary>
         private void LoadPayments(PayPalOrderEntity order, PaymentTransactionType transaction)
         {
@@ -330,7 +349,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             decimal otherAmount = GetAmount(transaction.PaymentInfo.GrossAmount) - taxAmount;
             foreach (OrderItemEntity orderItem in order.OrderItems)
             {
-                otherAmount = otherAmount - (orderItem.UnitPrice * (decimal)orderItem.Quantity);
+                otherAmount = otherAmount - (orderItem.UnitPrice * (decimal) orderItem.Quantity);
             }
 
             // other
@@ -349,7 +368,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             {
                 foreach (PaymentItemType paymentItem in transaction.PaymentItemInfo.PaymentItem)
                 {
-                    // SendMoney transactions don't inlclude items
+                    // SendMoney transactions don't include items
                     if (paymentItem.Name.Length == 0 && paymentItem.Amount == null)
                     {
                         continue;
@@ -373,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
-        /// Loads Order Item Options from the paypal transaction
+        /// Loads Order Item Options from the PayPal transaction
         /// </summary>
         private void LoadOptions(OrderItemEntity item, OptionType[] options)
         {
@@ -393,7 +412,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         private void LoadAddressInfo(PayPalOrderEntity order, PaymentTransactionType transaction)
         {
             // address verified
-            order.AddressStatus = (int)PayPalUtility.GetAddressStatus(transaction.PayerInfo.Address.AddressStatus);
+            order.AddressStatus = (int) PayPalUtility.GetAddressStatus(transaction.PayerInfo.Address.AddressStatus);
 
             // general Bill info
             order.BillCompany = transaction.PayerInfo.PayerBusiness;
@@ -401,7 +420,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             order.BillPhone = transaction.PayerInfo.ContactPhone;
             order.BillFirstName = transaction.PayerInfo.PayerName.FirstName;
             order.BillLastName = transaction.PayerInfo.PayerName.LastName;
-            order.BillNameParseStatus = (int)PersonNameParseStatus.Simple;
+            order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
 
             // Bill address
             order.BillStreet1 = transaction.PayerInfo.Address.Street1;
@@ -430,7 +449,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 order.ShipFirstName = personName.First;
                 order.ShipMiddleName = personName.Middle;
                 order.ShipLastName = personName.Last;
-                order.ShipNameParseStatus = (int)personName.ParseStatus;
+                order.ShipNameParseStatus = (int) personName.ParseStatus;
                 order.ShipUnparsedName = personName.UnparsedName;
 
                 // if billing/shipping name isn't the same, don't carry BillCompany over
@@ -482,7 +501,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 {
                     return Convert.ToDecimal(amountType.Value);
                 }
-                catch(FormatException)
+                catch (FormatException)
                 {
                     return 0M;
                 }

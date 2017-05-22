@@ -11,7 +11,7 @@ namespace Interapptive.Shared.Extensions
         /// <exception cref="IOException"></exception>
         public static string ConvertToString(this Stream stream)
         {
-            MethodConditions.EnsureArgumentIsNotNull(stream);
+            MethodConditions.EnsureArgumentIsNotNull(stream, nameof(stream));
 
             stream.Position = 0;
             using (StreamReader streamReader = new StreamReader(stream))
@@ -26,7 +26,7 @@ namespace Interapptive.Shared.Extensions
         /// <exception cref="IOException"></exception>
         public static byte[] ToArray(this Stream stream)
         {
-            MethodConditions.EnsureArgumentIsNotNull(stream);
+            MethodConditions.EnsureArgumentIsNotNull(stream, nameof(stream));
 
             using (MemoryStream memstream = new MemoryStream())
             {

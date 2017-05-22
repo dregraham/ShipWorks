@@ -6,9 +6,12 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -700,6 +703,14 @@ namespace ShipWorks.Data.Connection
         /// Create a new SqlAdapter
         /// </summary>
         public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
+
+        /// <summary>
+        /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        /// Fetches the query specified on the adapter specified. Uses the TEntity type to
+        /// produce an EntityCollection(Of TEntity) for the results to return
+        /// </summary>
+        public Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2 =>
+            (this as IDataAccessAdapter).FetchQueryAsync<T>(query);
 
         #endregion
 

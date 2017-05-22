@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using log4net;
-using System.Security;
-using System.Runtime.InteropServices;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Text;
 using Interapptive.Shared.Extensions;
+using log4net;
 
 namespace Interapptive.Shared.Utility
 {
@@ -35,10 +35,10 @@ namespace Interapptive.Shared.Utility
 
             if (Math.Abs(bytes) < 1024 * 1024 * 1024)
             {
-                return string.Format("{0:#,##0.0} MB", bytes / (double)(1024 * 1024));
+                return string.Format("{0:#,##0.0} MB", bytes / (double) (1024 * 1024));
             }
 
-            return string.Format("{0:#,##0.00} GB", bytes / (double)(1024 * 1024 * 1024));
+            return string.Format("{0:#,##0.00} GB", bytes / (double) (1024 * 1024 * 1024));
         }
 
         /// <summary>
@@ -64,12 +64,12 @@ namespace Interapptive.Shared.Utility
             else if (Math.Abs(bytes) < 1024 * 1024 * 1024)
             {
                 format = $"{decimalFormat} MB";
-                value = (double) bytes/(1024 * 1024);
+                value = (double) bytes / (1024 * 1024);
             }
             else
             {
                 format = $"{decimalFormat} GB";
-                value = (double) bytes/(1024 * 1024 * 1024);
+                value = (double) bytes / (1024 * 1024 * 1024);
             }
 
             return string.Format(format, value);
@@ -277,7 +277,7 @@ namespace Interapptive.Shared.Utility
         /// Converts a string to a secure string.
         /// </summary>
         /// <remarks>
-        /// This defeats the purporse of using a secure string...
+        /// This defeats the purpose of using a secure string...
         /// </remarks>
         public static SecureString ToSecureString(this string value)
         {
@@ -297,11 +297,11 @@ namespace Interapptive.Shared.Utility
         /// Converts a SecureString to an insecure string
         /// </summary>
         /// <remarks>
-        /// This defeats the purporse of using a secure string...
+        /// This defeats the purpose of using a secure string...
         /// </remarks>
         public static string ToInsecureString(this SecureString value)
         {
-            MethodConditions.EnsureArgumentIsNotNull(value);
+            MethodConditions.EnsureArgumentIsNotNull(value, nameof(value));
 
             IntPtr unmanagedString = IntPtr.Zero;
             try

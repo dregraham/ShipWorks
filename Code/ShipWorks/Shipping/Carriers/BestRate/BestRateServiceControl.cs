@@ -224,12 +224,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            // Due to some weird behavior with the show more link and the previous 
-            // selection not being cleared out when a new row was selected in the grid, 
-            // we need to compare the currently selected rate with what the service 
-            // control thinks is the selected rate. If they're different we have to 
+            // Due to some weird behavior with the show more link and the previous
+            // selection not being cleared out when a new row was selected in the grid,
+            // we need to compare the currently selected rate with what the service
+            // control thinks is the selected rate. If they're different we have to
             // explicitly call the SelectRate method on the rate control again. This will
-            // fire another RateSelected event, but this time the e.Rate and the 
+            // fire another RateSelected event, but this time the e.Rate and the
             // cachedRate will be the same.
             if (e.Rate != cachedRate)
             {
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             else
             {
-                // Always select the first rate since all the rates already take the service 
+                // Always select the first rate since all the rates already take the service
                 // level and the other fields into account when compiling the list of rates
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault();
 

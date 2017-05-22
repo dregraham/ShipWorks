@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             if (calculatedRateResult.Success)
             {
                 IEnumerable<UpsLocalServiceRate> localRates = calculatedRateResult.Value.ToList();
-                LogSuccess(localRates);
+                LogSuccess(localRates, shipment);
                 rateResult = GenerateLocalRateResults(localRates);
             }
             else
@@ -65,9 +65,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Logs Successfully retrieved rates.
         /// </summary>
-        private void LogSuccess(IEnumerable<UpsLocalServiceRate> localRates)
+        private void LogSuccess(IEnumerable<UpsLocalServiceRate> localRates, ShipmentEntity shipment)
         {
             StringBuilder logMessage = new StringBuilder();
+            logMessage.AppendLine($"OrderID: {shipment.Order.OrderID}");
+            logMessage.AppendLine($"ShipmentID: {shipment.ShipmentID}{Environment.NewLine}");
             localRates.ForEach(rate => rate.Log(logMessage));
             apiLog.LogResponse(logMessage.ToString(), "txt");
         }
