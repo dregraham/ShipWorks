@@ -21,6 +21,11 @@ namespace Interapptive.Shared.Data
         static bool truncateWithDelete = false;
 
         /// <summary>
+        /// Max value capable of being held in a money field
+        /// </summary>
+        public const decimal MoneyMaxValue = 922337203685477.5807M;
+
+        /// <summary>
         /// Executes each batch in the SQL, as separated by the GO keyword, using the given connection.
         /// </summary>
         public static void ExecuteScriptSql(string name, string sql, DbConnection con)

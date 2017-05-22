@@ -9,7 +9,8 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         [Fact]
         public void EnsureArgumentIsNotNull_ThrowsArgumentNullException_WhenObjectIsNull()
         {
-            Assert.Throws< ArgumentNullException>(() => MethodConditions.EnsureArgumentIsNotNull((object)null, "null"));
+            object value = null;
+            Assert.Throws<ArgumentNullException>(() => MethodConditions.EnsureArgumentIsNotNull(value, nameof(value)));
         }
 
         [Fact]
@@ -17,7 +18,8 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             try
             {
-                MethodConditions.EnsureArgumentIsNotNull((object)null, "value");
+                object value = null;
+                MethodConditions.EnsureArgumentIsNotNull(value, nameof(value));
             }
             catch (ArgumentNullException ex)
             {
@@ -29,7 +31,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         public void EnsureArgumentIsNotNull_ReturnsObject_WhenObjectIsNotNull()
         {
             object test = new object();
-            object result = MethodConditions.EnsureArgumentIsNotNull(test, "null");
+            object result = MethodConditions.EnsureArgumentIsNotNull(test, nameof(test));
             Assert.Equal(test, result);
         }
     }

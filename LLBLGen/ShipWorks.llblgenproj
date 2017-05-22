@@ -6,7 +6,7 @@
     <Property Name="AdditionalTaskPerformerFolder" Value="" />
     <Property Name="AdditionalTasksFolder" Value=".\Tasks" />
     <Property Name="AdditionalTemplatesFolder" Value=".\Templates" />
-    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value=".\TypeConverter" />
     <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
     <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
     <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
@@ -83,7 +83,9 @@
     <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
     <Property Name="UseCustomFieldOrderingOnNewElements" Value="true" />
   </Properties>
-  <TypeShortcuts />
+  <TypeShortcuts>
+    <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+  </TypeShortcuts>
   <IgnoredWarnings />
   <SavedSearchQueries />
   <CodeGenerationCyclePreferences>
@@ -390,7 +392,11 @@
           <Field Name="ApiToken" Type="string" IsOptional="true" MaxLength="100" FieldIndex="2" />
           <Field Name="ApiUrl" Type="string" MaxLength="110" FieldIndex="0" />
           <Field Name="ApiUserName" Type="string" MaxLength="65" FieldIndex="1" />
+          <Field Name="BigCommerceAuthentication" Type="BigCommerceAuthenticationType" FieldIndex="6" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" FieldIndex="5" />
+          <Field Name="Identifier" Type="string" MaxLength="110" FieldIndex="9" />
+          <Field Name="OauthClientId" Type="string" MaxLength="100" FieldIndex="7" />
+          <Field Name="OauthToken" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="StatusCodes" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="3" />
           <Field Name="WeightUnitOfMeasure" Type="int" FieldIndex="4" />
         </Fields>
@@ -488,6 +494,7 @@
           <Field Name="CustomerUpdateShipping" Type="bool" FieldIndex="7" />
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Customer" ObjectID="49c26834-7e51-4f06-be28-976aea3976f1">
@@ -3934,6 +3941,25 @@
                     <Field Name="StatusCodes" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="WeightUnitOfMeasure" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="BigCommerceAuthentication" Ordinal="8" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="BigCommerce Authentication Type" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="OauthClientId" Ordinal="9" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="OAuth Client ID" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="OauthToken" Ordinal="10" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="OAuth Token" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="Identifier" Ordinal="11" DbType="12" Length="110" />
                   </Fields>
                 </Table>
                 <Table Name="BuyDotComOrderItem">
@@ -4045,6 +4071,7 @@
                     <Field Name="AuditNewOrders" Ordinal="11" DbType="2" />
                     <Field Name="AuditDeletedOrders" Ordinal="12" DbType="2" />
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
+                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -9095,7 +9122,11 @@
             <FieldMapping FieldName="ApiToken" TargetFieldName="ApiToken" />
             <FieldMapping FieldName="ApiUrl" TargetFieldName="ApiUrl" />
             <FieldMapping FieldName="ApiUserName" TargetFieldName="ApiUserName" />
+            <FieldMapping FieldName="BigCommerceAuthentication" TargetFieldName="BigCommerceAuthentication" />
             <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
+            <FieldMapping FieldName="Identifier" TargetFieldName="Identifier" />
+            <FieldMapping FieldName="OauthClientId" TargetFieldName="OauthClientId" />
+            <FieldMapping FieldName="OauthToken" TargetFieldName="OauthToken" />
             <FieldMapping FieldName="StatusCodes" TargetFieldName="StatusCodes" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="WeightUnitOfMeasure" TargetFieldName="WeightUnitOfMeasure" />
@@ -9196,6 +9227,7 @@
             <FieldMapping FieldName="CustomerUpdateShipping" TargetFieldName="CustomerUpdateShipping" />
             <FieldMapping FieldName="LogOnMethod" TargetFieldName="LogOnMethod" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="UseParallelActionQueue" TargetFieldName="UseParallelActionQueue" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Customer" TargetName="ShipWorksLocal:dbo:Customer">

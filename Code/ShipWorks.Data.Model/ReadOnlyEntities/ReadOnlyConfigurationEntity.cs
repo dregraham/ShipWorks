@@ -49,6 +49,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AuditNewOrders = source.AuditNewOrders;
             AuditDeletedOrders = source.AuditDeletedOrders;
             CustomerKey = source.CustomerKey;
+            UseParallelActionQueue = source.UseParallelActionQueue;
             
             
             
@@ -135,6 +136,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String CustomerKey { get; }
+        /// <summary> The UseParallelActionQueue property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."UseParallelActionQueue"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean UseParallelActionQueue { get; }
         
         
         

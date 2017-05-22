@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
 		public OdbcFieldMap(IOdbcFieldMapIOFactory ioFactory)
 		{
-		    MethodConditions.EnsureArgumentIsNotNull(ioFactory);
+		    MethodConditions.EnsureArgumentIsNotNull(ioFactory, nameof(ioFactory));
 
 		    this.ioFactory = ioFactory;
             entries = new List<IOdbcFieldMapEntry>();

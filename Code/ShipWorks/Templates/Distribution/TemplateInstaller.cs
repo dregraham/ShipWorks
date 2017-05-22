@@ -5,11 +5,15 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Templates.Management.Skeletons;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Saving;
@@ -148,9 +152,11 @@ namespace ShipWorks.Templates.Distribution
         /// </summary>
         private TemplateEntity CreateTemplate(TemplateInstallInfo installInfo, TemplateFolderEntity parent)
         {
-            TemplateEntity template = new TemplateEntity();
+            string name = installInfo.TargetFullName.Split('\\').Last();
+
+            TemplateEntity template = GetOrCreateTemplate(parent, name);
             template.ParentFolder = parent;
-            template.Name = installInfo.TargetFullName.Split('\\').Last();
+            template.Name = name;
             template.TemplateTree = parent.TemplateTree;
 
             // Read the template XSL.
@@ -162,6 +168,22 @@ namespace ShipWorks.Templates.Distribution
             TemplateEditingService.SaveTemplate(template, true, SqlAdapter.Default);
 
             return template;
+        }
+
+        /// <summary>
+        /// Get a template with the given name in the specified parent, or else create a new one
+        /// </summary>
+        private TemplateEntity GetOrCreateTemplate(TemplateFolderEntity parent, string name)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create();
+
+                EntityCollection<TemplateEntity> templates = sqlAdapter.GetCollectionFromPredicate<TemplateEntity>(x =>
+                    x.Add(TemplateFields.ParentFolderID == parent.TemplateFolderID).AddWithAnd(TemplateFields.Name == name), 1);
+
+                return templates.FirstOrDefault() ?? new TemplateEntity();
+            }
         }
 
         /// <summary>
@@ -262,8 +284,8 @@ namespace ShipWorks.Templates.Distribution
 
                         string fullImagePath = Path.Combine(templateDiretory, relativePath);
 
-                        // If the file exists update the tempalte to point to its full path.  If it doesn't exist, its possible that it's a mistake - but its also valid
-                        // because it could be an XSL contruct like src="{Thumbnail}"
+                        // If the file exists update the template to point to its full path.  If it doesn't exist, its possible that it's a mistake - but its also valid
+                        // because it could be an XSL construct like src="{Thumbnail}"
                         if (File.Exists(fullImagePath))
                         {
                             // Update the attribute to be an absolute path

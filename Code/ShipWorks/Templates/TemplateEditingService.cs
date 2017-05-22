@@ -201,7 +201,7 @@ namespace ShipWorks.Templates
                 throw new InvalidOperationException("Could not find ParentFolder in tree when saving template.");
             }
 
-            // Ensure we don't conflict with a rerserved name
+            // Ensure we don't conflict with a reserved name
             if (template.FullName == @"System\Snippets")
             {
                 throw new TemplateException(TemplateHelper.SnippetTemplateReservedNameError);
@@ -224,7 +224,7 @@ namespace ShipWorks.Templates
                 Save(template, adapter);
             }
 
-            // If the xsl had changed and we need to update resouces
+            // If the xsl had changed and we need to update resources
             if (isXslEdited && updateResources)
             {
                 UpdateTemplateResources(template);
@@ -411,7 +411,7 @@ namespace ShipWorks.Templates
                 throw new TemplateInvalidLocationException("A template cannot be added to a folder it is already in.");
             }
 
-            // If the parent has the child for its anscestor at some point, then the child cant really be a child
+            // If the parent has the child for its ancestor at some point, then the child cant really be a child
             if (sourceNode.IsFolder && HasAncestor(targetFolder, sourceNode.Folder))
             {
                 throw new TemplateInvalidLocationException("A folder cannot be a descendant of itself.");
@@ -429,10 +429,10 @@ namespace ShipWorks.Templates
         /// </summary>
         private static bool HasAncestor(TemplateFolderEntity child, TemplateFolderEntity ancestor)
         {
-            // Check all of the potential ancestores immediate children
+            // Check all of the potential ancestors immediate children
             foreach (TemplateFolderEntity childFolder in ancestor.ChildFolders)
             {
-                // The potential anscestor has this child as an immediate child.
+                // The potential ancestor has this child as an immediate child.
                 if (childFolder == child)
                 {
                     return true;
@@ -547,7 +547,7 @@ namespace ShipWorks.Templates
                         // If its an existing local file, make sure there is a database resource for it
                         if (localFilePath != null)
                         {
-                            // Register the resouce
+                            // Register the resource
                             DataResourceReference resource = DataResourceManager.CreateFromFile(localFilePath, template.TemplateID);
                             updatedReferences.Add(resource.ReferenceID);
 

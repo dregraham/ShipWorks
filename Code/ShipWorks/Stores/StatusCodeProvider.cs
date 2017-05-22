@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using log4net;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using System.IO;
+using log4net;
 
 namespace ShipWorks.Stores
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Stores
     /// </summary>
     public abstract class StatusCodeProvider<T>
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(StatusCodeProvider<T>));
 
         // Code -> Value map
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Get the the XML representing the status codes that has already been persisted\saved locally 
+        /// Get the XML representing the status codes that has already been persisted\saved locally
         /// </summary>
         protected abstract string GetLocalStatusCodesXml();
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores
 
         /// <summary>
         /// Loads the status codes on demand from the database.  Needed to be done this way
-        /// because when it was loaded in the constructor, a call chain would end up calling a 
+        /// because when it was loaded in the constructor, a call chain would end up calling a
         /// virtual function.
         /// </summary>
         protected Dictionary<T, string> CodeMap
@@ -231,7 +231,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Writes an invdividual status code as Xml.  If necessary, derived class could output more data
+        /// Writes an individual status code as Xml.  If necessary, derived class could output more data
         /// </summary>
         private void WriteStatusCodeXml(KeyValuePair<T, string> pair, XmlTextWriter xmlWriter)
         {

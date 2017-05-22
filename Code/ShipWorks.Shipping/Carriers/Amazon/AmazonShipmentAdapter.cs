@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Id of the other account associated with this shipment
         /// </summary>
+        [SuppressMessage("MS", "RECS0029:\"value\" parameters should be used", Justification = "Amazon shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", Justification = "Amazon shipment types don't have accounts")]
         [SuppressMessage("SonarQube", "S108:Nested blocks of code should not be left empty", Justification = "Amazon shipment types don't have accounts")]
         public override long? AccountId

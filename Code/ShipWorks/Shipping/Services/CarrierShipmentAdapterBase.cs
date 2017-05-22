@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Services
     {
         private ShipmentType shipmentType;
         private ICustomsManager customsManager;
-        private EntityCollection<ShipmentCustomsItemEntity> customsItems;
         private readonly IStoreManager storeManager;
 
         /// <summary>

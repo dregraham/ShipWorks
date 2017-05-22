@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
@@ -13,10 +17,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public static bool IsDomesticCountry(this IAddressAdapter address)
         {
-            MethodConditions.EnsureArgumentIsNotNull(address, "address");
+            MethodConditions.EnsureArgumentIsNotNull(address, nameof(address));
 
             return address.CountryCode == "US" ||
                 address.CountryCode == "DC" ||

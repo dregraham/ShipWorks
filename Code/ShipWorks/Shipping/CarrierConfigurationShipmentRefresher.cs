@@ -30,10 +30,10 @@ namespace ShipWorks.Shipping
         public CarrierConfigurationShipmentRefresher(IObservable<IShipWorksMessage> messenger, IShippingErrorManager errorManager,
             IShippingProfileManager shippingProfileManager, IShippingManager shippingManager)
         {
-            this.messenger = MethodConditions.EnsureArgumentIsNotNull(messenger, "messenger");
+            this.messenger = MethodConditions.EnsureArgumentIsNotNull(messenger, nameof(messenger));
             this.errorManager = MethodConditions.EnsureArgumentIsNotNull(errorManager, nameof(errorManager));
-            this.shippingProfileManager = MethodConditions.EnsureArgumentIsNotNull(shippingProfileManager, "shippingProfileManager");
-            this.shippingManager = MethodConditions.EnsureArgumentIsNotNull(shippingManager, "shippingManager");
+            this.shippingProfileManager = MethodConditions.EnsureArgumentIsNotNull(shippingProfileManager, nameof(shippingProfileManager));
+            this.shippingManager = MethodConditions.EnsureArgumentIsNotNull(shippingManager, nameof(shippingManager));
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<ConfiguringCarrierMessage>().Subscribe(OnConfiguringCarrier),

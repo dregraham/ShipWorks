@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 
 namespace ShipWorks.Stores
 {
@@ -192,7 +193,7 @@ namespace ShipWorks.Stores
         public abstract OrderIdentifier CreateOrderIdentifier(OrderEntity order);
 
         /// <summary>
-        /// Get the store-specific fields that are used to unqiuely identifiy an online cusotmer record.  Such
+        /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
         /// as the eBay User ID or the osCommerce CustomerID.  If a particular store does not have any concept
         /// of a unique online customer, than this can return null.  If multiple fields are returned, they
         /// will be tested using OR.  If customer identifiers are unique per store instance, set instanceLookup to true.  If
@@ -220,13 +221,13 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Creates the add store wizard pages via io c.
+        /// Creates the add store wizard pages via IoC.
         /// </summary>
         protected List<WizardPage> CreateAddStoreWizardPagesViaIoC(ILifetimeScope scope)
         {
             if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
-                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
+                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).AsOrdered().ToList();
             }
 
             throw new InvalidOperationException("Invalid store type. " + TypeCode);
@@ -450,7 +451,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Handle a hyperlink click for the givnen field and entity from the grid
+        /// Handle a hyperlink click for the given field and entity from the grid
         /// </summary>
         public virtual void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
@@ -508,7 +509,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// This calls the abstract function to get the identifider, and then normalizes it.
+        /// This calls the abstract function to get the identifier, and then normalizes it.
         /// </summary>
         public string LicenseIdentifier
         {
@@ -565,7 +566,7 @@ namespace ShipWorks.Stores
             identifier = identifier.Replace("https://", "");
             identifier = identifier.Replace("http://", "");
 
-            // Dont allow quotes
+            // Don't allow quotes
             identifier = identifier.Replace("'", "");
             identifier = identifier.Replace("\"", "");
 
