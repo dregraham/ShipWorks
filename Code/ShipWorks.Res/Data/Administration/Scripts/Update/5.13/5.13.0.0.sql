@@ -13,6 +13,5 @@ PRINT N'Updating primary UPS Profile'
 GO
 UPDATE [dbo].UpsProfile
 SET 
-	[CustomsDescription] = ''
-WHERE ShippingProfileID in (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentType IN (0,1) AND ShipmentTypePrimary = 1)
+	[CustomsDescription] = 'Goods'
 GO

@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipment.Ups.CodPaymentType = (int) UpsCodPaymentType.Cash;
 
             shipment.Ups.CustomsDocumentsOnly = false;
-            shipment.Ups.CustomsDescription = "Goods";
+            shipment.Ups.CustomsDescription = string.Empty;
 
             shipment.Ups.CommercialPaperlessInvoice = false;
             shipment.Ups.CommercialInvoiceTermsOfSale = (int) UpsTermsOfSale.NotSpecified;
@@ -417,7 +417,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             profile.Ups.ShipmentChargePostalCode = string.Empty;
             profile.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillReceiver;
 
-            profile.Ups.CustomsDescription = string.Empty;
+            profile.Ups.CustomsDescription = "Goods";
         }
 
         /// <summary>
