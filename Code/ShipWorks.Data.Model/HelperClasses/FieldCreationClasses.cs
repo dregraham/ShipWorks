@@ -21787,6 +21787,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.UspsPackageID);}
 		}
+		/// <summary>Creates a new UpsProfileEntity.CustomsDescription field instance</summary>
+		public static EntityField2 CustomsDescription
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsDescription);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsProfilePackageEntity</summary>

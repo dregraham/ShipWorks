@@ -46,16 +46,16 @@
             this.sectionExpress = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.expressSignatureWaiver = new System.Windows.Forms.CheckBox();
             this.labelExpressSignatureWaiver = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress.ContentPanel)).BeginInit();
             this.sectionExpress.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             //
@@ -66,7 +66,7 @@
             //
             // personControl
             //
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Size = new System.Drawing.Size(395, 330);
             //
@@ -102,7 +102,7 @@
             //
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.dimensionsControl.Location = new System.Drawing.Point(87, 161);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
@@ -202,13 +202,13 @@
             this.weight.AutoSize = true;
             this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.weight.Location = new System.Drawing.Point(90, 91);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300D;
+            this.weight.RangeMax = 9999D;
             this.weight.RangeMin = 0D;
             this.weight.ShowShortcutInfo = true;
-            this.weight.Size = new System.Drawing.Size(238, 24);
+            this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
@@ -254,10 +254,10 @@
             //
             // insuranceControl
             //
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.insuranceControl.Location = new System.Drawing.Point(21, 236);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(464, 50);
@@ -266,7 +266,7 @@
             //
             // sectionExpress
             //
-            this.sectionExpress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionExpress.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionExpress.Collapsed = true;
             //
@@ -315,22 +315,22 @@
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress.ContentPanel)).EndInit();
             this.sectionExpress.ContentPanel.ResumeLayout(false);
             this.sectionExpress.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).EndInit();
             this.ResumeLayout(false);
 
         }

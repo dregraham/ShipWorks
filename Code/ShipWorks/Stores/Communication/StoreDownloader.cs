@@ -216,9 +216,9 @@ namespace ShipWorks.Stores.Communication
                     {
                         // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
                         // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
-                        // to backoff by one to include it.
+                        // to back off by one to include it.
                         orderNumber = Math.Max(0, store.InitialDownloadOrder.Value - 1);
-                        log.InfoFormat("Max(OrderNumber) - applying initial download polcy.");
+                        log.InfoFormat("Max(OrderNumber) - applying initial download policy.");
                     }
                     else
                     {
@@ -237,7 +237,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
+        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
         /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
         protected long GetNextOrderNumber()
@@ -413,7 +413,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.
         /// </summary>
-        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate,
+        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime? noteDate,
             NoteVisibility visibility, bool ignoreDuplicateText = false)
         {
             if (string.IsNullOrWhiteSpace(noteText))
@@ -460,7 +460,7 @@ namespace ShipWorks.Stores.Communication
             NoteEntity note = new NoteEntity();
             note.Order = order;
             note.UserID = null;
-            note.Edited = noteDate;
+            note.Edited = noteDate ?? order.OrderDate;
             note.Source = (int) NoteSource.Downloaded;
             note.Visibility = (int) visibility;
             note.Text = noteText;
@@ -512,7 +512,7 @@ namespace ShipWorks.Stores.Communication
                 ApplyAddressCasing(order);
             }
 
-            // if the downloaders specified they Parsed the name, also put the name in the unparsed field
+            // if the downloaders specified they parsed the name, also put the name in the unparsed field
             PersonAdapter ship = new PersonAdapter(order, "Ship");
             PersonAdapter bill = new PersonAdapter(order, "Bill");
 

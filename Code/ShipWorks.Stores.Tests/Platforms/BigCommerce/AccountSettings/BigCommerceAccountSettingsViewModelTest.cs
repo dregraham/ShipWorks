@@ -229,6 +229,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2/ ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
         [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v3 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
         [InlineData(" https://store-vplh1lw.mybigcommerce.com/api/v2 ", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
+        [InlineData("http://store-vplh1lw.mybigcommerce.com/api/v2", "https://api.bigcommerce.com/stores/vplh1lw/v2/")]
         public void MigrateToOauth_TranslatesApiUrl_WhenUrlIsBasicLegacy(string original, string expected)
         {
             CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);
@@ -246,6 +247,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [InlineData("")]
         [InlineData("  ")]
         [InlineData("http://www.example.com")]
+        [InlineData("https://shipworks.mybigcommerce.com/api/v2/")]
         public void MigrateToOauth_SetsApiUrlToEmptyString_WhenUrlIsNotasicLegacy(string original)
         {
             CreateSuccessfulPersistenceStrategyFor(BigCommerceAuthenticationType.Basic);

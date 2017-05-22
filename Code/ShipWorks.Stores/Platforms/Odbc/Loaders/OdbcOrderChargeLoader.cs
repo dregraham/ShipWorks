@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             {
                 // Filter out 0 amount charges.
                 IEnumerable<IOdbcFieldMapEntry> chargeEntries = map.FindEntriesBy(OrderChargeFields.Amount, false)
-                    .Where(e => ((decimal) e.ShipWorksField.Value > 0));
+                    .Where(e => e.ShipWorksField.Value is decimal);
 
                 foreach (IOdbcFieldMapEntry chargeEntry in chargeEntries)
                 {

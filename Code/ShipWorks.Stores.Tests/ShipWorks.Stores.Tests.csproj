@@ -138,6 +138,7 @@
       <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -240,6 +241,7 @@
     <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Paypal\XmlDeserializeTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
@@ -307,6 +309,10 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
       <Project>{1F6A1DC6-DD72-4279-8747-6789F83711FF}</Project>

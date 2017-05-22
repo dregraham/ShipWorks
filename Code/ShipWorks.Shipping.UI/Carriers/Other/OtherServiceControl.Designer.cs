@@ -105,7 +105,7 @@
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(238, 21);
+            this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += OnShipSenseFieldChanged;

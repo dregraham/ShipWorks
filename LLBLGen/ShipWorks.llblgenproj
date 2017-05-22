@@ -2503,6 +2503,7 @@
           <Field Name="Cn22Number" Type="string" IsOptional="true" MaxLength="255" FieldIndex="30" />
           <Field Name="CommercialPaperlessInvoice" Type="bool" IsOptional="true" FieldIndex="27" />
           <Field Name="CostCenter" Type="string" IsOptional="true" MaxLength="100" FieldIndex="28" />
+          <Field Name="CustomsDescription" Type="string" IsOptional="true" MaxLength="150" FieldIndex="36" />
           <Field Name="DeliveryConfirmation" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="EmailNotifyFrom" Type="string" IsOptional="true" MaxLength="100" FieldIndex="16" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="18" />
@@ -3614,7 +3615,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-05-11T15:29:55.8473097Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7382,6 +7383,7 @@
                     <Field Name="ShipmentChargePostalCode" Ordinal="34" IsOptional="true" DbType="12" Length="20" />
                     <Field Name="ShipmentChargeCountryCode" Ordinal="35" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="UspsPackageID" Ordinal="36" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="CustomsDescription" Ordinal="37" IsOptional="true" DbType="12" Length="150" />
                   </Fields>
                 </Table>
                 <Table Name="UpsProfilePackage">
@@ -11284,6 +11286,7 @@
             <FieldMapping FieldName="Cn22Number" TargetFieldName="Cn22Number" />
             <FieldMapping FieldName="CommercialPaperlessInvoice" TargetFieldName="CommercialPaperlessInvoice" />
             <FieldMapping FieldName="CostCenter" TargetFieldName="CostCenter" />
+            <FieldMapping FieldName="CustomsDescription" TargetFieldName="CustomsDescription" />
             <FieldMapping FieldName="DeliveryConfirmation" TargetFieldName="DeliveryConfirmation" />
             <FieldMapping FieldName="EmailNotifyFrom" TargetFieldName="EmailNotifyFrom" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />

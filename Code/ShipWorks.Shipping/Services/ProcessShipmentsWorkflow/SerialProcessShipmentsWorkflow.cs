@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             return shipments.Select((shipment, i) =>
             {
                 return concurrencyErrors.ContainsKey(shipment) ?
-                    new ProcessShipmentState(i, concurrencyErrors[shipment], cancellationSource) :
+                    new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
             });
         }

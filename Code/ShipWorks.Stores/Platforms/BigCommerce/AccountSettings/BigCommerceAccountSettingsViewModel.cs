@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
@@ -256,19 +257,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
                 return string.Empty;
             }
 
-            // First find the BC store identifier
-            int start = url.IndexOf("store-", StringComparison.InvariantCultureIgnoreCase) + 6;
-            int end = url.IndexOf(".mybigcommerce.com", StringComparison.InvariantCultureIgnoreCase);
+            string result = Regex.Replace(url,
+                @"\s*https?://store-([^.]*).mybigcommerce.com/api/v[23]/?\s*",
+                "https://api.bigcommerce.com/stores/$1/v2/");
 
-            if (start < 0 || end < 0 || (end - start) <= 0)
-            {
-                return string.Empty;
-            }
-
-            string storeIdentifier = url.Substring(start, end - start);
-
-            // Now format it correctly
-            return $"https://api.bigcommerce.com/stores/{storeIdentifier}/v2/";
+            return object.ReferenceEquals(result, url) ? string.Empty : result;
         }
     }
 }

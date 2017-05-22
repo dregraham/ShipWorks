@@ -151,6 +151,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.ShipmentChargePostalCode,  payorDutiesAccountState, payorDutiesPostalCode, labelPayorDutiesPostalCode);
             AddValueMapping(ups, UpsProfileFields.ShipmentChargeCountryCode, payorDutiesAccountState, payorDutiesCountry, labelPayorDutiesCountry);
 
+            AddValueMapping(ups, UpsProfileFields.CustomsDescription, customsDescState, customsDescription, labelCustomsDescription);
+
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
             AddEnabledStateMapping(ups, UpsProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderDelivery);

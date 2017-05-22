@@ -109,7 +109,7 @@ namespace ShipWorks.UI.Services
             Control owner = ownerFactory();
             if (owner.InvokeRequired)
             {
-                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>) (ShowDialog), createDialog);
+                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>) ShowDialog, createDialog);
             }
 
             using (IForm dlg = createDialog())
@@ -126,8 +126,8 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a question message box.
         /// </summary>
-        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
-            => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
+        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message) =>
+            MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
 
         /// <summary>
         /// Show a warning message
@@ -139,20 +139,25 @@ namespace ShipWorks.UI.Services
         /// </summary>
         private IDisposable OpenProgressDialog(IScheduler scheduler, ProgressDlg dialog)
         {
-            dialog.Show(ownerFactory());
+            Control owner = ownerFactory();
 
-            return Disposable.Create(() => scheduler.Schedule(dialog, CloseProgressDialog));
+            dialog.Show(owner);
+
+            return Disposable.Create(() => CloseProgressDialog(owner, dialog));
         }
 
         /// <summary>
         /// Close the given progress dialog
         /// </summary>
-        private static IDisposable CloseProgressDialog(IScheduler _, ProgressDlg dialog)
+        private static void CloseProgressDialog(Control owner, ProgressDlg dialog)
         {
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<Control, ProgressDlg>) CloseProgressDialog, owner, dialog);
+            }
+
             dialog?.CloseForced();
             dialog?.Dispose();
-
-            return Disposable.Empty;
         }
 
         /// <summary>
