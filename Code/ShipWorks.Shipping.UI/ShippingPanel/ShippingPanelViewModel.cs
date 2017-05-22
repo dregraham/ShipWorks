@@ -353,19 +353,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Update a stored shipment
         /// </summary>
-        public virtual void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter)
-        {
-            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
-            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
-            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
-            // panels update correctly.
-            IEnumerable<ICarrierShipmentAdapter> shipmentAdapters = loadedOrderSelection.ShipmentAdapters
-                .Where(sa => sa?.Shipment?.ShipmentID != shipmentAdapter?.Shipment?.ShipmentID)
-                .Concat(new[] { shipmentAdapter })
-                .ToList();
-
-            loadedOrderSelection = new LoadedOrderSelection(loadedOrderSelection.Order, shipmentAdapters, loadedOrderSelection.DestinationAddressEditable);
-        }
+        /// <remarks>
+        /// If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+        /// be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+        /// and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+        /// panels update correctly.
+        /// </remarks>
+        public virtual void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter) =>
+            loadedOrderSelection = loadedOrderSelection.CreateSelectionWithUpdatedShipment(shipmentAdapter);
 
         /// <summary>
         /// Load the shipment with the given ID when it becomes available

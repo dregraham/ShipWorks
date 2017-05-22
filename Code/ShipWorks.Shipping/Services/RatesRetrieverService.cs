@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Services
                 });
 
             var changedShipments = messenger.OfType<ShipmentChangedMessage>()
-                .Where(x => x.ShipmentAdapter != null)
+                .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
                 .Select(x => new
                 {
                     Message = x,
