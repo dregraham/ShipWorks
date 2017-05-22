@@ -453,6 +453,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentChargeCountryCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UspsPackageID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomsDescription", fieldHashtable);
 		}
 		#endregion
 
@@ -916,6 +918,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsProfileFieldIndex.UspsPackageID, true); }
 			set	{ SetValue((int)UpsProfileFieldIndex.UspsPackageID, value); }
+		}
+
+		/// <summary> The CustomsDescription property of the Entity UpsProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsProfile"."CustomsDescription"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String CustomsDescription
+		{
+			get { return (System.String)GetValue((int)UpsProfileFieldIndex.CustomsDescription, true); }
+			set	{ SetValue((int)UpsProfileFieldIndex.CustomsDescription, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
