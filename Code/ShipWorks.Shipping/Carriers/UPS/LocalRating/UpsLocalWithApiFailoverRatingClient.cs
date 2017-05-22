@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -12,6 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Rating client which attempts to get local rates and fails over to API rates
     /// </summary>
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalWithApiFailover)]
     public class UpsLocalWithApiFailOverRatingClient : IUpsRateClient
     {
         private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
