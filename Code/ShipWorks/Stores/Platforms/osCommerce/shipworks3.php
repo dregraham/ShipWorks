@@ -657,8 +657,17 @@
 	    $orderID = (int) $_REQUEST['order'];
 	    $code = (int) $_REQUEST['status'];
 	    
-	    $comments = mysql_escape_string($_REQUEST['comments']);
-	    
+	    # mysql_escape_string is no longer available in PHP 7, so we must use
+	    # mysqli_escape_string instead, but we have to verify that mysqli is installed
+	    if (function_exists('mysqli_connect'))
+	    {
+	    	$comments = mysqli_escape_string(tep_db_connect(), $_REQUEST['comments']);
+	    }
+	    else
+	    {
+	    	$comments = mysql_escape_string($_REQUEST['comments']);
+	    }	    
+
         tep_db_query(
             "insert into " . TABLE_ORDERS_STATUS_HISTORY . 
             " (orders_id, orders_status_id, date_added, customer_notified, comments) " .
