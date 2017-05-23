@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
-            Assert.Equal("Global Mail", code);
+            Assert.Equal("DHL", code);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
-            Assert.Equal("Global Mail", code);
+            Assert.Equal("DHL", code);
         }
 
         [Fact]
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -232,15 +232,39 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenUspsAndDhlServiceUsed()
+        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Endicia);
+
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
+
+            string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("DHL", code);
+        }
+
+        [Fact]
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndUspsServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
             Assert.Equal("USPS", code);
+        }
+
+        [Fact]
+        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
+
+            string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("DHL", code);
         }
 
         [Theory]
