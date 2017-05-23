@@ -11,19 +11,19 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.UI.Dialogs.NewUserExperience
+namespace ShipWorks.UI.Dialogs.SetupGuide
 {
     /// <summary>
     /// View model for the New User Experience window
     /// </summary>
     [Component]
-    public class NewUserExperienceViewModel : INewUserExperienceViewModel, INotifyPropertyChanged
+    public class SetupGuideViewModel : ISetupGuideViewModel, INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
         private readonly IAddStoreWizard addStoreWizard;
         private readonly IShipmentTypeSetupWizardFactory shipmentSetupWizardFactory;
         private IWin32Window owner;
-        private NewUserExperienceSection selectedSection;
+        private SetupGuideSection selectedSection;
         private Action onClose;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// <summary>
         /// Constructor
         /// </summary>
-        public NewUserExperienceViewModel(IAddStoreWizard addStoreWizard, IShipmentTypeSetupWizardFactory shipmentSetupWizardFactory)
+        public SetupGuideViewModel(IAddStoreWizard addStoreWizard, IShipmentTypeSetupWizardFactory shipmentSetupWizardFactory)
         {
             this.addStoreWizard = addStoreWizard;
             this.shipmentSetupWizardFactory = shipmentSetupWizardFactory;
@@ -47,7 +47,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
             ShowShippingSetupWizard = new RelayCommand<ShipmentTypeCode>(OpenShippingSetupWizardAction);
             UseShipWorks = new RelayCommand(UseShipWorksAction);
 
-            SelectedSection = NewUserExperienceSection.AddStore;
+            SelectedSection = SetupGuideSection.AddStore;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// Selection section of the dialog
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public NewUserExperienceSection SelectedSection
+        public SetupGuideSection SelectedSection
         {
             get { return selectedSection; }
             set { handler.Set(nameof(SelectedSection), ref selectedSection, value); }
@@ -99,7 +99,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// </summary>
         private void AddStoreAction()
         {
-            SelectedSection = NewUserExperienceSection.AddStore;
+            SelectedSection = SetupGuideSection.AddStore;
 
             addStoreWizard.RunWizard(owner);
         }
@@ -109,15 +109,15 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// </summary>
         private void SelectShippingSetupAction()
         {
-            SelectedSection = NewUserExperienceSection.AddShippingAccount;
+            SelectedSection = SetupGuideSection.AddShippingAccount;
         }
 
         /// <summary>
-        /// Select the shipping setup section
+        /// De-select the shipping setup section
         /// </summary>
         private void DeselectShippingSetupAction()
         {
-            SelectedSection = NewUserExperienceSection.AddStore;
+            SelectedSection = SetupGuideSection.AddStore;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// </summary>
         private void UseShipWorksAction()
         {
-            SelectedSection = NewUserExperienceSection.UseShipWorks;
+            SelectedSection = SetupGuideSection.UseShipWorks;
             onClose();
         }
 

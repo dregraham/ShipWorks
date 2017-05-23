@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace ShipWorks.UI.Dialogs.NewUserExperience
+namespace ShipWorks.UI.Dialogs.SetupGuide
 {
     /// <summary>
     /// Convert a selected section to a specific control
@@ -19,13 +19,13 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            NewUserExperienceSection? section = value as NewUserExperienceSection?;
+            SetupGuideSection? section = value as SetupGuideSection?;
             if (!section.HasValue)
             {
                 return string.Empty;
             }
 
-            return section.Value == NewUserExperienceSection.AddShippingAccount ?
+            return section.Value == SetupGuideSection.AddShippingAccount ?
                 (UserControl) new ShippingOptions() :
                 new MainOptions();
         }

@@ -10,7 +10,7 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Represents the experience of a new user setting up ShipWorks for the first time
     /// </summary>
-    public interface INewUserExperience : IDialog
+    public interface ISetupGuide : IDialog
     {
     }
 }

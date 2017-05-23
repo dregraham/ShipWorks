@@ -655,7 +655,7 @@ namespace ShipWorks
                     return;
                 }
 
-                QueueLogonAction(ShowNewUserExperience);
+                QueueLogonAction(ShowSetupGuide);
             }
             else
             {
@@ -758,13 +758,13 @@ namespace ShipWorks
         /// <summary>
         /// Show the New User Experience dialog
         /// </summary>
-        public void ShowNewUserExperience()
+        public void ShowSetupGuide()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                INewUserExperience newUserExperience = lifetimeScope.Resolve<INewUserExperience>();
-                newUserExperience.LoadOwner(this);
-                newUserExperience.ShowDialog();
+                ISetupGuide SetupGuide = lifetimeScope.Resolve<ISetupGuide>();
+                SetupGuide.LoadOwner(this);
+                SetupGuide.ShowDialog();
             }
         }
 

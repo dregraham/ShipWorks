@@ -10,7 +10,7 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// View model for the New User Experience dialog
     /// </summary>
-    public interface INewUserExperienceViewModel
+    public interface ISetupGuideViewModel
     {
         /// <summary>
         /// Set owner interaction hooks

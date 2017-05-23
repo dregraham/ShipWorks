@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Management
                 // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
                 if (complete)
                 {
-                    Program.MainForm.QueueLogonAction(Program.MainForm.ShowNewUserExperience);
+                    Program.MainForm.QueueLogonAction(Program.MainForm.ShowSetupGuide);
                 }
                 else
                 {

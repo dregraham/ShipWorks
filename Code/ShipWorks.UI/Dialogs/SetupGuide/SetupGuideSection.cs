@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.UI.Dialogs.NewUserExperience
+namespace ShipWorks.UI.Dialogs.SetupGuide
 {
     /// <summary>
     /// Selected section of the New User Experience screen
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum NewUserExperienceSection
+    [Obfuscation(Exclude = true, ApplyToMembers = true)]
+    public enum SetupGuideSection
     {
         /// <summary>
         /// Add store section

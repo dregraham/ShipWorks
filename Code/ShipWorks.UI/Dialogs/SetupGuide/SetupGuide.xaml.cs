@@ -5,18 +5,18 @@ using System.Windows.Interop;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration;
 
-namespace ShipWorks.UI.Dialogs.NewUserExperience
+namespace ShipWorks.UI.Dialogs.SetupGuide
 {
     /// <summary>
-    /// Interaction logic for NewUserExperience.xaml
+    /// Interaction logic for SetupGuide.xaml
     /// </summary>
     [Component]
-    public partial class NewUserExperience : Window, INewUserExperience
+    public partial class SetupGuide : Window, ISetupGuide
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public NewUserExperience()
+        public SetupGuide()
         {
             InitializeComponent();
         }
@@ -24,7 +24,7 @@ namespace ShipWorks.UI.Dialogs.NewUserExperience
         /// <summary>
         /// Constructor
         /// </summary>
-        public NewUserExperience(INewUserExperienceViewModel viewModel) : this()
+        public SetupGuide(ISetupGuideViewModel viewModel) : this()
         {
             DataContext = viewModel;
 
