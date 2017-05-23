@@ -1,5 +1,6 @@
 <?php
-        define('IS_ADMIN_FLAG', true);
+		# Uncomment this if you experience errors about IS_ADMIN_FLAG not being set to true
+		#define('IS_ADMIN_FLAG', true);
         define('SHIPWORKS_MODULE_ACTIVE', true);
         define('REQUIRE_SECURE', TRUE);
 
@@ -763,8 +764,8 @@
 
                 $orderID = (int) $_REQUEST['order'];
                 $code = (int) $_REQUEST['status'];
-
-                $comments = mysql_escape_string($_REQUEST['comments']);
+				
+	    		$comments = zen_db_prepare_input($_REQUEST['comments']);
 
                 $db->Execute(
                                 "insert into " . TABLE_ORDERS_STATUS_HISTORY .
@@ -816,7 +817,7 @@
         {
                 global $db;
                 $qry = sprintf("select countries_id from ". TABLE_COUNTRIES. " where countries_name = '%s'",
-                                mysql_real_escape_string($country_name));
+                                zen_db_prepare_input($country_name));
 
                 $countryQuery = $db->Execute($qry);
                 if ($countryQuery->RecordCount() == 0)
@@ -843,8 +844,8 @@
 
                 // now lookup the state code based on countryid and state name
                 $qry = sprintf("select zone_code from ". TABLE_ZONES. " where zone_country_id = '%s' and zone_name = '%s'",
-                                mysql_real_escape_string($country_id),
-                                mysql_real_escape_string($state_name));
+                                zen_db_prepare_input($country_id),
+                                zen_db_prepare_input($state_name));
                 $stateQuery = $db->Execute($qry);
                 if ($stateQuery->RecordCount() == 0)
                 {
