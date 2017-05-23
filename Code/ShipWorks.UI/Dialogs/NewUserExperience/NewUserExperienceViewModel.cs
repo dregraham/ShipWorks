@@ -11,7 +11,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.NewUserExperience
 {
     /// <summary>
     /// View model for the New User Experience window

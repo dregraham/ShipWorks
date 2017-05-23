@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.NewUserExperience
 {
     /// <summary>
     /// Selected section of the New User Experience screen

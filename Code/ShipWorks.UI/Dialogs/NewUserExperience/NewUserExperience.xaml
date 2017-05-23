@@ -1,11 +1,10 @@
-﻿<Window x:Class="ShipWorks.UI.Dialogs.NewUserExperience"
+﻿<Window x:Class="ShipWorks.UI.Dialogs.NewUserExperience.NewUserExperience"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
         xmlns:c="clr-namespace:ShipWorks.UI.Controls"
-        xmlns:local="clr-namespace:ShipWorks.UI.Dialogs"
+        xmlns:local="clr-namespace:ShipWorks.UI.Dialogs.NewUserExperience"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
@@ -17,7 +16,7 @@
         <local:SectionToControlConverter x:Key="SectionToControl" />
     </Window.Resources>
 
-    <c:AnimatedContentControl Margin="10"
-                                  VerticalAlignment="Stretch"
+    <c:AnimatedContentControl Margin="10 10 10 20"
+                              VerticalAlignment="Stretch"
             Content="{Binding SelectedSection, Converter={StaticResource SectionToControl}}" />
 </Window>

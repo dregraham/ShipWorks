@@ -18,6 +18,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
@@ -3394,13 +3395,11 @@ namespace ShipWorks
         /// </summary>
         private void OnManageStores(object sender, EventArgs e)
         {
-            ShowNewUserExperience();
-
             using (StoreManagerDlg dlg = new StoreManagerDlg())
             {
                 dlg.ShowDialog(this);
 
-                if (StoreManager.GetAllStores().Count == 0)
+                if (StoreManager.GetAllStoresReadOnly().None())
                 {
                     InitiateLogon();
                 }

@@ -208,16 +208,16 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
-    <Compile Include="Dialogs\MainOptions.xaml.cs">
+    <Compile Include="Dialogs\NewUserExperience\MainOptions.xaml.cs">
       <DependentUpon>MainOptions.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\NewUserExperience.xaml.cs">
+    <Compile Include="Dialogs\NewUserExperience\NewUserExperience.xaml.cs">
       <DependentUpon>NewUserExperience.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\NewUserExperienceSection.cs" />
-    <Compile Include="Dialogs\NewUserExperienceViewModel.cs" />
-    <Compile Include="Dialogs\SectionToControlConverter.cs" />
-    <Compile Include="Dialogs\ShippingOptions.xaml.cs">
+    <Compile Include="Dialogs\NewUserExperience\NewUserExperienceSection.cs" />
+    <Compile Include="Dialogs\NewUserExperience\NewUserExperienceViewModel.cs" />
+    <Compile Include="Dialogs\NewUserExperience\SectionToControlConverter.cs" />
+    <Compile Include="Dialogs\NewUserExperience\ShippingOptions.xaml.cs">
       <DependentUpon>ShippingOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -317,15 +317,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\MainOptions.xaml">
+    <Page Include="Dialogs\NewUserExperience\MainOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\NewUserExperience.xaml">
+    <Page Include="Dialogs\NewUserExperience\NewUserExperience.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\ShippingOptions.xaml">
+    <Page Include="Dialogs\NewUserExperience\ShippingOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -417,6 +417,7 @@
     <Resource Include="Resources\add-store.png" />
     <Resource Include="Resources\use-shipworks.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

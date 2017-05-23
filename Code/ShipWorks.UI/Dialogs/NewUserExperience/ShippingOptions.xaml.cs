@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.NewUserExperience
 {
     /// <summary>
-    /// Interaction logic for MainOptions.xaml
+    /// Interaction logic for ShippingOptions.xaml
     /// </summary>
-    public partial class MainOptions : UserControl
+    public partial class ShippingOptions : UserControl
     {
-        public MainOptions()
+        public ShippingOptions()
         {
             InitializeComponent();
         }

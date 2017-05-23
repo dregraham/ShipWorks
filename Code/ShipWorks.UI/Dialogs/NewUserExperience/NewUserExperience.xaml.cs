@@ -5,7 +5,7 @@ using System.Windows.Interop;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration;
 
-namespace ShipWorks.UI.Dialogs
+namespace ShipWorks.UI.Dialogs.NewUserExperience
 {
     /// <summary>
     /// Interaction logic for NewUserExperience.xaml
