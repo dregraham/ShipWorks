@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -57,7 +58,8 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                 foreach (KeyedComponentAttribute attribute in item.Attributes)
                 {
                     var registration = ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache)
-                        .Keyed(attribute.Key, attribute.Service);
+                        .Keyed(attribute.Key, attribute.Service)
+                        .OrderByMetadata(attribute.Service);
 
                     if (attribute.ExternallyOwned)
                     {

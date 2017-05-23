@@ -182,6 +182,12 @@
             this.packagesState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.tabPageCustoms = new System.Windows.Forms.TabPage();
+            this.groupBoxGeneral = new System.Windows.Forms.GroupBox();
+            this.labelCustomsDescription = new System.Windows.Forms.Label();
+            this.customsDescState = new System.Windows.Forms.CheckBox();
+            this.kryptonBorderEdge12 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.customsDescription = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupLabels.SuspendLayout();
@@ -198,12 +204,15 @@
             this.tabPagePackages.SuspendLayout();
             this.groupBoxPackages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            this.tabPageCustoms.SuspendLayout();
+            this.groupBoxGeneral.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tabPageSettings);
             this.tabControl.Controls.Add(this.tabPagePackages);
+            this.tabControl.Controls.Add(this.tabPageCustoms);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -1880,6 +1889,71 @@
             this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
             this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
             // 
+            // tabPageCustoms
+            // 
+            this.tabPageCustoms.Controls.Add(this.groupBoxGeneral);
+            this.tabPageCustoms.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCustoms.Name = "tabPageCustoms";
+            this.tabPageCustoms.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCustoms.Size = new System.Drawing.Size(417, 1033);
+            this.tabPageCustoms.TabIndex = 2;
+            this.tabPageCustoms.Text = "Customs";
+            this.tabPageCustoms.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxGeneral
+            // 
+            this.groupBoxGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxGeneral.Controls.Add(this.customsDescription);
+            this.groupBoxGeneral.Controls.Add(this.labelCustomsDescription);
+            this.groupBoxGeneral.Controls.Add(this.customsDescState);
+            this.groupBoxGeneral.Controls.Add(this.kryptonBorderEdge12);
+            this.groupBoxGeneral.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxGeneral.Name = "groupBoxGeneral";
+            this.groupBoxGeneral.Size = new System.Drawing.Size(388, 51);
+            this.groupBoxGeneral.TabIndex = 1;
+            this.groupBoxGeneral.TabStop = false;
+            this.groupBoxGeneral.Text = "General";
+            // 
+            // labelCustomsDescription
+            // 
+            this.labelCustomsDescription.AutoSize = true;
+            this.labelCustomsDescription.Location = new System.Drawing.Point(52, 20);
+            this.labelCustomsDescription.Name = "labelCustomsDescription";
+            this.labelCustomsDescription.Size = new System.Drawing.Size(64, 13);
+            this.labelCustomsDescription.TabIndex = 16;
+            this.labelCustomsDescription.Text = "Description:";
+            // 
+            // customsDescState
+            // 
+            this.customsDescState.AutoSize = true;
+            this.customsDescState.Checked = true;
+            this.customsDescState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customsDescState.Location = new System.Drawing.Point(9, 20);
+            this.customsDescState.Name = "customsDescState";
+            this.customsDescState.Size = new System.Drawing.Size(15, 14);
+            this.customsDescState.TabIndex = 0;
+            this.customsDescState.Tag = "";
+            this.customsDescState.UseVisualStyleBackColor = true;
+            // 
+            // kryptonBorderEdge12
+            // 
+            this.kryptonBorderEdge12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge12.AutoSize = false;
+            this.kryptonBorderEdge12.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge12.Location = new System.Drawing.Point(29, 17);
+            this.kryptonBorderEdge12.Name = "kryptonBorderEdge1";
+            this.kryptonBorderEdge12.Size = new System.Drawing.Size(1, 23);
+            this.kryptonBorderEdge12.Text = "kryptonBorderEdge1";
+            // 
+            // customsDescription
+            // 
+            this.customsDescription.Location = new System.Drawing.Point(120, 17);
+            this.customsDescription.Name = "customsDescription";
+            this.customsDescription.Size = new System.Drawing.Size(260, 21);
+            this.customsDescription.TabIndex = 18;
+            // 
             // UpsProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1914,6 +1988,9 @@
             this.groupBoxPackages.ResumeLayout(false);
             this.groupBoxPackages.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            this.tabPageCustoms.ResumeLayout(false);
+            this.groupBoxGeneral.ResumeLayout(false);
+            this.groupBoxGeneral.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2070,5 +2147,11 @@
         private System.Windows.Forms.CheckBox requestedLabelFormatState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;
         private Insurance.InsuranceProfileControl insuranceControl;
+        private System.Windows.Forms.TabPage tabPageCustoms;
+        private System.Windows.Forms.GroupBox groupBoxGeneral;
+        private System.Windows.Forms.Label labelCustomsDescription;
+        private System.Windows.Forms.CheckBox customsDescState;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge12;
+        private UI.Controls.MultiValueTextBox customsDescription;
     }
 }

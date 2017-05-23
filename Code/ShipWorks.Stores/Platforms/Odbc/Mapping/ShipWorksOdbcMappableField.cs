@@ -143,8 +143,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Obfuscation(Exclude = false)]
         public void LoadValue(IEntity2 entity, IOdbcFieldValueResolver valueResolver)
         {
-            MethodConditions.EnsureArgumentIsNotNull(valueResolver, "Value Resolver");
-            MethodConditions.EnsureArgumentIsNotNull(entity, "Entity");
+            MethodConditions.EnsureArgumentIsNotNull(valueResolver, nameof(valueResolver));
+            MethodConditions.EnsureArgumentIsNotNull(entity, nameof(entity));
 
             if (Value == null)
             {

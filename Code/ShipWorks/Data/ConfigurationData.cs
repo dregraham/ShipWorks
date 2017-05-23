@@ -1,4 +1,5 @@
 using System.Threading;
+using Interapptive.Shared.Enums;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -109,6 +110,8 @@ namespace ShipWorks.Data
             config.AuditDeletedOrders = false;
 
             config.CustomerKey = string.Empty;
+
+            config.UseParallelActionQueue = true;
 
             adapter.SaveEntity(config);
         }

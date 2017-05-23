@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Walmart;
@@ -11,6 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
     /// Element host for the WPF WalmartStoreSetupControl
     /// </summary>
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Walmart, ExternallyOwned = true)]
+    [Order(typeof(WizardPage), Order.Unordered)]
     public partial class WalmartStoreSetupControlHost : AddStoreWizardPage
     {
         private readonly IWalmartStoreSetupControlViewModel viewModel;

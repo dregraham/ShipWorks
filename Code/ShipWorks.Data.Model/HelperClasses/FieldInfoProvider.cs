@@ -517,6 +517,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)BigCommerceStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "WeightUnitOfMeasure", typeof(System.Int32), false, false, false, false,  (int)BigCommerceStoreFieldIndex.WeightUnitOfMeasure, 0, 0, 10);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "BigCommerceAuthentication", typeof(Interapptive.Shared.Enums.BigCommerceAuthenticationType), false, false, false, false,  (int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, 0, 0, 10);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthClientId", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthClientId, 100, 0, 0);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthToken", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthToken, 100, 0, 0);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.Identifier, 110, 0, 0);
 		}
 		/// <summary>Inits BuyDotComOrderItemEntity's FieldInfo objects</summary>
 		private void InitBuyDotComOrderItemEntityInfos()
@@ -623,6 +627,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "AuditNewOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditNewOrders, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AuditDeletedOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditDeletedOrders, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -2821,6 +2826,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargePostalCode", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargePostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("UpsProfileEntity", "UspsPackageID", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.UspsPackageID, 100, 0, 0);
+			this.AddElementFieldInfo("UpsProfileEntity", "CustomsDescription", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CustomsDescription, 150, 0, 0);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()

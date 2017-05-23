@@ -197,6 +197,29 @@ namespace ShipWorks.Data
                         resource.Compressed = compress;
                         resource.Filename = resourceFilename;
 
+                        string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
+
+                        try
+                        {
+                            // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
+                            if (!File.Exists(filePath))
+                            {
+                                File.WriteAllBytes(filePath, data);
+                            }
+                            else
+                            {
+                                File.SetLastAccessTimeUtc(filePath, DateTime.UtcNow);
+                            }
+                        }
+                        catch (IOException ex)
+                        {
+                            log.Warn("Couldn't update file " + filePath, ex);
+                        }
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            log.Warn(string.Format("Unable to access file {0}", filePath), ex);
+                        }
+
                         using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
                         {
                             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
@@ -214,28 +237,6 @@ namespace ShipWorks.Data
                     }
                 }
 
-                string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
-
-                try
-                {
-                    // Go ahead and make sure its written locally to our resource path, as if its being asked for now it will likely be used soon
-                    if (!File.Exists(filePath))
-                    {
-                        File.WriteAllBytes(filePath, data);
-                    }
-                    else
-                    {
-                        File.SetLastAccessTimeUtc(filePath, DateTime.UtcNow);
-                    }
-                }
-                catch (IOException ex)
-                {
-                    log.Warn("Couldn't update file " + filePath, ex);
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    log.Warn(string.Format("Unable to access file {0}", filePath), ex);
-                }
             }
 
             return resourceID;

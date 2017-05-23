@@ -8,10 +8,13 @@ using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
@@ -33,7 +36,7 @@ namespace ShipWorks.Shipping.Editing
         // Keeps track of the selected row, if any
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldn't currently be raised
+        // Indicates if the event shouldn't currently be raised
         int suspendShipSenseFieldEvent = 0;
 
         /// <summary>
@@ -66,18 +69,12 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The shipments last past to LoadShipments
         /// </summary>
-        protected List<ShipmentEntity> LoadedShipments
-        {
-            get { return loadedShipments; }
-        }
+        protected List<ShipmentEntity> LoadedShipments => loadedShipments;
 
         /// <summary>
         /// The enable editing value last past to LoadShipments
         /// </summary>
-        protected bool EnableEditing
-        {
-            get { return enableEditing; }
-        }
+        protected bool EnableEditing => enableEditing;
 
         /// <summary>
         /// Load the given shipments customs information into the control and resets the selection
@@ -100,14 +97,9 @@ namespace ShipWorks.Shipping.Editing
             this.enableEditing = enableEditing;
 
             // Enable\disable the ContentPanels... not the groups themselves, so the groups can still be open\closed
-            foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>())
+            // Don't do the commodities panel, it gets its individual controls disabled
+            foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>().Where(x => x != sectionContents))
             {
-                // Don't do the commodities panel, it gets its individual controls disabled
-                if (group == sectionContents)
-                {
-                    continue;
-                }
-
                 group.ContentPanel.Enabled = enableEditing;
             }
 
@@ -123,7 +115,7 @@ namespace ShipWorks.Shipping.Editing
             itemsGrid.SelectionChanged += this.OnItemsGridChangeSelectedRow;
 
             // Each bucket represents a row that we will created.  if Description for a bucket is not null, it means EVERY shipment
-            // so far has at least one content item with that description.  Number of buckets = MAX(CustomContents.Count) accross all shipments.
+            // so far has at least one content item with that description.  Number of buckets = MAX(CustomContents.Count) across all shipments.
             List<RowBucket> buckets = new List<RowBucket>();
             loadedShipments = shipments.Where(s => CustomsManager.IsCustomsRequired(s)).ToList();
 
@@ -237,7 +229,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void RefreshItems()
         {
-            // Helps to retain selections when a shipment is synched with ShipSense; this retains
+            // Helps to retain selections when a shipment is synced with ShipSense; this retains
             // any rows that were selected prior to the sync.
 
             // Make note of any rows that are selected in the grid, so we can re-select them
@@ -344,14 +336,9 @@ namespace ShipWorks.Shipping.Editing
 
                 using (MultiValueScope scope = new MultiValueScope())
                 {
-                    foreach (GridRow row in selectedRows)
+                    foreach (ShipmentCustomsItemEntity customsItem in CustomsItemsFromRows(selectedRows))
                     {
-                        List<ShipmentCustomsItemEntity> selectedItems = (List<ShipmentCustomsItemEntity>) row.Tag;
-
-                        foreach (ShipmentCustomsItemEntity customsItem in selectedItems)
-                        {
-                            LoadFormData(customsItem);
-                        }
+                        LoadFormData(customsItem);
                     }
                 }
 
@@ -384,27 +371,27 @@ namespace ShipWorks.Shipping.Editing
             List<long> changedWeights = new List<long>();
             List<long> changedValues = new List<long>();
 
-            foreach (GridRow row in selectedRows)
+            foreach (ShipmentCustomsItemEntity customsItem in CustomsItemsFromRows(selectedRows))
             {
-                foreach (ShipmentCustomsItemEntity customsItem in (List<ShipmentCustomsItemEntity>) row.Tag)
-                {
-                    SaveCustomsItem(customsItem, changedWeights, changedValues);
-                }
+                SaveCustomsItem(customsItem, changedWeights, changedValues);
             }
 
             // Update the content weights and values for all affected shipments
-            UpdateContentWeight(loadedShipments.Where(s => changedWeights.Contains(s.ShipmentID )));
+            UpdateContentWeight(loadedShipments.Where(s => changedWeights.Contains(s.ShipmentID)));
             UpdateCustomsValue(loadedShipments.Where(s => changedValues.Contains(s.ShipmentID)));
         }
+
+        /// <summary>
+        /// Get the customs items from all the selected rows
+        /// </summary>
+        private static IEnumerable<ShipmentCustomsItemEntity> CustomsItemsFromRows(IEnumerable<GridRow> shipmentRows) =>
+            shipmentRows.Select(x => x.Tag).Cast<List<ShipmentCustomsItemEntity>>().SelectMany(x => x);
 
         /// <summary>
         /// Flush any in-progress changes before saving
         /// </summary>
         /// <remarks>This should cause weight controls to finish, etc.</remarks>
-        public virtual void FlushChanges()
-        {
-            weight.FlushChanges();
-        }
+        public virtual void FlushChanges() => weight.FlushChanges();
 
         /// <summary>
         /// Saves the customs item.
@@ -487,7 +474,7 @@ namespace ShipWorks.Shipping.Editing
         {
             foreach (ShipmentEntity shipment in shipments)
             {
-                shipment.CustomsValue = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
+                shipment.CustomsValue = CalculateCustomsValue(shipment);
             }
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -497,6 +484,19 @@ namespace ShipWorks.Shipping.Editing
                     customsValue.ApplyMultiAmount(shipment.CustomsValue);
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculate the total customs value for the given shipment
+        /// </summary>
+        /// <remarks>
+        /// This method will clamp the value it returns to the max value that can be stored in a field
+        /// </remarks>
+        private decimal CalculateCustomsValue(IShipmentEntity shipment)
+        {
+            decimal value = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
+
+            return Math.Min(value, SqlUtility.MoneyMaxValue);
         }
 
         /// <summary>
@@ -565,13 +565,7 @@ namespace ShipWorks.Shipping.Editing
 
             itemsGrid.SelectedElements.Clear();
 
-            List<ShipmentCustomsItemEntity> createdList = new List<ShipmentCustomsItemEntity>();
-
-            // Add to each shipment
-            foreach (ShipmentEntity shipment in loadedShipments)
-            {
-                createdList.Add(CustomsManager.CreateCustomsItem(shipment));
-            }
+            List<ShipmentCustomsItemEntity> createdList = loadedShipments.Select(CustomsManager.CreateCustomsItem).ToList();
 
             // We only need one row to represent all the items we just created
             if (createdList.Count > 0)
@@ -634,13 +628,10 @@ namespace ShipWorks.Shipping.Editing
             {
                 int location = AutoScrollPosition.Y + 5;
 
-                foreach (CollapsibleGroupControl group in Controls)
+                foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>().Where(x => x.Visible))
                 {
-                    if (group.Visible)
-                    {
-                        group.Location = new Point(group.Location.X, location);
-                        location = group.Bottom + 5;
-                    }
+                    group.Location = new Point(group.Location.X, location);
+                    location = group.Bottom + 5;
                 }
             }
         }
@@ -663,10 +654,7 @@ namespace ShipWorks.Shipping.Editing
                 return;
             }
 
-            if (ShipSenseFieldChanged != null)
-            {
-                ShipSenseFieldChanged(this, EventArgs.Empty);
-            }
+            ShipSenseFieldChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public List<ExcludedPackageTypeEntity> GetExcludedPackageTypes(ShipmentType shipmentType)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipmentType, "shipmentType");
+            MethodConditions.EnsureArgumentIsNotNull(shipmentType, nameof(shipmentType));
             RelationPredicateBucket bucket = new RelationPredicateBucket(ExcludedPackageTypeFields.ShipmentType == (int) shipmentType.ShipmentTypeCode);
 
             using (ExcludedPackageTypeCollection excludedPackages = new ExcludedPackageTypeCollection())

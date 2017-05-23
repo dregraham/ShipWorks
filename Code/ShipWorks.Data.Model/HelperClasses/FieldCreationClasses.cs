@@ -2042,6 +2042,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.BigCommerceAuthentication field instance</summary>
+		public static EntityField2 BigCommerceAuthentication
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.BigCommerceAuthentication);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.OauthClientId field instance</summary>
+		public static EntityField2 OauthClientId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.OauthClientId);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.OauthToken field instance</summary>
+		public static EntityField2 OauthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.OauthToken);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.Identifier field instance</summary>
+		public static EntityField2 Identifier
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.Identifier);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity BuyDotComOrderItemEntity</summary>
@@ -3981,6 +4001,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomerKey
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerKey);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.UseParallelActionQueue field instance</summary>
+		public static EntityField2 UseParallelActionQueue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.UseParallelActionQueue);}
 		}
 	}
 
@@ -21736,6 +21761,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UspsPackageID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.UspsPackageID);}
+		}
+		/// <summary>Creates a new UpsProfileEntity.CustomsDescription field instance</summary>
+		public static EntityField2 CustomsDescription
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsProfileFieldIndex.CustomsDescription);}
 		}
 	}
 

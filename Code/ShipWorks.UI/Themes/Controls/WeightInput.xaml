@@ -28,7 +28,7 @@
 
                     <TextBox Name="PART_Entry"
                              Text="{Binding Path=Text,RelativeSource={RelativeSource TemplatedParent},NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}"
-                             Style="{StaticResource Grid.TextBox.Number}"
+                             Style="{StaticResource Grid.TextBox.Weight}"
                              Background="White"
                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                              VerticalContentAlignment="Center">

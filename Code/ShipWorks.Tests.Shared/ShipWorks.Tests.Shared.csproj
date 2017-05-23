@@ -166,13 +166,22 @@
     <Compile Include="EntityBuilders\UpsProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
+    <Compile Include="IKeyedMockCreator.cs" />
     <Compile Include="ImmediateSchedulerProvider.cs" />
+    <Compile Include="IMockFactory.cs" />
+    <Compile Include="KeyedMockCreator.cs" />
+    <Compile Include="MockFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestExecutionMode.cs" />
     <Compile Include="TestMessenger.cs" />
     <Compile Include="TestPackageAdapter.cs" />
     <Compile Include="TestSchedulerProvider.cs" />
     <Compile Include="TestStoreType.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STAFactAttribute.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STAFactDiscoverer.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATestCase.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATheoryAttribute.cs" />
+    <Compile Include="XUnitExtensions\STAThreadAttributes\STATheoryDiscoverer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
