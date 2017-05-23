@@ -15,6 +15,9 @@ namespace ShipWorks.UI.Controls
      TemplatePart(Name = "PART_MainContent", Type = typeof(ContentPresenter))]
     public class AnimatedContentControl : ContentControl
     {
+        /// <summary>
+        /// Static constructor
+        /// </summary>
         static AnimatedContentControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AnimatedContentControl), new FrameworkPropertyMetadata(typeof(AnimatedContentControl)));
