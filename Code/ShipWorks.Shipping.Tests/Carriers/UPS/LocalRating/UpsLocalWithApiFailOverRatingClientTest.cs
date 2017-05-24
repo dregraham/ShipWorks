@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using Xunit;
 

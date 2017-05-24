@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating

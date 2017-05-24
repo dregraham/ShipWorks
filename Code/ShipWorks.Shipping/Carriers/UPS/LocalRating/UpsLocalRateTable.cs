@@ -271,7 +271,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                 return upsLocalServiceRates.Any() ? 
                     GenericResult.FromSuccess(upsLocalServiceRates.AsEnumerable()) : 
-                    GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>("No local rates found.");
+                    GenericResult.FromError<IEnumerable<UpsLocalServiceRate>>("No local rates found");
             }
             catch (UpsLocalRatingException ex)
             {

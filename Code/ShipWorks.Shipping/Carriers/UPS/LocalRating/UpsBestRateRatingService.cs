@@ -8,6 +8,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.Promo;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
@@ -18,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsBestRateRatingService : UpsRatingService, IUpsBestRateRatingService
     {
         private readonly ILicenseService licenseService;
+        private UpsRatingMethod methodToUse;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBestRateRatingService"/> class.
@@ -45,7 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             // Filter out any rating methods unavailable to the user
             licenseService.GetLicenses()?.FirstOrDefault()?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, availableRatingMethods);
 
-            UpsRatingMethod methodToUse;
             if (account.LocalRatingEnabled)
             {
                 methodToUse = availableRatingMethods.Any(m => m == UpsRatingMethod.LocalWithApiFailover) ?
@@ -60,11 +61,27 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
                 else
                 {
-                    throw new UpsException($"To get rates for account {account.Description}, local rating must be enabled.");
+                    throw new UpsBestRateRatingException();
                 }
             }
 
             return upsRateClientFactory[methodToUse];
+        }
+
+        /// <summary>
+        /// Gets the rate result for the shipment
+        /// </summary>
+        protected override GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment,
+            UpsAccountEntity account)
+        {
+            GenericResult<List<UpsServiceRate>> rateResult = base.GetRateResult(shipment, account);
+            
+            if (methodToUse == UpsRatingMethod.LocalOnly && rateResult.Failure)
+            {
+                throw new UpsLocalRatingException(rateResult.Message);
+            }
+
+            return rateResult;
         }
     }
 }

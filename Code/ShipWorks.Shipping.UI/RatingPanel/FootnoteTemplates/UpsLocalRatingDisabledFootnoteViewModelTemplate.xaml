@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <DataTemplate x:Key="UpsLocalRatingExceptionFootnoteViewModelTemplate">
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/warning.png" />
+            <TextBlock Margin="6,1,0,0" Text="ShipWorks did not find any UPS rates for this shipment using local rating. ">
+                <Hyperlink Command="{Binding OnClickMoreInfo}">More Info...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

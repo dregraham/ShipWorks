@@ -1,7 +1,6 @@
 ﻿using System;
-using ShipWorks.Shipping.Carriers.UPS;
 
-namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
+namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
 {
     /// <summary>
     /// An exception for Ups Local Rating related errors

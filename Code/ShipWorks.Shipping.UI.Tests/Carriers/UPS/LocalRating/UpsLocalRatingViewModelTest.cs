@@ -10,6 +10,7 @@ using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using Xunit;

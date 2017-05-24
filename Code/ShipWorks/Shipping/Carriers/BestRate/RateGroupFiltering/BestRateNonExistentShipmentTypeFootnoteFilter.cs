@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
@@ -22,10 +23,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             List<RateResult> rates = rateGroup.Rates;
 
             // Remove the footnote factories that do not have associated rates in the rate group
-            // We want to keep the footnote indicating that a shipping account is required, though.
+            // We want to keep the footnote indicating that a shipping account is required and
+            // any footnotes dealing with Ups local rating
             List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories
-                                                        .Where(f => f.GetType() == typeof(ShippingAccountRequiredForRatingFootnoteFactory)
-                                                                    || rates.Select(r => r.ShipmentType).Contains(f.ShipmentTypeCode)).ToList();
+                .Where(f => f.GetType() == typeof(ShippingAccountRequiredForRatingFootnoteFactory) ||
+                            f.GetType() == typeof(UpsLocalRatingDisabledFootnoteFactory) ||
+                            f.GetType() == typeof(UpsLocalRatingExceptionFootnoteFactory) ||
+                            rates.Select(r => r.ShipmentType).Contains(f.ShipmentTypeCode))
+                .ToList();
 
             RateGroup filteredRateGroup = new RateGroup(rates);
             footnoteFactories.ForEach(filteredRateGroup.AddFootnoteFactory);

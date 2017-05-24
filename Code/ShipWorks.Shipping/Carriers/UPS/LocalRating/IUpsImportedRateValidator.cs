@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
