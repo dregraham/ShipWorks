@@ -28,7 +28,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories
                 .Where(f => f.GetType() == typeof(ShippingAccountRequiredForRatingFootnoteFactory) ||
                             f.GetType() == typeof(UpsLocalRatingDisabledFootnoteFactory) ||
-                            f.GetType() == typeof(UpsLocalRatingExceptionFootnoteFactory) ||
                             rates.Select(r => r.ShipmentType).Contains(f.ShipmentTypeCode))
                 .ToList();
 

@@ -15,7 +15,6 @@
         <ResourceDictionary Source="UspsRateNotQualifiedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UspsRatePromotionFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UpsLocalRatingDisabledFootnoteViewModelTemplate.xaml" />
-        <ResourceDictionary Source="UpsLocalRatingExceptionFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="UpsPromoFootnoteViewModelTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

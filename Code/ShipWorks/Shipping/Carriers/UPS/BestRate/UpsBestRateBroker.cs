@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
@@ -15,7 +13,6 @@ using ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -240,10 +237,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 catch (UpsBestRateRatingException)
                 {
                     rates.AddFootnoteFactory(new UpsLocalRatingDisabledFootnoteFactory(AccountRepository.GetAccount(shipment)));
-                }
-                catch (UpsLocalRatingException ex)
-                {
-                    rates.AddFootnoteFactory(new UpsLocalRatingExceptionFootnoteFactory(ex.Message, shipment.ShipmentTypeCode));
                 }
             }
 

@@ -16,19 +16,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes
             this.parameters = parameters;
             this.upsAccount = upsAccount;
             InitializeComponent();
-
-            if (upsAccount.LocalRatingEnabled)
-            {
-                footnote.Text = "ShipWorks did not find any UPS rates for this shipment. Please review and update your UPS local rates.";
-                accountSettingsLink.Visible = false;
-                accountSettingsLink.Enabled = false;
-            }
-            else
-            {
-                footnote.Text = "UPS local rating needs to be enabled to compare UPS rates. To setup local rating for this account,";
-                accountSettingsLink.Visible = true;
-                accountSettingsLink.Enabled = true;
-            }
         }
 
         /// <summary>

@@ -1253,7 +1253,6 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\IUpsLocalRatingDisabledFootnoteViewModel.cs" />
-    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\IUpsLocalRatingExceptionFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1261,13 +1260,6 @@
       <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnoteFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingExceptionFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingExceptionFootnote.Designer.cs">
-      <DependentUpon>UpsLocalRatingExceptionFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingExceptionFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsBestRateRatingException.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsLocalRatingException.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
@@ -8084,9 +8076,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
       <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingExceptionFootnote.resx">
-      <DependentUpon>UpsLocalRatingExceptionFootnote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>

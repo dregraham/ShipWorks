@@ -2,13 +2,13 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
-    <DataTemplate x:Key="UpsLocalRatingExceptionFootnoteViewModelTemplate">
+    <DataTemplate x:Key="UpsLocalRatingDisabledFootnoteViewModelTemplate">
         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
             <Image Style="{StaticResource Image.Icon}"
-                   Source="/Shipworks.Core;component/Resources/warning.png" />
-            <TextBlock Margin="6,1,0,0" Text="ShipWorks did not find any UPS rates for this shipment using local rating. ">
-                <Hyperlink Command="{Binding OnClickMoreInfo}">More Info...</Hyperlink>
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
+            <TextBlock Margin="6,1,0,0">
+                Local rating needs to be enabled to compare UPS rates.
+                <Hyperlink Command="{Binding OpenAccountSettings}">Enable...</Hyperlink>
             </TextBlock>
         </StackPanel>
     </DataTemplate>
