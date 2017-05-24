@@ -122,9 +122,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the rate result for the shipment
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="account">The account.</param>
-        /// <returns></returns>
         protected virtual GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment, UpsAccountEntity account)
         {
             IUpsRateClient upsRateClient = GetRatingClient(account);

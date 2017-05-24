@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 
             // Remove the footnote factories that do not have associated rates in the rate group
             // We want to keep the footnote indicating that a shipping account is required and
-            // any footnotes dealing with Ups local rating
+            // that local rating must be enabled to use UPS with best rate.
             List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories
                 .Where(f => f.GetType() == typeof(ShippingAccountRequiredForRatingFootnoteFactory) ||
                             f.GetType() == typeof(UpsLocalRatingDisabledFootnoteFactory) ||
