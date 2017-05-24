@@ -48,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
                 new ShipperReleaseSurcharge(surchargeLookup),
                 new SignatureSurcharge(surchargeLookup),
                 new VerbalConfirmationSurcharge(surchargeLookup), 
+                new DeclaredValueSurcharge(surchargeLookup), 
                 
                 // Third party billing is based on the shipments total price
                 new ThirdPartyBillingSurcharge(surchargeLookup)

@@ -95,7 +95,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             AddRow(worksheet, new[] { "Large Package", "yes very" });
 
             Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("The rate for Large Package is invalid 'yes very'.", ex.Message);
+            Assert.Equal("The rate for Large Package \"yes very\" should be numeric.", ex.Message);
+        }
+
+        [Fact]
+        public void Read_ThrowsUpsLocalRatingException_WhenSurchargeRateIsBlank()
+        {
+            Mock<IUpsLocalRateTable> rateTable = mock.Mock<IUpsLocalRateTable>();
+
+            IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            worksheet.Name = "Value Add";
+            worksheet.Range["A1"].Text = "Value Added Service";
+            worksheet.Range["B1"].Text = "Rate";
+            AddRow(worksheet, new[] { "Large Package", "" });
+
+            Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
+            Assert.Equal("The rate for Large Package is blank and should be numeric.", ex.Message);
         }
 
         [Fact]
@@ -130,10 +147,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             AddRow(worksheet, new[] { "unknown surcharge", "2.00" });
             
             Exception ex = Assert.Throws<UpsLocalRatingException>(() => testObject.Read(workbook.Worksheets, rateTable.Object));
-            Assert.Equal("Unknown Surcharge or Value Add unknown surcharge", ex.Message);
+            Assert.Equal("Unknown Value Added Service description on tab \"Value Add\": \"unknown surcharge\"", ex.Message);
         }
 
-        private void AddRow(IWorksheet workSheet , string[] values)
+        private void AddRow(IWorksheet workSheet, string[] values)
         {
             workSheet.InsertRow(workSheet.Rows.Length + 1);
             IRange row = workSheet.Rows.Last();
