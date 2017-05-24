@@ -10,7 +10,6 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public class ExceptionsRateFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly string errorMessage;
         private readonly RatingExceptionType ratingExceptionType;
 
         /// <summary>
@@ -24,8 +23,13 @@ namespace ShipWorks.Shipping.Editing.Rating
                 RatingExceptionType.InvalidPackageDimensions :
                 RatingExceptionType.General;
 
-            errorMessage = exception.Message;
+            ErrorMessage = exception.Message;
         }
+
+        /// <summary>
+        /// Gets the error message.
+        /// </summary>
+        public string ErrorMessage { get; }
 
         /// <summary>
         /// Notes that this factory should be used in BestRate
@@ -64,8 +68,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return ratingExceptionType == RatingExceptionType.InvalidPackageDimensions ?
-               (RateFootnoteControl) new InvalidPackageDimensionsRateFootnoteControl(errorMessage) :
-                new ExceptionsRateFootnoteControl(errorMessage);
+               (RateFootnoteControl) new InvalidPackageDimensionsRateFootnoteControl(ErrorMessage) :
+                new ExceptionsRateFootnoteControl(ErrorMessage);
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             viewModel.ErrorText = ratingExceptionType == RatingExceptionType.InvalidPackageDimensions ?
                 "Invalid package dimensions." :
                 "Some errors occurred while getting rates.";
-            viewModel.DetailedMessage = errorMessage;
+            viewModel.DetailedMessage = ErrorMessage;
             return viewModel;
         }
     }

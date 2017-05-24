@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -36,6 +37,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             base(shipmentType, accountRepository, "FedEx")
         {
 
+        }
+
+        /// <summary>
+        /// Gets the single best rate for each account based
+        /// on the configuration of the best rate shipment data.
+        /// </summary>
+        /// <returns>
+        /// A list of RateResults composed of the single best rate for each account.
+        /// </returns>
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
+        {
+            RateGroup bestRates = base.GetBestRates(shipment, brokerExceptions);
+
+            foreach (ExceptionsRateFootnoteFactory rateFootnoteFactory in bestRates.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>())
+            {
+                brokerExceptions.Add(new BrokerException(new ShippingException(rateFootnoteFactory.ErrorMessage), BrokerExceptionSeverityLevel.Error, ShipmentType));
+            }
+
+            return bestRates;
         }
 
         /// <summary>

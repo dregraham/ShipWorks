@@ -74,6 +74,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 brokerExceptions.Add(new BrokerException(new ShippingException("UPS did not provide SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
             }
 
+            foreach (ExceptionsRateFootnoteFactory rateFootnoteFactory in bestRates.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>())
+            {
+                brokerExceptions.Add(new BrokerException(new ShippingException(rateFootnoteFactory.ErrorMessage), BrokerExceptionSeverityLevel.Error, ShipmentType));
+            }
+
             return bestRates;
         }
 
