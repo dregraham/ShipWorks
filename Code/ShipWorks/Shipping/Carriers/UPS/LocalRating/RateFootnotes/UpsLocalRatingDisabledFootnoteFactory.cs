@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes
 {
     /// <summary>
-    /// 
+    /// Footnote factory for creating footnotes when no UPS rates are returned because local is not enabled
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Editing.Rating.IRateFootnoteFactory" />
     public class UpsLocalRatingDisabledFootnoteFactory : IRateFootnoteFactory
