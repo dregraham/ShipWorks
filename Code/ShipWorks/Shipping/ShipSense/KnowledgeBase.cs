@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.ShipSense
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to
             // reduce the number of database calls
-            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
+            string shipSenseXml = ShippingSettings.FetchReadOnly().ShipSenseUniquenessXml;
             IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
 
             return hashingStrategy.ComputeHash(keys);

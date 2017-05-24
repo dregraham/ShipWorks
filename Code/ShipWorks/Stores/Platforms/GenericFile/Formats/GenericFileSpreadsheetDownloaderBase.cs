@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Import.Spreadsheet;
@@ -76,16 +79,25 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             {
                 using (GenericSpreadsheetReader reader = CreateReader(file))
                 {
-                    while (reader.NextRecord())
+                    double speed = 0;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    using (new LoggedStopwatch(LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase)), "GenFile Importing orders time to run."))
                     {
-                        // Update the status
-                        Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
-
-                        LoadOrder(reader);
-
-                        if (Progress.IsCancelRequested)
+                        while (reader.NextRecord())
                         {
-                            return false;
+                            // Update the status
+                            Progress.Detail = $"Importing record {(QuantitySaved + 1)}... {speed:##.##} ms/order";
+
+                            LoadOrder(reader);
+
+                            if (Progress.IsCancelRequested)
+                            {
+                                return false;
+                            }
+
+                            speed = sw.ElapsedMilliseconds * 1.0 / QuantitySaved * 1.0;
                         }
                     }
                 }

@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Content
                 return;
             }
 
-            long? foundID = CustomerProvider.FindExistingCustomer(customer, true, false, SqlAdapter.Default);
+            long? foundID = CustomerProvider.FindExistingCustomer(customer, true, false, SqlAdapter.Default).CustomerID;
             if (foundID != null)
             {
                 DialogResult result = MessageHelper.ShowQuestion(this,
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Content
                 }
             }
 
-            foundID = CustomerProvider.FindExistingCustomer(customer, false, true, SqlAdapter.Default);
+            foundID = CustomerProvider.FindExistingCustomer(customer, false, true, SqlAdapter.Default).CustomerID;
             if (foundID != null)
             {
                 DialogResult result = MessageHelper.ShowQuestion(this,

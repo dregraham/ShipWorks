@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
-using ShipWorks.ApplicationCore;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
 using System.Diagnostics;
-using ShipWorks.Data.Controls;
+using System.Linq;
 using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Data.Model;
 using ShipWorks.Stores.Communication;
 using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Content
 {
@@ -29,38 +26,42 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Creates or loads a customer record based on configuration and the specified order.
         /// </summary>
-        public static long AcquireCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
+        public static CustomerEntity AcquireCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter, bool persist)
         {
-            long? customerID = null;
+            CustomerEntity customer = null;
 
             // This section of code can only be executed by a single thread - accross all computers running shipworks - at a time.
             using (CustomerAcquisitionLock customerLock = new CustomerAcquisitionLock())
             {
                 Stopwatch sw = Stopwatch.StartNew();
 
-                // Find the customer using its online identifier
-                customerID = FindExistingCustomer(order, storeType, adapter);
+                if (order.CustomerID > 0)
+                {
+                    customer = DataProvider.GetEntity(order.CustomerID, adapter, true) as CustomerEntity;
+                }
+                else
+                {
+                    // Find the customer using its online identifier
+                    customer = FindExistingCustomer(order, storeType, adapter);
+                }
 
                 TimeSpan searchTime = sw.Elapsed;
 
                 // If we still don't have a customer, we have to create one
-                if (customerID == null)
+                if (customer == null)
                 {
                     log.InfoFormat("  Creating new customer.");
 
-                    customerID = CreateCustomer(order, adapter);
+                    customer = CreateCustomer(order, adapter, persist);
                 }
                 // We found it, we may need to update it
                 else
                 {
-                    ConfigurationEntity config = ConfigurationData.Fetch();
+                    IConfigurationEntity config = ConfigurationData.FetchReadOnly();
 
                     // Have to update
                     if (config.CustomerUpdateShipping || config.CustomerUpdateBilling)
                     {
-                        CustomerEntity customer = new CustomerEntity(customerID.Value);
-                        adapter.FetchEntity(customer);
-
                         if (config.CustomerUpdateBilling)
                         {
                             PersonAdapter.Copy(order, customer, "Bill");
@@ -71,8 +72,11 @@ namespace ShipWorks.Stores.Content
                             PersonAdapter.Copy(order, customer, "Ship");
                         }
 
-                        // Save it back
-                        adapter.SaveEntity(customer);
+                        if (config.CustomerUpdateBilling || config.CustomerUpdateShipping || customer.IsDirty)
+                        {
+                            // Save it back
+                            adapter.SaveEntity(customer);
+                        }
                     }
                 }
 
@@ -82,51 +86,67 @@ namespace ShipWorks.Stores.Content
                     100 * searchTime.TotalSeconds / sw.Elapsed.TotalSeconds);
             }
 
-            return customerID.Value;
+            return customer;
+        }
+
+        /// <summary>
+        /// Find a CustomerID, searching using the specified predicate
+        /// </summary>
+        private static CustomerEntity FindCustomer(IPredicate predicate, SqlAdapter adapter)
+        {
+            if (predicate == null)
+            {
+                return null;
+            }
+
+            return FindCustomer(new RelationPredicateBucket(predicate), adapter);
+        }
+
+        /// <summary>
+        /// Find a CustomerID, searching using the specified predicate
+        /// </summary>
+        private static CustomerEntity FindCustomer(RelationPredicateBucket bucket, SqlAdapter adapter)
+        {
+            if (bucket == null)
+            {
+                return null;
+            }
+
+            CustomerEntity customer = null;
+            CustomerCollection customerCollection = new CustomerCollection();
+            bucket.Relations.Add(OrderEntity.Relations.CustomerEntityUsingCustomerID);
+
+            adapter.FetchEntityCollection(customerCollection, bucket);
+
+            customer = customerCollection?.FirstOrDefault();
+
+            return customer;
         }
 
         /// <summary>
         /// Find an existing customer that matches the properties of the given order for the specified store type
         /// </summary>
-        public static long? FindExistingCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
+        public static CustomerEntity FindExistingCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
         {
-            long? customerID = FindCustomerID(OrderFields.CustomerID, GetCompareOnlineIdentifierPredicate(order, storeType), adapter);
+            CustomerEntity customer = FindCustomer(GetCompareOnlineIdentifierPredicate(order, storeType), adapter);
 
-            if (customerID != null)
+            if (customer != null)
             {
-                log.InfoFormat("  Customer {0} found by online identifier.", customerID);
-                return customerID;
+                log.InfoFormat("  Customer {0} found by online identifier.", customer.CustomerID);
+                return customer;
             }
 
-            ConfigurationEntity config = ConfigurationData.Fetch();
+            IConfigurationEntity config = ConfigurationData.FetchReadOnly();
 
             return FindExistingCustomer(order, config.CustomerCompareEmail, config.CustomerCompareAddress, adapter);
         }
 
         /// <summary>
-        /// See if there is an existing customer that matches the specified customer using the configuration in the options
-        /// </summary>
-        public static long? FindExistingCustomer(CustomerEntity customer, SqlAdapter adapter)
-        {
-            ConfigurationEntity config = ConfigurationData.Fetch();
-
-            return FindExistingCustomer((EntityBase2) customer, config.CustomerCompareEmail, config.CustomerCompareAddress, adapter);
-        }
-
-        /// <summary>
-        /// See if there is an existing customer that matches the specified customer using the configuration in the options
-        /// </summary>
-        public static long? FindExistingCustomer(CustomerEntity customer, bool compareEmail, bool compareMailing, SqlAdapter adapter)
-        {
-            return FindExistingCustomer((EntityBase2) customer, compareEmail, compareMailing, adapter);
-        }
-
-        /// <summary>
         /// Find an existing customer based on the address information in the given entity
         /// </summary>
-        private static long? FindExistingCustomer(EntityBase2 entity, bool compareEmail, bool compareMailing, SqlAdapter adapter)
+        private static CustomerEntity FindExistingCustomer(EntityBase2 entity, bool compareEmail, bool compareMailing, SqlAdapter adapter)
         {
-            long? customerID = null;
+            CustomerEntity customer = null;
 
             PersonAdapter billPerson = new PersonAdapter(entity, "Bill");
 
@@ -134,70 +154,37 @@ namespace ShipWorks.Stores.Content
             if (compareEmail)
             {
                 // Find a match in the order table
-                customerID = FindCustomerID(OrderFields.CustomerID, GetCompareOrderEmailPredicate(billPerson), adapter);
+                customer = FindCustomer(GetCompareOrderEmailPredicate(billPerson), adapter);
 
                 // Find a match in the customer table
-                if (customerID == null)
+                if (customer == null)
                 {
-                    customerID = FindCustomerID(CustomerFields.CustomerID, GetCompareCustomerEmailPredicate(billPerson), adapter);
+                    customer = FindCustomer(GetCompareCustomerEmailPredicate(billPerson), adapter);
                 }
             }
 
             // Find the customer using the billing mailing address
-            if (customerID == null && compareMailing)
+            if (customer == null && compareMailing)
             {
                 // Find it in the order table
-                customerID = FindCustomerID(OrderFields.CustomerID, GetCompareOrderAddressPredicate(billPerson), adapter);
+                customer = FindCustomer(GetCompareOrderAddressPredicate(billPerson), adapter);
 
                 // Then look in the customer table
-                if (customerID == null)
+                if (customer == null)
                 {
-                    customerID = FindCustomerID(CustomerFields.CustomerID, GetCompareCustomerAddressPredicate(billPerson), adapter);
+                    customer = FindCustomer(GetCompareCustomerAddressPredicate(billPerson), adapter);
                 }
             }
 
-            return customerID;
+            return customer;
         }
 
         /// <summary>
-        /// Find a CustomerID, searching using the specified predicate
+        /// See if there is an existing customer that matches the specified customer using the configuration in the options
         /// </summary>
-        private static long? FindCustomerID(EntityField2 customerIDField, IPredicate predicate, SqlAdapter adapter)
+        public static CustomerEntity FindExistingCustomer(CustomerEntity customer, bool compareEmail, bool compareMailing, SqlAdapter adapter)
         {
-            if (predicate == null)
-            {
-                return null;
-            }
-
-            return FindCustomerID(customerIDField, new RelationPredicateBucket(predicate), adapter);
-        }
-
-        /// <summary>
-        /// Find a CustomerID, searching using the specified predicate
-        /// </summary>
-        private static long? FindCustomerID(EntityField2 customerIDField, RelationPredicateBucket bucket, SqlAdapter adapter)
-        {
-            if (bucket == null)
-            {
-                return null;
-            }
-
-            // We need to try to pull the CustomerID
-            ResultsetFields resultFields = new ResultsetFields(1);
-            resultFields.DefineField(customerIDField, 0, "CustomerID", "");
-
-            // Do the fetch
-            DataTable result = new DataTable();
-            adapter.FetchTypedList(resultFields, result, bucket, 1, true);
-
-            if (result.Rows.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return (long) result.Rows[0][0];
-            }
+            return FindExistingCustomer((EntityBase2) customer, compareEmail, compareMailing, adapter);
         }
 
         /// <summary>
@@ -323,7 +310,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create a new customer record based on the properties of the order
         /// </summary>
-        private static long CreateCustomer(OrderEntity order, SqlAdapter adapter)
+        private static CustomerEntity CreateCustomer(OrderEntity order, SqlAdapter adapter, bool persist)
         {
             CustomerEntity customer = new CustomerEntity();
 
@@ -334,10 +321,12 @@ namespace ShipWorks.Stores.Content
             customer.RollupOrderTotal = 0;
             customer.RollupNoteCount = 0;
 
-            adapter.SaveEntity(customer);
+            if (persist)
+            {
+                adapter.SaveEntity(customer);
+            }
 
-            // Entity will be OutOfSync, so we have to get the field directly
-            return (long) customer.Fields[(int) CustomerFieldIndex.CustomerID].CurrentValue;
+            return customer;
         }
     }
 }
