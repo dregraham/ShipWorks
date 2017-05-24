@@ -1261,7 +1261,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsBestRateRatingException.cs" />
-    <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsLocalRatingException.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />

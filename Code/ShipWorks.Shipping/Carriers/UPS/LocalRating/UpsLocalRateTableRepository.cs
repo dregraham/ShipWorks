@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;

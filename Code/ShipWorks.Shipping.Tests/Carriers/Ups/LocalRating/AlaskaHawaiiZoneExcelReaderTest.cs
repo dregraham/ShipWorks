@@ -3,7 +3,6 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
-using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Tests.Shared;
 using Syncfusion.XlsIO;
 using Xunit;

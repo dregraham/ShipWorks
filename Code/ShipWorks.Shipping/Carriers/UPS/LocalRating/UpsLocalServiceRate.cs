@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using log4net;
-using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {

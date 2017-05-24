@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;

@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating

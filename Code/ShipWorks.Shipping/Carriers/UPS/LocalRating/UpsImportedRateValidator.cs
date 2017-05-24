@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {

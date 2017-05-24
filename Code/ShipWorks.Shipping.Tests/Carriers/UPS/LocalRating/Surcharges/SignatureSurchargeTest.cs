@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges

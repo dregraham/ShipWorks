@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;

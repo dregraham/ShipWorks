@@ -6,13 +6,10 @@ using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using Xunit;
 
