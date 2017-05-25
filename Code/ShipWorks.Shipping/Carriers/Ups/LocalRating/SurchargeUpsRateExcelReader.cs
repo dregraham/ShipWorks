@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using System.Globalization;
 using Interapptive.Shared.Collections;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {
@@ -74,12 +75,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         }
         
         /// <summary>
-        /// Parshe the surcharge from the row and add it to the list of surcharges
+        /// Parse the surcharge from the row and add it to the list of surcharges
         /// </summary>
         private void AddRowToSurcharges(IRange row, IList<UpsRateSurchargeEntity> surcharges)
         {
             // try to parse the surcharge type
-            UpsSurchargeType surcharge = GetSurchargeType(row.Cells[0].Value);
+            UpsSurchargeType surcharge = GetSurchargeType(row.Cells[0]);
 
             double amount;
             if (double.TryParse(row.Cells[1].Value, NumberStyles, CultureInfo.CurrentCulture, out amount))
@@ -88,7 +89,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             }
             else
             {
-                throw new UpsLocalRatingException($"The rate for {row.Cells[0].Value} is invalid '{row.Cells[1].Value}'.");
+                string value = row.Cells[1].Value;
+                string message = string.IsNullOrWhiteSpace(value) ? 
+                    $"The rate for {row.Cells[0].Value} is blank and should be numeric." : 
+                    $"The rate for {row.Cells[0].Value} \"{row.Cells[1].Value}\" should be numeric.";
+                throw new UpsLocalRatingException(message);
             }
         }
 
@@ -127,14 +132,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Get the surcharge type from the string
         /// </summary>
         /// <exception cref="UpsLocalRatingException">When the surcharge type is unknown</exception>
-        private UpsSurchargeType GetSurchargeType(string name)
+        private UpsSurchargeType GetSurchargeType(IRange labelCell)
         {
+            string name = labelCell.Value.Trim();
             IEnumerable<EnumEntry<UpsSurchargeType>> surcharge =
                 surchargeTypeMap.Where(e => e.Description == name).ToList();
             
             if (surcharge.Count() != 1)
             {
-                throw new UpsLocalRatingException($"Unknown Surcharge or Value Add {name}");
+                throw new UpsLocalRatingException($"Unknown {labelCell.EntireColumn.Cells[0].Value} description on tab \"{labelCell.Worksheet.Name}\": \"{name}\"");
             }
 
             return surcharge.First().Value;

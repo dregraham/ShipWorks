@@ -181,6 +181,7 @@
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ShipDayServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\AdditionalHandlingSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeclaredValueSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\DryIceSurchargeTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelAirSurchargeTest.cs" />

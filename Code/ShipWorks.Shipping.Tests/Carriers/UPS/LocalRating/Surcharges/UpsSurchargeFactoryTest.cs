@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 typeof(ShipperReleaseSurcharge),
                 typeof(SignatureSurcharge),
                 typeof(VerbalConfirmationSurcharge),
+                typeof(DeclaredValueSurcharge),
                 typeof(ThirdPartyBillingSurcharge)
             };
 

@@ -106,6 +106,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.LocalRating
         SaturdayPickup = 33,
 
         [Description("NDA Early Over 150 LBS")]
-        NdaEarlyOver150Lbs = 34
+        NdaEarlyOver150Lbs = 34,
+
+        [Description("Declared Value - Minimum Charge")]
+        DeclaredValueMinimumCharge = 35,
+
+        [Description("Declared Value - Price Per Hundred")]
+        DeclaredValuePricePerHundred = 36
     }
 }

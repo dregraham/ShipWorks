@@ -58,6 +58,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         }
 
         [Theory]
+        [InlineData(100)]
+        [InlineData(101)]
+        [InlineData(400)]
+        public void DeclaredValue(decimal value)
+        {
+            RunTest(s=>s.Ups.Packages[0].DeclaredValue=value);
+        }
+
+        [Theory]
         [InlineData(100, 20, 10, 10)] // Dimensional Weight is 144
         [InlineData(71, 23, 7, 10)] // Dimensional Weight is 69, but UPS business rules should have it rated at 90 because it is a large package
         [InlineData(80, 20, 20, 10)] // Billable Weight is 231 - over the 150 limit, but dimensional.
