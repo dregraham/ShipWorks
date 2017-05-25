@@ -164,6 +164,7 @@
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingDisabledFootnoteViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml.cs">
       <DependentUpon>UpsLocalRatingControl.xaml</DependentUpon>
@@ -496,6 +497,10 @@
     <Page Include="RatingPanel\FootnoteTemplates\ShippingAccountRequiredForRatingFootnoteViewModelTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UpsLocalRatingDisabledFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\UpsPromoFootnoteViewModelTemplate.xaml">
       <SubType>Designer</SubType>

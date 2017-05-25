@@ -9,7 +9,6 @@ using Syncfusion.XlsIO;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using Xunit.Sdk;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {

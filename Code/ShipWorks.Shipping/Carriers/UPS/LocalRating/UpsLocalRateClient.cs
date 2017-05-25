@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -22,26 +21,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     {
         private readonly IApiLogEntry apiLog;
         private readonly IUpsLocalRateTable localRateTable;
-        private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateClient"/> class.
         /// </summary>
         public UpsLocalRateClient(IUpsLocalRateTable localRateTable,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory)
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             this.localRateTable = localRateTable;
-            this.upsRateClientFactory = upsRateClientFactory;
             apiLog = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate");
-            LocalRates = Enumerable.Empty<UpsLocalServiceRate>();
         }
-
-        /// <summary>
-        /// The UPS service rates from the last rating activity.
-        /// </summary>
-        /// <value>The UPS service rates that were calculated locally.</value>
-        public IEnumerable<UpsLocalServiceRate> LocalRates { get; private set; }
 
         /// <summary>
         /// Gets rates for the given shipment
@@ -52,14 +41,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             GenericResult<List<UpsServiceRate>> rateResult;
             if (calculatedRateResult.Success)
             {
-                LocalRates = calculatedRateResult.Value.ToList();
-                LogSuccess(LocalRates, shipment);
-                rateResult = GenerateLocalRateResults(LocalRates);
+                IEnumerable<UpsLocalServiceRate> localRates = calculatedRateResult.Value.ToList();
+                LogSuccess(localRates, shipment);
+                rateResult = GenerateLocalRateResults(localRates);
             }
             else
             {
                 LogFailure(calculatedRateResult.Message);
-                rateResult = GetRatesFromApi(shipment);
+                rateResult = GenericResult.FromError(calculatedRateResult.Message, new List<UpsServiceRate>());
             }
 
             return rateResult;
@@ -91,13 +80,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// </summary>
         private void LogFailure(string errorMessage)
         {
-            string completeErrorMessage = $"Error when calculating rates:\n\n{errorMessage}\n\nDelegating to UPS API.";
+            string completeErrorMessage = $"Error when calculating rates:\n\n{errorMessage}";
             apiLog.LogResponse(completeErrorMessage, "txt");
-        }
-
-        private GenericResult<List<UpsServiceRate>> GetRatesFromApi(ShipmentEntity shipment)
-        {
-            return upsRateClientFactory[UpsRatingMethod.Api].GetRates(shipment);
         }
     }
 }

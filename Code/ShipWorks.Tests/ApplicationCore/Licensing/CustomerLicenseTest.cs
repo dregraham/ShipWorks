@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
 
@@ -1015,11 +1016,17 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             {
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
 
-                List<ShipmentTypeCode> result = new List<ShipmentTypeCode>();
+                List<UpsRatingMethod> result = new List<UpsRatingMethod>()
+                {
+                    UpsRatingMethod.ApiOnly,
+                    UpsRatingMethod.LocalOnly,
+                    UpsRatingMethod.LocalWithApiFailover
+                };
 
                 customerLicense.ApplyShippingPolicy(ShipmentTypeCode.BestRate, result);
 
-                Assert.Contains(ShipmentTypeCode.UpsOnLineTools, result);
+                Assert.Single(result);
+                Assert.Contains(UpsRatingMethod.LocalOnly, result);
             }
         }
 

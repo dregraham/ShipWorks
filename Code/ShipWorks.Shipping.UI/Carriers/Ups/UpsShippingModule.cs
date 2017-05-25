@@ -16,6 +16,8 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using System;
 using System.Collections.Concurrent;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
@@ -153,7 +155,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .WithParameter(new ResolvedParameter(
                     (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
                     (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
+            
+            builder.RegisterType<UpsBestRateRatingService>()
+                .Keyed<IUpsBestRateRatingService>(shipmentType)
+                .WithParameter(new ResolvedParameter(
+                    (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
+                    (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
         }
-
     }
 }

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
+        protected readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
 
@@ -63,9 +63,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 IEnumerable<UpsTransitTime> transitTimes;
 
                 UpsAccountEntity account = accountRepository.GetAccount(shipment);
-                IUpsRateClient upsRateClient = GetRatingClient(account);
 
-                GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+                GenericResult<List<UpsServiceRate>> serviceRateResult = GetRateResult(shipment, account);
                 List<UpsServiceRate> serviceRates = serviceRateResult.Value;
 
                 // If there are no UPS Accounts then use the counter rates
@@ -121,18 +120,31 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the rate result for the shipment
+        /// </summary>
+        protected virtual GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment, UpsAccountEntity account)
+        {
+            IUpsRateClient upsRateClient = GetRatingClient(account);
+
+            GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+            return serviceRateResult;
+        }
+
+        /// <summary>
         /// Gets the ups rate client.
         /// </summary>
-        private IUpsRateClient GetRatingClient(UpsAccountEntity account)
+        protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
         {
             UpsRatingMethod ratingMethod;
             if (account==null)
             {
-                ratingMethod = UpsRatingMethod.Api;
+                ratingMethod = UpsRatingMethod.ApiOnly;
             }
             else
             {
-                ratingMethod = account.LocalRatingEnabled ? UpsRatingMethod.Local : UpsRatingMethod.Api;
+                ratingMethod = account.LocalRatingEnabled ?
+                    UpsRatingMethod.LocalWithApiFailover :
+                    UpsRatingMethod.ApiOnly;
             }
 
             return upsRateClientFactory[ratingMethod];
@@ -141,14 +153,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Adds the footnote factory.
         /// </summary>
-        private void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
+        protected void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
         {
             UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFactory.GetFootnoteFactory(account);
 
-            if (upsPromoFootnoteFactory != null)
-            {
-                rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
-            }
+            rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
         }
 
         /// <summary>

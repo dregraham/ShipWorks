@@ -14,18 +14,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     /// <summary>
     /// Client for local rating with telemetry
     /// </summary>
-    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.Local)]
+    [KeyedComponent(typeof(IUpsRateClient), UpsRatingMethod.LocalOnly)]
     public class TelemetricUpsLocalRateClient : IUpsRateClient
     {
-        private readonly UpsLocalRateClient rateClient;
+        private readonly IUpsRateClient localRateClient;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TelemetricUpsLocalRateClient"/> class.
         /// </summary>
-        public TelemetricUpsLocalRateClient(UpsLocalRateClient rateClient, Func<string, ITrackedDurationEvent> telemetryFactory)
+        public TelemetricUpsLocalRateClient(UpsLocalRateClient localRateClient, Func<string, ITrackedDurationEvent> telemetryFactory)
         {
-            this.rateClient = rateClient;
+            this.localRateClient = localRateClient;
             this.telemetryFactory = telemetryFactory;
         }
 
@@ -36,10 +36,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             using (ITrackedDurationEvent telemetryEvent = telemetryFactory("Shipping.Rating.Ups.LocalRating"))
             {
-                GenericResult<List<UpsServiceRate>> serviceRates = rateClient.GetRates(shipment);
-
-                telemetryEvent.AddProperty("Results.Quantity", rateClient.LocalRates.Count().ToString());
-                telemetryEvent.AddProperty("Results.AvailableServices", string.Join(",", rateClient.LocalRates.Select(r => EnumHelper.GetDescription(r.Service)).ToList()));
+                GenericResult<List<UpsServiceRate>> serviceRates = localRateClient.GetRates(shipment);
+                
+                telemetryEvent.AddProperty("Results.Quantity", serviceRates.Value.Count.ToString());
+                telemetryEvent.AddProperty("Results.AvailableServices", string.Join(",", serviceRates.Value.Select(r => EnumHelper.GetDescription(r.Service)).ToList()));
                 telemetryEvent.AddProperty("Shipment.Origin.StateProvince", shipment.OriginStateProvCode);
                 telemetryEvent.AddProperty("Shipment.Origin.PostalCode", shipment.OriginPostalCode);
                 telemetryEvent.AddProperty("Shipment.Destination.StateProvince", shipment.ShipStateProvCode);

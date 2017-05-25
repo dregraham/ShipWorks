@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Policies
 {
     /// <summary>
-    /// If Tango says we can't use UPS for BestRate, filter out UPS
+    /// If Tango says we can't use UPS for BestRate, filter out ups api rating
     /// </summary>
     public class BestRateUpsRestrictionShippingPolicy : IShippingPolicy
     {
-        private bool isRestricted = false;
+        private bool isRestricted;
 
         /// <summary>
         /// Uses the configuration data provided to configure the shipping policy.
@@ -31,16 +29,16 @@ namespace ShipWorks.Shipping.Policies
             }
             else
             {
-                throw new ArgumentException(string.Format("Unknown configuration value '{0}.' Expected 'true' or 'false.'", configuration), "configuration");
+                throw new ArgumentException($@"Unknown configuration value '{configuration}.' Expected 'true' or 'false.'", "configuration");
             }
         }
 
         /// <summary>
-        /// If rategroup, we can act on it. return true
+        /// We can act on a list of UpsRatingMethod
         /// </summary>
         public bool IsApplicable(object target)
         {
-            return isRestricted && (target is List<IBestRateShippingBroker> || target is List<ShipmentTypeCode>);
+            return isRestricted && target is List<UpsRatingMethod>;
         }
 
         /// <summary>
@@ -60,52 +58,15 @@ namespace ShipWorks.Shipping.Policies
 
             if (!IsApplicable(target))
             {
-                throw new ArgumentException("target not of type List<IBestRateShippingBroker> or List<ShipmentTypeCode>", "target");
+                throw new ArgumentException(@"target not of type ListList<UpsRatingMethod>", "target");
             }
 
-            List<IBestRateShippingBroker> brokers = target as List<IBestRateShippingBroker>;
-            List<ShipmentTypeCode> shipmentTypesToExclude = target as List<ShipmentTypeCode>;
+            List<UpsRatingMethod> availableRatingMethods = (List<UpsRatingMethod>) target;
 
-            if (brokers != null)
+            if (isRestricted)
             {
-                RemoveUpsRateGroups(brokers);
+                availableRatingMethods.RemoveAll(r => r != UpsRatingMethod.LocalOnly);
             }
-
-            if (shipmentTypesToExclude != null)
-            {
-                shipmentTypesToExclude.Add(ShipmentTypeCode.UpsOnLineTools);
-                shipmentTypesToExclude.Add(ShipmentTypeCode.UpsWorldShip);
-            }
-
-        }
-
-        /// <summary>
-        /// Removes the ups rate groups.
-        /// </summary>
-        private static void RemoveUpsRateGroups(List<IBestRateShippingBroker> brokers)
-        {
-            int originalNumberOfRateGroups = brokers.Count;
-
-            for (int i = originalNumberOfRateGroups - 1; i >= 0; i--)
-            {
-                IBestRateShippingBroker broker = brokers[i];
-
-                if (IsUpsBroker(broker))
-                {
-                    brokers.RemoveAt(i);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Determines whether broker is a UPS broker type.
-        /// </summary>
-        private static bool IsUpsBroker(IBestRateShippingBroker broker)
-        {
-            Type type = broker.GetType();
-
-            return type == typeof(WorldShipBestRateBroker) ||
-                   type == typeof(UpsBestRateBroker);
         }
     }
 }

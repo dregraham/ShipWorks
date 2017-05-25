@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -87,28 +83,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void RefreshContent()
         {
             base.RefreshContent();
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            List<ShipmentTypeCode> carriersHiddenByShipmentPolicy = new List<ShipmentTypeCode>();
+            IEnumerable<ShipmentType> availableBestRateShipmentTypes = ShipmentTypeManager.ShipmentTypes
+                .Where(c => !ExcludedShipmentTypes.Contains(c.ShipmentTypeCode));
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
-                license?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, carriersHiddenByShipmentPolicy);
-            }
-
-            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes
-                .Where(c => !carriersHiddenByShipmentPolicy.Contains(c.ShipmentTypeCode) && IsCarrierShippingType(c)),
-                typeCode => !settings.BestRateExcludedTypes.Contains(typeCode));
+            panelProviders.LoadProviders(availableBestRateShipmentTypes, IsBestRateExcludedType);
         }
 
         /// <summary>
-        /// Gets whether the specified shipment type is an actual carrier
+        /// Determines whether ShipmentTypeCode has been excluded in shipping settings.
         /// </summary>
-        /// <param name="shipmentType">The shipment type to test</param>
-        private static bool IsCarrierShippingType(ShipmentType shipmentType)
+        private static bool IsBestRateExcludedType(ShipmentTypeCode typeCode)
         {
-            return !ExcludedShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
+            return !ShippingSettings.Fetch().BestRateExcludedTypes.Contains(typeCode);
         }
     }
 }
