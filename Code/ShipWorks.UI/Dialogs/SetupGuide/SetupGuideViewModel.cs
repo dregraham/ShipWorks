@@ -140,7 +140,10 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         private void OpenShippingSetupWizardAction(ShipmentTypeCode shipmentType)
         {
             IShipmentTypeSetupWizard wizard = shipmentSetupWizardFactory.Create(shipmentType);
-            wizard.ShowDialog(owner);
+            if (wizard.ShowDialog(owner) == DialogResult.OK)
+            {
+                SelectedSection = SetupGuideSection.AddStore;
+            }
         }
     }
 }
