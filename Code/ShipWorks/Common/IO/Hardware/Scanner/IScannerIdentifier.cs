@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {

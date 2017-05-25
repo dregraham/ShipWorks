@@ -8550,14 +8550,24 @@ namespace ShipWorks.Data.Model
 		Username,
 		///<summary>Password. </summary>
 		Password,
-		///<summary>CgiUrl. </summary>
-		CgiUrl,
+		///<summary>ApiUrl. </summary>
+		ApiUrl,
 		///<summary>RequireSSL. </summary>
 		RequireSSL,
 		///<summary>DownloadPageSize. </summary>
 		DownloadPageSize,
 		///<summary>RequestTimeout. </summary>
 		RequestTimeout,
+		///<summary>ShopSiteAuthentication. </summary>
+		ShopSiteAuthentication,
+		///<summary>OauthClientID. </summary>
+		OauthClientID,
+		///<summary>OauthSecretKey. </summary>
+		OauthSecretKey,
+		///<summary>Identifier. </summary>
+		Identifier,
+		///<summary>OauthAuthorizationCode. </summary>
+		OauthAuthorizationCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

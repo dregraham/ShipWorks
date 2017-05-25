@@ -11,7 +11,7 @@ using Interapptive.Shared.Enums;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;

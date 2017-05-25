@@ -1,5 +1,5 @@
 ﻿using Divelements.SandRibbon;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore

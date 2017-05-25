@@ -10,7 +10,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

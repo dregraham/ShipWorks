@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 

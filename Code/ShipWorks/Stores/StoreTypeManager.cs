@@ -97,7 +97,6 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.GenericFile: return new Platforms.GenericFile.GenericFileStoreType(store);
                 case StoreTypeCode.Magento: return new Platforms.Magento.MagentoStoreType(store);
                 case StoreTypeCode.osCommerce: return new Platforms.osCommerce.oscStoreType(store);
-                case StoreTypeCode.ShopSite: return new Platforms.ShopSite.ShopSiteStoreType(store);
                 case StoreTypeCode.VirtueMart: return new Platforms.VirtueMart.VirtueMartStoreType(store);
                 case StoreTypeCode.XCart: return new Platforms.XCart.XCartStoreType(store);
                 case StoreTypeCode.ZenCart: return new Platforms.ZenCart.ZenCartStoreType(store);

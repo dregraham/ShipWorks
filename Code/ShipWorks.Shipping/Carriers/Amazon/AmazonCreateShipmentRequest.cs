@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;

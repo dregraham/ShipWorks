@@ -293,6 +293,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00_Test.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepositoryTest.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01_Test.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02_Test.cs" />
     <Compile Include="Editions\EditionManagerTest.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />

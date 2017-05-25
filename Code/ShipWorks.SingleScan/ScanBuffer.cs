@@ -8,7 +8,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;

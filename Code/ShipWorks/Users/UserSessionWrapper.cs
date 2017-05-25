@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;

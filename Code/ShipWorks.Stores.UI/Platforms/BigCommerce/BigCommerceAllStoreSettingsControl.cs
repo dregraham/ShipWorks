@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;

@@ -24,14 +24,12 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData("Bar")]
         public void Get_DelegatesToEncryptionProvider(string identifier)
         {
-            var encryptionProvider = mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(x => x.CreateBigCommerceEncryptionProvider());
             var store = mock.CreateMock<IBigCommerceStoreEntity>(x => x.SetupGet(y => y.Identifier).Returns(identifier)).Object;
             var testObject = mock.Create<BigCommerceIdentifier>();
 
             testObject.Get(store);
 
-            encryptionProvider.Verify(x => x.Decrypt(identifier));
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().Verify(x => x.Decrypt(identifier));
         }
 
         [Theory]
@@ -39,8 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData("Bar")]
         public void Get_ReturnsDecryptedIdentifier(string identifier)
         {
-            mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(x => x.CreateBigCommerceEncryptionProvider())
+            mock.Mock<IDatabaseSpecificEncryptionProvider>()
                 .Setup(x => x.Decrypt(It.IsAny<string>()))
                 .Returns(identifier);
             var testObject = mock.Create<BigCommerceIdentifier>();
@@ -71,14 +68,12 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData("http://www.foo.com/bar/", "http://www.foo.com/bar/")]
         public void Set_DelegatesToEncryptionProvider_WithCleansedIdentifier(string input, string cleansed)
         {
-            var encryptionProvider = mock.FromFactory<IEncryptionProviderFactory>()
-                   .Mock(x => x.CreateBigCommerceEncryptionProvider());
             var store = new BigCommerceStoreEntity { ApiUrl = input };
             var testObject = mock.Create<BigCommerceIdentifier>();
 
             testObject.Set(store);
 
-            encryptionProvider.Verify(x => x.Encrypt(cleansed));
+            mock.Mock<IDatabaseSpecificEncryptionProvider>().Verify(x => x.Encrypt(cleansed));
         }
 
         [Theory]
@@ -86,8 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData("Bar")]
         public void Set_SetsEncryptedIdentifier_OnStore(string input)
         {
-            mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(x => x.CreateBigCommerceEncryptionProvider())
+            mock.Mock<IDatabaseSpecificEncryptionProvider>()
                 .Setup(x => x.Encrypt(It.IsAny<string>()))
                 .Returns(input);
             var store = new BigCommerceStoreEntity { ApiUrl = "stuff" };

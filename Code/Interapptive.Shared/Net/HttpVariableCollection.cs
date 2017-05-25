@@ -9,7 +9,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Collection of HttpVariable
     /// </summary>
-    public class HttpVariableCollection : Collection<HttpVariable>
+    public class HttpVariableCollection : Collection<HttpVariable>, IHttpVariableCollection
     {
         /// <summary>
         /// Gets a variable's value by name

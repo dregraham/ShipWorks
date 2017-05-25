@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Common;
 using ShipWorks.Startup;
 using Xunit;

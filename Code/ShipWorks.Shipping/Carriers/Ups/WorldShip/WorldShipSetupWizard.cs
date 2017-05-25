@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip

@@ -5,7 +5,7 @@ using System.Text;
 using Autofac;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;

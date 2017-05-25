@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 

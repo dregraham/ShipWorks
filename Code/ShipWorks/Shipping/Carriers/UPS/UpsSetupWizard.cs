@@ -10,7 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;

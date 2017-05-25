@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Startup;
 using Xunit;
 

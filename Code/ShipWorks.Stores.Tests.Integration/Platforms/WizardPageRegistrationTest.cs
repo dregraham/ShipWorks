@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Wizard;

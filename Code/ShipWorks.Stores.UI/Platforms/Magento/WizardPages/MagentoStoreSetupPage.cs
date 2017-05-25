@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Magento;

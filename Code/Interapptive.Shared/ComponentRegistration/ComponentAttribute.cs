@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Autofac;
+using Autofac.Builder;
+
+namespace Interapptive.Shared.ComponentRegistration
+{
+    /// <summary>
+    /// Register a component for implemented interfaces
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ComponentAttribute : Attribute
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="registerAs"></param>
+        public ComponentAttribute(RegistrationType registerAs = RegistrationType.ImplementedInterfaces)
+        {
+            RegisterAs = registerAs;
+        }
+
+        /// <summary>
+        /// What service should this component be registered as
+        /// </summary>
+        public RegistrationType RegisterAs { get; set; }
+
+        /// <summary>
+        /// Get a registration, either from cache or by creating a new one
+        /// </summary>
+        public static IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> GetRegistrationBuilder(
+            Type component,
+            ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache)
+        {
+            if (registrationCache.ContainsKey(component))
+            {
+                return registrationCache[component];
+            }
+
+            var registration = builder.RegisterType(component);
+            registrationCache.Add(component, registration);
+            return registration;
+        }
+
+        /// <summary>
+        /// Register all components that use this attribute
+        /// </summary>
+        public static void Register(ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
+            params Assembly[] assemblies)
+        {
+            var components = assemblies.SelectMany(x => x.GetTypes())
+                .Select(x => new
+                {
+                    Component = x,
+                    Attributes = GetAttributes(x),
+                })
+                .Where(x => x.Attributes.Any());
+
+            foreach (var item in components)
+            {
+                var registration = GetRegistrationBuilder(item.Component, builder, registrationCache);
+
+                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.ImplementedInterfaces))
+                {
+                    registration.AsImplementedInterfaces();
+                }
+
+                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.Self))
+                {
+                    registration.AsSelf();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a component attribute from the type
+        /// </summary>
+        private static IEnumerable<ComponentAttribute> GetAttributes(Type type) =>
+            type.GetCustomAttributes(false).OfType<ComponentAttribute>();
+    }
+}

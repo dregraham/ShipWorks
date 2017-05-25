@@ -5,10 +5,10 @@ using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.SingleScan
 {
