@@ -12,7 +12,7 @@
     | redistributed in any form, as part of another product or otherwise.
     | Modified versions of this code may not be sold or redistributed.
     |
-    | Copyright 2009-2012 Interapptive, Inc.  All rights reserved.
+    | Copyright 2009-2017 Interapptive, Inc.  All rights reserved.
     | http://www.interapptive.com/
  */
 
@@ -21,17 +21,16 @@ define('REQUIRE_SECURE', true);
 
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
-
-//virtue mart setup
-define('JPATH_BASE', '.');
 define('DS', DIRECTORY_SEPARATOR);
-require_once('configuration.php');
-require_once(JPATH_BASE . DS . 'includes' . DS . 'defines.php');
-require_once(JPATH_BASE . DS . 'includes' . DS . 'framework.php');
-require_once(JPATH_BASE . DS . 'libraries' . DS . 'joomla' . DS
-	. 'factory.php');
 
-$moduleVersion = "3.4.0.2";
+define('JPATH_BASE', __DIR__ );
+
+require_once(JPATH_BASE . DS . 'includes' . DS . 'defines.php');
+require_once(JPATH_BASE . DS .   'configuration.php');
+require_once(JPATH_BASE . DS .  'includes' . DS . 'framework.php');
+require_once(JPATH_BASE . DS .  'libraries' . DS . 'joomla' . DS . 'factory.php');
+
+$moduleVersion = "3.15.0.0";
 $schemaVersion = "1.0.0";
 
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -43,6 +42,157 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 
 // turn off caching - the HTTP/1.0 way
 header("Pragma: no-cache");
+
+global $conn;
+global $CONFIG;
+
+// PHP 7 removed the mysql extensions, and replaced them with mysqli.
+// We need to check to see which is installed and use the appropriate one,
+// so the following wrapper methods are used to execute the one that is installed.
+
+// Wrapper method for connecting to the database.
+function sqlConnect()
+{
+	global $conn;
+	global $CONFIG;
+
+	if (function_exists('mysqli_connect')) 
+	{
+	  //mysqli is installed
+	  $conn = mysqli_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
+	} 
+	elseif (function_exists('mysql_connect')) 
+	{
+	  //mysql is installed
+	  $conn = mysql_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
+	}
+	else
+	{
+	  echo "Neither mysql_connect or mysqli_connect is installed.";
+	}
+}
+
+// Wrapper method for escaping text to store in the database.
+function sqlEscapeString($textToEscape)
+{
+	global $conn;
+
+	if (function_exists('mysqli_real_escape_string')) 
+	{
+	  //mysqli is installed
+	  return mysqli_real_escape_string($conn, $textToEscape);
+	} 
+	elseif (function_exists('mysql_real_escape_string')) 
+	{
+	  //mysql is installed
+	  return mysql_real_escape_string($textToEscape);
+	}
+	else
+	{
+	  echo "Neither mysql_real_escape_string or mysqli_real_escape_string is installed.";
+	}
+}
+
+// Wrapper method for executing a query.
+function sqlQuery($sql)
+{
+	global $conn;
+
+	if (function_exists('mysqli_query')) 
+	{
+	  //mysqli is installed
+	  return mysqli_query($conn, $sql);
+	} 
+	elseif (function_exists('mysql_query')) 
+	{
+	  //mysql is installed
+	  return mysql_query($conn, $sql);
+	}
+	else
+	{
+	  echo "Neither mysql_query or mysqli_query is installed.";
+	}
+}
+
+// Wrapper method for executing a number of rows query.
+function sqlNumRows($sql)
+{
+	if (function_exists('mysqli_num_rows')) 
+	{
+	  //mysqli is installed
+	  return mysqli_num_rows($sql);
+	} 
+	elseif (function_exists('mysql_num_rows')) 
+	{
+	  //mysql is installed
+	  return mysql_num_rows($sql);
+	}
+	else
+	{
+	  echo "Neither mysql_num_rows or mysqli_num_rows is installed.";
+	}
+}
+
+// Wrapper method for executing fetch array query.
+function sqlFetchArray($query)
+{
+	if (function_exists('mysqli_fetch_array')) 
+	{
+	  //mysqli is installed
+	  return mysqli_fetch_array($query);
+	} 
+	elseif (function_exists('mysql_fetch_array')) 
+	{
+	  //mysql is installed
+	  return mysql_fetch_array($query);
+	}
+	else
+	{
+	  echo "Neither mysql_fetch_array or mysqli_fetch_array is installed.";
+	}
+}
+
+// Wrapper method for selecting a database.
+function sqlSelectDb($dbName)
+{
+	global $conn;
+
+	if (function_exists('mysqli_select_db')) 
+	{
+	  //mysqli is installed
+	  return mysqli_select_db($conn, $dbName);
+	} 
+	elseif (function_exists('mysql_select_db')) 
+	{
+	  //mysql is installed
+	  return mysql_select_db($conn, $dbName);
+	}
+	else
+	{
+	  echo "Neither mysql_select_db or mysqli_select_db is installed.";
+	}
+}
+
+// Wrapper method for getting the last error.
+function sqlError()
+{
+	global $conn;
+
+	if (function_exists('mysqli_error')) 
+	{
+	  //mysqli is installed
+	  return mysqli_error($conn);
+	} 
+	elseif (function_exists('mysql_error')) 
+	{
+	  //mysql is installed
+	  return mysql_error($conn);
+	}
+	else
+	{
+	  echo "Neither mysql_error or mysqli_error is installed.";
+	}
+}
 
 function toUtf8($string)
 {
@@ -124,7 +274,7 @@ if (class_exists("JConfig")) {
 	if ($CONFIG->dbprefix) {
 		$dbPrefix = $CONFIG->dbprefix;
 	}
-	$conn = mysql_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
+	sqlConnect($CONFIG->host, $CONFIG->user, $CONFIG->password);
 }
 
 // Open the XML output and root
@@ -220,6 +370,7 @@ function Action_Debug()
 function checkAdminLogin()
 {
 	global $dbPrefix;
+	global $conn;
 	$loginOK = false;
 
 	if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
@@ -228,13 +379,14 @@ function checkAdminLogin()
 
 		$sql = "SELECT id, password"
 			. " FROM " . $dbPrefix . "users"
-			. " WHERE username='" . mysql_real_escape_string($username) . "'";
-		$check_adminquery = mysql_query($sql);
-
+			. " WHERE username='" . sqlEscapeString($username) . "'";
+		
+		$check_adminquery = sqlQuery($sql);
+		
 		//$check_adminquery is false...
 		//Joomla < 2.5.18 method of auth
-		if (mysql_num_rows($check_adminquery)) {
-			$check_admin = mysql_fetch_array($check_adminquery);
+		if (sqlNumRows($check_adminquery)) {
+			$check_admin = sqlFetchArray($check_adminquery);
 
 			// Check that password is good
 			$parts = explode(':', $check_admin['password']);
@@ -310,6 +462,7 @@ function Action_GetModule()
 function Action_GetStore()
 {
 	global $dbPrefix;
+	global $conn;
 	$sql = "SELECT * FROM " . $dbPrefix . "virtuemart_vmusers vmu" .
 		" inner join " . $dbPrefix . "users u on u.id=vmu.virtuemart_user_id" .
 		" inner join " . $dbPrefix
@@ -327,8 +480,8 @@ function Action_GetStore()
 		" WHERE user_is_vendor=1 " .
 		" ORDER BY vmu.virtuemart_vendor_id LIMIT 1";
 
-	$vendorquery = mysql_query($sql);
-	$vendor = mysql_fetch_array($vendorquery);
+	$vendorquery = sqlQuery($sql);
+	$vendor = sqlFetchArray($vendorquery);
 
 	writeStartTag("Store");
 	writeElement("Name", str_replace("\\", "", $vendor['name']));
@@ -350,6 +503,7 @@ function Action_GetStore()
 function Action_GetCount()
 {
 	global $dbPrefix;
+	global $conn;
 	$start = GetStart();
 
 	// Write the params for easier diagnostics
@@ -357,15 +511,15 @@ function Action_GetCount()
 	writeElement("Start", $start);
 	writeCloseTag("Parameters");
 
-	$ordersQuery = mysql_query(
+	$ordersQuery = sqlQuery(
 		"select count(*) as count " .
 		" from " . $dbPrefix . "virtuemart_orders o " .
 		" where modified_on > '$start'"
 		);
 	$count = 0;
 
-	if (mysql_num_rows($ordersQuery)) {
-		$rows = mysql_fetch_array($ordersQuery);
+	if (sqlNumRows($ordersQuery)) {
+		$rows = sqlFetchArray($ordersQuery);
 		$count = $rows['count'];
 	}
 
@@ -377,6 +531,7 @@ function Action_GetOrders()
 {
 	global $dbPrefix;
 	global $secure;
+	global $conn;
 
 	$maxcount = 50;
 
@@ -406,13 +561,13 @@ function Action_GetOrders()
 		" order by modified_on asc " .
 		" limit 0, " . $maxcount;
 
-	$ordersQuery = mysql_query($sql);
+	$ordersQuery = sqlQuery($sql);
 
 
 	$lastModified = null;
 	$processedIds = "";
 
-	while ($row = mysql_fetch_array($ordersQuery)) {
+	while ($row = sqlFetchArray($ordersQuery)) {
 		// keep track of the most current processed modified time
 		$lastModified = $row['modified_on'];
 
@@ -430,14 +585,14 @@ function Action_GetOrders()
 		// This make sure we don't split a page between orders of the same modified time
 		// If there's any that didn't make the maxcount cutoff with the same last modified time
 		// as the greatest last modified time we already processed, this will get them
-		$moreQuery = mysql_query(
+		$moreQuery = sqlQuery(
 			"select * " .
 			"from " . $dbPrefix . "virtuemart_orders o " .
 			"where virtuemart_order_id not in ($processedIds) " .
 			"and modified_on = '$lastModified'"
 			);
 
-		while ($row = mysql_fetch_array($ordersQuery)) {
+		while ($row = sqlFetchArray($ordersQuery)) {
 			WriteOrder($row);
 		}
 	}
@@ -458,6 +613,7 @@ function GetStart()
 function WriteOrder($row)
 {
 	global $dbPrefix;
+	global $conn;
 
 	writeStartTag("Order");
 	writeElement("OrderNumber", $row['virtuemart_order_id']);
@@ -472,12 +628,6 @@ function WriteOrder($row)
 	writeElement("StatusCode", ord($row['order_status']));
 	writeElement("CustomerID", $row['virtuemart_user_id']);
 
-	writeStartTag("Notes");
-	writeElementWithAttributes(
-		"Note", $row['customer_note'], array("public" => "true")
-		);
-	writeCloseTag("Notes");
-
 	$sqlAddressWithoutType
 		= "select u.*, s.state_name, c.country_name from " . $dbPrefix
 		. "virtuemart_order_userinfos u" .
@@ -490,11 +640,11 @@ function WriteOrder($row)
 		" where virtuemart_order_id = " . $row['virtuemart_order_id']
 		. " AND address_type=";
 
-	$customerBTQuery = mysql_query($sqlAddressWithoutType . "'BT'");
-	$customerBT = mysql_fetch_array($customerBTQuery);
+	$customerBTQuery = sqlQuery($sqlAddressWithoutType . "'BT'");
+	$customerBT = sqlFetchArray($customerBTQuery);
 
-	$customerSTQuery = mysql_query($sqlAddressWithoutType . "'ST'");
-	$customerST = mysql_fetch_array($customerSTQuery);
+	$customerSTQuery = sqlQuery($sqlAddressWithoutType . "'ST'");
+	$customerST = sqlFetchArray($customerSTQuery);
 
 	if ($customerST == null) {
 		$customerST = $customerBT;
@@ -545,15 +695,16 @@ function GetShippingMethod($shipping_method_id)
 {
 
 	global $dbPrefix;
+	global $conn;
 
 	$sql
 		= "SELECT * FROM " . $dbPrefix . "virtuemart_shipmentmethods_en_gb sm" .
 		" WHERE virtuemart_shipmentmethod_id = " . $shipping_method_id;
 
-	$q = mysql_query($sql);
+	$q = sqlQuery($sql);
 
 	if ($q) {
-		$row = mysql_fetch_array($q);
+		$row = sqlFetchArray($q);
 		return $row['shipment_name'];
 	} else {
 		return "";
@@ -566,13 +717,14 @@ function GetShippingMethod($shipping_method_id)
 function GetPaymentMethod($payment_method_id)
 {
 	global $dbPrefix;
+	global $conn;
 
 	$sql = "SELECT * FROM " . $dbPrefix . "virtuemart_paymentmethods_en_gb pm" .
 		" WHERE virtuemart_paymentmethod_id = " . $payment_method_id;
 
-	$q = mysql_query($sql);
+	$q = sqlQuery($sql);
 	if ($q) {
-		$row = mysql_fetch_array($q);
+		$row = sqlFetchArray($q);
 		return $row['payment_name'];
 	} else {
 		return "";
@@ -639,16 +791,17 @@ function WriteTotal($totalID, $title, $value, $class, $impact = "add")
 function WriteOrderItems($orderID)
 {
 	global $dbPrefix;
+	global $conn;
 	$imageRoot = GetImageRoot();
 
-	$itemQuery = mysql_query(
+	$itemQuery = sqlQuery(
 		"select * from " . $dbPrefix . "virtuemart_order_items" .
 		" where virtuemart_order_id = " . $orderID
 		);
 
 	writeStartTag("Items");
 
-	while ($item = mysql_fetch_array($itemQuery)) {
+	while ($item = sqlFetchArray($itemQuery)) {
 		// Get product info
 		$sql = "select p.*,m.file_url_thumb" .
 			" from " . $dbPrefix . "virtuemart_products p" .
@@ -660,9 +813,9 @@ function WriteOrderItems($orderID)
 			.
 			" where p.virtuemart_product_id = "
 			. $item['virtuemart_product_id'];
-		$productQuery = mysql_query($sql);
+		$productQuery = sqlQuery($sql);
 
-		$product = mysql_fetch_array($productQuery);
+		$product = sqlFetchArray($productQuery);
 
 		// Build fully qualified image url
 		$imageUrl = $product['file_url_thumb'];
@@ -739,13 +892,14 @@ function WriteItemAttributes($productID, $attributeColumn)
 function Action_GetStatusCodes()
 {
 	global $dbPrefix;
+	global $conn;
 	writeStartTag("StatusCodes");
 
-	$codesQuery = mysql_query(
+	$codesQuery = sqlQuery(
 		"SELECT * FROM " . $dbPrefix . "virtuemart_orderstates"
 		);
 
-	while ($row = mysql_fetch_array($codesQuery)) {
+	while ($row = sqlFetchArray($codesQuery)) {
 		writeStartTag("StatusCode");
 		writeElement("Code", ord($row['order_status_code']));
 		writeElement("Name", $row['order_status_name']);
@@ -759,6 +913,7 @@ function Action_GetStatusCodes()
 function Action_UpdateStatus()
 {
 	global $dbPrefix;
+	global $conn;
 
 	if (!isset($_POST['order']) || !isset($_POST['status'])
 		|| !isset($_POST['comments'])
@@ -767,26 +922,32 @@ function Action_UpdateStatus()
 		return;
 	}
 
+	echo "<UpdateSuccess>";
 	$orderID = (int)$_POST['order'];
 	$code = chr($_POST['status']);
+	$comments = sqlEscapeString($_POST['comments']);
 
-	$comments = mysql_escape_string($_POST['comments']);
-
-
-	mysql_query(
+	if (!sqlQuery(
 		"insert into " . $dbPrefix . "virtuemart_order_histories " .
-		" (virtuemart_order_id, order_status_code, created_on, customer_notified, comments) "
+		" (virtuemart_order_id, order_status_code, created_on, modified_on, locked_on, customer_notified, comments) "
 		.
-		" values (" . $orderID . ", '$code' , now(), 0, '" . $comments . "')"
-		);
+		" values (" . $orderID . ", '$code' , now(), now(), now(), 0, '" . $comments . "')"
+		))
+	{
+  		echo "<ErrorInserting>" . sqlError() . "</ErrorInserting>";
+  	}
 
-	mysql_query(
+	if (!sqlQuery(
 		"update " . $dbPrefix . "virtuemart_orders " .
 		" set order_status = '$code' " .
 		" where virtuemart_order_id = " . $orderID
-		);
+		))
+	{
+		
+  		echo "<ErrorUpdating>" . sqlError() . "</ErrorUpdating>";
+  	}
 
-	echo "<UpdateSuccess/>";
+	echo "</UpdateSuccess>";
 }
 
 // Convert the date string to xml date string
@@ -810,8 +971,8 @@ function db_connect()
 
 	if (class_exists("JConfig")) {
 		$CONFIG = new JConfig();
-		$conn = mysql_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
-		return mysql_select_db($CONFIG->db);
+	        sqlConnect($CONFIG->host, $CONFIG->user, $CONFIG->password);
+		return sqlSelectDb($CONFIG->db);
 	} else {
 		// Joomla 1.0
 		global $mosConfig_host;
@@ -819,10 +980,8 @@ function db_connect()
 		global $mosConfig_password;
 		global $mosConfig_db;
 
-		$conn = mysql_connect(
-			$mosConfig_host, $mosConfig_user, $mosConfig_password
-			);
-		return mysql_select_db($mosConfig_db);
+	        sqlConnect($mosConfig_host, $mosConfig_user, $mosConfig_password);
+		return sqlSelectDb($mosConfig_db);
 	}
 }
 
