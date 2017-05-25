@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public GenericResult<List<UpsServiceRate>> GetRates(ShipmentEntity shipment)
         {
             GenericResult<IEnumerable<UpsLocalServiceRate>> calculatedRateResult = localRateTable.CalculateRates(shipment);
-            GenericResult<List<UpsServiceRate>> rateResult = new GenericResult<List<UpsServiceRate>>();
+            GenericResult<List<UpsServiceRate>> rateResult;
             if (calculatedRateResult.Success)
             {
                 IEnumerable<UpsLocalServiceRate> localRates = calculatedRateResult.Value.ToList();
@@ -48,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             else
             {
                 LogFailure(calculatedRateResult.Message);
+                rateResult = GenericResult.FromError(calculatedRateResult.Message, new List<UpsServiceRate>());
             }
 
             return rateResult;

@@ -63,9 +63,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 IEnumerable<UpsTransitTime> transitTimes;
 
                 UpsAccountEntity account = accountRepository.GetAccount(shipment);
-                IUpsRateClient upsRateClient = GetRatingClient(account);
 
-                GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+                GenericResult<List<UpsServiceRate>> serviceRateResult = GetRateResult(shipment, account);
                 List<UpsServiceRate> serviceRates = serviceRateResult.Value;
 
                 // If there are no UPS Accounts then use the counter rates
@@ -118,6 +117,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Gets the rate result for the shipment
+        /// </summary>
+        protected virtual GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment, UpsAccountEntity account)
+        {
+            IUpsRateClient upsRateClient = GetRatingClient(account);
+
+            GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+            return serviceRateResult;
         }
 
         /// <summary>

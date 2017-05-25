@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;

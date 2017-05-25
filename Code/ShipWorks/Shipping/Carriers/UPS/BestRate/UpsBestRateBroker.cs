@@ -3,16 +3,16 @@ using System.Linq;
 using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         private RateGroup GetUpsRates(ShipmentEntity shipment)
         {
-            RateGroup rates;
+            RateGroup rates = new RateGroup(new List<RateResult>());
 
             // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -230,7 +230,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
                 IUpsBestRateRatingService ratingService = lifetimeScope.ResolveKeyed<IUpsBestRateRatingService>(ShipmentType.ShipmentTypeCode);
 
-                rates = ratingService.GetRates(shipment);
+                try
+                {
+                    rates = ratingService.GetRates(shipment);
+                }
+                catch (UpsBestRateRatingException)
+                {
+                    rates.AddFootnoteFactory(new UpsLocalRatingDisabledFootnoteFactory(AccountRepository.GetAccount(shipment)));
+                }
             }
 
             rates.Carrier = shipment.ShipmentTypeCode;
