@@ -5,7 +5,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
     /// <summary>
     /// Selected section of the New User Experience screen
     /// </summary>
-    [Obfuscation(Exclude = true, ApplyToMembers = true)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum SetupGuideSection
     {
         /// <summary>

@@ -53,26 +53,31 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         /// <summary>
         /// Open a shipping setup wizard
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand ShowShippingSetupWizard { get; }
 
         /// <summary>
         /// Add a store
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand AddStore { get; }
 
         /// <summary>
         /// Customer wants to setup a shipping account
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand SelectShippingSetup { get; }
 
         /// <summary>
         /// Customer wants to close shipping account setup
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand DeselectShippingSetup { get; }
 
         /// <summary>
         /// Start using ShipWorks
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public ICommand UseShipWorks { get; }
 
         /// <summary>

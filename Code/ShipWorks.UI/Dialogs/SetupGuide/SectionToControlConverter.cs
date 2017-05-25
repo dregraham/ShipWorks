@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -12,6 +9,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
     /// <summary>
     /// Convert a selected section to a specific control
     /// </summary>
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public class SectionToControlConverter : IValueConverter
     {
         /// <summary>
