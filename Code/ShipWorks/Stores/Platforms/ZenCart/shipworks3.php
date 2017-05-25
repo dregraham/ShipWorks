@@ -18,7 +18,7 @@
            | redistributed in any form, as part of another product or otherwise.
            | Modified versions of this code may not be sold or redistributed.
            |
-           | Copyright 2005-2012 Interapptive, Inc.  All rights reserved.
+           | Copyright 2005-2017 Interapptive, Inc.  All rights reserved.
            | http://www.interapptive.com/
            |
            | Adapted from OSCommerce file
@@ -57,7 +57,7 @@
          *
          */
 
-        $moduleVersion = "3.3.7.1";
+        $moduleVersion = "3.15.0.0";
         $schemaVersion = "1.0.0";
 
         header("Content-Type: text/xml;charset=utf-8");
