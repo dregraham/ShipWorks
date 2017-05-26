@@ -321,12 +321,14 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensionsTest.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRatePackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparerTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidatorTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Fake\FakeBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Fake\FakeRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
