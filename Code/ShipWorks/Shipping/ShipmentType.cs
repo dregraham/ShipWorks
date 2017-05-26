@@ -245,17 +245,6 @@ namespace ShipWorks.Shipping
         public bool ShouldApplyShipSense { get; set; }
 
         /// <summary>
-        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
-        /// null if the shipment type does not require setup
-        /// </summary>
-        /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
-        /// If it is not, it will fall back to the other version of this method</remarks>
-        public virtual IShipmentTypeSetupWizard CreateSetupWizard(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>().Create(ShipmentTypeCode);
-        }
-
-        /// <summary>
         /// Creates the UserControl that is used to edit service options for the shipment type
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Metrics;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Administration;
@@ -106,7 +107,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         {
             SelectedSection = SetupGuideSection.AddStore;
 
-            addStoreWizard.RunWizard(owner);
+            addStoreWizard.RunWizard(owner, OpenedFromSource.QuickStart);
         }
 
         /// <summary>
@@ -139,7 +140,8 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         /// </summary>
         private void OpenShippingSetupWizardAction(ShipmentTypeCode shipmentType)
         {
-            IShipmentTypeSetupWizard wizard = shipmentSetupWizardFactory.Create(shipmentType);
+            IShipmentTypeSetupWizard wizard = shipmentSetupWizardFactory.Create(shipmentType, OpenedFromSource.QuickStart);
+
             if (wizard.ShowDialog(owner) == DialogResult.OK)
             {
                 SelectedSection = SetupGuideSection.AddStore;

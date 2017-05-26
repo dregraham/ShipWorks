@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Management
 {
@@ -8,9 +9,12 @@ namespace ShipWorks.Stores.Management
     public interface IAddStoreWizard
     {
         /// <summary>
-        /// Run the setup wizard.  Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
-        /// it was already running on another computer.
+        /// Run the setup wizard
         /// </summary>
-        bool RunWizard(IWin32Window owner);
+        /// <remarks>
+        /// Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
+        /// it was already running on another computer.
+        /// </remarks>
+        bool RunWizard(IWin32Window owner, OpenedFromSource openedFrom);
     }
 }

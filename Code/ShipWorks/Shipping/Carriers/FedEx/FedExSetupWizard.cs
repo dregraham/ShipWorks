@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             accountNumber.Text = account.AccountNumber;
 
-            // If its not already setup or configured, load all the the settings\configuration pages
+            // If its not already setup or configured, load all the settings\configuration pages
             if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.FedEx))
             {
                 Pages.Add(new ShippingWizardPageOrigin(shipmentType));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Connection;
@@ -105,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
                 testObject.Run(shipment, null, null);
 
                 mock.Mock<IShipmentTypeSetupWizardFactory>()
-                    .Verify(x => x.Create(ShipmentTypeCode.Other));
+                    .Verify(x => x.Create(ShipmentTypeCode.Other, OpenedFromSource.NotSpecified));
             }
 
             [Fact]

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
@@ -87,29 +88,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (IForm setupDlg = shipmentType.CreateSetupWizard(lifetimeScope))
+                IShipmentTypeSetupWizard setupDlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(shipmentType.ShipmentTypeCode, OpenedFromSource.Manager);
+
+                // Ensure that the setup dialog is actually an Express1 setup wizard
+                var setupWizard = setupDlg as Express1SetupWizard;
+                Debug.Assert(setupWizard != null, "AutomaticExpress1Control can only create Express1 shipment types.");
+
+                // Pre-load the account address details
+                setupWizard.InitialAccountAddress = express1Settings.DefaultAccountPerson;
+
+                if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                 {
-                    // Ensure that the setup dialog is actually an Express1 setup wizard
-                    var setupWizard = setupDlg as Express1SetupWizard;
-                    Debug.Assert(setupWizard != null, "AutomaticExpress1Control can only create Express1 shipment types.");
+                    // The shipping type has already been set up, so just add a new account
+                    setupWizard.ForceAccountOnly = true;
 
-                    // Pre-load the account address details
-                    setupWizard.InitialAccountAddress = express1Settings.DefaultAccountPerson;
+                    added = (setupWizard.ShowDialog(this) == DialogResult.OK);
+                }
+                else
+                {
+                    // The shipping type still needs to be set up, so hand off to the shipment setup control
+                    setupWizard.HideDetailedConfiguration = true;
 
-                    if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-                    {
-                        // The shipping type has already been set up, so just add a new account
-                        setupWizard.ForceAccountOnly = true;
-
-                        added = (setupWizard.ShowDialog(this) == DialogResult.OK);
-                    }
-                    else
-                    {
-                        // The shipping type still needs to be set up, so hand off to the shipment setup control
-                        setupWizard.HideDetailedConfiguration = true;
-
-                        added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupWizard);
-                    }
+                    added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupWizard);
                 }
             }
 

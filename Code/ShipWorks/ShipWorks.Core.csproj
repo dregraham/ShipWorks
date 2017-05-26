@@ -1265,6 +1265,7 @@
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
+    <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\ILabelServiceFactory.cs" />

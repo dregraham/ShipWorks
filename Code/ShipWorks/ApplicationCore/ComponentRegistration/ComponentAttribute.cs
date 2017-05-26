@@ -28,6 +28,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public RegistrationType RegisterAs { get; set; }
 
         /// <summary>
+        /// Service for which this component should be registered
+        /// </summary>
+        public Type Service { get; set; }
+
+        /// <summary>
         /// Get a registration, either from cache or by creating a new one
         /// </summary>
         public static IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> GetRegistrationBuilder(
@@ -72,6 +77,15 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                 if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.Self))
                 {
                     registration.AsSelf();
+                }
+
+                Type[] specificServices = item.Attributes
+                    .Where(x => x.RegisterAs == RegistrationType.SpecificService)
+                    .Select(x => x.Service)
+                    .ToArray();
+                if (specificServices.Any())
+                {
+                    registration.As(specificServices);
                 }
             }
         }

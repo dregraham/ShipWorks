@@ -38,7 +38,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
-        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, ICarrierAccountRetriever accountRetriever)
+        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog,
+            PostalAccountManagerControlBase accountControl,
+            PostalOptionsControlBase optionsControl,
+            Express1Registration registration,
+            ICarrierAccountRetriever accountRetriever)
         {
             if (postageDialog == null)
             {

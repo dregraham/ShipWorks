@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             foreach (OnTracAccountEntity account in OnTracAccountManager.Accounts)
             {
-                GridRow row = new GridRow(new[] { account.Description } );
+                GridRow row = new GridRow(new[] { account.Description });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
@@ -72,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 delete.Top = add.Top;
                 delete.BringToFront();
             }
@@ -128,8 +131,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            using (var dlg = new OnTracSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                ShipmentTypeSetupWizardForm dlg = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.OnTrac);
+
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadAccounts();

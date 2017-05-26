@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -26,10 +27,11 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeSetupControl(ShipmentType shipmentType)
+        public ShipmentTypeSetupControl(ShipmentType shipmentType, OpenedFromSource openedFrom)
         {
             InitializeComponent();
 
+            OpenedFrom = openedFrom;
             this.shipmentType = shipmentType;
 
             labelSetup.Text = string.Format(labelSetup.Text, shipmentType.ShipmentTypeName);
@@ -55,6 +57,11 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// From where was this dialog opened
+        /// </summary>
+        OpenedFromSource OpenedFrom { get; }
+
+        /// <summary>
         /// Run setup for the configured shipment type
         /// </summary>
         private void OnSetup(object sender, EventArgs e)
@@ -71,7 +78,10 @@ namespace ShipWorks.Shipping.Settings
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, shipmentType.CreateSetupWizard(lifetimeScope)))
+                    IShipmentTypeSetupWizard wizard = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                        .Create(shipmentType.ShipmentTypeCode, OpenedFrom);
+
+                    if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, wizard))
                     {
                         RaiseSetupComplete();
                     }
@@ -82,7 +92,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Setup the given shipment type, returns true if it's setup.
         /// </summary>
-        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, IForm setupDlg)
+        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, IShipmentTypeSetupWizard setupDlg)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 

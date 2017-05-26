@@ -173,6 +173,7 @@
     <Compile Include="Metrics\DummyTrackedDurationEvent.cs" />
     <Compile Include="Metrics\ITrackedEvent.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
+    <Compile Include="Metrics\OpenedFromSource.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
     <Compile Include="Metrics\TrackedEvent.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />

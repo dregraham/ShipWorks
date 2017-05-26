@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.UI.Wizard;
@@ -14,14 +15,14 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Run the setup wizard.  Will return false if the user canceled.
         /// </summary>
-        public static DialogResult RunWizard(IWin32Window owner, ShipmentType shipmentType)
+        public static DialogResult RunWizard(IWin32Window owner, ShipmentType shipmentType, OpenedFromSource openedFrom)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (IForm wizard = shipmentType.CreateSetupWizard(lifetimeScope))
-                {
-                    return wizard.ShowDialog(owner);
-                }
+                IShipmentTypeSetupWizard wizard = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(shipmentType.ShipmentTypeCode, openedFrom);
+
+                return wizard.ShowDialog(owner);
             }
         }
 
@@ -30,11 +31,11 @@ namespace ShipWorks.Shipping.Settings
         /// account wizard is a seamless continuation of the previous wizard.
         /// </summary>
         /// <returns>The DialogResult of the shipment type's setup wizard.</returns>
-        public static DialogResult RunFromHostWizard(WizardForm hostWizard, ShipmentType shipmentType)
+        public static DialogResult RunFromHostWizard(WizardForm hostWizard, ShipmentType shipmentType, OpenedFromSource openedFrom)
         {
             // Hide the host wizard and run the setup wizard for the shipment type
             hostWizard.BeginInvoke(new MethodInvoker(hostWizard.Hide));
-            return RunWizard(hostWizard, shipmentType);
+            return RunWizard(hostWizard, shipmentType, openedFrom);
         }
     }
 }

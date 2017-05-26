@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -277,7 +278,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private Control BuildSetupControl(ShipmentType shipmentType)
         {
-            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);
             setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
             setupControl.Dock = DockStyle.Fill;
