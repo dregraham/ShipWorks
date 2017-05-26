@@ -46,6 +46,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
+        /// Count of FBA orders in a Download call.
+        /// </summary>
+        public int FbaOrdersDownloaded { get; private set; } = 0;
+
+        /// <summary>
         /// Start the download from Amazon.com using the Marketplace Web Service (MWS)
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to 
@@ -54,6 +59,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             try
             {
+                FbaOrdersDownloaded = 0;
+
                 Progress.Detail = "Connecting to Amazon...";
 
                 // declare upfront which api calls we are going to be using so they will be throttled
@@ -101,6 +108,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         // load each order in this result page
                         LoadOrders(client, xpath);
                     }
+
+                    trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
 
                     Progress.PercentComplete = 100;
                     Progress.Detail = "Done.";
@@ -182,6 +191,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Fulfilled by
             string fulfillmentChannel = XPathUtility.Evaluate(xpath, "amz:FulfillmentChannel", "");
             order.FulfillmentChannel = (int) TranslateFulfillmentChannel(fulfillmentChannel);
+
+            // If the order is new and it is of Amazon fulfillment type, increase the FBA count.
+            if (order.IsNew && order.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.AFN)
+            {
+                FbaOrdersDownloaded++;
+            }
 
             // IsPrime
             string isPrime = XPathUtility.Evaluate(xpath, "amz:IsPrime", "");
