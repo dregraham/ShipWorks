@@ -279,6 +279,7 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalWithApiFailOverRatingClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
