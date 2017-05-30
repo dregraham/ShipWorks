@@ -15,11 +15,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Process the list of shipments
         /// </summary>
+        /// <param name="sender">The object from where the message was sent.</param>
         /// <param name="shipments">List of shipments to process</param>
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments,
+        Task<IEnumerable<ProcessShipmentResult>> Process(object sender, 
+            IEnumerable<ShipmentEntity> shipments,
             ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing);
     }

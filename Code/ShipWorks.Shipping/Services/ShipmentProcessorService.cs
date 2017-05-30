@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Services
             {
                 refresher.RetrieveShipments = () => message.ShipmentsInContext;
 
-                shipments = await shipmentProcessor.Process(message.Shipments, refresher, message.SelectedRate, null);
+                shipments = await shipmentProcessor.Process(message.Sender, message.Shipments, refresher, message.SelectedRate, null);
             }
 
             return new ShipmentsProcessedMessage(message.Sender, shipments);
