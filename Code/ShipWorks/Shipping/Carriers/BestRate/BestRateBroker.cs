@@ -147,6 +147,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
+            foreach (ExceptionsRateFootnoteFactory rateFootnoteFactory in bestRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>())
+            {
+                brokerExceptions.Add(new BrokerException(new ShippingException(rateFootnoteFactory.ErrorMessage), BrokerExceptionSeverityLevel.Error, ShipmentType));
+            }
+
             return bestRateGroup;
         }
 
