@@ -1292,6 +1292,7 @@
     <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
+    <Compile Include="Shipping\IShippingDlg.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />

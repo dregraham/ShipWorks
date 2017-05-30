@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 .Returns(webService);
 
             var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                .Process(this, new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful);
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);
 
             var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                .Process(this, new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful, result.First().Error?.Message);
