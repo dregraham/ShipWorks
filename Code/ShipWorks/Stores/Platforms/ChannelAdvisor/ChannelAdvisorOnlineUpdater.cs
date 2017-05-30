@@ -413,7 +413,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (ShipmentTypeManager.IsDhl(postalServiceType))
             {
-                return "Global Mail";
+                return "DHL";
             }
 
             return "NONE";
