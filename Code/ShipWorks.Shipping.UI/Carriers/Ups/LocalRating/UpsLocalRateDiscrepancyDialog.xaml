@@ -1,25 +1,25 @@
 ﻿<src:InteropWindow x:Class="ShipWorks.Shipping.UI.Carriers.Ups.LocalRating.UpsLocalRateDiscrepancyDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.shipworks.com/ui"
-        xmlns:src="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
-        mc:Ignorable="d"
-        Title="Local Rate Does Not Match Shipping Label Cost" 
-        SizeToContent="WidthAndHeight"
-        >
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:ui="http://schemas.shipworks.com/ui"
+                   xmlns:src="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+                   xmlns:localRating="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
+                   mc:Ignorable="d"
+                   Title="Local Rate Does Not Match Shipping Label Cost"
+                   SizeToContent="WidthAndHeight"
+                   d:DataContext="{d:DesignInstance localRating:UpsLocalRateDiscrepancyViewModel}">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding Message}" Margin="10 10 10 5"/>
+            <TextBlock Text="{Binding Message}" Margin="10 10 10 5" />
             <TextBlock Margin="10 5 10 5">
                 For more info, please
-                <Hyperlink NavigateUri="{Binding HelpArticleLink}" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+                <Hyperlink NavigateUri="{Binding HelpArticleUrl}" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
             </TextBlock>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Height="23" Width="88" Content="Remind Me"></Button>
-                <Button Height="23" Width="88"  Content="OK"
-                        Margin="10"></Button>
+                <Button Height="23" Width="88" Content="Remind Me" Command="{Binding SnoozeClickCommand}" />
+                <Button Height="23" Width="88" Content="OK" Margin="10" Command="{Binding CloseClickCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>
