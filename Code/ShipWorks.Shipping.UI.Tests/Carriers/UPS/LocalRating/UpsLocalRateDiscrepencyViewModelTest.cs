@@ -37,13 +37,17 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void SnoozeClickCommand_DelegatesToLocalRateValidator()
+        public void SnoozeClickCommand_ExecutesSnoozeAction()
         {
             var testObject = mock.Create<UpsLocalRateDiscrepancyViewModel>();
             testObject.Load("msg", new Uri("http://www.shipworks.com/"));
+
+            bool snoozed = false;
+            testObject.Close = () => snoozed = true;
+
             testObject.SnoozeClickCommand.Execute(null);
 
-            mock.Mock<IUpsLocalRateValidator>().Verify(v=>v.Snooze(), Times.Once);
+            Assert.True(snoozed);
         }
 
         [Fact]
