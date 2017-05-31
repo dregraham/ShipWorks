@@ -495,7 +495,6 @@ namespace ShipWorks.UI.Controls
 
                         FormatWeightText(newWeight);
                         SetCurrentWeight(newWeight);
-                        textBox.Focus();
                         ClearError();
                         appliedWeight = true;
 
