@@ -17,20 +17,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     [Component(SingleInstance = true)]
     public class UpsLocalRateValidator : IUpsLocalRateValidator
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IUpsRateClient rateClient;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private DateTime wakeTime;
 
-        public UpsLocalRateValidator(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, IIndex<UpsRatingMethod, IUpsRateClient> rateClient,
-            ILocalRateValidationResultFactory validationResultFactory)
+        public UpsLocalRateValidator(IIndex<UpsRatingMethod, IUpsRateClient> rateClient,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
+            ILocalRateValidationResultFactory validationResultFactory,
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory
+            )
         {
-            this.upsAccountRepository = upsAccountRepository;
-            this.apiLogEntryFactory = apiLogEntryFactory;
             this.rateClient = rateClient[UpsRatingMethod.LocalOnly];
+            this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
+            this.apiLogEntryFactory = apiLogEntryFactory;
         }
 
         public ILocalRateValidationResult Validate(IEnumerable<ShipmentEntity> shipments)
