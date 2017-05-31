@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
                 testObject.Run(shipment, null, null);
 
                 mock.Mock<IShipmentTypeSetupWizardFactory>()
-                    .Verify(x => x.Create(ShipmentTypeCode.Other, OpenedFromSource.NotSpecified));
+                    .Verify(x => x.Create(ShipmentTypeCode.Other, OpenedFromSource.Processing));
             }
 
             [Fact]

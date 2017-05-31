@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -133,7 +134,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ShipmentTypeSetupWizardForm dlg = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.OnTrac);
+                IShipmentTypeSetupWizard dlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(ShipmentTypeCode.OnTrac, OpenedFromSource.Manager);
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

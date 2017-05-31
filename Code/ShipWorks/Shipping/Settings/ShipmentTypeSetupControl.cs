@@ -92,32 +92,8 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Setup the given shipment type, returns true if it's setup.
         /// </summary>
-        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, IShipmentTypeSetupWizard setupDlg)
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
-
-            try
-            {
-                using (SqlAppResourceLock setupLock = new SqlAppResourceLock("Setup - " + shipmentType.ShipmentTypeName))
-                {
-                    using (IForm dlg = setupDlg)
-                    {
-                        if (dlg.ShowDialog(messageOwner) == DialogResult.OK)
-                        {
-                            ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
-
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (SqlAppResourceLockException)
-            {
-                MessageHelper.ShowInformation(messageOwner, "The shipping provider is currently being setup on another computer.");
-            }
-
-            return false;
-        }
+        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, IShipmentTypeSetupWizard setupDlg) =>
+            setupDlg.ShowDialog(messageOwner) == DialogResult.OK;
 
         /// <summary>
         /// Upgrade the current edition of ShipWorks

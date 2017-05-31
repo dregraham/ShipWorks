@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Endicia
     /// <summary>
     /// Setup wizard for Express1 Endicia accounts
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Express1Endicia)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Express1Endicia)]
     public class Express1EndiciaSetupWizard : Express1SetupWizard
     {
         /// <summary>

@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Wizard for registering to use FedEx
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.FedEx)]
-    public partial class FedExSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.FedEx)]
+    public partial class FedExSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         FedExAccountEntity account;
 
@@ -272,5 +272,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             PrintUtility.PrintText(this, "ShipWorks - FedEx License Agreement", licenseAgreement.Text, true);
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

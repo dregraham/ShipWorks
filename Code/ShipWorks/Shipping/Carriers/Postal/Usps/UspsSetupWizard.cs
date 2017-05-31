@@ -36,9 +36,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Setup wizard for processing shipments with USPS
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Usps)]
     [NDependIgnoreLongTypes]
-    public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
+    public partial class UspsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
@@ -982,5 +982,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             BackEnabled = false;
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

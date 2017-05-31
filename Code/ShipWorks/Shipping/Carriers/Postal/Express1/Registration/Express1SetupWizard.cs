@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// Wizard for setting up shipping with Express1
     /// </summary>
     [NDependIgnoreLongTypes]
-    public partial class Express1SetupWizard : ShipmentTypeSetupWizardForm
+    public partial class Express1SetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private bool hideDetailedConfiguration;
         private PersonAdapter initialAccountAddress;
@@ -454,5 +454,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         {
             creditCardDetailsPanel.Top = creditCardDetailsPanel.Top - (initialPersonCreditCardHeight - personCreditCard.Height);
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

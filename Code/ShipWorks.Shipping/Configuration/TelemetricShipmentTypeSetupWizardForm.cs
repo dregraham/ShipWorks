@@ -52,11 +52,13 @@ namespace ShipWorks.Shipping.Configuration
         }
 
         /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => inner;
+
+        /// <summary>
         /// Dispose the control
         /// </summary>
-        public void Dispose()
-        {
-            inner.Dispose();
-        }
+        public void Dispose() => inner.Dispose();
     }
 }

@@ -29,9 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wizard Form for setting up shipping with endicia
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Endicia)]
     [NDependIgnoreLongTypes]
-    public partial class EndiciaSetupWizard : ShipmentTypeSetupWizardForm
+    public partial class EndiciaSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         EndiciaAccountEntity account;
         EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
@@ -480,7 +480,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaPaymentInfo paymentInfo = GetPaymentInfo();
 
-            // If we are signing up for ELS freemium, first validate the account information _would_ be ok for Tango - this doesnt actually create anything
+            // If we are signing up for ELS freemium, first validate the account information _would_ be ok for Tango - this doesn't actually create anything
             if (freemiumEdition != null && radioNewAccount.Checked)
             {
                 try
@@ -895,5 +895,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RateCache.Instance.Clear();
             }
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

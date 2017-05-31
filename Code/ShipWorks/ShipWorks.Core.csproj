@@ -1886,9 +1886,6 @@
     <Compile Include="Shipping\Policies\RateResultCountShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyType.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactory.cs" />
-    <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

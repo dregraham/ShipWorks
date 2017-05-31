@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     .Create(shipmentType.ShipmentTypeCode, OpenedFromSource.Manager);
 
                 // Ensure that the setup dialog is actually an Express1 setup wizard
-                var setupWizard = setupDlg as Express1SetupWizard;
+                var setupWizard = setupDlg.GetUnwrappedWizard() as Express1SetupWizard;
                 Debug.Assert(setupWizard != null, "AutomaticExpress1Control can only create Express1 shipment types.");
 
                 // Pre-load the account address details
@@ -103,14 +103,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     // The shipping type has already been set up, so just add a new account
                     setupWizard.ForceAccountOnly = true;
 
-                    added = (setupWizard.ShowDialog(this) == DialogResult.OK);
+                    added = (setupDlg.ShowDialog(this) == DialogResult.OK);
                 }
                 else
                 {
                     // The shipping type still needs to be set up, so hand off to the shipment setup control
                     setupWizard.HideDetailedConfiguration = true;
 
-                    added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupWizard);
+                    added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupDlg);
                 }
             }
 

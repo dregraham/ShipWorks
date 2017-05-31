@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Metrics;
+﻿using Autofac.Core;
+using Interapptive.Shared.Metrics;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Settings
@@ -8,6 +9,9 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public interface IShipmentTypeSetupWizardFactory
     {
-        IShipmentTypeSetupWizard Create(ShipmentTypeCode shipmentType, OpenedFromSource openedFrom);
+        /// <summary>
+        /// Create a wizard for the given shipment type
+        /// </summary>
+        IShipmentTypeSetupWizard Create(ShipmentTypeCode shipmentType, OpenedFromSource openedFrom, params Parameter[] parameters);
     }
 }
