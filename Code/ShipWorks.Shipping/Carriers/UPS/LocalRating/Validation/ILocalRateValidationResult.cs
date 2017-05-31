@@ -6,6 +6,11 @@
     public interface ILocalRateValidationResult
     {
         /// <summary>
+        /// LocalRate validated against shipment cost
+        /// </summary>
+        bool IsValid { get; }
+        
+        /// <summary>
         /// Gets the validation message.
         /// </summary>
         string Message { get; }

@@ -24,6 +24,7 @@ using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
@@ -48,6 +49,7 @@ namespace ShipWorks.Shipping.Services
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IActionDispatcher actionDispatcher;
         private Control owner;
+        private readonly IUpsLocalRateValidator upsLocalRateValidator;
 
         /// <summary>
         /// Constructor
@@ -56,8 +58,10 @@ namespace ShipWorks.Shipping.Services
         public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
             ILifetimeScope lifetimeScope, ILicenseService licenseService, IMessageHelper messageHelper,
             IProcessShipmentsWorkflowFactory workflowFactory, IShippingSettings shippingSettings,
-            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher)
+            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher,
+            IUpsLocalRateValidator upsLocalRateValidator)
         {
+            this.upsLocalRateValidator = upsLocalRateValidator;
             this.actionDispatcher = actionDispatcher;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.shippingSettings = shippingSettings;
@@ -130,6 +134,8 @@ namespace ShipWorks.Shipping.Services
                         cancellationSource, counterRateCarrierConfiguredWhileProcessingAction);
                 }
             }
+
+            result.LocalRateValidationResult = upsLocalRateValidator.Validate(clonedShipments);
 
             HandleProcessingException(result);
 
@@ -232,20 +238,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void HandleProcessingException(IProcessShipmentsWorkflowResult executionState)
         {
+            ValidateLocalRates(executionState);
+
             // If any accounts were out of funds we show that instead of the errors
             if (executionState.OutOfFundsException != null)
             {
-                DialogResult answer = messageHelper.ShowQuestion(
-                    $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
-                    "Would you like to purchase more now?");
-
-                if (answer == DialogResult.OK)
-                {
-                    using (Form dlg = executionState.OutOfFundsException.CreatePostageDialog(lifetimeScope))
-                    {
-                        dlg.ShowDialog(owner);
-                    }
-                }
+                HandleOutOfFundsException(executionState);
             }
             else if (executionState.TermsAndConditionsException != null)
             {
@@ -268,6 +266,42 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 messageHelper.ShowError(message);
+            }
+        }
+
+        /// <summary>
+        /// Handles Out Of Funds Exception
+        /// </summary>
+        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult executionState)
+        {
+            DialogResult answer = messageHelper.ShowQuestion(
+                                $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
+                                "Would you like to purchase more now?");
+
+            if (answer == DialogResult.OK)
+            {
+                using (Form dlg = executionState.OutOfFundsException.CreatePostageDialog(lifetimeScope))
+                {
+                    dlg.ShowDialog(owner);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validate Local Rates
+        /// </summary>
+        private void ValidateLocalRates(IProcessShipmentsWorkflowResult executionState)
+        {
+            if (!executionState.LocalRateValidationResult.IsValid)
+            {
+                if (executionState.NewErrors.Any())
+                {
+                    executionState.NewErrors.Insert(0, executionState.LocalRateValidationResult.Message);
+                }
+                else
+                {
+                    executionState.LocalRateValidationResult.ShowMessage();
+                }
             }
         }
 

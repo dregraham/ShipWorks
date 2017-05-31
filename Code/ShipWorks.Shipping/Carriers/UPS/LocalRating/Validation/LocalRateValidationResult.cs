@@ -32,6 +32,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         }
 
         /// <summary>
+        /// LocalRate validated against shipment cost
+        /// </summary>
+        public bool IsValid => discrepancyCount == 0;
+
+        /// <summary>
         /// Gets the validation message.
         /// </summary>
         public string Message { get; }

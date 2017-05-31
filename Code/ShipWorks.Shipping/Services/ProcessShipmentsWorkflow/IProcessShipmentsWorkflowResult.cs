@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 {
@@ -9,6 +10,11 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     /// </summary>
     public interface IProcessShipmentsWorkflowResult
     {
+        /// <summary>
+        /// Local Rate ValidationResult
+        /// </summary>
+        ILocalRateValidationResult LocalRateValidationResult { get; set; }
+
         /// <summary>
         /// List of new errors
         /// </summary>
