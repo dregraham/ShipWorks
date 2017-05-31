@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -33,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsZeroDiscrepencies_WhenSnoozing()
+        public void Validate_ReturnsZeroDiscrepancies_WhenSnoozing()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -51,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
 
         [Fact]
-        public void Validate_ReturnsZeroDiscrepencies_WhenShipmentIsNotUps()
+        public void Validate_ReturnsZeroDiscrepancies_WhenShipmentIsNotUps()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -67,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_DoesNotCountDiscrepency_WhenShipmentUsesThirdPartyBilling()
+        public void Validate_DoesNotCountDiscrepancy_WhenShipmentUsesThirdPartyBilling()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -83,7 +85,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_DoesNotCountDiscrepency_WhenLocalRatingIsNotEnabledForAccount()
+        public void Validate_DoesNotCountDiscrepancy_WhenLocalRatingIsNotEnabledForAccount()
         {
             var shipment = CreateShipment();
 
@@ -102,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsDiscrepency_WhenNoLocalRateIsFoundForUpsService()
+        public void Validate_ReturnsDiscrepancy_WhenNoLocalRateIsFoundForUpsService()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.WorldwideSaver);
 
@@ -121,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsDiscrepency_WhenLocalRateDoesNotMatchApiRate()
+        public void Validate_ReturnsDiscrepancy_WhenLocalRateDoesNotMatchApiRate()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -140,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsDiscrepency_WhenGetLocalRatesFails()
+        public void Validate_ReturnsDiscrepancy_WhenGetLocalRatesFails()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -159,7 +161,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsCorrectNumberOfDiscrepencies_WhenAllLocalRateDoNotMatchApiRates()
+        public void Validate_ReturnsCorrectNumberOfDiscrepancies_WhenAllLocalRateDoNotMatchApiRates()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -182,7 +184,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsCorrectNumberOfDiscrepencies_WhenSomeLocalRatesMatchApiRates()
+        public void Validate_ReturnsCorrectNumberOfDiscrepancies_WhenSomeLocalRatesMatchApiRates()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -205,7 +207,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsZeroDiscrepencies_WhenAllLocalRatesMatchApiRates()
+        public void Validate_ReturnsZeroDiscrepancies_WhenAllLocalRatesMatchApiRates()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -251,6 +253,53 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             testObject.Validate(shipments);
 
             resultFactory.Verify(r => r.Create(shipments.Count, 0));
+        }
+
+        [Fact]
+        public void Validate_LogsDiscrepancies_WhenRatesDoNotMatch()
+        {
+            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+            shipment.ShipmentID = 1;
+            var shipments = new List<ShipmentEntity>
+            {
+                shipment
+            };
+
+            var logger = mock.Mock<IApiLogEntry>();
+            var logFactory = mock.MockRepository.Create<Func<ApiLogSource, string, IApiLogEntry>>();
+            logFactory.Setup(f => f(ApiLogSource.UpsLocalRating, "Rate Discrepancies")).Returns(logger);
+
+            SetupGetLocalRatesToSucceed();
+            SetupLocalRatingEnabledForAccount(true, shipment);
+
+            testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
+
+            testObject.Validate(shipments);
+
+            logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
+        }
+
+        [Fact]
+        public void Validate_LogsDiscrepancies_WhenLocalRatesNotFound()
+        {
+            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+
+            var shipments = new List<ShipmentEntity>
+            {
+                shipment
+            };
+
+            var logger = mock.Mock<IApiLogEntry>();
+            var logFactory = mock.MockRepository.Create<Func<ApiLogSource, string, IApiLogEntry>>();
+            logFactory.Setup(f => f(ApiLogSource.UpsLocalRating, "Rate Discrepancies")).Returns(logger);
+
+            SetupGetLocalRatesToFail();
+            SetupLocalRatingEnabledForAccount(true, shipment);
+            testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
+
+            testObject.Validate(shipments);
+
+            logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
         }
 
         public void Dispose()

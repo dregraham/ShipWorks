@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -14,30 +16,40 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
+    /// <summary>
+    /// Validates whether or not a shipments local rate matches it's actual label cost
+    /// </summary>
+    /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation.IUpsLocalRateValidator" />
     [Component(SingleInstance = true)]
     public class UpsLocalRateValidator : IUpsLocalRateValidator
     {
         private readonly IUpsRateClient rateClient;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly IApiLogEntry logger;
         private DateTime wakeTime;
 
-        public UpsLocalRateValidator(IIndex<UpsRatingMethod, IUpsRateClient> rateClient,
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpsLocalRateValidator"/> class.
+        /// </summary>
+        public UpsLocalRateValidator(IIndex<UpsRatingMethod, IUpsRateClient> rateClientFactory,
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             ILocalRateValidationResultFactory validationResultFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory
-            )
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.rateClient = rateClient[UpsRatingMethod.LocalOnly];
+            rateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
-            this.apiLogEntryFactory = apiLogEntryFactory;
+            logger = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate Discrepancies");
         }
 
+        /// <summary>
+        /// Given a list of processed UPS shipments, if applicable, validate the local rates match the rate charged by UPS
+        /// </summary>
         public ILocalRateValidationResult Validate(IEnumerable<ShipmentEntity> shipments)
         {
-            int discrepencies = 0;
+            int discrepancies = 0;
+            StringBuilder logBuilder = new StringBuilder();
 
             if (DateTime.Now > wakeTime)
             {
@@ -54,20 +66,27 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
                             if (rate?.Amount != shipment.ShipmentCost)
                             {
-                                discrepencies++;
+                                discrepancies++;
+                                LogDiscrepancy(logBuilder, shipment, rate);
                             }
                         }
                         else
                         {
-                            discrepencies++;
+                            discrepancies++;
+                            LogDiscrepancy(logBuilder, shipment, null);
                         }
                     }
                 }
             }
 
-            return validationResultFactory.Create(shipments.Count(), discrepencies);
-        }
+            if (logBuilder.Length > 0)
+            {
+                logger.LogResponse(logBuilder.ToString(), ".txt");
+            }
 
+            return validationResultFactory.Create(shipments.Count(), discrepancies);
+        }
+        
         /// <summary>
         /// Suppresses validation for a limited amount of time or until SW restarts
         /// </summary>
@@ -89,6 +108,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             return shipment.Ups != null && shipment.Ups.PayorType != (int) UpsPayorType.ThirdParty &&
                     upsAccountRepository.GetAccountReadOnly(shipment).LocalRatingEnabled;
+        }
+
+        /// <summary>
+        /// Logs the discrepancies. Includes the shipmentID, the local rate, and the actual shipment cost
+        /// </summary>
+        private void LogDiscrepancy(StringBuilder stringBuilder, ShipmentEntity shipment, UpsServiceRate rate)
+        {
+            stringBuilder.AppendLine($"Shipment ID: {shipment.ShipmentID}");
+            stringBuilder.AppendLine($"Local Rate: {rate?.Amount.ToString(CultureInfo.InvariantCulture) ?? "Not found"}");
+            stringBuilder.AppendLine($"Label Cost: {shipment.ShipmentCost}");
+            stringBuilder.AppendLine();
         }
     }
 }
