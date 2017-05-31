@@ -12,7 +12,7 @@
 | redistributed in any form, as part of another product or otherwise.
 | Modified versions of this code may not be sold or redistributed.
 |
-| Copyright 2009-2012 Interapptive, Inc.  All rights reserved.
+| Copyright 2017 Interapptive, Inc.  All rights reserved.
 | http://www.interapptive.com/
 |
 |
