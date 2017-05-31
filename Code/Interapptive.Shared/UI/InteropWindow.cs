@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace Interapptive.Shared.UI
@@ -20,6 +21,13 @@ namespace Interapptive.Shared.UI
         protected InteropWindow(IWin32Window owner)
         {
             LoadOwner(owner);
+
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            WindowStyle = WindowStyle.ToolWindow;
+            ShowInTaskbar = false;
+            ResizeMode = ResizeMode.NoResize;
+            FontFamily = new FontFamily("Tahoma");
+            FontSize = 11;
         }
 
         /// <summary>
