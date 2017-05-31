@@ -9,10 +9,12 @@
                    mc:Ignorable="d"
                    Title="Local Rate Does Not Match Shipping Label Cost"
                    SizeToContent="WidthAndHeight"
+                   MinWidth="300"
+                   MaxWidth="500"
                    d:DataContext="{d:DesignInstance localRating:UpsLocalRateDiscrepancyViewModel}">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding Message}" Margin="10 10 10 5" />
+            <TextBlock Text="{Binding Message}" Margin="10 10 10 5" TextWrapping="Wrap"/>
             <TextBlock Margin="10 5 10 5">
                 For more info, please
                 <Hyperlink NavigateUri="{Binding HelpArticleUrl}" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
