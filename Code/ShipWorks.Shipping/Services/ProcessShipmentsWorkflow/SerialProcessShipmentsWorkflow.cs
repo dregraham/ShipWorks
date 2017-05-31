@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -24,21 +23,17 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private readonly LabelPersistenceStep saveLabelTask;
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
-        private readonly Func<Control> ownerRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
         public SerialProcessShipmentsWorkflow(
             ShipmentPreparationStep prepareShipmentTask,
             LabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
             LabelResultLogStep completeLabelTask,
-            IShippingManager shippingManager,
-            Func<Control> ownerRetriever)
+            IShippingManager shippingManager)
         {
-            this.ownerRetriever = ownerRetriever;
             this.shippingManager = shippingManager;
             this.completeLabelTask = completeLabelTask;
             this.saveLabelTask = saveLabelTask;
@@ -68,18 +63,19 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
             return await Task.Run(() =>
             {
-                ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
+                ProcessShipmentsWorkflowResult executionState = new ProcessShipmentsWorkflowResult(chosenRateResult);
                 return input.Where(_ => !cancellationSource.IsCancellationRequested)
                     .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
                     .Where(x => x != null)
                     .Aggregate(executionState, AggregateResults);
+
             });
         }
 
         /// <summary>
         /// Aggregate the results
         /// </summary>
-        private ShipmentProcessorExecutionState AggregateResults(ShipmentProcessorExecutionState executionState, ILabelResultLogResult result)
+        private ProcessShipmentsWorkflowResult AggregateResults(ProcessShipmentsWorkflowResult executionState, ILabelResultLogResult result)
         {
             if (!string.IsNullOrEmpty(result.ErrorMessage))
             {

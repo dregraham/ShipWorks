@@ -28,9 +28,41 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             mock.Provide(dialogIndex.Object);
             
             var testObject = mock.Create<LocalRateValidationResultFactory>();
-            testObject.Create(1, 1);
+            testObject.Create(1, 1, () => { });
             
            dialogIndex.Verify(i=>i["UpsLocalRateDiscrepancyDialog"], Times.Once);
+        }
+
+        [Fact]
+        public void Create_SetsSnoozeMethod()
+        {
+            var dialog = mock.Mock<IDialog>();
+            var dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
+            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
+                .Returns(dialog.Object);
+            mock.Provide(dialogIndex.Object);
+
+            var testObject = mock.Create<LocalRateValidationResultFactory>();
+            Action snooze = () => { };
+            testObject.Create(1, 1, snooze);
+            mock.Mock<IUpsLocalRateDiscrepancyViewModel>()
+                .VerifySet(m=>m.Snooze = snooze, Times.Once);
+        }
+
+        [Fact]
+        public void Create_SetsCloseMethod()
+        {
+            var dialog = mock.Mock<IDialog>();
+            var dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
+            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
+                .Returns(dialog.Object);
+            mock.Provide(dialogIndex.Object);
+
+            var testObject = mock.Create<LocalRateValidationResultFactory>();
+            Action snooze = () => { };
+            testObject.Create(1, 1, snooze);
+            mock.Mock<IUpsLocalRateDiscrepancyViewModel>()
+                .VerifySet(m => m.Close = dialog.Object.Close, Times.Once);
         }
 
         public void Dispose()

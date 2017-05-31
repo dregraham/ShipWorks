@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
     {
         private readonly AutoMock mock;
         private readonly Mock<ILocalRateValidationResultFactory> resultFactory;
-        private Mock<IIndex<UpsRatingMethod, IUpsRateClient>> rateClientFactory;
+        private readonly Mock<IIndex<UpsRatingMethod, IUpsRateClient>> rateClientFactory;
         private UpsLocalRateValidator testObject;
 
         public UpsLocalRateValidatorTest()
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             testObject.Snooze();
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 1));
+            resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 1));
+            resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 1));
+            resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 2));
+            resultFactory.Verify(r => r.Create(shipments.Count, 2, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 1));
+            resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -252,7 +252,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0));
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]

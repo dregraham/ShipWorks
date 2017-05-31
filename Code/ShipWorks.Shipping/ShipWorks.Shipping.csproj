@@ -334,7 +334,7 @@
     <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\OrderLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessor.cs" />
-    <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStep.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStep.cs" />

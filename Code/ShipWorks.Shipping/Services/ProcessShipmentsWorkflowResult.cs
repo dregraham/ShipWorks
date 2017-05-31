@@ -12,12 +12,12 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// State used when processing shipments
     /// </summary>
-    internal class ShipmentProcessorExecutionState : IProcessShipmentsWorkflowResult
+    internal class ProcessShipmentsWorkflowResult : IProcessShipmentsWorkflowResult
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentProcessorExecutionState(RateResult chosenRate)
+        public ProcessShipmentsWorkflowResult(RateResult chosenRate)
         {
             SelectedRate = chosenRate;
 
