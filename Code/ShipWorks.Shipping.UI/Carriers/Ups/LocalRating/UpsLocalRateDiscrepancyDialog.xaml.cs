@@ -7,8 +7,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     /// <summary>
     /// Interaction logic for UpsLocalRateDiscrepancyDialog.xaml
     /// </summary>
-    [NamedComponent("UpsLocalRateDiscrepancyDialog", typeof(InteropWindow))]
-    public partial class UpsLocalRateDiscrepancyDialog 
+    [NamedComponent("UpsLocalRateDiscrepancyDialog", typeof(IDialog))]
+    public partial class UpsLocalRateDiscrepancyDialog
     {
         public UpsLocalRateDiscrepancyDialog(IWin32Window owner) : base(owner)
         {

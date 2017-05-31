@@ -33,5 +33,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Closes the dialog
         /// </summary>
         ICommand CloseClickCommand { get; }
+
+        /// <summary>
+        /// Loads the specified message.
+        /// </summary>
+        void Load(string message, Uri helpArticleUrl);
     }
 }

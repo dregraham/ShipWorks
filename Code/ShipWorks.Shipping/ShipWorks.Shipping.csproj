@@ -284,6 +284,8 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\LocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\LocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRatingPipeline.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
