@@ -14,16 +14,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     [Component]
     public class UpsLocalRateDiscrepancyViewModel : IUpsLocalRateDiscrepancyViewModel
     {
-        private readonly IUpsLocalRateValidator localRateValidator;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsLocalRateDiscrepancyViewModel(IUpsLocalRateValidator localRateValidator)
+        public UpsLocalRateDiscrepancyViewModel()
         {
-            this.localRateValidator = localRateValidator;
-
-            SnoozeClickCommand = new RelayCommand(Snooze);
+            SnoozeClickCommand = new RelayCommand(ExecuteSnooze);
             CloseClickCommand = new RelayCommand(ExecuteClose);
         }
 
@@ -52,8 +48,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// Gets or sets the method to close the window.
         /// If user cancels, we will pass in false, else pass in true
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public Action Close { get; set; }
+
+        /// <summary>
+        /// Suppresses validation for a limited amount of time or until SW restarts
+        /// </summary>
+        public Action Snooze { get; set; }
 
         /// <summary>
         /// Snoozes validation so the user is not warned at every validation error
@@ -70,9 +70,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Snoozes validation so the user is not warned at every validation error
         /// </summary>
-        private void Snooze()
+        private void ExecuteSnooze()
         {
-            localRateValidator.Snooze();
+            Snooze?.Invoke();
             ExecuteClose();
         }
 

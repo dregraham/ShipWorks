@@ -1,7 +1,12 @@
-﻿namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
+﻿using System;
+
+namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
     public interface ILocalRateValidationResultFactory
     {
-        ILocalRateValidationResult Create(int shipmentCount, int discrepancyCount);
+        /// <summary>
+        /// Creates a LocalRateValidationResult
+        /// </summary>
+        ILocalRateValidationResult Create(int shipmentCount, int discrepancyCount, Action snooze);
     }
 }

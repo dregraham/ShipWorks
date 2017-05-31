@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                 logger.LogResponse(logBuilder.ToString(), ".txt");
             }
 
-            return validationResultFactory.Create(shipments.Count(), discrepancies);
+            return validationResultFactory.Create(shipments.Count(), discrepancies, Snooze);
         }
         
         /// <summary>

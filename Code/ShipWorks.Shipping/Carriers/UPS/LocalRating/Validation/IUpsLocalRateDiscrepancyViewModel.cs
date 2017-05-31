@@ -23,6 +23,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// If user cancels, we will pass in false, else pass in true
         /// </summary>
         Action Close { get; set; }
+
+        /// <summary>
+        /// Suppresses validation for a limited amount of time or until SW restarts
+        /// </summary>
+        Action Snooze { get; set; }
         
         /// <summary>
         /// Snoozes validation so the user is not warned at every validation error
