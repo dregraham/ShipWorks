@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// <summary>
     /// ViewModel for the UpsLocalRateDiscrepancyDialog
     /// </summary>
-    interface IUpsLocalRateDiscrepancyViewModel
+    public interface IUpsLocalRateDiscrepancyViewModel
     {
         /// <summary>
         /// The validation message
@@ -26,16 +26,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Gets or sets the method to close the window.
         /// If user cancels, we will pass in false, else pass in true
         /// </summary>
-        Action<bool> Close { get; set; }
+        Action Close { get; set; }
         
         /// <summary>
         /// Snoozes validation so the user is not warned at every validation error
         /// </summary>
-        ICommand SnoozeClickCommand();
+        ICommand SnoozeClickCommand { get; }
 
         /// <summary>
         /// Closes the dialog
         /// </summary>
-        ICommand CloseClickCommand();
+        ICommand CloseClickCommand { get; }
     }
 }

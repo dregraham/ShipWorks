@@ -164,6 +164,7 @@
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateDiscrepancyViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingDisabledFootnoteViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRatingControl.xaml.cs">
