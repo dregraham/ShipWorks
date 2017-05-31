@@ -94,6 +94,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -280,9 +281,11 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRatingPipeline.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
