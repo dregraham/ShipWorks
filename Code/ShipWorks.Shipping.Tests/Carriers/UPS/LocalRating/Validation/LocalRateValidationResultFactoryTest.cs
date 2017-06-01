@@ -12,21 +12,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
     public class LocalRateValidationResultFactoryTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly Mock<IDialog> dialog;
+        private readonly Mock<IIndex<string, IDialog>> dialogIndex;
 
         public LocalRateValidationResultFactoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            dialog = mock.Mock<IDialog>();
+            dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
+            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
+                .Returns(dialog.Object);
+            mock.Provide(dialogIndex.Object);
         }
 
         [Fact]
         public void Create_GetsUpsLocalRateDiscrepancyDialogFromIIndex()
         {
-            var dialog = mock.Mock<IDialog>();
-            var dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
-            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
-                .Returns(dialog.Object);
-            mock.Provide(dialogIndex.Object);
-            
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             testObject.Create(1, 1, () => { });
             
@@ -36,12 +38,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Create_SetsSnoozeMethod()
         {
-            var dialog = mock.Mock<IDialog>();
-            var dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
-            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
-                .Returns(dialog.Object);
-            mock.Provide(dialogIndex.Object);
-
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             Action snooze = () => { };
             testObject.Create(1, 1, snooze);
@@ -52,12 +48,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Create_SetsCloseMethod()
         {
-            var dialog = mock.Mock<IDialog>();
-            var dialogIndex = mock.CreateMock<IIndex<string, IDialog>>();
-            dialogIndex.Setup(x => x["UpsLocalRateDiscrepancyDialog"])
-                .Returns(dialog.Object);
-            mock.Provide(dialogIndex.Object);
-
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             Action snooze = () => { };
             testObject.Create(1, 1, snooze);
@@ -69,6 +59,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         {
             mock.Dispose();
         }
-
     }
 }

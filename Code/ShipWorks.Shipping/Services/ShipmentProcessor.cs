@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Services
         /// <param name="chosenRateResult">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessingAction">Execute after a counter rate carrier was configured</param>
         [NDependIgnoreLongMethod]
-        public async Task<IEnumerable<ProcessShipmentResult>> Process(object sender, IEnumerable<ShipmentEntity> shipmentsToProcess,
+        public async Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipmentsToProcess,
             ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction)
         {
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Services
                 .ToList();
 
             IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
-            messenger.Send(new ShipmentsProcessedMessage(sender, results));
+            messenger.Send(new ShipmentsProcessedMessage(this, results));
 
             return results;
         }

@@ -2054,7 +2054,7 @@ namespace ShipWorks.Shipping
 
             IShipmentProcessor shipmentProcessor = createShipmentProcessor();
 
-            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(this, shipments, carrierConfigurationShipmentRefresher,
+            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
 
             // Apply any changes made during processing to the grid
