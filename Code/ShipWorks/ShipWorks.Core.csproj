@@ -8749,10 +8749,11 @@
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.4.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\composer.json" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
-    <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
+    <None Include="Stores\Platforms\OpenCart\Modules\OpenCart1\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Stores\Platforms\OpenCart\Modules\OpenCart2\shipworks3.php" />
     <EmbeddedResource Include="Actions\ActionEditorDlg.resx">
       <DependentUpon>ActionEditorDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
