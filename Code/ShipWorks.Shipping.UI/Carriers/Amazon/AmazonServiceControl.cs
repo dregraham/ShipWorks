@@ -58,6 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
             dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
+            weight.WeightChanged += OnWeightChanged;
             weight.WeightChanged += OnShipSenseFieldChanged;
 
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
@@ -65,6 +66,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
                 telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 1);
             };
+        }
+
+        /// <summary>
+        /// Force the weight binding on weight change
+        /// </summary>
+        /// <remarks>
+        /// When code changes the weight, we need to force the binding to write its value. This isn't necessary when running
+        /// ShipWorks through Visual Studio, but is necessary when running an obfuscated build. This would imply that there
+        /// is an obfuscation issue, but I can't quite tell what it is.
+        /// </remarks>
+        private void OnWeightChanged(object sender, EventArgs e)
+        {
+            foreach (Binding binding in weight.DataBindings.OfType<Binding>().Where(x => x.PropertyName == nameof(weight.Weight)))
+            {
+                binding.WriteValue();
+            }
         }
 
         /// <summary>
