@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Usps
     /// <summary>
     /// Setup wizard for Express1 Usps accounts
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Express1Usps)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Express1Usps)]
     public class Express1UspsSetupWizard : Express1SetupWizard
     {
         /// <summary>

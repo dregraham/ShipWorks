@@ -17,5 +17,10 @@ namespace Interapptive.Shared.ComponentRegistration
         /// Register the component as its implemented interfaces
         /// </summary>
         ImplementedInterfaces = 2,
+
+        /// <summary>
+        /// Register the component as a specific service
+        /// </summary>
+        SpecificService = 3,
     }
 }

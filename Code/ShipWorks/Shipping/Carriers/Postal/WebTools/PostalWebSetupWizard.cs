@@ -4,14 +4,15 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
     /// <summary>
     /// Setup wizard for USPS w/o Postage shipping
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.PostalWebTools)]
-    public partial class PostalWebSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.PostalWebTools)]
+    public partial class PostalWebSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         /// <summary>
         /// Constructor
@@ -47,5 +48,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 RateCache.Instance.Clear();
             }
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

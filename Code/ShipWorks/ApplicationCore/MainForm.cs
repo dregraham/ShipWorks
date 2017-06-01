@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
@@ -17,6 +18,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
@@ -119,6 +121,8 @@ namespace ShipWorks
         // Indicates if the background async login was a success.  This is to make sure we don't keep going on the UI thread
         // if it failed.
         bool logonAsyncLoadSuccess = false;
+
+        ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
 
         // We have to remember these so that we can restore them after blanking the UI
         List<RibbonTab> ribbonTabs = new List<RibbonTab>();
@@ -641,7 +645,7 @@ namespace ShipWorks
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (!AddStoreWizard.RunWizard(this))
+                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.InitialSetup))
                 {
                     UserSession.Logoff(false);
                     UserSession.Reset();
@@ -650,6 +654,8 @@ namespace ShipWorks
 
                     return;
                 }
+
+                QueueLogonAction(ShowSetupGuide);
             }
             else
             {
@@ -714,6 +720,8 @@ namespace ShipWorks
             // Start the heartbeat
             heartBeat.Start();
 
+            ExecuteLogonActions();
+
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
             NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ShipWorksUpgrade));
@@ -728,6 +736,36 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+        }
+
+        /// <summary>
+        /// Execute any logon actions that have been queued
+        /// </summary>
+        private void ExecuteLogonActions()
+        {
+            Action action = null;
+            while (logonActions.TryDequeue(out action))
+            {
+                action();
+            }
+        }
+
+        /// <summary>
+        /// Queue an action to run at the end of the logon process
+        /// </summary>
+        public void QueueLogonAction(Action action) => logonActions.Enqueue(action);
+
+        /// <summary>
+        /// Show the New User Experience dialog
+        /// </summary>
+        public void ShowSetupGuide()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ISetupGuide SetupGuide = lifetimeScope.Resolve<ISetupGuide>();
+                SetupGuide.LoadOwner(this);
+                SetupGuide.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -3373,7 +3411,7 @@ namespace ShipWorks
             {
                 dlg.ShowDialog(this);
 
-                if (StoreManager.GetAllStores().Count == 0)
+                if (StoreManager.GetAllStoresReadOnly().None())
                 {
                     InitiateLogon();
                 }

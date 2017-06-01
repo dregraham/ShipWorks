@@ -17,8 +17,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// The setup wizard used for adding a new i-parcel account to ShipWorks.
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.iParcel)]
-    public partial class iParcelSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.iParcel)]
+    public partial class iParcelSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private readonly IParcelAccountEntity iParcelAccount;
 
@@ -164,5 +164,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             }
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

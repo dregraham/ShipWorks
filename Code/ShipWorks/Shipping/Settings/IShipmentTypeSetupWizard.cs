@@ -7,5 +7,9 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public interface IShipmentTypeSetupWizard : IForm
     {
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        IShipmentTypeSetupWizard GetUnwrappedWizard();
     }
 }

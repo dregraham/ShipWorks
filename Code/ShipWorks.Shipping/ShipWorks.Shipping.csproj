@@ -230,8 +230,10 @@
     <Compile Include="Carriers\Ups\UpsOltShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapter.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
+    <Compile Include="Configuration\CarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Configuration\IShippingConfiguration.cs" />
     <Compile Include="Configuration\ShippingConfiguration.cs" />
+    <Compile Include="Configuration\TelemetricShipmentTypeSetupWizardForm.cs" />
     <Compile Include="Loading\IShipmentsLoader.cs" />
     <Compile Include="Loading\IShipmentsValidator.cs" />
     <Compile Include="Loading\ShipmentsLoader.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Services\Dialogs\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />

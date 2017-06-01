@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// <summary>
     /// Setup wizard for WorldShip
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.UpsWorldShip)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.UpsWorldShip)]
     public class WorldShipSetupWizard : UpsSetupWizard
     {
         /// <summary>

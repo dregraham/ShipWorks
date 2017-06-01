@@ -34,9 +34,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
     [NDependIgnoreLongTypes]
-    public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
+    public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
@@ -1183,5 +1183,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
             }
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }
