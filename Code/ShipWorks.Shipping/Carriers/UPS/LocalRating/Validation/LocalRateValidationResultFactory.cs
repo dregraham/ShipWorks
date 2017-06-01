@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             if (shipmentsWithRateDiscrepancies == 0)
             {
-                return new PassedLocalRateValidationResult();
+                return new SuccessfulLocalRateValidationResult();
             }
 
             IDialog upsLocalRateDiscrepancyDialog = windowFactory["UpsLocalRateDiscrepancyDialog"];

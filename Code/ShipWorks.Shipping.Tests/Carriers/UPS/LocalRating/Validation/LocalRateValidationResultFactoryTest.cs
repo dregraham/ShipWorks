@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         {
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             var result = testObject.Create(1, 0, () => { });
-            Assert.IsType<PassedLocalRateValidationResult>(result);
+            Assert.IsType<SuccessfulLocalRateValidationResult>(result);
         }
 
         [Fact]
