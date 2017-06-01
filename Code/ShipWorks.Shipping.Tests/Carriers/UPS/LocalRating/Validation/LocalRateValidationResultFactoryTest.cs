@@ -27,6 +27,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
+        public void Create_GetsPassedLocalRateValidationResult_WhenNoDiscrepancies()
+        {
+            var testObject = mock.Create<LocalRateValidationResultFactory>();
+            var result = testObject.Create(1, 0, () => { });
+            Assert.IsType<PassedLocalRateValidationResult>(result);
+        }
+
+        [Fact]
+        public void Create_GetsFailedLocalRateValidationResult_WhenDiscrepancies()
+        {
+            var testObject = mock.Create<LocalRateValidationResultFactory>();
+            var result = testObject.Create(1, 2, () => { });
+            Assert.IsType<FailedLocalRateValidationResult>(result);
+        }
+
+        [Fact]
         public void Create_GetsUpsLocalRateDiscrepancyDialogFromIIndex()
         {
             var testObject = mock.Create<LocalRateValidationResultFactory>();

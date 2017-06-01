@@ -29,11 +29,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         public ILocalRateValidationResult Create(int totalShipmentsValidated, int shipmentsWithRateDiscrepancies, Action snooze)
         {
+            if (shipmentsWithRateDiscrepancies == 0)
+            {
+                return new PassedLocalRateValidationResult();
+            }
+
             IDialog upsLocalRateDiscrepancyDialog = windowFactory["UpsLocalRateDiscrepancyDialog"];
             discrepancyViewModel.Snooze = snooze;
             discrepancyViewModel.Close = upsLocalRateDiscrepancyDialog.Close;
 
-            return new LocalRateValidationResult(totalShipmentsValidated, shipmentsWithRateDiscrepancies, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
+            return new FailedLocalRateValidationResult(totalShipmentsValidated, shipmentsWithRateDiscrepancies, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
         }
     }
 }

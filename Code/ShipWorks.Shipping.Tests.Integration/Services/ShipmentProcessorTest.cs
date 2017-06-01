@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            await testObject.Process(this, new[] { shipment },
+            await testObject.Process(new[] { shipment },
                 context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            var result = await testObject.Process(this, new[] { shipment },
+            var result = await testObject.Process(new[] { shipment },
                 context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
@@ -681,7 +681,7 @@ namespace ShipWorks.Shipping.Tests.Services
             ProcessShipments(new[] { shipment });
 
         private Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipments) =>
-            testObject.Process(this, shipments,
+            testObject.Process(shipments,
                 context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 

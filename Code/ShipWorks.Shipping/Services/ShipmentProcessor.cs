@@ -238,8 +238,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
-            ValidateLocalRates(workflowResult);
-
+            workflowResult.LocalRateValidationResult.HandleValidationFailure(workflowResult);
+            
             // If any accounts were out of funds we show that instead of the errors
             if (workflowResult.OutOfFundsException != null)
             {
@@ -284,21 +284,6 @@ namespace ShipWorks.Shipping.Services
                 {
                     dlg.ShowDialog(owner);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Validate Local Rates
-        /// </summary>
-        private void ValidateLocalRates(IProcessShipmentsWorkflowResult workflowResult)
-        {
-            if (workflowResult.NewErrors.Any())
-            {
-                workflowResult.LocalRateValidationResult.PrependMessageToWorkflowResultErrors(workflowResult);
-            }
-            else
-            {
-                workflowResult.LocalRateValidationResult.ShowMessage();
             }
         }
 

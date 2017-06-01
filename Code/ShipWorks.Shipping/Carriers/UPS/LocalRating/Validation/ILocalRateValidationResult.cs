@@ -8,13 +8,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     public interface ILocalRateValidationResult
     {
         /// <summary>
-        /// Inserts a message into the 
+        /// Handles a validation failure.
         /// </summary>
-        void PrependMessageToWorkflowResultErrors(IProcessShipmentsWorkflowResult workflowResult);
-
-        /// <summary>
-        /// Shows the validation message.
-        /// </summary>
-        void ShowMessage();
+        void HandleValidationFailure(IProcessShipmentsWorkflowResult workflowResult);
     }
 }
