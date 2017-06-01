@@ -17,7 +17,7 @@
 |
 |
  */
-define('REQUIRE_SECURE', FALSE);
+define('REQUIRE_SECURE', TRUE);
 $moduleVersion = "4.1.0.0";
 $schemaVersion = "1.1.0";
 
