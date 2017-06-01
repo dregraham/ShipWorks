@@ -20,14 +20,15 @@ namespace Interapptive.Shared.UI
         /// <param name="owner">The owner.</param>
         protected InteropWindow(IWin32Window owner)
         {
-            LoadOwner(owner);
-
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             WindowStyle = WindowStyle.ToolWindow;
             ShowInTaskbar = false;
             ResizeMode = ResizeMode.NoResize;
             FontFamily = new FontFamily("Tahoma");
             FontSize = 11;
+            Topmost = true;
+
+            LoadOwner(owner);
         }
 
         /// <summary>
