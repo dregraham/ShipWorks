@@ -157,6 +157,7 @@ namespace ShipWorks.Stores.Content
 
             printResultControl.Initialize(printLayoutID, GridColumnDefinitionSet.PrintResult, layout => { });
 
+            shipmentsControl.AllowRatesPanelLink = false;
             shipmentsControl.Initialize(shipmentLayoutID, GridColumnDefinitionSet.ShipmentPanel,
                 layout => { layout.AllColumns[ShipmentFields.ShipDate].Visible = true; });
 
