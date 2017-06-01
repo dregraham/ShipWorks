@@ -7,6 +7,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Creates a LocalRateValidationResult
         /// </summary>
-        ILocalRateValidationResult Create(int shipmentCount, int discrepancyCount, Action snooze);
+        ILocalRateValidationResult Create(int totalShipmentsValidated, int shipmentsWithRateDiscrepancies, Action snooze);
     }
 }

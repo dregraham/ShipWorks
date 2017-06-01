@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
@@ -9,8 +9,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// </summary>
     public class LocalRateValidationResult : ILocalRateValidationResult
     {
-        private readonly int shipmentCount;
-        private readonly int discrepancyCount;
+        private readonly int totalShipmentsValidated;
+        private readonly int shipmentsWithRateDiscrepancies;
         private readonly IDialog upsLocalRateDiscrepancyDialog;
         private readonly IUpsLocalRateDiscrepancyViewModel discrepancyViewModel;
         private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103270-ups-local-rating");
@@ -18,35 +18,53 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Constructor
         /// </summary>
-        public LocalRateValidationResult(int shipmentCount,
-            int discrepancyCount,
+        public LocalRateValidationResult(int totalShipmentsValidated, 
+            int shipmentsWithRateDiscrepancies,
             IDialog upsLocalRateDiscrepancyDialog,
             IUpsLocalRateDiscrepancyViewModel discrepancyViewModel)
         {
-            this.shipmentCount = shipmentCount;
-            this.discrepancyCount = discrepancyCount;
+            this.totalShipmentsValidated = totalShipmentsValidated;
+            this.shipmentsWithRateDiscrepancies = shipmentsWithRateDiscrepancies;
             this.upsLocalRateDiscrepancyDialog = upsLocalRateDiscrepancyDialog;
             this.discrepancyViewModel = discrepancyViewModel;
-
-            Message = GetMessage();
         }
-
-        /// <summary>
-        /// LocalRate validated against shipment cost
-        /// </summary>
-        public bool IsValid => discrepancyCount == 0;
 
         /// <summary>
         /// Gets the validation message.
         /// </summary>
-        public string Message { get; }
+        public string Message
+        {
+            get
+            {
+                if (ValidationFailed)
+                {
+                    string startOfMessage = totalShipmentsValidated > 1
+                        ? $"{shipmentsWithRateDiscrepancies} of {totalShipmentsValidated} UPS shipments"
+                        : "The Ups shipment";
+                    string endOfMessage =
+                        "had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
+
+                    return $"{startOfMessage} {endOfMessage}";
+                }
+
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Prepends the message to workflow result error message list.
+        /// </summary>
+        public void PrependMessageToWorkflowResultErrors(IProcessShipmentsWorkflowResult result)
+        {
+            result.NewErrors.Insert(0, Message);
+        }
 
         /// <summary>
         /// Shows the validation message.
         /// </summary>
         public void ShowMessage()
         {
-            if (!Message.IsNullOrWhiteSpace())
+            if (ValidationFailed)
             {
                 discrepancyViewModel.Load(Message, helpArticleUrl);
                 upsLocalRateDiscrepancyDialog.DataContext = discrepancyViewModel;
@@ -55,21 +73,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         }
 
         /// <summary>
-        /// Gets the message.
+        /// Validation fails if any rate discrepancies
         /// </summary>
-        private string GetMessage()
-        {
-            if (discrepancyCount > 0)
-            {
-                string startOfMessage = shipmentCount > 1 ?
-                    $"{discrepancyCount} of {shipmentCount} UPS shipments" :
-                    "The Ups shipment";
-                string endOfMessage = "had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
-
-                return $"{startOfMessage} {endOfMessage}";
-            }
-
-            return string.Empty;
-        }
+        private bool ValidationFailed => shipmentsWithRateDiscrepancies != 0;
     }
 }

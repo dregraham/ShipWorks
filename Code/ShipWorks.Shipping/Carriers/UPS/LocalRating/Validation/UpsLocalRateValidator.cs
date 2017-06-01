@@ -55,26 +55,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
-                    if (RequiresValidation(shipment))
+                    if (EnsureLocalRatesMatchShipmentCost(shipment, logBuilder) == false)
                     {
-                        GenericResult<List<UpsServiceRate>> rateResult = rateClient.GetRates(shipment);
-
-                        if (rateResult.Success)
-                        {
-                            UpsServiceRate rate =
-                                rateResult.Value.SingleOrDefault(r => r.Service == (UpsServiceType) shipment.Ups.Service);
-
-                            if (rate?.Amount != shipment.ShipmentCost)
-                            {
-                                discrepancies++;
-                                LogDiscrepancy(logBuilder, shipment, rate);
-                            }
-                        }
-                        else
-                        {
-                            discrepancies++;
-                            LogDiscrepancy(logBuilder, shipment, null);
-                        }
+                        discrepancies++;
                     }
                 }
             }
@@ -86,7 +69,40 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             return validationResultFactory.Create(shipments.Count(), discrepancies, Snooze);
         }
+
+        /// <summary>
+        /// Validates the shipment.
+        /// </summary>
+        /// <returns>true if the local rates match the cost of the shipment, else false</returns>
+        private bool EnsureLocalRatesMatchShipmentCost(ShipmentEntity shipment, StringBuilder logBuilder)
+        {
+            bool isValid = true;
         
+            if (RequiresValidation(shipment))
+            {
+                GenericResult<List<UpsServiceRate>> rateResult = rateClient.GetRates(shipment);
+
+                if (rateResult.Success)
+                {
+                    UpsServiceRate rate =
+                        rateResult.Value.SingleOrDefault(r => r.Service == (UpsServiceType)shipment.Ups.Service);
+
+                    if (rate?.Amount != shipment.ShipmentCost)
+                    {
+                        isValid = false;
+                        AddDiscrepancyToLogger(logBuilder, shipment, rate);
+                    }
+                }
+                else
+                {
+                    isValid = false;
+                    AddDiscrepancyToLogger(logBuilder, shipment, null);
+                }
+            }
+
+            return isValid;
+        }
+
         /// <summary>
         /// Suppresses validation for a limited amount of time or until SW restarts
         /// </summary>
@@ -113,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Logs the discrepancies. Includes the shipmentID, the local rate, and the actual shipment cost
         /// </summary>
-        private void LogDiscrepancy(StringBuilder stringBuilder, ShipmentEntity shipment, UpsServiceRate rate)
+        private void AddDiscrepancyToLogger(StringBuilder stringBuilder, ShipmentEntity shipment, UpsServiceRate rate)
         {
             stringBuilder.AppendLine($"Shipment ID: {shipment.ShipmentID}");
             stringBuilder.AppendLine($"Local Rate: {rate?.Amount.ToString(CultureInfo.InvariantCulture) ?? "Not found"}");

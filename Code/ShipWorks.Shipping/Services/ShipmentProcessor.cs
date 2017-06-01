@@ -236,31 +236,31 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IProcessShipmentsWorkflowResult executionState)
+        private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
-            ValidateLocalRates(executionState);
+            ValidateLocalRates(workflowResult);
 
             // If any accounts were out of funds we show that instead of the errors
-            if (executionState.OutOfFundsException != null)
+            if (workflowResult.OutOfFundsException != null)
             {
-                HandleOutOfFundsException(executionState);
+                HandleOutOfFundsException(workflowResult);
             }
-            else if (executionState.TermsAndConditionsException != null)
+            else if (workflowResult.TermsAndConditionsException != null)
             {
-                messageHelper.ShowError(executionState.NewErrors.FirstOrDefault());
-                executionState.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
+                messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
+                workflowResult.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
             }
             else
             {
-                if (!executionState.NewErrors.Any())
+                if (!workflowResult.NewErrors.Any())
                 {
                     return;
                 }
 
-                string message = executionState.NewErrors.Take(3)
+                string message = workflowResult.NewErrors.Take(3)
                     .Aggregate("Some errors occurred during processing.", (x, y) => x + "\n\n" + y);
 
-                if (executionState.NewErrors.Count > 3)
+                if (workflowResult.NewErrors.Count > 3)
                 {
                     message += "\n\nSee the shipment list for all errors.";
                 }
@@ -272,15 +272,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handles Out Of Funds Exception
         /// </summary>
-        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult executionState)
+        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
         {
             DialogResult answer = messageHelper.ShowQuestion(
-                                $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
+                                $"You do not have sufficient funds in {workflowResult.OutOfFundsException.Provider} account {workflowResult.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
                                 "Would you like to purchase more now?");
 
             if (answer == DialogResult.OK)
             {
-                using (Form dlg = executionState.OutOfFundsException.CreatePostageDialog(lifetimeScope))
+                using (Form dlg = workflowResult.OutOfFundsException.CreatePostageDialog(lifetimeScope))
                 {
                     dlg.ShowDialog(owner);
                 }
@@ -290,18 +290,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Validate Local Rates
         /// </summary>
-        private void ValidateLocalRates(IProcessShipmentsWorkflowResult executionState)
+        private void ValidateLocalRates(IProcessShipmentsWorkflowResult workflowResult)
         {
-            if (!executionState.LocalRateValidationResult.IsValid)
+            if (workflowResult.NewErrors.Any())
             {
-                if (executionState.NewErrors.Any())
-                {
-                    executionState.NewErrors.Insert(0, executionState.LocalRateValidationResult.Message);
-                }
-                else
-                {
-                    executionState.LocalRateValidationResult.ShowMessage();
-                }
+                workflowResult.LocalRateValidationResult.PrependMessageToWorkflowResultErrors(workflowResult);
+            }
+            else
+            {
+                workflowResult.LocalRateValidationResult.ShowMessage();
             }
         }
 

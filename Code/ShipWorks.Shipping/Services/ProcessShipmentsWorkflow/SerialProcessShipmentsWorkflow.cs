@@ -63,11 +63,11 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
             return await Task.Run(() =>
             {
-                ProcessShipmentsWorkflowResult executionState = new ProcessShipmentsWorkflowResult(chosenRateResult);
+                ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
                 return input.Where(_ => !cancellationSource.IsCancellationRequested)
                     .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
                     .Where(x => x != null)
-                    .Aggregate(executionState, AggregateResults);
+                    .Aggregate(workflowResult, AggregateResults);
 
             });
         }
@@ -75,23 +75,23 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Aggregate the results
         /// </summary>
-        private ProcessShipmentsWorkflowResult AggregateResults(ProcessShipmentsWorkflowResult executionState, ILabelResultLogResult result)
+        private ProcessShipmentsWorkflowResult AggregateResults(ProcessShipmentsWorkflowResult workflowResult, ILabelResultLogResult result)
         {
             if (!string.IsNullOrEmpty(result.ErrorMessage))
             {
-                executionState.NewErrors.Add("Order " + result.OriginalShipment.Order.OrderNumberComplete + ": " + result.ErrorMessage);
+                workflowResult.NewErrors.Add("Order " + result.OriginalShipment.Order.OrderNumberComplete + ": " + result.ErrorMessage);
             }
 
-            executionState.OutOfFundsException = executionState.OutOfFundsException ?? result.OutOfFundsException;
-            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? result.TermsAndConditionsException;
-            executionState.WorldshipExported |= result.WorldshipExported;
+            workflowResult.OutOfFundsException = workflowResult.OutOfFundsException ?? result.OutOfFundsException;
+            workflowResult.TermsAndConditionsException = workflowResult.TermsAndConditionsException ?? result.TermsAndConditionsException;
+            workflowResult.WorldshipExported |= result.WorldshipExported;
 
             if (result.Success)
             {
-                executionState.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
+                workflowResult.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
             }
 
-            return executionState;
+            return workflowResult;
         }
 
         /// <summary>

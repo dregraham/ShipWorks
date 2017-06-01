@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
+﻿using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
+
+namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
     /// <summary>
     /// The result of a validation
@@ -6,14 +8,9 @@
     public interface ILocalRateValidationResult
     {
         /// <summary>
-        /// LocalRate validated against shipment cost
+        /// Inserts a message into the 
         /// </summary>
-        bool IsValid { get; }
-        
-        /// <summary>
-        /// Gets the validation message.
-        /// </summary>
-        string Message { get; }
+        void PrependMessageToWorkflowResultErrors(IProcessShipmentsWorkflowResult workflowResult);
 
         /// <summary>
         /// Shows the validation message.
