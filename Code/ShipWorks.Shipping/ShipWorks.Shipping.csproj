@@ -280,7 +280,7 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalWithApiFailOverRatingClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\SucessfulLocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\SuccessfulLocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
