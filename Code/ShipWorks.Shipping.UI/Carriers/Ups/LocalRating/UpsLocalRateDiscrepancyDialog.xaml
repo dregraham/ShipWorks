@@ -9,7 +9,6 @@
                    mc:Ignorable="d"
                    Title="Local Rate Does Not Match Shipping Label Cost"
                    SizeToContent="Height"
-                   WindowStartupLocation="CenterOwner"
                    Width="500"
                    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                    d:DataContext="{d:DesignInstance localRating:UpsLocalRateDiscrepancyViewModel}">
