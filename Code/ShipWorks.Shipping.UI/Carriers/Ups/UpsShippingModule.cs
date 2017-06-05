@@ -16,7 +16,9 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using System;
 using System.Collections.Concurrent;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 
@@ -84,6 +86,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             RegisterOltSpecificTypes(builder);
             RegisterWorldShipSpecificTypes(builder);
             RegisterPromoTypes(builder);
+            RegisterLocalRatingTypes(builder);
         }
 
         /// <summary>
@@ -161,6 +164,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .WithParameter(new ResolvedParameter(
                     (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
                     (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
+        }
+
+        /// <summary>
+        /// Registers the local rating types.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        private void RegisterLocalRatingTypes(ContainerBuilder builder)
+        {
+            builder.RegisterDecorator<IUpsLocalRateValidator>(
+                (c, inner) => new TelemetricUpsLocalRateValidator(inner, c.Resolve<Func<string, ITrackedEvent>>()),
+                nameof(UpsLocalRateValidator));
         }
     }
 }

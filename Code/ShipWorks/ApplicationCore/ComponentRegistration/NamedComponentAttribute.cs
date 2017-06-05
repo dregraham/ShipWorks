@@ -34,6 +34,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public Type ComponentType { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating the component should be registered as a single instance.
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
+
+        /// <summary>
         /// Register all components that use this attribute
         /// </summary>
         internal static void Register(ContainerBuilder builder,
@@ -52,8 +57,17 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (NamedComponentAttribute attribute in item.Attributes)
                 {
-                    ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache)
-                        .Named(attribute.ComponentName, attribute.ComponentType);
+                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration
+                        = ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache);
+                    
+                    if (item.Attributes.Any(x => x.SingleInstance))
+                    {
+                        registration.Named(attribute.ComponentName, attribute.ComponentType).SingleInstance();
+                    }
+                    else
+                    {
+                        registration.Named(attribute.ComponentName, attribute.ComponentType);
+                    }
                 }
             }
         }

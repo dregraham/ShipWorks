@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
@@ -7,6 +8,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Creates a LocalRateValidationResult
         /// </summary>
-        ILocalRateValidationResult Create(int totalShipmentsValidated, int shipmentsWithRateDiscrepancies, Action snooze);
+        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, int totalShipmentValidated, Action snooze);
     }
 }

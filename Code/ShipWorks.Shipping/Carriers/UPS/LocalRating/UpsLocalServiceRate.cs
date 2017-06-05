@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsLocalServiceRate : UpsServiceRate, IUpsLocalServiceRate
     {
         private readonly List<KeyValuePair<string, decimal>> addedSurcharges = new List<KeyValuePair<string, decimal>>();
-        private readonly string zone;
         private readonly List<decimal> packageRates; 
         private readonly List<string> packageBillableWeights;
         private int packageCount;
@@ -25,12 +24,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public UpsLocalServiceRate(UpsServiceType service, string zone, decimal amount, string billableWeight) :
             base(service, amount, false, null)
         {
-            this.zone = zone;
+            Zone = zone;
 
             packageRates = new List<decimal> {amount};
             packageBillableWeights = new List<string> {billableWeight};
             packageCount = 1;
         }
+
+        /// <summary>
+        /// Zone used to calculate this rate
+        /// </summary>
+        public string Zone { get; }
 
         /// <summary>
         /// Adds the package.
@@ -58,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public void Log(StringBuilder logEntry)
         {
             logEntry.AppendLine($"Rate Calculation for {Service}");
-            logEntry.AppendLine($"Zone {zone}");
+            logEntry.AppendLine($"Zone {Zone}");
             logEntry.AppendLine($"Number of Packages: {packageCount}");
             for (int pacakgeIndex = 0; pacakgeIndex < packageCount; pacakgeIndex++)
             {
