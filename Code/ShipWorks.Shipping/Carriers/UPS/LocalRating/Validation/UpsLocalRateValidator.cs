@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -18,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// Validates whether or not a shipments local rate matches it's actual label cost
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation.IUpsLocalRateValidator" />
+    [Obfuscation(Exclude = true)]
     [NamedComponent(nameof(UpsLocalRateValidator), typeof(IUpsLocalRateValidator), SingleInstance = true)]
     public class UpsLocalRateValidator : IUpsLocalRateValidator
     {
