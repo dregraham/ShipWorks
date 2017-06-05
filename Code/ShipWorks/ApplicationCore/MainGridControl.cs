@@ -971,7 +971,6 @@ namespace ShipWorks.ApplicationCore
             initiatedAdvanced = false;
 
             searchBox.Text = "";
-            ActiveGrid.Focus();
 
             UpdateHeaderContent();
 
