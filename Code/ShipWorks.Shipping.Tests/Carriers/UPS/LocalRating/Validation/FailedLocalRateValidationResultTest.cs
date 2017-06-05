@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
                     new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
             };
 
-            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 10, mockDialog.Object, mockViewModel.Object);
 
             string expectedMessage =
                 "9 of 10 UPS shipments had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
@@ -184,7 +184,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             Mock<IProcessShipmentsWorkflowResult> workFlowResult = mock.CreateMock<IProcessShipmentsWorkflowResult>();
             workFlowResult.Setup(w => w.NewErrors).Returns(new List<string>());
 
-            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 10, mockDialog.Object, mockViewModel.Object);
             testObject.HandleValidationFailure(workFlowResult.Object);
 
             string expectedMessage =
