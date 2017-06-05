@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         {
             var testObject = new FailedLocalRateValidationResult(1, 1, mockDialog.Object, mockViewModel.Object);
 
-            string expectedMessage = "The Ups shipment had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
+            string expectedMessage = "The UPS shipment had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
 
             Mock<IProcessShipmentsWorkflowResult> workFlowResult = mock.CreateMock<IProcessShipmentsWorkflowResult>();
             List<string> errors = new List<string> { "blah" };

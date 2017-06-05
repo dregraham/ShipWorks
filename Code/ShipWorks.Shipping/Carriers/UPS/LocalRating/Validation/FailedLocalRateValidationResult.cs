@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             string startOfMessage = totalShipmentsValidated > 1
                 ? $"{shipmentsWithRateDiscrepancies} of {totalShipmentsValidated} UPS shipments"
-                : "The Ups shipment";
+                : "The UPS shipment";
             string endOfMessage =
                 "had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
 
