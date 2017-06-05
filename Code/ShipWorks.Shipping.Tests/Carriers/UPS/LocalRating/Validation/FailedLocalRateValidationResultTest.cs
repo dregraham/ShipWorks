@@ -5,7 +5,10 @@ using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using Xunit;
 
@@ -27,7 +30,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Message_IsSetCorrectly_WhenSingleDiscrepancy()
         {
-            var testObject = new FailedLocalRateValidationResult(1, 1, mockDialog.Object, mockViewModel.Object);
+            var discrepancies = new List<UpsLocalRateDiscrepancy>
+            {
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1"))
+            };
+
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 1, mockDialog.Object, mockViewModel.Object);
 
             string expectedMessage = "The Ups shipment had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
 
@@ -43,7 +52,29 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void HandleValidationFailure_IsSetCorrectly_WhenMultipleDiscrepancies()
         {
-            var testObject = new FailedLocalRateValidationResult(10, 9, mockDialog.Object, mockViewModel.Object);
+            var discrepancies = new List<UpsLocalRateDiscrepancy>
+            {
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+            };
+
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
 
             string expectedMessage =
                 "9 of 10 UPS shipments had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
@@ -60,10 +91,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void HandleValidationFailure_ShowsMessage_AndNoOtherErrors()
         {
+            var discrepancies = new List<UpsLocalRateDiscrepancy>
+            {
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+            };
+
             Mock<IProcessShipmentsWorkflowResult> workFlowResult = mock.CreateMock<IProcessShipmentsWorkflowResult>();
             workFlowResult.Setup(w => w.NewErrors).Returns(new List<string>());
 
-            var testObject = new FailedLocalRateValidationResult(10, 9, mockDialog.Object, mockViewModel.Object);
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
             testObject.HandleValidationFailure(workFlowResult.Object);
 
             mockDialog.Verify(d=>d.ShowDialog(), Times.Once);
@@ -72,10 +125,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void HandleValidationFailure_SetsDialogDataContext_AndNoOtherErrors()
         {
+            var discrepancies = new List<UpsLocalRateDiscrepancy>
+            {
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+            };
+
             Mock<IProcessShipmentsWorkflowResult> workFlowResult = mock.CreateMock<IProcessShipmentsWorkflowResult>();
             workFlowResult.Setup(w => w.NewErrors).Returns(new List<string>());
 
-            var testObject = new FailedLocalRateValidationResult(10, 9, mockDialog.Object, mockViewModel.Object);
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
             testObject.HandleValidationFailure(workFlowResult.Object);
 
             mockDialog.VerifySet(d => d.DataContext = mockViewModel.Object, Times.Once());
@@ -84,10 +159,32 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void HandleValidationFailure_LoadsViewModel()
         {
+            var discrepancies = new List<UpsLocalRateDiscrepancy>
+            {
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+                new UpsLocalRateDiscrepancy(new ShipmentEntity(),
+                    new UpsLocalServiceRate(UpsServiceType.UpsGround, "1", 1, "1")),
+            };
+
             Mock<IProcessShipmentsWorkflowResult> workFlowResult = mock.CreateMock<IProcessShipmentsWorkflowResult>();
             workFlowResult.Setup(w => w.NewErrors).Returns(new List<string>());
 
-            var testObject = new FailedLocalRateValidationResult(10, 9, mockDialog.Object, mockViewModel.Object);
+            var testObject = new FailedLocalRateValidationResult(discrepancies, 9, mockDialog.Object, mockViewModel.Object);
             testObject.HandleValidationFailure(workFlowResult.Object);
 
             string expectedMessage =
