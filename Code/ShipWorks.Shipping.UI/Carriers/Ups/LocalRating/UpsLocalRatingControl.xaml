@@ -10,8 +10,8 @@
              d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -37,7 +37,8 @@
             </TextBlock>
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Upload the modified rate file.</TextBlock>
-            <TextBlock>4. Download the
+            <TextBlock>
+                4. Download the
                 <Hyperlink Command="{Binding DownloadSampleZoneFileCommand}">sample zone file</Hyperlink>.
             </TextBlock>
             <TextBlock>5. Modify the file to specify zones for your origin addresses.</TextBlock>
@@ -45,9 +46,9 @@
         </StackPanel>
 
         <DockPanel Grid.Row="3"
-                    Margin="0 0 0 10">
+                   Margin="0 0 0 10">
             <TextBlock VerticalAlignment="Center"
-                Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
             <Button Width="120"
                     Height="21"
                     HorizontalAlignment="Right"
@@ -61,7 +62,7 @@
         <DockPanel Grid.Row="4"
                    Margin="0 0 0 10">
             <TextBlock VerticalAlignment="Center"
-                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
             <Button Width="120"
                     Height="21"
                     HorizontalAlignment="Right"
@@ -71,22 +72,29 @@
                 Upload Zone File...
             </Button>
         </DockPanel>
-        <ui:WaitSpinner Grid.Row="5" Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top" Content="{Binding SpinnerText}"/>
-        <TextBlock Grid.Row="5" Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
-                   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
-            <TextBlock.Style>
+        <ui:WaitSpinner Grid.Row="5"
+                        Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top"
+                        Content="{Binding SpinnerText}" />
+        <TextBox Grid.Row="5" Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
+                 VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0"
+                 Background="Transparent" BorderThickness="0" IsReadOnly="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <TextBox.Style>
                 <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                            <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground" Value="Red" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                            <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Foreground" Value="Green" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBlock.Style>
-        </TextBlock>
+            </TextBox.Style>
+        </TextBox>
     </Grid>
 </UserControl>
