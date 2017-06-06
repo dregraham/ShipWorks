@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Snooze();
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupGetLocalRatesToFail();
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupGetLocalRatesToFail();
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(false, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 1, It.IsAny<Action>()), Times.Once());
         }
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 2), 2, It.IsAny<Action>()), Times.Once());
         }
@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 2, It.IsAny<Action>()), Times.Once());
         }
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 2, It.IsAny<Action>()), Times.Once());
         }
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
         }
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
         }

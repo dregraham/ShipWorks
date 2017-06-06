@@ -20,5 +20,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             // no-op
         }
+
+        public string GetUserFriendlyMessage()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

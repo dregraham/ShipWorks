@@ -17,5 +17,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Handles a validation failure.
         /// </summary>
         void HandleValidationFailure(IProcessShipmentsWorkflowResult workflowResult);
+        
+        /// <summary>
+        /// Gets the user friendly message.
+        /// </summary>
+        string GetUserFriendlyMessage();
     }
 }
