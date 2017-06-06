@@ -91,6 +91,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                     UpsServiceRate rate =
                         rateResult.Value.SingleOrDefault(r => r.Service == (UpsServiceType)shipment.Ups.Service);
 
+                    // UPS shipping API returns 0 when using third party billing. This is
+                    // not a discrepancy
                     if (shipment.ShipmentCost > 0 && rate?.Amount != shipment.ShipmentCost)
                     {
                         isValid = false;
