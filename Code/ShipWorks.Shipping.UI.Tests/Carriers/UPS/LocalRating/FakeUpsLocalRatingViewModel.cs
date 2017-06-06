@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
@@ -20,8 +21,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             Func<ISaveFileDialog> saveFileDialogFactory,
             Func<IOpenFileDialog> openFileDialogFactory,
             IMessageHelper messageHelper,
-            Func<Type, ILog> logFactory)
-            : base(rateTable, saveFileDialogFactory, openFileDialogFactory, messageHelper, logFactory)
+            Func<Type, ILog> logFactory,
+            IUpsLocalRateValidator rateValidator)
+            : base(rateTable, saveFileDialogFactory, openFileDialogFactory, messageHelper, logFactory, rateValidator)
         {
         }
 

@@ -10,6 +10,7 @@ using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -602,6 +603,76 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             await testObject.CallUploadZoneFile();
 
             log.Verify(l => l.Info("Successfully uploaded zone file"));
+        }
+
+        [Fact]
+        public async Task UploadRatingFile_ValidatesRates()
+        {
+            var upsAccount = new UpsAccountEntity();
+            var openFileDialog = mock.CreateMock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            mock.MockFunc(openFileDialog);
+
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
+
+            var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
+            testObject.Load(upsAccount, b => { });
+            await testObject.CallUploadRatingFile();
+
+            mock.Mock<IUpsLocalRateValidator>().Verify(v => v.ValidateRecentShipments(upsAccount));
+        }
+
+        [Fact]
+        public async Task UploadZoneFile_ValidatesRates()
+        {
+            var upsAccount = new UpsAccountEntity();
+            var openFileDialog = mock.CreateMock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            mock.MockFunc(openFileDialog);
+
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
+
+            var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
+            testObject.Load(upsAccount, b => { });
+            await testObject.CallUploadZoneFile();
+
+            mock.Mock<IUpsLocalRateValidator>().Verify(v => v.ValidateRecentShipments(upsAccount));
+        }
+
+        [Fact]
+        public async Task UploadZoneFile_DoesNotValidatesRates_WhenZoneFileDoesNotExist()
+        {
+            var upsAccount = new UpsAccountEntity();
+            var openFileDialog = mock.CreateMock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            mock.MockFunc(openFileDialog);
+            
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
+
+            var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
+            testObject.Load(upsAccount, b => { });
+            await testObject.CallUploadZoneFile();
+
+            mock.Mock<IUpsLocalRateValidator>().Verify(v => v.ValidateRecentShipments(It.IsAny<UpsAccountEntity>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UploadZoneFile_DoesNotValidatesRates_WhenRatesFileDoesNotExist()
+        {
+            var upsAccount = new UpsAccountEntity();
+            var openFileDialog = mock.CreateMock<IOpenFileDialog>();
+            openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
+            mock.MockFunc(openFileDialog);
+
+            mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
+
+            var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
+            testObject.Load(upsAccount, b => { });
+            await testObject.CallUploadZoneFile();
+
+            mock.Mock<IUpsLocalRateValidator>().Verify(v => v.ValidateRecentShipments(It.IsAny<UpsAccountEntity>()), Times.Never);
         }
 
         [Fact]
