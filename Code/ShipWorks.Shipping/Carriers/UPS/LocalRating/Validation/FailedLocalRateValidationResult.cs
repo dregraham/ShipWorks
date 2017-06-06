@@ -32,6 +32,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FailedLocalRateValidationResult"/> class.
+        /// </summary>
+        /// <param name="rateDiscrepancies">The rate discrepancies.</param>
+        public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies)
+        {
+            RateDiscrepancies = rateDiscrepancies;
+        }
+
+        /// <summary>
         /// Gets the local rates that we're validated to get this result
         /// </summary>
         public IEnumerable<UpsLocalRateDiscrepancy> RateDiscrepancies { get; }

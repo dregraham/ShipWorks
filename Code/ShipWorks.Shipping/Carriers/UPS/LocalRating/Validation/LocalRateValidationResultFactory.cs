@@ -42,5 +42,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             return new FailedLocalRateValidationResult(rateDiscrepancies, totalShipmentsValidated, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
         }
+
+        /// <summary>
+        /// Creates a LocalRateValidationResult with the specified rate discrepancies.
+        /// </summary>
+        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies)
+        {
+            if (!rateDiscrepancies.Any())
+            {
+                return new SuccessfulLocalRateValidationResult();
+            }
+
+            return new FailedLocalRateValidationResult(rateDiscrepancies);
+        }
     }
 }

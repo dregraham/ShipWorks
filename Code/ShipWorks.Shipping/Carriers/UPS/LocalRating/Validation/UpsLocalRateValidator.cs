@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -23,12 +28,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     [NamedComponent(nameof(UpsLocalRateValidator), typeof(IUpsLocalRateValidator), SingleInstance = true)]
     public class UpsLocalRateValidator : IUpsLocalRateValidator
     {
-        private readonly IUpsRateClient rateClient;
+        private readonly IUpsRateClient localRateClient;
+        private readonly IUpsRateClient apiRateClient;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
-        private readonly IApiLogEntry logger;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private DateTime wakeTime;
         private List<UpsLocalRateDiscrepancy> rateDiscrepancies;
+
+        public static readonly string CreateLabelLogFileName = "Rate Discrepancies (Create Label)";
+        public static readonly string UploadRatesLogFileName = "Rate Discrepancies (Upload Rate File)";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRateValidator"/> class.
@@ -36,12 +46,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public UpsLocalRateValidator(IIndex<UpsRatingMethod, IUpsRateClient> rateClientFactory,
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             ILocalRateValidationResultFactory validationResultFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
-            rateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
+            localRateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
+            apiRateClient = rateClientFactory[UpsRatingMethod.ApiOnly];
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
-            logger = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate Discrepancies");
+            this.apiLogEntryFactory = apiLogEntryFactory;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -67,15 +80,63 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             if (rateDiscrepancies.Any())
             {
                 string log = string.Join(Environment.NewLine, rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
-                logger.LogResponse(log, "txt");
+                apiLogEntryFactory(ApiLogSource.UpsLocalRating, CreateLabelLogFileName).LogResponse(log, "txt");
             }
 
             return validationResultFactory.Create(rateDiscrepancies, processedShipments?.Count() ?? 0, Snooze);
         }
 
+        /// <summary>
+        /// Validates the local rate against the api rate for the most recent shipments for the given account
+        /// </summary>
         public ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account)
         {
-            throw new NotImplementedException();
+            // Reset discrepancy list every validation run
+            rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
+
+            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account);
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                EnsureLocalRatesMatchApiRates(shipment);
+            }
+
+            if (rateDiscrepancies.Any())
+            {
+                string log = string.Join(Environment.NewLine,
+                    rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
+                apiLogEntryFactory(ApiLogSource.UpsLocalRating, UploadRatesLogFileName).LogResponse(log, "txt");
+            }
+
+            return validationResultFactory.Create(rateDiscrepancies);
+        }
+
+        /// <summary>
+        /// Gets the 10 most recent shipments that were processed using the given UPS account
+        /// </summary>
+        /// <param name="account">The account.</param>
+        private IEnumerable<ShipmentEntity> GetRecentShipments(UpsAccountEntity account)
+        {
+            ShipmentCollection shipments = new ShipmentCollection();
+
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
+            bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
+            ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
+
+            try
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.FetchEntityCollection(shipments, bucket, 10, sortExpression);
+                }
+            }
+            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            {
+                throw new UpsLocalRatingException($"Error retrieving list of recent shipments to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
+            }
+
+            return shipments.Items;
         }
 
         /// <summary>
@@ -85,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             if (RequiresValidation(shipment))
             {
-                GenericResult<List<UpsServiceRate>> rateResult = rateClient.GetRates(shipment);
+                GenericResult<List<UpsServiceRate>> rateResult = localRateClient.GetRates(shipment);
 
                 if (rateResult.Success)
                 {
@@ -98,6 +159,36 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                     {
                         // Local rate did not match actual shipment cost
                         rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, rate));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ensures the shipments local rate matches is actual shipment cost. If not add to list of discrepancies. 
+        /// </summary>
+        private void EnsureLocalRatesMatchApiRates(ShipmentEntity shipment)
+        {
+            if (RequiresValidation(shipment))
+            {
+                GenericResult<List<UpsServiceRate>> localRateResult = localRateClient.GetRates(shipment);
+
+                if (localRateResult.Success)
+                {
+                    UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
+
+                    UpsLocalServiceRate localRate =
+                        localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
+                    UpsServiceRate apiRate = apiRateClient.GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
+
+                    // Do not validate if no local OR api rates were found for the shipment
+                    if (localRate != null || apiRate != null)
+                    {
+                        if (localRate?.Amount != apiRate?.Amount)
+                        {
+                            // Local rate did not match api rate
+                            rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, localRate, apiRate));
+                        }
                     }
                 }
             }

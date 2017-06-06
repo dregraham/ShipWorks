@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             return $"Shipment ID: {Shipment.ShipmentID}" + Environment.NewLine + 
                    $"Local Rate: {LocalRate?.Amount.ToString("C") ?? "Not found"}" + Environment.NewLine +
+                   $"API Rate: {apiRate?.Amount.ToString("C") ?? "Not found"}" + Environment.NewLine +
                    $"Label Cost: {Shipment.ShipmentCost:C}" + Environment.NewLine ;
         }
 
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             return
                 $"There was a discrepancy between the local rate ({LocalRate?.Amount.ToString("C") ?? "Not found"}) " +
-                $"and the API rate ({apiRate.Amount:C}) using {EnumHelper.GetDescription((UpsServiceType) Shipment.Ups.Service)} " +
+                $"and the API rate ({apiRate?.Amount.ToString("C") ?? "Not found"}) using {EnumHelper.GetDescription((UpsServiceType) Shipment.Ups.Service)} " +
                 $"for the shipment with shipment ID {Shipment.ShipmentID}.";
         }
     }
