@@ -50,11 +50,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public ILocalRateValidationResult Validate(IEnumerable<ShipmentEntity> shipments)
         {
             // Reset discrepancy list every validation run
+            List<ShipmentEntity> processedShipments = null;
+
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
             if (DateTime.Now > wakeTime)
             {
-                foreach (ShipmentEntity shipment in shipments)
+                processedShipments = shipments.Where(s => s.Processed).ToList();
+
+                foreach (ShipmentEntity shipment in processedShipments)
                 {
                     EnsureLocalRatesMatchShipmentCost(shipment);
                 }
@@ -63,10 +67,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             if (rateDiscrepancies.Any())
             {
                 string log = string.Join(Environment.NewLine, rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
-                logger.LogResponse(log, ".txt");
+                logger.LogResponse(log, "txt");
             }
 
-            return validationResultFactory.Create(rateDiscrepancies, shipments.Count(), Snooze);
+            return validationResultFactory.Create(rateDiscrepancies, processedShipments?.Count() ?? 0, Snooze);
         }
 
         /// <summary>
@@ -83,16 +87,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                     UpsLocalServiceRate rate =
                         rateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == (UpsServiceType)shipment.Ups.Service);
 
-                    if (rate?.Amount != shipment.ShipmentCost)
+                    // UPS shipping API returns 0 when using third party billing. This is
+                    // not a discrepancy
+                    if (shipment.ShipmentCost > 0 && rate?.Amount != shipment.ShipmentCost)
                     {
                         // Local rate did not match actual shipment cost
                         rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, rate));
                     }
-                }
-                else
-                {
-                    // Could not find local rate for shipment
-                    rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, null));
                 }
             }
         }
@@ -116,7 +117,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </remarks>
         private bool RequiresValidation(ShipmentEntity shipment)
         {
-            return shipment.Ups != null &&
+            return 
+                (shipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools || shipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip) &&
+                shipment.Ups != null &&
                 shipment.Ups.PayorType != (int) UpsPayorType.ThirdParty &&
                 upsAccountRepository.GetAccountReadOnly(shipment).LocalRatingEnabled;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.IO;
@@ -373,6 +374,8 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         private string GetNextLogFile(ApiLogCategory category, string supplementName, string extension)
         {
+            Debug.Assert(!extension.StartsWith("."), "extension should not begin with '.'");
+
             EnsureLogNumber();
 
             string sourceName = source.ToString();
