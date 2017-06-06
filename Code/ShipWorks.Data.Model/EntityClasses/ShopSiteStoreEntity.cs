@@ -334,13 +334,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Password", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CgiUrl", fieldHashtable);
+			_fieldsCustomProperties.Add("ApiUrl", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequireSSL", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadPageSize", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestTimeout", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShopSiteAuthentication", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OauthClientID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OauthSecretKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Identifier", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OauthAuthorizationCode", fieldHashtable);
 		}
 		#endregion
 
@@ -414,14 +424,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShopSiteStoreFieldIndex.Password, value); }
 		}
 
-		/// <summary> The CgiUrl property of the Entity ShopSiteStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShopSiteStore"."CgiUrl"<br/>
+		/// <summary> The ApiUrl property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."ApiUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String CgiUrl
+		public virtual System.String ApiUrl
 		{
-			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.CgiUrl, true); }
-			set	{ SetValue((int)ShopSiteStoreFieldIndex.CgiUrl, value); }
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.ApiUrl, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.ApiUrl, value); }
 		}
 
 		/// <summary> The RequireSSL property of the Entity ShopSiteStore<br/><br/></summary>
@@ -452,6 +462,56 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShopSiteStoreFieldIndex.RequestTimeout, true); }
 			set	{ SetValue((int)ShopSiteStoreFieldIndex.RequestTimeout, value); }
+		}
+
+		/// <summary> The ShopSiteAuthentication property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."ShopSiteAuthentication"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual Interapptive.Shared.Enums.ShopSiteAuthenticationType ShopSiteAuthentication
+		{
+			get { return (Interapptive.Shared.Enums.ShopSiteAuthenticationType)GetValue((int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, value); }
+		}
+
+		/// <summary> The OauthClientID property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthClientID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OauthClientID
+		{
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthClientID, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.OauthClientID, value); }
+		}
+
+		/// <summary> The OauthSecretKey property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthSecretKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OauthSecretKey
+		{
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthSecretKey, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.OauthSecretKey, value); }
+		}
+
+		/// <summary> The Identifier property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."Identifier"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Identifier
+		{
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.Identifier, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.Identifier, value); }
+		}
+
+		/// <summary> The OauthAuthorizationCode property of the Entity ShopSiteStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthAuthorizationCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OauthAuthorizationCode
+		{
+			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, true); }
+			set	{ SetValue((int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

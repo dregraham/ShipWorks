@@ -1,5 +1,5 @@
 ﻿using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 
 namespace ShipWorks.Actions
 {

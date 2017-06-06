@@ -1,8 +1,8 @@
 ﻿using System;
 using ShipWorks.Stores.Platforms.Magento.Enums;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 {

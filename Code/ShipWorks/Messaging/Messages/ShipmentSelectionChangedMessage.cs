@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -13,11 +14,12 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentSelectionChangedMessage(object sender, IEnumerable<long> selectedShipmentIDs)
+        public ShipmentSelectionChangedMessage(object sender, IEnumerable<long> selectedShipmentIDs, ICarrierShipmentAdapter selectedShipment)
         {
             Sender = sender;
             MessageId = Guid.NewGuid();
             SelectedShipmentIDs = selectedShipmentIDs.ToReadOnly();
+            SelectedShipment = selectedShipment;
         }
 
         /// <summary>
@@ -34,5 +36,10 @@ namespace ShipWorks.Messaging.Messages
         /// IDs of the shipments that were selected
         /// </summary>
         public IEnumerable<long> SelectedShipmentIDs { get; }
+
+        /// <summary>
+        /// Gets the selected shipment if there is only one
+        /// </summary>
+        public ICarrierShipmentAdapter SelectedShipment { get; }
     }
 }

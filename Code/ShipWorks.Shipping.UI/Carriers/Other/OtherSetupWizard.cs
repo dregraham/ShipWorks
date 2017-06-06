@@ -1,15 +1,17 @@
 ﻿using System;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
     /// <summary>
     /// Setup wizard for the "Other" service
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Other)]
-    public partial class OtherSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Other)]
+    public partial class OtherSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         /// <summary>
         /// Constructor
@@ -31,5 +33,10 @@ namespace ShipWorks.Shipping.Carriers.Other
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

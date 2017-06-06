@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.BigCommerce;

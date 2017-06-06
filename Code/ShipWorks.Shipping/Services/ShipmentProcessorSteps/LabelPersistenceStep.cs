@@ -3,7 +3,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

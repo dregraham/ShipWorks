@@ -6,7 +6,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging.TrackedObservable;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
 

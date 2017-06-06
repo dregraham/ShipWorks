@@ -27,9 +27,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
             builder.RegisterType<OtherServiceControl>()
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Other);
 
-            builder.RegisterType<OtherSetupWizard>()
-                .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Other);
-
             builder.RegisterType<OtherProfileControl>()
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Other);
 

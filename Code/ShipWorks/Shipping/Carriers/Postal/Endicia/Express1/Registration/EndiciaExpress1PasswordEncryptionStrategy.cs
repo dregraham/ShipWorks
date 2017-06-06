@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration

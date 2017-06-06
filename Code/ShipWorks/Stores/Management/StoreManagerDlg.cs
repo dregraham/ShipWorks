@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -421,7 +422,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnAddStore(object sender, EventArgs e)
         {
-            AddStoreWizard.RunWizard(this);
+            AddStoreWizard.RunWizard(this, OpenedFromSource.Manager);
             LoadStores();
 
             SelectedStore = StoreManager.GetEnabledStores().OrderByDescending(s => s.StoreID).FirstOrDefault();

@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
         public void EnsureSetupWizardsAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
-            ShipmentTypeSetupWizardForm retriever = container.ResolveKeyed<ShipmentTypeSetupWizardForm>(shipmentType);
+            IShipmentTypeSetupWizard retriever = container.ResolveKeyed<IShipmentTypeSetupWizard>(shipmentType);
             Assert.Equal(expectedServiceType, retriever.GetType());
         }
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {
-                ShipmentTypeSetupWizardForm service = container.ResolveKeyed<ShipmentTypeSetupWizardForm>(value);
+                IShipmentTypeSetupWizard service = container.ResolveKeyed<IShipmentTypeSetupWizard>(value);
                 Assert.NotNull(service);
             }
         }

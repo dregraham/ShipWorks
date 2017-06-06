@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
@@ -10,6 +9,7 @@ using System.Xml;
 using System.IO;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
