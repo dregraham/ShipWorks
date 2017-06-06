@@ -276,7 +276,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
+            logger.Verify(l => l.LogResponse(It.IsAny<string>(), "txt"));
         }
 
         [Fact]
@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            logger.Verify(l => l.LogResponse(It.IsAny<string>(), ".txt"));
+            logger.Verify(l => l.LogResponse(It.IsAny<string>(), "txt"));
         }
 
         public void Dispose()
