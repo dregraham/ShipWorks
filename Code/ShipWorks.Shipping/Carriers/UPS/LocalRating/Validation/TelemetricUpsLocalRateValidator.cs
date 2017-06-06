@@ -42,9 +42,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             return result;
         }
 
+        /// <summary>
+        /// Validates the local rate against the shipment cost for the most recent shipments for the given account
+        /// </summary>
         public ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account)
         {
-            throw new NotImplementedException();
+            return rateValidator.ValidateRecentShipments(account);
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         ILocalRateValidationResult ValidateShipments(IEnumerable<ShipmentEntity> shipments);
 
         /// <summary>
-        /// Validates the local rate against the the shipment cost for the most recent shipments for the given account
+        /// Validates the local rate against the shipment cost for the most recent shipments for the given account
         /// </summary>
         ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account);
 
