@@ -51,9 +51,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             }
         }
 
+        /// <summary>
+        /// Gets the user friendly message.
+        /// </summary>
         public string GetUserFriendlyMessage()
         {
-            throw new NotImplementedException();
+            return string.Join(Environment.NewLine,
+                RateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetUserMessage()).ToList());
         }
 
         /// <summary>
