@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                     UpsServiceRate rate =
                         rateResult.Value.SingleOrDefault(r => r.Service == (UpsServiceType)shipment.Ups.Service);
 
-                    if (rate?.Amount != shipment.ShipmentCost)
+                    if (shipment.ShipmentCost > 0 && rate?.Amount != shipment.ShipmentCost)
                     {
                         isValid = false;
                         AddDiscrepancyToLogger(logBuilder, shipment, rate);

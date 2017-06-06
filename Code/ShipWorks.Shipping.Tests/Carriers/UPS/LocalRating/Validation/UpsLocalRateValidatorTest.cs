@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Validate_ReturnsDiscrepancy_WhenNoLocalRateIsFoundForUpsService()
         {
-            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.WorldwideSaver);
+            var shipment = CreateShipment(6, UpsPayorType.Sender, UpsServiceType.WorldwideSaver);
 
             var shipments = new List<ShipmentEntity>
             {
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Validate_ReturnsDiscrepancy_WhenLocalRateDoesNotMatchApiRate()
         {
-            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+            var shipment = CreateShipment(6, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
             var shipments = new List<ShipmentEntity>
             {
@@ -139,6 +139,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             testObject.Validate(shipments);
 
             resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
+        }
+
+        [Fact]
+        public void Validate_ReturnsNoDiscrepancies_WhenLocalRateDoesNotMatchApiRate_ButApiRateWasZero()
+        {
+            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+
+            var shipments = new List<ShipmentEntity>
+            {
+                shipment
+            };
+
+            SetupGetLocalRatesToSucceed();
+            SetupLocalRatingEnabledForAccount(true, shipment);
+            testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
+
+            testObject.Validate(shipments);
+
+            resultFactory.Verify(r => r.Create(It.IsAny<int>(), 0, It.IsAny<Action>()), Times.Once);
         }
 
         [Fact]
@@ -165,8 +184,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         {
             var shipments = new List<ShipmentEntity>
             {
-                CreateShipment(0, UpsPayorType.Sender, UpsServiceType.UpsGround),
-                CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir)
+                CreateShipment(3, UpsPayorType.Sender, UpsServiceType.UpsGround),
+                CreateShipment(3, UpsPayorType.Sender, UpsServiceType.Ups2DayAir)
             };
 
             SetupGetLocalRatesToSucceed();
@@ -189,7 +208,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             var shipments = new List<ShipmentEntity>
             {
                 CreateShipment(1, UpsPayorType.Sender, UpsServiceType.UpsGround),
-                CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir)
+                CreateShipment(2, UpsPayorType.Sender, UpsServiceType.UpsGround)
             };
 
             SetupGetLocalRatesToSucceed();
@@ -258,7 +277,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void Validate_LogsDiscrepancies_WhenRatesDoNotMatch()
         {
-            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+            var shipment = CreateShipment(3, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
             shipment.ShipmentID = 1;
             var shipments = new List<ShipmentEntity>
             {
