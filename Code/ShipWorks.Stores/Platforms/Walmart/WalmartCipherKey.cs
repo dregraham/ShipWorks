@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Security;
 
 namespace ShipWorks.Stores.Platforms.Walmart

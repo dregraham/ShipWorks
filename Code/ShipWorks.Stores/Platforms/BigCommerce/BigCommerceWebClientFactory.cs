@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Threading;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce

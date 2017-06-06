@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Walmart

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Messaging;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages

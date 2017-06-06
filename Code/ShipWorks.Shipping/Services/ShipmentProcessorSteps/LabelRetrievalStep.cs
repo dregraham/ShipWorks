@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data;

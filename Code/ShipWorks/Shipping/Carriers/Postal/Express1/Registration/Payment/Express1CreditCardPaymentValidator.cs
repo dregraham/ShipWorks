@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment
 {

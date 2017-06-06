@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Authentication;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;

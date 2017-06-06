@@ -1,6 +1,6 @@
 ﻿using System;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Settings;

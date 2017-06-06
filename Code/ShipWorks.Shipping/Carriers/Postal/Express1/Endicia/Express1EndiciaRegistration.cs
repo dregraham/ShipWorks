@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 

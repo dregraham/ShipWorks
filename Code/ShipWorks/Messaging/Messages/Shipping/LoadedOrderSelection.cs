@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -62,5 +63,23 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// Id of the order selection
         /// </summary>
         public long OrderID => Order?.OrderID ?? -1;
+
+        /// <summary>
+        /// Create a new LoadedOrderSelection with the given updated shipment
+        /// </summary>
+        public LoadedOrderSelection CreateSelectionWithUpdatedShipment(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (ShipmentAdapters?.Any() != true)
+            {
+                return this;
+            }
+
+            IEnumerable<ICarrierShipmentAdapter> shipmentAdapters = ShipmentAdapters
+                .Where(sa => sa?.Shipment?.ShipmentID != shipmentAdapter?.Shipment?.ShipmentID)
+                .Concat(new[] { shipmentAdapter })
+                .ToList();
+
+            return new LoadedOrderSelection(Order, shipmentAdapters, DestinationAddressEditable);
+        }
     }
 }

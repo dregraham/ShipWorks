@@ -334,7 +334,7 @@ namespace ShipWorks.Actions
                         message += "\n\n";
                     }
 
-                    message += string.Format("{0} of the selected actions cannot be ran from this computer.", wrongComputerCount);
+                    message += string.Format("{0} of the selected actions cannot be run from this computer.", wrongComputerCount);
                 }
 
                 if (notRanCount > 0)

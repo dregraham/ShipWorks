@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;

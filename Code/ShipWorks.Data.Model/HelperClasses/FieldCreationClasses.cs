@@ -19967,10 +19967,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.Password);}
 		}
-		/// <summary>Creates a new ShopSiteStoreEntity.CgiUrl field instance</summary>
-		public static EntityField2 CgiUrl
+		/// <summary>Creates a new ShopSiteStoreEntity.ApiUrl field instance</summary>
+		public static EntityField2 ApiUrl
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.CgiUrl);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ApiUrl);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.RequireSSL field instance</summary>
 		public static EntityField2 RequireSSL
@@ -19986,6 +19986,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestTimeout
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.RequestTimeout);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.ShopSiteAuthentication field instance</summary>
+		public static EntityField2 ShopSiteAuthentication
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ShopSiteAuthentication);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.OauthClientID field instance</summary>
+		public static EntityField2 OauthClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.OauthClientID);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.OauthSecretKey field instance</summary>
+		public static EntityField2 OauthSecretKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.OauthSecretKey);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.Identifier field instance</summary>
+		public static EntityField2 Identifier
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.Identifier);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.OauthAuthorizationCode field instance</summary>
+		public static EntityField2 OauthAuthorizationCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.OauthAuthorizationCode);}
 		}
 	}
 
