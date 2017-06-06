@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.UI;

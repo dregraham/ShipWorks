@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -269,8 +270,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 ShipmentTypeCode shipmentTypeCode = endiciaReseller == EndiciaReseller.Express1 ?
                     ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia;
-                IShipmentTypeSetupWizardFactory wizardFactory = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>();
-                IShipmentTypeSetupWizard wizard = wizardFactory.Create(shipmentTypeCode);
+                IShipmentTypeSetupWizard wizard = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(shipmentTypeCode, OpenedFromSource.Manager);
 
                 return wizard.ShowDialog(owner) == DialogResult.OK;
             }

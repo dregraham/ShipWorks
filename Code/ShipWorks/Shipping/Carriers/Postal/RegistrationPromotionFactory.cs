@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Autofac.Features.AttributeFilters;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;

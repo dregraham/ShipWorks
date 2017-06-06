@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating

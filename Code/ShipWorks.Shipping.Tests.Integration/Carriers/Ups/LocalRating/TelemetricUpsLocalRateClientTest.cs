@@ -28,6 +28,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                 OriginStateProvCode = "MO",
                 ShipPostalCode = "67890",
                 ShipStateProvCode = "MO",
+                Order = new OrderEntity()
+                {
+                    OrderNumber = 42
+                },
                 Ups = new UpsShipmentEntity()
                 {
                     Packages = {new UpsPackageEntity {DimsLength = 1, DimsHeight = 1, DimsWidth = 1, Weight = 1}}

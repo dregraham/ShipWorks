@@ -330,6 +330,27 @@
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Sears\SearsStoreModule.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
+      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteOAuthAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteOAuthAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml.cs">
+      <DependentUpon>ShopSiteLegacyAccountSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.Designer.cs">
+      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\SparkPay\SparkPaySettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -486,6 +507,14 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Upload\OdbcUploadShipmentStrategyPage.resx">
       <DependentUpon>OdbcUploadShipmentStrategyPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
+      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ShopSite\WizardPages\ShopSiteAccountPage.resx">
+      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\SparkPaySettingsControl.resx">
       <DependentUpon>SparkPaySettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -526,6 +555,10 @@
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
       <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{A93F195E-44BC-4C73-8F70-7714A040EA0E}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
@@ -586,6 +619,18 @@
     <Page Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteOAuthAccountSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\ShopSite\ShopSiteLegacyAccountSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
       <SubType>Designer</SubType>

@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Syncfusion.XlsIO;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating

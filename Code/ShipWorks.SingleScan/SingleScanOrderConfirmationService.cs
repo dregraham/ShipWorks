@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;

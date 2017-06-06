@@ -1,11 +1,21 @@
-﻿using System;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
-using ShipWorks.Editions;
 using ShipWorks.ApplicationCore;
-using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.UI;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -88,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 add.Hide();
 
-                // Adjust the location of the remove button based on the visiblity of the add button and
+                // Adjust the location of the remove button based on the visibility of the add button and
                 // make sure it's on top of the add button.
                 delete.Top = add.Top;
                 delete.BringToFront();
@@ -144,12 +154,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (UpsSetupWizard dlg = new UpsSetupWizard(shipmentTypeCode, true, lifetimeScope.Resolve<IShipmentTypeManager>()))
+                IShipmentTypeSetupWizard dlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(ShipmentTypeCode.UpsOnLineTools, OpenedFromSource.Manager, TypedParameter.From(true));
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        LoadShippers();
-                    }
+                    LoadShippers();
                 }
             }
         }

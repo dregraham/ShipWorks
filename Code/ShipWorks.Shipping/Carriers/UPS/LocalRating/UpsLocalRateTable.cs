@@ -7,7 +7,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;

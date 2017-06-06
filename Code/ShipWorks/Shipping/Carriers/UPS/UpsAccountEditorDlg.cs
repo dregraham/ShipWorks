@@ -4,8 +4,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 using UserControl = System.Windows.Controls.UserControl;
 

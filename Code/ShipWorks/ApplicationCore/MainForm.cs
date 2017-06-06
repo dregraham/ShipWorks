@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
@@ -17,6 +18,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
@@ -120,6 +122,8 @@ namespace ShipWorks
         // if it failed.
         bool logonAsyncLoadSuccess = false;
 
+        ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
+
         // We have to remember these so that we can restore them after blanking the UI
         List<RibbonTab> ribbonTabs = new List<RibbonTab>();
 
@@ -150,7 +154,7 @@ namespace ShipWorks
             heartBeat = new UIHeartbeat(this);
 
             // Persist size\position of the window
-            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
+            new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
         }
 
@@ -641,7 +645,7 @@ namespace ShipWorks
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
-                if (!AddStoreWizard.RunWizard(this))
+                if (!AddStoreWizard.RunWizard(this, OpenedFromSource.InitialSetup))
                 {
                     UserSession.Logoff(false);
                     UserSession.Reset();
@@ -650,6 +654,8 @@ namespace ShipWorks
 
                     return;
                 }
+
+                QueueLogonAction(ShowSetupGuide);
             }
             else
             {
@@ -714,6 +720,8 @@ namespace ShipWorks
             // Start the heartbeat
             heartBeat.Start();
 
+            ExecuteLogonActions();
+
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
             NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ShipWorksUpgrade));
@@ -728,6 +736,36 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+        }
+
+        /// <summary>
+        /// Execute any logon actions that have been queued
+        /// </summary>
+        private void ExecuteLogonActions()
+        {
+            Action action = null;
+            while (logonActions.TryDequeue(out action))
+            {
+                action();
+            }
+        }
+
+        /// <summary>
+        /// Queue an action to run at the end of the logon process
+        /// </summary>
+        public void QueueLogonAction(Action action) => logonActions.Enqueue(action);
+
+        /// <summary>
+        /// Show the New User Experience dialog
+        /// </summary>
+        public void ShowSetupGuide()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ISetupGuide SetupGuide = lifetimeScope.Resolve<ISetupGuide>();
+                SetupGuide.LoadOwner(this);
+                SetupGuide.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -1383,7 +1421,7 @@ namespace ShipWorks
         private void UpdatePanelState()
         {
             IEnumerable<DockControl> controls = Panels.Where(d => d.Controls.Count == 1).ToList();
-            IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
+            controls.Select(x => UpdatePanelState(x)).ToList();
         }
 
         /// <summary>
@@ -2231,6 +2269,8 @@ namespace ShipWorks
             // Update the grid to show the new node
             gridControl.ActiveFilterNode = ((FilterTree) sender).SelectedFilterNode;
 
+            DeselectFilterNodeFromOtherContextFilterTree(sender);
+
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to
             // update UI, b\c its already blank.
             if (UserSession.IsLoggedOn)
@@ -2240,6 +2280,28 @@ namespace ShipWorks
 
                 // Update the detail view UI
                 UpdateDetailViewSettingsUI();
+            }
+        }
+
+        /// <summary>
+        /// Deselect the filter node from the context that is not active
+        /// </summary>
+        private void DeselectFilterNodeFromOtherContextFilterTree(object sender)
+        {
+            // When a search is ending, we get two selection modifications and we don't
+            // want to deselect anything for the search related one
+            if (gridControl.IsSearchEnding)
+            {
+                return;
+            }
+
+            FilterTree otherTree = sender == orderFilterTree ? customerFilterTree : orderFilterTree;
+
+            if (otherTree.SelectedFilterNode != null)
+            {
+                otherTree.SelectedFilterNodeChanged -= OnSelectedFilterNodeChanged;
+                otherTree.SelectedFilterNode = null;
+                otherTree.SelectedFilterNodeChanged += OnSelectedFilterNodeChanged;
             }
         }
 
@@ -2360,30 +2422,18 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            FilterTarget target = FilterTarget.Orders;
+            long initialID = settings.FilterInitialUseLastActive ?
+                settings.CustomerFilterLastActive : settings.FilterInitialSpecified;
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
-            if (!settings.FilterInitialUseLastActive)
-            {
-                long initialID = settings.FilterInitialSpecified;
+            FilterTarget target = filterNode?.Filter.FilterTarget != null ?
+                (FilterTarget) filterNode.Filter.FilterTarget :
+                FilterTarget.Orders;
+            FilterTree filterTree = target == FilterTarget.Orders ?
+                orderFilterTree : customerFilterTree;
 
-                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
-
-                if (filterNode?.Filter.FilterTarget != null)
-                {
-                    target = (FilterTarget) filterNode.Filter.FilterTarget;
-                }
-            }
-
-            if (target == FilterTarget.Customers)
-            {
-                customerFilterTree.Focus();
-                customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
-            }
-            else
-            {
-                orderFilterTree.Focus();
-                orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
-            }
+            filterTree.Focus();
+            filterTree.SelectInitialFilter(settings, target);
         }
 
         /// <summary>
@@ -2812,7 +2862,6 @@ namespace ShipWorks
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
-
         }
 
         /// <summary>
@@ -3362,7 +3411,7 @@ namespace ShipWorks
             {
                 dlg.ShowDialog(this);
 
-                if (StoreManager.GetAllStores().Count == 0)
+                if (StoreManager.GetAllStoresReadOnly().None())
                 {
                     InitiateLogon();
                 }

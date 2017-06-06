@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan

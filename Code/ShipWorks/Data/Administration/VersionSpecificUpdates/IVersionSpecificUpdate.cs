@@ -1,5 +1,5 @@
 ﻿using System;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {

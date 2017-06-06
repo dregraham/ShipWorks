@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Threading;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;

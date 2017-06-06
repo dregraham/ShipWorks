@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce.CoreExtensions.Actions
