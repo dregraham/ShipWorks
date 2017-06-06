@@ -3,10 +3,10 @@ using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 {

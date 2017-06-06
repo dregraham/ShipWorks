@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -140,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers
                 return DialogResult.Cancel;
             }
 
-            result = messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode));
+            result = messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing));
 
             if (result == DialogResult.OK)
             {

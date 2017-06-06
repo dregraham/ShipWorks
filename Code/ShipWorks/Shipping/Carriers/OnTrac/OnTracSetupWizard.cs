@@ -6,7 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
 using ShipWorks.Shipping.Editing.Rating;
@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// Setup wizard for processing shipments with OnTrac
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.OnTrac)]
-    public partial class OnTracSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.OnTrac)]
+    public partial class OnTracSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         OnTracAccountEntity account;
 
@@ -183,5 +183,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 RateCache.Instance.Clear();
             }
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

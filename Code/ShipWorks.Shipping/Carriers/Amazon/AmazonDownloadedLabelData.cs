@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;

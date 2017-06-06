@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
+﻿using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval

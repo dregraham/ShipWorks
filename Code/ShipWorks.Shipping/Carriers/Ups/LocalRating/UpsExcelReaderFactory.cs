@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 {

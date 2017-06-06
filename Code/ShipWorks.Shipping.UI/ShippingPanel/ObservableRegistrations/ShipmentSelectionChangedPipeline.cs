@@ -43,11 +43,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void HandleShipmentSelectionChanged(IEnumerable<long> shipmentIDs, ShippingPanelViewModel viewModel)
         {
-            if (shipmentIDs.CompareCountTo(1) != ComparisonResult.Equal)
+            if (!shipmentIDs.IsCountEqualTo(1))
             {
                 viewModel.UnloadShipment();
                 viewModel.SelectedShipments = shipmentIDs.ToReadOnly();
-                messenger.Send(new RatesNotSupportedMessage(viewModel, "Unable to get rates for multiple shipments."));
+
+                string message = shipmentIDs.IsCountGreaterThan(1) ?
+                    "Unable to get rates for multiple shipments." : string.Empty;
+                messenger.Send(new RatesNotSupportedMessage(viewModel, message));
+
                 viewModel.LoadedShipmentResult = ShippingPanelLoadedShipmentResult.Multiple;
                 return;
             }

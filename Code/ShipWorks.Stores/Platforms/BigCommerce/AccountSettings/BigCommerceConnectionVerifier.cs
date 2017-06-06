@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 

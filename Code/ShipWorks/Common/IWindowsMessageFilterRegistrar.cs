@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Common
 {

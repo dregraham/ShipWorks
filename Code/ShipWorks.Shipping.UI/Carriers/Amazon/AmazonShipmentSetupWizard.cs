@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Setup wizard for Amazon shipment type
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Amazon)]
-    public partial class AmazonShipmentSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Amazon)]
+    public partial class AmazonShipmentSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private readonly AmazonShipmentType shipmentType;
         private readonly IShippingSettings shippingSettings;
@@ -157,5 +157,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return $"Amazon Origin: {description}";
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }

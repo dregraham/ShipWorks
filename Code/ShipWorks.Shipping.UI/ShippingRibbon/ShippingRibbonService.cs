@@ -361,24 +361,14 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Update stored shipments with the given shipment data
         /// </summary>
-        internal void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter)
-        {
-            if (currentOrder.ShipmentAdapters == null)
-            {
-                return;
-            }
-
-            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
-            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
-            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
-            // panels update correctly.
-            IEnumerable<ICarrierShipmentAdapter> shipmentAdapters = currentOrder.ShipmentAdapters
-                .Where(sa => sa?.Shipment?.ShipmentID != shipmentAdapter?.Shipment?.ShipmentID)
-                .Concat(new[] { shipmentAdapter })
-                .ToList();
-
-            currentOrder = new LoadedOrderSelection(currentOrder.Order, shipmentAdapters, currentOrder.DestinationAddressEditable);
-        }
+        /// <remarks>
+        /// If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+        /// be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+        /// and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+        /// panels update correctly.
+        /// </remarks>
+        internal void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter) =>
+            currentOrder = currentOrder.CreateSelectionWithUpdatedShipment(shipmentAdapter);
 
         /// <summary>
         /// Dispose held resources

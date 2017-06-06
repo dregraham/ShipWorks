@@ -143,6 +143,7 @@
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
+    <Compile Include="Controls\AnimatedContentControl.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -207,6 +208,18 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
+    <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
+      <DependentUpon>MainOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SetupGuide\SetupGuide.xaml.cs">
+      <DependentUpon>SetupGuide.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SetupGuide\SetupGuideSection.cs" />
+    <Compile Include="Dialogs\SetupGuide\SetupGuideViewModel.cs" />
+    <Compile Include="Dialogs\SetupGuide\SectionToControlConverter.cs" />
+    <Compile Include="Dialogs\SetupGuide\ShippingOptions.xaml.cs">
+      <DependentUpon>ShippingOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -303,6 +316,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\SetupGuide\MainOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\SetupGuide\SetupGuide.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\SetupGuide\ShippingOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Controls\DatePickerStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -340,6 +365,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Controls\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\AnimatedContentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -381,6 +410,16 @@
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add-carrier.png" />
+    <Resource Include="Resources\add-store.png" />
+    <Resource Include="Resources\use-shipworks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fedex.png" />
+    <Resource Include="Resources\ups.png" />
+    <Resource Include="Resources\usps.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

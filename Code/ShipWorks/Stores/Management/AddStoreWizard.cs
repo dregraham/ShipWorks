@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
@@ -26,12 +32,6 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using Quartz.Util;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Management
         /// Run the setup wizard.  Will return false if the user doesn't have permissions, the user canceled, or if the Wizard was not able to run because
         /// it was already running on another computer.
         /// </summary>
-        public static bool RunWizard(IWin32Window owner)
+        public static bool RunWizard(IWin32Window owner, OpenedFromSource openedFrom)
         {
             // See if we have permissions
             if (!(UserSession.Security.HasPermission(PermissionType.ManageStores)))
@@ -109,23 +109,25 @@ namespace ShipWorks.Stores.Management
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
                 using (IStoreSettingsTrackedDurationEvent storeSettingsEvent =
-                    IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreSettingsTrackedDurationEvent>(
+                    scope.Resolve<IStoreSettingsTrackedDurationEvent>(
                         new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
+                    wizard.OpenedFrom = openedFrom;
+
                     // Show the wizard and collect report the store configuration/settings
                     // for telemetry purposes
                     DialogResult dialogResult = wizard.ShowDialog(owner);
 
                     if (dialogResult == DialogResult.OK)
                     {
-                        CollectTelemetry(wizard.Store, storeSettingsEvent, dialogResult);
+                        CollectTelemetry(wizard.Store, storeSettingsEvent, dialogResult, openedFrom);
                         // The store was added, so make sure our local list of stores is refreshed
                         StoreManager.CheckForChanges();
                         return true;
                     }
 
                     // If canceling out of the add store wizard, collect telemetry from the AbandonedStore property
-                    CollectTelemetry(wizard.AbandonedStore, storeSettingsEvent, dialogResult);
+                    CollectTelemetry(wizard.AbandonedStore, storeSettingsEvent, dialogResult, openedFrom);
 
                     return false;
                 }
@@ -140,7 +142,8 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Collects the telemetry.
         /// </summary>
-        private static void CollectTelemetry(StoreEntity store, IStoreSettingsTrackedDurationEvent storeSettingsEvent, DialogResult dialogResult)
+        private static void CollectTelemetry(StoreEntity store, IStoreSettingsTrackedDurationEvent storeSettingsEvent,
+            DialogResult dialogResult, OpenedFromSource openedFrom)
         {
             if (store != null)
             {
@@ -148,6 +151,7 @@ namespace ShipWorks.Stores.Management
             }
 
             storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "No" : "Yes");
+            storeSettingsEvent.AddProperty("OpenedFrom", openedFrom.ToString());
         }
 
         /// <summary>
@@ -229,10 +233,14 @@ namespace ShipWorks.Stores.Management
                 originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
 
                 // Run the setup wizard
-                complete = RunWizard(originalWizard);
+                complete = RunWizard(originalWizard, OpenedFromSource.InitialSetup);
 
                 // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
-                if (!complete)
+                if (complete)
+                {
+                    Program.MainForm.QueueLogonAction(Program.MainForm.ShowSetupGuide);
+                }
+                else
                 {
                     UserSession.Logoff(false);
                 }
@@ -249,10 +257,14 @@ namespace ShipWorks.Stores.Management
         #endregion
 
         /// <summary>
+        /// From where was this dialog opened
+        /// </summary>
+        public OpenedFromSource OpenedFrom { get; set; } = OpenedFromSource.NotSpecified;
+
+        /// <summary>
         /// The store currently being configured by the wizard
         /// </summary>
         public StoreEntity Store => store;
-
 
         /// <summary>
         /// The store that was being configured when the wizard is abandoned
