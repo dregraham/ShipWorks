@@ -131,6 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private void AddDiscrepancyToLogger(StringBuilder stringBuilder, ShipmentEntity shipment, UpsServiceRate rate)
         {
+            stringBuilder.AppendLine($"Order Number: {shipment.Order.OrderNumber}");
             stringBuilder.AppendLine($"Shipment ID: {shipment.ShipmentID}");
             stringBuilder.AppendLine($"Local Rate: {rate?.Amount.ToString(CultureInfo.InvariantCulture) ?? "Not found"}");
             stringBuilder.AppendLine($"Label Cost: {shipment.ShipmentCost}");
