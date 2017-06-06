@@ -1,0 +1,9 @@
+﻿{
+  "access_token": "MTQ5NDQxOTU1MnxldmFsdWF0ZTUwfDF8U2hpcFdvcmtzfDc3NXw=",
+  "token_type": "MAC",
+  "expires_in": 30,
+  "download_url": "https://demo.shopsite.com/cgi-bin/ssdemos/stores/evaluate/sc/db_xml.cgi",
+  "upload1_url": "https://demo.shopsite.com/cgi-bin/ssdemos/stores/evaluate/sc/dbupload.cgi",
+  "upload2_url": "https://demo.shopsite.com/cgi-bin/ssdemos/stores/evaluate/sc/dbmake.cgi",
+  "publish_url": "https://demo.shopsite.com/cgi-bin/ssdemos/stores/evaluate/sc/generate.cgi"
+}

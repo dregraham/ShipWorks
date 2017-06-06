@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -721,7 +722,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);
             setupControl.SetupComplete += OnShipmentTypeSetupComplete;
 
             serviceControlArea.Controls.Add(setupControl);

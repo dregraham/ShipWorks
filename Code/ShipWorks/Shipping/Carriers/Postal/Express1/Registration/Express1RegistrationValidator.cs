@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {

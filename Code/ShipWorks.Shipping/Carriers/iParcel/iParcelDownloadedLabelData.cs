@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text;
 using log4net;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 

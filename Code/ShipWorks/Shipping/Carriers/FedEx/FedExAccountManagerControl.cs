@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -121,8 +125,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            using (FedExSetupWizard dlg = new FedExSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                IShipmentTypeSetupWizard dlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(ShipmentTypeCode.FedEx, OpenedFromSource.Manager);
+
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadShippers();

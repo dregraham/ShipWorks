@@ -1,6 +1,5 @@
 ﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento;
@@ -11,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Security;
 using System.Security;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento
 {

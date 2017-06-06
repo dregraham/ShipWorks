@@ -16,7 +16,7 @@ namespace Interapptive.Shared.Metrics
         /// Constructor
         /// </summary>
         public TrackedDurationEvent(string name)
-            :base(name)
+            : base(name)
         {
             stopwatch = Stopwatch.StartNew();
         }

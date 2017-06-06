@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<ShopSiteOrders>
+	<Response>
+		<ResponseCode>1</ResponseCode>
+		<ResponseDescription>success</ResponseDescription>
+	</Response>
+	<Order>
+		<OrderNumber>1235</OrderNumber>
+		<OrderDate>2017-05-05 12:12:14</OrderDate>
+		<Billing>
+			<FullName>Trial store Tim</FullName>
+			<Email>me@me.com</Email>
+			<Company/>
+			<Phone>8885551212</Phone>
+			<Address>
+				<Street1>123 Main</Street1>
+				<Street2/>
+				<City>St Louis</City>
+				<State>MO</State>
+				<Code>63112</Code>
+				<Country>United States</Country>
+			</Address>
+		</Billing>
+		<Shipping>
+			<FullName>Trial store Tim</FullName>
+			<Company/>
+			<Phone>8885551212</Phone>
+			<Address>
+				<Street1>123 Main</Street1>
+				<Street2/>
+				<City>St Louis</City>
+				<State>MO</State>
+				<Code>63112</Code>
+				<Country>United States</Country>
+			</Address>
+			<Product>
+				<ProdType>Tangible</ProdType>
+				<Name>Zebra Print Sunglasses</Name>
+				<SKU/>
+				<Taxable>Yes</Taxable>
+				<Quantity>1</Quantity>
+				<ItemPrice>62.99</ItemPrice>
+				<Total>62.99</Total>
+				<Weight>0.20</Weight>
+				<Dimension/>
+				<OrderOption>
+					<SelectedOption>Tan Lenses</SelectedOption>
+					<OptionPrice/>
+				</OrderOption>
+				<CustomerText/>
+			</Product>
+		</Shipping>
+		<Payment>
+			<CreditCard>
+				<Issuer>Visa</Issuer>
+				<Number>************1111</Number>
+				<VerificationValue/>
+				<FullName>Me Too</FullName>
+				<Company/>
+				<ExpirationDate>**/****</ExpirationDate>
+				<OrderProcessingInfo/>
+			</CreditCard>
+		</Payment>
+		<Totals>
+			<ProductTotal>62.99</ProductTotal>
+			<Discount/>
+			<Subtotal>62.99</Subtotal>
+			<Tax/>
+			<GrandTotal>62.99</GrandTotal>
+			<ShippingTotal>
+				<Total>0.00</Total>
+				<Description>Free ground shipping</Description>
+			</ShippingTotal>
+			<Surcharge/>
+		</Totals>
+		<Coupon/>
+		<Other>
+			<Associate/>
+			<OrderInstructions/>
+			<Comments/>
+			<IpHostname>IP Address:66.128.118.226, Host Name:mail.interapptive.com</IpHostname>
+			<TotalOrderWeight>0.2</TotalOrderWeight>
+			<EmailList/>
+			<CustomCheckoutField/>
+		</Other>
+	</Order>
+	<Order>
+		<OrderNumber>1236</OrderNumber>
+		<OrderDate>2017-05-05 14:44:09</OrderDate>
+		<Billing>
+			<FullName>Trial store Tim</FullName>
+			<Email>me@me.com</Email>
+			<Company/>
+			<Phone>8885551212</Phone>
+			<Address>
+				<Street1>123 Main</Street1>
+				<Street2/>
+				<City>St Louis</City>
+				<State>MO</State>
+				<Code>63112</Code>
+				<Country>United States</Country>
+			</Address>
+		</Billing>
+		<Shipping>
+			<FullName>Trial store Tim</FullName>
+			<Company/>
+			<Phone>8885551212</Phone>
+			<Address>
+				<Street1>123 Main</Street1>
+				<Street2/>
+				<City>St Louis</City>
+				<State>MO</State>
+				<Code>63112</Code>
+				<Country>United States</Country>
+			</Address>
+			<Product>
+				<ProdType>Tangible</ProdType>
+				<Name>Thick Frame Sunglasses</Name>
+				<SKU/>
+				<Taxable>Yes</Taxable>
+				<Quantity>1</Quantity>
+				<ItemPrice>69.99</ItemPrice>
+				<Total>69.99</Total>
+				<Weight>0.20</Weight>
+				<Dimension/>
+				<OrderOption>
+					<SelectedOption>Rose Lenses</SelectedOption>
+					<OptionPrice/>
+				</OrderOption>
+				<CustomerText/>
+			</Product>
+		</Shipping>
+		<Payment>
+			<CreditCard>
+				<Issuer>Visa</Issuer>
+				<Number>************1111</Number>
+				<VerificationValue/>
+				<FullName>me too</FullName>
+				<Company/>
+				<ExpirationDate>**/****</ExpirationDate>
+				<OrderProcessingInfo/>
+			</CreditCard>
+		</Payment>
+		<Totals>
+			<ProductTotal>69.99</ProductTotal>
+			<Discount/>
+			<Subtotal>69.99</Subtotal>
+			<Tax/>
+			<GrandTotal>69.99</GrandTotal>
+			<ShippingTotal>
+				<Total>0.00</Total>
+				<Description>Free ground shipping</Description>
+			</ShippingTotal>
+			<Surcharge/>
+		</Totals>
+		<Coupon/>
+		<Other>
+			<Associate/>
+			<OrderInstructions/>
+			<Comments/>
+			<IpHostname>IP Address:66.128.118.226, Host Name:mail.interapptive.com</IpHostname>
+			<TotalOrderWeight>0.2</TotalOrderWeight>
+			<EmailList/>
+			<CustomCheckoutField/>
+		</Other>
+	</Order>
+</ShopSiteOrders>

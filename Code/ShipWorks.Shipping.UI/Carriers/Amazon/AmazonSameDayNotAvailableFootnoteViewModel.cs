@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.UI;
 

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Services.Dialogs;
@@ -34,6 +35,7 @@ namespace ShipWorks.Startup
         /// </summary>
         public static IContainer BuildRegistrations(IContainer container) =>
             IoC.BuildRegistrations(container,
+                typeof(HttpVariableRequestSubmitter).Assembly,
                 typeof(ShippingDialogService).Assembly,
                 typeof(ShippingModule).Assembly,
                 typeof(LemonStandStoreModule).Assembly,
