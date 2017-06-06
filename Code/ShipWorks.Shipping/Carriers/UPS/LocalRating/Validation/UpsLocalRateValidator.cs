@@ -49,11 +49,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public ILocalRateValidationResult Validate(IEnumerable<ShipmentEntity> shipments)
         {
             int discrepancies = 0;
+            List<ShipmentEntity> processedShipments = null;
+
             StringBuilder logBuilder = new StringBuilder();
 
             if (DateTime.Now > wakeTime)
             {
-                foreach (ShipmentEntity shipment in shipments)
+                processedShipments = shipments.Where(s => s.Processed).ToList();
+
+                foreach (ShipmentEntity shipment in processedShipments)
                 {
                     if (EnsureLocalRatesMatchShipmentCost(shipment, logBuilder) == false)
                     {
@@ -67,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                 logger.LogResponse(logBuilder.ToString(), "txt");
             }
 
-            return validationResultFactory.Create(shipments.Count(), discrepancies, Snooze);
+            return validationResultFactory.Create(processedShipments?.Count() ?? 0, discrepancies, Snooze);
         }
 
         /// <summary>
@@ -92,11 +96,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                         isValid = false;
                         AddDiscrepancyToLogger(logBuilder, shipment, rate);
                     }
-                }
-                else
-                {
-                    isValid = false;
-                    AddDiscrepancyToLogger(logBuilder, shipment, null);
                 }
             }
 

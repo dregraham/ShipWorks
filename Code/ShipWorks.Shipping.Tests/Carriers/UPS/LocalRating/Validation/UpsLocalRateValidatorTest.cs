@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             testObject.Snooze();
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(0, 0, It.IsAny<Action>()), Times.Once());
         }
 
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(0, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsDiscrepancy_WhenGetLocalRatesFails()
+        public void Validate_DoesNotReturnDiscrepancy_WhenGetLocalRatesFails()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            resultFactory.Verify(r => r.Create(shipments.Count, 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(shipments.Count, 0, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -280,7 +280,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_LogsDiscrepancies_WhenLocalRatesNotFound()
+        public void Validate_DoesNotLogDiscrepancies_WhenLocalRatesNotFound()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.Validate(shipments);
 
-            logger.Verify(l => l.LogResponse(It.IsAny<string>(), "txt"));
+            logger.Verify(l => l.LogResponse(It.IsAny<string>(), "txt"), Times.Never);
         }
 
         public void Dispose()
@@ -316,11 +316,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         {
             return new ShipmentEntity
             {
+                Processed = true,
                 ShipmentCost = shipmentCost,
                 Ups = new UpsShipmentEntity
                 {
                     PayorType = (int)payorType,
                     Service = (int)service
+                }, 
+                Order = new OrderEntity()
+                {
+                    OrderNumber = 42
                 }
             };
         }
