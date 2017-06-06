@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
-            testObject.Validate(shipments);
+            testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(
                 r => r.Create(It.Is<IEnumerable<UpsLocalRateDiscrepancy>>(d => !d.Any()), 1, It.IsAny<Action>()),
