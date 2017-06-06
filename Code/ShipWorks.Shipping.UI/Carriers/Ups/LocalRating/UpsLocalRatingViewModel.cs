@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
@@ -42,6 +44,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private readonly Func<ISaveFileDialog> saveFileDialogFactory;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IUpsLocalRateValidator rateValidator;
         private readonly ILog log;
         protected readonly PropertyChangedHandler handler;
 
@@ -60,7 +63,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, Func<ISaveFileDialog> saveFileDialogFactory, Func<IOpenFileDialog> openFileDialogFactory, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
+        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, 
+            Func<ISaveFileDialog> saveFileDialogFactory, 
+            Func<IOpenFileDialog> openFileDialogFactory, 
+            IMessageHelper messageHelper, 
+            Func<Type, ILog> logFactory, 
+            IUpsLocalRateValidator rateValidator)
         {
             this.rateTable = rateTable;
             this.saveFileDialogFactory = saveFileDialogFactory;
@@ -71,6 +79,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             UploadZoneFileCommand = new RelayCommand(CallUploadZoneFile);
 
             this.messageHelper = messageHelper;
+            this.rateValidator = rateValidator;
             log = logFactory(GetType());
             
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -327,9 +336,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         rateTable.SaveRates(upsAccount);
                     });
 
-                    UpdateMessages();
-                    UploadMessage = "Local rates have been uploaded successfully";
-                    log.Info("Successfully uploaded rate table");
+                    if (ValidateRates())
+                    {
+                        UpdateMessages();
+                        UploadMessage = "Local rates have been uploaded successfully";
+                        log.Info("Successfully uploaded rate table");
+                    }
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -387,9 +399,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         rateTable.SaveZones();
                     });
 
-                    UpdateMessages();
-                    UploadMessage = "Zones have been uploaded successfully";
-                    log.Info("Successfully uploaded zone file");
+                    if (ValidateRates())
+                    {
+                        UpdateMessages();
+                        UploadMessage = "Zones have been uploaded successfully";
+                        log.Info("Successfully uploaded zone file");
+                    }
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -404,6 +419,23 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     isBusy(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Validate the rates using the rate validator
+        /// update status message with failure 
+        /// </summary>
+        /// <returns>true if the rates are valid</returns>
+        private bool ValidateRates()
+        {
+            ILocalRateValidationResult validationResult = rateValidator.ValidateRecentShipments(upsAccount);
+
+            if (validationResult.RateDiscrepancies.Any())
+            {
+                UploadMessage = validationResult.GetUserFriendlyMessage();
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
