@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             if (logBuilder.Length > 0)
             {
-                logger.LogResponse(logBuilder.ToString(), ".txt");
+                logger.LogResponse(logBuilder.ToString(), "txt");
             }
 
             return validationResultFactory.Create(shipments.Count(), discrepancies, Snooze);
