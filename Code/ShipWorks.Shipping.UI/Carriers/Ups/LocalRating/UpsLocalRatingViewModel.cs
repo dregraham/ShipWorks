@@ -428,13 +428,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <returns>true if the rates are valid</returns>
         private bool ValidateRates()
         {
-            ILocalRateValidationResult validationResult = rateValidator.ValidateRecentShipments(upsAccount);
-
-            if (validationResult.RateDiscrepancies.Any())
+            if (rateTable.RateUploadDate.HasValue && rateTable.ZoneUploadDate.HasValue)
             {
-                UploadMessage = validationResult.GetUserFriendlyMessage();
-                return false;
+                ILocalRateValidationResult validationResult = rateValidator.ValidateRecentShipments(upsAccount);
+
+                if (validationResult.RateDiscrepancies.Any())
+                {
+                    UploadMessage = validationResult.GetUserFriendlyMessage();
+                    return false;
+                }
             }
+
             return true;
         }
 
