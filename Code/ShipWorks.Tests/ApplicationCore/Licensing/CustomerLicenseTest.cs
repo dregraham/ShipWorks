@@ -767,6 +767,23 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
 
+        /// <summary>
+        /// Returning Hidden will cause a crash, so don't do it.
+        /// </summary>
+        [Fact]
+        public void CheckRestriction_DoesNotReturnHidden_WhenDisabled()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CustomerLicense testObject = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                testObject.DisabledReason = "I'm disabled";
+
+                EnumResult<EditionRestrictionLevel> result = testObject.CheckRestriction(EditionFeature.EndiciaAccountLimit, "foo");
+
+                Assert.NotEqual(EditionRestrictionLevel.Hidden, result.Value);
+            }
+        }
+
         [Fact]
         public void HandleRestriction_DelegatesToCorrectFeatureRestriction()
         {
