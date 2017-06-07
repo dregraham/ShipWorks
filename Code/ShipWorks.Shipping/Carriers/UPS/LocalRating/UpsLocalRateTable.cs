@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// The supported service types for local rating
         /// </summary>
-        public static List<UpsServiceType> SupportedServiceTypesForLocalRating = new List<UpsServiceType>()
+        public static readonly List<UpsServiceType> SupportedServiceTypesForLocalRating = new List<UpsServiceType>
         {
             UpsServiceType.UpsGround,
             UpsServiceType.UpsNextDayAirAM,
