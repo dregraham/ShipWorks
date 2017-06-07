@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly IUpsRateClient rateClient;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
-        private readonly IApiLogEntry logger;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private DateTime wakeTime;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             rateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
-            logger = apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate Discrepancies");
+            this.apiLogEntryFactory = apiLogEntryFactory;
         }
 
         /// <summary>
@@ -68,7 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             if (logBuilder.Length > 0)
             {
-                logger.LogResponse(logBuilder.ToString(), "txt");
+                apiLogEntryFactory(ApiLogSource.UpsLocalRating, "Rate Discrepancies")
+                    .LogResponse(logBuilder.ToString(), "txt");
             }
 
             return validationResultFactory.Create(processedShipments?.Count() ?? 0, discrepancies, Snooze);
