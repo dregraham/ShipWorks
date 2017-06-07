@@ -94,6 +94,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
@@ -279,6 +280,14 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalWithApiFailOverRatingClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\SuccessfulLocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\FailedLocalRateValidationResult.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\LocalRateValidationResultFactory.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
@@ -328,7 +337,7 @@
     <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\OrderLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessor.cs" />
-    <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStep.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStep.cs" />

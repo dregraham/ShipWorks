@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
@@ -11,12 +12,12 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// State used when processing shipments
     /// </summary>
-    internal class ShipmentProcessorExecutionState : IProcessShipmentsWorkflowResult
+    internal class ProcessShipmentsWorkflowResult : IProcessShipmentsWorkflowResult
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentProcessorExecutionState(RateResult chosenRate)
+        public ProcessShipmentsWorkflowResult(RateResult chosenRate)
         {
             SelectedRate = chosenRate;
 
@@ -73,5 +74,10 @@ namespace ShipWorks.Shipping.Services
         /// Selected rate for processing
         /// </summary>
         public RateResult SelectedRate { get; }
+
+        /// <summary>
+        /// Local Rate ValidationResult
+        /// </summary>
+        public ILocalRateValidationResult LocalRateValidationResult { get; set; }
     }
 }

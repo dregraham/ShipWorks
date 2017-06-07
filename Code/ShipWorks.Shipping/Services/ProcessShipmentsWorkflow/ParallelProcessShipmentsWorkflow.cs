@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Interapptive.Shared;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.ComponentRegistration;
@@ -81,7 +79,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             int shipmentCount = shipments.Count();
             var results = Consume(
                 x => workProgress.PercentComplete = (100 * x) / shipmentCount,
-                new ShipmentProcessorExecutionState(chosenRateResult),
+                new ProcessShipmentsWorkflowResult(chosenRateResult),
                 dataflow);
 
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
@@ -153,9 +151,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// We don't handle cancellation here because anything that's in flight needs to finish,
         /// regardless of whether a cancel was requested or not
         /// </remarks>
-        private static async Task<ShipmentProcessorExecutionState> Consume(
+        private static async Task<ProcessShipmentsWorkflowResult> Consume(
             Action<int> logProgress,
-            ShipmentProcessorExecutionState accumulator,
+            ProcessShipmentsWorkflowResult accumulator,
             IReceivableSourceBlock<ILabelResultLogResult> phase)
         {
             ILabelResultLogResult item = null;

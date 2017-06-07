@@ -24,6 +24,7 @@ using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
@@ -48,6 +49,7 @@ namespace ShipWorks.Shipping.Services
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IActionDispatcher actionDispatcher;
         private Control owner;
+        private readonly IUpsLocalRateValidator upsLocalRateValidator;
 
         /// <summary>
         /// Constructor
@@ -56,8 +58,10 @@ namespace ShipWorks.Shipping.Services
         public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
             ILifetimeScope lifetimeScope, ILicenseService licenseService, IMessageHelper messageHelper,
             IProcessShipmentsWorkflowFactory workflowFactory, IShippingSettings shippingSettings,
-            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher)
+            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher,
+            IUpsLocalRateValidator upsLocalRateValidator)
         {
+            this.upsLocalRateValidator = upsLocalRateValidator;
             this.actionDispatcher = actionDispatcher;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.shippingSettings = shippingSettings;
@@ -130,6 +134,8 @@ namespace ShipWorks.Shipping.Services
                         cancellationSource, counterRateCarrierConfiguredWhileProcessingAction);
                 }
             }
+
+            result.LocalRateValidationResult = upsLocalRateValidator.Validate(clonedShipments);
 
             HandleProcessingException(result);
 
@@ -230,44 +236,54 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IProcessShipmentsWorkflowResult executionState)
+        private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
+            workflowResult.LocalRateValidationResult.HandleValidationFailure(workflowResult);
+            
             // If any accounts were out of funds we show that instead of the errors
-            if (executionState.OutOfFundsException != null)
+            if (workflowResult.OutOfFundsException != null)
             {
-                DialogResult answer = messageHelper.ShowQuestion(
-                    $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
-                    "Would you like to purchase more now?");
-
-                if (answer == DialogResult.OK)
-                {
-                    using (Form dlg = executionState.OutOfFundsException.CreatePostageDialog(lifetimeScope))
-                    {
-                        dlg.ShowDialog(owner);
-                    }
-                }
+                HandleOutOfFundsException(workflowResult);
             }
-            else if (executionState.TermsAndConditionsException != null)
+            else if (workflowResult.TermsAndConditionsException != null)
             {
-                messageHelper.ShowError(executionState.NewErrors.FirstOrDefault());
-                executionState.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
+                messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
+                workflowResult.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
             }
             else
             {
-                if (!executionState.NewErrors.Any())
+                if (!workflowResult.NewErrors.Any())
                 {
                     return;
                 }
 
-                string message = executionState.NewErrors.Take(3)
+                string message = workflowResult.NewErrors.Take(3)
                     .Aggregate("Some errors occurred during processing.", (x, y) => x + "\n\n" + y);
 
-                if (executionState.NewErrors.Count > 3)
+                if (workflowResult.NewErrors.Count > 3)
                 {
                     message += "\n\nSee the shipment list for all errors.";
                 }
 
                 messageHelper.ShowError(message);
+            }
+        }
+
+        /// <summary>
+        /// Handles Out Of Funds Exception
+        /// </summary>
+        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
+        {
+            DialogResult answer = messageHelper.ShowQuestion(
+                                $"You do not have sufficient funds in {workflowResult.OutOfFundsException.Provider} account {workflowResult.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
+                                "Would you like to purchase more now?");
+
+            if (answer == DialogResult.OK)
+            {
+                using (Form dlg = workflowResult.OutOfFundsException.CreatePostageDialog(lifetimeScope))
+                {
+                    dlg.ShowDialog(owner);
+                }
             }
         }
 
