@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingManager shippingManager;
         private DateTime wakeTime;
         private List<UpsLocalRateDiscrepancy> rateDiscrepancies;
@@ -48,7 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             ILocalRateValidationResultFactory validationResultFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            ISqlAdapterFactory sqlAdapterFactory,
             IShippingManager shippingManager)
         {
             localRateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
@@ -56,7 +54,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            this.sqlAdapterFactory = sqlAdapterFactory;
             this.shippingManager = shippingManager;
         }
 
@@ -80,13 +77,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                 }
             }
 
-            if (rateDiscrepancies.Any())
-            {
-                string log = string.Join(Environment.NewLine, rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
-                apiLogEntryFactory(ApiLogSource.UpsLocalRating, CreateLabelLogFileName).LogResponse(log, "txt");
-            }
+            LogRateDiscrepancies(CreateLabelLogFileName);
 
-            return validationResultFactory.Create(rateDiscrepancies, processedShipments?.Count() ?? 0, Snooze);
+            return validationResultFactory.Create(rateDiscrepancies, processedShipments?.Count ?? 0, Snooze);
         }
 
         /// <summary>
@@ -103,13 +96,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             {
                 EnsureLocalRatesMatchApiRates(shipment);
             }
-
-            if (rateDiscrepancies.Any())
-            {
-                string log = string.Join(Environment.NewLine,
-                    rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
-                apiLogEntryFactory(ApiLogSource.UpsLocalRating, UploadRatesLogFileName).LogResponse(log, "txt");
-            }
+            
+            LogRateDiscrepancies(UploadRatesLogFileName);
 
             return validationResultFactory.Create(rateDiscrepancies);
         }
@@ -120,8 +108,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <param name="account">The account.</param>
         private IEnumerable<ShipmentEntity> GetRecentShipments(UpsAccountEntity account)
         {
-            ShipmentCollection shipmentCollection = new ShipmentCollection();
-
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
             bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
@@ -130,23 +116,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             
             ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
 
+            IEnumerable<ShipmentEntity> shipments;
             try
             {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.FetchEntityCollection(shipmentCollection, bucket, 10, sortExpression);
-                }
+                 shipments = shippingManager.GetShipments(bucket, sortExpression, 10);
             }
-            catch (Exception ex) when (ex is ORMException || ex is SqlException)
+            catch (ShippingException ex)
             {
-                throw new UpsLocalRatingException($"Error retrieving list of recent shipments to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
-            }
-
-            IList<ShipmentEntity> shipments = shipmentCollection.Items;
-
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                shippingManager.EnsureShipmentLoaded(shipment);
+                throw new UpsLocalRatingException($"Failed to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
             }
 
             return shipments;
@@ -157,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private void EnsureLocalRatesMatchShipmentCost(ShipmentEntity shipment)
         {
-            if (RequiresValidation(shipment))
+            if (RequiresValidation(shipment, true))
             {
                 GenericResult<List<UpsServiceRate>> rateResult = localRateClient.GetRates(shipment);
 
@@ -182,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private void EnsureLocalRatesMatchApiRates(ShipmentEntity shipment)
         {
-            if (RequiresValidation(shipment))
+            if (RequiresValidation(shipment, false))
             {
                 GenericResult<List<UpsServiceRate>> localRateResult = localRateClient.GetRates(shipment);
 
@@ -219,18 +196,37 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Whether or not the shipment should have it's local rates validated
         /// </summary>
         /// <remarks>
-        /// Only validate UPS shipments, where third party billing is not used, and the account has local rating enabled.
+        /// Only validate UPS shipments, where third party billing is not used. And when required,
+        /// only when local rating is enabled for the account.
         /// 
         /// Third party billing does not affect the returned API rates, even though it should.
         /// Don't bother validating since we know the API rate is wrong anyway.
         /// </remarks>
-        private bool RequiresValidation(ShipmentEntity shipment)
+        private bool RequiresValidation(ShipmentEntity shipment, bool localRatingEnabledRequiredForValidation)
         {
-            return 
-                (shipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools || shipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip) &&
-                shipment.Ups != null &&
-                shipment.Ups.PayorType != (int) UpsPayorType.ThirdParty &&
-                upsAccountRepository.GetAccountReadOnly(shipment).LocalRatingEnabled;
+            bool requiresValidation = (shipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools || shipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip) &&
+                    shipment.Ups != null &&
+                    shipment.Ups.PayorType != (int) UpsPayorType.ThirdParty;
+
+            if (localRatingEnabledRequiredForValidation)
+            {
+                requiresValidation = requiresValidation && upsAccountRepository.GetAccountReadOnly(shipment).LocalRatingEnabled;
+            }
+
+            return requiresValidation;
+        }
+
+        /// <summary>
+        /// Logs the rate discrepancies.
+        /// </summary>
+        private void LogRateDiscrepancies(string fileName)
+        {
+            if (rateDiscrepancies.Any())
+            {
+                string log = string.Join(Environment.NewLine,
+                    rateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetLogMessage()).ToList());
+                apiLogEntryFactory(ApiLogSource.UpsLocalRating, fileName).LogResponse(log, "txt");
+            }
         }
     }
 }
