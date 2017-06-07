@@ -211,6 +211,7 @@
     <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ValueAddServiceFilterTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Validation\LocalRateValidationResultFactoryTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Validation\FailedLocalRateValidationResultTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancyTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateValidatorTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />

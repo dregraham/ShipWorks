@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="localRate">The local rate.</param>
-        public UpsLocalRateDiscrepancy(ShipmentEntity shipment, UpsLocalServiceRate localRate)
+        public UpsLocalRateDiscrepancy(ShipmentEntity shipment, IUpsLocalServiceRate localRate)
         {
             Shipment = shipment;
             LocalRate = localRate;
@@ -30,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <param name="shipment">The shipment.</param>
         /// <param name="localRate">The local rate.</param>
         /// <param name="apiRate">The API rate.</param>
-        public UpsLocalRateDiscrepancy(ShipmentEntity shipment, UpsLocalServiceRate localRate, UpsServiceRate apiRate)
+        public UpsLocalRateDiscrepancy(ShipmentEntity shipment, IUpsLocalServiceRate localRate, UpsServiceRate apiRate)
         {
             this.apiRate = apiRate;
             Shipment = shipment;
@@ -45,17 +46,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// The local rate that caused the discrepancy
         /// </summary>
-        public UpsLocalServiceRate LocalRate { get; set; }
+        public IUpsLocalServiceRate LocalRate { get; set; }
         
         /// <summary>
         /// Logs the discrepancies. Includes the shipmentID, the local rate, and the actual shipment cost
         /// </summary>
         public string GetLogMessage()
         {
-            return $"Shipment ID: {Shipment.ShipmentID}" + Environment.NewLine + 
-                   $"Local Rate: {LocalRate?.Amount.ToString("C") ?? "Not found"}" + Environment.NewLine +
-                   $"API Rate: {apiRate?.Amount.ToString("C") ?? "Not found"}" + Environment.NewLine +
-                   $"Label Cost: {Shipment.ShipmentCost:C}" + Environment.NewLine ;
+            StringBuilder discrepancyInfo = new StringBuilder();
+            discrepancyInfo.AppendLine($"Shipment ID: {Shipment.ShipmentID}");
+            discrepancyInfo.AppendLine($"Local Rate: {LocalRate?.Amount.ToString("C") ?? "Not found"}");
+            discrepancyInfo.AppendLine($"API Rate: {apiRate?.Amount.ToString("C") ?? "Not found"}");
+            discrepancyInfo.AppendLine($"Label Cost: {Shipment.ShipmentCost:C}");
+            
+            LocalRate?.Log(discrepancyInfo);
+
+            return discrepancyInfo.ToString();
         }
 
         /// <summary>
@@ -63,10 +69,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         public string GetUserMessage()
         {
-            return
-                $"There was a discrepancy between the local rate ({LocalRate?.Amount.ToString("C") ?? "Not found"}) " +
-                $"and the API rate ({apiRate?.Amount.ToString("C") ?? "Not found"}) using {EnumHelper.GetDescription((UpsServiceType) Shipment.Ups.Service)} " +
-                $"for the shipment with shipment ID {Shipment.ShipmentID}.";
+            StringBuilder discrepancyInfo = new StringBuilder();
+            discrepancyInfo.AppendLine(
+                $"There was a discrepancy between the local rate ({LocalRate?.Amount.ToString("C") ?? "not found"}) " +
+                $"and the API rate ({apiRate?.Amount.ToString("C") ?? "not found"}) using {EnumHelper.GetDescription((UpsServiceType) Shipment.Ups.Service)}.");
+
+            LocalRate?.Log(discrepancyInfo);
+
+            return discrepancyInfo.ToString();
         }
     }
 }
