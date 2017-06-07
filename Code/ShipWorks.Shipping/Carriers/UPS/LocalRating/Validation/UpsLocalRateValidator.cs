@@ -111,7 +111,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
             bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(UpsShipmentEntity.Relations.UpsPackageEntityUsingShipmentID);
+            bucket.Relations.Add(UpsPackageEntity.Relations.UpsShipmentEntityUsingShipmentID);
             bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
+            bucket.PredicateExpression.AddWithAnd(UpsShipmentFields.PayorType != UpsPayorType.ThirdParty);
+            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsShipmentFields.Service, null, UpsLocalRateTable.SupportedServiceTypesForLocalRating));
+            bucket.PredicateExpression.AddWithAnd(UpsPackageFields.DryIceEnabled == false);
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
             
             ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
