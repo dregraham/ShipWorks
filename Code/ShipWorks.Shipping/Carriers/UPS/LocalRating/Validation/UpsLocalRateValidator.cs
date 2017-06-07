@@ -116,17 +116,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             
             ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
 
-            IEnumerable<ShipmentEntity> shipments;
             try
             {
-                 shipments = shippingManager.GetShipments(bucket, sortExpression, 10);
+                 return shippingManager.GetShipments(bucket, sortExpression, 10);
             }
             catch (ShippingException ex)
             {
                 throw new UpsLocalRatingException($"Failed to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
             }
-
-            return shipments;
         }
 
         /// <summary>
