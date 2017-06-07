@@ -253,6 +253,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
                     // save and refetch the account, but not all the rates.
                     adapter.SaveEntity(account, true, false);
+                    
+                    accountRepository.CheckForChangesNeeded();
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
