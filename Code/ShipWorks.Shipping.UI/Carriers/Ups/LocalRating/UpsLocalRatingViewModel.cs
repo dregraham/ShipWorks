@@ -41,8 +41,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             "Note: All previously uploaded rates will be overwritten with the new rates.";
 
         private readonly IUpsLocalRateTable rateTable;
-        private readonly Func<ISaveFileDialog> saveFileDialogFactory;
-        private readonly Func<IOpenFileDialog> openFileDialogFactory;
+        private readonly IFileDialogFactory fileDialogFactory;
         private readonly IMessageHelper messageHelper;
         private readonly IUpsLocalRateValidator rateValidator;
         private readonly ILog log;
@@ -64,15 +63,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
         public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, 
-            Func<ISaveFileDialog> saveFileDialogFactory, 
-            Func<IOpenFileDialog> openFileDialogFactory, 
+            IFileDialogFactory fileDialogFactory, 
             IMessageHelper messageHelper, 
             Func<Type, ILog> logFactory, 
             IUpsLocalRateValidator rateValidator)
         {
             this.rateTable = rateTable;
-            this.saveFileDialogFactory = saveFileDialogFactory;
-            this.openFileDialogFactory = openFileDialogFactory;
+            this.fileDialogFactory = fileDialogFactory;
             DownloadSampleRateFileCommand = new RelayCommand(DownloadSampleRateFile);
             DownloadSampleZoneFileCommand = new RelayCommand(DownloadSampleZoneFile);
             UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
@@ -254,7 +251,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <param name="defaultFileName">File name for the</param>
         private void DownloadFile(string resourceName, string defaultFileName)
         {
-            ISaveFileDialog fileDialog = saveFileDialogFactory();
+            ISaveFileDialog fileDialog = fileDialogFactory.CreateSaveFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
             fileDialog.DefaultFileName = defaultFileName;
@@ -312,7 +309,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             messageHelper.ShowWarning(WarningMessage);
 
-            IOpenFileDialog fileDialog = openFileDialogFactory();
+            IOpenFileDialog fileDialog = fileDialogFactory.CreateOpenFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
 
@@ -375,7 +372,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         protected async Task UploadZoneFile()
         {
-            IOpenFileDialog fileDialog = openFileDialogFactory();
+            IOpenFileDialog fileDialog = fileDialogFactory.CreateOpenFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
 

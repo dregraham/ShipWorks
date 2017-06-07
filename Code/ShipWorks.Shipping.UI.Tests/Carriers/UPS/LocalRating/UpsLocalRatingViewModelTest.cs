@@ -159,13 +159,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void DownloadFile_DisplaysError_WhenExceptionOccursSavingFile()
         {
-
-            var messageHelper = mock.Mock<IMessageHelper>();
-            var dialog = MockSaveDialog(DialogResult.OK);
-            var testObject = mock.Create<UpsLocalRatingViewModel>();
+            Mock<IMessageHelper> messageHelper = mock.Mock<IMessageHelper>();
+            Mock<ISaveFileDialog> dialog = mock.Mock<ISaveFileDialog>();
+            dialog.Setup(d => d.ShowDialog()).Returns(DialogResult.OK);
             dialog.Setup(d => d.CreateFileStream()).Throws(new ShipWorksSaveFileDialogException("Error", It.IsAny<Exception>()));
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
 
-            testObject.DownloadSampleRateFileCommand.Execute(null);
+            mock.Create<UpsLocalRatingViewModel>().DownloadSampleRateFileCommand.Execute(null);
 
             messageHelper.Verify(m => m.ShowError("Error"));
         }
@@ -173,13 +173,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         [Fact]
         public void DownloadFile_ResourceStreamNotAccessed_WhenFileDialogDoesNotReturnOK()
         {
-            var dialog = MockSaveDialog(DialogResult.Cancel);
-            var testObject = mock.Create<UpsLocalRatingViewModel>();
+            Mock<ISaveFileDialog> dialog = mock.Mock<ISaveFileDialog>();
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
 
-            testObject.DownloadSampleRateFileCommand.Execute(null);
+            mock.Create<UpsLocalRatingViewModel>().DownloadSampleRateFileCommand.Execute(null);
 
             dialog.Verify(d => d.CreateFileStream(), Times.Never);
-            dialog.Verify(d=>d.ShowFile(), Times.Never);
+            dialog.Verify(d => d.ShowFile(), Times.Never);
         }
 
         [Fact]
@@ -187,13 +187,14 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             using (var resultStream = new MemoryStream())
             {
-                var mockSaveDialog = MockSaveDialog(DialogResult.OK, resultStream);
+                Mock<ISaveFileDialog> dialog = mock.Mock<ISaveFileDialog>();
+                dialog.Setup(d => d.ShowDialog()).Returns(DialogResult.OK);
+                dialog.Setup(d => d.CreateFileStream()).Returns(resultStream);
+                mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
 
-                var testObject = mock.Create<UpsLocalRatingViewModel>();
+                mock.Create<UpsLocalRatingViewModel>().DownloadSampleRateFileCommand.Execute(null);
 
-                testObject.DownloadSampleRateFileCommand.Execute(null);
-
-                mockSaveDialog.Verify(d=>d.ShowFile(), Times.Once);
+                dialog.Verify(d => d.ShowFile(), Times.Once);
             }
         }
 
@@ -212,11 +213,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 // Setup the dialog so that it returns this mocked stream and execute the download command
                 using (var createFileStream = mockedStream.Object)
                 {
-                    MockSaveDialog(DialogResult.OK, createFileStream);
-
-                    var testObject = mock.Create<UpsLocalRatingViewModel>();
-
-                    testObject.DownloadSampleRateFileCommand.Execute(null);
+                    Mock<ISaveFileDialog> dialog = mock.Mock<ISaveFileDialog>();
+                    dialog.Setup(d => d.ShowDialog()).Returns(DialogResult.OK);
+                    dialog.Setup(d => d.CreateFileStream()).Returns(createFileStream);
+                    mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
+                    
+                    mock.Create<UpsLocalRatingViewModel>().DownloadSampleRateFileCommand.Execute(null);
                 }
 
                 // Convert the result stream to a string
@@ -228,7 +230,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleRatesFileResourceName))
                 {
                     sampleFileBytes = new byte[resourceStream.Length];
-                    resourceStream.Read(sampleFileBytes, 0, (int) resourceStream.Length);
+                    resourceStream.Read(sampleFileBytes, 0, (int)resourceStream.Length);
                 }
 
                 // Verify that the contents of the embedded resource is identical to the file we
@@ -252,11 +254,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 // Setup the dialog so that it returns this mocked stream and execute the download command
                 using (var createFileStream = mockedStream.Object)
                 {
-                    MockSaveDialog(DialogResult.OK, createFileStream);
+                    Mock<ISaveFileDialog> dialog = mock.Mock<ISaveFileDialog>();
+                    dialog.Setup(d => d.ShowDialog()).Returns(DialogResult.OK);
+                    dialog.Setup(d => d.CreateFileStream()).Returns(createFileStream);
+                    mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
 
-                    var testObject = mock.Create<UpsLocalRatingViewModel>();
-
-                    testObject.DownloadSampleZoneFileCommand.Execute(null);
+                    mock.Create<UpsLocalRatingViewModel>().DownloadSampleZoneFileCommand.Execute(null);
                 }
 
                 // Convert the result stream to a string
@@ -297,8 +300,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.CreateFileStream()).Returns(fileStream);
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f=> f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(), b=> { });
@@ -315,8 +317,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
@@ -338,8 +339,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
@@ -358,8 +358,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             };
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b=> { });
@@ -378,7 +377,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             };
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
             
@@ -398,8 +397,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(t => t.SaveRates(It.IsAny<UpsAccountEntity>()))
@@ -417,7 +415,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var log = mock.Mock<ILog>();
             var logFactory = mock.MockRepository.Create<Func<ILog>>();
@@ -440,8 +438,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(42), b => { });
@@ -457,8 +454,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(42), b => isBusyValues.Add(b));
@@ -477,7 +473,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
 
@@ -495,8 +491,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(t => t.SaveRates(It.IsAny<UpsAccountEntity>()))
@@ -518,8 +513,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.CreateFileStream()).Returns(fileStream);
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(), b => { });
@@ -536,8 +530,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(upsAccount, b => { });
@@ -572,8 +565,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity(42);
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
 
@@ -590,7 +582,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
 
@@ -611,7 +603,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
@@ -629,7 +621,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
@@ -647,8 +639,8 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
-            
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
+
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
@@ -664,7 +656,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
 
@@ -680,8 +672,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(t => t.SaveZones())
@@ -699,7 +690,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var log = mock.Mock<ILog>();
             var logFactory = mock.MockRepository.Create<Func<ILog>>();
@@ -722,8 +713,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(42), b => { });
@@ -739,8 +729,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
 
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
             testObject.Load(new UpsAccountEntity(42), b => isBusyValues.Add(b));
@@ -759,7 +748,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
             var openFileDialog = mock.CreateMock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            mock.MockFunc(openFileDialog);
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
 
@@ -777,8 +766,8 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            var openFileDialogFactory = mock.MockRepository.Create<Func<IOpenFileDialog>>();
-            openFileDialogFactory.Setup(f => f()).Returns(openFileDialog);
+            
+            mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()
                 .Setup(t => t.SaveZones())
@@ -789,17 +778,6 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             await testObject.CallUploadZoneFile();
 
             Assert.True(testObject.ErrorUploading);
-        }
-
-        private Mock<ISaveFileDialog> MockSaveDialog(DialogResult result, Stream stream = null)
-        {
-            var fileDialogMock = mock.MockRepository.Create<ISaveFileDialog>();
-            mock.MockFunc(fileDialogMock);
-
-            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
-            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
-            
-            return fileDialogMock;
         }
 
         public void Dispose()
