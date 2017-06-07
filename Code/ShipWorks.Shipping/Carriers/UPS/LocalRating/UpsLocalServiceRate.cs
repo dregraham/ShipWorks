@@ -14,8 +14,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsLocalServiceRate : UpsServiceRate, IUpsLocalServiceRate
     {
         private readonly List<KeyValuePair<string, decimal>> addedSurcharges = new List<KeyValuePair<string, decimal>>();
-        private readonly List<decimal> packageRates; 
-        private readonly List<string> packageBillableWeights;
+
+        
         private int packageCount;
 
         /// <summary>
@@ -26,10 +26,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         {
             Zone = zone;
 
-            packageRates = new List<decimal> {amount};
-            packageBillableWeights = new List<string> {billableWeight};
+            PackageRates = new List<decimal> {amount};
+            PackageBillableWeights = new List<string> {billableWeight};
             packageCount = 1;
         }
+
+        public List<string> PackageBillableWeights { get; }
+
+        public List<decimal> PackageRates { get; }
 
         /// <summary>
         /// Zone used to calculate this rate
@@ -39,11 +43,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Adds the package.
         /// </summary>
-        public void AddAmount(UpsLocalServiceRate rateToAdd)
+        public void AddAmount(IUpsLocalServiceRate rateToAdd)
         {
             Amount += rateToAdd.Amount;
-            packageRates.AddRange(rateToAdd.packageRates);
-            packageBillableWeights.AddRange(rateToAdd.packageBillableWeights);
+            PackageRates.AddRange(rateToAdd.PackageRates);
+            PackageBillableWeights.AddRange(rateToAdd.PackageBillableWeights);
             packageCount++;
         }
 
@@ -67,8 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             for (int pacakgeIndex = 0; pacakgeIndex < packageCount; pacakgeIndex++)
             {
                 logEntry.AppendLine($"\tPackage {pacakgeIndex + 1}:");
-                logEntry.AppendLine($"\t\tBillable Weight : {packageBillableWeights[pacakgeIndex]} Lbs");
-                logEntry.AppendLine($"\t\tService Rate : {packageRates[pacakgeIndex]:C}");
+                logEntry.AppendLine($"\t\tBillable Weight : {PackageBillableWeights[pacakgeIndex]} Lbs");
+                logEntry.AppendLine($"\t\tService Rate : {PackageRates[pacakgeIndex]:C}");
             }
             addedSurcharges.ForEach(s => logEntry.AppendLine($"\t{s.Key} : {s.Value:C}"));
             logEntry.AppendLine($"Total : {Amount:C}");

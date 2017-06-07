@@ -1243,6 +1243,7 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalServiceRate.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\IUpsLocalRatingDisabledFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.cs">
       <SubType>UserControl</SubType>
@@ -1252,6 +1253,11 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsBestRateRatingException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\FailedLocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\ILocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
@@ -1298,6 +1304,7 @@
     <Compile Include="Shipping\Services\ISingleScanOrderConfirmationService.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizard.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizardFactory.cs" />

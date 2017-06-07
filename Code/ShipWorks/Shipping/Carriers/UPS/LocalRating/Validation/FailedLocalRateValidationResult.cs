@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
@@ -15,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly IDialog upsLocalRateDiscrepancyDialog;
         private readonly IUpsLocalRateDiscrepancyViewModel discrepancyViewModel;
         private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103270-ups-local-rating");
-
+ 
         /// <summary>
         /// Constructor
         /// </summary>
@@ -58,6 +61,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             {
                 ShowMessage();
             }
+        }
+
+        /// <summary>
+        /// Create a dashboard message to show the failure
+        /// </summary>
+        public DashboardItem CreateDashboardMessage()
+        {
+            return new DashboardLocalMessageItem("FailedLocalRatingValidation", DashboardMessageImageType.Warning,
+                "UPS rates may have changed. Please review and update your local rates.", string.Empty,
+                new DashboardActionUrl("[link]View Details[/link]", helpArticleUrl));
         }
 
         /// <summary>

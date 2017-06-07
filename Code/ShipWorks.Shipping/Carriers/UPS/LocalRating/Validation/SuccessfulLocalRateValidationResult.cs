@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
@@ -19,6 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public void HandleValidationFailure(IProcessShipmentsWorkflowResult workflowResult)
         {
             // no-op
+        }
+
+        /// <summary>
+        /// No dashboard messages for success
+        /// </summary>
+        public DashboardItem CreateDashboardMessage()
+        {
+            return null;
         }
 
         /// <summary>
