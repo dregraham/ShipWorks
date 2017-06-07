@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Save_SetsAccountsUpsRateTableId()
+        public void SaveRateTable_SetsAccountsUpsRateTableId()
         {
             UpsRateTableEntity rateTable = new UpsRateTableEntity() { UpsRateTableID = 123 };
             UpsAccountEntity account = new UpsAccountEntity();
@@ -69,7 +69,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public void Save_SetsAccountsUpsRateTable()
+        public void SaveRateTable_DelegatesToAccountRepo()
+        {
+            UpsRateTableEntity rateTable = new UpsRateTableEntity() { UpsRateTableID = 123 };
+            UpsAccountEntity account = new UpsAccountEntity();
+
+            testObject.Save(rateTable, account);
+
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
+                .Verify(r=>r.Save(account));
+        }
+
+        [Fact]
+        public void SaveRateTable_SetsAccountsUpsRateTable()
         {
             UpsRateTableEntity rateTable = new UpsRateTableEntity() { UpsRateTableID = 123 };
             UpsAccountEntity account = new UpsAccountEntity();
@@ -166,13 +178,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
             IDictionary<UpsSurchargeType, double> result = testObject.GetSurcharges(123123);
             Assert.Empty(result);
         }
-        
-      
-
-       
-
-
-        
 
         public void Dispose()
         {

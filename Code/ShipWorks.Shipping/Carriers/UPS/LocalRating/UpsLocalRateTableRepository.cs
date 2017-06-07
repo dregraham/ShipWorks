@@ -251,10 +251,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                     // update account with new rate table
                     account.UpsRateTable = rateTable;
 
-                    // save and refetch the account, but not all the rates.
-                    adapter.SaveEntity(account, true, false);
-                    
-                    accountRepository.CheckForChangesNeeded();
+                    // This doesn't refetch all rates...
+                    accountRepository.Save(account);
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
