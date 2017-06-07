@@ -168,13 +168,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                         localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
                     UpsServiceRate apiRate = apiRateClient.GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
 
-                    // Do not validate if no local OR api rates were found for the shipment
-                    if (localRate?.Amount != apiRate?.Amount)
+                    if (HasRateDiscrepancy(localRate, apiRate))
                     {
                         rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, localRate, apiRate));
                     }
                 }
             }
+        }
+
+        private static bool HasRateDiscrepancy(UpsLocalServiceRate localRate, UpsServiceRate apiRate)
+        {
+            // Can only have discrepancy if there is both an apiRate and a localRate
+            if (localRate == null || apiRate == null)
+            {
+                return false;
+            }
+
+            return localRate.Amount != apiRate.Amount;
         }
 
         /// <summary>

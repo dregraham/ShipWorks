@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         private readonly Mock<ILocalRateValidationResultFactory> resultFactory;
         private readonly Mock<IIndex<UpsRatingMethod, IUpsRateClient>> rateClientFactory;
         private UpsLocalRateValidator testObject;
-        private UpsAccountEntity account;
+        private readonly UpsAccountEntity account;
 
         public UpsLocalRateValidatorTest()
         {
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_ReturnsDiscrepancy_WhenGetLocalRatesFails()
+        public void ValidateShipments_ReturnsDiscrepancy_WhenGetLocalRatesFails()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void Validate_DoesNotReturnDiscrepancy_WhenGetLocalRatesFails()
+        public void ValidateShipments_DoesNotReturnDiscrepancy_WhenGetLocalRatesFails()
         {
             var shipment = CreateShipment(42, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
@@ -285,7 +285,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         #region ValidateRecentShipments
 
         [Fact]
-        public void ValidateRecentShipments_ReturnsZeroDiscrepancies_WhenShipmentIsNotUps()
+        public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenShipmentIsNotUps()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -319,27 +319,34 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void ValidateRecentShipments_DoesNotCountDiscrepancy_WhenLocalRatingIsNotEnabledForAccount()
+        public void ValidateRecentShipments_ReturnsDiscrepancy_WhenLocalRatingIsNotEnabledForAccount()
         {
-            var shipment = CreateShipment();
+            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
             var shipments = new List<ShipmentEntity>
             {
                 shipment
             };
-            
+
+            var apiRates = new List<UpsServiceRate>
+            {
+                new UpsServiceRate(UpsServiceType.Ups2DayAir, 5, true, 1)
+            };
+
             SetupGetRecentShipments(shipments);
             SetupGetLocalRatesToSucceed();
+            SetupApiRateClient(apiRates);
             SetupLocalRatingEnabledForAccount(false, shipment.Ups.UpsAccountID);
+
             testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1)), Times.Once());
         }
 
         [Fact]
-        public void ValidateRecentShipments_ReturnsDiscrepancy_WhenNoLocalRateIsFoundForUpsService()
+        public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenNoLocalRateIsFoundForUpsService()
         {
             var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.WorldwideSaver);
 
@@ -363,7 +370,35 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+        }
+
+        [Fact]
+        public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenNoApiRateIsFoundForUpsService()
+        {
+            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+
+            var shipments = new List<ShipmentEntity>
+            {
+                shipment
+            };
+
+            var apiRates = new List<UpsServiceRate>
+            {
+                new UpsServiceRate(UpsServiceType.UpsGround, 1, true, 1),
+                new UpsServiceRate(UpsServiceType.UpsCaWorldWideExpress, 2, true, 1)
+            };
+
+            SetupGetRecentShipments(shipments);
+            SetupApiRateClient(apiRates);
+            SetupGetLocalRatesToSucceed();
+            SetupLocalRatingEnabledForAccount(true, shipment.Ups.UpsAccountID);
+
+            testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
+
+            testObject.ValidateRecentShipments(account);
+
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
         }
 
         [Fact]
@@ -484,7 +519,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         }
 
         [Fact]
-        public void ValidateRecentShipments_ReturnsZeroDiscrepancies_WhenAllLocalRatesMatchApiRates()
+        public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenAllLocalRatesMatchApiRates()
         {
             var shipments = new List<ShipmentEntity>
             {
@@ -517,7 +552,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         [Fact]
         public void ValidateRecentShipments_LogsDiscrepancies_WhenRatesDoNotMatch()
         {
-            var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
+            var shipment = CreateShipment(2, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
 
             var shipments = new List<ShipmentEntity>
             {
@@ -605,15 +640,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
         private void SetupGetRecentShipments(IEnumerable<ShipmentEntity> shipments)
         {
-            var sqlAdapter = mock.Mock<ISqlAdapter>();
-            sqlAdapter.Setup(a => a.FetchEntityCollection(It.IsAny<IEntityCollection2>(),
-                    It.IsAny<IRelationPredicateBucket>(), It.IsAny<int>(), It.IsAny<ISortExpression>()))
-                .Callback(
-                    (IEntityCollection2 c, IRelationPredicateBucket b, int i,
-                        ISortExpression s) => ((ShipmentCollection) c)
-                        .AddRange(shipments));
-
-            mock.Mock<ISqlAdapterFactory>().Setup(f => f.Create()).Returns(sqlAdapter.Object);
+            mock.Mock<IShippingManager>()
+                .Setup(m => m.GetShipments(It.IsAny<RelationPredicateBucket>(), It.IsAny<ISortExpression>(), It.IsAny<int>()))
+                .Returns(shipments);
         }
 
         private void SetupApiRateClient(List<UpsServiceRate> rates)
