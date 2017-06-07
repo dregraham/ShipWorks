@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
+﻿using System.Collections.Generic;
+using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
@@ -7,6 +8,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// </summary>
     public interface ILocalRateValidationResult
     {
+        /// <summary>
+        /// Rate discrepancies associated with this result
+        /// </summary>
+        IEnumerable<UpsLocalRateDiscrepancy> RateDiscrepancies { get; }
+
         /// <summary>
         /// Handles a validation failure.
         /// </summary>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.ComponentRegistration;
@@ -27,9 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Creates a ILocalRateValidationResult
         /// </summary>
-        public ILocalRateValidationResult Create(int totalShipmentsValidated, int shipmentsWithRateDiscrepancies, Action snooze)
+        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, int totalShipmentsValidated, Action snooze)
         {
-            if (shipmentsWithRateDiscrepancies == 0)
+            if (!rateDiscrepancies.Any())
             {
                 return new SuccessfulLocalRateValidationResult();
             }
@@ -38,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             discrepancyViewModel.Snooze = snooze;
             discrepancyViewModel.Close = upsLocalRateDiscrepancyDialog.Close;
 
-            return new FailedLocalRateValidationResult(totalShipmentsValidated, shipmentsWithRateDiscrepancies, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
+            return new FailedLocalRateValidationResult(rateDiscrepancies, totalShipmentsValidated, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
         }
     }
 }
