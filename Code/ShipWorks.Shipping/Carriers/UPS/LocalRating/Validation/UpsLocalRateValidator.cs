@@ -34,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly ILocalRateValidationResultFactory validationResultFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IShippingManager shippingManager;
         private DateTime wakeTime;
         private List<UpsLocalRateDiscrepancy> rateDiscrepancies;
 
@@ -47,7 +48,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             ILocalRateValidationResultFactory validationResultFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            ISqlAdapterFactory sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IShippingManager shippingManager)
         {
             localRateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
             apiRateClient = rateClientFactory[UpsRatingMethod.ApiOnly];
@@ -55,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             this.validationResultFactory = validationResultFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -117,18 +120,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <param name="account">The account.</param>
         private IEnumerable<ShipmentEntity> GetRecentShipments(UpsAccountEntity account)
         {
-            ShipmentCollection shipments = new ShipmentCollection();
+            ShipmentCollection shipmentCollection = new ShipmentCollection();
 
             RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
             bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
+            
             ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
 
             try
             {
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
-                    adapter.FetchEntityCollection(shipments, bucket, 10, sortExpression);
+                    adapter.FetchEntityCollection(shipmentCollection, bucket, 10, sortExpression);
                 }
             }
             catch (Exception ex) when (ex is ORMException || ex is SqlException)
@@ -136,7 +142,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                 throw new UpsLocalRatingException($"Error retrieving list of recent shipments to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
             }
 
-            return shipments.Items;
+            IList<ShipmentEntity> shipments = shipmentCollection.Items;
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                shippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            return shipments;
         }
 
         /// <summary>
