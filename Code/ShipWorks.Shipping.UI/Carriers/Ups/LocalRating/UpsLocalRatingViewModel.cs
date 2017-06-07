@@ -435,6 +435,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 if (validationResult.RateDiscrepancies.Any())
                 {
                     UploadMessage = validationResult.GetUserFriendlyMessage();
+                    ErrorUploading = true;
                     log.Error(validationResult.GetUserFriendlyMessage());
                     return false;
                 }
