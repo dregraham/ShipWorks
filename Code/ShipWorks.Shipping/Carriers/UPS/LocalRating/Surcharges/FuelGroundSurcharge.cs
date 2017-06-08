@@ -30,8 +30,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             {
                 decimal fuelSurchargeRate = (decimal) surcharges[UpsSurchargeType.FuelGround];
                 decimal fuelSurcharge = Math.Round(serviceRate.Amount * fuelSurchargeRate, 2, MidpointRounding.AwayFromZero);
+                decimal percentageToDisplay = Math.Round(100 * fuelSurchargeRate, 2, MidpointRounding.AwayFromZero);
 
-                serviceRate.AddAmount(fuelSurcharge, $"Ground Fuel Surcharge of {fuelSurchargeRate}");
+                serviceRate.AddAmount(fuelSurcharge, $"Ground Fuel Surcharge of {percentageToDisplay}%");
             }
         }
     }
