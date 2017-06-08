@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                 if (validationResult.RateDiscrepancies.Any())
                 {
                     UploadMessage =
-                        "Warning: ShipWorks has detected one or more discrepancies with your current Local Rate File compared to your previously shipped orders. Please review your Local Rate File.\n\n" +
+                        "Warning: ShipWorks found a discrepancy between your local rates and rates retrieved from UPS. ShipWorks uses recently shipped orders when doing this comparison.\n\n" +
                         validationResult.GetUserFriendlyMessage();
                     ErrorUploading = true;
                     log.Error(validationResult.GetUserFriendlyMessage());
