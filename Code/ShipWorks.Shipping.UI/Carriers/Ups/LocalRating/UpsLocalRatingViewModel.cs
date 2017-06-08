@@ -331,14 +331,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         }
 
                         rateTable.SaveRates(upsAccount);
-                    });
 
-                    if (ValidateRates())
-                    {
-                        UpdateMessages();
-                        UploadMessage = "Local rates have been uploaded successfully";
-                        log.Info("Successfully uploaded rate table");
-                    }
+                        if (ValidateRates())
+                        {
+                            UpdateMessages();
+                            UploadMessage = "Local rates have been uploaded successfully";
+                            log.Info("Successfully uploaded rate table");
+                        }
+                    });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -394,14 +394,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         }
 
                         rateTable.SaveZones();
-                    });
 
-                    if (ValidateRates())
-                    {
-                        UpdateMessages();
-                        UploadMessage = "Zones have been uploaded successfully";
-                        log.Info("Successfully uploaded zone file");
-                    }
+                        if (ValidateRates())
+                        {
+                            UpdateMessages();
+                            UploadMessage = "Zones have been uploaded successfully";
+                            log.Info("Successfully uploaded zone file");
+                        }
+                    });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -431,7 +431,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
 
                 if (validationResult.RateDiscrepancies.Any())
                 {
-                    UploadMessage = validationResult.GetUserFriendlyMessage();
+                    UploadMessage =
+                        "Warning: ShipWorks found a discrepancy between your local rates and rates retrieved from UPS. ShipWorks uses recently shipped orders when doing this comparison.\n\n" +
+                        validationResult.GetUserFriendlyMessage();
                     ErrorUploading = true;
                     log.Error(validationResult.GetUserFriendlyMessage());
                     return false;
