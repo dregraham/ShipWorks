@@ -12,6 +12,7 @@
     <Control.Resources>
         <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <ui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <ui:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -21,6 +22,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <WrapPanel Grid.Row="0">
             <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
@@ -98,5 +100,8 @@
                 </TextBox.Style>
             </TextBox>
         </ScrollViewer>
+        <TextBlock Grid.Row="6" TextAlignment="Right" Visibility="{Binding UploadMessageMoreInfoLink, Converter={StaticResource NullToVisibilityConverter}}" Margin="0 10 0 0">
+            <Hyperlink NavigateUri="{Binding UploadMessageMoreInfoLink}" ui:Link.OpenInBrowser="true">More Info</Hyperlink>
+        </TextBlock>
     </Grid>
 </UserControl>

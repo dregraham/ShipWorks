@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
@@ -55,6 +56,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private bool isUploading;
         private string zoneStatusMessage;
         private string spinnerText;
+        private Uri uploadMessageMoreInfoLink;
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
@@ -82,6 +84,16 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
+        /// <summary>
+        /// Command to supplement the upload message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri UploadMessageMoreInfoLink
+        {
+            get { return uploadMessageMoreInfoLink; }
+            set { handler.Set(nameof(UploadMessageMoreInfoLink), ref uploadMessageMoreInfoLink, value); }
+        }
+        
         /// <summary>
         /// Command to download the sample rate file
         /// </summary>
@@ -434,6 +446,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     UploadMessage =
                         "Warning: ShipWorks found a discrepancy between your local rates and rates retrieved from UPS. ShipWorks uses recently shipped orders when doing this comparison.\n\n" +
                         validationResult.GetUserFriendlyMessage();
+                    UploadMessageMoreInfoLink = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
                     ErrorUploading = true;
                     log.Error(validationResult.GetUserFriendlyMessage());
                     return false;
