@@ -513,9 +513,10 @@ namespace ShipWorks.ApplicationCore.Dashboard
                         }
                     });
                 }
+                validatingLocalRates = false;
             }
         }
-        
+
         /// <summary>
         /// Update the dashboard with license issues
         /// </summary>
