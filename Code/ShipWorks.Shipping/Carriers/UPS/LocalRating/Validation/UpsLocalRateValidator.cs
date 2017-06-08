@@ -131,7 +131,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
             bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(UpsShipmentEntity.Relations.UpsPackageEntityUsingShipmentID);
+            bucket.Relations.Add(UpsPackageEntity.Relations.UpsShipmentEntityUsingShipmentID);
             bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
+            bucket.PredicateExpression.AddWithAnd(UpsShipmentFields.PayorType != UpsPayorType.ThirdParty);
+            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsShipmentFields.Service, null, UpsLocalRateTable.SupportedServiceTypesForLocalRating));
+            bucket.PredicateExpression.AddWithAnd(UpsPackageFields.DryIceEnabled == false);
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
             
             ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
@@ -188,13 +193,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                         localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
                     UpsServiceRate apiRate = apiRateClient.GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
 
-                    // Do not validate if no local OR api rates were found for the shipment
-                    if (localRate?.Amount != apiRate?.Amount)
+                    if (HasRateDiscrepancy(localRate, apiRate))
                     {
                         rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, localRate, apiRate));
                     }
                 }
             }
+        }
+
+        private static bool HasRateDiscrepancy(UpsLocalServiceRate localRate, UpsServiceRate apiRate)
+        {
+            // Can only have discrepancy if there is both an apiRate and a localRate
+            if (localRate == null || apiRate == null)
+            {
+                return false;
+            }
+
+            return localRate.Amount != apiRate.Amount;
         }
 
         /// <summary>
