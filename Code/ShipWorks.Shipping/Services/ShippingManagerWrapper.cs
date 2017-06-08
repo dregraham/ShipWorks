@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Services
                 EnsureShipmentLoaded(shipment);
             }
 
-            log.Debug($"{shipments.Count} shipments found matching criteria.");
+            log.Info($"{shipments.Count} shipments found matching criteria.");
 
             return shipments;
         }
