@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly int totalShipmentsValidated;
         private readonly IDialog upsLocalRateDiscrepancyDialog;
         private readonly IUpsLocalRateDiscrepancyViewModel discrepancyViewModel;
-        private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103270-ups-local-rating");
+        private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
 
         /// <summary>
         /// Constructor
