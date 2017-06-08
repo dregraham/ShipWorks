@@ -28,8 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     [NamedComponent(nameof(UpsLocalRateValidator), typeof(IUpsLocalRateValidator), SingleInstance = true)]
     public class UpsLocalRateValidator : IUpsLocalRateValidator
     {
-        private readonly IUpsRateClient localRateClient;
-        private readonly IUpsRateClient apiRateClient;
+        private readonly IIndex<UpsRatingMethod, IUpsRateClient> rateClientFactory;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -49,8 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             IShippingManager shippingManager)
         {
-            localRateClient = rateClientFactory[UpsRatingMethod.LocalOnly];
-            apiRateClient = rateClientFactory[UpsRatingMethod.ApiOnly];
+            this.rateClientFactory = rateClientFactory;
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
@@ -138,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             if (RequiresValidation(shipment, true))
             {
-                GenericResult<List<UpsServiceRate>> rateResult = localRateClient.GetRates(shipment);
+                GenericResult<List<UpsServiceRate>> rateResult = rateClientFactory[UpsRatingMethod.LocalOnly].GetRates(shipment);
 
                 if (rateResult.Success)
                 {
@@ -163,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             if (RequiresValidation(shipment, false))
             {
-                GenericResult<List<UpsServiceRate>> localRateResult = localRateClient.GetRates(shipment);
+                GenericResult<List<UpsServiceRate>> localRateResult = rateClientFactory[UpsRatingMethod.LocalOnly].GetRates(shipment);
 
                 if (localRateResult.Success)
                 {
@@ -171,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
                     UpsLocalServiceRate localRate =
                         localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
-                    UpsServiceRate apiRate = apiRateClient.GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
+                    UpsServiceRate apiRate = rateClientFactory[UpsRatingMethod.ApiOnly].GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
 
                     if (HasRateDiscrepancy(localRate, apiRate))
                     {
