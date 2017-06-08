@@ -379,7 +379,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLinkLearnEnableRemoteConnections(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/EnableRemoteConnections.html", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000059021-enabling-remote-connections?", this);
         }
 
         #endregion
@@ -1437,7 +1437,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLinkSqlTroubleshooting(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.shipworks.com/shipworks/help/DatabaseTroubleshooting.html", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000096365-troubleshooting-database-and-sql-issues-with-shipworks", this);
         }
 
         #endregion

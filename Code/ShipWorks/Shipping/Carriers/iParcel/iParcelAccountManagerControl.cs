@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -39,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             foreach (IParcelAccountEntity account in iParcelAccountManager.Accounts)
             {
-                GridRow row = new GridRow(new[] { account.Description } );
+                GridRow row = new GridRow(new[] { account.Description });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
@@ -72,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 add.Hide();
 
                 // Adjust the location of the remove button based on the visiblity of the add button and
-                // make sure it's on top of the add button. 
+                // make sure it's on top of the add button.
                 delete.Top = add.Top;
                 delete.BringToFront();
             }
@@ -98,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             try
             {
-                IParcelAccountEntity account = (IParcelAccountEntity)sandGrid.SelectedElements[0].Tag;
+                IParcelAccountEntity account = (IParcelAccountEntity) sandGrid.SelectedElements[0].Tag;
                 initialAccountID = account.IParcelAccountID;
 
                 using (iParcelAccountEditorDlg dlg = new iParcelAccountEditorDlg(account))
@@ -128,8 +132,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            using (var dlg = new iParcelSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                IShipmentTypeSetupWizard dlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
+                    .Create(ShipmentTypeCode.iParcel, OpenedFromSource.Manager);
+
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadAccounts();
@@ -143,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private void OnDelete(object sender, EventArgs e)
         {
             GridRow gridRow = (GridRow) sandGrid.SelectedElements[0];
-            IParcelAccountEntity account = (IParcelAccountEntity)gridRow.Tag;
+            IParcelAccountEntity account = (IParcelAccountEntity) gridRow.Tag;
 
             // By default we are just asking if they want to delete
             string question = string.Format("Remove account '{0}' from ShipWorks?", account.Username);

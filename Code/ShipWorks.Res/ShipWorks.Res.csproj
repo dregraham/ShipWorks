@@ -410,6 +410,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.10.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -551,6 +552,7 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\settings.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

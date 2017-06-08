@@ -85,6 +85,7 @@
   </Properties>
   <TypeShortcuts>
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
   <SavedSearchQueries />
@@ -2279,11 +2280,16 @@
       </EntityDefinition>
       <EntityDefinition Name="ShopSiteStore" ObjectID="4f59f22b-c423-4c55-bf43-d05e4f0d54d3" InheritanceType="2">
         <Fields>
-          <Field Name="CgiUrl" Type="string" MaxLength="350" FieldIndex="2" />
+          <Field Name="ApiUrl" Type="string" MaxLength="350" FieldIndex="2" />
           <Field Name="DownloadPageSize" Type="int" FieldIndex="4" />
+          <Field Name="Identifier" Type="string" MaxLength="350" FieldIndex="9" />
+          <Field Name="OauthAuthorizationCode" Type="string" MaxLength="100" FieldIndex="10" />
+          <Field Name="OauthClientID" Type="string" MaxLength="100" FieldIndex="7" />
+          <Field Name="OauthSecretKey" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="Password" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="RequestTimeout" Type="int" FieldIndex="5" />
           <Field Name="RequireSSL" Type="bool" FieldIndex="3" />
+          <Field Name="ShopSiteAuthentication" Type="ShopSiteAuthenticationType" FieldIndex="6" />
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3609,7 +3615,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-05-12T20:58:01.8151555Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7095,10 +7101,15 @@
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="Username" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="Password" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="CgiUrl" Ordinal="4" DbType="12" Length="350" />
+                    <Field Name="ApiUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="RequireSSL" Ordinal="5" DbType="2" />
                     <Field Name="DownloadPageSize" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="RequestTimeout" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="ShopSiteAuthentication" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="OauthClientID" Ordinal="9" DbType="12" Length="100" />
+                    <Field Name="OauthSecretKey" Ordinal="10" DbType="12" Length="100" />
+                    <Field Name="OauthAuthorizationCode" Ordinal="11" DbType="12" Length="100" />
+                    <Field Name="Identifier" Ordinal="12" DbType="12" Length="350" />
                   </Fields>
                 </Table>
                 <Table Name="SparkPayStore">
@@ -11047,11 +11058,16 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShopSiteStore" TargetName="ShipWorksLocal:dbo:ShopSiteStore">
           <FieldMappings>
-            <FieldMapping FieldName="CgiUrl" TargetFieldName="CgiUrl" />
+            <FieldMapping FieldName="ApiUrl" TargetFieldName="ApiUrl" />
             <FieldMapping FieldName="DownloadPageSize" TargetFieldName="DownloadPageSize" />
+            <FieldMapping FieldName="Identifier" TargetFieldName="Identifier" />
+            <FieldMapping FieldName="OauthAuthorizationCode" TargetFieldName="OauthAuthorizationCode" />
+            <FieldMapping FieldName="OauthClientID" TargetFieldName="OauthClientID" />
+            <FieldMapping FieldName="OauthSecretKey" TargetFieldName="OauthSecretKey" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="RequestTimeout" TargetFieldName="RequestTimeout" />
             <FieldMapping FieldName="RequireSSL" TargetFieldName="RequireSSL" />
+            <FieldMapping FieldName="ShopSiteAuthentication" TargetFieldName="ShopSiteAuthentication" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
           </FieldMappings>

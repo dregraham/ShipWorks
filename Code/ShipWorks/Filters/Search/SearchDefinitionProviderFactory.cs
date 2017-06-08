@@ -1,5 +1,5 @@
 ﻿using System;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Filters.Content;
 using ShipWorks.Stores;

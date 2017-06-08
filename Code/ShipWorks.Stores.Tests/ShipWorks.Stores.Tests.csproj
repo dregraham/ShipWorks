@@ -244,6 +244,15 @@
     <Compile Include="Platforms\Paypal\XmlDeserializeTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
+    <Compile Include="Platforms\ShopSite\Responses\ShopSiteResponseHelper.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteOauthAccessTokenWebClientTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteOauthWebClientTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteWebClientTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteStoreTypeTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteIdentifierTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteOauthAuthenticationPersistenceStrategyTest.cs" />
+    <Compile Include="Platforms\ShopSite\ShopSiteAccountSettingsViewModelTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
@@ -335,6 +344,8 @@
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoParentItem.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithConfigurableProduct.json" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Platforms\ShopSite\Responses\FetchAccessToken.json" />
+    <EmbeddedResource Include="Platforms\ShopSite\Responses\FetchEmptyAccessToken.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Platforms\LemonStand\Artifacts\CustomerMissingBillingAddress.js" />
@@ -366,6 +377,12 @@
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\ShopSite\Responses\GetOrders.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\ShopSite\Responses\TestConnection.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

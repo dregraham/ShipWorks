@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 
@@ -28,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     IShipmentTypeSetupWizardFactory wizardFactory = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>();
-                    IShipmentTypeSetupWizard wizard = wizardFactory.Create(ShipmentTypeCode.Usps);
+                    IShipmentTypeSetupWizard wizard = wizardFactory.Create(ShipmentTypeCode.Usps, OpenedFromSource.Nudge);
 
                     DialogResult result = wizard.ShowDialog(HostForm);
                     HostForm.DialogResult = result;

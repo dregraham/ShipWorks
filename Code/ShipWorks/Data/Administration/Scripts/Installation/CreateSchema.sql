@@ -3584,10 +3584,15 @@ CREATE TABLE [dbo].[ShopSiteStore]
 [StoreID] [bigint] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CgiUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ApiUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RequireSSL] [bit] NOT NULL,
 [DownloadPageSize] [int] NOT NULL,
-[RequestTimeout] [int] NOT NULL
+[RequestTimeout] [int] NOT NULL,
+[ShopSiteAuthentication] [int] NOT NULL,
+[OauthClientID] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OauthSecretKey] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OauthAuthorizationCode] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Identifier] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_StoreShopSite] on [dbo].[ShopSiteStore]'

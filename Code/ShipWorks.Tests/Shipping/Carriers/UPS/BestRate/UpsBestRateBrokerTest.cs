@@ -162,43 +162,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             }
         }
 
-        //[Fact]
-        //public void GetBestRates_ReturnsAllRatesOrdered_WithCheapestFirst()
-        //{
-        //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-        //    Assert.Equal(5, rates.Count);
-        //    Assert.Equal(account1Rate1, OriginalRates(rates).ElementAt(3));
-        //    Assert.Equal(account1Rate2, OriginalRates(rates).ElementAt(1));
-        //    Assert.Equal(account1Rate3, OriginalRates(rates).ElementAt(4));
-        //    Assert.Equal(account3Rate1, OriginalRates(rates).ElementAt(0));
-        //    Assert.Equal(account3Rate2, OriginalRates(rates).ElementAt(2));
-        //}
-
-        //[Fact]
-        //public void GetBestRates_ReturnsBestRateForEachAccount_WhenServiceTypeIsFiltered()
-        //{
-        //    testShipment.BestRate.ServiceLevel = (int) ServiceLevelType.ThreeDays;
-
-        //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-        //    Assert.True(OriginalRates(rates).Contains(account1Rate1));
-        //    Assert.True(OriginalRates(rates).Contains(account1Rate3));
-        //    Assert.True(OriginalRates(rates).Contains(account3Rate2));
-        //    Assert.Equal(3, rates.Count);
-        //}
-
-        //[Fact]
-        //public void GetBestRates_ReturnsBestRateForSingleAccount_WhenServiceTypeFilterExcludesAllRatesInSecondAccount()
-        //{
-        //    testShipment.BestRate.ServiceLevel = (int)ServiceLevelType.OneDay;
-
-        //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-        //    Assert.True(OriginalRates(rates).Contains(account1Rate3));
-        //    Assert.Equal(1, rates.Count);
-        //}
-
         [Fact]
         public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
@@ -417,43 +380,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.True(resultKeys.Contains("UPSUpsNextDayAir"));
         }
 
-        //[Fact]
-        //public void GetBestRates_ConvertsShipmentToUps_WhenRateIsSelected()
-        //{
-        //    rateGroup1.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup1.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>) rates[0].Tag)(testShipment);
-
-        //    Assert.Equal((int)ShipmentTypeCode.UpsOnLineTools, testShipment.ShipmentType);
-        //    Assert.Equal((int)UpsServiceType.UpsExpressEarlyAm, testShipment.Ups.Service);
-        //    Assert.Equal(account1.UpsAccountID, testShipment.Ups.UpsAccountID);
-        //}
-
-        //[Fact]
-        //public void GetBestRates_DoesNotAlterOtherShipmentTypeData_WhenRateIsSelected()
-        //{
-        //    rateGroup1.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    FedExShipmentEntity fedExEntity = new FedExShipmentEntity();
-        //    testShipment.FedEx = fedExEntity;
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, UpsServiceType.UpsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup1.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
-
-        //    Assert.Equal(fedExEntity, testShipment.FedEx);
-        //}
-
         [Fact]
         public void GetBestRates_AddsUPSToDescription_WhenItDoesNotAlreadyExist()
         {
@@ -470,6 +396,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Ground"));
             Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
             Assert.Equal(2, rates.Rates.Count);
+        }
+
+        [Fact]
+        public void GetBestRates_AddsBrokerException_WhenExceptionsRateFootnoteFactoryIsReturnedFromBase()
+        {
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+
+            RateGroup rateGroup = new RateGroup(new List<RateResult>());
+            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeCode.UpsOnLineTools, new Exception("blah")));
+
+            testObject.GetRatesAction = (shipment, type) => rateGroup;
+
+            testObject.GetBestRates(testShipment, brokerExceptions);
+
+            Assert.Equal(1, brokerExceptions.Count);
+            Assert.Equal("blah", brokerExceptions.Single().Message);
         }
 
         [Fact]

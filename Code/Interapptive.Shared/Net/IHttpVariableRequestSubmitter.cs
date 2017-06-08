@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Interapptive.Shared.Net
 {
     /// <summary>
@@ -16,6 +15,6 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// The variables to be posted
         /// </summary>
-        HttpVariableCollection Variables { get; }
+        IHttpVariableCollection Variables { get; }
     }
 }

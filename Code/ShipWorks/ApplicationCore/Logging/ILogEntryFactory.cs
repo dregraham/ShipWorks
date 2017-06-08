@@ -2,6 +2,9 @@
 
 namespace ShipWorks.ApplicationCore.Logging
 {
+    /// <summary>
+    /// Factory for creating an ApiLogEntry
+    /// </summary>
     public interface ILogEntryFactory
     {
         /// <summary>

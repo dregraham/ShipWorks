@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {

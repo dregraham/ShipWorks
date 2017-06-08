@@ -7,7 +7,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Wizard for registering to use FedEx
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.FedEx)]
-    public partial class FedExSetupWizard : ShipmentTypeSetupWizardForm
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.FedEx)]
+    public partial class FedExSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         FedExAccountEntity account;
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             accountNumber.Text = account.AccountNumber;
 
-            // If its not already setup or configured, load all the the settings\configuration pages
+            // If its not already setup or configured, load all the settings\configuration pages
             if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.FedEx))
             {
                 Pages.Add(new ShippingWizardPageOrigin(shipmentType));
@@ -272,5 +272,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             PrintUtility.PrintText(this, "ShipWorks - FedEx License Agreement", licenseAgreement.Text, true);
         }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
     }
 }
