@@ -70,8 +70,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
         static Guid tangoMessageWorkID;
 
         // keep track of any local rating issues
-        private static DashboardItem validationResult;
-        private static object validationLock = new object();
+        private static ILocalRateValidationResult validationResult;
+        private static bool validatingLocalRates;
 
         /// <summary>
         /// Initialize once per application run
@@ -491,26 +491,27 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         private static void ValidateLocalRates()
         {
-            lock (validationLock)
+            if (validationResult == null && !validatingLocalRates)
             {
-                if (validationResult == null)
+                validatingLocalRates = true;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        IUpsLocalRateValidator rateValidator = lifetimeScope.Resolve<IUpsLocalRateValidator>();
+                    IUpsLocalRateValidator rateValidator = lifetimeScope.Resolve<IUpsLocalRateValidator>();
 
-                        Task.Run(() =>
+                    Task.Run(() =>
+                    {
+                        validationResult = rateValidator.ValidateRecentShipments();
+                        DashboardLocalMessageItem localRateDashboardMessage = validationResult.CreateDashboardMessage() as DashboardLocalMessageItem;
+
+                        if (localRateDashboardMessage != null)
                         {
-                            validationResult = rateValidator.ValidateRecentShipments().CreateDashboardMessage();
                             panel.BeginInvoke(new MethodInvoker(() =>
                             {
-                                if (validationResult != null)
-                                {
-                                    AddDashboardItem(validationResult);
-                                }
+                                DismissLocalMessage(localRateDashboardMessage.Identifier);
+                                AddDashboardItem(localRateDashboardMessage);
                             }));
-                        });
-                    }
+                        }
+                    });
                 }
             }
         }
