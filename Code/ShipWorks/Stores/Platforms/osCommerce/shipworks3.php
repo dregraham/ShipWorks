@@ -190,51 +190,44 @@
 	// has access.
 	function checkAdminLogin()
 	{		
-	    if (function_exists("tep_admin_check_login"))
-	    {	        
-	        // If the admin_check function exists, the password_funcs should be available
-	        // in the admin area.
-	        require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
+	    // If the admin_check function exists, the password_funcs should be available
+	    // in the admin area.
+	    require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
 	    
-	        $loginOK = false;
+	    $loginOK = false;
 	        
-	        if (isset($_REQUEST['username']) && isset($_REQUEST['password']))
-	        {
-                $email_address = tep_db_prepare_input($_REQUEST['username']);
-                $password = tep_db_prepare_input($_REQUEST['password']);
-    	            	        
-                $check_admin_query = tep_db_query(
-                    "select admin_id as login_id, admin_password as login_password " . 
-                    " from " . TABLE_ADMIN . 
-                    " where admin_email_address = '" . tep_db_input($email_address) . "'");
-                                    
-                if (tep_db_num_rows($check_admin_query)) 
-                {
-                    $check_admin = tep_db_fetch_array($check_admin_query);
-                                        
-                    // Check that password is good
-                    if (tep_validate_password($password, $check_admin['login_password'])) 
-                    {
-                        $loginOK = true;
-                    }
-                }
-                
-                if (!$loginOK)
-                {
-                    outputError(50, "Username or password is incorrect");
-                }
-            }
-            else
-            {
-                outputError(30, "Username or password was not supplied");
-            }
-
-	        return $loginOK;
-	    }
-	    else
+	    if (isset($_REQUEST['username']) && isset($_REQUEST['password']))
 	    {
-	        return true;
-	    }
+            $email_address = tep_db_prepare_input($_REQUEST['username']);
+            $password = tep_db_prepare_input($_REQUEST['password']);
+    	            	        
+            $check_admin_query = tep_db_query(
+                "select id as login_id, user_password as login_password " . 
+                " from " . TABLE_ADMINISTRATORS . 
+                " where user_name = '" . tep_db_input($email_address) . "'");
+                                    
+            if (tep_db_num_rows($check_admin_query)) 
+            {
+                $check_admin = tep_db_fetch_array($check_admin_query);
+                                        
+                // Check that password is good
+                if (tep_validate_password($password, $check_admin['login_password'])) 
+                {
+                    $loginOK = true;
+                }
+            }
+                
+            if (!$loginOK)
+            {
+                outputError(50, "Username or password is incorrect.");
+            }
+        }
+        else
+        {
+            outputError(30, "Username or password was not supplied");
+        }
+
+	    return $loginOK;
 	}
 	
 	// Get module data
