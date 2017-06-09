@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Net;
@@ -24,6 +25,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Email;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Dashboard
@@ -66,6 +68,10 @@ namespace ShipWorks.ApplicationCore.Dashboard
         // Work ID for checking tango messages and checking the sw version
         static Guid checkVersionWorkID;
         static Guid tangoMessageWorkID;
+
+        // keep track of any local rating issues
+        private static ILocalRateValidationResult validationResult;
+        private static bool validatingLocalRates;
 
         /// <summary>
         /// Initialize once per application run
@@ -477,6 +483,38 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForActionChanges();
             CheckForSchedulerServiceStoppedChanges();
             CheckForLicenseDependentChanges();
+            ValidateLocalRates();
+        }
+
+        /// <summary>
+        /// Validate local rates
+        /// </summary>
+        private static void ValidateLocalRates()
+        {
+            if (validationResult == null && !validatingLocalRates)
+            {
+                validatingLocalRates = true;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IUpsLocalRateValidator rateValidator = lifetimeScope.Resolve<IUpsLocalRateValidator>();
+
+                    Task.Run(() =>
+                    {
+                        validationResult = rateValidator.ValidateRecentShipments();
+                        DashboardLocalMessageItem localRateDashboardMessage = validationResult.CreateDashboardMessage() as DashboardLocalMessageItem;
+
+                        if (localRateDashboardMessage != null)
+                        {
+                            panel.BeginInvoke(new MethodInvoker(() =>
+                            {
+                                DismissLocalMessage(localRateDashboardMessage.Identifier);
+                                AddDashboardItem(localRateDashboardMessage);
+                            }));
+                        }
+                    });
+                }
+                validatingLocalRates = false;
+            }
         }
 
         /// <summary>

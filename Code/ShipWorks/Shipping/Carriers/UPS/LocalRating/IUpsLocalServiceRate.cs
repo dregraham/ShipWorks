@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
@@ -12,11 +13,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Adds the amount.
         /// </summary>
         void AddAmount(decimal amount, string surchargeName);
-
+        
         /// <summary>
         /// Merges the specified package rate.
         /// </summary>
-        void AddAmount(UpsLocalServiceRate packageRate);
+        void AddAmount(IUpsLocalServiceRate packageRate);
 
         /// <summary>
         /// Logs the specified log.
@@ -42,6 +43,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Indicates if the rate is a negotiated "Account Based Rate" (ABR)
         /// </summary>
         bool Negotiated { get; }
+
+        List<string> PackageBillableWeights { get; }
+
+        List<decimal> PackageRates { get; }
 
         /// <summary>
         /// Zone used to calculate this rate

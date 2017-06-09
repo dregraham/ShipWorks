@@ -285,6 +285,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         #region ValidateRecentShipments
 
         [Fact]
+        public void ValidateRecentShipments_ValidatesRecentShipmentsForAccountsWhereLocalRatingIsEnabled()
+        {
+            testObject = mock.Create<UpsLocalRateValidator>(
+                new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
+
+            UpsAccountEntity localratingAccount = new UpsAccountEntity() {LocalRatingEnabled = true};
+            UpsAccountEntity localratingDisabledAccount = new UpsAccountEntity() {LocalRatingEnabled = false};
+
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
+                .SetupGet(r => r.AccountsReadOnly)
+                .Returns(new[] {localratingAccount, localratingDisabledAccount});
+
+            testObject.ValidateRecentShipments();
+
+            mock.Mock<IShippingManager>()
+                .Verify(
+                    m => m.GetShipments(It.IsAny<RelationPredicateBucket>(), It.IsAny<ISortExpression>(),
+                        It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
         public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenShipmentIsNotUps()
         {
             var shipments = new List<ShipmentEntity>

@@ -233,7 +233,6 @@
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsLocalRateExcelReaderFactory.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\IUpsLocalServiceRate.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\ShipDayServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\ServiceFilters\AddressServiceFilter.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Surcharges\DeclaredValueSurcharge.cs" />
@@ -281,14 +280,9 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\SuccessfulLocalRateValidationResult.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateValidator.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\FailedLocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\LocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\TelemetricUpsLocalRateValidator.cs" />
-    <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
@@ -329,7 +323,6 @@
     <Compile Include="Services\ProcessShipmentsWorkflow\DataFlow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Services\LabelPrintingService.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ParallelProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflowFactory.cs" />

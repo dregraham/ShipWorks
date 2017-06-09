@@ -5,6 +5,7 @@ using System.Linq;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
@@ -45,9 +46,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Validates the local rate against the shipment cost for the most recent shipments for the given account
         /// </summary>
-        public ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account)
+        public ILocalRateValidationResult ValidateRecentShipments(IUpsAccountEntity account)
         {
             return rateValidator.ValidateRecentShipments(account);
+        }
+
+        /// <summary>
+        /// Validates the local rate against the shipment cost for the most recent shipments for all accounts
+        /// </summary>
+        public ILocalRateValidationResult ValidateRecentShipments()
+        {
+            return rateValidator.ValidateRecentShipments();
         }
 
         /// <summary>

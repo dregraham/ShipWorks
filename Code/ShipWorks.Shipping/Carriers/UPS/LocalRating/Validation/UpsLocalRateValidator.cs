@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Validates the local rate against the api rate for the most recent shipments for the given account
         /// </summary>
-        public ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account)
+        public ILocalRateValidationResult ValidateRecentShipments(IUpsAccountEntity account)
         {
             // Reset discrepancy list every validation run
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
@@ -101,10 +101,30 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         }
 
         /// <summary>
+        /// Validates the local rate against the api rate for the most recent shipments for all accounts, return the first failure
+        /// </summary>
+        public ILocalRateValidationResult ValidateRecentShipments()
+        {
+            IEnumerable<IUpsAccountEntity> accounts = upsAccountRepository.AccountsReadOnly.Where(a => a.LocalRatingEnabled);
+
+            foreach (IUpsAccountEntity account in accounts)
+            {
+                ILocalRateValidationResult result = ValidateRecentShipments(account);
+
+                if (result is FailedLocalRateValidationResult)
+                {
+                    return result;
+                }
+            }
+
+            return new SuccessfulLocalRateValidationResult();
+        }
+
+        /// <summary>
         /// Gets the 10 most recent shipments that were processed using the given UPS account
         /// </summary>
         /// <param name="account">The account.</param>
-        private IEnumerable<ShipmentEntity> GetRecentShipments(UpsAccountEntity account)
+        private IEnumerable<ShipmentEntity> GetRecentShipments(IUpsAccountEntity account)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
