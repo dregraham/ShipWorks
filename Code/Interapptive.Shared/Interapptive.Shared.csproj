@@ -272,6 +272,8 @@
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="UI\FileDialogFactory.cs" />
+    <Compile Include="UI\IFileDialogFactory.cs" />
     <Compile Include="UI\IForm.cs" />
     <Compile Include="UI\InteropWindow.cs" />
     <Compile Include="UI\ISaveFileDialog.cs" />

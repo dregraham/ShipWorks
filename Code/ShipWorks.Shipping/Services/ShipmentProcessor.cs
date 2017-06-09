@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Services
                 }
             }
 
-            result.LocalRateValidationResult = upsLocalRateValidator.Validate(clonedShipments);
+            result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
 
             HandleProcessingException(result);
 

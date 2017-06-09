@@ -42,5 +42,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// Indicates if the rate is a negotiated "Account Based Rate" (ABR)
         /// </summary>
         bool Negotiated { get; }
+
+        /// <summary>
+        /// Zone used to calculate this rate
+        /// </summary>
+        string Zone { get; }
     }
 }

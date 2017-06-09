@@ -9,5 +9,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Creates a LocalRateValidationResult
         /// </summary>
         ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, int totalShipmentValidated, Action snooze);
+
+        /// <summary>
+        /// Creates a LocalRateValidationResult with the specified rate discrepancies.
+        /// </summary>
+        /// <param name="rateDiscrepancies">The rate discrepancies.</param>
+        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies);
     }
 }

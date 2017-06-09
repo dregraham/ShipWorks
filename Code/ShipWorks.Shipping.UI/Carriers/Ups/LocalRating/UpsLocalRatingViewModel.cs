@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,9 +10,11 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
@@ -39,9 +42,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
             "Note: All previously uploaded rates will be overwritten with the new rates.";
 
         private readonly IUpsLocalRateTable rateTable;
-        private readonly Func<ISaveFileDialog> saveFileDialogFactory;
-        private readonly Func<IOpenFileDialog> openFileDialogFactory;
+        private readonly IFileDialogFactory fileDialogFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IUpsLocalRateValidator rateValidator;
         private readonly ILog log;
         protected readonly PropertyChangedHandler handler;
 
@@ -53,6 +56,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         private bool isUploading;
         private string zoneStatusMessage;
         private string spinnerText;
+        private Uri uploadMessageMoreInfoLink;
 
         // Action to call when busy uploading a file
         private Action<bool> isBusy;
@@ -60,22 +64,36 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsLocalRatingViewModel"/> class.
         /// </summary>
-        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, Func<ISaveFileDialog> saveFileDialogFactory, Func<IOpenFileDialog> openFileDialogFactory, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
+        public UpsLocalRatingViewModel(IUpsLocalRateTable rateTable, 
+            IFileDialogFactory fileDialogFactory, 
+            IMessageHelper messageHelper, 
+            Func<Type, ILog> logFactory, 
+            IUpsLocalRateValidator rateValidator)
         {
             this.rateTable = rateTable;
-            this.saveFileDialogFactory = saveFileDialogFactory;
-            this.openFileDialogFactory = openFileDialogFactory;
+            this.fileDialogFactory = fileDialogFactory;
             DownloadSampleRateFileCommand = new RelayCommand(DownloadSampleRateFile);
             DownloadSampleZoneFileCommand = new RelayCommand(DownloadSampleZoneFile);
             UploadRatingFileCommand = new RelayCommand(CallUploadRatingFile);
             UploadZoneFileCommand = new RelayCommand(CallUploadZoneFile);
 
             this.messageHelper = messageHelper;
+            this.rateValidator = rateValidator;
             log = logFactory(GetType());
             
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
+        /// <summary>
+        /// Command to supplement the upload message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri UploadMessageMoreInfoLink
+        {
+            get { return uploadMessageMoreInfoLink; }
+            set { handler.Set(nameof(UploadMessageMoreInfoLink), ref uploadMessageMoreInfoLink, value); }
+        }
+        
         /// <summary>
         /// Command to download the sample rate file
         /// </summary>
@@ -245,7 +263,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// <param name="defaultFileName">File name for the</param>
         private void DownloadFile(string resourceName, string defaultFileName)
         {
-            ISaveFileDialog fileDialog = saveFileDialogFactory();
+            ISaveFileDialog fileDialog = fileDialogFactory.CreateSaveFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
             fileDialog.DefaultFileName = defaultFileName;
@@ -303,7 +321,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         {
             messageHelper.ShowWarning(WarningMessage);
 
-            IOpenFileDialog fileDialog = openFileDialogFactory();
+            IOpenFileDialog fileDialog = fileDialogFactory.CreateOpenFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
 
@@ -325,11 +343,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         }
 
                         rateTable.SaveRates(upsAccount);
-                    });
 
-                    UpdateMessages();
-                    UploadMessage = "Local rates have been uploaded successfully";
-                    log.Info("Successfully uploaded rate table");
+                        if (ValidateRates())
+                        {
+                            UpdateMessages();
+                            UploadMessage = "Local rates have been uploaded successfully";
+                            log.Info("Successfully uploaded rate table");
+                        }
+                    });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -363,7 +384,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
         /// </summary>
         protected async Task UploadZoneFile()
         {
-            IOpenFileDialog fileDialog = openFileDialogFactory();
+            IOpenFileDialog fileDialog = fileDialogFactory.CreateOpenFileDialog();
             fileDialog.DefaultExt = Extension;
             fileDialog.Filter = Filter;
 
@@ -385,11 +406,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                         }
 
                         rateTable.SaveZones();
-                    });
 
-                    UpdateMessages();
-                    UploadMessage = "Zones have been uploaded successfully";
-                    log.Info("Successfully uploaded zone file");
+                        if (ValidateRates())
+                        {
+                            UpdateMessages();
+                            UploadMessage = "Zones have been uploaded successfully";
+                            log.Info("Successfully uploaded zone file");
+                        }
+                    });
                 }
                 catch (Exception e) when (e is UpsLocalRatingException || e is ShipWorksOpenFileDialogException)
                 {
@@ -404,6 +428,32 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     isBusy(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Validate the rates using the rate validator
+        /// update status message with failure 
+        /// </summary>
+        /// <returns>true if the rates are valid</returns>
+        private bool ValidateRates()
+        {
+            if (rateTable.RateUploadDate.HasValue && rateTable.ZoneUploadDate.HasValue)
+            {
+                ILocalRateValidationResult validationResult = rateValidator.ValidateRecentShipments(upsAccount);
+
+                if (validationResult.RateDiscrepancies.Any())
+                {
+                    UploadMessage =
+                        "Warning: ShipWorks found a discrepancy between your local rates and rates retrieved from UPS. ShipWorks uses recently shipped orders when doing this comparison.\n\n" +
+                        validationResult.GetUserFriendlyMessage();
+                    UploadMessageMoreInfoLink = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
+                    ErrorUploading = true;
+                    log.Error(validationResult.GetUserFriendlyMessage());
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

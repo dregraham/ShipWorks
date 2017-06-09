@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly int totalShipmentsValidated;
         private readonly IDialog upsLocalRateDiscrepancyDialog;
         private readonly IUpsLocalRateDiscrepancyViewModel discrepancyViewModel;
-        private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103270-ups-local-rating");
+        private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
 
         /// <summary>
         /// Constructor
@@ -29,6 +29,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             this.totalShipmentsValidated = totalShipmentsValidated;
             this.upsLocalRateDiscrepancyDialog = upsLocalRateDiscrepancyDialog;
             this.discrepancyViewModel = discrepancyViewModel;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FailedLocalRateValidationResult"/> class.
+        /// </summary>
+        /// <param name="rateDiscrepancies">The rate discrepancies.</param>
+        public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies)
+        {
+            RateDiscrepancies = rateDiscrepancies;
         }
 
         /// <summary>
@@ -52,13 +61,22 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         }
 
         /// <summary>
+        /// Gets the user friendly message.
+        /// </summary>
+        public string GetUserFriendlyMessage()
+        {
+            return string.Join(Environment.NewLine,
+                RateDiscrepancies.Select(rateDiscrepancy => rateDiscrepancy.GetUserMessage()).ToList());
+        }
+
+        /// <summary>
         /// Gets the validation message.
         /// </summary>
         private string GetMessage()
         {
-            string startOfMessage = totalShipmentsValidated > 1
-                ? $"{RateDiscrepancies.Count()} of the {totalShipmentsValidated} successfully processed UPS shipments"
-                : "The UPS shipment";
+            string startOfMessage = totalShipmentsValidated > 1 ?
+                $"{RateDiscrepancies.Count()} of the {totalShipmentsValidated} successfully processed UPS shipments" :
+                "The UPS shipment";
             string endOfMessage =
                 "had local rates that did not match the rates on your UPS account. Please review and update your local rates.";
 

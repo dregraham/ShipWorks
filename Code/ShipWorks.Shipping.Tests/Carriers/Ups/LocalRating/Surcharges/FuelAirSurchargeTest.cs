@@ -27,11 +27,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             var serviceRate = mock.Mock<IUpsLocalServiceRate>();
             serviceRate.Setup(r => r.Service).Returns(UpsServiceType.Ups2DayAir);
-            serviceRate.Setup(r => r.Amount).Returns(100);
+            serviceRate.Setup(r => r.Amount).Returns(200);
 
             testObject.Apply(null, serviceRate.Object);
 
-            serviceRate.Verify(s => s.AddAmount(5.25M, "Air Fuel Surcharge of 0.0525"));
+            serviceRate.Verify(s => s.AddAmount(10.50M, "Air Fuel Surcharge of 5.25%"));
         }
 
         [Fact]

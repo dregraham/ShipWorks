@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
@@ -17,11 +18,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         /// Initializes a new instance of the <see cref="FakeUpsLocalRatingViewModel"/> class.
         /// </summary>
         public FakeUpsLocalRatingViewModel(IUpsLocalRateTable rateTable,
-            Func<ISaveFileDialog> saveFileDialogFactory,
-            Func<IOpenFileDialog> openFileDialogFactory,
+            IFileDialogFactory fileDialogFactory,
             IMessageHelper messageHelper,
-            Func<Type, ILog> logFactory)
-            : base(rateTable, saveFileDialogFactory, openFileDialogFactory, messageHelper, logFactory)
+            Func<Type, ILog> logFactory,
+            IUpsLocalRateValidator rateValidator)
+            : base(rateTable, fileDialogFactory, messageHelper, logFactory, rateValidator)
         {
         }
 

@@ -33,13 +33,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Given a list of processed UPS shipments, if applicable, validate the local rates match the rate charged by UPS
         /// </summary>
-        public ILocalRateValidationResult Validate(IEnumerable<ShipmentEntity> shipments)
+        public ILocalRateValidationResult ValidateShipments(IEnumerable<ShipmentEntity> shipments)
         {
-            ILocalRateValidationResult result = rateValidator.Validate(shipments);
+            ILocalRateValidationResult result = rateValidator.ValidateShipments(shipments);
 
             LogTelemetry(shipments, result);
 
             return result;
+        }
+
+        /// <summary>
+        /// Validates the local rate against the shipment cost for the most recent shipments for the given account
+        /// </summary>
+        public ILocalRateValidationResult ValidateRecentShipments(UpsAccountEntity account)
+        {
+            return rateValidator.ValidateRecentShipments(account);
         }
 
         /// <summary>

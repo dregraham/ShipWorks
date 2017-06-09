@@ -10,8 +10,9 @@
              d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <ui:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Control.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -20,9 +21,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <WrapPanel>
+        <WrapPanel Grid.Row="0">
             <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
         </WrapPanel>
         <TextBlock Grid.Row="1"
@@ -37,7 +39,8 @@
             </TextBlock>
             <TextBlock>2. Modify the file to specify your rates.</TextBlock>
             <TextBlock>3. Upload the modified rate file.</TextBlock>
-            <TextBlock>4. Download the
+            <TextBlock>
+                4. Download the
                 <Hyperlink Command="{Binding DownloadSampleZoneFileCommand}">sample zone file</Hyperlink>.
             </TextBlock>
             <TextBlock>5. Modify the file to specify zones for your origin addresses.</TextBlock>
@@ -45,9 +48,9 @@
         </StackPanel>
 
         <DockPanel Grid.Row="3"
-                    Margin="0 0 0 10">
+                   Margin="0 0 0 10">
             <TextBlock VerticalAlignment="Center"
-                Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
             <Button Width="120"
                     Height="21"
                     HorizontalAlignment="Right"
@@ -61,7 +64,7 @@
         <DockPanel Grid.Row="4"
                    Margin="0 0 0 10">
             <TextBlock VerticalAlignment="Center"
-                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
             <Button Width="120"
                     Height="21"
                     HorizontalAlignment="Right"
@@ -71,22 +74,34 @@
                 Upload Zone File...
             </Button>
         </DockPanel>
-        <ui:WaitSpinner Grid.Row="5" Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top" Content="{Binding SpinnerText}"/>
-        <TextBlock Grid.Row="5" Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
-                   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0 10 0 0">
-            <TextBlock.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                            <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                            <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
+        <ui:WaitSpinner Grid.Row="5"
+                        Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top"
+                        Content="{Binding SpinnerText}" />
+        <ScrollViewer Grid.Row="5" HorizontalScrollBarVisibility="Disabled" 
+                      VerticalScrollBarVisibility="Auto" Margin="0 10 0 0">
+            <TextBox Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
+                     Margin="-2 0 0 0"
+                     VerticalAlignment="Top" HorizontalAlignment="Left" 
+                     Background="Transparent" BorderThickness="0" IsReadOnly="True">
+                <TextBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="True">
+                                <Setter Property="TextBox.Foreground" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="False">
+                                <Setter Property="TextBox.Foreground" Value="Green" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </ScrollViewer>
+        <TextBlock Grid.Row="6" TextAlignment="Right" Visibility="{Binding UploadMessageMoreInfoLink, Converter={StaticResource NullToVisibilityConverter}}" Margin="0 10 0 0">
+            <Hyperlink NavigateUri="{Binding UploadMessageMoreInfoLink}" ui:Link.OpenInBrowser="true">More Info</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>
