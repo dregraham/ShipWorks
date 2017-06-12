@@ -793,6 +793,7 @@
   <ItemGroup>
     <Folder Include="Shipping\Carriers\Postal\Endicia\Express1\" />
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
+    <Folder Include="Shipping\Carriers\UPS\Validation\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExSingleMatch.cer" />

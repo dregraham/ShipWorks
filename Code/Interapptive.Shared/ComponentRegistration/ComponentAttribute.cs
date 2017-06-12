@@ -33,6 +33,11 @@ namespace Interapptive.Shared.ComponentRegistration
         public Type Service { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating the component should be registered as a single instance.
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
+
+        /// <summary>
         /// Get a registration, either from cache or by creating a new one
         /// </summary>
         public static IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> GetRegistrationBuilder(
@@ -86,6 +91,11 @@ namespace Interapptive.Shared.ComponentRegistration
                 if (specificServices.Any())
                 {
                     registration.As(specificServices);
+                }
+
+                if (item.Attributes.Any(x=>x.SingleInstance))
+                {
+                    registration.SingleInstance();
                 }
             }
         }

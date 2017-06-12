@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Tests.Integration.Shared;
 
 namespace ShipWorks.Tests.Integration.MSTest.Actions.Scheduling
 {

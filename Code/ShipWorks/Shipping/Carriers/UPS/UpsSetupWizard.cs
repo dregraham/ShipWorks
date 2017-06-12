@@ -148,11 +148,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
             }
 
+            // Sets initial values and resets existing values depending on when this is called.
+            // A new entry is needed here when introducing a not null field to the UpsAccount table.
             upsAccount.CountryCode = "US";
             upsAccount.InvoiceAuth = false;
             upsAccount.RateType = (int) UpsRateType.DailyPickup;
             upsAccount.InitializeNullsToDefault();
             upsAccount.PromoStatus = (int) UpsPromoStatus.None;
+            upsAccount.LocalRatingEnabled = false;
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
 

@@ -14,6 +14,12 @@ namespace Interapptive.Shared.Utility
             new GenericResult<T>(true, value, null);
 
         /// <summary>
+        /// Get a successful result
+        /// </summary>
+        public static GenericResult<T> FromSuccess<T>(T value, string message) =>
+            new GenericResult<T>(true, value, message);
+
+        /// <summary>
         /// Get an error result
         /// </summary>
         public static GenericResult<T> FromError<T>(string message) =>

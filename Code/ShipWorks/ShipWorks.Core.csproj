@@ -1235,11 +1235,31 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingControl.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalServiceRate.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\IUpsLocalRatingDisabledFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.Designer.cs">
+      <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsBestRateRatingException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\FailedLocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\ILocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
@@ -1284,6 +1304,7 @@
     <Compile Include="Shipping\Services\ISingleScanOrderConfirmationService.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizard.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizardFactory.cs" />
@@ -1522,7 +1543,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
-    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
@@ -7944,6 +7964,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.resx">
       <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
+      <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>

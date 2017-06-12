@@ -4,26 +4,35 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.UPS.LocalRating;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Window for editing an existing UPS account
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class UpsAccountEditorDlg : Form
     {
-        private UpsAccountEntity account;
+        private readonly UpsAccountEntity account;
+        private readonly IUpsLocalRatingControl localRatingControl;
+        private readonly IUpsLocalRatingViewModel localRatingControlViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsAccountEditorDlg(UpsAccountEntity account)
+        public UpsAccountEditorDlg(UpsAccountEntity account, IUpsLocalRatingControl localRatingControl, IUpsLocalRatingViewModel localRatingControlViewModel)
         {
             InitializeComponent();
 
             this.account = account;
+            this.localRatingControl = localRatingControl;
+            this.localRatingControlViewModel = localRatingControlViewModel;
         }
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -40,6 +49,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             description.PromptText = UpsAccountManager.GetDefaultDescription(account);
 
             upsRateTypeControl.Initialize(account, false);
+
+            localRatingControlViewModel.Load(account, HandleLocalRatingControlIsBusy);
+            localRatingControl.DataContext = localRatingControlViewModel;
+            LocalRateControlHost.Child = (UserControl) localRatingControl;
+        }
+
+        /// <summary>
+        /// Enables / Disables OK and Cancel
+        /// </summary>
+        private void HandleLocalRatingControlIsBusy(bool isBusy)
+        {
+            ok.Enabled = !isBusy;
+            cancel.Enabled = !isBusy;
+            this.ControlBox = !isBusy;
         }
 
         /// <summary>
@@ -67,6 +90,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 if (!upsRateTypeControl.RegisterAndSaveToEntity())
+                {
+                    return;
+                }
+
+                if (!localRatingControlViewModel.Save())
                 {
                     return;
                 }

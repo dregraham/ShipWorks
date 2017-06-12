@@ -57,7 +57,10 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="factory">The factory.</param>
         public virtual void AddFootnoteFactory(IRateFootnoteFactory factory)
         {
-            footnoteFactories.Add(factory);
+            if (factory != null)
+            {
+                footnoteFactories.Add(factory);
+            }
         }
 
         /// <summary>

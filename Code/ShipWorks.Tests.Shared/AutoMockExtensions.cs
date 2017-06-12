@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shared
         /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
         /// </summary>
         /// <typeparam name="TInput">The type of input.</typeparam>
-        /// <typeparam name="TOutput">The type the function will return.</typeparam>
+        /// <typeparam name="TOutput">The type the funct will return.</typeparam>
         /// <param name="mock">The mock.</param>
         /// <param name="functionOutput">The actual output of the function.</param>
         /// <remarks>
@@ -159,6 +159,16 @@ namespace ShipWorks.Tests.Shared
         {
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
+            mock.Provide(function.Object);
+        }
+
+        /// <summary>
+        /// Mocks a function with null parameters that returns the output provided.
+        /// </summary>
+        public static void MockFunc<TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
+        {
+            Mock<Func<TOutput>> function = mock.MockRepository.Create<Func<TOutput>>();
+            function.Setup(func => func()).Returns(functionOutput.Object);
             mock.Provide(function.Object);
         }
 

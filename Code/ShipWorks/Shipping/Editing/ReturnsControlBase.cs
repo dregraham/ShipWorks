@@ -18,6 +18,11 @@ namespace ShipWorks.Shipping.Editing
         private List<ShipmentEntity> loadedShipments;
 
         /// <summary>
+        /// A change occurred that impacts the rate of a shipment.
+        /// </summary>
+        public event EventHandler RateCriteriaChanged;
+
+        /// <summary>
         /// Shipments currently loaded into the control
         /// </summary>
         protected List<ShipmentEntity> LoadedShipments
@@ -47,6 +52,14 @@ namespace ShipWorks.Shipping.Editing
         public virtual void SaveToShipments()
         {
 
+        }
+
+        /// <summary>
+        /// Raises the rate criteria changed event.
+        /// </summary>
+        protected void RaiseRateCriteriaChanged()
+        {
+            RateCriteriaChanged?.Invoke(this, new EventArgs());
         }
     }
 }

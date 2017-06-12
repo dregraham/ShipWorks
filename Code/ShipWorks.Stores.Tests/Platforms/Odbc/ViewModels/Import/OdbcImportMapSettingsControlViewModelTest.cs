@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -16,6 +15,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
@@ -312,7 +312,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             var importSettingsFileMock = mock.Mock<IOdbcImportSettingsFile>();
             importSettingsFileMock.Setup(s => s.Extension).Returns(".blah");
 
-            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            var dialogMock = MockOpenFileDialog(DialogResult.Abort, null);
             MockFieldMap();
 
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
@@ -328,7 +328,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             var importSettingsFileMock = mock.Mock<IOdbcImportSettingsFile>();
             importSettingsFileMock.Setup(s => s.Filter).Returns("filter");
 
-            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            var dialogMock = MockOpenFileDialog(DialogResult.Abort, null);
             MockFieldMap();
 
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
@@ -341,7 +341,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         [Fact]
         public void OpenMapSettingsFileCommand_SetsDefaultFilename_FromOdbcMapName()
         {
-            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            var dialogMock = MockOpenFileDialog(DialogResult.Abort, null);
             MockFieldMap();
 
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
@@ -354,7 +354,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         [Fact]
         public void OpenMapSettingsFileCommand_DoesNotAttemptToReadStream_WhenUserCancels()
         {
-            var dialogMock = MockDialog(FileDialogType.Open, DialogResult.Abort, null);
+            var dialogMock = MockOpenFileDialog(DialogResult.Abort, null);
             MockFieldMap();
 
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
@@ -369,7 +369,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                var dialogMock = MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                var dialogMock = MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -434,7 +434,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -464,7 +464,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -492,7 +492,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -527,7 +527,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
@@ -556,7 +556,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         {
             using (var stream = new MemoryStream())
             {
-                MockDialog(FileDialogType.Open, DialogResult.OK, stream);
+                MockOpenFileDialog(DialogResult.OK, stream);
                 var fieldMapMock = MockFieldMap();
 
                 Mock<IOdbcFieldMap> fieldMapFromDisk = mock.MockRepository.Create<IOdbcFieldMap>();
@@ -592,18 +592,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
 
-        private Mock<IFileDialog> MockDialog(FileDialogType dialogType, DialogResult result, MemoryStream stream)
+        private Mock<IOpenFileDialog> MockOpenFileDialog(DialogResult result, MemoryStream stream)
         {
-            var fileDialogMock = mock.MockRepository.Create<IFileDialog>();
-            var dialogIndex = mock.MockRepository.Create<IIndex<FileDialogType, IFileDialog>>();
+            var fileDialogMock = mock.CreateMock<IOpenFileDialog>(sd =>
+            {
+                sd.Setup(d => d.ShowDialog()).Returns(result);
+                sd.Setup(d => d.CreateFileStream()).Returns(stream);
+            });
 
-            fileDialogMock.Setup(d => d.ShowDialog()).Returns(result);
-            fileDialogMock.Setup(d => d.CreateFileStream()).Returns(stream);
-
-            dialogIndex.Setup(i => i[dialogType]).Returns(fileDialogMock.Object);
-
-            mock.Provide(dialogIndex.Object);
-
+            mock.MockFunc(fileDialogMock);
             return fileDialogMock;
         }
 

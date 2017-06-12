@@ -59,8 +59,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Email = source.Email;
             Website = source.Website;
             PromoStatus = source.PromoStatus;
+            LocalRatingEnabled = source.LocalRatingEnabled;
+            UpsRateTableID = source.UpsRateTableID;
             
             
+            UpsRateTable = source.UpsRateTable?.AsReadOnly(objectMap);
             
 
             CopyCustomUpsAccountData(source);
@@ -205,7 +208,21 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte PromoStatus { get; }
+        /// <summary> The LocalRatingEnabled property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."LocalRatingEnabled"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean LocalRatingEnabled { get; }
+        /// <summary> The UpsRateTableID property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."UpsRateTableID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> UpsRateTableID { get; }
         
+        
+        public IUpsRateTableEntity UpsRateTable { get; }
         
         
         /// <summary>

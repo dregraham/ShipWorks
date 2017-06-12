@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -506,5 +507,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">Shipment that will be updated</param>
         /// <param name="tag">Rate tag that represents the service type</param>
         protected abstract void SetServiceTypeFromTag(ShipmentEntity shipment, object tag);
+
+        /// <summary>
+        /// Updates the shipment for current broker.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        protected void UpdateShipmentForCurrentBrokerType(ShipmentEntity shipment)
+        {
+            ShipmentType.UpdateDynamicShipmentData(shipment);
+
+            OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
+
+            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+            storeType.OverrideShipmentDetails(shipment);
+        }
     }
 }

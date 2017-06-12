@@ -11,6 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
+using ShipWorks.Tests.Integration.Shared;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 {

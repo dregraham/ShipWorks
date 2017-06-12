@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Interapptive.Shared.Tests.Utility
 {
@@ -30,6 +31,20 @@ namespace Interapptive.Shared.Tests.Utility
         public void Clamp_ReturnsExpectedValue(double value, double expected)
         {
             double result = value.Clamp(0, 10);
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(5D, true)]
+        [InlineData(0D, true)]
+        [InlineData(.1D, false)]
+        [InlineData(42.00001D, false)]
+        [InlineData(33.999999D, false)]
+        [InlineData(double.Epsilon * 100 - .1E-320, false)]
+        [InlineData(double.Epsilon * 100 - .1E-321, true)]
+        public void IsInt(double value, bool expected)
+        {
+            bool result = value.IsInt();
             Assert.Equal(expected, result);
         }
 

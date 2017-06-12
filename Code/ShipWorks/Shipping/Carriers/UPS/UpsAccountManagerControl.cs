@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
@@ -16,6 +8,14 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -127,13 +127,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             UpsAccountEntity shipper = (UpsAccountEntity) sandGrid.SelectedElements[0].Tag;
             initialShipperID = shipper.UpsAccountID;
-
-            using (UpsAccountEditorDlg dlg = new UpsAccountEditorDlg(shipper))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (UpsAccountEditorDlg dlg = scope.Resolve<UpsAccountEditorDlg>(TypedParameter.From(shipper)))
+                {
+                    dlg.ShowDialog(this);
 
-                UpsAccountManager.CheckForChangesNeeded();
-                LoadShippers();
+                    UpsAccountManager.CheckForChangesNeeded();
+                    LoadShippers();
+                }
             }
         }
 

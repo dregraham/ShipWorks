@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+﻿using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -11,49 +7,35 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// </summary>
     public class UpsServiceRate
     {
-        UpsServiceType service;
-        decimal amount;
-        bool negotiated;
-        
-
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsServiceRate(UpsServiceType service, decimal amount, bool negotiated, int? guaranteedDaysToDelivery)
         {
-            this.service = service;
-            this.amount = amount;
-            this.negotiated = negotiated;
+            Service = service;
+            Amount = amount;
+            Negotiated = negotiated;
             GuaranteedDaysToDelivery = guaranteedDaysToDelivery;
         }
 
         /// <summary>
         /// The guaranteed days automatic delivery if provided by Ups
         /// </summary>
-        public int? GuaranteedDaysToDelivery { get; set; }
+        public int? GuaranteedDaysToDelivery { get; }
 
         /// <summary>
         /// The service the rate is for
         /// </summary>
-        public UpsServiceType Service
-        {
-            get { return service; }
-        }
+        public UpsServiceType Service { get; }
 
         /// <summary>
         /// The cost to ship with the service
         /// </summary>
-        public decimal Amount
-        {
-            get { return amount; }
-        }
+        public decimal Amount { get; protected set; }
 
         /// <summary>
         /// Indicates if the rate is a negotiated "Account Based Rate" (ABR)
         /// </summary>
-        public bool Negotiated
-        {
-            get { return negotiated; }
-        }
+        public bool Negotiated { get; }
     }
 }

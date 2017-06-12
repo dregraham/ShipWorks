@@ -241,8 +241,8 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<EndiciaAccountEditorDlg>();
             builder.RegisterType<UspsAccountInfoControl>();
 
-            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
-            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
+            builder.RegisterType<ShipWorksOpenFileDialog>().AsImplementedInterfaces();
+            builder.RegisterType<ShipWorksSaveFileDialog>().AsImplementedInterfaces();
         }
 
         /// <summary>

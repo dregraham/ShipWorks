@@ -1,12 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
+﻿using System;
+using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Policies;
 using Xunit;
 
@@ -15,110 +9,102 @@ namespace ShipWorks.Tests.Shipping.Policies
     public class BestRateUpsRestrictionShippingPolicyTest
     {
         private BestRateUpsRestrictionShippingPolicy testObject;
-        private List<IBestRateShippingBroker> brokers;
-        private int initialBrokerCount;
-        private List<ShipmentTypeCode> shipmentTypeCodes;
 
         public BestRateUpsRestrictionShippingPolicyTest()
         {
             testObject = new BestRateUpsRestrictionShippingPolicy();
+        }
 
-            brokers = new List<IBestRateShippingBroker>()
+        [Fact]
+        public void Configure_ThrowsArgumentException_WhenValueIsNotTrueOrFalse()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => testObject.Configure("nottrueorfalse"));
+            Assert.Equal("Unknown configuration value 'nottrueorfalse.' Expected 'true' or 'false.'\r\nParameter name: configuration", ex.Message);
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsTrue_WhenTargetIsListOfUpsRatingMethod()
+        {
+            testObject.Configure("true");
+
+            Assert.True(testObject.IsApplicable(new List<UpsRatingMethod>()));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenTargetIsNotListOfUpsRatingMethod()
+        {
+            testObject.Configure("true");
+
+            Assert.False(testObject.IsApplicable("TheWrongType"));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenConfiguredWithFalse()
+        {
+            testObject.Configure("false");
+
+            Assert.False(testObject.IsApplicable(new List<UpsRatingMethod>()));
+        }
+
+        [Fact]
+        public void IsApplicable_ReturnsFalse_WhenConfiguredWithTrue()
+        {
+            testObject.Configure("true");
+
+            Assert.True(testObject.IsApplicable(new List<UpsRatingMethod>()));
+        }
+
+        [Fact]
+        public void Apply_ThrowsArgumentNullException_WhenTargetIsNull()
+        {
+            testObject.Configure("true");
+            Assert.Throws<ArgumentNullException>(() => testObject.Apply(null));
+        }
+
+        [Fact]
+        public void Apply_ThrowsArgumentException_WhenTargetIsNotApplicable()
+        {
+            testObject.Configure("true");
+            ArgumentException ex = Assert.Throws<ArgumentException>(() => testObject.Apply("not applicable type"));
+            Assert.Equal("target not of type ListList<UpsRatingMethod>\r\nParameter name: target", ex.Message);
+        }
+
+        [Fact]
+        public void Apply_RemovesAllButLocalOnly_WhenRestricted()
+        {
+            testObject.Configure("true");
+
+            List<UpsRatingMethod> services = new List<UpsRatingMethod>()
             {
-                new EndiciaBestRateBroker(),
-                new Express1EndiciaBestRateBroker(),
-                new WorldShipBestRateBroker(new UpsOltShipmentType()),
-                new UpsBestRateBroker(new UpsOltShipmentType()),
+                UpsRatingMethod.LocalOnly,
+                UpsRatingMethod.ApiOnly,
+                UpsRatingMethod.LocalWithApiFailover
             };
 
-            initialBrokerCount = brokers.Count;
+            testObject.Apply(services);
 
-            shipmentTypeCodes = new List<ShipmentTypeCode>();
+            Assert.Single(services);
+            Assert.Contains(UpsRatingMethod.LocalOnly, services);
         }
 
         [Fact]
-        public void IsApplicable_ReturnsTrue_RestrictedAndTargetIsListOfBrokers()
-        {
-            testObject.Configure("true");
-
-            Assert.True(testObject.IsApplicable(brokers), "Expected IsApplicable to be true.");
-        }
-
-        [Fact]
-        public void IsApplicable_ReturnsTrue_RestrictedAndTargetIsListOfShipmentTypeCodes()
-        {
-            testObject.Configure("true");
-
-            Assert.True(testObject.IsApplicable(shipmentTypeCodes), "Expected IsApplicable to be true.");
-        }
-
-        [Fact]
-        public void IsApplicable_ReturnsFalse_NotRestrictedAndTargetIsListOfBrokers()
+        public void Apply_DoesNotRemoveAnything_WhenNotRestricted()
         {
             testObject.Configure("false");
 
-            Assert.False(testObject.IsApplicable(brokers), "Expected IsApplicable to be false.");
-        }
+            List<UpsRatingMethod> services = new List<UpsRatingMethod>()
+            {
+                UpsRatingMethod.LocalOnly,
+                UpsRatingMethod.ApiOnly,
+                UpsRatingMethod.LocalWithApiFailover
+            };
 
-        [Fact]
-        public void IsApplicable_ReturnsFalse_RestrictedAndTargetIsNotListOfBrokers()
-        {
-            testObject.Configure("true");
+            testObject.Apply(services);
 
-            List<string> strings = new List<string>();
-
-            Assert.False(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
-        }
-
-        [Fact]
-        public void IsApplicable_ReturnsFalse_ConfiguredNotCalledAndTargetIsListOfBrokers()
-        {
-            testObject.Configure("true");
-
-            List<string> strings = new List<string>();
-
-            Assert.False(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
-        }
-
-        [Fact]
-        public void Apply_DoesNotFilterBrokers_NotRestricted()
-        {
-            testObject.Configure("false");
-
-            testObject.Apply(brokers);
-
-            Assert.Equal(initialBrokerCount, brokers.Count);
-        }
-
-        [Fact]
-        public void Apply_FiltersBrokers_Restricted()
-        {
-            testObject.Configure("true");
-
-            testObject.Apply(brokers);
-
-            Assert.Equal(initialBrokerCount - 2, brokers.Count);
-        }
-
-        [Fact]
-        public void Apply_AddsUpsOnlineToolsAndUpsWorldShipToTarget_Restricted()
-        {
-            testObject.Configure("true");
-
-            testObject.Apply(shipmentTypeCodes);
-
-            Assert.True(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsOnLineTools));
-            Assert.True(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsWorldShip));
-        }
-
-        [Fact]
-        public void Apply_TargetRemainsEmpty_NotRestricted()
-        {
-            testObject.Configure("false");
-
-            testObject.Apply(shipmentTypeCodes);
-
-            Assert.False(shipmentTypeCodes.Any());
+            Assert.Equal(3, services.Count);
+            Assert.Contains(UpsRatingMethod.LocalOnly, services);
+            Assert.Contains(UpsRatingMethod.ApiOnly, services);
+            Assert.Contains(UpsRatingMethod.LocalWithApiFailover, services);
         }
     }
 }

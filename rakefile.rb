@@ -88,6 +88,21 @@ namespace :build do
 		msb.targets :Build
 	end
 
+	desc "Build with minimal output and no analyzers"
+	msbuild :quick => "build:restore" do |msb, args|
+		print "Building solution with the Debug (No Analyzers) config...\r\n\r\n"
+
+		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: true
+		msb.verbosity = 'minimal'
+		msb.targets :Build
+	end
+
+	desc "Set verbosity to minimal"
+	msbuild :quiet do |msb, args|
+		print "Setting verbosity to minimal...\r\n\r\n"
+		msb.verbosity = 'minimal'
+	end
+
 	desc "Build Shipworks in the Debug configuration and set to 32 bit"
 	task :debug32 => "build:debug" do |msb|
 		puts "Setting to 32-bit...\r\n\r\n"

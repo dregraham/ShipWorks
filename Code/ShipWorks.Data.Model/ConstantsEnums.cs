@@ -9204,6 +9204,74 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>PromoStatus. </summary>
 		PromoStatus,
+		///<summary>LocalRatingEnabled. </summary>
+		LocalRatingEnabled,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLetterRate.</summary>
+	public enum UpsLetterRateFieldIndex
+	{
+		///<summary>UpsLetterRateID. </summary>
+		UpsLetterRateID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>Zone. </summary>
+		Zone,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Rate. </summary>
+		Rate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingDeliveryAreaSurcharge.</summary>
+	public enum UpsLocalRatingDeliveryAreaSurchargeFieldIndex
+	{
+		///<summary>DeliveryAreaSurchargeID. </summary>
+		DeliveryAreaSurchargeID,
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>DestinationZip. </summary>
+		DestinationZip,
+		///<summary>DeliveryAreaType. </summary>
+		DeliveryAreaType,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingZone.</summary>
+	public enum UpsLocalRatingZoneFieldIndex
+	{
+		///<summary>ZoneID. </summary>
+		ZoneID,
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>OriginZipFloor. </summary>
+		OriginZipFloor,
+		///<summary>OriginZipCeiling. </summary>
+		OriginZipCeiling,
+		///<summary>DestinationZipFloor. </summary>
+		DestinationZipFloor,
+		///<summary>DestinationZipCeiling. </summary>
+		DestinationZipCeiling,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Zone. </summary>
+		Zone,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsLocalRatingZoneFile.</summary>
+	public enum UpsLocalRatingZoneFileFieldIndex
+	{
+		///<summary>ZoneFileID. </summary>
+		ZoneFileID,
+		///<summary>UploadDate. </summary>
+		UploadDate,
+		///<summary>FileContent. </summary>
+		FileContent,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9260,6 +9328,40 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPackageRate.</summary>
+	public enum UpsPackageRateFieldIndex
+	{
+		///<summary>UpsPackageRateID. </summary>
+		UpsPackageRateID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>Zone. </summary>
+		Zone,
+		///<summary>WeightInPounds. </summary>
+		WeightInPounds,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Rate. </summary>
+		Rate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsPricePerPound.</summary>
+	public enum UpsPricePerPoundFieldIndex
+	{
+		///<summary>UpsPricePerPoundID. </summary>
+		UpsPricePerPoundID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>Zone. </summary>
+		Zone,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>Rate. </summary>
+		Rate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9384,6 +9486,30 @@ namespace ShipWorks.Data.Model
 		DryIceWeight,
 		///<summary>DryIceIsForMedicalUse. </summary>
 		DryIceIsForMedicalUse,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsRateSurcharge.</summary>
+	public enum UpsRateSurchargeFieldIndex
+	{
+		///<summary>UpsRateSurchargeID. </summary>
+		UpsRateSurchargeID,
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>SurchargeType. </summary>
+		SurchargeType,
+		///<summary>Amount. </summary>
+		Amount,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsRateTable.</summary>
+	public enum UpsRateTableFieldIndex
+	{
+		///<summary>UpsRateTableID. </summary>
+		UpsRateTableID,
+		///<summary>UploadDate. </summary>
+		UploadDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11023,12 +11149,28 @@ namespace ShipWorks.Data.Model
 		ThreeDCartStoreEntity,
 		///<summary>UpsAccount</summary>
 		UpsAccountEntity,
+		///<summary>UpsLetterRate</summary>
+		UpsLetterRateEntity,
+		///<summary>UpsLocalRatingDeliveryAreaSurcharge</summary>
+		UpsLocalRatingDeliveryAreaSurchargeEntity,
+		///<summary>UpsLocalRatingZone</summary>
+		UpsLocalRatingZoneEntity,
+		///<summary>UpsLocalRatingZoneFile</summary>
+		UpsLocalRatingZoneFileEntity,
 		///<summary>UpsPackage</summary>
 		UpsPackageEntity,
+		///<summary>UpsPackageRate</summary>
+		UpsPackageRateEntity,
+		///<summary>UpsPricePerPound</summary>
+		UpsPricePerPoundEntity,
 		///<summary>UpsProfile</summary>
 		UpsProfileEntity,
 		///<summary>UpsProfilePackage</summary>
 		UpsProfilePackageEntity,
+		///<summary>UpsRateSurcharge</summary>
+		UpsRateSurchargeEntity,
+		///<summary>UpsRateTable</summary>
+		UpsRateTableEntity,
 		///<summary>UpsShipment</summary>
 		UpsShipmentEntity,
 		///<summary>User</summary>

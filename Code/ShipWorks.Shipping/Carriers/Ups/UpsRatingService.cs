@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using Autofac.Features.Indexed;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        private readonly UpsApiRateClient upsApiRateClient;
+        protected readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
 
@@ -34,14 +35,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public UpsRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
-            UpsApiRateClient upsApiRateClient,
+            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
-            IUpsPromoFactory promoFactory
-            )
+            IUpsPromoFactory promoFactory)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
-            this.upsApiRateClient = upsApiRateClient;
+            this.upsRateClientFactory = upsRateClientFactory;
             this.shipmentType = shipmentType;
             this.promoFactory = promoFactory;
         }
@@ -58,13 +58,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             bool anyNegotiated = false;
             bool allNegotiated = false;
 
-            IEnumerable<UpsServiceRate> serviceRates;
-            IEnumerable<UpsTransitTime> transitTimes;
-
-            UpsAccountEntity account = null;
-
             try
             {
+                IEnumerable<UpsTransitTime> transitTimes;
+
+                UpsAccountEntity account = accountRepository.GetAccount(shipment);
+
+                GenericResult<List<UpsServiceRate>> serviceRateResult = GetRateResult(shipment, account);
+                List<UpsServiceRate> serviceRates = serviceRateResult.Value;
+
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
                 {
@@ -72,15 +74,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, true);
-                    serviceRates = upsApiRateClient.GetRates(shipment, true);
                 }
                 else
                 {
-                    account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
-
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
-                    serviceRates = upsApiRateClient.GetRates(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
                     wantedNegotiated = account.RateType == (int) UpsRateType.Negotiated;
@@ -94,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
-                AddMessageResult(shipment, wantedNegotiated, anyNegotiated, allNegotiated, rates);
+                AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, serviceRateResult.Message);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
@@ -122,16 +120,44 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the rate result for the shipment
+        /// </summary>
+        protected virtual GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment, UpsAccountEntity account)
+        {
+            IUpsRateClient upsRateClient = GetRatingClient(account);
+
+            GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
+            return serviceRateResult;
+        }
+
+        /// <summary>
+        /// Gets the ups rate client.
+        /// </summary>
+        protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
+        {
+            UpsRatingMethod ratingMethod;
+            if (account==null)
+            {
+                ratingMethod = UpsRatingMethod.ApiOnly;
+            }
+            else
+            {
+                ratingMethod = account.LocalRatingEnabled ?
+                    UpsRatingMethod.LocalWithApiFailover :
+                    UpsRatingMethod.ApiOnly;
+            }
+
+            return upsRateClientFactory[ratingMethod];
+        }
+
+        /// <summary>
         /// Adds the footnote factory.
         /// </summary>
-        private void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
+        protected void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
         {
             UpsPromoFootnoteFactory upsPromoFootnoteFactory = promoFactory.GetFootnoteFactory(account);
 
-            if (upsPromoFootnoteFactory != null)
-            {
-                rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
-            }
+            rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
         }
 
         /// <summary>
@@ -169,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Adds the message result.
         /// </summary>
-        private static void AddMessageResult(ShipmentEntity shipment, bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, IList<RateResult> rates)
+        private static void AddMessageResult(bool wantedNegotiated, bool anyNegotiated, bool allNegotiated, IList<RateResult> rates, string clientMessage)
         {
             if (rates.None())
             {
@@ -194,9 +220,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            if (shipment.ReturnShipment)
+            if (!clientMessage.IsNullOrWhiteSpace())
             {
-                rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
+                rates.Add(new RateResult(clientMessage, ""));
             }
         }
 
