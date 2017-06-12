@@ -15,13 +15,13 @@
 	| redistributed in any form, as part of another product or otherwise.
 	| Modified versions of this code may not be sold or redistributed.
 	|
-	| Copyright 2005-2012 Interapptive, Inc.  All rights reserved.
+	| Copyright 2005-2017 Interapptive, Inc.  All rights reserved.
 	| http://www.interapptive.com/
 	|
 	|
 	*/
 	
-	$moduleVersion = "3.0.1.3";
+	$moduleVersion = "3.15.0.0";
 	$schemaVersion = "1.0.0";
 	
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -33,6 +33,25 @@
 
 	// HTTP/1.0
 	header("Pragma: no-cache");	
+	
+	// Wrapper method for escaping text to store in the database.
+	function sqlEscapeString($textToEscape)
+	{
+		if (function_exists('mysqli_real_escape_string')) 
+		{
+			//mysqli is installed
+			return mysqli_real_escape_string(tep_db_connect(), $textToEscape);
+		} 
+		elseif (function_exists('mysql_real_escape_string')) 
+		{
+			//mysql is installed
+			return mysql_real_escape_string($textToEscape);
+		}
+		else
+		{
+		  echo "Neither mysql_real_escape_string or mysqli_real_escape_string is installed.";
+		}
+	}
 
 	function toUtf8($string)
 	{
@@ -109,7 +128,7 @@
 	writeXmlDeclaration();
 	writeStartTag("ShipWorks", array("moduleVersion" => $moduleVersion, "schemaVersion" => $schemaVersion));
 	
-	// Enforse SSL
+	// Enforce SSL
 	if (!$secure && REQUIRE_SECURE)
 	{
 		outputError(10, "Invalid URL, HTTPS is required");
@@ -171,51 +190,44 @@
 	// has access.
 	function checkAdminLogin()
 	{		
-	    if (function_exists("tep_admin_check_login"))
-	    {	        
-	        // If the admin_check function exists, the password_funcs should be available
-	        // in the admin area.
-	        require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
+	    // If the admin_check function exists, the password_funcs should be available
+	    // in the admin area.
+	    require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
 	    
-	        $loginOK = false;
+	    $loginOK = false;
 	        
-	        if (isset($_REQUEST['username']) && isset($_REQUEST['password']))
-	        {
-                $email_address = tep_db_prepare_input($_REQUEST['username']);
-                $password = tep_db_prepare_input($_REQUEST['password']);
-    	            	        
-                $check_admin_query = tep_db_query(
-                    "select admin_id as login_id, admin_password as login_password " . 
-                    " from " . TABLE_ADMIN . 
-                    " where admin_email_address = '" . tep_db_input($email_address) . "'");
-                                    
-                if (tep_db_num_rows($check_admin_query)) 
-                {
-                    $check_admin = tep_db_fetch_array($check_admin_query);
-                                        
-                    // Check that password is good
-                    if (tep_validate_password($password, $check_admin['login_password'])) 
-                    {
-                        $loginOK = true;
-                    }
-                }
-                
-                if (!$loginOK)
-                {
-                    outputError(50, "Username or password is incorrect");
-                }
-            }
-            else
-            {
-                outputError(30, "Username or password was not supplied");
-            }
-
-	        return $loginOK;
-	    }
-	    else
+	    if (isset($_REQUEST['username']) && isset($_REQUEST['password']))
 	    {
-	        return true;
-	    }
+            $email_address = tep_db_prepare_input($_REQUEST['username']);
+            $password = tep_db_prepare_input($_REQUEST['password']);
+    	            	        
+            $check_admin_query = tep_db_query(
+                "select id as login_id, user_password as login_password " . 
+                " from " . TABLE_ADMINISTRATORS . 
+                " where user_name = '" . tep_db_input($email_address) . "'");
+                                    
+            if (tep_db_num_rows($check_admin_query)) 
+            {
+                $check_admin = tep_db_fetch_array($check_admin_query);
+                                        
+                // Check that password is good
+                if (tep_validate_password($password, $check_admin['login_password'])) 
+                {
+                    $loginOK = true;
+                }
+            }
+                
+            if (!$loginOK)
+            {
+                outputError(50, "Username or password is incorrect.");
+            }
+        }
+        else
+        {
+            outputError(30, "Username or password was not supplied");
+        }
+
+	    return $loginOK;
 	}
 	
 	// Get module data
@@ -657,8 +669,8 @@
 	    $orderID = (int) $_REQUEST['order'];
 	    $code = (int) $_REQUEST['status'];
 	    
-	    $comments = mysql_escape_string($_REQUEST['comments']);
-	    
+    	$comments = sqlEscapeString($_REQUEST['comments']);
+
         tep_db_query(
             "insert into " . TABLE_ORDERS_STATUS_HISTORY . 
             " (orders_id, orders_status_id, date_added, customer_notified, comments) " .
