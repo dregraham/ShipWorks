@@ -139,13 +139,13 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpRequestSubmitter request, string action)
         {
-            if (store.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
+            if (store.ModuleUsername == string.Empty)
             {
-                if (store.ModuleUsername.IsNullOrWhiteSpace() || store.ModulePassword.IsNullOrWhiteSpace())
-                {
-                    throw new MagentoException($"Username and password are required to connect to your Magento store.");
-                }
-
+                request.Headers.Add(HttpRequestHeader.Authorization,
+                    $"Bearer {SecureText.Decrypt(store.ModulePassword, string.Empty)}");
+            }
+            else
+            {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     IMagentoTwoRestClient magentoRestClient =
@@ -153,16 +153,6 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {magentoRestClient.GetToken()}");
                 }
-            }
-            else
-            {
-                if (store.ModulePassword.IsNullOrWhiteSpace())
-                {
-                    throw new MagentoException($"Password (Token) is required to connect to your Magento store.");
-                }
-
-                request.Headers.Add(HttpRequestHeader.Authorization, 
-                    $"Bearer {SecureText.Decrypt(store.ModulePassword, string.Empty)}");
             }
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
