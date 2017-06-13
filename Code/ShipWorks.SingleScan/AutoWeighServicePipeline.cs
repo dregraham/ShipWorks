@@ -22,7 +22,7 @@ namespace ShipWorks.SingleScan
     /// <seealso cref="ShipWorks.ApplicationCore.IInitializeForCurrentUISession" />
     public class AutoWeighServicePipeline : IInitializeForCurrentUISession
     {
-        private readonly IAutoPrintSettings autoPrintSettings;
+        private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly IConnectableObservable<SingleScanFilterUpdateCompleteMessage> filterUpdateCompleteMessages;
         private readonly IDisposable filterUpdateCompleteMessagesConnection;
         private readonly IAutoWeighService autoWeighService;
@@ -33,7 +33,7 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public AutoWeighServicePipeline(IMessenger messenger,
-            IAutoPrintSettings autoPrintSettings,
+            ISingleScanAutomationSettings singleScanAutomationSettings,
             IAutoWeighService autoWeighService,
             IOrderLoader orderLoader,
             IShippingManager shippingManager)
@@ -41,7 +41,7 @@ namespace ShipWorks.SingleScan
             this.autoWeighService = autoWeighService;
             this.orderLoader = orderLoader;
             this.shippingManager = shippingManager;
-            this.autoPrintSettings = autoPrintSettings;
+            this.singleScanAutomationSettings = singleScanAutomationSettings;
             filterUpdateCompleteMessages = messenger.OfType<SingleScanFilterUpdateCompleteMessage>().Publish();
             filterUpdateCompleteMessagesConnection = filterUpdateCompleteMessages.Connect();
         }
@@ -60,7 +60,7 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             filterUpdateCompleteMessages
-                .Where(message => !autoPrintSettings.IsAutoPrintEnabled())
+                .Where(message => !singleScanAutomationSettings.IsAutoPrintEnabled())
                 .Where(message => message.FilterNodeContent.Count == 1)
                 .SelectMany(async message => await Weigh(message))
                 .Subscribe();
