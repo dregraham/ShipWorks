@@ -30,6 +30,7 @@ namespace ShipWorks.SingleScan
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLoader orderLoader;
         private readonly IShippingManager shippingManager;
+        private readonly ISchedulerProvider scheduler;
 
         /// <summary>
         /// Constructor
@@ -38,12 +39,14 @@ namespace ShipWorks.SingleScan
             ISingleScanAutomationSettings singleScanAutomationSettings,
             IAutoWeighService autoWeighService,
             IOrderLoader orderLoader,
-            IShippingManager shippingManager)
+            IShippingManager shippingManager,
+            ISchedulerProvider scheduler)
         {
             this.messenger = messenger;
             this.autoWeighService = autoWeighService;
             this.orderLoader = orderLoader;
             this.shippingManager = shippingManager;
+            this.scheduler = scheduler;
             this.singleScanAutomationSettings = singleScanAutomationSettings;
             filterUpdateCompleteMessages = messenger.OfType<SingleScanFilterUpdateCompleteMessage>().Publish();
             filterUpdateCompleteMessagesConnection = filterUpdateCompleteMessages.Connect();
@@ -63,6 +66,7 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             filterUpdateCompleteMessages
+                .ObserveOn(scheduler.WindowsFormsEventLoop)
                 .Where(message => !singleScanAutomationSettings.IsAutoPrintEnabled())
                 .Where(message => message.FilterNodeContent.Count == 1)
                 .SelectMany(async message => await Weigh(message))
