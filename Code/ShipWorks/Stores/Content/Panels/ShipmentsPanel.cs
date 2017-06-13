@@ -61,6 +61,11 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
+        /// Should the show rates panel link be allowed
+        /// </summary>
+        public bool AllowRatesPanelLink { get; set; } = true;
+
+        /// <summary>
         /// Extra space at the bottom that can be used for other controls
         /// </summary>
         protected override int ExtraBottomSpace =>
@@ -84,6 +89,9 @@ namespace ShipWorks.Stores.Content.Panels
         public override void Initialize(Guid settingsKey, GridColumnDefinitionSet definitionSet, Action<GridColumnLayout> layoutInitializer)
         {
             base.Initialize(settingsKey, definitionSet, layoutInitializer);
+
+            // Initialize the value for the show rates panel link.
+            rateMessagePanel.Visible = AllowRatesPanelLink && !isRatingPanelVisible;
 
             // Load the copy menu
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
@@ -130,7 +138,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(x => rateMessagePanel.Visible = !isRatingPanelVisible)
+                .Do(x => rateMessagePanel.Visible = AllowRatesPanelLink && !isRatingPanelVisible)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
                 .Do(x => SelectShipmentRows(isThisPanelVisible ?
@@ -190,14 +198,14 @@ namespace ShipWorks.Stores.Content.Panels
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
                 .Do(x => isRatingPanelVisible = true)
-                .Subscribe(_ => rateMessagePanel.Visible = !isRatingPanelVisible);
+                .Subscribe(_ => rateMessagePanel.Visible = AllowRatesPanelLink && !isRatingPanelVisible);
 
             messenger.OfType<PanelHiddenMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
                 .Do(x => isRatingPanelVisible = false)
                 .Subscribe(_ =>
                 {
-                    rateMessagePanel.Visible = !isRatingPanelVisible;
+                    rateMessagePanel.Visible = AllowRatesPanelLink && !isRatingPanelVisible;
                 });
         }
 

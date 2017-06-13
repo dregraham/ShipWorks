@@ -174,7 +174,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Refresh()
         {
-            if (DateTime.UtcNow.Subtract(lastRefreshTimeInUtc) > capabilitiesTimeToLive)
+            // If the license capabilities is null ,possibly due to Tango returning an empty node, 
+            // or we've passed our time limit, force a refresh
+            if (LicenseCapabilities == null || DateTime.UtcNow.Subtract(lastRefreshTimeInUtc) > capabilitiesTimeToLive)
             {
                 // The license capabilities have expired
                 ForceRefresh();
@@ -378,7 +380,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (IsDisabled)
             {
-                return EditionRestrictionLevel.Hidden.AsEnumResult();
+                return EditionRestrictionLevel.Forbidden.AsEnumResult();
             }
 
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
