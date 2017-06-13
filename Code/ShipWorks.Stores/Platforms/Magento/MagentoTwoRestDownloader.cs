@@ -60,6 +60,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 do
                 {
                     ordersResponse = webClient.GetOrders(GetStartDate(), 1);
+
+                    if (ordersResponse == null)
+                    {
+                        throw new DownloadException("Magento returned an invalid response when attempting to download orders.");
+                    }
+
                     int totalOrders = ordersResponse.TotalCount;
 
                     if (totalOrders == 0 && QuantitySaved == 0)
