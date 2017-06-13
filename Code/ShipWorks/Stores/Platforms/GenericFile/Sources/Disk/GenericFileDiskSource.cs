@@ -163,11 +163,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Disk
             }
             catch (IOException ex)
             {
-                throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
+                log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
+                log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
             }
         }
 
@@ -184,11 +184,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.Disk
             }
             catch (IOException ex)
             {
-                throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
+                log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
+                log.Warn($"Could not move the file '{file.Name}' after {uiDetail}.\n\nError: {ex.Message}", ex);
             }
         }
     }

@@ -250,8 +250,7 @@ namespace ShipWorks.Users
             // infotipDeletedUsers
             // 
             this.infotipDeletedUsers.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.infotipDeletedUsers.Caption = "ShipWorks users are never really deleted so that ShipWorks can keep the full hist" +
-                "ory every user.";
+            this.infotipDeletedUsers.Caption = "ShipWorks users are never really deleted so that ShipWorks can keep the full history for every user.";
             this.infotipDeletedUsers.Location = new System.Drawing.Point(130, 214);
             this.infotipDeletedUsers.Name = "infotipDeletedUsers";
             this.infotipDeletedUsers.Size = new System.Drawing.Size(12, 12);
