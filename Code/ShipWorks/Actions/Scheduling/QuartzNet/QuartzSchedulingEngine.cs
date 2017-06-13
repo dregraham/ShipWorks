@@ -6,12 +6,16 @@ using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Data.Common;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Quartz.Spi;
 using System.Linq;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.VersionSpecificUpdates;
+using ShipWorks.Data.Connection;
 
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
@@ -240,7 +244,32 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         {
             var scheduler = schedulerFactory.GetScheduler();
 
-            scheduler.Start();
+            try
+            {
+                scheduler.Start();
+            }
+            catch (SchedulerConfigException ex)
+            {
+                log.Warn("SchedulerConfigException occurred.  Attempting to fix assemblies and actions.", ex);
+
+                // Redeploy assemblies to make sure they are up to date when we rebuild the schedule actions.
+                using (DbConnection connection = SqlSession.Current.OpenConnection())
+                {
+                    using (DbTransaction tran = connection.BeginTransaction())
+                    {
+                        SqlAssemblyDeployer.DeployAssemblies(connection, tran);
+                        tran.Commit();
+                    }
+                }
+
+                // This updater rebuilds the schedule actions so that they have correct assembly refs
+                V_04_05_00_00 versionUpdater = new V_04_05_00_00();
+                versionUpdater.Update();
+
+                // We have to get a new scheduler so that it's state is correct 
+                scheduler = schedulerFactory.GetScheduler();
+                scheduler.Start();
+            }
 
             var taskSource = new TaskCompletionSource<object>();
 
