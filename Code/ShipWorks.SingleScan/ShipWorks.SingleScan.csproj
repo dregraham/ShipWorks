@@ -143,6 +143,7 @@
     <Compile Include="AutoPrintCompletionResult.cs" />
     <Compile Include="AutoWeighService.cs" />
     <Compile Include="AutoPrintServicePipeline.cs" />
+    <Compile Include="AutoWeighServicePipeline.cs" />
     <Compile Include="ISingleScanAutomationSettings.cs" />
     <Compile Include="IAutoWeighService.cs" />
     <Compile Include="IAutoPrintService.cs" />

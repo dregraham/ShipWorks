@@ -112,7 +112,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private static void CollectTelemetryData(ITrackedDurationEvent trackedDurationEvent, string message)
         {
-            trackedDurationEvent.AddProperty(TelemetryPropertyName, message);
+            trackedDurationEvent?.AddProperty(TelemetryPropertyName, message);
         }
     }
 }
