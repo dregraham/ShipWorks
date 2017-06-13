@@ -11,6 +11,7 @@ using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Shipping;
 
@@ -25,6 +26,7 @@ namespace ShipWorks.SingleScan
         private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly IConnectableObservable<SingleScanFilterUpdateCompleteMessage> filterUpdateCompleteMessages;
         private readonly IDisposable filterUpdateCompleteMessagesConnection;
+        private readonly IMessenger messenger;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLoader orderLoader;
         private readonly IShippingManager shippingManager;
@@ -38,6 +40,7 @@ namespace ShipWorks.SingleScan
             IOrderLoader orderLoader,
             IShippingManager shippingManager)
         {
+            this.messenger = messenger;
             this.autoWeighService = autoWeighService;
             this.orderLoader = orderLoader;
             this.shippingManager = shippingManager;
@@ -74,8 +77,25 @@ namespace ShipWorks.SingleScan
             List<ShipmentEntity> shipments = (await GetShipments(message.OrderId)).ToList();
 
             autoWeighService.ApplyWeight(shipments, null);
+
+            List<ShipmentEntity> dirtyShipments = shipments.Where(s => s.IsDirty).ToList();
+
             IDictionary<ShipmentEntity, Exception> savedShipments = shippingManager.SaveShipmentsToDatabase(shipments, false);
-            return savedShipments.All(s => s.Value == null);
+            bool anyErrors = savedShipments.All(s => s.Value == null);
+            SendShipmentChangedMessage(dirtyShipments);
+
+            return anyErrors;
+        }
+
+        /// <summary>
+        /// Sends the shipment changed message.
+        /// </summary>
+        private void SendShipmentChangedMessage(List<ShipmentEntity> dirtyShipments)
+        {
+            foreach (ShipmentEntity shipment in dirtyShipments)
+            {
+                messenger.Send(new ShipmentChangedMessage(this, shippingManager.GetShipmentAdapter(shipment)));
+            }
         }
 
         /// <summary>
