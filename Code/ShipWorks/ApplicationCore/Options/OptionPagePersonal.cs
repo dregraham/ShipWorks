@@ -180,17 +180,7 @@ namespace ShipWorks.ApplicationCore.Options
             {
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
-
-                // Only allow auto weigh to be checked when auto print is enabled
-                if (!autoPrint.Checked)
-                {
-                    autoWeigh.Checked = false;
-                    autoWeigh.Enabled = false;
-                }
-                else
-                {
-                    autoWeigh.Enabled = true;
-                }
+                autoWeigh.Enabled = true;
             }
         }
 
