@@ -9,15 +9,15 @@ namespace ShipWorks.SingleScan
     /// Permissions for AutoPrint
     /// </summary>
     [Component]
-    public class AutoPrintSettings : IAutoPrintSettings
+    public class SingleScanAutomationSettings : ISingleScanAutomationSettings
     {
         private readonly IMainForm mainForm;
         private readonly IUserSession userSession;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoPrintSettings"/> class.
+        /// Initializes a new instance of the <see cref="SingleScanAutomationSettings"/> class.
         /// </summary>
-        public AutoPrintSettings(IMainForm mainForm, IUserSession userSession)
+        public SingleScanAutomationSettings(IMainForm mainForm, IUserSession userSession)
         {
             this.mainForm = mainForm;
             this.userSession = userSession;

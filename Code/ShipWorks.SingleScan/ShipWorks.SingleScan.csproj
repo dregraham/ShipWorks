@@ -131,7 +131,7 @@
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDialog.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintResult.cs" />
-    <Compile Include="AutoPrintSettings.cs" />
+    <Compile Include="SingleScanAutomationSettings.cs" />
     <Compile Include="AutoPrintService.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDialog.cs">
       <SubType>Form</SubType>
@@ -143,7 +143,7 @@
     <Compile Include="AutoPrintCompletionResult.cs" />
     <Compile Include="AutoWeighService.cs" />
     <Compile Include="AutoPrintServicePipeline.cs" />
-    <Compile Include="IAutoPrintSettings.cs" />
+    <Compile Include="ISingleScanAutomationSettings.cs" />
     <Compile Include="IAutoWeighService.cs" />
     <Compile Include="IAutoPrintService.cs" />
     <Compile Include="ISingleScanConfirmationService.cs" />

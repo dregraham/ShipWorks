@@ -15,7 +15,7 @@ namespace ShipWorks.SingleScan
     [Component]
     public class AutoWeighService : IAutoWeighService
     {
-        private readonly IAutoPrintSettings autoPrintSettings;
+        private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IMessageHelper messageHelper;
         private readonly IScaleReader scaleReader;
@@ -34,13 +34,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoWeighService"/> class.
         /// </summary>
-        public AutoWeighService(IAutoPrintSettings autoPrintSettings,
+        public AutoWeighService(ISingleScanAutomationSettings singleScanAutomationSettings,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
             IMessageHelper messageHelper,
             IScaleReader scaleReader,
             Func<Type, ILog> logFactory)
         {
-            this.autoPrintSettings = autoPrintSettings;
+            this.singleScanAutomationSettings = singleScanAutomationSettings;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.messageHelper = messageHelper;
             this.scaleReader = scaleReader;
@@ -53,7 +53,7 @@ namespace ShipWorks.SingleScan
         [NDependIgnoreLongMethod]
         public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
-            if (!autoPrintSettings.IsAutoWeighEnabled())
+            if (!singleScanAutomationSettings.IsAutoWeighEnabled())
             {
                 log.Debug("AutoWeigh is turned off");
                 CollectTelemetryData(trackedDurationEvent, "N/A");

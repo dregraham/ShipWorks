@@ -3,7 +3,7 @@
     /// <summary>
     /// Permissions for AutoPrint
     /// </summary>
-    public interface IAutoPrintSettings
+    public interface ISingleScanAutomationSettings
     {
         /// <summary>
         /// Whether or not auto print is permitted in the current state
