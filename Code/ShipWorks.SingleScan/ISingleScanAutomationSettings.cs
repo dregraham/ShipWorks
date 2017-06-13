@@ -14,5 +14,10 @@
         /// Whether or not auto weigh is turned on
         /// </summary>
         bool IsAutoWeighEnabled();
+
+        /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        bool AutoCreateShipments();
     }
 }

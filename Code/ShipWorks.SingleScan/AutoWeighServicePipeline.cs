@@ -113,7 +113,7 @@ namespace ShipWorks.SingleScan
             }
 
             // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
-            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId.Value }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
+            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId.Value }, ProgressDisplayOptions.NeverShow, singleScanAutomationSettings.AutoCreateShipments(), Timeout.Infinite);
 
             IEnumerable<ShipmentEntity> shipments = loadedOrders.Shipments.Where(s => !s.Processed);
             return shipments;

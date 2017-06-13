@@ -1,6 +1,7 @@
 ﻿using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
@@ -13,14 +14,16 @@ namespace ShipWorks.SingleScan
     {
         private readonly IMainForm mainForm;
         private readonly IUserSession userSession;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanAutomationSettings"/> class.
         /// </summary>
-        public SingleScanAutomationSettings(IMainForm mainForm, IUserSession userSession)
+        public SingleScanAutomationSettings(IMainForm mainForm, IUserSession userSession, IShippingSettings shippingSettings)
         {
             this.mainForm = mainForm;
             this.userSession = userSession;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -36,5 +39,10 @@ namespace ShipWorks.SingleScan
         /// Whether or not auto weigh is turned on
         /// </summary>
         public bool IsAutoWeighEnabled() => userSession.Settings?.AutoWeigh ?? false;
+
+        /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        public bool AutoCreateShipments() => shippingSettings.AutoCreateShipments;
     }
 }
