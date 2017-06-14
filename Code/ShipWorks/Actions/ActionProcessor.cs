@@ -102,7 +102,7 @@ namespace ShipWorks.Actions
                     {
                         foreach (ActionProcessor actionProcessor in lifetimeScope.Resolve<IActionProcessorFactory>().CreateStandard())
                         {
-                            actionProcessorTasks.Add(Task.Run(() =>
+                            actionProcessorTasks.Add(StartTask(() =>
                             {
                                 if (actionProcessor.AnyWorkToDo())
                                 {
@@ -125,6 +125,35 @@ namespace ShipWorks.Actions
             }
         }
 
+        /// <summary>
+        /// Execute the func in a new thread
+        /// </summary>
+        private static Task StartTask(Action func)
+        {
+            if (Program.ExecutionMode.IsUIDisplayed)
+            {
+                return Task.Run(func);
+            }
+
+            // Background process needs to be executed with STA
+            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+            Thread thread = new Thread(ExceptionMonitor.WrapThread(() =>
+            {
+                try
+                {
+                    func();
+                    tcs.SetResult(null);
+                }
+                catch (Exception e)
+                {
+                    tcs.SetException(e);
+                }
+            }));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            return tcs.Task;
+        }
+        
         /// <summary>
         /// See if there is any work to do, and if so, cleanup any abandoned queues
         /// </summary>
