@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using Autofac;
 using System.Threading.Tasks;
@@ -119,21 +120,23 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Execute the func in a new thread
         /// </summary>
-        private static Task StartTask(Action func)
+        private static Task StartTask(Action processQueue)
         {
             if (Program.ExecutionMode.IsUIDisplayed)
             {
-                return Task.Run(func);
+                return Task.Run(processQueue);
             }
 
-            // Background process needs to be executed with STA
-            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+            // Background process needs to be executed with STA because some action tasks use COM objects
+            // which are not thread safe, when the task is run via the UI this happens automatically
+            TaskCompletionSource<Unit> tcs = new TaskCompletionSource<Unit>();
+
             Thread thread = new Thread(ExceptionMonitor.WrapThread(() =>
             {
                 try
                 {
-                    func();
-                    tcs.SetResult(null);
+                    processQueue();
+                    tcs.SetResult(new Unit());
                 }
                 catch (Exception e)
                 {
