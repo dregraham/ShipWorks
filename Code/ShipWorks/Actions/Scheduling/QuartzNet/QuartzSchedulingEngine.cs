@@ -252,16 +252,6 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             {
                 log.Warn("SchedulerConfigException occurred.  Attempting to fix assemblies and actions.", ex);
 
-                // Redeploy assemblies to make sure they are up to date when we rebuild the schedule actions.
-                using (DbConnection connection = SqlSession.Current.OpenConnection())
-                {
-                    using (DbTransaction tran = connection.BeginTransaction())
-                    {
-                        SqlAssemblyDeployer.DeployAssemblies(connection, tran);
-                        tran.Commit();
-                    }
-                }
-
                 // This updater rebuilds the schedule actions so that they have correct assembly refs
                 V_04_05_00_00 versionUpdater = new V_04_05_00_00();
                 versionUpdater.Update();
