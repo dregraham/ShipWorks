@@ -192,7 +192,14 @@
 	{		
 	    // If the admin_check function exists, the password_funcs should be available
 	    // in the admin area.
-	    require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
+	    if (file_exists(DIR_WS_FUNCTIONS . 'password_funcs.php'))
+	    {
+	    	require_once(DIR_WS_FUNCTIONS . 'password_funcs.php');
+	    }
+	    else
+	    {
+	    	return true;
+	    }
 	    
 	    $loginOK = false;
 	        
