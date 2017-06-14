@@ -73,16 +73,7 @@ namespace ShipWorks.Actions
 
                 if (ApplicationBusyManager.TryOperationStarting("running actions", out busyToken))
                 {
-                    if (Program.ExecutionMode.IsUIDisplayed)
-                    {
-                        ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
-                    }
-                    else
-                    {
-                        var thread = new Thread(ExceptionMonitor.WrapThread(WorkerThread));
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
-                    }
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
                 }
             }
         }
