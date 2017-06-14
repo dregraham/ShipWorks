@@ -11,6 +11,9 @@ using Autofac;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 using System.Web;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Magento.Enums;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -36,30 +39,38 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
         {
-            switch (action)
+            try
             {
-                case "getstatuscodes":
-                    return ProcessGetRequest("/store/statuscodes", "GetStatusCodes", request);
+                switch (action)
+                {
+                    case "getstatuscodes":
+                        return ProcessGetRequest("/store/statuscodes", "GetStatusCodes", request);
 
-                case "getorders":
-                    return ProcessGetRequest("/orders", "GetOrders", request);
+                    case "getorders":
+                        return ProcessGetRequest("/orders", "GetOrders", request);
 
-                case "getcount":
-                    return ProcessGetRequest("/orders/count", "GetCount", request);
+                    case "getcount":
+                        return ProcessGetRequest("/orders/count", "GetCount", request);
 
-                case "getmodule":
-                    return ProcessGetRequest("/module", "GetModule", request);
+                    case "getmodule":
+                        return ProcessGetRequest("/module", "GetModule", request);
 
-                case "updateorder":
-                    return ProcessUpdateOrder(request);
+                    case "updateorder":
+                        return ProcessUpdateOrder(request);
 
-                case "getstore":
-                    return ProcessGetRequest("/store", "GetStore", request);
+                    case "getstore":
+                        return ProcessGetRequest("/store", "GetStore", request);
 
-                default:
-                    throw new InvalidOperationException("MagentoTwoWebClient doesn't support action: " + action);
+                    default:
+                        throw new InvalidOperationException("MagentoTwoWebClient doesn't support action: " + action);
+                }
+            }
+            catch (MagentoException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
             }
         }
+
         private GenericModuleResponse ProcessUpdateOrder(HttpVariableRequestSubmitter request)
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter

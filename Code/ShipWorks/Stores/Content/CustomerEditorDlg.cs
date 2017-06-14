@@ -100,6 +100,7 @@ namespace ShipWorks.Stores.Content
                 layout.AllColumns[EmailOutboundFields.ContextID].Position = 1;
             });
 
+            shipmentsControl.AllowRatesPanelLink = false;
             shipmentsControl.Initialize(shipmentLayoutID, GridColumnDefinitionSet.ShipmentPanel, (GridColumnLayout layout) =>
             {
                 layout.AllColumns[ShipmentFields.OrderID].Visible = true;
