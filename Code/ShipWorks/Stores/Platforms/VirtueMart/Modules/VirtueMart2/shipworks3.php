@@ -23,14 +23,6 @@ define('REQUIRE_SECURE', FALSE);
 define('_JEXEC', true);
 define('DS', DIRECTORY_SEPARATOR);
 
-<<<<<<< Updated upstream
-define('JPATH_BASE', __DIR__ );
-
-require_once(JPATH_BASE . DS . 'includes' . DS . 'defines.php');
-require_once(JPATH_BASE . DS .   'configuration.php');
-require_once(JPATH_BASE . DS .  'includes' . DS . 'framework.php');
-require_once(JPATH_BASE . DS .  'libraries' . DS . 'joomla' . DS . 'factory.php');
-=======
 // Initialize Joomla
 define('JPATH_BASE', dirname($_SERVER["SCRIPT_FILENAME"]) );
 
@@ -61,7 +53,6 @@ else
 	VmConfig::loadJLang('com_virtuemart', true);
 	VmConfig::loadJLang('com_virtuemart_orders', true);
 }
->>>>>>> Stashed changes
 
 $moduleVersion = "3.15.0.0";
 $schemaVersion = "1.0.0";
@@ -76,171 +67,6 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 // turn off caching - the HTTP/1.0 way
 header("Pragma: no-cache");
 
-<<<<<<< Updated upstream
-global $conn;
-global $CONFIG;
-
-// PHP 7 removed the mysql extensions, and replaced them with mysqli.
-// We need to check to see which is installed and use the appropriate one,
-// so the following wrapper methods are used to execute the one that is installed.
-
-// Wrapper method for connecting to the database.
-function sqlConnect()
-{
-	global $conn;
-	global $CONFIG;
-
-	if (function_exists('mysqli_connect')) 
-	{
-	  //mysqli is installed
-	  $conn = mysqli_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
-	} 
-	elseif (function_exists('mysql_connect')) 
-	{
-	  //mysql is installed
-	  $conn = mysql_connect($CONFIG->host, $CONFIG->user, $CONFIG->password);
-	}
-	else
-	{
-	  echo "Neither mysql_connect or mysqli_connect is installed.";
-	}
-}
-
-// Wrapper method for escaping text to store in the database.
-function sqlEscapeString($textToEscape)
-{
-	global $conn;
-
-	if (function_exists('mysqli_real_escape_string')) 
-	{
-	  //mysqli is installed
-	  return mysqli_real_escape_string($conn, $textToEscape);
-	} 
-	elseif (function_exists('mysql_real_escape_string')) 
-	{
-	  //mysql is installed
-	  return mysql_real_escape_string($textToEscape);
-	}
-	else
-	{
-	  echo "Neither mysql_real_escape_string or mysqli_real_escape_string is installed.";
-	}
-}
-
-// Wrapper method for executing a query.
-function sqlQuery($sql)
-{
-	global $conn;
-
-	if (function_exists('mysqli_query')) 
-	{
-	  //mysqli is installed
-	  return mysqli_query($conn, $sql);
-	} 
-	elseif (function_exists('mysql_query')) 
-	{
-	  //mysql is installed
-	  return mysql_query($conn, $sql);
-	}
-	else
-	{
-	  echo "Neither mysql_query or mysqli_query is installed.";
-	}
-}
-
-// Wrapper method for executing a number of rows query.
-function sqlNumRows($sql)
-{
-	if (function_exists('mysqli_num_rows')) 
-	{
-	  //mysqli is installed
-	  return mysqli_num_rows($sql);
-	} 
-	elseif (function_exists('mysql_num_rows')) 
-	{
-	  //mysql is installed
-	  return mysql_num_rows($sql);
-	}
-	else
-	{
-	  echo "Neither mysql_num_rows or mysqli_num_rows is installed.";
-	}
-}
-
-// Wrapper method for executing fetch array query.
-function sqlFetchArray($query)
-{
-	if (function_exists('mysqli_fetch_array')) 
-	{
-	  //mysqli is installed
-	  return mysqli_fetch_array($query);
-	} 
-	elseif (function_exists('mysql_fetch_array')) 
-	{
-	  //mysql is installed
-	  return mysql_fetch_array($query);
-	}
-	else
-	{
-	  echo "Neither mysql_fetch_array or mysqli_fetch_array is installed.";
-	}
-}
-
-// Wrapper method for selecting a database.
-function sqlSelectDb($dbName)
-{
-	global $conn;
-
-	if (function_exists('mysqli_select_db')) 
-	{
-	  //mysqli is installed
-	  return mysqli_select_db($conn, $dbName);
-	} 
-	elseif (function_exists('mysql_select_db')) 
-	{
-	  //mysql is installed
-	  return mysql_select_db($conn, $dbName);
-	}
-	else
-	{
-	  echo "Neither mysql_select_db or mysqli_select_db is installed.";
-	}
-}
-
-// Wrapper method for getting the last error.
-function sqlError()
-{
-	global $conn;
-
-	if (function_exists('mysqli_error')) 
-	{
-	  //mysqli is installed
-	  return mysqli_error($conn);
-	} 
-	elseif (function_exists('mysql_error')) 
-	{
-	  //mysql is installed
-	  return mysql_error($conn);
-	}
-	else
-	{
-	  echo "Neither mysql_error or mysqli_error is installed.";
-	}
-}
-
-function toUtf8($string)
-{
-	return iconv("ISO-8859-1", "UTF-8//TRANSLIT", $string);
-}
-
-//basic XML helper functions
-function writeXmlDeclaration()
-{
-	echo "<?xml version=\"1.0\" standalone=\"yes\" ?>";
-}
-
-function writeStartTag($tag, $attributes = null)
-=======
 /**
  * Simple iterator for a query
  *
@@ -248,7 +74,6 @@ function writeStartTag($tag, $attributes = null)
  * while older versions don't. This class lets us treat both the same.
  */
 class QueryIterator implements Iterator
->>>>>>> Stashed changes
 {
 	private $current = null;
 	private $index = 0;
@@ -371,10 +196,6 @@ class XmlOutput
 	{
 		return iconv("ISO-8859-1", "UTF-8//TRANSLIT", $string);
 	}
-<<<<<<< Updated upstream
-	sqlConnect($CONFIG->host, $CONFIG->user, $CONFIG->password);
-=======
->>>>>>> Stashed changes
 }
 
 //are we on an SSL connection?
@@ -464,57 +285,11 @@ function Action_Debug()
 // has access.
 function checkAdminLogin()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-	$loginOK = false;
-
-	if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
-		$username = $_REQUEST['username'];
-		$password = $_REQUEST['password'];
-
-		$sql = "SELECT id, password"
-			. " FROM " . $dbPrefix . "users"
-			. " WHERE username='" . sqlEscapeString($username) . "'";
-		
-		$check_adminquery = sqlQuery($sql);
-		
-		//$check_adminquery is false...
-		//Joomla < 2.5.18 method of auth
-		if (sqlNumRows($check_adminquery)) {
-			$check_admin = sqlFetchArray($check_adminquery);
-
-			// Check that password is good
-			$parts = explode(':', $check_admin['password']);
-			$crypt = $parts[0];
-			$salt = @$parts[1];
-			$testcrypt = getCryptedPassword($password, $salt);
-
-			if ($crypt == $testcrypt) {
-				$loginOK = true;
-			}
-		}
-
-		//Attempt this only if $loginOK is still false
-		//Joomla > 2.5.17 method of auth
-		if (!$loginOK) {
-			$db = JFactory::getDBO();
-
-			$query = "SELECT id,username, password FROM " . $dbPrefix
-				. "users WHERE username = '$username'";
-			$db->setQuery($query);
-
-			if ($result = $db->loadObject()) {
-				$match = JUserHelper::verifyPassword(
-					$password, $result->password, $result->id
-					);
-=======
 	if (!isset($_REQUEST['username']) || !isset($_REQUEST['password']))
 	{
 		outputError(40, "Insufficient parameters");
 		return false;
 	}
->>>>>>> Stashed changes
 
 	$authenticate = JAuthentication::getInstance();
 	$response = $authenticate->authenticate([
@@ -587,44 +362,6 @@ function GetStateNameFromId($id)
 // Write store data
 function Action_GetStore()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-	$sql = "SELECT * FROM " . $dbPrefix . "virtuemart_vmusers vmu" .
-		" inner join " . $dbPrefix . "users u on u.id=vmu.virtuemart_user_id" .
-		" inner join " . $dbPrefix
-		. "virtuemart_userinfos ui on ui.virtuemart_user_id = vmu.virtuemart_user_id"
-		.
-		" inner join " . $dbPrefix
-		. "virtuemart_vendors_en_gb en on en.virtuemart_vendor_id = vmu.virtuemart_vendor_id"
-		.
-		" inner join " . $dbPrefix
-		. "virtuemart_states s on s.virtuemart_state_id = ui.virtuemart_state_id"
-		.
-		" inner join " . $dbPrefix
-		. "virtuemart_countries c on c.virtuemart_country_id = ui.virtuemart_country_id"
-		.
-		" WHERE user_is_vendor=1 " .
-		" ORDER BY vmu.virtuemart_vendor_id LIMIT 1";
-
-	$vendorquery = sqlQuery($sql);
-	$vendor = sqlFetchArray($vendorquery);
-
-	writeStartTag("Store");
-	writeElement("Name", str_replace("\\", "", $vendor['name']));
-	writeElement("CompanyOrOwner", str_replace("\\", "", $vendor['company']));
-	writeElement("Email", $vendor['email']);
-	writeElement("Street1", $vendor['address_1']);
-	writeElement("Street2", $vendor['address_2']);
-	writeElement("City", $vendor['city']);
-	writeElement("State", $vendor['state_name']);
-	writeElement("PostalCode", $vendor['zip']);
-	writeElement("Country", substr($vendor['country_2_code'], 0, 2));
-	writeElement("Phone", $vendor['phone_1']);
-	writeElement("Website", $vendor['vendor_url']);
-
-	writeCloseTag("Store");
-=======
 	$vendorModel = VmModel::getModel('vendor');
 
 	$vendor = $vendorModel->getVendor();
@@ -659,36 +396,11 @@ function Action_GetStore()
 function GetValue($obj, $prop)
 {
 	return $obj != null && property_exists($obj, $prop) ? $obj->$prop : '';
->>>>>>> Stashed changes
 }
 
 // Get the count of orders greater than the start ID
 function Action_GetCount()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-	$start = GetStart();
-
-	// Write the params for easier diagnostics
-	writeStartTag("Parameters");
-	writeElement("Start", $start);
-	writeCloseTag("Parameters");
-
-	$ordersQuery = sqlQuery(
-		"select count(*) as count " .
-		" from " . $dbPrefix . "virtuemart_orders o " .
-		" where modified_on > '$start'"
-		);
-	$count = 0;
-
-	if (sqlNumRows($ordersQuery)) {
-		$rows = sqlFetchArray($ordersQuery);
-		$count = $rows['count'];
-	}
-
-	writeElement("OrderCount", $count);
-=======
 	$start = GetStart();
 
 	// Write the params for easier diagnostics
@@ -706,54 +418,18 @@ function Action_GetCount()
 	$count = $db->loadObject()->count;
 
 	XmlOutput::writeElement("OrderCount", $count);
->>>>>>> Stashed changes
 }
 
 // Get all orders greater than the given start id, limited by max count
 function Action_GetOrders()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $secure;
-	global $conn;
-
-	$maxcount = 50;
-
-=======
 	$maxcount = isset($_POST['maxcount']) ? $_POST['maxcount'] : 50;
->>>>>>> Stashed changes
 	$start = GetStart();
 
 	// Only get orders through 2 seconds ago.
 	$end = toFormattedDateFromObject(time() - 2);
 
 	// Write the params for easier diagnostics
-<<<<<<< Updated upstream
-	writeStartTag("Parameters");
-	writeElement("Start", $start);
-	writeElement("MaxCount", $maxcount);
-	writeCloseTag("Parameters");
-
-
-	writeStartTag("Orders");
-
-	$sql = "select * " .
-		" from " . $dbPrefix . "virtuemart_orders " .
-		" where modified_on > '$start'  " .
-		"    and modified_on <= '$end' " .
-		" order by modified_on asc " .
-		" limit 0, " . $maxcount;
-
-	$ordersQuery = sqlQuery($sql);
-
-
-	$lastModified = null;
-	$processedIds = "";
-
-	while ($row = sqlFetchArray($ordersQuery)) {
-		// keep track of the most current processed modified time
-		$lastModified = $row['modified_on'];
-=======
 	XmlOutput::writeStartTag("Parameters");
 	XmlOutput::writeElement("Start", $start);
 	XmlOutput::writeElement("MaxCount", $maxcount);
@@ -773,7 +449,6 @@ function Action_GetOrders()
 
 	$lastModified = null;
 	$processedIds = [];
->>>>>>> Stashed changes
 
 	foreach ($orderIterator as $order)
 	{
@@ -783,26 +458,7 @@ function Action_GetOrders()
 		WriteOrder($order);
 	}
 
-<<<<<<< Updated upstream
-	// If we processed some orders, we may have to get some more
-	if ($processedIds != "") {
-		// This make sure we don't split a page between orders of the same modified time
-		// If there's any that didn't make the maxcount cutoff with the same last modified time
-		// as the greatest last modified time we already processed, this will get them
-		$moreQuery = sqlQuery(
-			"select * " .
-			"from " . $dbPrefix . "virtuemart_orders o " .
-			"where virtuemart_order_id not in ($processedIds) " .
-			"and modified_on = '$lastModified'"
-			);
-
-		while ($row = sqlFetchArray($ordersQuery)) {
-			WriteOrder($row);
-		}
-	}
-=======
 	WriteExtraOrders($db, $processedIds, $lastModified);
->>>>>>> Stashed changes
 
 	XmlOutput::writeCloseTag("Orders");
 }
@@ -849,22 +505,11 @@ function GetStart()
  */
 function WriteOrder($order)
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-
-	writeStartTag("Order");
-	writeElement("OrderNumber", $row['virtuemart_order_id']);
-	writeElement("OrderDate", toFormattedDateFromString($row['created_on']));
-	writeElement(
-		"LastModified", toFormattedDateFromString($row['modified_on'])
-=======
 	XmlOutput::writeStartTag("Order");
 	XmlOutput::writeElement("OrderNumber", $order->virtuemart_order_id);
 	XmlOutput::writeElement("OrderDate", toFormattedDateFromString($order->created_on));
 	XmlOutput::writeElement(
 		"LastModified", toFormattedDateFromString($order->modified_on)
->>>>>>> Stashed changes
 		);
 	XmlOutput::writeElement(
 		"ShippingMethod",
@@ -873,63 +518,6 @@ function WriteOrder($order)
 	XmlOutput::writeElement("StatusCode", ord($order->order_status));
 	XmlOutput::writeElement("CustomerID", $order->virtuemart_user_id);
 
-<<<<<<< Updated upstream
-	$sqlAddressWithoutType
-		= "select u.*, s.state_name, c.country_name from " . $dbPrefix
-		. "virtuemart_order_userinfos u" .
-		" left outer join " . $dbPrefix
-		. "virtuemart_states s on s.virtuemart_state_id = u.virtuemart_state_id"
-		.
-		" inner join " . $dbPrefix
-		. "virtuemart_countries c on c.virtuemart_country_id = u.virtuemart_country_id"
-		.
-		" where virtuemart_order_id = " . $row['virtuemart_order_id']
-		. " AND address_type=";
-
-	$customerBTQuery = sqlQuery($sqlAddressWithoutType . "'BT'");
-	$customerBT = sqlFetchArray($customerBTQuery);
-
-	$customerSTQuery = sqlQuery($sqlAddressWithoutType . "'ST'");
-	$customerST = sqlFetchArray($customerSTQuery);
-
-	if ($customerST == null) {
-		$customerST = $customerBT;
-	}
-
-	writeStartTag("ShippingAddress");
-	writeElement("FirstName", $customerST['first_name']);
-	writeElement("LastName", $customerST['last_name']);
-	writeElement("Company", $customerST['company']);
-	writeElement("Street1", $customerST['address_1']);
-	writeElement("Street2", $customerST['address_2']);
-	writeElement("City", $customerST['city']);
-	writeElement("State", $customerST['state_name']);
-	writeElement("PostalCode", $customerST['zip']);
-	writeElement("Country", $customerST['country_name']);
-	writeElement("Phone", $customerST['phone_1']);
-	writeElement("Email", $customerST['email']);
-	writeCloseTag("ShippingAddress");
-
-	writeStartTag("BillingAddress");
-	writeElement("FirstName", $customerBT['first_name']);
-	writeElement("LastName", $customerBT['last_name']);
-	writeElement("Company", $customerBT['company']);
-	writeElement("Street1", $customerBT['address_1']);
-	writeElement("Street2", $customerBT['address_2']);
-	writeElement("City", $customerBT['city']);
-	writeElement("State", $customerBT['state_name']);
-	writeElement("PostalCode", $customerBT['zip']);
-	writeElement("Country", $customerBT['country_name']);
-	writeElement("Phone", $customerBT['phone_1']);
-	writeElement("Email", $customerBT['email']);
-	writeCloseTag("BillingAddress");
-
-	writeStartTag("Payment");
-	writeElement(
-		"Method", GetPaymentMethod($row['virtuemart_paymentmethod_id'])
-		);
-	writeCloseTag("Payment");
-=======
 	$billingAddress = WriteAddress($order->virtuemart_order_id, "BT", "BillingAddress", null);
 	WriteAddress($order->virtuemart_order_id, "ST", "ShippingAddress", $billingAddress);
 
@@ -942,7 +530,6 @@ function WriteOrder($order)
 	WriteOrderItems($order->virtuemart_order_id);
 	WriteOrderTotals($order);
 	WriteNotes($order);
->>>>>>> Stashed changes
 
 	XmlOutput::writeCloseTag("Order");
 }
@@ -1028,10 +615,6 @@ function GetPaymentMethod($payment_method_id)
 	return ($result == null) ? "" : $result->payment_name;
 }
 
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-=======
 // Write all totals lines for the order
 function WriteOrderTotals($order)
 {
@@ -1048,20 +631,10 @@ function WriteOrderTotals($order)
 		$title = ($order->order_discountAmount > 0) ? 'Fee' : 'Discount';
 		WriteTotal($title, $order->order_discountAmount, $title, "add");
 	}
->>>>>>> Stashed changes
 
 	$title = "Coupon ($order->coupon_code)";
 	WriteTotalIfGreaterThanZero($title, $order->coupon_discount, $title, "subtract");
 
-<<<<<<< Updated upstream
-	$q = sqlQuery($sql);
-
-	if ($q) {
-		$row = sqlFetchArray($q);
-		return $row['shipment_name'];
-	} else {
-		return "";
-=======
 	XmlOutput::writeCloseTag("Totals");
 }
 
@@ -1073,7 +646,6 @@ function WriteTotalIfGreaterThanZero($title, $value, $class, $impact = "add")
 	if ($value > 0)
 	{
 		WriteTotal($title, $value, $class, $impact);
->>>>>>> Stashed changes
 	}
 }
 
@@ -1093,12 +665,7 @@ function WriteTotal($title, $value, $class, $impact = "add")
  */
 function WriteOrderItems($orderID)
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-=======
 	$imageRoot = GetImageRoot();
->>>>>>> Stashed changes
 
 	$db = JFactory::getDBO();
 	$query = $db->getQuery(true)
@@ -1108,20 +675,11 @@ function WriteOrderItems($orderID)
 	$db->setQuery($query);
 	$itemIterator = QueryIterator::Get($db);
 
-<<<<<<< Updated upstream
-	$q = sqlQuery($sql);
-	if ($q) {
-		$row = sqlFetchArray($q);
-		return $row['payment_name'];
-	} else {
-		return "";
-=======
 	XmlOutput::writeStartTag("Items");
 
 	foreach ($itemIterator as $item)
 	{
 		WriteOrderItem($item, $imageRoot);
->>>>>>> Stashed changes
 	}
 
 	XmlOutput::writeCloseTag("Items");
@@ -1320,40 +878,6 @@ function WriteAttributeForFieldTypeG($productCustom)
  */
 function WriteAttributeForFieldTypeM($productCustom)
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-	$imageRoot = GetImageRoot();
-
-	$itemQuery = sqlQuery(
-		"select * from " . $dbPrefix . "virtuemart_order_items" .
-		" where virtuemart_order_id = " . $orderID
-		);
-
-	writeStartTag("Items");
-
-	while ($item = sqlFetchArray($itemQuery)) {
-		// Get product info
-		$sql = "select p.*,m.file_url_thumb" .
-			" from " . $dbPrefix . "virtuemart_products p" .
-			" inner join " . $dbPrefix
-			. "virtuemart_product_medias pm on pm.virtuemart_product_id = p.virtuemart_product_id"
-			.
-			" inner join " . $dbPrefix
-			. "virtuemart_medias m on m.virtuemart_media_id = pm.virtuemart_media_id"
-			.
-			" where p.virtuemart_product_id = "
-			. $item['virtuemart_product_id'];
-		$productQuery = sqlQuery($sql);
-
-		$product = sqlFetchArray($productQuery);
-
-		// Build fully qualified image url
-		$imageUrl = $product['file_url_thumb'];
-		if (isset($imageUrl) and strlen($imageUrl) > 0) {
-			$imageUrl = $imageRoot . $imageUrl;
-		}
-=======
 	$customFieldModel = VmModel::getModel('customfields');
 	$value = $customFieldModel->displayCustomMedia(
 		$productCustom->customfield_value,
@@ -1384,7 +908,6 @@ function WriteAttributeForFieldTypeS($productCustom)
 
 	WriteAttributeElement('Custom', vmText::_($value));
 }
->>>>>>> Stashed changes
 
 /**
  * Write element for attributes with field_type of 'A'
@@ -1486,21 +1009,6 @@ function WriteAttributeElement($name, $value, $price = 0) {
 // Return the collection of valid status codes
 function Action_GetStatusCodes()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-	writeStartTag("StatusCodes");
-
-	$codesQuery = sqlQuery(
-		"SELECT * FROM " . $dbPrefix . "virtuemart_orderstates"
-		);
-
-	while ($row = sqlFetchArray($codesQuery)) {
-		writeStartTag("StatusCode");
-		writeElement("Code", ord($row['order_status_code']));
-		writeElement("Name", $row['order_status_name']);
-		writeCloseTag("StatusCode");
-=======
 	$db = JFactory::getDBO();
 	$query = $db->getQuery(true)
 		->select('order_status_code, order_status_name')
@@ -1516,7 +1024,6 @@ function Action_GetStatusCodes()
 		XmlOutput::writeElement("Code", ord($code->order_status_code));
 		XmlOutput::writeElement("Name", vmText::_($code->order_status_name));
 		XmlOutput::writeCloseTag("StatusCode");
->>>>>>> Stashed changes
 	}
 
 	XmlOutput::writeCloseTag("StatusCodes");
@@ -1525,51 +1032,14 @@ function Action_GetStatusCodes()
 // Update order status
 function Action_UpdateStatus()
 {
-<<<<<<< Updated upstream
-	global $dbPrefix;
-	global $conn;
-
-	if (!isset($_POST['order']) || !isset($_POST['status'])
-		|| !isset($_POST['comments'])
-	) {
-=======
 	if (!isset($_POST['order']) ||
 		!isset($_POST['status']) ||
 		!isset($_POST['comments']))
 	{
->>>>>>> Stashed changes
 		outputError(40, "Insufficient parameters");
 		return;
 	}
 
-<<<<<<< Updated upstream
-	echo "<UpdateSuccess>";
-	$orderID = (int)$_POST['order'];
-	$code = chr($_POST['status']);
-	$comments = sqlEscapeString($_POST['comments']);
-
-	if (!sqlQuery(
-		"insert into " . $dbPrefix . "virtuemart_order_histories " .
-		" (virtuemart_order_id, order_status_code, created_on, modified_on, locked_on, customer_notified, comments) "
-		.
-		" values (" . $orderID . ", '$code' , now(), now(), now(), 0, '" . $comments . "')"
-		))
-	{
-  		echo "<ErrorInserting>" . sqlError() . "</ErrorInserting>";
-  	}
-
-	if (!sqlQuery(
-		"update " . $dbPrefix . "virtuemart_orders " .
-		" set order_status = '$code' " .
-		" where virtuemart_order_id = " . $orderID
-		))
-	{
-		
-  		echo "<ErrorUpdating>" . sqlError() . "</ErrorUpdating>";
-  	}
-
-	echo "</UpdateSuccess>";
-=======
 	$db = JFactory::getDBO();
 
 	$orderID = (int) $_POST['order'];
@@ -1615,7 +1085,6 @@ function UpdateOrderStatus($db, $orderID, $code)
 	{
 		XmlOutput::writeElement("ErrorUpdating", $db->getErrorMsg());
 	}
->>>>>>> Stashed changes
 }
 
 // Convert the date string to xml date string
@@ -1630,71 +1099,6 @@ function toFormattedDateFromString($sqlDateString)
 function toFormattedDateFromObject($sqlDateString)
 {
 	return gmdate("Y-m-d\TH:i:s", $sqlDateString);
-}
-
-<<<<<<< Updated upstream
-//virtue mart functions
-function db_connect()
-{
-	global $conn;
-
-	if (class_exists("JConfig")) {
-		$CONFIG = new JConfig();
-	        sqlConnect($CONFIG->host, $CONFIG->user, $CONFIG->password);
-		return sqlSelectDb($CONFIG->db);
-	} else {
-		// Joomla 1.0
-		global $mosConfig_host;
-		global $mosConfig_user;
-		global $mosConfig_password;
-		global $mosConfig_db;
-
-	        sqlConnect($mosConfig_host, $mosConfig_user, $mosConfig_password);
-		return sqlSelectDb($mosConfig_db);
-	}
-}
-
-function not_null($value)
-{
-	if (is_array($value)) {
-		if (sizeof($value) > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		if ((is_string($value) || is_int($value)) && ($value != '')
-			&& ($value != 'NULL')
-			&& (strlen(trim($value)) > 0)
-		) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-
-=======
->>>>>>> Stashed changes
-// encrypts a string using the encryption method that virtuemart does
-function getCryptedPassword($plaintext, $salt = '', $encryption = 'md5-hex')
-{
-	$encrypted = ($salt) ? md5($plaintext . $salt) : md5($plaintext);
-	return $encrypted;
-}
-
-// converts a date string in utc format to one in local time, sql format
-function toLocalSqlDate($sqlUtc)
-{
-	$pattern = "/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/i";
-
-	if (preg_match($pattern, $sqlUtc, $dt)) {
-		$unixUtc = gmmktime($dt[4], $dt[5], $dt[6], $dt[2], $dt[3], $dt[1]);
-
-		return date("Y-m-d H:i:s", $unixUtc);
-	}
-
-	return $sqlUtc;
 }
 
 ?>
