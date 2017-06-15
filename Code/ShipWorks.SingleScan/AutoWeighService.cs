@@ -53,7 +53,7 @@ namespace ShipWorks.SingleScan
         [NDependIgnoreLongMethod]
         public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedEvent trackedDurationEvent)
         {
-            if (!singleScanAutomationSettings.IsAutoWeighEnabled())
+            if (!singleScanAutomationSettings.IsAutoWeighEnabled)
             {
                 log.Debug("AutoWeigh is turned off");
                 CollectTelemetryData(trackedDurationEvent, "N/A");

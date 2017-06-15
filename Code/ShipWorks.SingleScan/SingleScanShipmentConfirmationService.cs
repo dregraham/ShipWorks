@@ -126,7 +126,7 @@ namespace ShipWorks.SingleScan
                     }
                 }
 
-                if (singleScanAutomationSettings.IsAutoWeighEnabled() && confirmedShipments.IsCountEqualTo(1))
+                if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
                 {
                     ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
                     int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdapters().Count();
@@ -218,7 +218,7 @@ namespace ShipWorks.SingleScan
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
             string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
-            if (singleScanAutomationSettings.IsAutoWeighEnabled())
+            if (singleScanAutomationSettings.IsAutoWeighEnabled)
             {
                 multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
             }

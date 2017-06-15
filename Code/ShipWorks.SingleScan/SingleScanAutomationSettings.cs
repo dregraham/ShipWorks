@@ -27,6 +27,16 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
+        /// Whether or not auto weigh is turned on
+        /// </summary>
+        public bool IsAutoWeighEnabled => userSession.Settings?.AutoWeigh ?? false;
+
+        /// <summary>
+        /// Should shipments be auto created
+        /// </summary>
+        public bool AutoCreateShipments => shippingSettings.AutoCreateShipments;
+
+        /// <summary>
         /// Whether or not auto print is permitted in the current state
         /// </summary>
         public bool IsAutoPrintEnabled()
@@ -34,15 +44,5 @@ namespace ShipWorks.SingleScan
             return userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
                    !mainForm.AdditionalFormsOpen();
         }
-
-        /// <summary>
-        /// Whether or not auto weigh is turned on
-        /// </summary>
-        public bool IsAutoWeighEnabled() => userSession.Settings?.AutoWeigh ?? false;
-
-        /// <summary>
-        /// Should shipments be auto created
-        /// </summary>
-        public bool AutoCreateShipments() => shippingSettings.AutoCreateShipments;
     }
 }
