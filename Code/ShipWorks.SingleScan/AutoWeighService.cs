@@ -29,7 +29,7 @@ namespace ShipWorks.SingleScan
 
         private const int ScaleTimeoutInSeconds = 2;
 
-        public const string TelemetryPropertyName = "SingleScan.AutoPrint.ShipmentsProcessed.AutoWeigh";
+        public const string TelemetryPropertyName = "SingleScan.AutoWeigh";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoWeighService"/> class.
@@ -51,7 +51,7 @@ namespace ShipWorks.SingleScan
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
         [NDependIgnoreLongMethod]
-        public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
+        public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedEvent trackedDurationEvent)
         {
             if (!singleScanAutomationSettings.IsAutoWeighEnabled())
             {
@@ -110,7 +110,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Collects the telemetry data.
         /// </summary>
-        private static void CollectTelemetryData(ITrackedDurationEvent trackedDurationEvent, string message)
+        private static void CollectTelemetryData(ITrackedEvent trackedDurationEvent, string message)
         {
             trackedDurationEvent?.AddProperty(TelemetryPropertyName, message);
         }

@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -80,14 +81,17 @@ namespace ShipWorks.SingleScan
         {
             List<ShipmentEntity> shipments = (await GetShipments(message.OrderId)).ToList();
 
-            autoWeighService.ApplyWeight(shipments, null);
-
+            using (ITrackedEvent telemetry = new TrackedEvent("SingleScan.Search.AutoWeigh"))
+            {
+                autoWeighService.ApplyWeight(shipments, telemetry);
+            }
+            
             List<ShipmentEntity> dirtyShipments = shipments.Where(s => s.IsDirty).ToList();
 
             IDictionary<ShipmentEntity, Exception> savedShipments = shippingManager.SaveShipmentsToDatabase(shipments, false);
             bool anyErrors = savedShipments.All(s => s.Value == null);
             SendShipmentChangedMessage(dirtyShipments);
-
+            
             return anyErrors;
         }
 
