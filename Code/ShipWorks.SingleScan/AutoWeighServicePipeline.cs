@@ -63,10 +63,22 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             filterUpdateCompleteMessages
-                .Where(message => !singleScanAutomationSettings.IsAutoPrintEnabled())
-                .Where(message => message.FilterNodeContent.Count == 1)
+                .Where(ShouldWeigh)
                 .SelectMany(async message => await Weigh(message))
                 .Subscribe();
+        }
+
+        /// <summary>
+        /// Returns true if we there is only one order in grid and autoprint isn't enabled.
+        /// </summary>
+        private bool ShouldWeigh(SingleScanFilterUpdateCompleteMessage message)
+        {
+            if (message.FilterNodeContent.Count != 1)
+            {
+                return false;
+            }
+
+            return !singleScanAutomationSettings.IsAutoPrintEnabled();
         }
 
         /// <summary>
