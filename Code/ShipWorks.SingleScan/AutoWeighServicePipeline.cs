@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Threading;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,8 +30,7 @@ namespace ShipWorks.SingleScan
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLoader orderLoader;
         private readonly IShippingManager shippingManager;
-        private readonly ISchedulerProvider scheduler;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -40,14 +38,12 @@ namespace ShipWorks.SingleScan
             ISingleScanAutomationSettings singleScanAutomationSettings,
             IAutoWeighService autoWeighService,
             IOrderLoader orderLoader,
-            IShippingManager shippingManager,
-            ISchedulerProvider scheduler)
+            IShippingManager shippingManager)
         {
             this.messenger = messenger;
             this.autoWeighService = autoWeighService;
             this.orderLoader = orderLoader;
             this.shippingManager = shippingManager;
-            this.scheduler = scheduler;
             this.singleScanAutomationSettings = singleScanAutomationSettings;
             filterUpdateCompleteMessages = messenger.OfType<SingleScanFilterUpdateCompleteMessage>().Publish();
             filterUpdateCompleteMessagesConnection = filterUpdateCompleteMessages.Connect();
@@ -67,7 +63,6 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             filterUpdateCompleteMessages
-                .ObserveOn(scheduler.WindowsFormsEventLoop)
                 .Where(message => !singleScanAutomationSettings.IsAutoPrintEnabled())
                 .Where(message => message.FilterNodeContent.Count == 1)
                 .SelectMany(async message => await Weigh(message))
