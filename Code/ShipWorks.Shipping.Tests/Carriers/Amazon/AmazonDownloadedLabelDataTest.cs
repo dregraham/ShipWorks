@@ -43,14 +43,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         };
 
         readonly AutoMock mock = null;
-        readonly List<IAmazonLabelEnforcer> labelEnforcers;
 
         public AmazonDownloadedLabelDataTest()
         {
             mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
-            labelEnforcers = new List<IAmazonLabelEnforcer>();
-
-            mock.Provide<IEnumerable<IAmazonLabelEnforcer>>(labelEnforcers);
         }
 
         [Fact]
@@ -89,21 +85,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IDataResourceManager>().Verify(x =>
                 x.CreateFromPdf(It.IsAny<Stream>(), defaultShipment.ShipmentID,
                     It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
-        }
-
-        [Fact]
-        public void Save_VerifiesShipment_WithEnforcers()
-        {
-            var enforcer1 = mock.Mock<IAmazonLabelEnforcer>();
-            var enforcer2 = mock.Mock<IAmazonLabelEnforcer>();
-
-            labelEnforcers.AddRange(enforcer1.Object, enforcer2.Object);
-
-            var testObject = mock.Create<AmazonDownloadedLabelData>(TypedParameter.From(defaultShipment), TypedParameter.From(defaultLabel));
-            testObject.Save();
-
-            enforcer1.Verify(x => x.VerifyShipment(defaultShipment));
-            enforcer2.Verify(x => x.VerifyShipment(defaultShipment));
         }
 
         public void Dispose()

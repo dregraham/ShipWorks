@@ -30,14 +30,5 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return AmazonApiRegion; }
         }
-
-        /// <summary>
-        /// Amazon shipping token
-        /// </summary>
-        string IAmazonCredentials.ShippingToken
-        {
-            get { return AmazonShippingToken; }
-            set { AmazonShippingToken = value; }
-        }
     }
 }

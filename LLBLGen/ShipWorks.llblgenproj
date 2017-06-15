@@ -288,7 +288,6 @@
           <Field Name="AccessKeyID" Type="string" MaxLength="32" FieldIndex="6" />
           <Field Name="AmazonApi" Type="int" FieldIndex="0" />
           <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="1" />
-          <Field Name="AmazonShippingToken" Type="string" MaxLength="500" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
@@ -450,7 +449,6 @@
           <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="6" />
           <Field Name="AmazonAuthToken" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="AmazonShippingToken" Type="string" MaxLength="500" FieldIndex="7" />
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
@@ -9017,7 +9015,6 @@
             <FieldMapping FieldName="AccessKeyID" TargetFieldName="AccessKeyID" />
             <FieldMapping FieldName="AmazonApi" TargetFieldName="AmazonApi" />
             <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
-            <FieldMapping FieldName="AmazonShippingToken" TargetFieldName="AmazonShippingToken" />
             <FieldMapping FieldName="AuthToken" TargetFieldName="AuthToken" />
             <FieldMapping FieldName="Certificate" TargetFieldName="Certificate" />
             <FieldMapping FieldName="Cookie" TargetFieldName="Cookie" />
@@ -9187,7 +9184,6 @@
             <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
             <FieldMapping FieldName="AmazonAuthToken" TargetFieldName="AmazonAuthToken" />
             <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
-            <FieldMapping FieldName="AmazonShippingToken" TargetFieldName="AmazonShippingToken" />
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />

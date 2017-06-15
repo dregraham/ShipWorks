@@ -400,7 +400,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 19, 0);
+			this.AddElementMapping("AmazonStoreEntity", @"ShipWorksLocal", @"dbo", "AmazonStore", 18, 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApi", "AmazonApi", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 2);
@@ -419,7 +419,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 			this.AddElementFieldMapping("AmazonStoreEntity", "DomainName", "DomainName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 17);
-			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, "NVarChar", 500, 0, 0, false, "", null, typeof(System.String), 18);
 		}
 
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
@@ -595,7 +594,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>
 		private void InitChannelAdvisorStoreEntityMappings()
 		{
-			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 9, 0);
+			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 8, 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -604,7 +603,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonMerchantID", "AmazonMerchantID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonAuthToken", "AmazonAuthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonShippingToken", "AmazonShippingToken", false, "NVarChar", 500, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
@@ -650,7 +648,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditNewOrders", "AuditNewOrders", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditDeletedOrders", "AuditDeletedOrders", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
 			this.AddElementFieldMapping("ConfigurationEntity", "CustomerKey", "CustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>

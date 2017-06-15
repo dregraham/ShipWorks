@@ -343,8 +343,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonAuthToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AmazonShippingToken", fieldHashtable);
 		}
 		#endregion
 
@@ -466,16 +464,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, value); }
-		}
-
-		/// <summary> The AmazonShippingToken property of the Entity ChannelAdvisorStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonShippingToken"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String AmazonShippingToken
-		{
-			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, true); }
-			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

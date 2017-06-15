@@ -318,7 +318,6 @@
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresherTest.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensionsTest.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerTest.cs" />

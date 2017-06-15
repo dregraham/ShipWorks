@@ -402,13 +402,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
 
-            storeEntity.SetShippingToken(new AmazonShippingToken()
-            {
-                ErrorDate = new DateTime(2001, 1, 1),
-                ErrorReason = string.Empty
-            });
-
-
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {
