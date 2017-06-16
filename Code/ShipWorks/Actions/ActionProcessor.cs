@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using Autofac;
 using System.Threading.Tasks;
@@ -73,16 +74,7 @@ namespace ShipWorks.Actions
 
                 if (ApplicationBusyManager.TryOperationStarting("running actions", out busyToken))
                 {
-                    if (Program.ExecutionMode.IsUIDisplayed)
-                    {
-                        ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
-                    }
-                    else
-                    {
-                        var thread = new Thread(ExceptionMonitor.WrapThread(WorkerThread));
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start();
-                    }
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
                 }
             }
         }
@@ -102,7 +94,7 @@ namespace ShipWorks.Actions
                     {
                         foreach (ActionProcessor actionProcessor in lifetimeScope.Resolve<IActionProcessorFactory>().CreateStandard())
                         {
-                            actionProcessorTasks.Add(Task.Run(() =>
+                            actionProcessorTasks.Add(StartTask(() =>
                             {
                                 if (actionProcessor.AnyWorkToDo())
                                 {
@@ -125,6 +117,37 @@ namespace ShipWorks.Actions
             }
         }
 
+        /// <summary>
+        /// Execute the func in a new thread
+        /// </summary>
+        private static Task StartTask(Action processQueue)
+        {
+            if (Program.ExecutionMode.IsUIDisplayed)
+            {
+                return Task.Run(processQueue);
+            }
+
+            // Background process needs to be executed with STA because some action tasks use COM objects
+            // which are not thread safe, when the task is run via the UI this happens automatically
+            TaskCompletionSource<Unit> tcs = new TaskCompletionSource<Unit>();
+
+            Thread thread = new Thread(ExceptionMonitor.WrapThread(() =>
+            {
+                try
+                {
+                    processQueue();
+                    tcs.SetResult(new Unit());
+                }
+                catch (Exception e)
+                {
+                    tcs.SetException(e);
+                }
+            }));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            return tcs.Task;
+        }
+        
         /// <summary>
         /// See if there is any work to do, and if so, cleanup any abandoned queues
         /// </summary>
