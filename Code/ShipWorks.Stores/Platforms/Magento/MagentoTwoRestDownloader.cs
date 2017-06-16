@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         if (magentoOrder.EntityId != magentoOrder.IncrementId)
                         {
                             // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
-                            if (IsLegacyRESTOrder(magentoOrder.EntityId))
+                            if (IsLegacyRestOrder(magentoOrder.EntityId))
                             {
                                 // we have downloaded this order before used its entity id as the order number so use it again
                                 orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// the IncrementId is the value that shows up in the Magento UI, when this downloader was built we would pull the orders EntityId into the OrderNumber field
         /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we dont duplicate them 
         /// </remarks>
-        private bool IsLegacyRESTOrder(int magentoOrderId)
+        private bool IsLegacyRestOrder(int magentoOrderId)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
