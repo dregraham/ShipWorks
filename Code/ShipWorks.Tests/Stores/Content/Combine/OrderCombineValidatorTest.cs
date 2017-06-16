@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         }
 
         [Fact]
-        public void Validate_ReturnSuccess_WhenOrderCountIsGreaterThaOne()
+        public void Validate_ReturnSuccess_WhenOrderCountIsGreaterThanOne()
         {
             var result = testObject.Validate(new long[] { 1, 2 });
             Assert.True(result.Success);
