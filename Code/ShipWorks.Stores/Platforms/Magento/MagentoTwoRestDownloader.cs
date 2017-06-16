@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                             }
                         }
 
-                        // the above did not yeald an order identifier so use our default and correct behavior of using incrementid as the order identifier
+                        // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
                         if (orderIdentifier == null)
                         {
                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
