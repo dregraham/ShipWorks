@@ -19,6 +19,9 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("entity_id")]
         public int EntityId { get; set; }
+
+        [JsonProperty("increment_id")]
+        public int IncrementId { get; set; }
         
         [JsonProperty("grand_total")]
         public double GrandTotal { get; set; }

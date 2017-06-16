@@ -27,6 +27,11 @@ namespace ShipWorks.Data.Connection
         bool FetchEntity(IEntity2 entity);
 
         /// <summary>
+        /// Fetches a new entity using the filter/relation combination filter passed via filterBucket and the new entity is created using the specified generic type
+        /// </summary>
+        TEntity FetchNewEntity<TEntity>(IRelationPredicateBucket bucket) where TEntity : EntityBase2, IEntity2, new();
+
+        /// <summary>
         /// Gets a scalar value, calculated with the aggregate and expression specified.
         /// the field specified is the field the expression and aggregate are applied on.
         /// </summary>
