@@ -134,6 +134,7 @@
     <Compile Include="Custom\OrderItemAttributeEntityTest.cs" />
     <Compile Include="Custom\OrderItemEntityTest.cs" />
     <Compile Include="Custom\UpsAccountEntityTest.cs" />
+    <Compile Include="Custom\UpsPackageEntityTest.cs" />
     <Compile Include="Custom\UspsAccountEntityTest.cs" />
     <Compile Include="EbayOrderEntityTest.cs" />
     <Compile Include="FedExShipmentEntityTest.cs" />

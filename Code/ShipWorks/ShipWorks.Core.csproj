@@ -698,15 +698,6 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\NamedComponentAttribute.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationExtensions.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationSource.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedResolutionExtensions.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderAttribute.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\TypeExtensions.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
       <DependentUpon>CrashDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -888,7 +879,6 @@
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
-    <Compile Include="ApplicationCore\ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -970,6 +960,8 @@
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Data\Administration\ISetupGuide.cs" />
+    <Compile Include="Data\Administration\ISetupGuideViewModel.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
@@ -988,6 +980,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_12_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_09_03_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
     <Compile Include="Data\Connection\ISqlAdapter.cs" />
     <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />
@@ -1242,11 +1235,31 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingControl.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalServiceRate.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\IUpsLocalRatingDisabledFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.Designer.cs">
+      <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\UpsBestRateRatingException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\FailedLocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\ILocalRateValidationResult.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateDiscrepancyViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\IUpsLocalRateValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
@@ -1265,6 +1278,7 @@
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
+    <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\ILabelServiceFactory.cs" />
@@ -1290,6 +1304,7 @@
     <Compile Include="Shipping\Services\ISingleScanOrderConfirmationService.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizard.cs" />
     <Compile Include="Shipping\Settings\IShipmentTypeSetupWizardFactory.cs" />
@@ -1310,6 +1325,8 @@
     <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
+    <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
@@ -1526,7 +1543,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
-    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
@@ -1748,6 +1764,8 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
+    <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
@@ -1884,9 +1902,6 @@
     <Compile Include="Shipping\Policies\RateResultCountShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyType.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactory.cs" />
-    <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -6058,7 +6073,6 @@
       <DependentUpon>ProStoresTokenLoginPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\SearchFit\SearchFitStoreType.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteException.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartStoreType.cs" />
     <Compile Include="Stores\Platforms\VirtueMart\VirtueMartStoreType.cs" />
     <Compile Include="Stores\Platforms\Volusion\CoreExtensions\Actions\VolusionShipmentUploadTask.cs" />
@@ -7197,21 +7211,6 @@
     <Compile Include="Stores\StatusPresetTarget.cs" />
     <Compile Include="Stores\StatusPresetCommands.cs" />
     <Compile Include="Stores\OnlineUpdateCommandProvider.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.Designer.cs">
-      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteDownloader.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteStoreType.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\ShopSiteWebClient.cs" />
-    <Compile Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.Designer.cs">
-      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Management\StoreManagerDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7965,6 +7964,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.resx">
       <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
+      <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>
@@ -8772,10 +8774,11 @@
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.4.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\composer.json" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
-    <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
+    <None Include="Stores\Platforms\OpenCart\Modules\OpenCart1\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Stores\Platforms\OpenCart\Modules\OpenCart2\shipworks3.php" />
     <EmbeddedResource Include="Actions\ActionEditorDlg.resx">
       <DependentUpon>ActionEditorDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -9898,14 +9901,6 @@
     <EmbeddedResource Include="Stores\Management\StatusPresetEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StatusPresetEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ShopSite\WizardPages\ShopSiteAccountPage.resx">
-      <DependentUpon>ShopSiteAccountPage.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\StoreManagerDlg.resx">
       <SubType>Designer</SubType>

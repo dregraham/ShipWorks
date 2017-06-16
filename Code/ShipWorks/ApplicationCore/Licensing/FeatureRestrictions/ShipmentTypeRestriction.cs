@@ -14,10 +14,6 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
     /// </summary>
     public class ShipmentTypeRestriction : FeatureRestriction
     {
-        private const string BestRateUpsRestrictionMessage =
-            "There is a UPS account in ShipWorks. Best Rate can no longer be used. " +
-            "Please choose another shipping provider.";
-
         private const string BestRateDisabledMessage =
             "Your plan does not support Best Rate.  You’ll need to upgrade your plan to continue using Best Rate.  " +
             "Please contact our Enterprise Sales Team to learn more about this and other Enterprise features.  " +
@@ -158,30 +154,24 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
         /// </summary>
         /// <remarks>
         /// There are two conditions that will allow best rate to show in the application
-        /// 1. they are in trial and there is no ups account
-        /// 2. their account is enabled for best rate and there is no ups account
+        /// 1. they are in trial
+        /// 2. their account is enabled for best rate
         /// </remarks>
         private Tuple<bool, string> IsBestRateDisabled(ILicenseCapabilities capabilities)
         {
-            // Get the ups shipment type so we can see if there are any ups accounts in the application
-            ShipmentType uspShipmentType = shipmentTypeManager.Get(ShipmentTypeCode.UpsOnLineTools);
-
             if (capabilities.IsInTrial)
             {
-                // All customers can use best rate when in trial as long as there
-                // aren't any UPS accounts in ShipWorks.
-                return Result(uspShipmentType.HasAccounts, BestRateUpsRestrictionMessage);
+                // All customers can use best rate when in trial
+                return Result(false);
             }
 
-            // Special checks for best rate as it is part of plan capabilities along with a
-            // check to see if there are any UPS accounts: Best rate is disabled if the
-            // plan tells us it's not or if there are any UPS accounts
+            // Special checks for best rate as it is part of plan capabilities 
             if (!capabilities.IsBestRateAllowed)
             {
                 return Result(true, BestRateDisabledMessage);
             }
 
-            return Result(uspShipmentType.HasAccounts, BestRateUpsRestrictionMessage);
+            return Result(false);
         }
 
         /// <summary>

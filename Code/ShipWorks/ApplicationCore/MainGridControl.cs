@@ -384,7 +384,7 @@ namespace ShipWorks.ApplicationCore
                                                     .Any(row => ActiveGrid.GetRowEntityID(row) == orderId) ?? false;
                             if (entityInGrid)
                             {
-                                ActiveGrid.SelectRows(new[] {orderId.Value});
+                                ActiveGrid.SelectRows(new[] { orderId.Value });
                             }
                         }
                     }
@@ -960,21 +960,26 @@ namespace ShipWorks.ApplicationCore
                 throw new InvalidOperationException("Not Searching.");
             }
 
-            ActiveGrid.ActiveFilterNode = null;
+            using (Disposable.Create(() => IsSearchEnding = false))
+            {
+                IsSearchEnding = true;
 
-            searchProvider.StatusChanged -= OnSearchStatusChanged;
-            searchProvider.Cancel();
-            searchProvider.Dispose();
-            searchProvider = null;
+                ActiveGrid.ActiveFilterNode = null;
 
-            AdvancedSearchVisible = false;
-            initiatedAdvanced = false;
+                searchProvider.StatusChanged -= OnSearchStatusChanged;
+                searchProvider.Cancel();
+                searchProvider.Dispose();
+                searchProvider = null;
 
-            searchBox.Text = "";
+                AdvancedSearchVisible = false;
+                initiatedAdvanced = false;
 
-            UpdateHeaderContent();
+                searchBox.Text = "";
 
-            RaiseSearchActiveChanged();
+                UpdateHeaderContent();
+
+                RaiseSearchActiveChanged();
+            }
         }
 
         /// <summary>
@@ -1018,6 +1023,11 @@ namespace ShipWorks.ApplicationCore
                 UpdateHeaderColors();
             }
         }
+
+        /// <summary>
+        /// Is a search in the process of ending
+        /// </summary>
+        public bool IsSearchEnding { get; private set; }
 
         /// <summary>
         /// As the filter definition changes, its required height will change.  We adjust to fit.

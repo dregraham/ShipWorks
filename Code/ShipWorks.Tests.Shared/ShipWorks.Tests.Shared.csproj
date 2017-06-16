@@ -143,6 +143,7 @@
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTestHelpers.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
+    <Compile Include="Database\DatabaseFixtureWithReusableContext.cs" />
     <Compile Include="Database\DataContext.cs" />
     <Compile Include="Database\DummyLegacyLicense.cs" />
     <Compile Include="Database\FedExDatabaseFixture.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="EntityBuilders\UpsProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
+    <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />
     <Compile Include="IKeyedMockCreator.cs" />
     <Compile Include="ImmediateSchedulerProvider.cs" />
     <Compile Include="IMockFactory.cs" />

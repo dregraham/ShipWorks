@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private IOdbcFieldMap fieldMap;
         private const int NumberOfSampleResults = 25;
         private bool isQueryValid;
-        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
-            IIndex<FileDialogType, IFileDialog> fileDialogFactory,
+            Func<IOpenFileDialog> openFileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile) :
                 base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
             this.sampleDataCommand = sampleDataCommand;
             this.fieldMap = fieldMap;
-            this.fileDialogFactory = fileDialogFactory;
+            this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
             ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private void OpenMapSettingsFile()
         {
 
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
+            IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
             fileDialog.Filter = importSettingsFile.Filter;
             fileDialog.DefaultFileName = fieldMap.Name;

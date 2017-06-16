@@ -294,7 +294,7 @@ namespace ShipWorks.Data.Utility
 
                 case EntityFieldLengthSource.ShopSiteUsername: return ShopSiteStoreFields.Username;
                 case EntityFieldLengthSource.ShopSitePassword: return ShopSiteStoreFields.Password;
-                case EntityFieldLengthSource.ShopSiteUrl: return ShopSiteStoreFields.CgiUrl;
+                case EntityFieldLengthSource.ShopSiteUrl: return ShopSiteStoreFields.ApiUrl;
 
                 case EntityFieldLengthSource.CustomsDescription: return ShipmentCustomsItemFields.Description;
                 case EntityFieldLengthSource.CustomsHarmonizedCode: return ShipmentCustomsItemFields.HarmonizedCode;

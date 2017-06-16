@@ -7,10 +7,9 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Get a file from the user
     /// </summary>
-    public class ShipWorksOpenFileDialog : IFileDialog
+    public class ShipWorksOpenFileDialog : IOpenFileDialog
     {
         private readonly Control owner;
-        private string selectedFileName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOpenFileDialog"/> class.
@@ -37,6 +36,11 @@ namespace Interapptive.Shared.UI
         public string DefaultFileName { private get; set; }
 
         /// <summary>
+        /// Gets the name of the selected file.
+        /// </summary>
+        public string SelectedFileName { get; private set; }
+
+        /// <summary>
         /// Shows the dialog.
         /// </summary>
         public DialogResult ShowDialog()
@@ -51,7 +55,7 @@ namespace Interapptive.Shared.UI
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    selectedFileName = openFileDialog.FileName;
+                    SelectedFileName = openFileDialog.FileName;
                 }
 
                 return dialogResult;
@@ -61,10 +65,20 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Gets the file with the name chosen by the user from ShowOpenFile or ShowSaveFile.
         /// </summary>
-        /// <exception cref="UnauthorizedAccessException" />
         public Stream CreateFileStream()
         {
-            return string.IsNullOrEmpty(selectedFileName) ? null : File.OpenRead(selectedFileName);
+            try
+            {
+                return string.IsNullOrEmpty(SelectedFileName) ? null : File.OpenRead(SelectedFileName);
+            }
+            catch (Exception e) when (e is IOException ||
+                                      e is NotSupportedException ||
+                                      e is UnauthorizedAccessException ||
+                                      e is ArgumentException)
+
+            {
+                throw new ShipWorksOpenFileDialogException(e.Message, e);
+            }
         }
     }
 }

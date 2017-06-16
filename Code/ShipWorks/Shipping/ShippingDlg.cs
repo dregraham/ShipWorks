@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -49,13 +50,7 @@ namespace ShipWorks.Shipping
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
-
-        readonly static IEnumerable<EntityField2> stateCountryFields = new[]
-            {
-                ShipmentFields.ShipStateProvCode, ShipmentFields.ShipCountryCode,
-                ShipmentFields.OriginStateProvCode, ShipmentFields.OriginCountryCode
-            };
-
+        
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
         private bool loadingSelectedShipments = false;
@@ -83,7 +78,7 @@ namespace ShipWorks.Shipping
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
-        private Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
+        private readonly Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
         private CustomsControlCache customsControlCache = new CustomsControlCache();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
@@ -97,9 +92,9 @@ namespace ShipWorks.Shipping
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
-        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
         private bool applyingProfile;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -107,13 +102,12 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory)
+            ICustomsManager customsManager)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
             this.customsManager = customsManager;
-            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
@@ -728,7 +722,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);
             setupControl.SetupComplete += OnShipmentTypeSetupComplete;
 
             serviceControlArea.Controls.Add(setupControl);

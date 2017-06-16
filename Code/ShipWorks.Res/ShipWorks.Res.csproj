@@ -287,6 +287,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.5.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.13.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <EmbeddedResource Include="Templates\Distribution\Source.zip" />
   </ItemGroup>
@@ -410,6 +411,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.13\5.13.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.10.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.11.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.12.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.14.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

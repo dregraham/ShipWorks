@@ -8,6 +8,7 @@ using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -26,6 +27,7 @@ namespace ShipWorks.Shipping.Services
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ILog log;
         private IDisposable subscription;
+        private IDisposable multipleSelectionSubscription;
 
         /// <summary>
         /// Constructor
@@ -51,10 +53,18 @@ namespace ShipWorks.Shipping.Services
             Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
-            // Ignore shipment changes from the GridProvider. This means someone changed the carrier from the
-            // shipments panel, and if it is for the current shipment, we'll get another request for rates from
-            // the shipping panel
-            subscription = messenger.OfType<ShipmentChangedMessage>()
+            var changedOrders = messenger.OfType<OrderSelectionChangedMessage>()
+                .SelectMany(x => x.LoadedOrderSelection)
+                .OfType<LoadedOrderSelection>()
+                .Select(x => x.ShipmentAdapters.FirstOrDefault())
+                .Where(x => x != null)
+                .Select(x => new
+                {
+                    HashingService = rateHashingServiceLookup[x.ShipmentTypeCode],
+                    ShipmentAdapter = x
+                });
+
+            var changedShipments = messenger.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
                 .Select(x => new
                 {
@@ -64,8 +74,33 @@ namespace ShipWorks.Shipping.Services
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
                 .Select(x => new
                 {
-                    ShipmentAdapter = x.Message.ShipmentAdapter.Clone(),
-                    RatingHash = x.HashingService.GetRatingHash(x.Message.ShipmentAdapter.Shipment)
+                    x.HashingService,
+                    x.Message.ShipmentAdapter
+                });
+
+            var selectedShipments = messenger.OfType<ShipmentSelectionChangedMessage>()
+                .Where(x => x.SelectedShipment != null)
+                .Select(x => new
+                {
+                    HashingService = rateHashingServiceLookup[x.SelectedShipment.ShipmentTypeCode],
+                    ShipmentAdapter = x.SelectedShipment
+                });
+
+            multipleSelectionSubscription = messenger.OfType<ShipmentSelectionChangedMessage>()
+                .Where(x => x.SelectedShipmentIDs.IsCountGreaterThan(1))
+                .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for multiple shipments.")))
+                .Subscribe();
+
+            // Ignore shipment changes from the GridProvider. This means someone changed the carrier from the
+            // shipments panel, and if it is for the current shipment, we'll get another request for rates from
+            // the shipping panel
+            subscription = changedShipments
+                .Merge(changedOrders)
+                .Merge(selectedShipments)
+                .Select(x => new
+                {
+                    ShipmentAdapter = x.ShipmentAdapter.Clone(),
+                    RatingHash = x.HashingService.GetRatingHash(x.ShipmentAdapter.Shipment)
                 })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
                 .Throttle(TimeSpan.FromMilliseconds(ThrottleTime), schedulerProvider.Default)
@@ -87,6 +122,7 @@ namespace ShipWorks.Shipping.Services
         public void EndSession()
         {
             subscription?.Dispose();
+            multipleSelectionSubscription?.Dispose();
         }
 
         /// <summary>

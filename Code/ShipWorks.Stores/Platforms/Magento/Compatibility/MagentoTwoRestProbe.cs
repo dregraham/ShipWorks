@@ -2,8 +2,8 @@
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility

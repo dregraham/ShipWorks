@@ -2,6 +2,7 @@
 using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Ground;

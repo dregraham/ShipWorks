@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Threading;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -24,21 +23,17 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private readonly LabelPersistenceStep saveLabelTask;
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
-        private readonly Func<Control> ownerRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
         public SerialProcessShipmentsWorkflow(
             ShipmentPreparationStep prepareShipmentTask,
             LabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
             LabelResultLogStep completeLabelTask,
-            IShippingManager shippingManager,
-            Func<Control> ownerRetriever)
+            IShippingManager shippingManager)
         {
-            this.ownerRetriever = ownerRetriever;
             this.shippingManager = shippingManager;
             this.completeLabelTask = completeLabelTask;
             this.saveLabelTask = saveLabelTask;
@@ -68,34 +63,35 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
             return await Task.Run(() =>
             {
-                ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
+                ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
                 return input.Where(_ => !cancellationSource.IsCancellationRequested)
                     .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
                     .Where(x => x != null)
-                    .Aggregate(executionState, AggregateResults);
+                    .Aggregate(workflowResult, AggregateResults);
+
             });
         }
 
         /// <summary>
         /// Aggregate the results
         /// </summary>
-        private ShipmentProcessorExecutionState AggregateResults(ShipmentProcessorExecutionState executionState, ILabelResultLogResult result)
+        private ProcessShipmentsWorkflowResult AggregateResults(ProcessShipmentsWorkflowResult workflowResult, ILabelResultLogResult result)
         {
             if (!string.IsNullOrEmpty(result.ErrorMessage))
             {
-                executionState.NewErrors.Add("Order " + result.OriginalShipment.Order.OrderNumberComplete + ": " + result.ErrorMessage);
+                workflowResult.NewErrors.Add("Order " + result.OriginalShipment.Order.OrderNumberComplete + ": " + result.ErrorMessage);
             }
 
-            executionState.OutOfFundsException = executionState.OutOfFundsException ?? result.OutOfFundsException;
-            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? result.TermsAndConditionsException;
-            executionState.WorldshipExported |= result.WorldshipExported;
+            workflowResult.OutOfFundsException = workflowResult.OutOfFundsException ?? result.OutOfFundsException;
+            workflowResult.TermsAndConditionsException = workflowResult.TermsAndConditionsException ?? result.TermsAndConditionsException;
+            workflowResult.WorldshipExported |= result.WorldshipExported;
 
             if (result.Success)
             {
-                executionState.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
+                workflowResult.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
             }
 
-            return executionState;
+            return workflowResult;
         }
 
         /// <summary>

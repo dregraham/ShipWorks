@@ -345,7 +345,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // the association fails ShipWorks continues to function.
                 log.Error("Error when associating stamps account with license.", ex);
             }
-
         }
 
         /// <summary>

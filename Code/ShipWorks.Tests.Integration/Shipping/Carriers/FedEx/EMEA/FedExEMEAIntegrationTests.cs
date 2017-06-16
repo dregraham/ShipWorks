@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;

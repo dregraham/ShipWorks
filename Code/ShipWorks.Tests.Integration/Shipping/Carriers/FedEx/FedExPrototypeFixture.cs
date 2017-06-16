@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
+using ShipWorks.Tests.Integration.Shared;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx

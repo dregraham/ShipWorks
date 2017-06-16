@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <DataTemplate x:Key="UpsLocalRatingDisabledFootnoteViewModelTemplate">
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
+            <TextBlock Margin="6,1,0,0">
+                Local rating needs to be enabled to compare UPS rates.
+                <Hyperlink Command="{Binding OpenAccountSettings}">Enable...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

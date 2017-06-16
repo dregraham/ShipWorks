@@ -32,20 +32,23 @@
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelOptional = new System.Windows.Forms.Label();
             this.labelAccount = new System.Windows.Forms.Label();
-            this.accountNumber = new System.Windows.Forms.TextBox();
             this.labelUpsAccount = new System.Windows.Forms.Label();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.Tabs = new System.Windows.Forms.TabControl();
             this.tabPageAccount = new System.Windows.Forms.TabPage();
+            this.accountNumber = new System.Windows.Forms.TextBox();
             this.description = new ShipWorks.UI.Controls.PromptTextBox();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.tabPageRates = new System.Windows.Forms.TabPage();
             this.upsRateTypeControl = new ShipWorks.Shipping.Carriers.UPS.UpsAccountRateTypeControl();
+            this.tabPageLocalRating = new System.Windows.Forms.TabPage();
+            this.LocalRateControlHost = new System.Windows.Forms.Integration.ElementHost();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.tabControl.SuspendLayout();
+            this.Tabs.SuspendLayout();
             this.tabPageAccount.SuspendLayout();
             this.tabPageRates.SuspendLayout();
+            this.tabPageLocalRating.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,14 +79,6 @@
             this.labelAccount.Size = new System.Drawing.Size(50, 13);
             this.labelAccount.TabIndex = 1;
             this.labelAccount.Text = "Account:";
-            // 
-            // accountNumber
-            // 
-            this.accountNumber.Location = new System.Drawing.Point(85, 25);
-            this.accountNumber.Name = "accountNumber";
-            this.accountNumber.ReadOnly = true;
-            this.accountNumber.Size = new System.Drawing.Size(165, 21);
-            this.accountNumber.TabIndex = 2;
             // 
             // labelUpsAccount
             // 
@@ -117,18 +112,19 @@
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
-            // tabControl
+            // Tabs
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Tabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(this.tabPageAccount);
-            this.tabControl.Controls.Add(this.tabPageRates);
-            this.tabControl.Location = new System.Drawing.Point(12, 12);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(400, 473);
-            this.tabControl.TabIndex = 0;
+            this.Tabs.Controls.Add(this.tabPageAccount);
+            this.Tabs.Controls.Add(this.tabPageRates);
+            this.Tabs.Controls.Add(this.tabPageLocalRating);
+            this.Tabs.Location = new System.Drawing.Point(12, 12);
+            this.Tabs.Name = "Tabs";
+            this.Tabs.SelectedIndex = 0;
+            this.Tabs.Size = new System.Drawing.Size(400, 473);
+            this.Tabs.TabIndex = 0;
             // 
             // tabPageAccount
             // 
@@ -147,6 +143,14 @@
             this.tabPageAccount.Text = "Account";
             this.tabPageAccount.UseVisualStyleBackColor = true;
             // 
+            // accountNumber
+            // 
+            this.accountNumber.Location = new System.Drawing.Point(85, 25);
+            this.accountNumber.Name = "accountNumber";
+            this.accountNumber.ReadOnly = true;
+            this.accountNumber.Size = new System.Drawing.Size(165, 21);
+            this.accountNumber.TabIndex = 2;
+            // 
             // description
             // 
             this.description.Location = new System.Drawing.Point(85, 52);
@@ -159,6 +163,7 @@
             // 
             // personControl
             // 
+            this.personControl.AddressSelector = null;
             this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
@@ -169,11 +174,14 @@
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone) 
             | ShipWorks.Data.Controls.PersonFields.Website)));
+            this.personControl.EnableValidationControls = false;
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.personControl.FullName = "";
             this.personControl.Location = new System.Drawing.Point(6, 79);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 362);
             this.personControl.TabIndex = 5;
+            this.personControl.ValidatedAddressScope = null;
             this.personControl.ContentChanged += new System.EventHandler(this.OnPersonContentChanged);
             // 
             // tabPageRates
@@ -195,6 +203,28 @@
             this.upsRateTypeControl.Size = new System.Drawing.Size(389, 444);
             this.upsRateTypeControl.TabIndex = 0;
             // 
+            // tabPageLocalRating
+            // 
+            this.tabPageLocalRating.Controls.Add(this.LocalRateControlHost);
+            this.tabPageLocalRating.Location = new System.Drawing.Point(4, 22);
+            this.tabPageLocalRating.Name = "tabPageLocalRating";
+            this.tabPageLocalRating.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLocalRating.Size = new System.Drawing.Size(392, 447);
+            this.tabPageLocalRating.TabIndex = 2;
+            this.tabPageLocalRating.Text = "Local Rating";
+            this.tabPageLocalRating.UseVisualStyleBackColor = true;
+            // 
+            // LocalRateControlHost
+            // 
+            this.LocalRateControlHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LocalRateControlHost.Location = new System.Drawing.Point(3, 3);
+            this.LocalRateControlHost.Margin = new System.Windows.Forms.Padding(0);
+            this.LocalRateControlHost.Name = "LocalRateControlHost";
+            this.LocalRateControlHost.Size = new System.Drawing.Size(386, 441);
+            this.LocalRateControlHost.TabIndex = 0;
+            this.LocalRateControlHost.Text = "elementHost1";
+            this.LocalRateControlHost.Child = null;
+            // 
             // UpsAccountEditorDlg
             // 
             this.AcceptButton = this.ok;
@@ -202,7 +232,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
             this.ClientSize = new System.Drawing.Size(424, 527);
-            this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.Tabs);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.cancel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -216,10 +246,11 @@
             this.Text = "UPS Account";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
-            this.tabControl.ResumeLayout(false);
+            this.Tabs.ResumeLayout(false);
             this.tabPageAccount.ResumeLayout(false);
             this.tabPageAccount.PerformLayout();
             this.tabPageRates.ResumeLayout(false);
+            this.tabPageLocalRating.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
@@ -236,10 +267,12 @@
         private System.Windows.Forms.Label labelUpsAccount;
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageAccount;
         private System.Windows.Forms.TabPage tabPageRates;
         private ShipWorks.Shipping.Carriers.UPS.UpsAccountRateTypeControl upsRateTypeControl;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
+        private System.Windows.Forms.TabPage tabPageLocalRating;
+        private System.Windows.Forms.Integration.ElementHost LocalRateControlHost;
+        public System.Windows.Forms.TabControl Tabs;
     }
 }

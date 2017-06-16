@@ -6,8 +6,11 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Builder;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
@@ -16,8 +19,6 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -42,7 +43,6 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -225,7 +225,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<HttpRequestSubmitterFactory>()
                 .As<IHttpRequestSubmitterFactory>();
-				
+
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -241,8 +241,8 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<EndiciaAccountEditorDlg>();
             builder.RegisterType<UspsAccountInfoControl>();
 
-            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
-            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
+            builder.RegisterType<ShipWorksOpenFileDialog>().AsImplementedInterfaces();
+            builder.RegisterType<ShipWorksSaveFileDialog>().AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -288,12 +288,6 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<ShipmentTypeSetupActivity>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<EncryptionProviderFactory>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<LicenseCipherKey>()
-                .Keyed<ICipherKey>(CipherContext.License);
 
             builder.RegisterType<StreamCipherKey>()
                 .Keyed<ICipherKey>(CipherContext.Stream);

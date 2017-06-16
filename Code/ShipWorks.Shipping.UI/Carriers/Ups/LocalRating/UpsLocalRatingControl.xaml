@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.Carriers.Ups.UpsLocalRatingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             FontFamily="Tahoma"
+             FontSize="11"
+             d:DataContext="{d:DesignInstance local:UpsLocalRatingViewModel}"
+             mc:Ignorable="d">
+    <Control.Resources>
+        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <ui:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Control.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0">
+            <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding LocalRatingEnabled}">Enable local rating</CheckBox>
+        </WrapPanel>
+        <TextBlock Grid.Row="1"
+                   Margin="21 10 0 10"
+                   TextWrapping="Wrap">
+            To display UPS rates with Best Rate in ShipWorks, please complete the following steps:
+        </TextBlock>
+        <StackPanel Grid.Row="2" Margin="41 0 0 10">
+            <TextBlock>
+                1. Download the
+                <Hyperlink Command="{Binding DownloadSampleRateFileCommand}">sample rate file</Hyperlink>.
+            </TextBlock>
+            <TextBlock>2. Modify the file to specify your rates.</TextBlock>
+            <TextBlock>3. Upload the modified rate file.</TextBlock>
+            <TextBlock>
+                4. Download the
+                <Hyperlink Command="{Binding DownloadSampleZoneFileCommand}">sample zone file</Hyperlink>.
+            </TextBlock>
+            <TextBlock>5. Modify the file to specify zones for your origin addresses.</TextBlock>
+            <TextBlock>6. Upload the modified zone file.</TextBlock>
+        </StackPanel>
+
+        <DockPanel Grid.Row="3"
+                   Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding RateStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadRatingFileCommand}">
+                Upload Rate File...
+            </Button>
+        </DockPanel>
+
+        <DockPanel Grid.Row="4"
+                   Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center"
+                       Text="{Binding ZoneStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Width="120"
+                    Height="21"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBooleanConverter}}"
+                    Command="{Binding UploadZoneFileCommand}">
+                Upload Zone File...
+            </Button>
+        </DockPanel>
+        <ui:WaitSpinner Grid.Row="5"
+                        Visibility="{Binding IsUploading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderThickness="0" Background="Transparent" VerticalAlignment="Top"
+                        Content="{Binding SpinnerText}" />
+        <ScrollViewer Grid.Row="5" HorizontalScrollBarVisibility="Disabled" 
+                      VerticalScrollBarVisibility="Auto" Margin="0 10 0 0">
+            <TextBox Text="{Binding UploadMessage, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
+                     Margin="-2 0 0 0"
+                     VerticalAlignment="Top" HorizontalAlignment="Left" 
+                     Background="Transparent" BorderThickness="0" IsReadOnly="True">
+                <TextBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="True">
+                                <Setter Property="TextBox.Foreground" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ErrorUploading, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="False">
+                                <Setter Property="TextBox.Foreground" Value="Green" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </ScrollViewer>
+        <TextBlock Grid.Row="6" TextAlignment="Right" Visibility="{Binding UploadMessageMoreInfoLink, Converter={StaticResource NullToVisibilityConverter}}" Margin="0 10 0 0">
+            <Hyperlink NavigateUri="{Binding UploadMessageMoreInfoLink}" ui:Link.OpenInBrowser="true">More Info</Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

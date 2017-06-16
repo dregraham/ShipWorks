@@ -74,6 +74,10 @@
       <HintPath>..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Reactive.Testing, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net46\Microsoft.Reactive.Testing.dll</HintPath>
       <Private>True</Private>
@@ -84,6 +88,14 @@
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Compression.Base46.15.1.0.41\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.15.1.0.41\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
@@ -162,6 +174,45 @@
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\AddressServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\DimensionServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\PackageServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ShipDayServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\AdditionalHandlingSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeclaredValueSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DeliveryAreaSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\DryIceSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelAirSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\NdaEarlyOver150LbsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ReturnsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayPickupSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ThirdPartyBillingSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\FuelGroundSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\LargePackageUpsSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\CODSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SaturdayDeliverySurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\SignatureSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\CarbonNeutralSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\ShipperReleaseSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\UpsSurchargeFactoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Surcharges\VerbalConfirmationSurchargeTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsImportedRateValidatorTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateClientTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateExcelReaderFactoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableRepositoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalRateTableTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceUpsRateExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\SurchargeUpsRateExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalServiceRateTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsLocalWithApiFailOverRatingClientTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\UpsZoneExcelReaderTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\ServiceFilters\ValueAddServiceFilterTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Validation\LocalRateValidationResultFactoryTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Validation\FailedLocalRateValidationResultTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancyTest.cs" />
+    <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateValidatorTest.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapterTest.cs" />
@@ -230,6 +281,10 @@
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{A93F195E-44BC-4C73-8F70-7714A040EA0E}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>

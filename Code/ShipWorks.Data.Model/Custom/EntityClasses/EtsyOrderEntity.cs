@@ -7,7 +7,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         static Action<EtsyOrderEntity> effectiveOnlineStatusAlgorithm = null;
 
         /// <summary>
-        /// Set the algorithm to use for calculating the effective paymeant status of the item
+        /// Set the algorithm to use for calculating the effective payment status of the item
         /// </summary>
         public static void SetEffectiveOnlineStatusAlgorithm(Action<EtsyOrderEntity> algorithm)
         {

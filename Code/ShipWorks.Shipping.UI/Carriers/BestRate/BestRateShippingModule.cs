@@ -69,8 +69,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // return BestRateShippingBrokerFactory with default behavior
             return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
             {
-                new UpsWorldShipBrokerFilter(),
-                new UpsBestRateRestrictionBrokerFilter()
+                new UpsWorldShipBrokerFilter()
             });
         }
     }

@@ -180,6 +180,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Writes the carbon neutral XML to a rate or ship request
+        /// </summary>
+        public static void WriteCarbonNeutralXml(XmlTextWriter xmlWriter, UpsShipmentEntity ups)
+        {
+            if (ups.CarbonNeutral)
+            {
+                // Element just needs to be present
+                xmlWriter.WriteElementString("UPScarbonneutralIndicator", string.Empty);
+            }
+        }
+
+        /// <summary>
         /// Translate the state if necessary
         /// </summary>
         /// <param name="countryCode">Country associated with the address</param>

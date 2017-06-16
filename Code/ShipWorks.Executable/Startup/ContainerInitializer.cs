@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Services.Dialogs;
@@ -34,12 +35,19 @@ namespace ShipWorks.Startup
         /// </summary>
         public static IContainer BuildRegistrations(IContainer container) =>
             IoC.BuildRegistrations(container,
+                // Interapptive.Shared
+                typeof(HttpVariableRequestSubmitter).Assembly,
+                // ShipWorks.Shipping
                 typeof(ShippingDialogService).Assembly,
+                // ShipWorks.Shipping.UI
                 typeof(ShippingModule).Assembly,
+                // ShipWorks.Stores.UI
                 typeof(LemonStandStoreModule).Assembly,
+                // ShipWorks.UI
                 typeof(EnumImageConverter).Assembly,
+                // ShipWorks.Stores
                 typeof(MagentoTwoRestClient).Assembly,
-                typeof(NoneLabelService).Assembly,
+                // ShipWorks.SingleScan
                 typeof(ScannerService).Assembly);
     }
 }

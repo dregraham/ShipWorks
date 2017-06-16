@@ -851,14 +851,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// One of the values that affects rates has changed
-        /// </summary>
-        private void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-            RaiseRateCriteriaChanged();
-        }
-
-        /// <summary>
         /// Called when [dangerous goods checked].
         /// </summary>
         private void OnDangerousGoodsChecked(object sender, EventArgs e)

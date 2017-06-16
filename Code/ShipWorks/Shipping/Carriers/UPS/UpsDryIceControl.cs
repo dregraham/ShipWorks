@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,6 +14,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class UpsDryIceControl : UserControl, IShippingProfileControl
     {
+        /// <summary>
+        /// A change occurred that impacts the rate of a shipment.
+        /// </summary>
+        public event EventHandler RateCriteriaChanged;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -29,7 +35,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnRegulationSetChanged(object sender, System.EventArgs e)
         {
             medicalUse.Enabled = (regulationSet.SelectedItem != null &&
-                ((EnumEntry<UpsDryIceRegulationSet>)regulationSet.SelectedItem).Value == UpsDryIceRegulationSet.Cfr);
+                ((EnumEntry<UpsDryIceRegulationSet>) regulationSet.SelectedItem).Value == UpsDryIceRegulationSet.Cfr);
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -38,6 +45,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnContainsDryIceChanged(object sender, System.EventArgs e)
         {
             panelDryIceDetails.Enabled = containsDryIce.Checked;
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Called when [rate criteria changed].
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, System.EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -107,6 +123,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             medicalUse.Checked = packageEntity.DryIceIsForMedicalUse.GetValueOrDefault();
             weight.Weight = packageEntity.DryIceWeight.GetValueOrDefault();
             regulationSet.SelectedValue = (UpsDryIceRegulationSet)packageEntity.DryIceRegulationSet.GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Raises the rate criteria changed event.
+        /// </summary>
+        private void RaiseRateCriteriaChanged()
+        {
+            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

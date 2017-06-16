@@ -32,6 +32,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -46,7 +47,7 @@ namespace ShipWorks.Stores.Content.Panels
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
 
-        private OrderEntity loadedOrder;
+        private LoadedOrderSelection loadedOrderSelection;
         private bool isThisPanelVisible;
         private bool isRatingPanelVisible;
         private IEnumerable<long> selectedShipments;
@@ -99,17 +100,37 @@ namespace ShipWorks.Stores.Content.Panels
             IMessenger messenger = globalLifetimeScope.Resolve<IMessenger>();
             ISchedulerProvider schedulerProvider = globalLifetimeScope.Resolve<ISchedulerProvider>();
 
-            messenger.Where(x => x.Sender is ShippingDlg)
-                .Subscribe(_ => ReloadContent());
+            HandleShipmentChanges(messenger);
+            HandleOrderSelectionChanges(messenger, schedulerProvider);
+            HandleShippingDialogMessages(messenger, schedulerProvider);
+            HandleRatingPanelToggle(messenger);
+            HandleShipmentsPanelToggle(messenger);
+        }
 
-            // Update the shipment when the provider changes. This keeps things in sync, updates the displayed rates
-            // immediately. This means we no longer need to hide rates when the shipping pane is shown because they
-            // should not get out of sync.
-            messenger.OfType<ShipmentChangedMessage>()
-                .Where(x => x.ChangedField == ShipmentFields.ShipmentType.Name)
-                .Do(_ => Program.MainForm.ForceHeartbeat())
-                .Subscribe(_ => ReloadContent());
+        /// <summary>
+        /// Handle messages related to the Shipping Dialog
+        /// </summary>
+        private void HandleShippingDialogMessages(IMessenger messenger, ISchedulerProvider schedulerProvider)
+        {
+            messenger.Where(x => x.Sender is ShippingDlg).Subscribe(_ => ReloadContent());
 
+            // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
+            // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
+            //  for both UPS and FedEx at the same time)
+            messenger.OfType<ShippingDialogOpeningMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(_ =>
+                {
+                    rateMessagePanel.Visible = false;
+                    selectedShipments = entityGrid.Selection.Keys.ToReadOnly();
+                });
+        }
+
+        /// <summary>
+        /// Handle order selection changes
+        /// </summary>
+        private void HandleOrderSelectionChanges(IMessenger messenger, ISchedulerProvider schedulerProvider)
+        {
             messenger.OfType<OrderSelectionChangingMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(_ => entityGrid.SelectRows(Enumerable.Empty<long>()))
@@ -125,21 +146,25 @@ namespace ShipWorks.Stores.Content.Panels
                     DefaultShipmentSelection))
                 .Do(_ => selectedShipments = Enumerable.Empty<long>())
                 .Subscribe();
+        }
 
-            // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
-            // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
-            //  for both UPS and FedEx at the same time)
-            messenger.OfType<ShippingDialogOpeningMessage>()
-                .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(_ =>
-                {
-                    rateMessagePanel.Visible = false;
-                    selectedShipments = entityGrid.Selection.Keys.ToReadOnly();
-                });
+        /// <summary>
+        /// Handle shipment changes
+        /// </summary>
+        private void HandleShipmentChanges(IMessenger messenger)
+        {
+            // Update the shipment when the provider changes. This keeps things in sync, updates the displayed rates
+            // immediately. This means we no longer need to hide rates when the shipping pane is shown because they
+            // should not get out of sync.
+            messenger.OfType<ShipmentChangedMessage>()
+                .Where(x => x.ChangedField == ShipmentFields.ShipmentType.Name)
+                .Do(_ => Program.MainForm.ForceHeartbeat())
+                .Subscribe(_ => ReloadContent());
 
-            HandleRatingPanelToggle(messenger);
-
-            HandleShipmentsPanelToggle(messenger);
+            messenger.OfType<ShipmentChangedMessage>()
+                .Where(x => x.Sender is GridProviderDisplayType)
+                .Do(x => UpdateStoredShipment(x.ShipmentAdapter))
+                .Subscribe();
         }
 
         /// <summary>
@@ -205,12 +230,12 @@ namespace ShipWorks.Stores.Content.Panels
                 LoadedOrderSelection orderSelection =
                     orderSelectionChangedMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().FirstOrDefault();
 
-                loadedOrder = orderSelection.Order;
+                loadedOrderSelection = orderSelection;
             }
             else
             {
                 // More than one or no order has been selected
-                loadedOrder = null;
+                loadedOrderSelection = default(LoadedOrderSelection);
             }
         }
 
@@ -267,7 +292,15 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (isThisPanelVisible)
             {
-                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
+                IEnumerable<long> keys = entityGrid.Selection.Keys;
+                ICarrierShipmentAdapter shipmentAdapter = null;
+
+                if (keys.IsCountEqualTo(1))
+                {
+                    shipmentAdapter = loadedOrderSelection.ShipmentAdapters.FirstOrDefault(x => keys.Contains(x.Shipment.ShipmentID));
+                }
+
+                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, keys, shipmentAdapter));
             }
         }
 
@@ -369,14 +402,15 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count == 1)
             {
-                ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
-                if (shipment != null)
+                ICarrierShipmentAdapter shipmentAdapter = loadedOrderSelection.ShipmentAdapters
+                    .FirstOrDefault(s => s.Shipment.ShipmentID == entityGrid.Selection.Keys.First());
+                if (shipmentAdapter != null)
                 {
                     try
                     {
-                        if (shipment.TrackingNumber.Length > 0)
+                        if (shipmentAdapter.Shipment.TrackingNumber.Length > 0)
                         {
-                            Clipboard.SetText(shipment.TrackingNumber);
+                            Clipboard.SetText(shipmentAdapter.Shipment.TrackingNumber);
                         }
                         else
                         {
@@ -436,26 +470,28 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void DeleteShipment(long shipmentID)
         {
-            if (loadedOrder != null)
+            if (loadedOrderSelection.ShipmentAdapters.None())
             {
-                DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
+                return;
+            }
 
-                if (result == DialogResult.OK)
+            DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
+
+            if (result == DialogResult.OK)
+            {
+                ICarrierShipmentAdapter shipmentAdapter = loadedOrderSelection.ShipmentAdapters.FirstOrDefault(s => s.Shipment.ShipmentID == shipmentID);
+
+                if (shipmentAdapter == null)
                 {
-                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
-
-                    if (shipment == null)
-                    {
-                        MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
-                    }
-                    else
-                    {
-                        ShippingManager.DeleteShipment(EntityUtility.CloneEntity(shipment, false));
-                        Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { loadedOrder.OrderID }));
-                    }
-
-                    ReloadContent();
+                    MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
                 }
+                else
+                {
+                    ShippingManager.DeleteShipment(EntityUtility.CloneEntity(shipmentAdapter.Shipment, false));
+                    Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { loadedOrderSelection.OrderID }));
+                }
+
+                ReloadContent();
             }
         }
 
@@ -485,10 +521,11 @@ namespace ShipWorks.Stores.Content.Panels
                 // reason than I'm being lazy right now.
                 if (entityGrid.Selection.Count == 1)
                 {
-                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
-                    if (shipment != null)
+                    ICarrierShipmentAdapter shipmentAdapter = loadedOrderSelection.ShipmentAdapters
+                        .FirstOrDefault(s => s.Shipment.ShipmentID == entityGrid.Selection.Keys.First());
+                    if (shipmentAdapter != null)
                     {
-                        if (shipment.Processed || shipment.Voided)
+                        if (shipmentAdapter.Shipment.Processed || shipmentAdapter.Shipment.Voided)
                         {
                             editText = "View";
                             editImage = Resources.view;
@@ -511,5 +548,17 @@ namespace ShipWorks.Stores.Content.Panels
             DockControl ratingPanel = Program.MainForm.Panels.Where(DockPanelIdentifiers.IsRatingPanel).Single();
             Program.MainForm.ShowPanel(ratingPanel);
         }
+
+        /// <summary>
+        /// Update a stored shipment
+        /// </summary>
+        /// <remarks>
+        /// If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+        /// be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+        /// and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+        /// panels update correctly.
+        /// </remarks>
+        public virtual void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter) =>
+            loadedOrderSelection = loadedOrderSelection.CreateSelectionWithUpdatedShipment(shipmentAdapter);
     }
 }

@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private readonly Func<string, IDialog> dialogFactory;
         private bool columnSourceIsTable = true;
         private IOdbcFieldMap fieldMap;
-        private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
+        private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
 
         private const string InitialQueryComment =
@@ -50,12 +50,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
-            IIndex<FileDialogType, IFileDialog> fileDialogFactory,
+            Func<IOpenFileDialog> openFileDialogFactory,
             IOdbcSettingsFile uploadSettingsFile) : base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
             this.fieldMap = fieldMap;
-            this.fileDialogFactory = fileDialogFactory;
+            this.openFileDialogFactory = openFileDialogFactory;
             this.uploadSettingsFile = uploadSettingsFile;
             CustomQuery = InitialQueryComment;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         private void OpenMapSettingsFile()
         {
-            IFileDialog fileDialog = fileDialogFactory[FileDialogType.Open];
+            IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = uploadSettingsFile.Extension;
             fileDialog.Filter = uploadSettingsFile.Filter;
             fileDialog.DefaultFileName = fieldMap.Name;

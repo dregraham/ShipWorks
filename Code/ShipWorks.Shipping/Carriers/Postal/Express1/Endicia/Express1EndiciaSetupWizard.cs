@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Endicia
     /// <summary>
     /// Setup wizard for Express1 Endicia accounts
     /// </summary>
-    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Express1Endicia)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Express1Endicia)]
     public class Express1EndiciaSetupWizard : Express1SetupWizard
     {
         /// <summary>

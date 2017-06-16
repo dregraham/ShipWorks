@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.Enums;
 using RestSharp;
 using RestSharp.Authenticators;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce

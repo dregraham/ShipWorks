@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Shared.Database;

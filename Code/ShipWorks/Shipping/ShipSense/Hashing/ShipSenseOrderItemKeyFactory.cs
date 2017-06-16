@@ -2,7 +2,7 @@
 using System.Linq;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ShipSense.Hashing

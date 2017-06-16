@@ -321,14 +321,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Some aspect of the shipment that affects rates has changed
-        /// </summary>
-        private void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-            RaiseRateCriteriaChanged();
-        }
-
-        /// <summary>
         /// Some aspect of the shipment that affects ShipSense has changed
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)

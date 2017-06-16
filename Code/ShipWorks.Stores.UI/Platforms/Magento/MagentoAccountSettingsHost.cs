@@ -1,10 +1,10 @@
 ﻿using System.Windows.Forms;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using Interapptive.Shared.UI;
 using System;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento

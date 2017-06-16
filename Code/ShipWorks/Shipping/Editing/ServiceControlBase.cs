@@ -369,6 +369,7 @@ namespace ShipWorks.Shipping.Editing
                 }
 
                 newReturnsControl.LoadShipments(LoadedShipments);
+                newReturnsControl.RateCriteriaChanged += OnRateCriteriaChanged;
 
                 // add the control to the UI
                 newReturnsControl.Location = new Point(0, 0);
@@ -501,6 +502,14 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendRateEvent--;
         }
+        
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        protected void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
 
         /// <summary>
         /// Raise the event to notify listeners that data that affects rates has changed
@@ -612,7 +621,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Click of the Return Shipment checkbox
         /// </summary>
-        private void OnReturnShipmentChanged(object sender, EventArgs e)
+        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
         {
             returnsPanel.Enabled = returnShipment.Checked;
         }

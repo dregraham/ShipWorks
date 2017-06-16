@@ -435,7 +435,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             if (!item.ThumbnailUrl.IsNullOrWhiteSpace())
             {
                 // Thumbnail node format - <img border=0 width=42 height=70 src=Actual_Thumbnail_URL>
-                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[] { "src=" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[]{"src="}, StringSplitOptions.RemoveEmptyEntries);
 
                 if (thumbnailSplit.Length == 2)
                 {

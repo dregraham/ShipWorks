@@ -7,23 +7,15 @@ using Interapptive.Shared.Win32;
 using System.Xml.Linq;
 using log4net;
 using log4net.Core;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Templates;
-using ShipWorks.Tests.Integration.MSTest.Utilities;
-using ShipWorks.Users;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Tests.Integration.Shared;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
 {   
