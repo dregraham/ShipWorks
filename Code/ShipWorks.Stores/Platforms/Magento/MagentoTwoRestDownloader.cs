@@ -89,21 +89,17 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
-                        MagentoOrderIdentifier orderIdentifier= null;
+                        MagentoOrderIdentifier orderIdentifier;
                         // The orders order number and orderid are not the same
-                        if (magentoOrder.EntityId != magentoOrder.IncrementId)
+                        if (magentoOrder.EntityId != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
                         {
                             // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
-                            if (IsLegacyRestOrder(magentoOrder.EntityId))
-                            {
-                                // we have downloaded this order before used its entity id as the order number so use it again
-                                orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
-                            }
+                            // we have downloaded this order before used its entity id as the order number so use it again
+                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                         }
-
-                        // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
-                        if (orderIdentifier == null)
+                        else
                         {
+                            // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
                         }
 
