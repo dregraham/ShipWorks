@@ -16,8 +16,13 @@
     | http://www.interapptive.com/
  */
 
+//phpinfo();
+//return;
+
+$mode = getenv('MODULE_MODE');
+//var_dump($mode);
 // flag indicating if we will require SSL connection or not (default is true)
-define('REQUIRE_SECURE', TRUE);
+define('REQUIRE_SECURE', $mode !== "DEV");
 
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
@@ -282,7 +287,7 @@ function checkAdminLogin()
 {
   if (!isset($_REQUEST['username']) || !isset($_REQUEST['password']))
   {
-    outputError(40, "Insufficient parameters");
+    XmlOutput::outputError(40, "Insufficient parameters");
     return false;
   }
 
