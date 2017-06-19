@@ -80,12 +80,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonAuthToken = string.Empty;
             caStore.AmazonMerchantID = string.Empty;
 
-            caStore.SetShippingToken(new AmazonShippingToken()
-            {
-                ErrorDate = new DateTime(2001, 1, 1),
-                ErrorReason = string.Empty
-            });
-
             return caStore;
         }
 

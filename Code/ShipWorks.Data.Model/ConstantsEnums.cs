@@ -568,8 +568,6 @@ namespace ShipWorks.Data.Model
 		ExcludeFBA,
 		///<summary>DomainName. </summary>
 		DomainName,
-		///<summary>AmazonShippingToken. </summary>
-		AmazonShippingToken,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1356,8 +1354,6 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. </summary>
 		AmazonApiRegion,
-		///<summary>AmazonShippingToken. </summary>
-		AmazonShippingToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

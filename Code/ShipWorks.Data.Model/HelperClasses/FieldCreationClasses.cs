@@ -1292,11 +1292,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
 		}
-		/// <summary>Creates a new AmazonStoreEntity.AmazonShippingToken field instance</summary>
-		public static EntityField2 AmazonShippingToken
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonShippingToken);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>
@@ -3131,11 +3126,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonApiRegion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AmazonApiRegion);}
-		}
-		/// <summary>Creates a new ChannelAdvisorStoreEntity.AmazonShippingToken field instance</summary>
-		public static EntityField2 AmazonShippingToken
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AmazonShippingToken);}
 		}
 	}
 

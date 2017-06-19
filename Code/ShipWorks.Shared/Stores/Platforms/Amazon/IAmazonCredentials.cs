@@ -16,11 +16,6 @@
         string AuthToken { get; }
 
         /// <summary>
-        /// Amazon shipping token
-        /// </summary>
-        string ShippingToken { get; set; }
-
-        /// <summary>
         /// Amazon store region
         /// </summary>
         string Region { get; }
