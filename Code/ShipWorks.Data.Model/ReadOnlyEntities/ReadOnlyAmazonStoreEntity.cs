@@ -53,7 +53,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MarketplaceID = source.MarketplaceID;
             ExcludeFBA = source.ExcludeFBA;
             DomainName = source.DomainName;
-            AmazonShippingToken = source.AmazonShippingToken;
             
             
             
@@ -164,12 +163,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String DomainName { get; }
-        /// <summary> The AmazonShippingToken property of the Entity AmazonStore<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonStore"."AmazonShippingToken"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String AmazonShippingToken { get; }
         
         
         

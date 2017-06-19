@@ -22,20 +22,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonShipment labelResponse;
         private readonly IObjectReferenceManager objectReferenceManager;
         private readonly IDataResourceManager resourceManager;
-        private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonDownloadedLabelData(ShipmentEntity shipment,
             AmazonShipment labelResponse,
-            IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
             IObjectReferenceManager objectReferenceManager,
             IDataResourceManager resourceManager)
         {
             this.shipment = shipment;
             this.labelResponse = labelResponse;
-            this.labelEnforcers = labelEnforcers;
             this.objectReferenceManager = objectReferenceManager;
             this.resourceManager = resourceManager;
         }
@@ -50,8 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // Save the label
             SaveLabel(labelResponse.Label.FileContents, shipment.ShipmentID);
-
-            VerifyShipment(shipment);
         }
 
         /// <summary>
@@ -105,17 +100,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
 
                 return memoryStream.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Verify the shipment with all registered enforcers
-        /// </summary>
-        private void VerifyShipment(ShipmentEntity shipment)
-        {
-            foreach (IAmazonLabelEnforcer enforcer in labelEnforcers)
-            {
-                enforcer.VerifyShipment(shipment);
             }
         }
     }
