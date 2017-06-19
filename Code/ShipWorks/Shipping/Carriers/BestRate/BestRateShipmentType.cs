@@ -36,7 +36,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         protected BestRateShipmentType()
         {
-
         }
 
         /// <summary>
@@ -104,10 +103,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 return true;
             }
 
-            if (originID == (int) ShipmentOriginSource.Account)
+            if (originID == (int)ShipmentOriginSource.Account)
             {
                 // Copy an empty person since the account address used will depend on each carrier
-                PersonAdapter.Copy(new PersonAdapter { OriginID = (int) ShipmentOriginSource.Account }, person);
+                PersonAdapter.Copy(new PersonAdapter { OriginID = (int)ShipmentOriginSource.Account }, person);
                 return true;
             }
 
@@ -250,15 +249,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
-            BestRateEventTypes originalEventTypes = (BestRateEventTypes) shipment.BestRateEvents;
+            BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
 
-            BestRateResultTag bestRateResultTag = ((BestRateResultTag) bestRate.Tag);
+            BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
 
             bestRateResultTag.RateSelectionDelegate(shipment);
 
             // Reset the event types after the selected shipment has been applied to
             // avoid losing them during the transition to the targeted shipment type
-            shipment.BestRateEvents = (byte) originalEventTypes;
+            shipment.BestRateEvents = (byte)originalEventTypes;
         }
 
         /// <summary>
@@ -271,10 +270,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipment.BestRate = new BestRateShipmentEntity(shipment.ShipmentID);
             }
 
+            shipment.BestRate.InsuranceValue = 0;
+
             base.ConfigureNewShipment(shipment);
 
-            shipment.BestRate.InsuranceValue = 0;
-            shipment.BestRate.RequestedLabelFormat = (int) LabelFormatType.Standard;
+            shipment.BestRate.RequestedLabelFormat = (int)LabelFormatType.Standard;
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
-            shipment.InsuranceProvider = (int) shipmentInsuranceProvider;
+            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
@@ -334,10 +334,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public static void AddBestRateEvent(ShipmentEntity shipment, BestRateEventTypes eventType)
         {
-            if ((shipment.BestRateEvents & (byte) BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte) BestRateEventTypes.RateAutoSelectedAndProcessed)
+            if ((shipment.BestRateEvents & (byte)BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte)BestRateEventTypes.RateAutoSelectedAndProcessed)
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
-                shipment.BestRateEvents |= (byte) eventType;
+                shipment.BestRateEvents |= (byte)eventType;
             }
         }
 
@@ -348,7 +348,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             if (shipment.BestRate != null)
             {
-                shipment.BestRate.RequestedLabelFormat = (int) requestedLabelFormat;
+                shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
 
