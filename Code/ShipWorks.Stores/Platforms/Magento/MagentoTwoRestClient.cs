@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly MagentoStoreEntity store;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IMagentoProductCache magentoProductCache;
+        private readonly ILog log;
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ItemsEndpoint = "rest/V1/orders/items";
@@ -38,11 +40,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestClient"/> class.
         /// </summary>
-        public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory, IMagentoProductCache magentoProductCache)
+        public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory, IMagentoProductCache magentoProductCache, Func<Type, ILog> logFactory)
         {
             this.store = store;
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.magentoProductCache = magentoProductCache;
+            log = logFactory(typeof(MagentoTwoRestClient));
             storeUri = new Uri(store.ModuleUrl);
         }
 
@@ -135,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             catch (MagentoException ex)
             {
-                errorMessage += $"\nMagento returned an error when creating the invoice: \n{ex.Message}\n";
+                log.Error($"\nMagento returned an error when creating the invoice: \n{ex.Message}\n");
             }
 
             if (errorMessage != baseErrorMessage)
