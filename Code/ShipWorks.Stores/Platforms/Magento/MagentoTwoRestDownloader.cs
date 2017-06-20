@@ -8,9 +8,12 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
@@ -29,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
         private readonly MagentoStoreEntity magentoStore;
-
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
@@ -38,12 +41,13 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
         public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) : base(store)
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory) : base(store)
         {
             magentoStore = (MagentoStoreEntity) store;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
             log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -85,9 +89,21 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
-                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
-                        MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
+                        MagentoOrderIdentifier orderIdentifier;
+                        // The orders order number and orderid are not the same
+                        if (magentoOrder.EntityId != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
+                        {
+                            // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
+                            // we have downloaded this order before used its entity id as the order number so use it again
+                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+                        }
+                        else
+                        {
+                            // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
+                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
+                        }
 
+                        MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
                         LoadOrder(orderEntity, magentoOrder, Progress);
                     }
                 } while (ordersResponse.TotalCount > 0);
@@ -100,6 +116,31 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
+
+        /// <summary>
+        /// Check and see if the MagentoOrderId belongs to an order that was downloaded prior to us switching from using EntityId as the order number to IncrementId
+        /// </summary>
+        /// <remarks>
+        /// The magento EntityId and IncrementId are the same 90% of the time, customers have the ability to customize the IncrementId to be something different
+        /// the IncrementId is the value that shows up in the Magento UI, when this downloader was built we would pull the orders EntityId into the OrderNumber field
+        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we dont duplicate them 
+        /// </remarks>
+        private bool IsLegacyRestOrder(int magentoOrderId)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                RelationPredicateBucket bucket =
+                    new RelationPredicateBucket(MagentoOrderFields.StoreID == Store.StoreID & 
+                    MagentoOrderFields.IsManual == false & 
+                    MagentoOrderFields.MagentoOrderID == magentoOrderId & 
+                    MagentoOrderFields.OrderNumber == magentoOrderId);
+                
+                MagentoOrderEntity order = adapter.FetchNewEntity<MagentoOrderEntity>(bucket);
+
+                return !order.IsNew;
+            }
+        }
+        
         /// <summary>
         /// Get the start date for the download cycle
         /// </summary>
@@ -150,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     orderEntity.OrderDate =
                         DateTime.SpecifyKind(createdDate, DateTimeKind.Utc);
                 }
-                orderEntity.OrderNumber = magentoOrder.EntityId;
+                orderEntity.OrderNumber = magentoOrder.IncrementId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
                 orderEntity.MagentoOrderID = magentoOrder.EntityId;
                 orderEntity.OnlineCustomerID = magentoOrder.CustomerId;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
@@ -307,7 +308,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     break;
             }
 
-            return service;
+            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+            return rgx.Replace(service, "");
         }
     }
 }
