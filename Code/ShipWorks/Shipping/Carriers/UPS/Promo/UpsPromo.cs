@@ -4,12 +4,8 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using System;
 using System.Web.Services.Protocols;
-using Autofac;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
@@ -37,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             AccountNumber = upsAccount.AccountNumber;
             Username = upsAccount.UserID;
             Password = upsAccount.Password;
-            AccessLicenseNumber = SecureText.Decrypt(upsSettingsRepository.GetShippingSettings().UpsAccessKey, "UPS");
             CountryCode = upsAccount.CountryCode == "CA" ? "CA" : "US";
             promoClientFactory = promoFactory;
             this.promoPolicy = promoPolicy;
@@ -64,7 +59,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// The Access License Number
         /// </summary>
-        public string AccessLicenseNumber { get; }
+        public string AccessLicenseNumber => SecureText.Decrypt(
+            upsSettingsRepository.GetShippingSettings().UpsAccessKey, "UPS");
 
         /// <summary>
         /// The Country Code of the UPS Account

@@ -346,6 +346,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Get the Ups AccessLicense text
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAccessLicenseText()
+        {
+            // Create the client for connecting to the UPS server
+            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.LicenseAgreement, null);
+            
+            // <AccessLicenseProfile> block (performed a diff, and license agreement is same for both US and CA)
+            xmlWriter.WriteStartElement("AccessLicenseProfile");
+            xmlWriter.WriteElementString("CountryCode", "US");
+            xmlWriter.WriteElementString("LanguageCode", "EN");
+            xmlWriter.WriteEndElement();
+
+            UpsWebClient.AppendToolList(xmlWriter);
+            
+            // Process the XML request
+            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
+
+            // Extract the license text and return it to be passed on to the next stage of the wizard
+            return (string)upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseText)");
+        }
+
+        /// <summary>
         /// Gets a list of UpsServiceTypes that are SurePost
         /// </summary>
         public static IEnumerable<UpsServiceType> SurePostShipmentTypes
