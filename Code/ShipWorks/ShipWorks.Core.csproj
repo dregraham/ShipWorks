@@ -1236,6 +1236,7 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\LocalRating\IUpsLocalRatingControl.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
@@ -1269,6 +1270,7 @@
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsUtilityWrapper.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporter.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />

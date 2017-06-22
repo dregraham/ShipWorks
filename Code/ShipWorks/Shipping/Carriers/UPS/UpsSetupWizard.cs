@@ -319,29 +319,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 return;
             }
-
-            Cursor.Current = Cursors.WaitCursor;
-
-            // Create the client for connecting to the UPS server
-            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.LicenseAgreement, null);
-
-            // <AccessLicenseProfile> block (performed a diff, and license agreement is same for both US and CA)
-            xmlWriter.WriteStartElement("AccessLicenseProfile");
-            xmlWriter.WriteElementString("CountryCode", "US");
-            xmlWriter.WriteElementString("LanguageCode", "EN");
-            xmlWriter.WriteEndElement();
-
-            UpsWebClient.AppendToolList(xmlWriter);
-
+            
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                // Process the XML request
-                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
-
                 // Extract the license text and return it to be passed on to the next stage of the wizard
-                upsLicense = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseText)");
+                upsLicense = UpsUtility.GetAccessLicenseText();
             }
             catch (UpsException ex)
             {
@@ -602,7 +586,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// If UpsAccessKey is already set in ShippingSettings return
         /// If UpsAccessKey is not set, it is retrieved from UPS and set in ShippingSettings
         /// </remarks>
-        [NDependIgnoreLongMethod]
         private void GetUpsAccessKey()
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -612,59 +595,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return;
             }
 
-            // Create the client for connecting to the UPS server
-            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.AccessKey, null);
-
-            xmlWriter.WriteStartElement("AccessLicenseProfile");
-            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
-            xmlWriter.WriteElementString("LanguageCode", "EN");
-            xmlWriter.WriteElementString("AccessLicenseText", upsLicense);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteElementString("CompanyName", upsAccount.Company);
-            xmlWriter.WriteElementString("CompanyURL", upsAccount.Website);
-            xmlWriter.WriteElementString("ShipperNumber", upsAccount.AccountNumber);
-
-            xmlWriter.WriteStartElement("Address");
-            xmlWriter.WriteElementString("AddressLine1", upsAccount.Street1);
-            xmlWriter.WriteElementString("AddressLine2", upsAccount.Street2);
-            xmlWriter.WriteElementString("AddressLine3", upsAccount.Street3);
-            xmlWriter.WriteElementString("City", upsAccount.City);
-            xmlWriter.WriteElementString("StateProvinceCode", upsAccount.StateProvCode);
-            xmlWriter.WriteElementString("PostalCode", upsAccount.PostalCode);
-            xmlWriter.WriteElementString("CountryCode", upsAccount.CountryCode);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement("PrimaryContact");
-            xmlWriter.WriteElementString("Name", new PersonName(new PersonAdapter(upsAccount, "")).FullName);
-            xmlWriter.WriteElementString("Title", "N\\A");
-            xmlWriter.WriteElementString("EMailAddress", upsAccount.Email);
-            xmlWriter.WriteElementString("PhoneNumber", new PersonAdapter(upsAccount, "").Phone10Digits);
-            xmlWriter.WriteEndElement();
-
-            UpsWebClient.AppendToolList(xmlWriter);
-
-            xmlWriter.WriteStartElement("ClientSoftwareProfile");
-            xmlWriter.WriteElementString("SoftwareInstaller", "User");
-            xmlWriter.WriteElementString("SoftwareProductName", "ShipWorks");
-            xmlWriter.WriteElementString("SoftwareProvider", "Interapptive, Inc.");
-            xmlWriter.WriteElementString("SoftwareVersionNumber",
-                Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
-            xmlWriter.WriteEndElement();
-
-            Cursor.Current = Cursors.WaitCursor;
-
-            // Process the XML request
-            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
-
-            // Now we can get the Access License number
-            string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
-
-            // Refetch in case it changed...
-            settings = ShippingSettings.Fetch();
-            settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
-
-            ShippingSettings.Save(settings);
+            UpsUtility.FetchAndSaveUpsAccessKey(upsAccount, upsLicense);
         }
 
         /// <summary>
