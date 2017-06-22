@@ -69,29 +69,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 
             try
             {
-                UPSSecurity security = GetUpsSecurity(upsPromo.AccessLicenseNumber, upsPromo.Username, upsPromo.Password);
+                UPSSecurity security = GetUpsSecurity(upsPromo.AccessLicenseNumber, upsPromo.Username,
+                    upsPromo.Password);
                 return new PromoAcceptanceTerms(ProcessGetAgreementRequest(request, security));
+            }
+            catch (SoapException ex) when (ex.Detail.OuterXml.Contains("Invalid Access License number"))
+            {
+                // The access license number is not valid, get a new license number and retry getting the agreement 
+                try
+                {
+                    UpsAccountEntity account = accountRepository.GetAccount(upsPromo.AccountId);
+
+                    string accessKey = secureText.Decrypt(upsUtility.FetchAndSaveUpsAccessKey(account, upsUtility.GetAccessLicenseText()));
+                    UPSSecurity security = GetUpsSecurity(accessKey, upsPromo.Username, upsPromo.Password);
+                    return new PromoAcceptanceTerms(ProcessGetAgreementRequest(request, security));
+                }
+                catch (Exception e)
+                {
+                    throw WebHelper.TranslateWebException(e, typeof(UpsPromoException));
+                }
             }
             catch (Exception ex)
             {
-                // The access license number is not valid, get a new license number and retry getting the agreement 
-                SoapException soapEx = ex as SoapException;
-                if (soapEx != null && soapEx.Detail.OuterXml.Contains("Invalid Access License number"))
-                {
-                    try
-                    {
-                        UpsAccountEntity account = accountRepository.GetAccount(upsPromo.AccountId);
-
-                        string accessKey = secureText.Decrypt(upsUtility.FetchAndSaveUpsAccessKey(account, upsUtility.GetAccessLicenseText()));
-                        UPSSecurity security = GetUpsSecurity(accessKey, upsPromo.Username, upsPromo.Password);
-                        return new PromoAcceptanceTerms(ProcessGetAgreementRequest(request, security));
-                    }
-                    catch (Exception e)
-                    {
-                        throw WebHelper.TranslateWebException(e, typeof(UpsPromoException));
-                    }
-                }
-
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
         }
