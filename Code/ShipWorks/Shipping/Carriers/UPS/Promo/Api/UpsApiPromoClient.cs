@@ -3,6 +3,10 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using System;
+using System.Web.Services.Protocols;
+using Interapptive.Shared.Security;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 {
@@ -15,20 +19,31 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         private const string TestingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
         private readonly IUpsPromo upsPromo;
         private readonly ILogEntryFactory logEntryFactory;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
+        private readonly IUpsUtility upsUtility;
         private readonly LocaleType locale;
+        private readonly IEncryptionProvider secureText;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsApiPromoClient(IUpsPromo upsPromo, ILogEntryFactory logEntryFactory)
+        public UpsApiPromoClient(IUpsPromo upsPromo, 
+            ILogEntryFactory logEntryFactory, 
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, 
+            IUpsUtility upsUtility, 
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.upsPromo = upsPromo;
             this.logEntryFactory = logEntryFactory;
-            locale = new LocaleType()
+            this.accountRepository = accountRepository;
+            this.upsUtility = upsUtility;
+            locale = new LocaleType
             {
                 CountryCode = upsPromo.CountryCode,
                 LanguageCode = "en"
             };
+
+            secureText = encryptionProviderFactory.CreateSecureTextEncryptionProvider("UPS");
         }
 
         /// <summary>
@@ -54,32 +69,47 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 
             try
             {
-                IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UPS, "GetPromoAgreement", LogActionType.Other);
-
-                using (PromoDiscountService service = new PromoDiscountService(apiLogEntry))
+                UPSSecurity security = GetUpsSecurity(upsPromo.AccessLicenseNumber, upsPromo.Username,
+                    upsPromo.Password);
+                return new PromoAcceptanceTerms(ProcessGetAgreementRequest(request, security));
+            }
+            catch (SoapException ex) when (ex.Detail.OuterXml.Contains("Invalid Access License number"))
+            {
+                // The access license number is not valid, get a new license number and retry getting the agreement 
+                try
                 {
-                    // Point the service to the correct endpoint
-                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
-                    service.UPSSecurityValue = new UPSSecurity()
-                    {
-                        ServiceAccessToken = new UPSSecurityServiceAccessToken()
-                        {
-                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
-                        },
-                        UsernameToken = new UPSSecurityUsernameToken()
-                        {
-                            Username = upsPromo.Username,
-                            Password = upsPromo.Password
-                        }
-                    };
+                    UpsAccountEntity account = accountRepository.GetAccount(upsPromo.AccountId);
 
-                    PromoDiscountAgreementResponse response = service.ProcessPromoDiscountAgreement(request);
-                    return new PromoAcceptanceTerms(response);
+                    string accessKey = secureText.Decrypt(upsUtility.FetchAndSaveUpsAccessKey(account, upsUtility.GetAccessLicenseText()));
+                    UPSSecurity security = GetUpsSecurity(accessKey, upsPromo.Username, upsPromo.Password);
+                    return new PromoAcceptanceTerms(ProcessGetAgreementRequest(request, security));
+                }
+                catch (Exception e)
+                {
+                    throw WebHelper.TranslateWebException(e, typeof(UpsPromoException));
                 }
             }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
+            }
+        }
+
+        /// <summary>
+        /// Process the get agreement request
+        /// </summary>
+        private PromoDiscountAgreementResponse ProcessGetAgreementRequest(PromoDiscountAgreementRequest request, UPSSecurity security)
+        {
+            IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UPS, "GetPromoAgreement", LogActionType.Other);
+
+            using (PromoDiscountService service = new PromoDiscountService(apiLogEntry))
+            {
+                // Point the service to the correct endpoint
+                service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
+                service.UPSSecurityValue = security;
+
+                PromoDiscountAgreementResponse response = service.ProcessPromoDiscountAgreement(request);
+                return response;
             }
         }
 
@@ -106,19 +136,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
                 {
                     // Point the service to the correct endpoint
                     service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
-                    service.UPSSecurityValue = new UPSSecurity()
-                    {
-                        ServiceAccessToken = new UPSSecurityServiceAccessToken()
-                        {
-                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
-                        },
-                        UsernameToken = new UPSSecurityUsernameToken()
-                        {
-                            Username = upsPromo.Username,
-                            Password = upsPromo.Password
-                        }
-                    };
 
+                    service.UPSSecurityValue =
+                        GetUpsSecurity(upsPromo.AccessLicenseNumber, upsPromo.Username, upsPromo.Password);
                     PromoDiscountResponse response = service.ProcessPromoDiscount(request);
                     return new PromoActivation(response);
                 }
@@ -127,6 +147,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
+        }
+
+        /// <summary>
+        /// Get the UpsSecurity object
+        /// </summary>
+        private static UPSSecurity GetUpsSecurity(string licenseNumber, string username, string password)
+        {
+            return new UPSSecurity
+            {
+                ServiceAccessToken = new UPSSecurityServiceAccessToken
+                {
+                    AccessLicenseNumber = licenseNumber
+                },
+                UsernameToken = new UPSSecurityUsernameToken
+                {
+                    Username = username,
+                    Password = password
+                }
+            };
         }
     }
 }

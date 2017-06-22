@@ -1876,10 +1876,7 @@ namespace ShipWorks.Shipping
                 try
                 {
                     anyAttempted = true;
-                    using (ILifetimeScope ratesScope = lifetimeScope.BeginLifetimeScope())
-                    {
-                        _e.Result = ratesScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
-                    }
+                    _e.Result = lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
 
                     // Just in case it used to have an error remove it
                     ErrorManager?.Remove(shipment.ShipmentID);
