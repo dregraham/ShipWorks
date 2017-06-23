@@ -292,12 +292,24 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (isThisPanelVisible)
             {
-                IEnumerable<long> keys = entityGrid.Selection.Keys;
+                IEnumerable<long> keys = entityGrid.Selection.Keys.ToList();
                 ICarrierShipmentAdapter shipmentAdapter = null;
 
                 if (keys.IsCountEqualTo(1))
                 {
-                    shipmentAdapter = loadedOrderSelection.ShipmentAdapters.FirstOrDefault(x => keys.Contains(x.Shipment.ShipmentID));
+                    long shipmentId = keys.Single();
+                    if (loadedOrderSelection.ShipmentAdapters == null)
+                    {
+                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                        {
+                            IShippingManager shippingManager = scope.Resolve<IShippingManager>();
+                            shipmentAdapter = shippingManager.GetShipment(shipmentId);
+                        }
+                    }
+                    else
+                    {
+                        shipmentAdapter = loadedOrderSelection.ShipmentAdapters.FirstOrDefault(x => x.Shipment.ShipmentID == shipmentId);
+                    }
                 }
 
                 Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, keys, shipmentAdapter));

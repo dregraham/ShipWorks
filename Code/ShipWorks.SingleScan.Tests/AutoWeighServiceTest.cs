@@ -192,8 +192,8 @@ namespace ShipWorks.SingleScan.Tests
 
         private void SetAutoWeighSetting(bool allowAutoWeigh)
         {
-            mock.Mock<IAutoPrintSettings>()
-                .Setup(p => p.IsAutoWeighEnabled())
+            mock.Mock<ISingleScanAutomationSettings>()
+                .SetupGet(p => p.IsAutoWeighEnabled)
                 .Returns(allowAutoWeigh);
         }
 
