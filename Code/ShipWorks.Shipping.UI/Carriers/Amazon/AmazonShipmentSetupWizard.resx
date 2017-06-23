@@ -117,14 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HelpLink.Text" xml:space="preserve">
-    <value>This wizard will assist you in configuring your Amazon account for use with ShipWorks. This 
-enables you to begin shipping, tracking, and printing labels with your Amazon account. 
-
-To enable Amazon Shipping services in ShipWorks you must link your USPS and / or UPS 
-account in Seller Central. Click here for instructions to find out how to link your existing 
-account(s).</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pictureBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

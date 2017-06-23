@@ -37,7 +37,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonShipmentSetupWizard));
-            this.HelpLink = new System.Windows.Forms.LinkLabel();
+            this.Instructions = new System.Windows.Forms.Label();
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
@@ -81,19 +81,20 @@
             // 
             this.topPanel.Size = new System.Drawing.Size(557, 56);
             // 
-            // HelpLink
+            // Instructions
             // 
-            this.HelpLink.AutoSize = true;
-            this.HelpLink.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.HelpLink.Location = new System.Drawing.Point(20, 10);
-            this.HelpLink.Name = "HelpLink";
-            this.HelpLink.Size = new System.Drawing.Size(444, 78);
-            this.HelpLink.TabIndex = 0;
-            this.HelpLink.Text = resources.GetString("HelpLink.Text");
+            this.Instructions.AutoSize = true;
+            this.Instructions.Location = new System.Drawing.Point(20, 10);
+            this.Instructions.Name = "Instructions";
+            this.Instructions.Size = new System.Drawing.Size(444, 26);
+            this.Instructions.TabIndex = 0;
+            this.Instructions.Text = "This wizard will assist you in configuring your Amazon account for use with ShipW" +
+    "orks. This \r\nenables you to begin shipping, tracking, and printing labels with y" +
+    "our Amazon account. ";
             // 
             // wizardPageWelcome
             // 
-            this.wizardPageWelcome.Controls.Add(this.HelpLink);
+            this.wizardPageWelcome.Controls.Add(this.Instructions);
             this.wizardPageWelcome.Description = "Setup ShipWorks to work with your Amazon account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -167,6 +168,6 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageWelcome;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
-        private System.Windows.Forms.LinkLabel HelpLink;
+        private System.Windows.Forms.Label Instructions;
     }
 }
