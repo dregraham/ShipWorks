@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Autofac;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -18,7 +17,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     /// View model for the Ups local rating footnote
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes.IUpsLocalRatingDisabledFootnoteViewModel" />
-    [Component]
     public class UpsLocalRatingDisabledFootnoteViewModel : IUpsLocalRatingDisabledFootnoteViewModel
     {
         private readonly IMessenger messenger;
