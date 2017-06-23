@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         protected AmazonShipmentSetupWizard()
         {
             InitializeComponent();
-            HelpLink.LinkArea = new LinkArea(HelpLink.Text.IndexOf("Click here for instructions", StringComparison.Ordinal), 27);
         }
 
         /// <summary>
@@ -52,8 +51,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            HelpLink.LinkClicked += (x, y) => WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000066194", this);
-
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
