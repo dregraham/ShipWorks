@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -27,6 +28,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .Keyed<ShipmentType>(ShipmentTypeCode.BestRate);
 
             builder.RegisterType<BrokerExceptionsRateFootnoteViewModel>()
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
+
+            builder.RegisterType<UpsLocalRatingDisabledFootnoteViewModel>()
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
 

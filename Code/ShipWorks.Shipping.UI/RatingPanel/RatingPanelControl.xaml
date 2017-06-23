@@ -7,6 +7,7 @@
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel"
              xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
+             xmlns:upslr="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
 
              FontFamily="Tahoma"
@@ -183,6 +184,8 @@
                                  DataTemplate="{StaticResource UspsRateNotQualifiedFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:UspsRatePromotionFootnoteViewModel}"
                                  DataTemplate="{StaticResource UspsRatePromotionFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type upslr:UpsLocalRatingDisabledFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UpsLocalRatingDisabledFootnoteViewModelTemplate}" />
                 </ui:TypeBasedTemplateSelector.Templates>
             </ListBox>
 
