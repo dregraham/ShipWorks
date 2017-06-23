@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
     /// View model for the Ups local rating footnote
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Carriers.UPS.LocalRating.RateFootnotes.IUpsLocalRatingDisabledFootnoteViewModel" />
-    [Obfuscation(Exclude = true)]
     public class UpsLocalRatingDisabledFootnoteViewModel : IUpsLocalRatingDisabledFootnoteViewModel
     {
         private readonly IMessenger messenger;
