@@ -158,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
@@ -306,19 +305,6 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedDlg.Designer.cs">
-      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.Designer.cs">
-      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -400,12 +386,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedDlg.resx">
-      <DependentUpon>AmazonNotLinkedDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Carriers\Amazon\AmazonNotLinkedFootnoteControl.resx">
-      <DependentUpon>AmazonNotLinkedFootnoteControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
       <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -541,10 +521,6 @@
     <Page Include="RatingPanel\FootnoteTemplates\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="RatingPanel\FootnoteTemplates\AmazonNotLinkedFootnoteViewModelTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\FootnoteTemplates.xaml">
       <SubType>Designer</SubType>

@@ -384,8 +384,6 @@
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
-    <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
-    <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
@@ -405,7 +403,6 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Carriers\Amazon\AmazonRateHashingService.cs" />
