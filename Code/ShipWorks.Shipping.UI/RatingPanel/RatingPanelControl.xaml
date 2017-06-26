@@ -156,8 +156,6 @@
                 <ui:TypeBasedTemplateSelector.Templates>
                     <ui:Template Value="{x:Type amz:AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
                                  DataTemplate="{StaticResource AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
-                    <ui:Template Value="{x:Type amz:AmazonNotLinkedFootnoteViewModel}"
-                                 DataTemplate="{StaticResource AmazonNotLinkedFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type amz:AmazonSameDayNotAvailableFootnoteViewModel}"
                                  DataTemplate="{StaticResource AmazonSameDayNotAvailableFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:BrokerExceptionsRateFootnoteViewModel}"
