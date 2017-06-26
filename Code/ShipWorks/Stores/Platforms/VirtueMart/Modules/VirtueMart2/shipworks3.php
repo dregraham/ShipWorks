@@ -151,7 +151,7 @@ class XmlOutput
 
       foreach ($attributes as $name => $attribValue)
       {
-        echo(utf8_encode($name . '="' . htmlspecialchars($attribValue) . '" '));
+        echo(utf8_encode($name . '="' .XmlOutput:: replaceHtmlCharacters($attribValue) . '" '));
       }
     }
 
@@ -167,7 +167,7 @@ class XmlOutput
   public static function writeElement($tag, $value)
   {
     XmlOutput::writeStartTag($tag);
-    echo(utf8_encode(htmlspecialchars($value)));
+    echo(utf8_encode(XmlOutput::replaceHtmlCharacters($value)));
     XmlOutput::writeCloseTag($tag);
   }
 
@@ -178,10 +178,10 @@ class XmlOutput
 
     foreach ($attributes as $name => $attribValue)
     {
-      echo(utf8_encode($name . '="' . htmlspecialchars($attribValue) . '" '));
+      echo(utf8_encode($name . '="' .XmlOutput:: replaceHtmlCharacters($attribValue) . '" '));
     }
     echo('>');
-    echo(utf8_encode(htmlspecialchars($value)));
+    echo(utf8_encode(XmlOutput::replaceHtmlCharacters($value)));
     XmlOutput::writeCloseTag($tag);
   }
 
@@ -192,6 +192,12 @@ class XmlOutput
     XmlOutput::writeElement("Code", $code);
     XmlOutput::writeElement("Description", $error);
     XmlOutput::writeCloseTag("Error");
+  }
+
+  // Wrap htmlspecialchars so that all calls get the same options
+  private static function replaceHtmlCharacters($value)
+  {
+    return htmlspecialchars($value, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
   }
 }
 
@@ -536,12 +542,41 @@ function WriteOrder($order)
  */
 function WriteNotes($order)
 {
-  if (isset($order->customer_note))
+//var_dump($order);
+
+  $note = GetNoteFromOrder($order);
+
+  if (isset($note))
   {
     XmlOutput::writeStartTag("Notes");
-    XmlOutput::writeElementWithAttributes("Note", $order->customer_note, ['public' => 'true']);
+    XmlOutput::writeElementWithAttributes("Note", $note, ['public' => 'true']);
     XmlOutput::writeCloseTag("Notes");
   }
+}
+
+/**
+ * Get the note from the given order
+ * In VirtueMart 3, notes were moved from the order into the billing address
+ */
+function GetNoteFromOrder($order)
+{
+  $notesStoredInAddress = version_compare(vmVersion::$RELEASE, '3') >= 0;
+
+  if (!$notesStoredInAddress)
+  {
+    return $order->customer_note;
+  }
+
+  $db = JFactory::getDBO();
+  $query = $db->getQuery(true)
+    ->select("customer_note")
+    ->from("#__virtuemart_order_userinfos")
+    ->where("virtuemart_order_id = $order->virtuemart_order_id AND address_type = 'BT'");
+
+  $db->setQuery($query);
+  $noteObject = $db->loadObject();
+
+  return isset($noteObject) ? $noteObject->customer_note : null;
 }
 
 /**
@@ -1040,7 +1075,7 @@ function Action_UpdateStatus()
   $db = JFactory::getDBO();
 
   $orderID = (int) $_POST['order'];
-  $code = $db->quote(chr($_POST['status']));
+  $code = chr($_POST['status']);
   $comments = $db->quote($_POST['comments']);
 
   XmlOutput::writeStartTag("UpdateSuccess");
@@ -1056,9 +1091,11 @@ function Action_UpdateStatus()
  */
 function AddOrderHistory($db, $orderID, $code, $comments)
 {
+  $quotedCode = $db->quote($code);
+
   $insertQuery = "insert into #__virtuemart_order_histories " .
     "(virtuemart_order_id, order_status_code, created_on, modified_on, locked_on, customer_notified, comments) " .
-    "values ($orderID, $code, now(), now(), now(), 0, $comments)";
+    "values ($orderID, $quotedCode, now(), now(), now(), 0, $comments)";
   $db->setQuery($insertQuery);
   $db->query();
 
