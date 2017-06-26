@@ -298,6 +298,10 @@ namespace ShipWorks.Stores.Content.Panels
                 if (keys.IsCountEqualTo(1))
                 {
                     long shipmentId = keys.Single();
+                    // When created by the constructor, ShipmentAdapters cannot be null as each constructor takes
+                    // a ShipmentAdapter and will crash if null.
+                    // There are instances where default(LoadedOrderSelection) is being called, so ShipmentAdapter can 
+                    // sometimes be null in this instance, so that is why we make the check.
                     if (loadedOrderSelection.ShipmentAdapters == null)
                     {
                         using (ILifetimeScope scope = IoC.BeginLifetimeScope())
