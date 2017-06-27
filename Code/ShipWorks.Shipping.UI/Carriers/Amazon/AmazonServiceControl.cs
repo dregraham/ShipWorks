@@ -51,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
             dimensionsControl.Initialize();
+            shipDate.Value = DateTime.Now;
 
             originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
