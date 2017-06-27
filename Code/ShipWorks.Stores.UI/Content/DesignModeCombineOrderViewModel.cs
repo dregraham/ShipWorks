@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.UI.Content
     /// <summary>
     /// View model to aid in developing the combine orders window
     /// </summary>
-    internal class DesignModeCombineOrderViewModel : ICombineOrdersViewModel
+    internal class DesignModeCombineOrderViewModel
     {
         /// <summary>
         /// Constructor
@@ -76,10 +76,5 @@ namespace ShipWorks.Stores.UI.Content
         /// Orders that will be combined
         /// </summary>
         public IEnumerable<IOrderEntity> Orders { get; set; }
-
-        /// <summary>
-        /// Details for combining orders
-        /// </summary>
-        public Tuple<long, string> Details { get; set; }
     }
 }

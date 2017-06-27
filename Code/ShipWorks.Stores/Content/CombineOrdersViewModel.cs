@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.Stores.Content;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -20,7 +23,10 @@ namespace ShipWorks.Stores.Content
     [Component(Service = typeof(ICombineOrdersViewModel))]
     public class CombineOrdersViewModel : ICombineOrdersViewModel, INotifyPropertyChanged
     {
+        private readonly IMessageHelper messageHelper;
+        private readonly ICombineOrdersDialog combineOrdersDialog;
         private readonly PropertyChangedHandler handler;
+
         private string newOrderNumber;
         private IOrderEntity survivingOrder;
         private string addressName;
@@ -31,25 +37,23 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrdersViewModel(IEnumerable<IOrderEntity> orders)
+        public CombineOrdersViewModel(IMessageHelper messageHelper, ICombineOrdersDialog combineOrdersDialog)
         {
-            if (orders?.Any() != true)
-            {
-                throw new ArgumentException("Orders cannot be null or empty");
-            }
+            this.combineOrdersDialog = combineOrdersDialog;
+            this.messageHelper = messageHelper;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            Orders = orders.ToReadOnly();
-
-            IOrderEntity firstOrder = orders.First();
-            NewOrderNumber = firstOrder.OrderNumberComplete + "-C";
-            SurvivingOrder = firstOrder;
-            SetAddress(SurvivingOrder);
-
-            AllAddressesMatch = orders.Select(x => x.ShipPerson)
-                .Distinct(new OrderCombineAddressComparer()).IsCountEqualTo(1);
+            ConfirmCombine = new RelayCommand(
+                () => ConfirmCombineAction(),
+                () => SurvivingOrder != null && !string.IsNullOrWhiteSpace(NewOrderNumber));
         }
+
+        /// <summary>
+        /// Confirm combination of the orders
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ConfirmCombine { get; }
 
         /// <summary>
         /// A property value has changed
@@ -129,9 +133,47 @@ namespace ShipWorks.Stores.Content
         public IEnumerable<IOrderEntity> Orders { get; set; }
 
         /// <summary>
-        /// Details for combining orders
+        /// Get order combination details from user
         /// </summary>
-        public Tuple<long, string> Details => Tuple.Create(SurvivingOrder.OrderID, NewOrderNumber);
+        public GenericResult<Tuple<long, string>> GetCombinationDetailsFromUser(IEnumerable<IOrderEntity> orders)
+        {
+            Load(orders);
+            combineOrdersDialog.DataContext = this;
+
+            return messageHelper.ShowDialog(combineOrdersDialog) == true ?
+                GenericResult.FromSuccess(Tuple.Create(SurvivingOrder.OrderID, NewOrderNumber)) :
+                GenericResult.FromError<Tuple<long, string>>("Canceled");
+        }
+
+        /// <summary>
+        /// Load the orders into the view model
+        /// </summary>
+        private void Load(IEnumerable<IOrderEntity> orders)
+        {
+            if (orders?.Any() != true)
+            {
+                throw new ArgumentException("Orders cannot be null or empty");
+            }
+
+            Orders = orders.ToReadOnly();
+
+            IOrderEntity firstOrder = orders.First();
+            NewOrderNumber = firstOrder.OrderNumberComplete + "-C";
+            SurvivingOrder = firstOrder;
+            SetAddress(SurvivingOrder);
+
+            AllAddressesMatch = orders.Select(x => x.ShipPerson)
+                .Distinct(new OrderCombineAddressComparer()).IsCountEqualTo(1);
+        }
+
+        /// <summary>
+        /// Handle the confirmation of combining orders
+        /// </summary>
+        private void ConfirmCombineAction()
+        {
+            combineOrdersDialog.DialogResult = true;
+            combineOrdersDialog.Close();
+        }
 
         /// <summary>
         /// Set the address properties from the given person adapter

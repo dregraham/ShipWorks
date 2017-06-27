@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Content.Controls
+namespace ShipWorks.Core.Stores.Content
 {
     /// <summary>
-    /// Get order combination details from user
+    /// View Model for the combine orders dialog
     /// </summary>
-    public interface ICombineOrdersDialog : IDialog
+    public interface ICombineOrdersViewModel
     {
         /// <summary>
         /// Get order combination details from user

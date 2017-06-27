@@ -49,6 +49,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Stores.Content;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -2824,28 +2825,6 @@ namespace ShipWorks
         /// </summary>
         private async void OnNewOrder(object sender, EventArgs e)
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                var orderLoader = lifetimeScope.Resolve<IOrderLoader>();
-                var results = await orderLoader.LoadAsync(gridControl.Selection.Keys, ProgressDisplayOptions.NeverShow, true, TimeSpan.FromMinutes(2));
-                var orders = results.Shipments.GroupBy(x => x.Order).Select(x => x.Key).ToList();
-
-                var combineOrdersDialog = lifetimeScope.Resolve<ICombineOrdersDialog>();
-                combineOrdersDialog.GetCombinationDetailsFromUser(orders);
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
             long? customerID = null;
             long? storeID = null;
 

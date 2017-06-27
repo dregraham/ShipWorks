@@ -43,7 +43,7 @@
                 <TextBox Width="100"
                          Padding="2"
                          Margin="8, 0, 0, 0"
-                         Text="{Binding NewOrderNumber}" />
+                         Text="{Binding NewOrderNumber, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
             <TextBlock TextWrapping="Wrap"
@@ -130,6 +130,7 @@
             <Button Grid.Row="1"
                     Padding="8, 4"
                     IsDefault="True"
+                    Command="{Binding ConfirmCombine}"
                     HorizontalAlignment="Right">Confirm Combine</Button>
         </Grid>
     </Grid>
