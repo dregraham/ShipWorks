@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Uploads shipmnent details for a particular shipment
+        /// Uploads shipment details for a particular shipment
         /// </summary>
         public void UploadShipmentDetails(IEnumerable<long> shipmentKeys)
         {
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Uploads shipmnent details for a particular shipment
+        /// Uploads shipment details for a particular shipment
         /// </summary>
         public void UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
