@@ -3,6 +3,9 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Content
 {
+    /// <summary>
+    /// Order validation for combining orders
+    /// </summary>
     public interface IOrderCombineValidator
     {
         /// <summary>
