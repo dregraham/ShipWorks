@@ -164,7 +164,9 @@
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemAttributeEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\OrderEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\OrderEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\ShippingDefaultsRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingOriginEntity.Interface.cs" />

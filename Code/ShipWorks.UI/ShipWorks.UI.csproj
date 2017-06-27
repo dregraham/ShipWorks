@@ -221,6 +221,9 @@
       <DependentUpon>ShippingOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\UserConditionalNotification\IUserConditionalNotificationViewModel.cs" />
+    <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotification.xaml.cs">
+      <DependentUpon>UserConditionalNotification.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -330,6 +333,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\UserConditionalNotification\UserConditionalNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Controls\DatePickerStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -359,6 +366,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\GlobalStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

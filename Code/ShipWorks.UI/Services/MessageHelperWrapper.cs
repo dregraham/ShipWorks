@@ -128,6 +128,22 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public bool? ShowDialog(IDialog dialog)
+        {
+            Control owner = ownerFactory();
+            if (owner.InvokeRequired)
+            {
+                return (bool?) owner.Invoke((Func<IDialog, bool?>) ShowDialog, dialog);
+            }
+
+            dialog.LoadOwner(owner);
+
+            return dialog.ShowDialog();
+        }
+
+        /// <summary>
         /// Show an information message, takes an owner
         /// </summary>
         public void ShowInformation(IWin32Window owner, string message) => MessageHelper.ShowInformation(owner, message);

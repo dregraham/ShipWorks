@@ -1,0 +1,131 @@
+﻿<Window x:Class="ShipWorks.Stores.UI.Content.CombineOrdersDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Stores.UI.Content"
+        xmlns:ui="http://schemas.shipworks.com/ui"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:DesignModeCombineOrderViewModel, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        Title="Combine Orders" Height="400" Width="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
+            <ui:PluralizingValueConverter x:Key="PluralizingValue" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock TextWrapping="Wrap">
+                ShipWorks will combine these orders into a new order.
+            </TextBlock>
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="0, 8, 0, 0">
+                <TextBlock FontWeight="Bold"
+                           VerticalAlignment="Center">New Order Number</TextBlock>
+                <TextBox Width="100"
+                         Padding="2"
+                         Margin="8, 0, 0, 0"
+                         Text="{Binding NewOrderNumber}" />
+            </StackPanel>
+
+            <TextBlock TextWrapping="Wrap"
+                       Margin="0, 8, 0, 0">
+                All order items and notes will be added to the new combined
+                order, but the other details will be copied from the order
+                selected below:
+            </TextBlock>
+        </StackPanel>
+
+        <ListView Grid.Row="1"
+                  Margin="0, 8, 0, 0"
+                  ItemsSource="{Binding Orders}"
+                  SelectedItem="{Binding SurvivingOrder}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding OrderNumberComplete}" />
+                        <TextBlock Grid.Column="1"
+                                   FontWeight="Bold"
+                                   Visibility="{Binding IsSelected,
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}},
+                                        Converter={StaticResource ShowWhenTrue}}">
+                            The Combined order is based on this order
+                        </TextBlock>
+                        <TextBlock Grid.Column="1"
+                                   Visibility="{Binding IsSelected,
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}},
+                                        Converter={StaticResource HideWhenTrue}}">
+                            <Run FontWeight="Bold"
+                                 Text="{Binding RollupItemCount}" />
+                            <Run FontWeight="Bold"
+                                 Text="{Binding RollupItemCount, Converter={StaticResource PluralizingValue}, ConverterParameter=Item}" />
+                            <Run>will be added to the combined order</Run>
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ui:NotificationBorder Grid.Row="2"
+                Margin="0, 8, 0, 0"
+                BorderBrush="{StaticResource Yellow}"
+                Visibility="Visible"
+                IconControl="!"
+                IconFontFamily="Tahoma">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" TextWrapping="Wrap">
+                    At least one of the order recipients or addresses doesn't
+                    match the information below:
+                </TextBlock>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="{Binding AddressName}" />
+                    <TextBlock Text="{Binding AddressStreet}" />
+                    <TextBlock Text="{Binding AddressCityStateZip}" />
+                </StackPanel>
+            </Grid>
+        </ui:NotificationBorder>
+
+        <Grid Grid.Row="3" Margin="0, 8, 0, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       FontWeight="Bold">
+                Are you sure you want to combine these orders?
+            </TextBlock>
+
+            <Button Grid.Row="1"
+                    Padding="8, 4"
+                    HorizontalAlignment="Right">Confirm Combine</Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -87,6 +87,7 @@ using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
@@ -2821,7 +2822,7 @@ namespace ShipWorks
         /// <summary>
         /// Create a new order
         /// </summary>
-        private void OnNewOrder(object sender, EventArgs e)
+        private async void OnNewOrder(object sender, EventArgs e)
         {
             long? customerID = null;
             long? storeID = null;
