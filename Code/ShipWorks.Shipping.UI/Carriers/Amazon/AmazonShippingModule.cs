@@ -59,18 +59,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
 
-            builder.RegisterType<AmazonNotLinkedFootnoteFactory>()
-                .As<IAmazonNotLinkedFootnoteFactory>()
-                .ExternallyOwned();
-
             if (!InterapptiveOnly.MagicKeysDown)
             {
-                builder.RegisterType<AmazonUspsRateFilter>()
-                    .As<IAmazonRateGroupFilter>();
-
-                builder.RegisterType<AmazonUpsRateFilter>()
-                    .As<IAmazonRateGroupFilter>();
-
                 builder.RegisterType<AmazonAllowedCarriersRateGroupFilter>()
                     .As<IAmazonRateGroupFilter>();
             }

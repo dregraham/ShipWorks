@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml" />
-        <ResourceDictionary Source="AmazonNotLinkedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="BrokerExceptionsRateFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="CounterRatesInvalidStoreAddressFootnoteViewModelTemplate.xaml" />
