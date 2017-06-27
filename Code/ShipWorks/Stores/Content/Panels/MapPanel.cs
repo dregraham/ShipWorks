@@ -53,6 +53,27 @@ namespace ShipWorks.Stores.Content.Panels
             Messenger.Current.OfType<PanelHiddenMessage>()
                 .Where(x => IsOwnedBy(x.Panel))
                 .Subscribe(_ => isPanelShown = false);
+
+            GotFocus += OnGotFocus;
+            LostFocus += OnLostFocus;
+        }
+
+        /// <summary>
+        /// Handles lost focus event.  Used to set the panel as not shown.
+        /// </summary>
+        private void OnLostFocus(object sender, EventArgs e)
+        {
+            isPanelShown = false;
+        }
+
+        /// <summary>
+        /// Handles lost got event.  Used to set the panel as shown and fetch the image.
+        /// </summary>
+        private void OnGotFocus(object sender, EventArgs e)
+        {
+            errorLabel.Text = "Loading...";
+            isPanelShown = true;
+            LoadImage(googleImage.Tag as PersonAdapter);
         }
 
         /// <summary>
@@ -280,6 +301,10 @@ namespace ShipWorks.Stores.Content.Panels
                 return null;
             }
 
+            // We need to keep the requested person adapter around so that got/lost focus can
+            // get the image if it hasn't already been downloaded.
+            googleImage.Tag = person;
+
             Size adjustedSize = GetPictureSize(size);
 
             string hash = GetAddressHash(person, adjustedSize);
@@ -303,8 +328,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private async Task<GoogleResponse> GetImageFromGoogle(PersonAdapter person, Size size, string hash)
         {
-            GoogleResponse response = isPanelShown ?
-                await LoadImageFromGoogle(person, size) :
+            GoogleResponse response;
+            response = isPanelShown || Visible ? 
+                await LoadImageFromGoogle(person, size) : 
                 new GoogleResponse();
 
             if (!response.IsThrottled && response.ReturnedImage != null)
