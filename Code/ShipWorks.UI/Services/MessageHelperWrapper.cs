@@ -15,12 +15,15 @@ namespace ShipWorks.UI.Services
     {
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider)
+        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider,
+            Func<IUserConditionalNotification> createUserConditionalNotification)
         {
+            this.createUserConditionalNotification = createUserConditionalNotification;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -39,6 +42,12 @@ namespace ShipWorks.UI.Services
         /// Show an information message
         /// </summary>
         public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
+
+        /// <summary>
+        /// Show a user conditional information message
+        /// </summary>
+        public void ShowUserConditionalInformation(string message, UserConditionalNotificationType notificationType) =>
+            createUserConditionalNotification().ShowInformation(ownerFactory(), message, notificationType);
 
         /// <summary>
         /// Show a message

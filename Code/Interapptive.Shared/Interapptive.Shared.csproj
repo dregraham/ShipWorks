@@ -286,6 +286,7 @@
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialogException.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialogException.cs" />
+    <Compile Include="UI\UserConditionalNotificationType.cs" />
     <Compile Include="Utility\ClrHelper.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />

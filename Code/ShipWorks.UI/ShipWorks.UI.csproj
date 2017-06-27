@@ -220,6 +220,7 @@
     <Compile Include="Dialogs\SetupGuide\ShippingOptions.xaml.cs">
       <DependentUpon>ShippingOptions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\UserConditionalNotification\IUserConditionalNotificationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />

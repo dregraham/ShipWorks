@@ -1313,6 +1313,11 @@
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
+    <Compile Include="Stores\Content\Controls\ICombineOrdersDialog.cs" />
+    <Compile Include="Stores\Content\ICombineOrdersGateway.cs" />
+    <Compile Include="Stores\Content\IOrderCombinationOrchestrator.cs" />
+    <Compile Include="Stores\Content\IOrderCombiner.cs" />
+    <Compile Include="Stores\Content\IStoreSpecificOrderCombiner.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />
@@ -3968,6 +3973,7 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IUserConditionalNotification.cs" />
     <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
