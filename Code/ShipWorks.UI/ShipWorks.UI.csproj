@@ -133,6 +133,7 @@
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
+    <Compile Include="AttachedProperties\ListSelection.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />

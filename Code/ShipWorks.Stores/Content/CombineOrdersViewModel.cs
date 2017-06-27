@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Content
         private string addressName;
         private string addressStreet;
         private string addressCityStateZip;
+        private bool allAddressesMatch;
 
         /// <summary>
         /// Constructor
@@ -44,9 +45,10 @@ namespace ShipWorks.Stores.Content
             IOrderEntity firstOrder = orders.First();
             NewOrderNumber = firstOrder.OrderNumberComplete + "-C";
             SurvivingOrder = firstOrder;
-            AddressName = firstOrder.BillPerson.UnparsedName;
-            AddressStreet = firstOrder.BillPerson.Street1;
-            AddressCityStateZip = $"{firstOrder.BillPerson.City}, {Geography.GetStateProvName(firstOrder.BillPerson.StateProvCode)} {firstOrder.BillPerson.PostalCode}";
+            SetAddress(SurvivingOrder);
+
+            AllAddressesMatch = orders.Select(x => x.ShipPerson)
+                .Distinct(new OrderCombineAddressComparer()).IsCountEqualTo(1);
         }
 
         /// <summary>
@@ -71,7 +73,13 @@ namespace ShipWorks.Stores.Content
         public IOrderEntity SurvivingOrder
         {
             get { return survivingOrder; }
-            set { handler.Set(nameof(SurvivingOrder), ref survivingOrder, value); }
+            set
+            {
+                if (handler.Set(nameof(SurvivingOrder), ref survivingOrder, value))
+                {
+                    SetAddress(value);
+                }
+            }
         }
 
         /// <summary>
@@ -105,6 +113,16 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
+        /// States whether all the order addresses match or not
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AllAddressesMatch
+        {
+            get { return allAddressesMatch; }
+            set { handler.Set(nameof(AllAddressesMatch), ref allAddressesMatch, value); }
+        }
+
+        /// <summary>
         /// Orders that will be combined
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -114,5 +132,18 @@ namespace ShipWorks.Stores.Content
         /// Details for combining orders
         /// </summary>
         public Tuple<long, string> Details => Tuple.Create(SurvivingOrder.OrderID, NewOrderNumber);
+
+        /// <summary>
+        /// Set the address properties from the given person adapter
+        /// </summary>
+        private void SetAddress(IOrderEntity selectedOrder)
+        {
+            PersonAdapter address = selectedOrder.ShipPerson;
+            string state = Geography.GetStateProvName(address.StateProvCode);
+
+            AddressName = address.UnparsedName;
+            AddressStreet = address.Street1;
+            AddressCityStateZip = $"{address.City}, {state} {address.PostalCode}";
+        }
     }
 }
