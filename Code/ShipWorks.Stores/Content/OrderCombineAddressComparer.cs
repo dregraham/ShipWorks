@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 
 namespace ShipWorks.Stores.Content
 {
     /// <summary>
     /// EqualityComparer for PersonAdapters used by the OrderCombine function
     /// </summary>
-    internal class OrderCombineAddressComparer : IEqualityComparer<PersonAdapter>
+    internal class OrderCombineAddressComparer : IOrderCombineAddressComparer
     {
         /// <summary>
         /// Are the two person adapters equal

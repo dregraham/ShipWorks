@@ -150,6 +150,7 @@
     <Compile Include="Communication\DownloadStartingPoint.cs" />
     <Compile Include="Content\CombineOrdersViewModel.cs" />
     <Compile Include="Content\ICombineOrdersDialog.cs" />
+    <Compile Include="Content\IOrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombineAddressComparer.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />

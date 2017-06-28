@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -25,6 +24,7 @@ namespace ShipWorks.Stores.Content
     {
         private readonly IMessageHelper messageHelper;
         private readonly ICombineOrdersDialog combineOrdersDialog;
+        private readonly IOrderCombineAddressComparer addressComparer;
         private readonly PropertyChangedHandler handler;
 
         private string newOrderNumber;
@@ -37,8 +37,11 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrdersViewModel(IMessageHelper messageHelper, ICombineOrdersDialog combineOrdersDialog)
+        public CombineOrdersViewModel(IMessageHelper messageHelper,
+            ICombineOrdersDialog combineOrdersDialog,
+            IOrderCombineAddressComparer addressComparer)
         {
+            this.addressComparer = addressComparer;
             this.combineOrdersDialog = combineOrdersDialog;
             this.messageHelper = messageHelper;
 
@@ -163,7 +166,7 @@ namespace ShipWorks.Stores.Content
             SetAddress(SurvivingOrder);
 
             AllAddressesMatch = orders.Select(x => x.ShipPerson)
-                .Distinct(new OrderCombineAddressComparer()).IsCountEqualTo(1);
+                .Distinct(addressComparer).IsCountEqualTo(1);
         }
 
         /// <summary>
@@ -181,11 +184,18 @@ namespace ShipWorks.Stores.Content
         private void SetAddress(IOrderEntity selectedOrder)
         {
             PersonAdapter address = selectedOrder.ShipPerson;
-            string state = Geography.GetStateProvName(address.StateProvCode);
 
-            AddressName = address.UnparsedName;
-            AddressStreet = address.Street1;
-            AddressCityStateZip = $"{address.City}, {state} {address.PostalCode}";
+            AddressName = address.ParsedName.FullName;
+            AddressStreet = JoinAddressPieces(", ", address.Street1, address.Street2);
+
+            string stateZip = JoinAddressPieces(" ", address.StateProvCode, address.PostalCode);
+            AddressCityStateZip = JoinAddressPieces(", ", address.City, stateZip);
         }
+
+        /// <summary>
+        /// Join pieces of an address using the specified separator
+        /// </summary>
+        private string JoinAddressPieces(string separator, params string[] pieces) =>
+            string.Join(separator, pieces.Where(x => !string.IsNullOrWhiteSpace(x)));
     }
 }
