@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            CommerceInterfaceOrderSearch = source.CommerceInterfaceOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ICommerceInterfaceOrderSearchEntity>();
 
             CopyCustomCommerceInterfaceOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String CommerceInterfaceOrderNumber { get; }
         
         
+        
+        public IEnumerable<ICommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

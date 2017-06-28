@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            YahooOrderSearch = source.YahooOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IYahooOrderSearchEntity>();
 
             CopyCustomYahooOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String YahooOrderID { get; }
         
         
+        
+        public IEnumerable<IYahooOrderSearchEntity> YahooOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

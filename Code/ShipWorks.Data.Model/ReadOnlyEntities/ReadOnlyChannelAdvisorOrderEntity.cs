@@ -49,6 +49,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ChannelAdvisorOrderSearch = source.ChannelAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IChannelAdvisorOrderSearchEntity>();
 
             CopyCustomChannelAdvisorOrderData(source);
         }
@@ -116,6 +118,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int32 IsPrime { get; }
         
         
+        
+        public IEnumerable<IChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

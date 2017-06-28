@@ -46,6 +46,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            AmazonOrderSearch = source.AmazonOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IAmazonOrderSearchEntity>();
 
             CopyCustomAmazonOrderData(source);
         }
@@ -95,6 +97,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String PurchaseOrderNumber { get; }
         
         
+        
+        public IEnumerable<IAmazonOrderSearchEntity> AmazonOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

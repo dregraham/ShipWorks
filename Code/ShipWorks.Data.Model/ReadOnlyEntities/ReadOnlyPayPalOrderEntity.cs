@@ -43,6 +43,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            PayPalOrderSearch = source.PayPalOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IPayPalOrderSearchEntity>();
 
             CopyCustomPayPalOrderData(source);
         }
@@ -74,6 +76,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int32 PaymentStatus { get; }
         
         
+        
+        public IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

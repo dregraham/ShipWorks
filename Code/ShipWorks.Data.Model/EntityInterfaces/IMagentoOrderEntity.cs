@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IMagentoOrderSearchEntity> MagentoOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IMagentoOrderSearchEntity> IMagentoOrderEntity.MagentoOrderSearch => MagentoOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

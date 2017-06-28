@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.SearsOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -91,6 +92,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(SearsOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between SearsOrderEntity and SearsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// SearsOrder.OrderID - SearsOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation SearsOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "SearsOrderSearch" , true);
+				relation.AddEntityFieldPair(SearsOrderFields.OrderID, SearsOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -197,6 +213,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new SearsOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new SearsOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new SearsOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation SearsOrderSearchEntityUsingOrderIDStatic = new SearsOrderRelations().SearsOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new SearsOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new SearsOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new SearsOrderRelations().CustomerEntityUsingCustomerID;

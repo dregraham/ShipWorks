@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            MagentoOrderSearch = source.MagentoOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IMagentoOrderSearchEntity>();
 
             CopyCustomMagentoOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int64 MagentoOrderID { get; }
         
         
+        
+        public IEnumerable<IMagentoOrderSearchEntity> MagentoOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

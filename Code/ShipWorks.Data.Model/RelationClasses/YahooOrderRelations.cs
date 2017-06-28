@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.YahooOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -125,6 +126,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between YahooOrderEntity and YahooOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// YahooOrder.OrderID - YahooOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation YahooOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "YahooOrderSearch" , true);
+				relation.AddEntityFieldPair(YahooOrderFields.OrderID, YahooOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 
 		/// <summary>Returns a new IEntityRelation object, between YahooOrderEntity and CustomerEntity over the m:1 relation they have, using the relation between the fields:
 		/// YahooOrder.CustomerID - Customer.CustomerID
@@ -199,6 +215,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new YahooOrderRelations().OrderPaymentDetailEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new YahooOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new YahooOrderRelations().ValidatedAddressEntityUsingConsumerID;
+		internal static readonly IEntityRelation YahooOrderSearchEntityUsingOrderIDStatic = new YahooOrderRelations().YahooOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new YahooOrderRelations().CustomerEntityUsingCustomerID;
 		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new YahooOrderRelations().StoreEntityUsingStoreID;
 

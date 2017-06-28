@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<ThreeDCartOrderSearchEntity> _threeDCartOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -58,6 +59,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
 			/// <summary>Member name Shipments</summary>
 			public static readonly string Shipments = "Shipments";
+			/// <summary>Member name ThreeDCartOrderSearch</summary>
+			public static readonly string ThreeDCartOrderSearch = "ThreeDCartOrderSearch";
 			/// <summary>Member name ValidatedAddress</summary>
 			public static readonly string ValidatedAddress = "ValidatedAddress";
 			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
@@ -124,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_threeDCartOrderSearch = (EntityCollection<ThreeDCartOrderSearchEntity>)info.GetValue("_threeDCartOrderSearch", typeof(EntityCollection<ThreeDCartOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -139,6 +143,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "ThreeDCartOrderSearch":
+					this.ThreeDCartOrderSearch.Add((ThreeDCartOrderSearchEntity)entity);
+					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -161,6 +168,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "ThreeDCartOrderSearch":
+					toReturn.Add(Relations.ThreeDCartOrderSearchEntityUsingOrderID);
+					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -190,6 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "ThreeDCartOrderSearch":
+					this.ThreeDCartOrderSearch.Add((ThreeDCartOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -204,6 +217,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "ThreeDCartOrderSearch":
+					this.PerformRelatedEntityRemoval(this.ThreeDCartOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -234,6 +250,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.ThreeDCartOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -263,6 +280,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_threeDCartOrderSearch", ((_threeDCartOrderSearch!=null) && (_threeDCartOrderSearch.Count>0) && !this.MarkedForDeletion)?_threeDCartOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -284,6 +302,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new ThreeDCartOrderRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ThreeDCartOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoThreeDCartOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ThreeDCartOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -297,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._threeDCartOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -304,6 +332,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._threeDCartOrderSearch = (EntityCollection<ThreeDCartOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -312,6 +341,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._threeDCartOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -321,6 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ThreeDCartOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ThreeDCartOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -328,6 +359,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
+			toReturn.Add("ThreeDCartOrderSearch", _threeDCartOrderSearch);
 			return toReturn;
 		}
 
@@ -378,6 +410,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ThreeDCartOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathThreeDCartOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<ThreeDCartOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ThreeDCartOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("ThreeDCartOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.ThreeDCartOrderEntity, (int)ShipWorks.Data.Model.EntityType.ThreeDCartOrderSearchEntity, 0, null, null, null, null, "ThreeDCartOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -410,6 +449,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ThreeDCartOrderFieldIndex.ThreeDCartOrderID, true); }
 			set	{ SetValue((int)ThreeDCartOrderFieldIndex.ThreeDCartOrderID, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'ThreeDCartOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(ThreeDCartOrderSearchEntity))]
+		public virtual EntityCollection<ThreeDCartOrderSearchEntity> ThreeDCartOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<ThreeDCartOrderSearchEntity, ThreeDCartOrderSearchEntityFactory>("ThreeDCartOrder", true, false, ref _threeDCartOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

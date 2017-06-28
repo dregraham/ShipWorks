@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<MagentoOrderSearchEntity> _magentoOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -48,6 +49,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Customer = "Customer";
 			/// <summary>Member name Store</summary>
 			public static readonly string Store = "Store";
+			/// <summary>Member name MagentoOrderSearch</summary>
+			public static readonly string MagentoOrderSearch = "MagentoOrderSearch";
 			/// <summary>Member name Notes</summary>
 			public static readonly string Notes = "Notes";
 			/// <summary>Member name OrderCharges</summary>
@@ -124,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_magentoOrderSearch = (EntityCollection<MagentoOrderSearchEntity>)info.GetValue("_magentoOrderSearch", typeof(EntityCollection<MagentoOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -139,6 +143,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "MagentoOrderSearch":
+					this.MagentoOrderSearch.Add((MagentoOrderSearchEntity)entity);
+					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -161,6 +168,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "MagentoOrderSearch":
+					toReturn.Add(Relations.MagentoOrderSearchEntityUsingOrderID);
+					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -190,6 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "MagentoOrderSearch":
+					this.MagentoOrderSearch.Add((MagentoOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -204,6 +217,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "MagentoOrderSearch":
+					this.PerformRelatedEntityRemoval(this.MagentoOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -234,6 +250,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.MagentoOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -263,6 +280,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_magentoOrderSearch", ((_magentoOrderSearch!=null) && (_magentoOrderSearch.Count>0) && !this.MarkedForDeletion)?_magentoOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -284,6 +302,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new MagentoOrderRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'MagentoOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoMagentoOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(MagentoOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -297,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._magentoOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -304,6 +332,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._magentoOrderSearch = (EntityCollection<MagentoOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -312,6 +341,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._magentoOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -321,6 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<MagentoOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(MagentoOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -328,6 +359,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
+			toReturn.Add("MagentoOrderSearch", _magentoOrderSearch);
 			return toReturn;
 		}
 
@@ -378,6 +410,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'MagentoOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathMagentoOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<MagentoOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(MagentoOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("MagentoOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.MagentoOrderEntity, (int)ShipWorks.Data.Model.EntityType.MagentoOrderSearchEntity, 0, null, null, null, null, "MagentoOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -410,6 +449,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)MagentoOrderFieldIndex.MagentoOrderID, true); }
 			set	{ SetValue((int)MagentoOrderFieldIndex.MagentoOrderID, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'MagentoOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(MagentoOrderSearchEntity))]
+		public virtual EntityCollection<MagentoOrderSearchEntity> MagentoOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<MagentoOrderSearchEntity, MagentoOrderSearchEntityFactory>("MagentoOrder", true, false, ref _magentoOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

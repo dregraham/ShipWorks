@@ -279,6 +279,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty AmazonOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class AmazonOrderSearchEntityFactory : EntityFactoryBase2<AmazonOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public AmazonOrderSearchEntityFactory() : base("AmazonOrderSearchEntity", ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new AmazonOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AmazonOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty AmazonProfileEntity objects.</summary>
 	[Serializable]
 	public partial class AmazonProfileEntityFactory : EntityFactoryBase2<AmazonProfileEntity> {
@@ -579,6 +599,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ChannelAdvisorOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class ChannelAdvisorOrderSearchEntityFactory : EntityFactoryBase2<ChannelAdvisorOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public ChannelAdvisorOrderSearchEntityFactory() : base("ChannelAdvisorOrderSearchEntity", ShipWorks.Data.Model.EntityType.ChannelAdvisorOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ChannelAdvisorOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ChannelAdvisorStoreEntity objects.</summary>
 	[Serializable]
 	public partial class ChannelAdvisorStoreEntityFactory : EntityFactoryBase2<ChannelAdvisorStoreEntity> {
@@ -619,6 +659,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ClickCartProOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class ClickCartProOrderSearchEntityFactory : EntityFactoryBase2<ClickCartProOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public ClickCartProOrderSearchEntityFactory() : base("ClickCartProOrderSearchEntity", ShipWorks.Data.Model.EntityType.ClickCartProOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new ClickCartProOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ClickCartProOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewClickCartProOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty CommerceInterfaceOrderEntity objects.</summary>
 	[Serializable]
 	public partial class CommerceInterfaceOrderEntityFactory : EntityFactoryBase2<CommerceInterfaceOrderEntity> {
@@ -632,6 +692,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new CommerceInterfaceOrderEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewCommerceInterfaceOrderUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty CommerceInterfaceOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class CommerceInterfaceOrderSearchEntityFactory : EntityFactoryBase2<CommerceInterfaceOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public CommerceInterfaceOrderSearchEntityFactory() : base("CommerceInterfaceOrderSearchEntity", ShipWorks.Data.Model.EntityType.CommerceInterfaceOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new CommerceInterfaceOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewCommerceInterfaceOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -819,6 +899,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty EbayOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class EbayOrderSearchEntityFactory : EntityFactoryBase2<EbayOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public EbayOrderSearchEntityFactory() : base("EbayOrderSearchEntity", ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new EbayOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new EbayOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty EbayStoreEntity objects.</summary>
 	[Serializable]
 	public partial class EbayStoreEntityFactory : EntityFactoryBase2<EbayStoreEntity> {
@@ -992,6 +1092,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new EtsyOrderEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty EtsyOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class EtsyOrderSearchEntityFactory : EntityFactoryBase2<EtsyOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public EtsyOrderSearchEntityFactory() : base("EtsyOrderSearchEntity", ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new EtsyOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new EtsyOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1479,6 +1599,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty GrouponOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class GrouponOrderSearchEntityFactory : EntityFactoryBase2<GrouponOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public GrouponOrderSearchEntityFactory() : base("GrouponOrderSearchEntity", ShipWorks.Data.Model.EntityType.GrouponOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new GrouponOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new GrouponOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty GrouponStoreEntity objects.</summary>
 	[Serializable]
 	public partial class GrouponStoreEntityFactory : EntityFactoryBase2<GrouponStoreEntity> {
@@ -1719,6 +1859,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty LemonStandOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class LemonStandOrderSearchEntityFactory : EntityFactoryBase2<LemonStandOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public LemonStandOrderSearchEntityFactory() : base("LemonStandOrderSearchEntity", ShipWorks.Data.Model.EntityType.LemonStandOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new LemonStandOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new LemonStandOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty LemonStandStoreEntity objects.</summary>
 	[Serializable]
 	public partial class LemonStandStoreEntityFactory : EntityFactoryBase2<LemonStandStoreEntity> {
@@ -1759,6 +1919,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty MagentoOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class MagentoOrderSearchEntityFactory : EntityFactoryBase2<MagentoOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public MagentoOrderSearchEntityFactory() : base("MagentoOrderSearchEntity", ShipWorks.Data.Model.EntityType.MagentoOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new MagentoOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new MagentoOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMagentoOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty MagentoStoreEntity objects.</summary>
 	[Serializable]
 	public partial class MagentoStoreEntityFactory : EntityFactoryBase2<MagentoStoreEntity> {
@@ -1792,6 +1972,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new MarketplaceAdvisorOrderEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorOrderUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty MarketplaceAdvisorOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class MarketplaceAdvisorOrderSearchEntityFactory : EntityFactoryBase2<MarketplaceAdvisorOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public MarketplaceAdvisorOrderSearchEntityFactory() : base("MarketplaceAdvisorOrderSearchEntity", ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new MarketplaceAdvisorOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1879,6 +2079,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty NetworkSolutionsOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class NetworkSolutionsOrderSearchEntityFactory : EntityFactoryBase2<NetworkSolutionsOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public NetworkSolutionsOrderSearchEntityFactory() : base("NetworkSolutionsOrderSearchEntity", ShipWorks.Data.Model.EntityType.NetworkSolutionsOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new NetworkSolutionsOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNetworkSolutionsOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty NetworkSolutionsStoreEntity objects.</summary>
 	[Serializable]
 	public partial class NetworkSolutionsStoreEntityFactory : EntityFactoryBase2<NetworkSolutionsStoreEntity> {
@@ -1932,6 +2152,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new NeweggOrderItemEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderItemUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty NeweggOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class NeweggOrderSearchEntityFactory : EntityFactoryBase2<NeweggOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public NeweggOrderSearchEntityFactory() : base("NeweggOrderSearchEntity", ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new NeweggOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new NeweggOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2199,6 +2439,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty OrderMotionOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class OrderMotionOrderSearchEntityFactory : EntityFactoryBase2<OrderMotionOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public OrderMotionOrderSearchEntityFactory() : base("OrderMotionOrderSearchEntity", ShipWorks.Data.Model.EntityType.OrderMotionOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new OrderMotionOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OrderMotionOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderMotionOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty OrderMotionStoreEntity objects.</summary>
 	[Serializable]
 	public partial class OrderMotionStoreEntityFactory : EntityFactoryBase2<OrderMotionStoreEntity> {
@@ -2292,6 +2552,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new PayPalOrderEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalOrderUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty PayPalOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class PayPalOrderSearchEntityFactory : EntityFactoryBase2<PayPalOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public PayPalOrderSearchEntityFactory() : base("PayPalOrderSearchEntity", ShipWorks.Data.Model.EntityType.PayPalOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new PayPalOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new PayPalOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2419,6 +2699,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ProStoresOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class ProStoresOrderSearchEntityFactory : EntityFactoryBase2<ProStoresOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public ProStoresOrderSearchEntityFactory() : base("ProStoresOrderSearchEntity", ShipWorks.Data.Model.EntityType.ProStoresOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new ProStoresOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProStoresOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProStoresOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ProStoresStoreEntity objects.</summary>
 	[Serializable]
 	public partial class ProStoresStoreEntityFactory : EntityFactoryBase2<ProStoresStoreEntity> {
@@ -2532,6 +2832,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new SearsOrderItemEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderItemUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty SearsOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class SearsOrderSearchEntityFactory : EntityFactoryBase2<SearsOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public SearsOrderSearchEntityFactory() : base("SearsOrderSearchEntity", ShipWorks.Data.Model.EntityType.SearsOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new SearsOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new SearsOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2859,6 +3179,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ShopifyOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class ShopifyOrderSearchEntityFactory : EntityFactoryBase2<ShopifyOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public ShopifyOrderSearchEntityFactory() : base("ShopifyOrderSearchEntity", ShipWorks.Data.Model.EntityType.ShopifyOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new ShopifyOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ShopifyOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ShopifyStoreEntity objects.</summary>
 	[Serializable]
 	public partial class ShopifyStoreEntityFactory : EntityFactoryBase2<ShopifyStoreEntity> {
@@ -3112,6 +3452,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new ThreeDCartOrderItemEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderItemUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ThreeDCartOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class ThreeDCartOrderSearchEntityFactory : EntityFactoryBase2<ThreeDCartOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public ThreeDCartOrderSearchEntityFactory() : base("ThreeDCartOrderSearchEntity", ShipWorks.Data.Model.EntityType.ThreeDCartOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ThreeDCartOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3639,6 +3999,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty WalmartOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class WalmartOrderSearchEntityFactory : EntityFactoryBase2<WalmartOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public WalmartOrderSearchEntityFactory() : base("WalmartOrderSearchEntity", ShipWorks.Data.Model.EntityType.WalmartOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new WalmartOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new WalmartOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWalmartOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty WalmartStoreEntity objects.</summary>
 	[Serializable]
 	public partial class WalmartStoreEntityFactory : EntityFactoryBase2<WalmartStoreEntity> {
@@ -3779,6 +4159,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty YahooOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class YahooOrderSearchEntityFactory : EntityFactoryBase2<YahooOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public YahooOrderSearchEntityFactory() : base("YahooOrderSearchEntity", ShipWorks.Data.Model.EntityType.YahooOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new YahooOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new YahooOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty YahooProductEntity objects.</summary>
 	[Serializable]
 	public partial class YahooProductEntityFactory : EntityFactoryBase2<YahooProductEntity> {
@@ -3858,6 +4258,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					factoryToUse = new AmazonOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity:
+					factoryToUse = new AmazonOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
 					factoryToUse = new AmazonProfileEntityFactory();
 					break;
@@ -3903,14 +4306,23 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ChannelAdvisorOrderItemEntity:
 					factoryToUse = new ChannelAdvisorOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.ChannelAdvisorOrderSearchEntity:
+					factoryToUse = new ChannelAdvisorOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.ChannelAdvisorStoreEntity:
 					factoryToUse = new ChannelAdvisorStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ClickCartProOrderEntity:
 					factoryToUse = new ClickCartProOrderEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.ClickCartProOrderSearchEntity:
+					factoryToUse = new ClickCartProOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.CommerceInterfaceOrderEntity:
 					factoryToUse = new CommerceInterfaceOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.CommerceInterfaceOrderSearchEntity:
+					factoryToUse = new CommerceInterfaceOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ComputerEntity:
 					factoryToUse = new ComputerEntityFactory();
@@ -3939,6 +4351,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.EbayOrderItemEntity:
 					factoryToUse = new EbayOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity:
+					factoryToUse = new EbayOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.EbayStoreEntity:
 					factoryToUse = new EbayStoreEntityFactory();
 					break;
@@ -3965,6 +4380,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					factoryToUse = new EtsyOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity:
+					factoryToUse = new EtsyOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					factoryToUse = new EtsyStoreEntityFactory();
@@ -4038,6 +4456,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity:
 					factoryToUse = new GrouponOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.GrouponOrderSearchEntity:
+					factoryToUse = new GrouponOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.GrouponStoreEntity:
 					factoryToUse = new GrouponStoreEntityFactory();
 					break;
@@ -4074,17 +4495,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.LemonStandOrderItemEntity:
 					factoryToUse = new LemonStandOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderSearchEntity:
+					factoryToUse = new LemonStandOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
 					factoryToUse = new LemonStandStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					factoryToUse = new MagentoOrderEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.MagentoOrderSearchEntity:
+					factoryToUse = new MagentoOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.MagentoStoreEntity:
 					factoryToUse = new MagentoStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderEntity:
 					factoryToUse = new MarketplaceAdvisorOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderSearchEntity:
+					factoryToUse = new MarketplaceAdvisorOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorStoreEntity:
 					factoryToUse = new MarketplaceAdvisorStoreEntityFactory();
@@ -4098,6 +4528,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.NetworkSolutionsOrderEntity:
 					factoryToUse = new NetworkSolutionsOrderEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.NetworkSolutionsOrderSearchEntity:
+					factoryToUse = new NetworkSolutionsOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.NetworkSolutionsStoreEntity:
 					factoryToUse = new NetworkSolutionsStoreEntityFactory();
 					break;
@@ -4106,6 +4539,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggOrderItemEntity:
 					factoryToUse = new NeweggOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity:
+					factoryToUse = new NeweggOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggStoreEntity:
 					factoryToUse = new NeweggStoreEntityFactory();
@@ -4146,6 +4582,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.OrderMotionOrderEntity:
 					factoryToUse = new OrderMotionOrderEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.OrderMotionOrderSearchEntity:
+					factoryToUse = new OrderMotionOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.OrderMotionStoreEntity:
 					factoryToUse = new OrderMotionStoreEntityFactory();
 					break;
@@ -4160,6 +4599,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.PayPalOrderEntity:
 					factoryToUse = new PayPalOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.PayPalOrderSearchEntity:
+					factoryToUse = new PayPalOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.PayPalStoreEntity:
 					factoryToUse = new PayPalStoreEntityFactory();
@@ -4179,6 +4621,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					factoryToUse = new ProStoresOrderEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.ProStoresOrderSearchEntity:
+					factoryToUse = new ProStoresOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresStoreEntity:
 					factoryToUse = new ProStoresStoreEntityFactory();
 					break;
@@ -4196,6 +4641,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.SearsOrderItemEntity:
 					factoryToUse = new SearsOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.SearsOrderSearchEntity:
+					factoryToUse = new SearsOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.SearsStoreEntity:
 					factoryToUse = new SearsStoreEntityFactory();
@@ -4245,6 +4693,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShopifyOrderItemEntity:
 					factoryToUse = new ShopifyOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.ShopifyOrderSearchEntity:
+					factoryToUse = new ShopifyOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.ShopifyStoreEntity:
 					factoryToUse = new ShopifyStoreEntityFactory();
 					break;
@@ -4283,6 +4734,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					factoryToUse = new ThreeDCartOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderSearchEntity:
+					factoryToUse = new ThreeDCartOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartStoreEntity:
 					factoryToUse = new ThreeDCartStoreEntityFactory();
@@ -4362,6 +4816,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.WalmartOrderItemEntity:
 					factoryToUse = new WalmartOrderItemEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderSearchEntity:
+					factoryToUse = new WalmartOrderSearchEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.WalmartStoreEntity:
 					factoryToUse = new WalmartStoreEntityFactory();
 					break;
@@ -4382,6 +4839,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.YahooOrderItemEntity:
 					factoryToUse = new YahooOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.YahooOrderSearchEntity:
+					factoryToUse = new YahooOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.YahooProductEntity:
 					factoryToUse = new YahooProductEntityFactory();

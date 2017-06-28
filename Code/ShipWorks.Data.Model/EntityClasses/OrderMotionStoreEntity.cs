@@ -47,6 +47,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name OrderMotionEmailAccount</summary>
 			public static readonly string OrderMotionEmailAccount = "OrderMotionEmailAccount";
+			/// <summary>Member name AmazonOrderSearch</summary>
+			public static readonly string AmazonOrderSearch = "AmazonOrderSearch";
+			/// <summary>Member name ChannelAdvisorOrderSearch</summary>
+			public static readonly string ChannelAdvisorOrderSearch = "ChannelAdvisorOrderSearch";
+			/// <summary>Member name ClickCartProOrderSearch</summary>
+			public static readonly string ClickCartProOrderSearch = "ClickCartProOrderSearch";
+			/// <summary>Member name CommerceInterfaceOrderSearch</summary>
+			public static readonly string CommerceInterfaceOrderSearch = "CommerceInterfaceOrderSearch";
+			/// <summary>Member name EbayOrderSearch</summary>
+			public static readonly string EbayOrderSearch = "EbayOrderSearch";
+			/// <summary>Member name EtsyOrderSearch</summary>
+			public static readonly string EtsyOrderSearch = "EtsyOrderSearch";
+			/// <summary>Member name GrouponOrderSearch</summary>
+			public static readonly string GrouponOrderSearch = "GrouponOrderSearch";
+			/// <summary>Member name LemonStandOrderSearch</summary>
+			public static readonly string LemonStandOrderSearch = "LemonStandOrderSearch";
+			/// <summary>Member name MagentoOrderSearch</summary>
+			public static readonly string MagentoOrderSearch = "MagentoOrderSearch";
+			/// <summary>Member name MarketplaceAdvisorOrderSearch</summary>
+			public static readonly string MarketplaceAdvisorOrderSearch = "MarketplaceAdvisorOrderSearch";
+			/// <summary>Member name NetworkSolutionsOrderSearch</summary>
+			public static readonly string NetworkSolutionsOrderSearch = "NetworkSolutionsOrderSearch";
+			/// <summary>Member name NeweggOrderSearch</summary>
+			public static readonly string NeweggOrderSearch = "NeweggOrderSearch";
+			/// <summary>Member name OrderMotionOrderSearch</summary>
+			public static readonly string OrderMotionOrderSearch = "OrderMotionOrderSearch";
+			/// <summary>Member name PayPalOrderSearch</summary>
+			public static readonly string PayPalOrderSearch = "PayPalOrderSearch";
+			/// <summary>Member name ProStoresOrderSearch</summary>
+			public static readonly string ProStoresOrderSearch = "ProStoresOrderSearch";
+			/// <summary>Member name SearsOrderSearch</summary>
+			public static readonly string SearsOrderSearch = "SearsOrderSearch";
+			/// <summary>Member name ShopifyOrderSearch</summary>
+			public static readonly string ShopifyOrderSearch = "ShopifyOrderSearch";
+			/// <summary>Member name ThreeDCartOrderSearch</summary>
+			public static readonly string ThreeDCartOrderSearch = "ThreeDCartOrderSearch";
+			/// <summary>Member name WalmartOrderSearch</summary>
+			public static readonly string WalmartOrderSearch = "WalmartOrderSearch";
+			/// <summary>Member name YahooOrderSearch</summary>
+			public static readonly string YahooOrderSearch = "YahooOrderSearch";
 		}
 		#endregion
 		

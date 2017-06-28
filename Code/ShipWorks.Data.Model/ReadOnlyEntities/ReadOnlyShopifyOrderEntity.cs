@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ShopifyOrderSearch = source.ShopifyOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IShopifyOrderSearchEntity>();
 
             CopyCustomShopifyOrderData(source);
         }
@@ -67,6 +69,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int32 PaymentStatusCode { get; }
         
         
+        
+        public IEnumerable<IShopifyOrderSearchEntity> ShopifyOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<ILemonStandOrderSearchEntity> LemonStandOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<ILemonStandOrderSearchEntity> ILemonStandOrderEntity.LemonStandOrderSearch => LemonStandOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

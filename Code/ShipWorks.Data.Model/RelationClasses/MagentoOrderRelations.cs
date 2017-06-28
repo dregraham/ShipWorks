@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.MagentoOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between MagentoOrderEntity and MagentoOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// MagentoOrder.OrderID - MagentoOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation MagentoOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MagentoOrderSearch" , true);
+				relation.AddEntityFieldPair(MagentoOrderFields.OrderID, MagentoOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between MagentoOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// MagentoOrder.OrderID - Note.EntityID
@@ -193,6 +209,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticMagentoOrderRelations
 	{
+		internal static readonly IEntityRelation MagentoOrderSearchEntityUsingOrderIDStatic = new MagentoOrderRelations().MagentoOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new MagentoOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new MagentoOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new MagentoOrderRelations().OrderItemEntityUsingOrderID;

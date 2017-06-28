@@ -35,6 +35,66 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 		#region Class Property Declarations
 
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and AmazonOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - AmazonOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation AmazonOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AmazonOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, AmazonOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and ChannelAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - ChannelAdvisorOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ChannelAdvisorOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, ChannelAdvisorOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and ClickCartProOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - ClickCartProOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation ClickCartProOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ClickCartProOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, ClickCartProOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ClickCartProOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and CommerceInterfaceOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - CommerceInterfaceOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "CommerceInterfaceOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, CommerceInterfaceOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("CommerceInterfaceOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and DownloadEntity over the 1:n relation they have, using the relation between the fields:
 		/// EtsyStore.StoreID - Download.StoreID
 		/// </summary>
@@ -46,6 +106,126 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, DownloadFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DownloadEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and EbayOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - EbayOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation EbayOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, EbayOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and EtsyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - EtsyOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation EtsyOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EtsyOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, EtsyOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and GrouponOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - GrouponOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation GrouponOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "GrouponOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, GrouponOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and LemonStandOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - LemonStandOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation LemonStandOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "LemonStandOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, LemonStandOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("LemonStandOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and MagentoOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - MagentoOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation MagentoOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MagentoOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, MagentoOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and MarketplaceAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - MarketplaceAdvisorOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MarketplaceAdvisorOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, MarketplaceAdvisorOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MarketplaceAdvisorOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and NetworkSolutionsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - NetworkSolutionsOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NetworkSolutionsOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, NetworkSolutionsOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NetworkSolutionsOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and NeweggOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - NeweggOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation NeweggOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NeweggOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, NeweggOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -65,6 +245,81 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and OrderMotionOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - OrderMotionOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderMotionOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderMotionOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, OrderMotionOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderMotionOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - PayPalOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation PayPalOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "PayPalOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, PayPalOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and ProStoresOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - ProStoresOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation ProStoresOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProStoresOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, ProStoresOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and SearsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - SearsOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation SearsOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "SearsOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, SearsOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and ShopifyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - ShopifyOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation ShopifyOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ShopifyOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, ShopifyOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShopifyOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// EtsyStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -76,6 +331,51 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, StatusPresetFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StatusPresetEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and ThreeDCartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - ThreeDCartOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation ThreeDCartOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ThreeDCartOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, ThreeDCartOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and WalmartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - WalmartOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation WalmartOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WalmartOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, WalmartOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WalmartOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EtsyStoreEntity and YahooOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EtsyStore.StoreID - YahooOrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation YahooOrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "YahooOrderSearch" , true);
+				relation.AddEntityFieldPair(EtsyStoreFields.StoreID, YahooOrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -120,9 +420,29 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticEtsyStoreRelations
 	{
+		internal static readonly IEntityRelation AmazonOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().AmazonOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().ChannelAdvisorOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation ClickCartProOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().ClickCartProOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().CommerceInterfaceOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new EtsyStoreRelations().DownloadEntityUsingStoreID;
+		internal static readonly IEntityRelation EbayOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().EbayOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation EtsyOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().EtsyOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation GrouponOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().GrouponOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation LemonStandOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().LemonStandOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation MagentoOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().MagentoOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().MarketplaceAdvisorOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().NetworkSolutionsOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new EtsyStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().PayPalOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().SearsOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation ShopifyOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().ShopifyOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new EtsyStoreRelations().StatusPresetEntityUsingStoreID;
+		internal static readonly IEntityRelation ThreeDCartOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().ThreeDCartOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation WalmartOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().WalmartOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation YahooOrderSearchEntityUsingStoreIDStatic = new EtsyStoreRelations().YahooOrderSearchEntityUsingStoreID;
 
 		/// <summary>CTor</summary>
 		static StaticEtsyStoreRelations()

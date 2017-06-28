@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.PayPalOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -91,6 +92,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(PayPalOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between PayPalOrderEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// PayPalOrder.OrderID - PayPalOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation PayPalOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "PayPalOrderSearch" , true);
+				relation.AddEntityFieldPair(PayPalOrderFields.OrderID, PayPalOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -197,6 +213,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new PayPalOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new PayPalOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new PayPalOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingOrderIDStatic = new PayPalOrderRelations().PayPalOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new PayPalOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new PayPalOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new PayPalOrderRelations().CustomerEntityUsingCustomerID;

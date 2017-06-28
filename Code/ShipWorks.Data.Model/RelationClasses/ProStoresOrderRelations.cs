@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.ProStoresOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -91,6 +92,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ProStoresOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ProStoresOrderEntity and ProStoresOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ProStoresOrder.OrderID - ProStoresOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation ProStoresOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProStoresOrderSearch" , true);
+				relation.AddEntityFieldPair(ProStoresOrderFields.OrderID, ProStoresOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -197,6 +213,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new ProStoresOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new ProStoresOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new ProStoresOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingOrderIDStatic = new ProStoresOrderRelations().ProStoresOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new ProStoresOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ProStoresOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new ProStoresOrderRelations().CustomerEntityUsingCustomerID;

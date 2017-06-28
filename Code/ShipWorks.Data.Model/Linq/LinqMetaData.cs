@@ -89,6 +89,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					toReturn = this.AmazonOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity:
+					toReturn = this.AmazonOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
 					toReturn = this.AmazonProfile;
 					break;
@@ -134,14 +137,23 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ChannelAdvisorOrderItemEntity:
 					toReturn = this.ChannelAdvisorOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.ChannelAdvisorOrderSearchEntity:
+					toReturn = this.ChannelAdvisorOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.ChannelAdvisorStoreEntity:
 					toReturn = this.ChannelAdvisorStore;
 					break;
 				case ShipWorks.Data.Model.EntityType.ClickCartProOrderEntity:
 					toReturn = this.ClickCartProOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.ClickCartProOrderSearchEntity:
+					toReturn = this.ClickCartProOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.CommerceInterfaceOrderEntity:
 					toReturn = this.CommerceInterfaceOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.CommerceInterfaceOrderSearchEntity:
+					toReturn = this.CommerceInterfaceOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.ComputerEntity:
 					toReturn = this.Computer;
@@ -170,6 +182,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EbayOrderItemEntity:
 					toReturn = this.EbayOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity:
+					toReturn = this.EbayOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.EbayStoreEntity:
 					toReturn = this.EbayStore;
 					break;
@@ -196,6 +211,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					toReturn = this.EtsyOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity:
+					toReturn = this.EtsyOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
@@ -269,6 +287,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity:
 					toReturn = this.GrouponOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.GrouponOrderSearchEntity:
+					toReturn = this.GrouponOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.GrouponStoreEntity:
 					toReturn = this.GrouponStore;
 					break;
@@ -305,17 +326,26 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.LemonStandOrderItemEntity:
 					toReturn = this.LemonStandOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderSearchEntity:
+					toReturn = this.LemonStandOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
 					toReturn = this.LemonStandStore;
 					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					toReturn = this.MagentoOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.MagentoOrderSearchEntity:
+					toReturn = this.MagentoOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.MagentoStoreEntity:
 					toReturn = this.MagentoStore;
 					break;
 				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderEntity:
 					toReturn = this.MarketplaceAdvisorOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderSearchEntity:
+					toReturn = this.MarketplaceAdvisorOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.MarketplaceAdvisorStoreEntity:
 					toReturn = this.MarketplaceAdvisorStore;
@@ -329,6 +359,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.NetworkSolutionsOrderEntity:
 					toReturn = this.NetworkSolutionsOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.NetworkSolutionsOrderSearchEntity:
+					toReturn = this.NetworkSolutionsOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.NetworkSolutionsStoreEntity:
 					toReturn = this.NetworkSolutionsStore;
 					break;
@@ -337,6 +370,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggOrderItemEntity:
 					toReturn = this.NeweggOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity:
+					toReturn = this.NeweggOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggStoreEntity:
 					toReturn = this.NeweggStore;
@@ -377,6 +413,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.OrderMotionOrderEntity:
 					toReturn = this.OrderMotionOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.OrderMotionOrderSearchEntity:
+					toReturn = this.OrderMotionOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.OrderMotionStoreEntity:
 					toReturn = this.OrderMotionStore;
 					break;
@@ -391,6 +430,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.PayPalOrderEntity:
 					toReturn = this.PayPalOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.PayPalOrderSearchEntity:
+					toReturn = this.PayPalOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.PayPalStoreEntity:
 					toReturn = this.PayPalStore;
@@ -410,6 +452,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					toReturn = this.ProStoresOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.ProStoresOrderSearchEntity:
+					toReturn = this.ProStoresOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresStoreEntity:
 					toReturn = this.ProStoresStore;
 					break;
@@ -427,6 +472,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.SearsOrderItemEntity:
 					toReturn = this.SearsOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.SearsOrderSearchEntity:
+					toReturn = this.SearsOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.SearsStoreEntity:
 					toReturn = this.SearsStore;
@@ -476,6 +524,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShopifyOrderItemEntity:
 					toReturn = this.ShopifyOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.ShopifyOrderSearchEntity:
+					toReturn = this.ShopifyOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.ShopifyStoreEntity:
 					toReturn = this.ShopifyStore;
 					break;
@@ -514,6 +565,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					toReturn = this.ThreeDCartOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderSearchEntity:
+					toReturn = this.ThreeDCartOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartStoreEntity:
 					toReturn = this.ThreeDCartStore;
@@ -593,6 +647,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.WalmartOrderItemEntity:
 					toReturn = this.WalmartOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderSearchEntity:
+					toReturn = this.WalmartOrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.WalmartStoreEntity:
 					toReturn = this.WalmartStore;
 					break;
@@ -613,6 +670,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.YahooOrderItemEntity:
 					toReturn = this.YahooOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.YahooOrderSearchEntity:
+					toReturn = this.YahooOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.YahooProductEntity:
 					toReturn = this.YahooProduct;
@@ -688,6 +748,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonOrderItemEntity> AmazonOrderItem
 		{
 			get { return new DataSource2<AmazonOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonOrderSearchEntity instances in the database.</summary>
+		public DataSource2<AmazonOrderSearchEntity> AmazonOrderSearch
+		{
+			get { return new DataSource2<AmazonOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonProfileEntity instances in the database.</summary>
@@ -780,6 +846,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ChannelAdvisorOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting ChannelAdvisorOrderSearchEntity instances in the database.</summary>
+		public DataSource2<ChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch
+		{
+			get { return new DataSource2<ChannelAdvisorOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting ChannelAdvisorStoreEntity instances in the database.</summary>
 		public DataSource2<ChannelAdvisorStoreEntity> ChannelAdvisorStore
 		{
@@ -792,10 +864,22 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ClickCartProOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting ClickCartProOrderSearchEntity instances in the database.</summary>
+		public DataSource2<ClickCartProOrderSearchEntity> ClickCartProOrderSearch
+		{
+			get { return new DataSource2<ClickCartProOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting CommerceInterfaceOrderEntity instances in the database.</summary>
 		public DataSource2<CommerceInterfaceOrderEntity> CommerceInterfaceOrder
 		{
 			get { return new DataSource2<CommerceInterfaceOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting CommerceInterfaceOrderSearchEntity instances in the database.</summary>
+		public DataSource2<CommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch
+		{
+			get { return new DataSource2<CommerceInterfaceOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ComputerEntity instances in the database.</summary>
@@ -852,6 +936,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<EbayOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting EbayOrderSearchEntity instances in the database.</summary>
+		public DataSource2<EbayOrderSearchEntity> EbayOrderSearch
+		{
+			get { return new DataSource2<EbayOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting EbayStoreEntity instances in the database.</summary>
 		public DataSource2<EbayStoreEntity> EbayStore
 		{
@@ -904,6 +994,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<EtsyOrderEntity> EtsyOrder
 		{
 			get { return new DataSource2<EtsyOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting EtsyOrderSearchEntity instances in the database.</summary>
+		public DataSource2<EtsyOrderSearchEntity> EtsyOrderSearch
+		{
+			get { return new DataSource2<EtsyOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting EtsyStoreEntity instances in the database.</summary>
@@ -1050,6 +1146,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<GrouponOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting GrouponOrderSearchEntity instances in the database.</summary>
+		public DataSource2<GrouponOrderSearchEntity> GrouponOrderSearch
+		{
+			get { return new DataSource2<GrouponOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting GrouponStoreEntity instances in the database.</summary>
 		public DataSource2<GrouponStoreEntity> GrouponStore
 		{
@@ -1122,6 +1224,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<LemonStandOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandOrderSearchEntity instances in the database.</summary>
+		public DataSource2<LemonStandOrderSearchEntity> LemonStandOrderSearch
+		{
+			get { return new DataSource2<LemonStandOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandStoreEntity instances in the database.</summary>
 		public DataSource2<LemonStandStoreEntity> LemonStandStore
 		{
@@ -1134,6 +1242,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<MagentoOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting MagentoOrderSearchEntity instances in the database.</summary>
+		public DataSource2<MagentoOrderSearchEntity> MagentoOrderSearch
+		{
+			get { return new DataSource2<MagentoOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting MagentoStoreEntity instances in the database.</summary>
 		public DataSource2<MagentoStoreEntity> MagentoStore
 		{
@@ -1144,6 +1258,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<MarketplaceAdvisorOrderEntity> MarketplaceAdvisorOrder
 		{
 			get { return new DataSource2<MarketplaceAdvisorOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting MarketplaceAdvisorOrderSearchEntity instances in the database.</summary>
+		public DataSource2<MarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch
+		{
+			get { return new DataSource2<MarketplaceAdvisorOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting MarketplaceAdvisorStoreEntity instances in the database.</summary>
@@ -1170,6 +1290,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<NetworkSolutionsOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting NetworkSolutionsOrderSearchEntity instances in the database.</summary>
+		public DataSource2<NetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch
+		{
+			get { return new DataSource2<NetworkSolutionsOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting NetworkSolutionsStoreEntity instances in the database.</summary>
 		public DataSource2<NetworkSolutionsStoreEntity> NetworkSolutionsStore
 		{
@@ -1186,6 +1312,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<NeweggOrderItemEntity> NeweggOrderItem
 		{
 			get { return new DataSource2<NeweggOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting NeweggOrderSearchEntity instances in the database.</summary>
+		public DataSource2<NeweggOrderSearchEntity> NeweggOrderSearch
+		{
+			get { return new DataSource2<NeweggOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting NeweggStoreEntity instances in the database.</summary>
@@ -1266,6 +1398,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<OrderMotionOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting OrderMotionOrderSearchEntity instances in the database.</summary>
+		public DataSource2<OrderMotionOrderSearchEntity> OrderMotionOrderSearch
+		{
+			get { return new DataSource2<OrderMotionOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting OrderMotionStoreEntity instances in the database.</summary>
 		public DataSource2<OrderMotionStoreEntity> OrderMotionStore
 		{
@@ -1294,6 +1432,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<PayPalOrderEntity> PayPalOrder
 		{
 			get { return new DataSource2<PayPalOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting PayPalOrderSearchEntity instances in the database.</summary>
+		public DataSource2<PayPalOrderSearchEntity> PayPalOrderSearch
+		{
+			get { return new DataSource2<PayPalOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting PayPalStoreEntity instances in the database.</summary>
@@ -1332,6 +1476,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ProStoresOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProStoresOrderSearchEntity instances in the database.</summary>
+		public DataSource2<ProStoresOrderSearchEntity> ProStoresOrderSearch
+		{
+			get { return new DataSource2<ProStoresOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProStoresStoreEntity instances in the database.</summary>
 		public DataSource2<ProStoresStoreEntity> ProStoresStore
 		{
@@ -1366,6 +1516,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<SearsOrderItemEntity> SearsOrderItem
 		{
 			get { return new DataSource2<SearsOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting SearsOrderSearchEntity instances in the database.</summary>
+		public DataSource2<SearsOrderSearchEntity> SearsOrderSearch
+		{
+			get { return new DataSource2<SearsOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting SearsStoreEntity instances in the database.</summary>
@@ -1464,6 +1620,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ShopifyOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShopifyOrderSearchEntity instances in the database.</summary>
+		public DataSource2<ShopifyOrderSearchEntity> ShopifyOrderSearch
+		{
+			get { return new DataSource2<ShopifyOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShopifyStoreEntity instances in the database.</summary>
 		public DataSource2<ShopifyStoreEntity> ShopifyStore
 		{
@@ -1540,6 +1702,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ThreeDCartOrderItemEntity> ThreeDCartOrderItem
 		{
 			get { return new DataSource2<ThreeDCartOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartOrderSearchEntity instances in the database.</summary>
+		public DataSource2<ThreeDCartOrderSearchEntity> ThreeDCartOrderSearch
+		{
+			get { return new DataSource2<ThreeDCartOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartStoreEntity instances in the database.</summary>
@@ -1698,6 +1866,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<WalmartOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting WalmartOrderSearchEntity instances in the database.</summary>
+		public DataSource2<WalmartOrderSearchEntity> WalmartOrderSearch
+		{
+			get { return new DataSource2<WalmartOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting WalmartStoreEntity instances in the database.</summary>
 		public DataSource2<WalmartStoreEntity> WalmartStore
 		{
@@ -1738,6 +1912,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<YahooOrderItemEntity> YahooOrderItem
 		{
 			get { return new DataSource2<YahooOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting YahooOrderSearchEntity instances in the database.</summary>
+		public DataSource2<YahooOrderSearchEntity> YahooOrderSearch
+		{
+			get { return new DataSource2<YahooOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting YahooProductEntity instances in the database.</summary>

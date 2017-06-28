@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IGrouponOrderSearchEntity> IGrouponOrderEntity.GrouponOrderSearch => GrouponOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

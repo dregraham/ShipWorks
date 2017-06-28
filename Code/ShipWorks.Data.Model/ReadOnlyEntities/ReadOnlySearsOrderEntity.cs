@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            SearsOrderSearch = source.SearsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ISearsOrderSearchEntity>();
 
             CopyCustomSearsOrderData(source);
         }
@@ -81,6 +83,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Boolean CustomerPickup { get; }
         
         
+        
+        public IEnumerable<ISearsOrderSearchEntity> SearsOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

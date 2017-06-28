@@ -160,6 +160,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmazonOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AmazonOrderSearch entity</summary>
+		public EntityQuery<AmazonOrderSearchEntity> AmazonOrderSearch
+		{
+			get { return Create<AmazonOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the AmazonProfile entity</summary>
 		public EntityQuery<AmazonProfileEntity> AmazonProfile
 		{
@@ -250,6 +256,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ChannelAdvisorOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ChannelAdvisorOrderSearch entity</summary>
+		public EntityQuery<ChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch
+		{
+			get { return Create<ChannelAdvisorOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ChannelAdvisorStore entity</summary>
 		public EntityQuery<ChannelAdvisorStoreEntity> ChannelAdvisorStore
 		{
@@ -262,10 +274,22 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ClickCartProOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ClickCartProOrderSearch entity</summary>
+		public EntityQuery<ClickCartProOrderSearchEntity> ClickCartProOrderSearch
+		{
+			get { return Create<ClickCartProOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the CommerceInterfaceOrder entity</summary>
 		public EntityQuery<CommerceInterfaceOrderEntity> CommerceInterfaceOrder
 		{
 			get { return Create<CommerceInterfaceOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the CommerceInterfaceOrderSearch entity</summary>
+		public EntityQuery<CommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch
+		{
+			get { return Create<CommerceInterfaceOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the Computer entity</summary>
@@ -322,6 +346,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<EbayOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the EbayOrderSearch entity</summary>
+		public EntityQuery<EbayOrderSearchEntity> EbayOrderSearch
+		{
+			get { return Create<EbayOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the EbayStore entity</summary>
 		public EntityQuery<EbayStoreEntity> EbayStore
 		{
@@ -374,6 +404,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<EtsyOrderEntity> EtsyOrder
 		{
 			get { return Create<EtsyOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the EtsyOrderSearch entity</summary>
+		public EntityQuery<EtsyOrderSearchEntity> EtsyOrderSearch
+		{
+			get { return Create<EtsyOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the EtsyStore entity</summary>
@@ -520,6 +556,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<GrouponOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the GrouponOrderSearch entity</summary>
+		public EntityQuery<GrouponOrderSearchEntity> GrouponOrderSearch
+		{
+			get { return Create<GrouponOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the GrouponStore entity</summary>
 		public EntityQuery<GrouponStoreEntity> GrouponStore
 		{
@@ -592,6 +634,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<LemonStandOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the LemonStandOrderSearch entity</summary>
+		public EntityQuery<LemonStandOrderSearchEntity> LemonStandOrderSearch
+		{
+			get { return Create<LemonStandOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the LemonStandStore entity</summary>
 		public EntityQuery<LemonStandStoreEntity> LemonStandStore
 		{
@@ -604,6 +652,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<MagentoOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the MagentoOrderSearch entity</summary>
+		public EntityQuery<MagentoOrderSearchEntity> MagentoOrderSearch
+		{
+			get { return Create<MagentoOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the MagentoStore entity</summary>
 		public EntityQuery<MagentoStoreEntity> MagentoStore
 		{
@@ -614,6 +668,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<MarketplaceAdvisorOrderEntity> MarketplaceAdvisorOrder
 		{
 			get { return Create<MarketplaceAdvisorOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the MarketplaceAdvisorOrderSearch entity</summary>
+		public EntityQuery<MarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch
+		{
+			get { return Create<MarketplaceAdvisorOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the MarketplaceAdvisorStore entity</summary>
@@ -640,6 +700,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<NetworkSolutionsOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the NetworkSolutionsOrderSearch entity</summary>
+		public EntityQuery<NetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch
+		{
+			get { return Create<NetworkSolutionsOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the NetworkSolutionsStore entity</summary>
 		public EntityQuery<NetworkSolutionsStoreEntity> NetworkSolutionsStore
 		{
@@ -656,6 +722,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<NeweggOrderItemEntity> NeweggOrderItem
 		{
 			get { return Create<NeweggOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the NeweggOrderSearch entity</summary>
+		public EntityQuery<NeweggOrderSearchEntity> NeweggOrderSearch
+		{
+			get { return Create<NeweggOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the NeweggStore entity</summary>
@@ -736,6 +808,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<OrderMotionOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the OrderMotionOrderSearch entity</summary>
+		public EntityQuery<OrderMotionOrderSearchEntity> OrderMotionOrderSearch
+		{
+			get { return Create<OrderMotionOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the OrderMotionStore entity</summary>
 		public EntityQuery<OrderMotionStoreEntity> OrderMotionStore
 		{
@@ -764,6 +842,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<PayPalOrderEntity> PayPalOrder
 		{
 			get { return Create<PayPalOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the PayPalOrderSearch entity</summary>
+		public EntityQuery<PayPalOrderSearchEntity> PayPalOrderSearch
+		{
+			get { return Create<PayPalOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the PayPalStore entity</summary>
@@ -802,6 +886,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ProStoresOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ProStoresOrderSearch entity</summary>
+		public EntityQuery<ProStoresOrderSearchEntity> ProStoresOrderSearch
+		{
+			get { return Create<ProStoresOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ProStoresStore entity</summary>
 		public EntityQuery<ProStoresStoreEntity> ProStoresStore
 		{
@@ -836,6 +926,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<SearsOrderItemEntity> SearsOrderItem
 		{
 			get { return Create<SearsOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the SearsOrderSearch entity</summary>
+		public EntityQuery<SearsOrderSearchEntity> SearsOrderSearch
+		{
+			get { return Create<SearsOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the SearsStore entity</summary>
@@ -934,6 +1030,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ShopifyOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ShopifyOrderSearch entity</summary>
+		public EntityQuery<ShopifyOrderSearchEntity> ShopifyOrderSearch
+		{
+			get { return Create<ShopifyOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ShopifyStore entity</summary>
 		public EntityQuery<ShopifyStoreEntity> ShopifyStore
 		{
@@ -1010,6 +1112,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<ThreeDCartOrderItemEntity> ThreeDCartOrderItem
 		{
 			get { return Create<ThreeDCartOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ThreeDCartOrderSearch entity</summary>
+		public EntityQuery<ThreeDCartOrderSearchEntity> ThreeDCartOrderSearch
+		{
+			get { return Create<ThreeDCartOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the ThreeDCartStore entity</summary>
@@ -1168,6 +1276,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<WalmartOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the WalmartOrderSearch entity</summary>
+		public EntityQuery<WalmartOrderSearchEntity> WalmartOrderSearch
+		{
+			get { return Create<WalmartOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the WalmartStore entity</summary>
 		public EntityQuery<WalmartStoreEntity> WalmartStore
 		{
@@ -1208,6 +1322,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<YahooOrderItemEntity> YahooOrderItem
 		{
 			get { return Create<YahooOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the YahooOrderSearch entity</summary>
+		public EntityQuery<YahooOrderSearchEntity> YahooOrderSearch
+		{
+			get { return Create<YahooOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the YahooProduct entity</summary>

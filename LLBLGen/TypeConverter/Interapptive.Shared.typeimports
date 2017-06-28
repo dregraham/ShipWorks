@@ -1,4 +1,5 @@
 <typeImports>
     <typeImport typeName="Interapptive.Shared.Enums.BigCommerceAuthenticationType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/>
     <typeImport typeName="Interapptive.Shared.Enums.ShopSiteAuthenticationType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
+    <typeImport typeName="Interapptive.Shared.Enums.CombineSplitStatusType" assemblyFile="..\..\Artifacts\Application\Interapptive.Shared.dll"/> 
 </typeImports> 

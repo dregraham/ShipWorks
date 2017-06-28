@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            NetworkSolutionsOrderSearch = source.NetworkSolutionsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<INetworkSolutionsOrderSearchEntity>();
 
             CopyCustomNetworkSolutionsOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int64 NetworkSolutionsOrderID { get; }
         
         
+        
+        public IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

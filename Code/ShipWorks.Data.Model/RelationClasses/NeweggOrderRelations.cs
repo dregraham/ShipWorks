@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.NeweggOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between NeweggOrderEntity and NeweggOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// NeweggOrder.OrderID - NeweggOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation NeweggOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NeweggOrderSearch" , true);
+				relation.AddEntityFieldPair(NeweggOrderFields.OrderID, NeweggOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between NeweggOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// NeweggOrder.OrderID - Note.EntityID
@@ -193,6 +209,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticNeweggOrderRelations
 	{
+		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingOrderIDStatic = new NeweggOrderRelations().NeweggOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new NeweggOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new NeweggOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new NeweggOrderRelations().OrderItemEntityUsingOrderID;

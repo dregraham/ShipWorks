@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores
 {
@@ -159,6 +160,7 @@ namespace ShipWorks.Stores
             newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
             newOrder.RequestedShipping = string.Empty;
+            newOrder.CombineSplitStatus = CombineSplitStatusType.None;
 
             return newOrder;
         }

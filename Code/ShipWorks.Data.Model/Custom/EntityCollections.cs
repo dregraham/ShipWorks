@@ -519,6 +519,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of AmazonOrderSearchEntity
+	/// </summary>
+	public class AmazonOrderSearchCollection : EntityCollection<AmazonOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonOrderSearchCollection collection = new AmazonOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of AmazonProfileEntity
 	/// </summary>
 	public class AmazonProfileCollection : EntityCollection<AmazonProfileEntity>
@@ -1374,6 +1431,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of ChannelAdvisorOrderSearchEntity
+	/// </summary>
+	public class ChannelAdvisorOrderSearchCollection : EntityCollection<ChannelAdvisorOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ChannelAdvisorOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ChannelAdvisorOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ChannelAdvisorOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ChannelAdvisorOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ChannelAdvisorOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ChannelAdvisorOrderSearchCollection collection = new ChannelAdvisorOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of ChannelAdvisorStoreEntity
 	/// </summary>
 	public class ChannelAdvisorStoreCollection : EntityCollection<ChannelAdvisorStoreEntity>
@@ -1488,6 +1602,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of ClickCartProOrderSearchEntity
+	/// </summary>
+	public class ClickCartProOrderSearchCollection : EntityCollection<ClickCartProOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ClickCartProOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ClickCartProOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ClickCartProOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ClickCartProOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ClickCartProOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ClickCartProOrderSearchCollection collection = new ClickCartProOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of CommerceInterfaceOrderEntity
 	/// </summary>
 	public class CommerceInterfaceOrderCollection : EntityCollection<CommerceInterfaceOrderEntity>
@@ -1529,6 +1700,63 @@ namespace ShipWorks.Data.Model.Custom
         public static CommerceInterfaceOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             CommerceInterfaceOrderCollection collection = new CommerceInterfaceOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of CommerceInterfaceOrderSearchEntity
+	/// </summary>
+	public class CommerceInterfaceOrderSearchCollection : EntityCollection<CommerceInterfaceOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all CommerceInterfaceOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all CommerceInterfaceOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new CommerceInterfaceOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static CommerceInterfaceOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static CommerceInterfaceOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            CommerceInterfaceOrderSearchCollection collection = new CommerceInterfaceOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -2058,6 +2286,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of EbayOrderSearchEntity
+	/// </summary>
+	public class EbayOrderSearchCollection : EntityCollection<EbayOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all EbayOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all EbayOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new EbayOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static EbayOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static EbayOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            EbayOrderSearchCollection collection = new EbayOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of EbayStoreEntity
 	/// </summary>
 	public class EbayStoreCollection : EntityCollection<EbayStoreEntity>
@@ -2555,6 +2840,63 @@ namespace ShipWorks.Data.Model.Custom
         public static EtsyOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             EtsyOrderCollection collection = new EtsyOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of EtsyOrderSearchEntity
+	/// </summary>
+	public class EtsyOrderSearchCollection : EntityCollection<EtsyOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all EtsyOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all EtsyOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new EtsyOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static EtsyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static EtsyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            EtsyOrderSearchCollection collection = new EtsyOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -3939,6 +4281,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of GrouponOrderSearchEntity
+	/// </summary>
+	public class GrouponOrderSearchCollection : EntityCollection<GrouponOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all GrouponOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all GrouponOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new GrouponOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static GrouponOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static GrouponOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            GrouponOrderSearchCollection collection = new GrouponOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of GrouponStoreEntity
 	/// </summary>
 	public class GrouponStoreCollection : EntityCollection<GrouponStoreEntity>
@@ -4623,6 +5022,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of LemonStandOrderSearchEntity
+	/// </summary>
+	public class LemonStandOrderSearchCollection : EntityCollection<LemonStandOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all LemonStandOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all LemonStandOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new LemonStandOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static LemonStandOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static LemonStandOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            LemonStandOrderSearchCollection collection = new LemonStandOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of LemonStandStoreEntity
 	/// </summary>
 	public class LemonStandStoreCollection : EntityCollection<LemonStandStoreEntity>
@@ -4737,6 +5193,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of MagentoOrderSearchEntity
+	/// </summary>
+	public class MagentoOrderSearchCollection : EntityCollection<MagentoOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all MagentoOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all MagentoOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new MagentoOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static MagentoOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static MagentoOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            MagentoOrderSearchCollection collection = new MagentoOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of MagentoStoreEntity
 	/// </summary>
 	public class MagentoStoreCollection : EntityCollection<MagentoStoreEntity>
@@ -4835,6 +5348,63 @@ namespace ShipWorks.Data.Model.Custom
         public static MarketplaceAdvisorOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             MarketplaceAdvisorOrderCollection collection = new MarketplaceAdvisorOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of MarketplaceAdvisorOrderSearchEntity
+	/// </summary>
+	public class MarketplaceAdvisorOrderSearchCollection : EntityCollection<MarketplaceAdvisorOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all MarketplaceAdvisorOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all MarketplaceAdvisorOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new MarketplaceAdvisorOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static MarketplaceAdvisorOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static MarketplaceAdvisorOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            MarketplaceAdvisorOrderSearchCollection collection = new MarketplaceAdvisorOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -5079,6 +5649,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of NetworkSolutionsOrderSearchEntity
+	/// </summary>
+	public class NetworkSolutionsOrderSearchCollection : EntityCollection<NetworkSolutionsOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all NetworkSolutionsOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all NetworkSolutionsOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new NetworkSolutionsOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static NetworkSolutionsOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static NetworkSolutionsOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            NetworkSolutionsOrderSearchCollection collection = new NetworkSolutionsOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of NetworkSolutionsStoreEntity
 	/// </summary>
 	public class NetworkSolutionsStoreCollection : EntityCollection<NetworkSolutionsStoreEntity>
@@ -5234,6 +5861,63 @@ namespace ShipWorks.Data.Model.Custom
         public static NeweggOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             NeweggOrderItemCollection collection = new NeweggOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of NeweggOrderSearchEntity
+	/// </summary>
+	public class NeweggOrderSearchCollection : EntityCollection<NeweggOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all NeweggOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all NeweggOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new NeweggOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static NeweggOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static NeweggOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            NeweggOrderSearchCollection collection = new NeweggOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -5991,6 +6675,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of OrderMotionOrderSearchEntity
+	/// </summary>
+	public class OrderMotionOrderSearchCollection : EntityCollection<OrderMotionOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all OrderMotionOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all OrderMotionOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new OrderMotionOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static OrderMotionOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static OrderMotionOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            OrderMotionOrderSearchCollection collection = new OrderMotionOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of OrderMotionStoreEntity
 	/// </summary>
 	public class OrderMotionStoreCollection : EntityCollection<OrderMotionStoreEntity>
@@ -6260,6 +7001,63 @@ namespace ShipWorks.Data.Model.Custom
         public static PayPalOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             PayPalOrderCollection collection = new PayPalOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of PayPalOrderSearchEntity
+	/// </summary>
+	public class PayPalOrderSearchCollection : EntityCollection<PayPalOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all PayPalOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all PayPalOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new PayPalOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static PayPalOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static PayPalOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            PayPalOrderSearchCollection collection = new PayPalOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -6618,6 +7416,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of ProStoresOrderSearchEntity
+	/// </summary>
+	public class ProStoresOrderSearchCollection : EntityCollection<ProStoresOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ProStoresOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ProStoresOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ProStoresOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ProStoresOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ProStoresOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ProStoresOrderSearchCollection collection = new ProStoresOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of ProStoresStoreEntity
 	/// </summary>
 	public class ProStoresStoreCollection : EntityCollection<ProStoresStoreEntity>
@@ -6944,6 +7799,63 @@ namespace ShipWorks.Data.Model.Custom
         public static SearsOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             SearsOrderItemCollection collection = new SearsOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of SearsOrderSearchEntity
+	/// </summary>
+	public class SearsOrderSearchCollection : EntityCollection<SearsOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all SearsOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all SearsOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new SearsOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static SearsOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static SearsOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            SearsOrderSearchCollection collection = new SearsOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -7872,6 +8784,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of ShopifyOrderSearchEntity
+	/// </summary>
+	public class ShopifyOrderSearchCollection : EntityCollection<ShopifyOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ShopifyOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ShopifyOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ShopifyOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ShopifyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ShopifyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ShopifyOrderSearchCollection collection = new ShopifyOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of ShopifyStoreEntity
 	/// </summary>
 	public class ShopifyStoreCollection : EntityCollection<ShopifyStoreEntity>
@@ -8597,6 +9566,63 @@ namespace ShipWorks.Data.Model.Custom
         public static ThreeDCartOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             ThreeDCartOrderItemCollection collection = new ThreeDCartOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of ThreeDCartOrderSearchEntity
+	/// </summary>
+	public class ThreeDCartOrderSearchCollection : EntityCollection<ThreeDCartOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ThreeDCartOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ThreeDCartOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ThreeDCartOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ThreeDCartOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ThreeDCartOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ThreeDCartOrderSearchCollection collection = new ThreeDCartOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -10095,6 +11121,63 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of WalmartOrderSearchEntity
+	/// </summary>
+	public class WalmartOrderSearchCollection : EntityCollection<WalmartOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all WalmartOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all WalmartOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new WalmartOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static WalmartOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static WalmartOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            WalmartOrderSearchCollection collection = new WalmartOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of WalmartStoreEntity
 	/// </summary>
 	public class WalmartStoreCollection : EntityCollection<WalmartStoreEntity>
@@ -10478,6 +11561,63 @@ namespace ShipWorks.Data.Model.Custom
         public static YahooOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             YahooOrderItemCollection collection = new YahooOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of YahooOrderSearchEntity
+	/// </summary>
+	public class YahooOrderSearchCollection : EntityCollection<YahooOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all YahooOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all YahooOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new YahooOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static YahooOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static YahooOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            YahooOrderSearchCollection collection = new YahooOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 

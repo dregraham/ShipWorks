@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -28,6 +29,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             Set(x => x.StoreID, store.StoreID);
             Set(x => x.Customer, customer);
             Set(x => x.CustomerID, customer.CustomerID);
+            Set(x => x.CombineSplitStatus, CombineSplitStatusType.None);
         }
 
         /// <summary>

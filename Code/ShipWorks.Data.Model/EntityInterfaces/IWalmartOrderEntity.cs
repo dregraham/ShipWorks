@@ -54,6 +54,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IWalmartOrderSearchEntity> WalmartOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -80,6 +81,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IWalmartOrderSearchEntity> IWalmartOrderEntity.WalmartOrderSearch => WalmartOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

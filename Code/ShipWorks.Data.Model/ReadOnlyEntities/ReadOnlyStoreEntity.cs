@@ -69,6 +69,46 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            AmazonOrderSearch = source.AmazonOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IAmazonOrderSearchEntity>();
+            ChannelAdvisorOrderSearch = source.ChannelAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IChannelAdvisorOrderSearchEntity>();
+            ClickCartProOrderSearch = source.ClickCartProOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IClickCartProOrderSearchEntity>();
+            CommerceInterfaceOrderSearch = source.CommerceInterfaceOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ICommerceInterfaceOrderSearchEntity>();
+            EbayOrderSearch = source.EbayOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IEbayOrderSearchEntity>();
+            EtsyOrderSearch = source.EtsyOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IEtsyOrderSearchEntity>();
+            GrouponOrderSearch = source.GrouponOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IGrouponOrderSearchEntity>();
+            LemonStandOrderSearch = source.LemonStandOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ILemonStandOrderSearchEntity>();
+            MagentoOrderSearch = source.MagentoOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IMagentoOrderSearchEntity>();
+            MarketplaceAdvisorOrderSearch = source.MarketplaceAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IMarketplaceAdvisorOrderSearchEntity>();
+            NetworkSolutionsOrderSearch = source.NetworkSolutionsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<INetworkSolutionsOrderSearchEntity>();
+            NeweggOrderSearch = source.NeweggOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<INeweggOrderSearchEntity>();
+            OrderMotionOrderSearch = source.OrderMotionOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderMotionOrderSearchEntity>();
+            PayPalOrderSearch = source.PayPalOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IPayPalOrderSearchEntity>();
+            ProStoresOrderSearch = source.ProStoresOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IProStoresOrderSearchEntity>();
+            SearsOrderSearch = source.SearsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ISearsOrderSearchEntity>();
+            ShopifyOrderSearch = source.ShopifyOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IShopifyOrderSearchEntity>();
+            ThreeDCartOrderSearch = source.ThreeDCartOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IThreeDCartOrderSearchEntity>();
+            WalmartOrderSearch = source.WalmartOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IWalmartOrderSearchEntity>();
+            YahooOrderSearch = source.YahooOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IYahooOrderSearchEntity>();
 
             CopyCustomStoreData(source);
         }
@@ -256,6 +296,46 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public Nullable<System.Int64> InitialDownloadOrder { get; }
         
         
+        
+        public IEnumerable<IAmazonOrderSearchEntity> AmazonOrderSearch { get; }
+        
+        public IEnumerable<IChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch { get; }
+        
+        public IEnumerable<IClickCartProOrderSearchEntity> ClickCartProOrderSearch { get; }
+        
+        public IEnumerable<ICommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch { get; }
+        
+        public IEnumerable<IEbayOrderSearchEntity> EbayOrderSearch { get; }
+        
+        public IEnumerable<IEtsyOrderSearchEntity> EtsyOrderSearch { get; }
+        
+        public IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
+        
+        public IEnumerable<ILemonStandOrderSearchEntity> LemonStandOrderSearch { get; }
+        
+        public IEnumerable<IMagentoOrderSearchEntity> MagentoOrderSearch { get; }
+        
+        public IEnumerable<IMarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch { get; }
+        
+        public IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
+        
+        public IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
+        
+        public IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
+        
+        public IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
+        
+        public IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
+        
+        public IEnumerable<ISearsOrderSearchEntity> SearsOrderSearch { get; }
+        
+        public IEnumerable<IShopifyOrderSearchEntity> ShopifyOrderSearch { get; }
+        
+        public IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
+        
+        public IEnumerable<IWalmartOrderSearchEntity> WalmartOrderSearch { get; }
+        
+        public IEnumerable<IYahooOrderSearchEntity> YahooOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

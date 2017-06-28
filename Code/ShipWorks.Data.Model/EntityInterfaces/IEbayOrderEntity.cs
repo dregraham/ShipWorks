@@ -163,6 +163,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IEnumerable<IEbayCombinedOrderRelationEntity> EbayCombinedOrderRelation { get; }
+        IEnumerable<IEbayOrderSearchEntity> EbayOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -190,6 +191,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         
         IEnumerable<IEbayCombinedOrderRelationEntity> IEbayOrderEntity.EbayCombinedOrderRelation => EbayCombinedOrderRelation;
+        IEnumerable<IEbayOrderSearchEntity> IEbayOrderEntity.EbayOrderSearch => EbayOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

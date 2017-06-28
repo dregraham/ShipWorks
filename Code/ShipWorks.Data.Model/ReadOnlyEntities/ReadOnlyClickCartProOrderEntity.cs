@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ClickCartProOrderSearch = source.ClickCartProOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IClickCartProOrderSearchEntity>();
 
             CopyCustomClickCartProOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String ClickCartProOrderID { get; }
         
         
+        
+        public IEnumerable<IClickCartProOrderSearchEntity> ClickCartProOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

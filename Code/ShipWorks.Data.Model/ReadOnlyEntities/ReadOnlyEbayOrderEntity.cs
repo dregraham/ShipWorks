@@ -64,6 +64,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             EbayCombinedOrderRelation = source.EbayCombinedOrderRelation?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IEbayCombinedOrderRelationEntity>();
+            EbayOrderSearch = source.EbayOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IEbayOrderSearchEntity>();
 
             CopyCustomEbayOrderData(source);
         }
@@ -211,6 +213,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IEnumerable<IEbayCombinedOrderRelationEntity> EbayCombinedOrderRelation { get; }
+        
+        public IEnumerable<IEbayOrderSearchEntity> EbayOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

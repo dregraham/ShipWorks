@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            WalmartOrderSearch = source.WalmartOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IWalmartOrderSearchEntity>();
 
             CopyCustomWalmartOrderData(source);
         }
@@ -81,6 +83,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String RequestedShippingMethodCode { get; }
         
         
+        
+        public IEnumerable<IWalmartOrderSearchEntity> WalmartOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

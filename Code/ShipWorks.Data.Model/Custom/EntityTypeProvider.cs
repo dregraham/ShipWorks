@@ -29,6 +29,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "AmazonASINEntity": return EntityType.AmazonASINEntity;
 				case "AmazonOrderEntity": return EntityType.AmazonOrderEntity;
 				case "AmazonOrderItemEntity": return EntityType.AmazonOrderItemEntity;
+				case "AmazonOrderSearchEntity": return EntityType.AmazonOrderSearchEntity;
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonStoreEntity": return EntityType.AmazonStoreEntity;
@@ -44,9 +45,12 @@ namespace ShipWorks.Data.Model.Custom
 				case "BuyDotComStoreEntity": return EntityType.BuyDotComStoreEntity;
 				case "ChannelAdvisorOrderEntity": return EntityType.ChannelAdvisorOrderEntity;
 				case "ChannelAdvisorOrderItemEntity": return EntityType.ChannelAdvisorOrderItemEntity;
+				case "ChannelAdvisorOrderSearchEntity": return EntityType.ChannelAdvisorOrderSearchEntity;
 				case "ChannelAdvisorStoreEntity": return EntityType.ChannelAdvisorStoreEntity;
 				case "ClickCartProOrderEntity": return EntityType.ClickCartProOrderEntity;
+				case "ClickCartProOrderSearchEntity": return EntityType.ClickCartProOrderSearchEntity;
 				case "CommerceInterfaceOrderEntity": return EntityType.CommerceInterfaceOrderEntity;
+				case "CommerceInterfaceOrderSearchEntity": return EntityType.CommerceInterfaceOrderSearchEntity;
 				case "ComputerEntity": return EntityType.ComputerEntity;
 				case "ConfigurationEntity": return EntityType.ConfigurationEntity;
 				case "CustomerEntity": return EntityType.CustomerEntity;
@@ -56,6 +60,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "EbayCombinedOrderRelationEntity": return EntityType.EbayCombinedOrderRelationEntity;
 				case "EbayOrderEntity": return EntityType.EbayOrderEntity;
 				case "EbayOrderItemEntity": return EntityType.EbayOrderItemEntity;
+				case "EbayOrderSearchEntity": return EntityType.EbayOrderSearchEntity;
 				case "EbayStoreEntity": return EntityType.EbayStoreEntity;
 				case "EmailAccountEntity": return EntityType.EmailAccountEntity;
 				case "EmailOutboundEntity": return EntityType.EmailOutboundEntity;
@@ -65,6 +70,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "EndiciaScanFormEntity": return EntityType.EndiciaScanFormEntity;
 				case "EndiciaShipmentEntity": return EntityType.EndiciaShipmentEntity;
 				case "EtsyOrderEntity": return EntityType.EtsyOrderEntity;
+				case "EtsyOrderSearchEntity": return EntityType.EtsyOrderSearchEntity;
 				case "EtsyStoreEntity": return EntityType.EtsyStoreEntity;
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
@@ -89,6 +95,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "GridColumnPositionEntity": return EntityType.GridColumnPositionEntity;
 				case "GrouponOrderEntity": return EntityType.GrouponOrderEntity;
 				case "GrouponOrderItemEntity": return EntityType.GrouponOrderItemEntity;
+				case "GrouponOrderSearchEntity": return EntityType.GrouponOrderSearchEntity;
 				case "GrouponStoreEntity": return EntityType.GrouponStoreEntity;
 				case "InfopiaOrderItemEntity": return EntityType.InfopiaOrderItemEntity;
 				case "InfopiaStoreEntity": return EntityType.InfopiaStoreEntity;
@@ -101,17 +108,22 @@ namespace ShipWorks.Data.Model.Custom
 				case "LabelSheetEntity": return EntityType.LabelSheetEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
+				case "LemonStandOrderSearchEntity": return EntityType.LemonStandOrderSearchEntity;
 				case "LemonStandStoreEntity": return EntityType.LemonStandStoreEntity;
 				case "MagentoOrderEntity": return EntityType.MagentoOrderEntity;
+				case "MagentoOrderSearchEntity": return EntityType.MagentoOrderSearchEntity;
 				case "MagentoStoreEntity": return EntityType.MagentoStoreEntity;
 				case "MarketplaceAdvisorOrderEntity": return EntityType.MarketplaceAdvisorOrderEntity;
+				case "MarketplaceAdvisorOrderSearchEntity": return EntityType.MarketplaceAdvisorOrderSearchEntity;
 				case "MarketplaceAdvisorStoreEntity": return EntityType.MarketplaceAdvisorStoreEntity;
 				case "MivaOrderItemAttributeEntity": return EntityType.MivaOrderItemAttributeEntity;
 				case "MivaStoreEntity": return EntityType.MivaStoreEntity;
 				case "NetworkSolutionsOrderEntity": return EntityType.NetworkSolutionsOrderEntity;
+				case "NetworkSolutionsOrderSearchEntity": return EntityType.NetworkSolutionsOrderSearchEntity;
 				case "NetworkSolutionsStoreEntity": return EntityType.NetworkSolutionsStoreEntity;
 				case "NeweggOrderEntity": return EntityType.NeweggOrderEntity;
 				case "NeweggOrderItemEntity": return EntityType.NeweggOrderItemEntity;
+				case "NeweggOrderSearchEntity": return EntityType.NeweggOrderSearchEntity;
 				case "NeweggStoreEntity": return EntityType.NeweggStoreEntity;
 				case "NoteEntity": return EntityType.NoteEntity;
 				case "ObjectLabelEntity": return EntityType.ObjectLabelEntity;
@@ -125,23 +137,27 @@ namespace ShipWorks.Data.Model.Custom
 				case "OrderItemEntity": return EntityType.OrderItemEntity;
 				case "OrderItemAttributeEntity": return EntityType.OrderItemAttributeEntity;
 				case "OrderMotionOrderEntity": return EntityType.OrderMotionOrderEntity;
+				case "OrderMotionOrderSearchEntity": return EntityType.OrderMotionOrderSearchEntity;
 				case "OrderMotionStoreEntity": return EntityType.OrderMotionStoreEntity;
 				case "OrderPaymentDetailEntity": return EntityType.OrderPaymentDetailEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "OtherShipmentEntity": return EntityType.OtherShipmentEntity;
 				case "PayPalOrderEntity": return EntityType.PayPalOrderEntity;
+				case "PayPalOrderSearchEntity": return EntityType.PayPalOrderSearchEntity;
 				case "PayPalStoreEntity": return EntityType.PayPalStoreEntity;
 				case "PermissionEntity": return EntityType.PermissionEntity;
 				case "PostalProfileEntity": return EntityType.PostalProfileEntity;
 				case "PostalShipmentEntity": return EntityType.PostalShipmentEntity;
 				case "PrintResultEntity": return EntityType.PrintResultEntity;
 				case "ProStoresOrderEntity": return EntityType.ProStoresOrderEntity;
+				case "ProStoresOrderSearchEntity": return EntityType.ProStoresOrderSearchEntity;
 				case "ProStoresStoreEntity": return EntityType.ProStoresStoreEntity;
 				case "ResourceEntity": return EntityType.ResourceEntity;
 				case "ScanFormBatchEntity": return EntityType.ScanFormBatchEntity;
 				case "SearchEntity": return EntityType.SearchEntity;
 				case "SearsOrderEntity": return EntityType.SearsOrderEntity;
 				case "SearsOrderItemEntity": return EntityType.SearsOrderItemEntity;
+				case "SearsOrderSearchEntity": return EntityType.SearsOrderSearchEntity;
 				case "SearsStoreEntity": return EntityType.SearsStoreEntity;
 				case "ServerMessageEntity": return EntityType.ServerMessageEntity;
 				case "ServerMessageSignoffEntity": return EntityType.ServerMessageSignoffEntity;
@@ -158,6 +174,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				case "ShopifyOrderEntity": return EntityType.ShopifyOrderEntity;
 				case "ShopifyOrderItemEntity": return EntityType.ShopifyOrderItemEntity;
+				case "ShopifyOrderSearchEntity": return EntityType.ShopifyOrderSearchEntity;
 				case "ShopifyStoreEntity": return EntityType.ShopifyStoreEntity;
 				case "ShopSiteStoreEntity": return EntityType.ShopSiteStoreEntity;
 				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
@@ -171,6 +188,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "TemplateUserSettingsEntity": return EntityType.TemplateUserSettingsEntity;
 				case "ThreeDCartOrderEntity": return EntityType.ThreeDCartOrderEntity;
 				case "ThreeDCartOrderItemEntity": return EntityType.ThreeDCartOrderItemEntity;
+				case "ThreeDCartOrderSearchEntity": return EntityType.ThreeDCartOrderSearchEntity;
 				case "ThreeDCartStoreEntity": return EntityType.ThreeDCartStoreEntity;
 				case "UpsAccountEntity": return EntityType.UpsAccountEntity;
 				case "UpsLetterRateEntity": return EntityType.UpsLetterRateEntity;
@@ -197,6 +215,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "VolusionStoreEntity": return EntityType.VolusionStoreEntity;
 				case "WalmartOrderEntity": return EntityType.WalmartOrderEntity;
 				case "WalmartOrderItemEntity": return EntityType.WalmartOrderItemEntity;
+				case "WalmartOrderSearchEntity": return EntityType.WalmartOrderSearchEntity;
 				case "WalmartStoreEntity": return EntityType.WalmartStoreEntity;
 				case "WorldShipGoodsEntity": return EntityType.WorldShipGoodsEntity;
 				case "WorldShipPackageEntity": return EntityType.WorldShipPackageEntity;
@@ -204,6 +223,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "WorldShipShipmentEntity": return EntityType.WorldShipShipmentEntity;
 				case "YahooOrderEntity": return EntityType.YahooOrderEntity;
 				case "YahooOrderItemEntity": return EntityType.YahooOrderItemEntity;
+				case "YahooOrderSearchEntity": return EntityType.YahooOrderSearchEntity;
 				case "YahooProductEntity": return EntityType.YahooProductEntity;
 				case "YahooStoreEntity": return EntityType.YahooStoreEntity;
 			}

@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.AmazonOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between AmazonOrderEntity and AmazonOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// AmazonOrder.OrderID - AmazonOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation AmazonOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AmazonOrderSearch" , true);
+				relation.AddEntityFieldPair(AmazonOrderFields.OrderID, AmazonOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between AmazonOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// AmazonOrder.OrderID - Note.EntityID
@@ -193,6 +209,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticAmazonOrderRelations
 	{
+		internal static readonly IEntityRelation AmazonOrderSearchEntityUsingOrderIDStatic = new AmazonOrderRelations().AmazonOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new AmazonOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new AmazonOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new AmazonOrderRelations().OrderItemEntityUsingOrderID;

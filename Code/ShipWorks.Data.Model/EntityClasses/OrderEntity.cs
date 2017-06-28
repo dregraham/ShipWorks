@@ -779,6 +779,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipSenseRecognitionStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipAddressType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CombineSplitStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -1710,6 +1712,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressType, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipAddressType, value); }
+		}
+
+		/// <summary> The CombineSplitStatus property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."CombineSplitStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus
+		{
+			get { return (Interapptive.Shared.Enums.CombineSplitStatusType)GetValue((int)OrderFieldIndex.CombineSplitStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.CombineSplitStatus, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

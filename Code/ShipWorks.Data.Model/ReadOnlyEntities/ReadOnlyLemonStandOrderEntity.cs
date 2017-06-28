@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            LemonStandOrderSearch = source.LemonStandOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<ILemonStandOrderSearchEntity>();
 
             CopyCustomLemonStandOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String LemonStandOrderID { get; }
         
         
+        
+        public IEnumerable<ILemonStandOrderSearchEntity> LemonStandOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

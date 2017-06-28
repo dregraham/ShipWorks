@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<YahooOrderSearchEntity> _yahooOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -60,6 +61,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
 			public static readonly string ValidatedAddress = "ValidatedAddress";
+			/// <summary>Member name YahooOrderSearch</summary>
+			public static readonly string YahooOrderSearch = "YahooOrderSearch";
 			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
 			public static readonly string ShipmentCollectionViaValidatedAddress = "ShipmentCollectionViaValidatedAddress";
 		}
@@ -124,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_yahooOrderSearch = (EntityCollection<YahooOrderSearchEntity>)info.GetValue("_yahooOrderSearch", typeof(EntityCollection<YahooOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -139,6 +143,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "YahooOrderSearch":
+					this.YahooOrderSearch.Add((YahooOrderSearchEntity)entity);
+					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -161,6 +168,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "YahooOrderSearch":
+					toReturn.Add(Relations.YahooOrderSearchEntityUsingOrderID);
+					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -190,6 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "YahooOrderSearch":
+					this.YahooOrderSearch.Add((YahooOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -204,6 +217,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "YahooOrderSearch":
+					this.PerformRelatedEntityRemoval(this.YahooOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -234,6 +250,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.YahooOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -263,6 +280,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_yahooOrderSearch", ((_yahooOrderSearch!=null) && (_yahooOrderSearch.Count>0) && !this.MarkedForDeletion)?_yahooOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -284,6 +302,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new YahooOrderRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'YahooOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoYahooOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(YahooOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -297,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._yahooOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -304,6 +332,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._yahooOrderSearch = (EntityCollection<YahooOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -312,6 +341,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._yahooOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -321,6 +351,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<YahooOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(YahooOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -328,6 +359,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
+			toReturn.Add("YahooOrderSearch", _yahooOrderSearch);
 			return toReturn;
 		}
 
@@ -378,6 +410,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'YahooOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathYahooOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<YahooOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(YahooOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("YahooOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.YahooOrderEntity, (int)ShipWorks.Data.Model.EntityType.YahooOrderSearchEntity, 0, null, null, null, null, "YahooOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -410,6 +449,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)YahooOrderFieldIndex.YahooOrderID, true); }
 			set	{ SetValue((int)YahooOrderFieldIndex.YahooOrderID, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'YahooOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(YahooOrderSearchEntity))]
+		public virtual EntityCollection<YahooOrderSearchEntity> YahooOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<YahooOrderSearchEntity, YahooOrderSearchEntityFactory>("YahooOrder", true, false, ref _yahooOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

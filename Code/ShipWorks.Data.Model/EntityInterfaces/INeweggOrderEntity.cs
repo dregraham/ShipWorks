@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -68,6 +69,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<INeweggOrderSearchEntity> INeweggOrderEntity.NeweggOrderSearch => NeweggOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

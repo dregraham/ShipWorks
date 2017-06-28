@@ -110,6 +110,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipSenseHashKey = source.ShipSenseHashKey;
             ShipSenseRecognitionStatus = source.ShipSenseRecognitionStatus;
             ShipAddressType = source.ShipAddressType;
+            CombineSplitStatus = source.CombineSplitStatus;
             
             
             Customer = source.Customer?.AsReadOnly(objectMap);
@@ -576,6 +577,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipAddressType { get; }
+        /// <summary> The CombineSplitStatus property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."CombineSplitStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus { get; }
         
         
         public ICustomerEntity Customer { get; }

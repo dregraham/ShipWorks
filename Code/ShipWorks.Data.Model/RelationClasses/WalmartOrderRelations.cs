@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.WalmartOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -125,6 +126,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between WalmartOrderEntity and WalmartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// WalmartOrder.OrderID - WalmartOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation WalmartOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WalmartOrderSearch" , true);
+				relation.AddEntityFieldPair(WalmartOrderFields.OrderID, WalmartOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WalmartOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WalmartOrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 
 		/// <summary>Returns a new IEntityRelation object, between WalmartOrderEntity and CustomerEntity over the m:1 relation they have, using the relation between the fields:
 		/// WalmartOrder.CustomerID - Customer.CustomerID
@@ -199,6 +215,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new WalmartOrderRelations().OrderPaymentDetailEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new WalmartOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new WalmartOrderRelations().ValidatedAddressEntityUsingConsumerID;
+		internal static readonly IEntityRelation WalmartOrderSearchEntityUsingOrderIDStatic = new WalmartOrderRelations().WalmartOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new WalmartOrderRelations().CustomerEntityUsingCustomerID;
 		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new WalmartOrderRelations().StoreEntityUsingStoreID;
 
