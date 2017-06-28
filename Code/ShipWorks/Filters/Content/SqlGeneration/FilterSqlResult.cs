@@ -75,6 +75,27 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             columnMaskTableMap[EntityType.LemonStandOrderEntity] = FilterNodeColumnMaskTable.LemonStandOrder;
             columnMaskTableMap[EntityType.WalmartOrderEntity] = FilterNodeColumnMaskTable.WalmartOrder;
             columnMaskTableMap[EntityType.WalmartOrderItemEntity] = FilterNodeColumnMaskTable.WalmartOrderItem;
+            columnMaskTableMap[EntityType.AmazonOrderSearchEntity] = FilterNodeColumnMaskTable.AmazonOrderSearch;
+            columnMaskTableMap[EntityType.ChannelAdvisorOrderSearchEntity] = FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch;
+            columnMaskTableMap[EntityType.ClickCartProOrderSearchEntity] = FilterNodeColumnMaskTable.ClickCartProOrderSearch;
+            columnMaskTableMap[EntityType.CommerceInterfaceOrderSearchEntity] = FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch;
+            columnMaskTableMap[EntityType.EbayOrderSearchEntity] = FilterNodeColumnMaskTable.EbayOrderSearch;
+            columnMaskTableMap[EntityType.EtsyOrderSearchEntity] = FilterNodeColumnMaskTable.EtsyOrderSearch;
+            columnMaskTableMap[EntityType.GrouponOrderSearchEntity] = FilterNodeColumnMaskTable.GrouponOrderSearch;
+            columnMaskTableMap[EntityType.LemonStandOrderSearchEntity] = FilterNodeColumnMaskTable.LemonStandOrderSearch;
+            columnMaskTableMap[EntityType.MagentoOrderSearchEntity] = FilterNodeColumnMaskTable.MagentoOrderSearch;
+            columnMaskTableMap[EntityType.MarketplaceAdvisorOrderSearchEntity] = FilterNodeColumnMaskTable.MarketplaceAdvisorOrderSearch;
+            columnMaskTableMap[EntityType.NetworkSolutionsOrderSearchEntity] = FilterNodeColumnMaskTable.NetworkSolutionsOrderSearch;
+            columnMaskTableMap[EntityType.NeweggOrderSearchEntity] = FilterNodeColumnMaskTable.NeweggOrderSearch;
+            columnMaskTableMap[EntityType.OrderMotionOrderSearchEntity] = FilterNodeColumnMaskTable.OrderMotionOrderSearch;
+            columnMaskTableMap[EntityType.OrderSearchEntity] = FilterNodeColumnMaskTable.OrderSearch;
+            columnMaskTableMap[EntityType.PayPalOrderSearchEntity] = FilterNodeColumnMaskTable.PayPalOrderSearch;
+            columnMaskTableMap[EntityType.ProStoresOrderSearchEntity] = FilterNodeColumnMaskTable.ProStoresOrderSearch;
+            columnMaskTableMap[EntityType.SearsOrderSearchEntity] = FilterNodeColumnMaskTable.SearsOrderSearch;
+            columnMaskTableMap[EntityType.ShopifyOrderSearchEntity] = FilterNodeColumnMaskTable.ShopifyOrderSearch;
+            columnMaskTableMap[EntityType.ThreeDCartOrderSearchEntity] = FilterNodeColumnMaskTable.ThreeDCartOrderSearch;
+            columnMaskTableMap[EntityType.WalmartOrderSearchEntity] = FilterNodeColumnMaskTable.WalmartOrderSearch;
+            columnMaskTableMap[EntityType.YahooOrderSearchEntity] = FilterNodeColumnMaskTable.YahooOrderSearch;
 
             // Make sure we've mapped each table
             if (columnMaskTableMap.Keys.Count != Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length)

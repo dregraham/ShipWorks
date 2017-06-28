@@ -46,7 +46,6 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         LemonStandOrder = 33,
         WalmartOrder = 34,
         WalmartOrderItem = 35,
-
         AmazonOrderSearch = 36,
         ChannelAdvisorOrderSearch = 37,
         ClickCartProOrderSearch = 38,

@@ -57,7 +57,6 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 3;
-
             tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrderSearch] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 6;
