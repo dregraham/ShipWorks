@@ -57,6 +57,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name PayPalOrderSearch</summary>
 			public static readonly string PayPalOrderSearch = "PayPalOrderSearch";
 			/// <summary>Member name Shipments</summary>

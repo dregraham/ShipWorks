@@ -95,6 +95,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 Enumerable.Empty<INeweggOrderSearchEntity>();
             OrderMotionOrderSearch = source.OrderMotionOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IOrderMotionOrderSearchEntity>();
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
             PayPalOrderSearch = source.PayPalOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IPayPalOrderSearchEntity>();
             ProStoresOrderSearch = source.ProStoresOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
@@ -322,6 +324,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
         
         public IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
+        
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         
         public IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
         

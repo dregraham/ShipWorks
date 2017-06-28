@@ -260,6 +260,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between NetworkSolutionsStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// NetworkSolutionsStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(NetworkSolutionsStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NetworkSolutionsStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between NetworkSolutionsStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// NetworkSolutionsStore.StoreID - PayPalOrderSearch.StoreID
 		/// </summary>
@@ -435,6 +450,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().OrderEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().PayPalOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new NetworkSolutionsStoreRelations().SearsOrderSearchEntityUsingStoreID;

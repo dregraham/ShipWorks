@@ -480,6 +480,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<IOrderChargeEntity> OrderCharges { get; }
         IEnumerable<IOrderItemEntity> OrderItems { get; }
         IEnumerable<IOrderPaymentDetailEntity> OrderPaymentDetails { get; }
+        IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         IEnumerable<IShipmentEntity> Shipments { get; }
         IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
 
@@ -514,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IEnumerable<IOrderChargeEntity> IOrderEntity.OrderCharges => OrderCharges;
         IEnumerable<IOrderItemEntity> IOrderEntity.OrderItems => OrderItems;
         IEnumerable<IOrderPaymentDetailEntity> IOrderEntity.OrderPaymentDetails => OrderPaymentDetails;
+        IEnumerable<IOrderSearchEntity> IOrderEntity.OrderSearch => OrderSearch;
         IEnumerable<IShipmentEntity> IOrderEntity.Shipments => Shipments;
         IEnumerable<IValidatedAddressEntity> IOrderEntity.ValidatedAddress => ValidatedAddress;
 

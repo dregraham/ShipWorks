@@ -260,6 +260,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between InfopiaStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// InfopiaStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(InfopiaStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("InfopiaStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between InfopiaStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// InfopiaStore.StoreID - PayPalOrderSearch.StoreID
 		/// </summary>
@@ -435,6 +450,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new InfopiaStoreRelations().OrderEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().PayPalOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new InfopiaStoreRelations().SearsOrderSearchEntityUsingStoreID;

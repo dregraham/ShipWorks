@@ -276,6 +276,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between EbayStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(EbayStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between EbayStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// EbayStore.StoreID - PayPalOrderSearch.StoreID
 		/// </summary>
@@ -452,6 +467,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new EbayStoreRelations().OrderEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().PayPalOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().SearsOrderSearchEntityUsingStoreID;

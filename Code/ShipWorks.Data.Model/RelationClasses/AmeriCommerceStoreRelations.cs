@@ -260,6 +260,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between AmeriCommerceStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// AmeriCommerceStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(AmeriCommerceStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmeriCommerceStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between AmeriCommerceStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// AmeriCommerceStore.StoreID - PayPalOrderSearch.StoreID
 		/// </summary>
@@ -435,6 +450,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().OrderEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().PayPalOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new AmeriCommerceStoreRelations().SearsOrderSearchEntityUsingStoreID;

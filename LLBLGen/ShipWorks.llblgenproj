@@ -1911,6 +1911,15 @@
           <Field Name="Value" Type="string" MaxLength="100" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="OrderSearch" ObjectID="e9ae11b7-a1c0-42a9-926b-d9c3ca4b1ddd">
+        <Fields>
+          <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
+          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="OrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="StoreID" Type="long" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="OtherProfile" ObjectID="b611235c-2e48-49d7-be0a-f533ce64e34d">
         <Fields>
           <Field Name="Carrier" Type="string" IsOptional="true" MaxLength="50" FieldIndex="1" />
@@ -3669,6 +3678,16 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="OrderSearch.Order-Order.OrderSearch" Start=":OrderSearch" End=":Order" StartNavigator="Order" EndNavigator="OrderSearch" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="OrderSearch.Store-Store.OrderSearch" Start=":OrderSearch" End=":Store" StartNavigator="Store" EndNavigator="OrderSearch" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="OtherProfile.ShippingProfile-ShippingProfile.Other" Start=":OtherProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Other" Type="1" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -4123,7 +4142,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-06-27T20:48:11.032425Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-06-28T13:42:08.5754087Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6942,6 +6961,16 @@
                     <Field Name="Value" Ordinal="5" DbType="12" Length="100" />
                   </Fields>
                 </Table>
+                <Table Name="OrderSearch">
+                  <PkConstraintName Name="PK_OrderSearch" />
+                  <Fields>
+                    <Field Name="OrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
                 <Table Name="OtherProfile">
                   <PkConstraintName Name="PK_OtherProfile" />
                   <Fields>
@@ -9467,6 +9496,16 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:OrderPaymentDetail:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OrderSearch:FK_OrderSearch_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:OrderSearch:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OrderSearch:FK_OrderSearch_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OrderSearch:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:OtherProfile:FK_OtherProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:OtherProfile:ShippingProfileID" />
@@ -11725,6 +11764,15 @@
             <FieldMapping FieldName="OrderPaymentDetailID" TargetFieldName="OrderPaymentDetailID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="Value" TargetFieldName="Value" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OrderSearch" TargetName="ShipWorksLocal:dbo:OrderSearch">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
+            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
+            <FieldMapping FieldName="OrderSearchID" TargetFieldName="OrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OtherProfile" TargetName="ShipWorksLocal:dbo:OtherProfile">

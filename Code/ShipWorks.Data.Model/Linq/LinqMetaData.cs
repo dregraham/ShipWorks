@@ -422,6 +422,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.OrderPaymentDetailEntity:
 					toReturn = this.OrderPaymentDetail;
 					break;
+				case ShipWorks.Data.Model.EntityType.OrderSearchEntity:
+					toReturn = this.OrderSearch;
+					break;
 				case ShipWorks.Data.Model.EntityType.OtherProfileEntity:
 					toReturn = this.OtherProfile;
 					break;
@@ -1414,6 +1417,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<OrderPaymentDetailEntity> OrderPaymentDetail
 		{
 			get { return new DataSource2<OrderPaymentDetailEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting OrderSearchEntity instances in the database.</summary>
+		public DataSource2<OrderSearchEntity> OrderSearch
+		{
+			get { return new DataSource2<OrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting OtherProfileEntity instances in the database.</summary>

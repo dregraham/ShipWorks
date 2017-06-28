@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(206);
+			this.InitClass(207);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -167,6 +167,7 @@ namespace ShipWorks.Data.Model
 			InitOrderMotionOrderSearchEntityMappings();
 			InitOrderMotionStoreEntityMappings();
 			InitOrderPaymentDetailEntityMappings();
+			InitOrderSearchEntityMappings();
 			InitOtherProfileEntityMappings();
 			InitOtherShipmentEntityMappings();
 			InitPayPalOrderEntityMappings();
@@ -2302,6 +2303,17 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "Label", "Label", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("OrderPaymentDetailEntity", "Value", "Value", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 4);
+		}
+
+		/// <summary>Inits OrderSearchEntity's mappings</summary>
+		private void InitOrderSearchEntityMappings()
+		{
+			this.AddElementMapping("OrderSearchEntity", @"ShipWorksLocal", @"dbo", "OrderSearch", 5, 0);
+			this.AddElementFieldMapping("OrderSearchEntity", "OrderSearchID", "OrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("OrderSearchEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("OrderSearchEntity", "OrderNumber", "OrderNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("OrderSearchEntity", "OrderNumberComplete", "OrderNumberComplete", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits OtherProfileEntity's mappings</summary>

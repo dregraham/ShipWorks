@@ -6897,6 +6897,22 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderSearch.</summary>
+	public enum OrderSearchFieldIndex
+	{
+		///<summary>OrderSearchID. </summary>
+		OrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OtherProfile.</summary>
 	public enum OtherProfileFieldIndex
 	{
@@ -11485,6 +11501,8 @@ namespace ShipWorks.Data.Model
 		OrderMotionStoreEntity,
 		///<summary>OrderPaymentDetail</summary>
 		OrderPaymentDetailEntity,
+		///<summary>OrderSearch</summary>
+		OrderSearchEntity,
 		///<summary>OtherProfile</summary>
 		OtherProfileEntity,
 		///<summary>OtherShipment</summary>

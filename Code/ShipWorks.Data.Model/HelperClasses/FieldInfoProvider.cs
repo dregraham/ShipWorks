@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (206 + 0));
+			this.InitClass( (207 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -170,6 +170,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitOrderMotionOrderSearchEntityInfos();
 			InitOrderMotionStoreEntityInfos();
 			InitOrderPaymentDetailEntityInfos();
+			InitOrderSearchEntityInfos();
 			InitOtherProfileEntityInfos();
 			InitOtherShipmentEntityInfos();
 			InitPayPalOrderEntityInfos();
@@ -2188,6 +2189,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OrderPaymentDetailFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "Label", typeof(System.String), false, false, false, false,  (int)OrderPaymentDetailFieldIndex.Label, 100, 0, 0);
 			this.AddElementFieldInfo("OrderPaymentDetailEntity", "Value", typeof(System.String), false, false, false, false,  (int)OrderPaymentDetailFieldIndex.Value, 100, 0, 0);
+		}
+		/// <summary>Inits OrderSearchEntity's FieldInfo objects</summary>
+		private void InitOrderSearchEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(OrderSearchFieldIndex), "OrderSearchEntity");
+			this.AddElementFieldInfo("OrderSearchEntity", "OrderSearchID", typeof(System.Int64), true, false, true, false,  (int)OrderSearchFieldIndex.OrderSearchID, 0, 0, 19);
+			this.AddElementFieldInfo("OrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OrderSearchFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("OrderSearchEntity", "StoreID", typeof(System.Int64), false, true, false, false,  (int)OrderSearchFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("OrderSearchEntity", "OrderNumber", typeof(System.Int64), false, false, false, false,  (int)OrderSearchFieldIndex.OrderNumber, 0, 0, 19);
+			this.AddElementFieldInfo("OrderSearchEntity", "OrderNumberComplete", typeof(System.String), false, false, false, false,  (int)OrderSearchFieldIndex.OrderNumberComplete, 50, 0, 0);
 		}
 		/// <summary>Inits OtherProfileEntity's FieldInfo objects</summary>
 		private void InitOtherProfileEntityInfos()

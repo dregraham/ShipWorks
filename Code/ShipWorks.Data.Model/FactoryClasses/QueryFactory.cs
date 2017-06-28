@@ -826,6 +826,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<OrderPaymentDetailEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the OrderSearch entity</summary>
+		public EntityQuery<OrderSearchEntity> OrderSearch
+		{
+			get { return Create<OrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the OtherProfile entity</summary>
 		public EntityQuery<OtherProfileEntity> OtherProfile
 		{

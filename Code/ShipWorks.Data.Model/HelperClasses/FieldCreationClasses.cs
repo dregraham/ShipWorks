@@ -16029,6 +16029,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity OrderSearchEntity</summary>
+	public partial class OrderSearchFields
+	{
+		/// <summary>Creates a new OrderSearchEntity.OrderSearchID field instance</summary>
+		public static EntityField2 OrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderSearchID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderNumberComplete);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity OtherProfileEntity</summary>
 	public partial class OtherProfileFields
 	{

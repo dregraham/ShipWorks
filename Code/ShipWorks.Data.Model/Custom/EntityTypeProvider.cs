@@ -140,6 +140,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "OrderMotionOrderSearchEntity": return EntityType.OrderMotionOrderSearchEntity;
 				case "OrderMotionStoreEntity": return EntityType.OrderMotionStoreEntity;
 				case "OrderPaymentDetailEntity": return EntityType.OrderPaymentDetailEntity;
+				case "OrderSearchEntity": return EntityType.OrderSearchEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "OtherShipmentEntity": return EntityType.OtherShipmentEntity;
 				case "PayPalOrderEntity": return EntityType.PayPalOrderEntity;

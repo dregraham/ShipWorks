@@ -2499,6 +2499,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty OrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class OrderSearchEntityFactory : EntityFactoryBase2<OrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public OrderSearchEntityFactory() : base("OrderSearchEntity", ShipWorks.Data.Model.EntityType.OrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new OrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty OtherProfileEntity objects.</summary>
 	[Serializable]
 	public partial class OtherProfileEntityFactory : EntityFactoryBase2<OtherProfileEntity> {
@@ -4590,6 +4611,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.OrderPaymentDetailEntity:
 					factoryToUse = new OrderPaymentDetailEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OrderSearchEntity:
+					factoryToUse = new OrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.OtherProfileEntity:
 					factoryToUse = new OtherProfileEntityFactory();

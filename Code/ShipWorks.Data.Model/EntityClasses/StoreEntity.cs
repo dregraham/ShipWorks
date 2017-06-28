@@ -45,6 +45,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<NetworkSolutionsOrderSearchEntity> _networkSolutionsOrderSearch;
 		private EntityCollection<NeweggOrderSearchEntity> _neweggOrderSearch;
 		private EntityCollection<OrderMotionOrderSearchEntity> _orderMotionOrderSearch;
+		private EntityCollection<OrderSearchEntity> _orderSearch;
 		private EntityCollection<PayPalOrderSearchEntity> _payPalOrderSearch;
 		private EntityCollection<ProStoresOrderSearchEntity> _proStoresOrderSearch;
 		private EntityCollection<SearsOrderSearchEntity> _searsOrderSearch;
@@ -90,6 +91,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string NeweggOrderSearch = "NeweggOrderSearch";
 			/// <summary>Member name OrderMotionOrderSearch</summary>
 			public static readonly string OrderMotionOrderSearch = "OrderMotionOrderSearch";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name PayPalOrderSearch</summary>
 			public static readonly string PayPalOrderSearch = "PayPalOrderSearch";
 			/// <summary>Member name ProStoresOrderSearch</summary>
@@ -174,6 +177,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_networkSolutionsOrderSearch = (EntityCollection<NetworkSolutionsOrderSearchEntity>)info.GetValue("_networkSolutionsOrderSearch", typeof(EntityCollection<NetworkSolutionsOrderSearchEntity>));
 				_neweggOrderSearch = (EntityCollection<NeweggOrderSearchEntity>)info.GetValue("_neweggOrderSearch", typeof(EntityCollection<NeweggOrderSearchEntity>));
 				_orderMotionOrderSearch = (EntityCollection<OrderMotionOrderSearchEntity>)info.GetValue("_orderMotionOrderSearch", typeof(EntityCollection<OrderMotionOrderSearchEntity>));
+				_orderSearch = (EntityCollection<OrderSearchEntity>)info.GetValue("_orderSearch", typeof(EntityCollection<OrderSearchEntity>));
 				_payPalOrderSearch = (EntityCollection<PayPalOrderSearchEntity>)info.GetValue("_payPalOrderSearch", typeof(EntityCollection<PayPalOrderSearchEntity>));
 				_proStoresOrderSearch = (EntityCollection<ProStoresOrderSearchEntity>)info.GetValue("_proStoresOrderSearch", typeof(EntityCollection<ProStoresOrderSearchEntity>));
 				_searsOrderSearch = (EntityCollection<SearsOrderSearchEntity>)info.GetValue("_searsOrderSearch", typeof(EntityCollection<SearsOrderSearchEntity>));
@@ -234,6 +238,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "OrderMotionOrderSearch":
 					this.OrderMotionOrderSearch.Add((OrderMotionOrderSearchEntity)entity);
+					break;
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)entity);
 					break;
 				case "PayPalOrderSearch":
 					this.PayPalOrderSearch.Add((PayPalOrderSearchEntity)entity);
@@ -316,6 +323,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "OrderMotionOrderSearch":
 					toReturn.Add(Relations.OrderMotionOrderSearchEntityUsingStoreID);
+					break;
+				case "OrderSearch":
+					toReturn.Add(Relations.OrderSearchEntityUsingStoreID);
 					break;
 				case "PayPalOrderSearch":
 					toReturn.Add(Relations.PayPalOrderSearchEntityUsingStoreID);
@@ -405,6 +415,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "OrderMotionOrderSearch":
 					this.OrderMotionOrderSearch.Add((OrderMotionOrderSearchEntity)relatedEntity);
 					break;
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)relatedEntity);
+					break;
 				case "PayPalOrderSearch":
 					this.PayPalOrderSearch.Add((PayPalOrderSearchEntity)relatedEntity);
 					break;
@@ -478,6 +491,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "OrderMotionOrderSearch":
 					this.PerformRelatedEntityRemoval(this.OrderMotionOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
 					break;
+				case "OrderSearch":
+					this.PerformRelatedEntityRemoval(this.OrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "PayPalOrderSearch":
 					this.PerformRelatedEntityRemoval(this.PayPalOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -539,6 +555,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add(this.NetworkSolutionsOrderSearch);
 			toReturn.Add(this.NeweggOrderSearch);
 			toReturn.Add(this.OrderMotionOrderSearch);
+			toReturn.Add(this.OrderSearch);
 			toReturn.Add(this.PayPalOrderSearch);
 			toReturn.Add(this.ProStoresOrderSearch);
 			toReturn.Add(this.SearsOrderSearch);
@@ -587,6 +604,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_networkSolutionsOrderSearch", ((_networkSolutionsOrderSearch!=null) && (_networkSolutionsOrderSearch.Count>0) && !this.MarkedForDeletion)?_networkSolutionsOrderSearch:null);
 				info.AddValue("_neweggOrderSearch", ((_neweggOrderSearch!=null) && (_neweggOrderSearch.Count>0) && !this.MarkedForDeletion)?_neweggOrderSearch:null);
 				info.AddValue("_orderMotionOrderSearch", ((_orderMotionOrderSearch!=null) && (_orderMotionOrderSearch.Count>0) && !this.MarkedForDeletion)?_orderMotionOrderSearch:null);
+				info.AddValue("_orderSearch", ((_orderSearch!=null) && (_orderSearch.Count>0) && !this.MarkedForDeletion)?_orderSearch:null);
 				info.AddValue("_payPalOrderSearch", ((_payPalOrderSearch!=null) && (_payPalOrderSearch.Count>0) && !this.MarkedForDeletion)?_payPalOrderSearch:null);
 				info.AddValue("_proStoresOrderSearch", ((_proStoresOrderSearch!=null) && (_proStoresOrderSearch.Count>0) && !this.MarkedForDeletion)?_proStoresOrderSearch:null);
 				info.AddValue("_searsOrderSearch", ((_searsOrderSearch!=null) && (_searsOrderSearch.Count>0) && !this.MarkedForDeletion)?_searsOrderSearch:null);
@@ -733,6 +751,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'OrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderSearchFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
+			return bucket;
+		}
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'PayPalOrderSearch' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoPayPalOrderSearch()
@@ -821,6 +848,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(this._networkSolutionsOrderSearch);
 			collectionsQueue.Enqueue(this._neweggOrderSearch);
 			collectionsQueue.Enqueue(this._orderMotionOrderSearch);
+			collectionsQueue.Enqueue(this._orderSearch);
 			collectionsQueue.Enqueue(this._payPalOrderSearch);
 			collectionsQueue.Enqueue(this._proStoresOrderSearch);
 			collectionsQueue.Enqueue(this._searsOrderSearch);
@@ -848,6 +876,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			this._networkSolutionsOrderSearch = (EntityCollection<NetworkSolutionsOrderSearchEntity>) collectionsQueue.Dequeue();
 			this._neweggOrderSearch = (EntityCollection<NeweggOrderSearchEntity>) collectionsQueue.Dequeue();
 			this._orderMotionOrderSearch = (EntityCollection<OrderMotionOrderSearchEntity>) collectionsQueue.Dequeue();
+			this._orderSearch = (EntityCollection<OrderSearchEntity>) collectionsQueue.Dequeue();
 			this._payPalOrderSearch = (EntityCollection<PayPalOrderSearchEntity>) collectionsQueue.Dequeue();
 			this._proStoresOrderSearch = (EntityCollection<ProStoresOrderSearchEntity>) collectionsQueue.Dequeue();
 			this._searsOrderSearch = (EntityCollection<SearsOrderSearchEntity>) collectionsQueue.Dequeue();
@@ -876,6 +905,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn |=(this._networkSolutionsOrderSearch != null);
 			toReturn |=(this._neweggOrderSearch != null);
 			toReturn |=(this._orderMotionOrderSearch != null);
+			toReturn |=(this._orderSearch != null);
 			toReturn |=(this._payPalOrderSearch != null);
 			toReturn |=(this._proStoresOrderSearch != null);
 			toReturn |=(this._searsOrderSearch != null);
@@ -905,6 +935,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<NetworkSolutionsOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(NetworkSolutionsOrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<NeweggOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(NeweggOrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderMotionOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderMotionOrderSearchEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<PayPalOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(PayPalOrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ProStoresOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProStoresOrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<SearsOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(SearsOrderSearchEntityFactory))) : null);
@@ -932,6 +963,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("NetworkSolutionsOrderSearch", _networkSolutionsOrderSearch);
 			toReturn.Add("NeweggOrderSearch", _neweggOrderSearch);
 			toReturn.Add("OrderMotionOrderSearch", _orderMotionOrderSearch);
+			toReturn.Add("OrderSearch", _orderSearch);
 			toReturn.Add("PayPalOrderSearch", _payPalOrderSearch);
 			toReturn.Add("ProStoresOrderSearch", _proStoresOrderSearch);
 			toReturn.Add("SearsOrderSearch", _searsOrderSearch);
@@ -1143,6 +1175,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathOrderMotionOrderSearch
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<OrderMotionOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderMotionOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("OrderMotionOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.StoreEntity, (int)ShipWorks.Data.Model.EntityType.OrderMotionOrderSearchEntity, 0, null, null, null, null, "OrderMotionOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("OrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.StoreEntity, (int)ShipWorks.Data.Model.EntityType.OrderSearchEntity, 0, null, null, null, null, "OrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PayPalOrderSearch' for this entity.</summary>
@@ -1607,6 +1646,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<OrderMotionOrderSearchEntity> OrderMotionOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<OrderMotionOrderSearchEntity, OrderMotionOrderSearchEntityFactory>("Store", true, false, ref _orderMotionOrderSearch);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(OrderSearchEntity))]
+		public virtual EntityCollection<OrderSearchEntity> OrderSearch
+		{
+			get { return GetOrCreateEntityCollection<OrderSearchEntity, OrderSearchEntityFactory>("Store", true, false, ref _orderSearch);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PayPalOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

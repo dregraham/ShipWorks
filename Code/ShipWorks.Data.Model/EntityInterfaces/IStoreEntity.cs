@@ -217,6 +217,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
         IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
         IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
+        IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
         IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
         IEnumerable<ISearsOrderSearchEntity> SearsOrderSearch { get; }
@@ -263,6 +264,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IEnumerable<INetworkSolutionsOrderSearchEntity> IStoreEntity.NetworkSolutionsOrderSearch => NetworkSolutionsOrderSearch;
         IEnumerable<INeweggOrderSearchEntity> IStoreEntity.NeweggOrderSearch => NeweggOrderSearch;
         IEnumerable<IOrderMotionOrderSearchEntity> IStoreEntity.OrderMotionOrderSearch => OrderMotionOrderSearch;
+        IEnumerable<IOrderSearchEntity> IStoreEntity.OrderSearch => OrderSearch;
         IEnumerable<IPayPalOrderSearchEntity> IStoreEntity.PayPalOrderSearch => PayPalOrderSearch;
         IEnumerable<IProStoresOrderSearchEntity> IStoreEntity.ProStoresOrderSearch => ProStoresOrderSearch;
         IEnumerable<ISearsOrderSearchEntity> IStoreEntity.SearsOrderSearch => SearsOrderSearch;

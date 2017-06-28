@@ -124,6 +124,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 Enumerable.Empty<IOrderItemEntity>();
             OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IOrderPaymentDetailEntity>();
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
             Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IShipmentEntity>();
             ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
@@ -597,6 +599,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IEnumerable<IOrderItemEntity> OrderItems { get; }
         
         public IEnumerable<IOrderPaymentDetailEntity> OrderPaymentDetails { get; }
+        
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         
         public IEnumerable<IShipmentEntity> Shipments { get; }
         
