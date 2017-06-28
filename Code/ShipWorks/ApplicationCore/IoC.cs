@@ -348,10 +348,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces()
-                .UsingConstructor();
-
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

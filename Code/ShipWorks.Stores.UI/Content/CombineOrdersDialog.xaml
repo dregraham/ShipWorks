@@ -10,6 +10,13 @@
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow"
         ShowInTaskbar="False"
+
+        FontFamily="Tahoma"
+        FontSize="8.25 pt"
+        FontStyle="Normal"
+        FontStretch="Normal"
+        FontWeight="Normal"
+
         Title="Combine Orders"
         Height="400" Width="500"
         MinHeight="400" MinWidth="400">

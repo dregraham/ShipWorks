@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Shared.Users;
 
@@ -8,6 +9,7 @@ namespace ShipWorks.Users
     /// <summary>
     /// Settings for the current user
     /// </summary>
+    [Component]
     public class CurrentUserSettings : ICurrentUserSettings
     {
         readonly IUserSession userSession;
