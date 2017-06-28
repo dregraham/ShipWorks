@@ -58,6 +58,28 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 3;
 
+            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 8;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EtsyOrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.MagentoOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrderSearch] = 7;
+            tableBitCount[(int) FilterNodeColumnMaskTable.NetworkSolutionsOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.NeweggOrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ShopifyOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ThreeDCartOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 6;
+
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;
             for (int i = 1; i < tableBitOffset.Length; i++)

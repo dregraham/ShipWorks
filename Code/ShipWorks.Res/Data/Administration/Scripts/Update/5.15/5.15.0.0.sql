@@ -12,6 +12,35 @@ GO
 ALTER TABLE [dbo].[UserSettings] ADD
 [DialogSettings] [xml] NULL
 GO
+PRINT N'Creating [dbo].[OrderSearch]'
+GO
+CREATE TABLE [dbo].[OrderSearch]
+(
+[OrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
+[OrderID] [bigint] NOT NULL,
+[StoreID] [bigint] NOT NULL,
+[OrderNumber] [bigint] NOT NULL,
+[OrderNumberComplete] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OrderSearch] on [dbo].[OrderSearch]'
+GO
+ALTER TABLE [dbo].[OrderSearch] ADD CONSTRAINT [PK_OrderSearch] PRIMARY KEY CLUSTERED  ([OrderSearchID])
+GO
+PRINT N'Creating index [IX_OrderSearch_OrderNumber] on [dbo].[OrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_OrderSearch_OrderNumber] ON [dbo].[OrderSearch] ([OrderNumber]) INCLUDE ([OrderID], [StoreID])
+GO
+PRINT N'Creating index [IX_OrderSearch_OrderNumberComplete] on [dbo].[OrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_OrderSearch_OrderNumberComplete] ON [dbo].[OrderSearch] ([OrderNumberComplete]) INCLUDE ([OrderID], [StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderSearch]'
+GO
+ALTER TABLE [dbo].[OrderSearch] ADD CONSTRAINT [FK_OrderSearch_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+ALTER TABLE [dbo].[OrderSearch] ADD CONSTRAINT [FK_OrderSearch_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Creating [dbo].[AmazonOrderSearch]'
 GO
 CREATE TABLE [dbo].[AmazonOrderSearch]
