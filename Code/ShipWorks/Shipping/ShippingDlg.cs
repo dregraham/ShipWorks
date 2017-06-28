@@ -1862,8 +1862,29 @@ namespace ShipWorks.Shipping
                 {
                     rateControl.ShowSpinner = false;
 
-                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates(_e.Result as RateGroup);
+                    ObjectDisposedException objectDisposedException = _e.Error as ObjectDisposedException;
+                    if (closing && objectDisposedException != null)
+                    {
+                        log.Error("Error occurs when trying to load rates after shipping dialog is closed", objectDisposedException);
+                        return;
+                    }
+
+                    try
+                    {
+                        // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
+                        LoadDisplayedRates(_e.Result as RateGroup);
+                    }
+                    catch (ObjectDisposedException ex)
+                    {
+                        if (closing)
+                        {
+                            log.Error("Error occurs when trying to load rates after shipping dialog is closed", ex);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                 }
             };
 
