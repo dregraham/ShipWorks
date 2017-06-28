@@ -27,7 +27,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a user conditional information message
         /// </summary>
-        void ShowUserConditionalInformation(string message, UserConditionalNotificationType notificationType);
+        void ShowUserConditionalInformation(string title, string message, UserConditionalNotificationType notificationType);
 
         /// <summary>
         /// Show a new progress dialog

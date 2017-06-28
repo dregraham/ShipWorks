@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;
@@ -11,6 +13,16 @@ namespace ShipWorks.Users
     [Component]
     public class UserSessionWrapper : IUserSession
     {
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UserSessionWrapper(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
         /// <summary>
         /// Currently logged in user
         /// </summary>
@@ -47,5 +59,24 @@ namespace ShipWorks.Users
         /// Is a user logged on
         /// </summary>
         public bool IsLoggedOn => UserSession.IsLoggedOn;
+
+        /// <summary>
+        /// Update the current user's settings
+        /// </summary>
+        public void UpdateSettings(Action<UserSettingsEntity> updateAction)
+        {
+            UserSettingsEntity userSettings = UserSession.User?.Settings;
+
+            if (userSettings == null)
+            {
+                return;
+            }
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                updateAction(userSettings);
+                sqlAdapter.SaveAndRefetch(userSettings);
+            }
+        }
     }
 }

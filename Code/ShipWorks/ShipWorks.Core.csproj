@@ -3974,7 +3974,6 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\IUserConditionalNotification.cs" />
     <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
@@ -8479,6 +8478,9 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\ComputerManager.cs" />
+    <Compile Include="Users\CurrentUserSettings.cs" />
+    <Compile Include="Users\ICurrentUserSettings.cs" />
+    <Compile Include="Users\IUserConditionalNotification.cs" />
     <Compile Include="Users\IUserService.cs" />
     <Compile Include="Users\IUserSession.cs" />
     <Compile Include="Users\Logon\LogonCredentials.cs" />

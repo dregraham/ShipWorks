@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
+using ShipWorks.Users;
 
 namespace ShipWorks.UI.Services
 {
@@ -46,8 +47,8 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a user conditional information message
         /// </summary>
-        public void ShowUserConditionalInformation(string message, UserConditionalNotificationType notificationType) =>
-            createUserConditionalNotification().ShowInformation(ownerFactory(), message, notificationType);
+        public void ShowUserConditionalInformation(string title, string message, UserConditionalNotificationType notificationType) =>
+            createUserConditionalNotification().Show(this, title, message, notificationType);
 
         /// <summary>
         /// Show a message

@@ -195,6 +195,9 @@
     <Compile Include="Custom\EntityClasses\UpsPackageEntity.cs" />
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\UserSettingsEntity.cs" />
+    <Compile Include="Custom\EntityClasses\UserSettingsEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\UserSettingsEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.ReadOnly.cs" />
