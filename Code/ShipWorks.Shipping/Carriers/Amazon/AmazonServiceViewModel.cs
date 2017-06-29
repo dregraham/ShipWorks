@@ -1,16 +1,16 @@
-﻿using Interapptive.Shared.Messaging;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.UI.Controls.MultiValueBinders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
+using Interapptive.Shared.Messaging;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.UI.Controls.MultiValueBinders;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -19,10 +19,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonServiceViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly AmazonShipmentType amazonShipmentType;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
+        private GenericMultiValueBinder<ShipmentEntity, DateTime> dateBinder;
         private IMultiValue<AmazonDeliveryExperienceType?> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
@@ -31,9 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger, AmazonShipmentType amazonShipmentType)
+        public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger)
         {
-            this.amazonShipmentType = amazonShipmentType;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>()
@@ -94,21 +93,28 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void Load(List<ShipmentEntity> shipments)
         {
             // Build a multi value binder for each of the UI controls.
+            dateBinder = new GenericMultiValueBinder<ShipmentEntity, DateTime>(shipments,
+                nameof(ShipDate),
+                entity => entity.ShipDate,
+                (entity, value) => entity.ShipDate = value,
+                entity => entity.Processed);
+
             weightBinder = new GenericMultiValueBinder<ShipmentEntity, double>(shipments,
                 nameof(ContentWeight),
                 entity => entity.ContentWeight,
                 (entity, value) => entity.ContentWeight = value,
-                (entity) => entity.Processed);
+                entity => entity.Processed);
 
             deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType?>(shipments,
                 nameof(DeliveryExperience),
                 entity => (AmazonDeliveryExperienceType?) entity.Amazon.DeliveryExperience,
                 (entity, value) => entity.Amazon.DeliveryExperience = (int) value.GetValueOrDefault(),
-                (entity) => entity.Processed);
+                entity => entity.Processed);
 
             SetupServices(shipments);
 
             // Wire up the property changed event so we can update rates.
+            dateBinder.PropertyChanged += OnPropertyChanged;
             weightBinder.PropertyChanged += OnPropertyChanged;
             deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
             shippingServiceBinder.PropertyChanged += OnPropertyChanged;
@@ -166,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         entity.Amazon.CarrierName = value?.CarrierName ?? string.Empty;
                     }
                 },
-                (entity) => entity.Processed);
+                entity => entity.Processed);
 
             ShippingService = CreateTagBasedOnShipment(shipment);
         }
@@ -184,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 nameof(ShippingService),
                 entity => ServicesAvailable.FirstOrDefault(),
                 (entity, value) => { },
-                (entity) => true);
+                entity => true);
         }
 
         /// <summary>
@@ -198,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 nameof(ShippingService),
                 entity => new AmazonRateTag(),
                 (entity, value) => { },
-                (entity) => true);
+                entity => true);
 
             ServicesAvailable = new List<AmazonRateTag>();
         }
@@ -207,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Creates the tag based on shipment.
         /// </summary>
         public AmazonRateTag CreateTagBasedOnShipment(ShipmentEntity shipment) =>
-            new AmazonRateTag()
+            new AmazonRateTag
             {
                 Description = shipment.Amazon.ShippingServiceName,
                 ShippingServiceId = shipment.Amazon.ShippingServiceID,
@@ -228,6 +234,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Save(List<ShipmentEntity> shipments)
         {
+            dateBinder.Save();
             weightBinder.Save();
             deliveryExperienceBinder.Save();
             shippingServiceBinder.Save();
@@ -238,6 +245,28 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IMultiValue<AmazonDeliveryExperienceType?> DeliveryExperience => deliveryExperienceBinder;
+
+        /// <summary>
+        /// The ship date
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public DateTime ShipDate
+        {
+            get
+            {
+                return dateBinder.PropertyValue;
+            }
+            set
+            {
+                dateBinder.PropertyValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Is ship date multivalued
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShipDateIsMultiValued => dateBinder.IsMultiValued;
 
         /// <summary>
         /// ContentWeight display text

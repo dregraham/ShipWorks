@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public partial class AmazonServiceControl : ServiceControlBase
     {
         private readonly AmazonServiceViewModel viewModel;
-        private readonly AmazonShipmentType amazonShipmentType;
         private readonly AmazonRateHashingService rateHashingService;
         private IDisposable propertyChangedSubscriptions;
 
@@ -32,13 +31,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="viewModel">The view model for this control.</param>
-        /// <param name="amazonShipmentType">AmazonShipmentType</param>
         /// <param name="rateHashingService"></param>
-        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonShipmentType amazonShipmentType, AmazonRateHashingService rateHashingService)
+        public AmazonServiceControl(RateControl rateControl, AmazonServiceViewModel viewModel, AmazonRateHashingService rateHashingService)
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
             this.viewModel = viewModel;
-            this.amazonShipmentType = amazonShipmentType;
             this.rateHashingService = rateHashingService;
             InitializeComponent();
         }
@@ -54,12 +51,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
             dimensionsControl.Initialize();
+            shipDate.Value = DateTime.Now;
 
             originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
             dimensionsControl.DimensionsChanged += OnDimensionsChanged;
             dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             weight.WeightChanged += OnWeightChanged;
             weight.WeightChanged += OnShipSenseFieldChanged;
+            shipDate.ValueChanged += OnShipDateChanged;
 
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
@@ -82,6 +81,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 binding.WriteValue();
             }
+        }
+
+        /// <summary>
+        /// Called when [ship date changed].
+        /// </summary>
+        private void OnShipDateChanged(object sender, EventArgs e)
+        {
+            foreach (Binding binding in shipDate.DataBindings.OfType<Binding>().Where(x => x.PropertyName == nameof(shipDate.Value)))
+            {
+                binding.WriteValue();
+            }
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -138,6 +150,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued),
                 viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued),
                 false, DataSourceUpdateMode.OnPropertyChanged);
+
+            shipDate.DataBindings.Clear();
+            shipDate.DataBindings.Add(nameof(shipDate.Value), viewModel, nameof(viewModel.ShipDate), false, DataSourceUpdateMode.OnPropertyChanged);
+            shipDate.DataBindings.Add(nameof(shipDate.MultiValued), viewModel, nameof(viewModel.ShipDateIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             weight.DataBindings.Clear();
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -254,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
         }
-
+        
         /// <summary>
         /// Save the content of the control to the entities
         /// </summary>
