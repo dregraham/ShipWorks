@@ -1,25 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.Users;
 using log4net;
-using ShipWorks.Common.Threading;
-using System.Diagnostics;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 
@@ -32,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         int totalCount = 0;
-        private ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
+        private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
 
         ShopifyWebClient webClient = null;
 
@@ -528,6 +522,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
+            GetImage(item, shopifyProduct);
+            GetBarcode(item, lineItem, shopifyProduct);
+        }
+
+        /// <summary>
+        /// Gets the image from the shopifyProduct and copies them into the ShopifyOrderItemEntity
+        /// </summary>
+        private static void GetImage(ShopifyOrderItemEntity item, JToken shopifyProduct)
+        {
             JToken images = shopifyProduct.SelectToken("product.images");
 
             if (images != null)
@@ -544,6 +547,25 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 item.Image = imageUrl;
                 item.Thumbnail = imageUrl;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the corresponding variant barcode from the Shopify product and stores it as the UPC of the ShopifyOrderItemEntity
+        /// </summary>
+        private void GetBarcode(ShopifyOrderItemEntity item, JToken lineItem, JToken shopifyProduct)
+        {
+            // The barcode is stored as part of the product variant, so we need the variantID.
+            long variantID = lineItem.GetValue<long>("variant_id");
+
+            // Grab all the variants of the product
+            JToken variants = shopifyProduct.SelectToken("product.variants");
+
+            // Get the variant with a corresponding variantID
+            JToken variant = variants.FirstOrDefault(v => v.GetValue<long>("id") == variantID);
+            if (variant != null)
+            {
+                item.UPC = variant.GetValue<string>("barcode");
             }
         }
 
