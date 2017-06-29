@@ -29,29 +29,44 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="8">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
+                   Margin="12,20"
                    TextWrapping="Wrap"
                    Text="{Binding Message}" />
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal">
-            <CheckBox IsChecked="{Binding DoNotShowAgain}"
-                      Margin="0,0,4,0"/>
-            <TextBlock>Do not show this dialog again</TextBlock>
-        </StackPanel>
+        <Border Grid.Row="1"
+                Background="#F0F0F0"
+                Padding="12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="2"
-                MinWidth="80"
-                Padding="4, 2"
-                HorizontalAlignment="Right"
-                Command="{Binding Dismiss}"
-                Content="OK" />
+                <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                    <CheckBox IsChecked="{Binding DoNotShowAgain}"
+                              Margin="0,0,4,0"
+                              VerticalContentAlignment="Center">
+                        Do not show this dialog again
+                    </CheckBox>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        MinWidth="80"
+                        Padding="8, 4"
+                        HorizontalAlignment="Right"
+                        Command="{Binding Dismiss}"
+                        IsDefault="True"
+                        Content="OK" />
+            </Grid>
+        </Border>
     </Grid>
 </Window>
