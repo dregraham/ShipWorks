@@ -356,7 +356,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 BestRateUpsRestrictionShippingPolicy bestRateUpsRestriction = new BestRateUpsRestrictionShippingPolicy();
-                bestRateUpsRestriction.Configure("True");
+
+                string bestRateShippingPolicy = LicenseCapabilities.GetShipmentTypeFunctionality(ShipmentTypeCode.BestRate, ShippingPolicyType.BestRateUpsRestriction);
+
+                bestRateUpsRestriction.Configure(bestRateShippingPolicy != string.Empty
+                    ? bestRateShippingPolicy
+                    : "True");
+
                 if (bestRateUpsRestriction.IsApplicable(target))
                 {
                     bestRateUpsRestriction.Apply(target);
