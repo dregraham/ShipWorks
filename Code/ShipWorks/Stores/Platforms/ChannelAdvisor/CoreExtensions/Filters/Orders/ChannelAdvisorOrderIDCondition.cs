@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters.Order
             string orderSql = String.Empty;
             string orderSearchSql = String.Empty;
 
-            // First we have to get from Order -> ChannelAdvisorOrder            
+            // First we have to get from Order -> ChannelAdvisorOrder
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, ChannelAdvisorOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(ChannelAdvisorOrderFields.CustomOrderIdentifier), context));
