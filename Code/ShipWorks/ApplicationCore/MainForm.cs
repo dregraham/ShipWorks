@@ -2823,7 +2823,7 @@ namespace ShipWorks
         /// <summary>
         /// Create a new order
         /// </summary>
-        private async void OnNewOrder(object sender, EventArgs e)
+        private void OnNewOrder(object sender, EventArgs e)
         {
             long? customerID = null;
             long? storeID = null;
