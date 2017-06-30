@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -12,25 +13,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
     /// </summary>
     [ConditionElement("Amazon Order #", "Amazon.CombinedOrderNumbers")]
     [ConditionStoreType(StoreTypeCode.Amazon)]
-    public class AmazonCombinedOrderNumberCondition : NumericStringCondition<long>
+    [Component]
+    public class AmazonCombinedOrderNumberCondition : NumericStringCondition<long>, ICombinedOrderCondition
     {
-        private readonly EntityField2 searchField;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="searchField">This is the field to search, either OrderNumber or OrderNumberComplete</param>
-        public AmazonCombinedOrderNumberCondition(EntityField2 searchField)
-        {
-            this.searchField = searchField;
-        }
-
         /// <summary>
         /// Generate the filter SQL
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
             string amazonOrderSearchSql = String.Empty;
+
+            EntityField2 searchField = IsNumeric ? AmazonOrderSearchFields.OrderNumber : AmazonOrderSearchFields.OrderNumberComplete;
 
             // Add any combined order AmazonOrderID entries.
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, AmazonOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))

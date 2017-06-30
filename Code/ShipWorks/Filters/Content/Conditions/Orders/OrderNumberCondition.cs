@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters;
@@ -12,25 +16,6 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     [ConditionElement("Order Number", "Order.Number")]
     public class OrderNumberCondition : NumericStringCondition<long>
     {
-        private EntityField2 orderNumberField = null;
-        private EntityField2 orderNumberCompleteField = null;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderNumberCondition()
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderNumberCondition(EntityField2 orderNumberField, EntityField2 orderNumberCompleteField)
-        {
-            this.orderNumberField = orderNumberField;
-            this.orderNumberCompleteField = orderNumberCompleteField;
-        }
-
         /// <summary>
         /// Generate the SQL that evaluates the condition
         /// </summary>
@@ -38,44 +23,79 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         {
             string orderNumberSql = string.Empty;
             string orderSearchSql = string.Empty;
+            string storeCombinedOrderSearchSql = string.Empty;
 
             if (IsNumeric)
             {
-                orderNumberField = orderNumberField ?? OrderFields.OrderNumber;
-                orderNumberSql = GenerateSql(context.GetColumnReference(orderNumberField), context);
-
-                CombinedOrderNumberCondition combinedOrderNumberCondition = new CombinedOrderNumberCondition(OrderSearchFields.OrderNumber);
-                combinedOrderNumberCondition.Operator = Operator;
-                combinedOrderNumberCondition.Value1 = Value1;
-                combinedOrderNumberCondition.Value2 = Value2;
-                orderSearchSql = $" OR {combinedOrderNumberCondition.GenerateSql(context)}";
-
-                AmazonCombinedOrderNumberCondition amazonCombinedOrderNumberCondition = new AmazonCombinedOrderNumberCondition(AmazonOrderSearchFields.OrderNumber);
-                amazonCombinedOrderNumberCondition.Operator = Operator;
-                amazonCombinedOrderNumberCondition.Value1 = Value1;
-                amazonCombinedOrderNumberCondition.Value2 = Value2;
-                orderSearchSql = $" {orderSearchSql} OR {amazonCombinedOrderNumberCondition.GenerateSql(context)}";
+                orderNumberSql = GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context);
             }
             else
             {
-                orderNumberCompleteField = orderNumberCompleteField ?? OrderFields.OrderNumberComplete;
-                orderNumberSql = StringCondition.GenerateSql(StringValue, StringOperator, context.GetColumnReference(orderNumberCompleteField), context);
-                
-                CombinedOrderNumberCondition combinedOrderNumberCondition = new CombinedOrderNumberCondition(OrderSearchFields.OrderNumberComplete);
-                combinedOrderNumberCondition.IsNumeric = IsNumeric;
-                combinedOrderNumberCondition.StringOperator = StringOperator;
-                combinedOrderNumberCondition.StringValue = StringValue;
-                orderSearchSql = $" OR {combinedOrderNumberCondition.GenerateSql(context)}";
-
-                AmazonCombinedOrderNumberCondition amazonCombinedOrderNumberCondition = new AmazonCombinedOrderNumberCondition(AmazonOrderSearchFields.OrderNumberComplete);
-                amazonCombinedOrderNumberCondition.IsNumeric = IsNumeric;
-                amazonCombinedOrderNumberCondition.StringOperator = StringOperator;
-                amazonCombinedOrderNumberCondition.StringValue = StringValue;
-
-                orderSearchSql = $" {orderSearchSql} OR {amazonCombinedOrderNumberCondition.GenerateSql(context)}";
+                orderNumberSql = StringCondition.GenerateSql(StringValue, StringOperator, context.GetColumnReference(OrderFields.OrderNumberComplete), context);
             }
 
-            return $"{orderNumberSql} {orderSearchSql}";
+            orderSearchSql = GenerateCombinedOrderSearchSql(context);
+
+            storeCombinedOrderSearchSql = GenerateStoreCombinedOrderSearchSql(context);
+
+            return $"{orderNumberSql} OR {orderSearchSql} OR {storeCombinedOrderSearchSql}";
+        }
+
+        /// <summary>
+        /// Get the SQL for searching order specific combined order numbers
+        /// </summary>
+        private string GenerateCombinedOrderSearchSql(SqlGenerationContext context)
+        {
+            EntityField2 searchField = IsNumeric ? OrderSearchFields.OrderNumber : OrderSearchFields.OrderNumberComplete;
+
+            CombinedOrderNumberCondition combinedOrderNumberCondition = new CombinedOrderNumberCondition(searchField);
+            combinedOrderNumberCondition.IsNumeric = IsNumeric;
+
+            if (IsNumeric)
+            {
+                combinedOrderNumberCondition.Operator = Operator;
+                combinedOrderNumberCondition.Value1 = Value1;
+                combinedOrderNumberCondition.Value2 = Value2;
+            }
+            else
+            {
+                combinedOrderNumberCondition.StringOperator = StringOperator;
+                combinedOrderNumberCondition.StringValue = StringValue;
+            }
+
+            return combinedOrderNumberCondition.GenerateSql(context);
+        }
+
+        /// <summary>
+        /// Get the SQL for searching store specific combined order numbers
+        /// </summary>
+        private string GenerateStoreCombinedOrderSearchSql(SqlGenerationContext context)
+        {
+            List<string> storeConditionSqls = new List<string>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                foreach (ICombinedOrderCondition combinedOrderCondition in lifetimeScope.Resolve<IEnumerable<ICombinedOrderCondition>>())
+                {
+                    combinedOrderCondition.IsNumeric = IsNumeric;
+
+                    if (IsNumeric)
+                    {
+                        combinedOrderCondition.Operator = Operator;
+                        combinedOrderCondition.Value1 = Value1;
+                        combinedOrderCondition.Value2 = Value2;
+                    }
+                    else
+                    {
+                        combinedOrderCondition.StringOperator = StringOperator;
+                        combinedOrderCondition.StringValue = StringValue;
+                    }
+
+                    storeConditionSqls.Add(combinedOrderCondition.GenerateSql(context));
+                }
+            }
+
+            return string.Join(" OR ", storeConditionSqls);
         }
     }
 }
