@@ -1741,6 +1741,7 @@
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
