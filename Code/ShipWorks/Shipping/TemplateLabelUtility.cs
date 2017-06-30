@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Save the image to disk
+        /// Loads the image from disk
         /// </summary>
         public static Image LoadImageFromDisk(string fullFilenameAndPath)
         {

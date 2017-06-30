@@ -299,6 +299,7 @@
     <Compile Include="Configuration\IShippingConfiguration.cs" />
     <Compile Include="Configuration\ShippingConfiguration.cs" />
     <Compile Include="Configuration\TelemetricShipmentTypeSetupWizardForm.cs" />
+    <Compile Include="ITemplateLabelUtility.cs" />
     <Compile Include="Loading\IShipmentsLoader.cs" />
     <Compile Include="Loading\IShipmentsValidator.cs" />
     <Compile Include="Loading\ShipmentsLoader.cs" />
@@ -444,6 +445,7 @@
     <Compile Include="EmptyRateHashingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateHashingService.cs" />
+    <Compile Include="TemplateLabelUtilityWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
