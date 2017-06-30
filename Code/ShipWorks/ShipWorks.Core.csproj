@@ -1847,6 +1847,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Filters\YahooCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
