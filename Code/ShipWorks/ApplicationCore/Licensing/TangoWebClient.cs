@@ -165,21 +165,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static string GetTangoCustomerId()
         {
-            StoreEntity store;
-
-            try
-            {
-                store = StoreManager.GetEnabledStores()
-                            .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                        StoreManager.GetAllStores()
-                            .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
-
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                return string.Empty;
-            }
+            StoreEntity store = StoreManager.GetEnabledStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                                StoreManager.GetAllStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
 
             try
             {
