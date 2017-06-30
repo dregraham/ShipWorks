@@ -1787,6 +1787,7 @@
     <Compile Include="Stores\Platforms\ProStores\CoreExtensions\Filters\ProStoresCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsCombinedOrderNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
