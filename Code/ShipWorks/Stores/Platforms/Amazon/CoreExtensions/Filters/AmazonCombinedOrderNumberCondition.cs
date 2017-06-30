@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
 
             EntityField2 searchField = IsNumeric ? AmazonOrderSearchFields.OrderNumber : AmazonOrderSearchFields.OrderNumberComplete;
 
-            // Add any combined order AmazonOrderID entries.
+            // Add any combined order number/number complete entries.
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, AmazonOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 amazonOrderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(searchField), context));

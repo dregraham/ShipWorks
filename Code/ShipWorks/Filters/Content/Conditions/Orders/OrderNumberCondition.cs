@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
@@ -75,23 +75,31 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                IStoreManager storeManager = lifetimeScope.Resolve<IStoreManager>();
+                List<StoreTypeCode> existingStoreTypeCodes = storeManager.GetUniqueStoreTypes().Select(s => s.TypeCode).ToList();
+
                 foreach (ICombinedOrderCondition combinedOrderCondition in lifetimeScope.Resolve<IEnumerable<ICombinedOrderCondition>>())
                 {
-                    combinedOrderCondition.IsNumeric = IsNumeric;
+                    ConditionStoreTypeAttribute attribute = (ConditionStoreTypeAttribute) Attribute.GetCustomAttribute(combinedOrderCondition.GetType(), typeof(ConditionStoreTypeAttribute));
 
-                    if (IsNumeric)
+                    if (existingStoreTypeCodes.Any(st => st == attribute.StoreType))
                     {
-                        combinedOrderCondition.Operator = Operator;
-                        combinedOrderCondition.Value1 = Value1;
-                        combinedOrderCondition.Value2 = Value2;
-                    }
-                    else
-                    {
-                        combinedOrderCondition.StringOperator = StringOperator;
-                        combinedOrderCondition.StringValue = StringValue;
-                    }
+                        combinedOrderCondition.IsNumeric = IsNumeric;
 
-                    storeConditionSqls.Add(combinedOrderCondition.GenerateSql(context));
+                        if (IsNumeric)
+                        {
+                            combinedOrderCondition.Operator = Operator;
+                            combinedOrderCondition.Value1 = Value1;
+                            combinedOrderCondition.Value2 = Value2;
+                        }
+                        else
+                        {
+                            combinedOrderCondition.StringOperator = StringOperator;
+                            combinedOrderCondition.StringValue = StringValue;
+                        }
+
+                        storeConditionSqls.Add(combinedOrderCondition.GenerateSql(context));
+                    }
                 }
             }
 
