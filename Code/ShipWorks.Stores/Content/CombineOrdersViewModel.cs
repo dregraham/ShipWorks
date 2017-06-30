@@ -50,6 +50,8 @@ namespace ShipWorks.Stores.Content
             ConfirmCombine = new RelayCommand(
                 () => ConfirmCombineAction(),
                 () => SurvivingOrder != null && !string.IsNullOrWhiteSpace(NewOrderNumber));
+
+            CancelCombine = new RelayCommand(() => CancelCombineAction());
         }
 
         /// <summary>
@@ -57,6 +59,12 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ConfirmCombine { get; }
+
+        /// <summary>
+        /// Cancel combining orders
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand CancelCombine { get; }
 
         /// <summary>
         /// A property value has changed
@@ -175,6 +183,14 @@ namespace ShipWorks.Stores.Content
         private void ConfirmCombineAction()
         {
             combineOrdersDialog.DialogResult = true;
+            combineOrdersDialog.Close();
+        }
+
+        /// <summary>
+        /// Cancel combining orders
+        /// </summary>
+        private void CancelCombineAction()
+        {
             combineOrdersDialog.Close();
         }
 

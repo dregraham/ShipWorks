@@ -1,11 +1,13 @@
 ﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Content
 {
     /// <summary>
     /// EqualityComparer for PersonAdapters used by the OrderCombine function
     /// </summary>
-    internal class OrderCombineAddressComparer : IOrderCombineAddressComparer
+    [Component]
+    public class OrderCombineAddressComparer : IOrderCombineAddressComparer
     {
         /// <summary>
         /// Are the two person adapters equal

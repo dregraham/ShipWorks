@@ -18,7 +18,7 @@
         FontWeight="Normal"
 
         Title="Combine Orders"
-        Height="400" Width="500"
+        Height="400" Width="520"
         MinHeight="400" MinWidth="400">
     <Window.Resources>
         <ResourceDictionary>
@@ -55,9 +55,11 @@
 
             <TextBlock TextWrapping="Wrap"
                        Margin="0, 8, 0, 0">
-                All order items and notes will be added to the new combined
-                order, but the other details will be copied from the order
-                selected below:
+                All order items and notes will be added to the new combined order,
+                but other order details will be copied from the selected order below:
+                <Hyperlink ui:Link.OpenInBrowser="True"
+                           FontStyle="Italic"
+                           NavigateUri="http://www.google.com">more info...</Hyperlink>
             </TextBlock>
         </StackPanel>
 
@@ -115,7 +117,8 @@
                     match the information below:
                 </TextBlock>
 
-                <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="1"
+                            Margin="12,4,0,0">
                     <TextBlock Text="{Binding AddressName}" />
                     <TextBlock Text="{Binding AddressStreet}" />
                     <TextBlock Text="{Binding AddressCityStateZip}" />
@@ -123,22 +126,30 @@
             </Grid>
         </ui:NotificationBorder>
 
-        <Grid Grid.Row="3" Margin="0, 8, 0, 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
+        <ui:AlignmentWrapPanel Grid.Row="3"
+                               Margin="0, 8, 0, 0">
             <TextBlock Grid.Row="0"
-                       FontWeight="Bold">
+                       FontWeight="Bold"
+                       VerticalAlignment="Center">
                 Are you sure you want to combine these orders?
             </TextBlock>
 
-            <Button Grid.Row="1"
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Padding="8, 4"
+                        Style="{StaticResource Button.Link}"
+                        Foreground="{StaticResource Blue}"
+                        VerticalAlignment="Center"
+                        IsCancel="True"
+                        Margin="12,0"
+                    Command="{Binding CancelCombine}">Cancel</Button>
+
+                <Button Grid.Row="2"
                     Padding="8, 4"
                     IsDefault="True"
-                    Command="{Binding ConfirmCombine}"
-                    HorizontalAlignment="Right">Confirm Combine</Button>
-        </Grid>
+                    Command="{Binding ConfirmCombine}">Confirm Combine</Button>
+            </StackPanel>
+        </ui:AlignmentWrapPanel>
     </Grid>
 </Window>
