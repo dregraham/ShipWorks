@@ -168,6 +168,7 @@
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />
+    <Compile Include="ExtensionMethods\ItExtensions.cs" />
     <Compile Include="IKeyedMockCreator.cs" />
     <Compile Include="ImmediateSchedulerProvider.cs" />
     <Compile Include="IMockFactory.cs" />

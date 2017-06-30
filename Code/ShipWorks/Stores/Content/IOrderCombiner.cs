@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Content
 {
@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Combine the list of orders into a single order
         /// </summary>
-        GenericResult<long> Combine(long survivingOrderID, IEnumerable<OrderEntity> orders, string newOrderNumber);
+        GenericResult<long> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders, string newOrderNumber);
     }
 }

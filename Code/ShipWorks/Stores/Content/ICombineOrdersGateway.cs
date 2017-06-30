@@ -16,6 +16,6 @@ namespace ShipWorks.Stores.Content
         /// We should change the return type from IOrderEntity to an
         /// actual projection class, depending on our needs
         /// </remarks>
-        GenericResult<IOrderEntity> LoadOrders(IEnumerable<long> orderIDs);
+        GenericResult<IEnumerable<IOrderEntity>> LoadOrders(IEnumerable<long> orderIDs);
     }
 }
