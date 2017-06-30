@@ -1790,6 +1790,7 @@
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\CoreExtensions\Filters\ThreeDCartCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
