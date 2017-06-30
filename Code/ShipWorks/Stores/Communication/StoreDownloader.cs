@@ -545,6 +545,7 @@ namespace ShipWorks.Stores.Communication
                         SaveExistingOrder(order, adapter);
                     }
 
+// TODO:  This Wait() should probably be moved outside the transaction!!!
                     alreadyDownloaded.Wait();
                     log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded.Result ? "not " : "");
 
