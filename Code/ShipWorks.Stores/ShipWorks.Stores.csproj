@@ -403,6 +403,7 @@
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartCombinedOrderNumberCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartItemOnlineStatusCondition.cs" />
