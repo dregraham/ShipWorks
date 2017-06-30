@@ -1,7 +1,8 @@
-﻿using ShipWorks.Filters.Content;
+﻿using System;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
@@ -17,10 +18,20 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
+            string orderSql = String.Empty;
+            string orderSearchSql = String.Empty;
+
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, EbayOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderFields.SellingManagerRecord), context));
+                orderSql = scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderFields.SellingManagerRecord), context));
             }
+
+            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                orderSearchSql = scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderSearchFields.SellingManagerRecord), context));
+            }
+
+            return $"{orderSql} OR {orderSearchSql}"; ;
         }
     }
 }
