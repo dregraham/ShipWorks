@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.HelperClasses;
+﻿using System;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -17,11 +18,21 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Filters
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            // First we have to get from Order -> OrderMotionOrder           
+            string orderSql = String.Empty;
+            string orderSearchSql = String.Empty;
+
+            // First we have to get from Order -> OrderMotionOrder
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, OrderMotionOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderFields.OrderMotionShipmentID), context));
+                orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderFields.OrderMotionShipmentID), context));
             }
+
+            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, OrderMotionOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderSearchFields.OrderMotionShipmentID), context));
+            }
+
+            return $"{orderSql} OR {orderSearchSql}";
         }
     }
 }
