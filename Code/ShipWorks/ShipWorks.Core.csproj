@@ -1744,6 +1744,7 @@
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\CoreExtensions\Filters\MagentoCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
