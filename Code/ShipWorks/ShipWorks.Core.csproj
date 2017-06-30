@@ -1732,6 +1732,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\ClickCartPro\CoreExtensions\Filters\Orders\ClickCartProCombinedOrderNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
