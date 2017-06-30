@@ -1777,6 +1777,7 @@
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\CoreExtensions\Filters\MarketplaceAdvisorCombinedOrderNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\CoreExtensions\Filters\NetworkSolutionsCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
