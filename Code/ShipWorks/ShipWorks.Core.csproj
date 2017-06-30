@@ -1784,6 +1784,7 @@
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\PayPal\CoreExtensions\Filters\PayPalCombinedOrderNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\ProStores\CoreExtensions\Filters\ProStoresCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
