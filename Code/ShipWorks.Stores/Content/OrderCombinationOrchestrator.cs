@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Stores.Content;
@@ -12,6 +14,7 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Orchestrate the combination of orders
     /// </summary>
+    [Component]
     public class OrderCombinationOrchestrator : IOrderCombinationOrchestrator
     {
         readonly ICombineOrdersGateway gateway;
@@ -42,9 +45,9 @@ namespace ShipWorks.Stores.Content
         /// <returns>
         /// The value of the result is the ID of the created order
         /// </returns>
-        public GenericResult<long> Combine(IEnumerable<long> orderIDs)
+        public async Task<GenericResult<long>> Combine(IEnumerable<long> orderIDs)
         {
-            var loadResult = gateway.LoadOrders(orderIDs);
+            var loadResult = await gateway.LoadOrders(orderIDs);
 
             if (loadResult.Failure)
             {
@@ -68,7 +71,7 @@ namespace ShipWorks.Stores.Content
 
             long survivingOrderId = combinationDetails.Value.Item1;
             string newOrderNumber = combinationDetails.Value.Item2;
-            var combineResults = orderCombiner.Combine(survivingOrderId, orders, newOrderNumber);
+            var combineResults = await orderCombiner.Combine(survivingOrderId, orders, newOrderNumber);
 
             DisplayCombinationResults(orders, newOrderNumber, combineResults);
 

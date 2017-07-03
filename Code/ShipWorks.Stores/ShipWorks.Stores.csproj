@@ -148,11 +148,13 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Content\CombineOrdersGateway.cs" />
     <Compile Include="Content\CombineOrdersViewModel.cs" />
     <Compile Include="Content\ICombineOrdersDialog.cs" />
     <Compile Include="Content\IOrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombinationOrchestrator.cs" />
     <Compile Include="Content\OrderCombineAddressComparer.cs" />
+    <Compile Include="Content\OrderCombiner.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />

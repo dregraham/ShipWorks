@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Content
@@ -23,6 +25,22 @@ namespace ShipWorks.Stores.Content
         /// Get a populated order from a order ID
         /// </summary>
         OrderEntity FetchOrder(long orderID);
+
+        /// <summary>
+        /// Load an order async
+        /// </summary>
+        /// <remarks>
+        /// This method bypasses the entity cache
+        /// </remarks>
+        Task<OrderEntity> LoadOrderAsync(long orderId, ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Load orders async
+        /// </summary>
+        /// <remarks>
+        /// This method bypasses the entity cache
+        /// </remarks>
+        Task<IEnumerable<OrderEntity>> LoadOrdersAsync(IEnumerable<long> orderIDs, ISqlAdapter sqlAdapter);
 
         /// <summary>
         /// Load the specified order using the given prefetch path

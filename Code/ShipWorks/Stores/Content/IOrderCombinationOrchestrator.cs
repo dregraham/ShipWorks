@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Content
@@ -14,6 +15,6 @@ namespace ShipWorks.Stores.Content
         /// <returns>
         /// The value of the result is the ID of the created order
         /// </returns>
-        GenericResult<long> Combine(IEnumerable<long> orderIDs);
+        Task<GenericResult<long>> Combine(IEnumerable<long> orderIDs);
     }
 }

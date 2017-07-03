@@ -49,7 +49,6 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.Stores.Content;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -88,7 +87,6 @@ using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
@@ -2849,6 +2847,23 @@ namespace ShipWorks
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LookupOrder(dlg.OrderID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a new order
+        /// </summary>
+        private async void OnCombineOrders(object sender, EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IOrderCombinationOrchestrator orchestrator = lifetimeScope.Resolve<IOrderCombinationOrchestrator>();
+                GenericResult<long> result = await orchestrator.Combine(gridControl.Selection.OrderedKeys);
+
+                if (result.Success)
+                {
+                    LookupOrder(result.Value);
                 }
             }
         }

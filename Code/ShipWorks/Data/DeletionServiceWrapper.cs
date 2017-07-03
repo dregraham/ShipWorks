@@ -44,5 +44,10 @@ namespace ShipWorks.Data
                 localStoresToDelete.ForEach(x => DeleteStore(x, securityContext));
             }
         }
+
+        /// <summary>
+        /// Deletes the given order
+        /// </summary>
+        public void DeleteOrder(long orderID) => DeletionService.DeleteOrder(orderID);
     }
 }

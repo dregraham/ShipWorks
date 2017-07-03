@@ -333,5 +333,17 @@ namespace Interapptive.Shared.Collections
             return list1Lookup.Count == list2Lookup.Count &&
                 list1Lookup.All(g => g.Count() == list2Lookup[g.Key].Count());
         }
+
+        /// <summary>
+        /// Inject a default value into the enumerable if it's empty or null
+        /// </summary>
+        public static IEnumerable<T> DefaultIfEmptyOrNull<T>(this IEnumerable<T> source) =>
+            source.DefaultIfEmptyOrNull(default(T));
+
+        /// <summary>
+        /// Inject a default value into the enumerable if it's empty or null
+        /// </summary>
+        public static IEnumerable<T> DefaultIfEmptyOrNull<T>(this IEnumerable<T> source, T defaultValue) =>
+            (source ?? Enumerable.Empty<T>()).DefaultIfEmpty(defaultValue);
     }
 }

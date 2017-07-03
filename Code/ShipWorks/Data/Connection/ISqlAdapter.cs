@@ -8,7 +8,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// A custom ShipWorks DataAccessAdapter
     /// </summary>
-    public interface ISqlAdapter : IDisposable
+    public interface ISqlAdapter : IDataAccessAdapter, IDisposable
     {
         /// <summary>
         /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
@@ -61,7 +61,7 @@ namespace ShipWorks.Data.Connection
         /// be fetched. This overload returns all found entities and doesn't apply sorting
         /// </summary>
         /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
-        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned
         ///     of the type created by the factory in the passed in EntityCollection instance.</param>
         void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket);
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Data.Connection
         /// be fetched. This overload returns all found entities and doesn't apply sorting
         /// </summary>
         /// <param name="collectionToFill">EntityCollection object containing an entity factory which has to be filled</param>
-        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned 
+        /// <param name="filterBucket">filter information for retrieving the entities. If null, all entities are returned
         ///     of the type created by the factory in the passed in EntityCollection instance.</param>
         /// <param name="maxRowsToReturn">Maximum number of rows to return</param>
         void FetchEntityCollection(IEntityCollection2 collectionToFill, IRelationPredicateBucket filterBucket, int maxRowsToReturn);

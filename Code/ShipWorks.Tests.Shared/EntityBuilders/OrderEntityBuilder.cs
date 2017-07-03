@@ -108,6 +108,28 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             CreateCollectionEntity<OrderItemEntity, TOrderItem, OrderItemEntityBuilder<TOrderItem>>(builderConfiguration, x => x.OrderItems);
 
         /// <summary>
+        /// Add a note to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithNote() => WithNote(null);
+
+        /// <summary>
+        /// Add a note to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithNote(Action<EntityBuilder<NoteEntity>> builderConfiguration) =>
+            CreateCollectionEntity(builderConfiguration, x => x.Notes);
+
+        /// <summary>
+        /// Add a payment detail to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithPaymentDetail() => WithPaymentDetail(null);
+
+        /// <summary>
+        /// Add a payment detail to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithPaymentDetail(Action<EntityBuilder<OrderPaymentDetailEntity>> builderConfiguration) =>
+            CreateCollectionEntity(builderConfiguration, x => x.OrderPaymentDetails);
+
+        /// <summary>
         /// Create an entity and add it to a collection
         /// </summary>
         protected OrderEntityBuilder<TOrder> CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,

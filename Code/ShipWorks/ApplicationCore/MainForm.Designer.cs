@@ -71,6 +71,7 @@ namespace ShipWorks
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
             this.buttonNewOrder = new Divelements.SandRibbon.Button();
+            this.buttonCombineOrders = new Divelements.SandRibbon.Button();
             this.buttonDeleteOrders = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
@@ -731,7 +732,8 @@ namespace ShipWorks
             //
             this.stripLayoutModifyOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonNewOrder,
-            this.buttonDeleteOrders});
+            this.buttonDeleteOrders,
+            this.buttonCombineOrders });
             this.stripLayoutModifyOrders.ItemSpacing = 6;
             this.stripLayoutModifyOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
             this.stripLayoutModifyOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
@@ -744,6 +746,15 @@ namespace ShipWorks
             this.buttonNewOrder.QuickAccessKey = "ON";
             this.buttonNewOrder.Text = "New";
             this.buttonNewOrder.Activate += new System.EventHandler(this.OnNewOrder);
+            //
+            // buttonCombineOrders
+            //
+            this.buttonCombineOrders.Guid = new System.Guid("69DAE715-64CB-40E3-BD24-0DC683BCC4D1");
+            this.buttonCombineOrders.Image = global::ShipWorks.Properties.Resources.order_add;
+            this.ribbonSecurityProvider.SetPermission(this.buttonCombineOrders, ShipWorks.Users.Security.PermissionType.CustomersAddOrder);
+            this.buttonCombineOrders.QuickAccessKey = "OC";
+            this.buttonCombineOrders.Text = "Combine";
+            this.buttonCombineOrders.Activate += new System.EventHandler(this.OnCombineOrders);
             //
             // buttonDeleteOrders
             //
@@ -2819,6 +2830,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrders;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkCustomers;
         private Divelements.SandRibbon.Button buttonNewOrder;
+        private Divelements.SandRibbon.Button buttonCombineOrders;
         private Divelements.SandRibbon.Button buttonEditOrder;
         private Divelements.SandRibbon.Button buttonDeleteOrders;
         private Divelements.SandRibbon.Button buttonNewCustomer;

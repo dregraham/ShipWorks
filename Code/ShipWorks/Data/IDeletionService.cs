@@ -18,5 +18,10 @@ namespace ShipWorks.Data
         /// Deletes all the stores for the given channel
         /// </summary>
         void DeleteChannel(StoreTypeCode channel, ISecurityContext securityContext);
+
+        /// <summary>
+        /// Deletes the given order
+        /// </summary>
+        void DeleteOrder(long orderID);
     }
 }

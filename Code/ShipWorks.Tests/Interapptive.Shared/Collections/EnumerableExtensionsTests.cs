@@ -332,18 +332,46 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
 
             Assert.False(list1.UnorderedSequenceEquals(list2));
         }
-		
+
         [Fact]
         public void ForEach_CallsActionForEachItem()
         {
             var enumerable = Enumerable.Range(0, 3);
             List<int> numbersInEnumerable = new List<int>();
-            enumerable.ForEach(i=>numbersInEnumerable.Add(i));
+            enumerable.ForEach(i => numbersInEnumerable.Add(i));
 
             Assert.Equal(3, numbersInEnumerable.Count);
             Assert.Contains(0, numbersInEnumerable);
             Assert.Contains(1, numbersInEnumerable);
             Assert.Contains(2, numbersInEnumerable);
+        }
+
+        [Fact]
+        public void DefaultIfEmptyOrNull_ReturnsDefault_WhenEmpty()
+        {
+            var result = Enumerable.Empty<int>().DefaultIfEmptyOrNull().First();
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void DefaultIfEmptyOrNull_ReturnsDefault_WhenNull()
+        {
+            var result = ((IEnumerable<int>) null).DefaultIfEmptyOrNull().First();
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void DefaultIfEmptyOrNull_ReturnsSpecifiedDefault_WhenEmpty()
+        {
+            var result = Enumerable.Empty<string>().DefaultIfEmptyOrNull("foo").First();
+            Assert.Equal("foo", result);
+        }
+
+        [Fact]
+        public void DefaultIfEmptyOrNull_ReturnsSpecifiedDefault_WhenNull()
+        {
+            var result = ((IEnumerable<string>) null).DefaultIfEmptyOrNull("foo").First();
+            Assert.Equal("foo", result);
         }
     }
 }
