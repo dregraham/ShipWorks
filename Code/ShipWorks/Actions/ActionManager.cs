@@ -56,7 +56,7 @@ namespace ShipWorks.Actions
             {
                 // Do this outside of a transaction.  I added this b\c DeleteStoreActions gets called in DeleteStore, which is a long running transaction.  The Actions of
                 // course would be deleted in a transaction, but there's no need for this query to be in a transaction.
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
                 {
                     if (tableSynchronizer.Synchronize())
                     {

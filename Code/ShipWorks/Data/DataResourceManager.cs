@@ -163,7 +163,7 @@ namespace ShipWorks.Data
 
                     // See if we can find an existing resource
                     ResourceCollection resources = new ResourceCollection();
-                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object)checksum), 1, null, null, excludeDataFields);
+                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object) checksum), 1, null, null, excludeDataFields);
 
                     // The resource already exists, just use it
                     if (resources.Count > 0)
@@ -222,7 +222,7 @@ namespace ShipWorks.Data
 
                         using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
                         {
-                            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                             {
                                 // Don't refetch b\c we don't want to pull back the Data
                                 adapter.SaveEntity(resource, false);

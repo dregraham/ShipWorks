@@ -173,7 +173,8 @@ namespace ShipWorks.Data.Connection
 
                 return new System.Transactions.TransactionScope(
                     System.Transactions.TransactionScopeOption.Required,
-                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout });
+                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout },
+                    System.Transactions.TransactionScopeAsyncFlowOption.Enabled);
             }
 
             return null;

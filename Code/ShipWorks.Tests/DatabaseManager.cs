@@ -49,7 +49,7 @@ namespace ShipWorks.Tests
             UserManager.InitializeForCurrentUser();
             UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
-            transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5));
+            transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5), TransactionScopeAsyncFlowOption.Enabled);
 
             StartTiming(false);
         }
