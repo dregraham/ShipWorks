@@ -165,8 +165,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static string GetTangoCustomerId()
         {
-            StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
-                                StoreManager.GetAllStores().FirstOrDefault();
+            StoreEntity store = StoreManager.GetEnabledStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                                StoreManager.GetAllStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
 
             try
             {
@@ -1010,6 +1012,33 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Process the request
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ProcessTrialRequest");
+
+            // Grab the shipment type functionality node
+            XmlNode shipmentTypeFunctionality = xmlResponse.SelectSingleNode("//License/ShipmentTypeFunctionality");
+            // Grab the Best Rate shipment type functionality node
+            XmlNode bestRateShipmentTypeFunctionality = shipmentTypeFunctionality?.SelectSingleNode("//ShipmentType[@TypeCode='14']");
+
+            if (bestRateShipmentTypeFunctionality?.SelectSingleNode("Restriction")?.InnerText.ToLower() == "disabled")
+            {
+                // If it exists remove it 
+                shipmentTypeFunctionality.RemoveChild(bestRateShipmentTypeFunctionality);
+
+                // add the new default which enables best rate but limits it to local rating only
+                XmlDocumentFragment newBestRateFunctionality = xmlResponse.CreateDocumentFragment();
+                newBestRateFunctionality.InnerXml = 
+                    @"<ShipmentType TypeCode='14'> 
+                        <Feature>
+                            <Type>BestRateUpsRestriction</Type>
+                            <Config>True</Config>
+                        </Feature>
+                        <Feature>
+                            <Type>RateResultCount</Type>
+                            <Config>5</Config>
+                        </Feature>
+                    </ShipmentType>";
+
+                shipmentTypeFunctionality.AppendChild(newBestRateFunctionality);
+            }
 
             // Create the details
             TrialDetail trialDetail = new TrialDetail(xmlResponse, store);
