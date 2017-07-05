@@ -156,9 +156,11 @@
     <Compile Include="Content\OrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombiner.cs" />
     <Compile Include="Content\OrderCombinerActions\IOrderCombinerAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\IStoreSpecificOrderCombinerAction.cs" />
     <Compile Include="Content\OrderCombinerActions\MoveItemsAction.cs" />
     <Compile Include="Content\OrderCombinerActions\MoveNotesAction.cs" />
     <Compile Include="Content\OrderCombinerActions\MovePaymentDetailsAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\PlatformSpecificAction.cs" />
     <Compile Include="Content\OrderCombinerActions\SearchRecordCreationAction.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonOrderCombinerAction.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
@@ -263,6 +266,7 @@
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoRestProbe.cs" />
+    <Compile Include="Platforms\Magento\Content\MagentoOrderCombinerAction.cs" />
     <Compile Include="Platforms\Magento\IMagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoHttpRequestSubmitter.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
@@ -481,6 +485,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
