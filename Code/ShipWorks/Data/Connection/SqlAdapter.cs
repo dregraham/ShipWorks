@@ -173,7 +173,8 @@ namespace ShipWorks.Data.Connection
 
                 return new System.Transactions.TransactionScope(
                     System.Transactions.TransactionScopeOption.Required,
-                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout });
+                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout },
+                    System.Transactions.TransactionScopeAsyncFlowOption.Enabled);
             }
 
             return null;
@@ -703,41 +704,6 @@ namespace ShipWorks.Data.Connection
         /// Create a new SqlAdapter
         /// </summary>
         public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
-
-        /// <summary>
-        /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
-        /// Fetches the query specified on the adapter specified. Uses the TEntity type to
-        /// produce an EntityCollection(Of TEntity) for the results to return
-        /// </summary>
-        public Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2 =>
-            (this as IDataAccessAdapter).FetchQueryAsync<T>(query);
-
-        //
-        // Summary:
-        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchScalar``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
-        //     Fetches a scalar value using the query specified, and returns this value typed
-        //     as TValue, using a cast. The query specified will be converted to a scalar query
-        //     prior to execution.
-        //
-        // Parameters:
-        //   adapter:
-        //     The adapter.
-        //
-        //   query:
-        //     The query.
-        //
-        // Type parameters:
-        //   TValue:
-        //     The type of the value to return.
-        //
-        // Returns:
-        //     the value to fetch
-        //
-        // Remarks:
-        //     Use nullable(Of T) for scalars which are a value type, to avoid crashes when
-        //     the scalar query returns a NULL value.
-        public Task<TValue> FetchScalarAsync<TValue>(DynamicQuery query) =>
-            (this as IDataAccessAdapter).FetchScalarAsync<TValue>(query);
 
         #endregion
 

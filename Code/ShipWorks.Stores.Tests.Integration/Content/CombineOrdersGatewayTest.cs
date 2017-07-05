@@ -4,6 +4,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -64,31 +65,44 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             Assert.False(await testObject.CanCombine(store, new[] { context.Order.OrderID }));
         }
 
-        [Fact]
-        public async Task CanCombine_ReturnTrue_WhenNotPrime()
+        [Theory]
+        [InlineData(AmazonMwsIsPrime.Yes, false)]
+        [InlineData(AmazonMwsIsPrime.No, true)]
+        [InlineData(AmazonMwsIsPrime.Unknown, false)]
+        public async Task CanCombine_QueriesPrime(AmazonMwsIsPrime isPrime, bool expected)
         {
             var testObject = context.Mock.Create<CombineOrdersGateway>();
 
-            //AmazonStoreEntity store = new AmazonStoreEntity();
-            //store.StoreTypeCode = StoreTypeCode.Amazon;
+            var store = Create.Store<AmazonStoreEntity>(StoreTypeCode.Amazon).Save();
 
-            Create.Order<AmazonOrderEntity>(context.Store, context.Customer)
-                .Set(x => x.IsPrime = 2)
+            var order = Create.Order<AmazonOrderEntity>(store, context.Customer)
+                .Set(x => x.IsPrime = (int) isPrime)
+                .Set(x => x.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.MFN)
                 .Save();
 
-            Assert.True(await testObject.CanCombine(context.Store, new []{ context.Order.OrderID }));
+            var result = await testObject.CanCombine(store, new[] {order.OrderID});
+
+            Assert.Equal(expected, result);
         }
 
-        //[Fact]
-        //public async Task CanCombine_ReturnFalse_WhenPrime()
-        //{
-        //    var testObject = context.Mock.Create<CombineOrdersGateway>();
+        [Theory]
+        [InlineData(AmazonMwsFulfillmentChannel.AFN, false)]
+        [InlineData(AmazonMwsFulfillmentChannel.MFN, true)]
+        [InlineData(AmazonMwsFulfillmentChannel.Unknown, false)]
+        public async Task CanCombine_QueriesAmazonFulfillment(AmazonMwsFulfillmentChannel isFulfillment, bool expected)
+        {
+            var testObject = context.Mock.Create<CombineOrdersGateway>();
 
-        //    var isPrime = Create.Order<AmazonOrderEntity>(context.Store, context.Customer)
-        //        .Set(x => x.IsPrime = 2)
-        //        .Save();
+            var store = Create.Store<AmazonStoreEntity>(StoreTypeCode.Amazon).Save();
 
-        //    Assert.True(await testObject.CanCombine(context.Store, new[] { context.Order.OrderID }));
-        //}
+            var order = Create.Order<AmazonOrderEntity>(store, context.Customer)
+                .Set(x => x.FulfillmentChannel = (int) isFulfillment)
+                .Set(x => x.IsPrime = (int) AmazonMwsIsPrime.No)
+                .Save();
+
+            var result = await testObject.CanCombine(store, new[] { order.OrderID });
+
+            Assert.Equal(expected, result);
+        }
     }
 }
