@@ -60,6 +60,28 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         }
 
         [Fact]
+        public async Task Combine_CopiesStoreSpecificData()
+        {
+            var store = Create.Store<MagentoStoreEntity>(StoreTypeCode.Magento).Save();
+            var order1 = Create.Order<MagentoOrderEntity>(store, context.Customer)
+                .Set(x => x.MagentoOrderID, 123)
+                .Save();
+            var order2 = Create.Order<MagentoOrderEntity>(store, context.Customer)
+                .Set(x => x.MagentoOrderID, 456)
+                .Save();
+
+            var testObject = context.Mock.Create<OrderCombiner>();
+
+            var result = await testObject.Combine(order1.OrderID, new IOrderEntity[] { order1, order2 }, "1234-C");
+
+            var newOrder = await GetOrder(result.Value);
+            Assert.IsAssignableFrom<IMagentoOrderEntity>(newOrder);
+
+            var magentoOrder = newOrder as IMagentoOrderEntity;
+            Assert.Equal(123, magentoOrder.MagentoOrderID);
+        }
+
+        [Fact]
         public async Task Combine_MovesItemsToNewOrder()
         {
             Modify.Order(context.Order)

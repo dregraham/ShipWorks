@@ -155,6 +155,11 @@
     <Compile Include="Content\OrderCombinationOrchestrator.cs" />
     <Compile Include="Content\OrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombiner.cs" />
+    <Compile Include="Content\OrderCombinerActions\IOrderCombinerAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\MoveItemsAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\MoveNotesAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\MovePaymentDetailsAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\SearchRecordCreationAction.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />

@@ -1,18 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content.OrderCombinerActions;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Content
@@ -26,12 +21,17 @@ namespace ShipWorks.Stores.Content
         private readonly IOrderManager orderManager;
         private readonly IDeletionService deletionService;
         readonly IConfigurationData configurationData;
+        readonly IEnumerable<IOrderCombinerAction> combinationActions;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderCombiner(IOrderManager orderManager, IDeletionService deletionService, IConfigurationData configurationData)
+        public OrderCombiner(IOrderManager orderManager,
+            IDeletionService deletionService,
+            IConfigurationData configurationData,
+            IEnumerable<IOrderCombinerAction> combinationActions)
         {
+            this.combinationActions = combinationActions;
             this.configurationData = configurationData;
             this.deletionService = deletionService;
             this.orderManager = orderManager;
@@ -49,16 +49,7 @@ namespace ShipWorks.Stores.Content
             {
                 using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
                 {
-                    OrderEntity combinedOrder = await orderManager.LoadOrderAsync(survivingOrderID, sqlAdapter).ConfigureAwait(false);
-
-                    combinedOrder.IsNew = true;
-                    combinedOrder.OrderID = 0;
-                    combinedOrder.ApplyOrderNumberPostfix("-C");
-
-                    foreach (IEntityFieldCore field in combinedOrder.Fields)
-                    {
-                        field.IsChanged = true;
-                    }
+                    OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, sqlAdapter);
 
                     bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
 
@@ -68,55 +59,48 @@ namespace ShipWorks.Stores.Content
                         return GenericResult.FromError<long>("Save failed");
                     }
 
-
-                    QueryFactory queryFactory = new QueryFactory();
-
-
-                    // Move items
-                    IRelationPredicateBucket itemsBucket = new RelationPredicateBucket(OrderItemFields.OrderID.In(orders.Select(x => x.OrderID)));
-                    await sqlAdapter.UpdateEntitiesDirectlyAsync(new OrderItemEntity { OrderID = combinedOrder.OrderID }, itemsBucket);
-
-
-                    // Move notes
-                    IRelationPredicateBucket notesBucket = new RelationPredicateBucket(NoteFields.EntityID.In(orders.Select(x => x.OrderID)));
-                    await sqlAdapter.UpdateEntitiesDirectlyAsync(new NoteEntity { EntityID = combinedOrder.OrderID }, notesBucket);
-                    DynamicQuery noteCountQuery = queryFactory.Note
-                        .Select(NoteFields.NoteID.Count())
-                        .Where(NoteFields.EntityID == combinedOrder.OrderID);
-
-                    combinedOrder.RollupNoteCount = await sqlAdapter.FetchScalarAsync<int>(noteCountQuery);
-
-
-                    // Move paymentDetails
-                    IRelationPredicateBucket paymentDetailsBucket = new RelationPredicateBucket(OrderPaymentDetailFields.OrderID.In(orders.Select(x => x.OrderID)));
-                    await sqlAdapter.UpdateEntitiesDirectlyAsync(new OrderPaymentDetailEntity { OrderID = combinedOrder.OrderID }, paymentDetailsBucket);
-
-
-                    // Delete
-                    foreach (IOrderEntity order in orders)
+                    foreach (IOrderCombinerAction action in combinationActions)
                     {
-                        deletionService.DeleteOrder(order.OrderID);
+                        await action.Perform(combinedOrder, orders, sqlAdapter).ConfigureAwait(false);
                     }
 
+                    DeleteOriginalOrders(orders);
 
-                    // Add search records
-                    IEnumerable<OrderSearchEntity> orderSearches = orders.Select(x => new OrderSearchEntity
-                    {
-                        OrderID = combinedOrder.OrderID,
-                        StoreID = x.StoreID,
-                        OrderNumber = x.OrderNumber,
-                        OrderNumberComplete = x.OrderNumberComplete
-                    });
-
-                    await sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
-
-
-
-                    await sqlAdapter.SaveEntityAsync(combinedOrder);
+                    await sqlAdapter.SaveEntityAsync(combinedOrder).ConfigureAwait(false);
 
                     sqlAdapter.Commit();
                     return GenericResult.FromSuccess(combinedOrder.OrderID);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Create the combined order from the surviving order id
+        /// </summary>
+        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, ISqlAdapter sqlAdapter)
+        {
+            OrderEntity combinedOrder = await orderManager.LoadOrderAsync(survivingOrderID, sqlAdapter).ConfigureAwait(false);
+
+            combinedOrder.IsNew = true;
+            combinedOrder.OrderID = 0;
+            combinedOrder.ApplyOrderNumberPostfix("-C");
+
+            foreach (IEntityFieldCore field in combinedOrder.Fields)
+            {
+                field.IsChanged = true;
+            }
+
+            return combinedOrder;
+        }
+
+        /// <summary>
+        /// Delete the original orders
+        /// </summary>
+        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders)
+        {
+            foreach (IOrderEntity order in orders)
+            {
+                deletionService.DeleteOrder(order.OrderID);
             }
         }
     }
