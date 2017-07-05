@@ -65,11 +65,26 @@ namespace ShipWorks.Stores.Content
             IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
             IPredicate andWherePredicate = ShipmentFields.Processed == true;
 
-            if (store.TypeCode == (int)StoreTypeCode.Amazon)
+            if (store.TypeCode == (int) StoreTypeCode.Amazon)
             {
                 shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("AmazonOrderEntity"));
                 orPredicate = orPredicate.Or(AmazonOrderFields.IsPrime.In((int)AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
                     .Or(AmazonOrderFields.FulfillmentChannel.In((int)AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
+            }
+
+            if (store.TypeCode == (int) StoreTypeCode.Ebay)
+            {
+                shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("EbayOrderEntity"));
+                orPredicate = orPredicate.Or(EbayOrderFields.GspEligible == true);
+            }
+
+            if (store.TypeCode == (int) StoreTypeCode.ChannelAdvisor)
+            {
+                shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("ChannelAdvisorOrderEntity"))
+                    .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
+                    .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation("ChannelAdvisorOrderItemEntity"));
+                orPredicate = orPredicate.Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                    .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
             }
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
