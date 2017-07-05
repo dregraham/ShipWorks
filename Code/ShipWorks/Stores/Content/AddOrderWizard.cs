@@ -445,7 +445,7 @@ namespace ShipWorks.Stores.Content
                     {
                         try
                         {
-                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter, true).CustomerID;
                         }
                         catch (CustomerAcquisitionLockException)
                         {

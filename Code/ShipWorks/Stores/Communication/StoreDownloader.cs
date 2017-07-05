@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
@@ -16,11 +17,13 @@ using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
@@ -36,17 +39,19 @@ namespace ShipWorks.Stores.Communication
     public abstract class StoreDownloader
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
-
-        StoreEntity store;
-        IProgressReporter progress;
-        long downloadLogID;
+        private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
+        private readonly StoreEntity store;
+        private IProgressReporter progress;
+        private long downloadLogID;
         protected DbConnection connection;
-
-        StoreType storeType;
-
-        int quantitySaved = 0;
-        int quantityNew = 0;
+        private readonly StoreType storeType;
+        private int quantitySaved = 0;
+        private int quantityNew = 0;
+        private readonly IConfigurationEntity config;
+        private string orderStatusText = string.Empty;
+        private string itemStatusText = string.Empty;
+        private bool orderStatusHasTokens = false;
+        private bool itemStatusHasTokens = false;
 
         /// <summary>
         /// Constructor
@@ -67,6 +72,7 @@ namespace ShipWorks.Stores.Communication
 
             this.store = store;
             this.storeType = storeType;
+            config = ConfigurationData.FetchReadOnly();
         }
 
         /// <summary>
@@ -146,6 +152,11 @@ namespace ShipWorks.Stores.Communication
             {
                 throw new InvalidOperationException("Download should only be called once per instance.");
             }
+
+            orderStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.Order).StatusText;
+            itemStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.OrderItem).StatusText;
+            orderStatusHasTokens = TemplateTokenProcessor.HasTokens(orderStatusText);
+            itemStatusHasTokens = TemplateTokenProcessor.HasTokens(itemStatusText);
 
             this.progress = progress;
             this.downloadLogID = downloadLogID;
@@ -254,7 +265,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (orderIdentifier == null)
             {
-                throw new ArgumentNullException("orderIdentifier");
+                throw new ArgumentNullException(nameof(orderIdentifier));
             }
 
             // Try to find an existing order
@@ -262,7 +273,7 @@ namespace ShipWorks.Stores.Communication
 
             if (order != null)
             {
-                log.InfoFormat("Found existing {0}", orderIdentifier);
+                log.Debug($"Found existing {orderIdentifier}");
 
                 ShippingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
@@ -274,7 +285,7 @@ namespace ShipWorks.Stores.Communication
             }
             else
             {
-                log.InfoFormat("{0} not found, creating", orderIdentifier);
+                log.Debug($"{orderIdentifier} not found, creating");
 
                 // Create a new order
                 order = storeType.CreateOrder();
@@ -338,6 +349,7 @@ namespace ShipWorks.Stores.Communication
                 }
                 else
                 {
+                    OrderUtility.PopulateOrderDetails(order);
                     return order;
                 }
             }
@@ -471,232 +483,343 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        protected virtual void SaveDownloadedOrder(OrderEntity order)
+        protected virtual async void SaveDownloadedOrder(OrderEntity order)
         {
             using (DbTransaction transaction = connection.BeginTransaction())
             {
-                SaveDownloadedOrder(order, transaction);
+                await SaveDownloadedOrder(order, transaction);
             }
         }
 
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
-        protected virtual void SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
+        protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-
             if (order == null)
             {
                 throw new ArgumentNullException("order");
             }
 
-            // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
-            bool isOrderNew = order.IsNew;
-
-            ConfigurationEntity config = ConfigurationData.Fetch();
-
-            string orderStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.Order).StatusText;
-            string itemStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.OrderItem).StatusText;
-
-            bool orderStatusHasTokens = TemplateTokenProcessor.HasTokens(orderStatusText);
-            bool itemStatusHasTokens = TemplateTokenProcessor.HasTokens(itemStatusText);
-
-            List<OrderItemEntity> newOrderItems = order.OrderItems.Where(i => i.IsNew).ToList();
-
-            // Update the address casing of the order
-            if (config.AddressCasing)
+            using (new LoggedStopwatch(log, $"SaveDownloadedOrder: {order.OrderNumber}"))
             {
-                ApplyAddressCasing(order);
-            }
-
-            // if the downloaders specified they parsed the name, also put the name in the unparsed field
-            PersonAdapter ship = new PersonAdapter(order, "Ship");
-            PersonAdapter bill = new PersonAdapter(order, "Bill");
-
-            if (ship.NameParseStatus == PersonNameParseStatus.Simple)
-            {
-                ship.UnparsedName = new PersonName(ship.FirstName, ship.MiddleName, ship.LastName).FullName;
-            }
-
-            if (bill.NameParseStatus == PersonNameParseStatus.Simple)
-            {
-                bill.UnparsedName = new PersonName(bill.FirstName, bill.MiddleName, bill.LastName).FullName;
-            }
-
-            // We have to get this order's identifier
-            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(order);
-
-            // Now we have to see if it was new
-            bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
-
-            ResetAddressIfRequired(isOrderNew, order, transaction);
-
-            // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
-            using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
-            {
-                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
+                // Update the address casing of the order
+                if (config.AddressCasing)
                 {
-                    // Get the customer
-                    if (isOrderNew)
+                    ApplyAddressCasing(order);
+                }
+
+                // if the downloaders specified they parsed the name, also put the name in the unparsed field
+                PersonAdapter ship = new PersonAdapter(order, "Ship");
+                PersonAdapter bill = new PersonAdapter(order, "Bill");
+
+                if (ship.NameParseStatus == PersonNameParseStatus.Simple)
+                {
+                    ship.UnparsedName = new PersonName(ship.FirstName, ship.MiddleName, ship.LastName).FullName;
+                }
+
+                if (bill.NameParseStatus == PersonNameParseStatus.Simple)
+                {
+                    bill.UnparsedName = new PersonName(bill.FirstName, bill.MiddleName, bill.LastName).FullName;
+                }
+
+                // We have to get this order's identifier
+                OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(order);
+
+                // Now we have to see if it was new
+                Task<bool> alreadyDownloaded = Task.Run(() => HasDownloadHistory(orderIdentifier));
+
+                ResetAddressIfRequired(order.IsNew, order, transaction);
+
+                // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
+                using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
+                {
+                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
-                        try
+                        if (order.IsNew)
                         {
-                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                            SaveNewOrder(order, adapter);
                         }
-                        catch (CustomerAcquisitionLockException)
+                        else
                         {
-                            throw new DownloadException(
-                                "ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
-                        }
-                    }
-
-                    // Protect payment details
-                    foreach (OrderPaymentDetailEntity detail in order.OrderPaymentDetails)
-                    {
-                        if (detail.IsNew)
-                        {
-                            PaymentDetailSecurity.Protect(detail);
-                        }
-                    }
-
-                    // Apply default status to order.  If tokenized, it has to be done after the save.
-                    // Don't overwrite it if its already set.
-                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
-                    {
-                        order.LocalStatus = orderStatusText;
-                    }
-
-                    // Apply default status to items.  If tokenized, it has to be done after the save.
-                    if (!itemStatusHasTokens)
-                    {
-                        foreach (OrderItemEntity item in newOrderItems)
-                        {
-                            // Don't overwrite what the downloader set
-                            if (string.IsNullOrEmpty(item.LocalStatus))
-                            {
-                                item.LocalStatus = itemStatusText;
-                            }
-                        }
-                    }
-
-                    // If it's new and LastModified isn't set, use the date
-                    if (isOrderNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
-                    {
-                        order.OnlineLastModified = order.OrderDate;
-                    }
-
-                    // Calculate or verify the order total
-                    VerifyOrderTotal(order);
-
-                    try
-                    {
-                        // Save the order so we can get its OrderID
-                        adapter.SaveAndRefetch(order);
-                    }
-                    catch (ORMQueryExecutionException ex)
-                        when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new DownloadException(
-                            $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
-                            "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
-                    }
-
-                    // Update the note counts
-                    NoteManager.AdjustNoteCount(adapter, order.OrderID, order.Notes.Select(n => n.IsNew).Count());
-
-                    // Apply default order status, if it contained tokens it has to be after the save.  Don't overwrite what the downloader set.
-                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && orderStatusHasTokens)
-                    {
-                        order.LocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
-                        adapter.SaveAndRefetch(order);
-                    }
-
-                    // Apply default item status, if it contained token it has to be after the save and out of the transaction.
-                    if (itemStatusHasTokens)
-                    {
-                        foreach (OrderItemEntity item in newOrderItems)
-                        {
-                            // Don't overwrite what the downloader set
-                            if (string.IsNullOrEmpty(item.LocalStatus))
-                            {
-                                item.LocalStatus = TemplateTokenProcessor.ProcessTokens(itemStatusText, item.OrderItemID);
-                                adapter.SaveAndRefetch(item);
-                            }
-                        }
-                    }
-
-                    // Everything has been set on the order, so calculate the hash key
-                    OrderUtility.PopulateOrderDetails(order, adapter);
-                    OrderUtility.UpdateShipSenseHashKey(order);
-                    adapter.SaveAndRefetch(order);
-
-                    // Update unprocessed shipment addresses if the order address has changed
-                    if (!isOrderNew)
-                    {
-                        AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = ShippingAddressBeforeDownload != newShippingAddress;
-                        if (shippingAddressChanged)
-                        {
-                            SetAddressValidationStatus(order, "Ship", adapter);
-                            adapter.SaveAndRefetch(order);
-
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, ShippingAddressBeforeDownload, newShippingAddress);
+                            SaveExistingOrder(order, adapter);
                         }
 
-                        // Update the customer's addresses if necessary
-                        AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = BillingAddressBeforeDownload != newBillingAddress;
+                        // TODO:  This Wait() should probably be moved outside the transaction!!!
+                        await alreadyDownloaded;
+                        log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded.Result ? "not " : "");
 
-                        if (billingAddressChanged)
-                        {
-                            SetAddressValidationStatus(order, "Bill", adapter);
-                            adapter.SaveAndRefetch(order);
-                        }
+                        // Log this download
+                        AddToDownloadHistory(order.OrderID, orderIdentifier, alreadyDownloaded.Result, adapter);
 
-                        // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
-                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
-                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
-                        {
-                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
-                            if (existingCustomer != null)
-                            {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, BillingAddressBeforeDownload, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, ShippingAddressBeforeDownload, "Ship");
+                        // Dispatch the order downloaded action
+                        ActionDispatcher.DispatchOrderDownloaded(order.OrderID, store.StoreID, !alreadyDownloaded.Result, adapter);
 
-                                adapter.SaveEntity(existingCustomer);
-                            }
-                        }
+                        adapter.Commit();
                     }
-                    else
-                    {
-                        SetAddressValidationStatus(order, "Ship", adapter);
-                        SetAddressValidationStatus(order, "Bill", adapter);
-                        adapter.SaveAndRefetch(order);
-                    }
+                }
 
-                    log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
+                quantitySaved++;
 
-                    // Log this download
-                    AddToDownloadHistory(order, orderIdentifier, alreadyDownloaded, adapter);
-
-                    // Dispatch the order downloaded action
-                    ActionDispatcher.DispatchOrderDownloaded(order, !alreadyDownloaded, adapter);
-
-                    adapter.Commit();
+                if (!alreadyDownloaded.Result)
+                {
+                    quantityNew++;
                 }
             }
 
-            quantitySaved++;
+        }
 
-            if (!alreadyDownloaded)
+        /// <summary>
+        /// Save a new order
+        /// </summary>
+        private void SaveNewOrder(OrderEntity order, SqlAdapter adapter)
+        {
+            if (!order.IsNew)
             {
-                quantityNew++;
+                SaveExistingOrder(order, adapter);
+                return;
             }
 
-            log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+            // Start getting the customer asynchronously since we don't need it until right before we save.
+            Task<CustomerEntity> getCustomerTask = Task.Run(() =>
+            {
+                try
+                {
+                    return CustomerProvider.AcquireCustomer(order, storeType, adapter, true);
+                }
+                catch (CustomerAcquisitionLockException)
+                {
+                    throw new DownloadException(
+                        "ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
+                }
+            });
+
+            // Protect payment details
+            foreach (OrderPaymentDetailEntity detail in order.OrderPaymentDetails)
+            {
+                if (detail.IsNew)
+                {
+                    PaymentDetailSecurity.Protect(detail);
+                }
+            }
+
+            // Apply default status to order.  If tokenized, it has to be done after the save.
+            // Don't overwrite it if its already set.
+            if (string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
+            {
+                order.LocalStatus = orderStatusText;
+            }
+
+            // Apply default status to items.  If tokenized, it has to be done after the save.
+            if (!itemStatusHasTokens)
+            {
+                foreach (OrderItemEntity item in order.OrderItems)
+                {
+                    // Don't overwrite what the downloader set
+                    if (string.IsNullOrEmpty(item.LocalStatus))
+                    {
+                        item.LocalStatus = itemStatusText;
+                    }
+                }
+            }
+
+            // If it's new and LastModified isn't set, use the date
+            if (!order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
+            {
+                order.OnlineLastModified = order.OrderDate;
+            }
+
+            // Calculate or verify the order total
+            VerifyOrderTotal(order);
+
+            OrderUtility.UpdateShipSenseHashKey(order);
+
+            SetAddressValidationStatus(order, true, "Ship", adapter);
+            SetAddressValidationStatus(order, true, "Bill", adapter);
+
+            // Wait for the customer to be found or created
+            getCustomerTask.Wait();
+            CustomerEntity customer = getCustomerTask.Result;
+
+            // Update the note counts
+            AdjustNoteCount(order, customer);
+
+            try
+            {
+                order.CustomerID = customer.CustomerID;
+
+                // Save the order so we can get its OrderID
+                adapter.SaveEntity(order, false);
+            }
+            catch (ORMQueryExecutionException ex)
+                when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DownloadException(
+                    $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
+                    "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
+            }
+
+            bool orderChanged = false;
+            string tmpLocalStatus = string.Empty;
+
+            // Apply default order status, if it contained tokens it has to be after the save.  Don't overwrite what the downloader set.
+            if (orderStatusHasTokens && string.IsNullOrEmpty(order.LocalStatus))
+            {
+                tmpLocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
+                if (!order.LocalStatus.Equals(tmpLocalStatus, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    order.LocalStatus = tmpLocalStatus;
+                    orderChanged = true;
+                }
+            }
+
+            // Apply default item status, if it contained token it has to be after the save and out of the transaction.
+            if (itemStatusHasTokens)
+            {
+                foreach (OrderItemEntity item in order.OrderItems)
+                {
+                    // Don't overwrite what the downloader set
+                    if (string.IsNullOrEmpty(item.LocalStatus))
+                    {
+                        tmpLocalStatus = TemplateTokenProcessor.ProcessTokens(itemStatusText, item.OrderItemID);
+                        if (!item.LocalStatus.Equals(tmpLocalStatus, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            item.LocalStatus = tmpLocalStatus;
+                            orderChanged = true;
+                        }
+                    }
+                }
+            }
+
+            if (orderChanged)
+            {
+                adapter.SaveEntity(order);
+            }
+        }
+
+        /// <summary>
+        /// Save an existing order
+        /// </summary>
+        private void SaveExistingOrder(OrderEntity order, SqlAdapter adapter)
+        {
+            // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
+            bool isOrderNew = order.IsNew;
+
+            if (isOrderNew)
+            {
+                SaveNewOrder(order, adapter);
+                return;
+            }
+            
+            // Protect payment details
+            foreach (OrderPaymentDetailEntity detail in order.OrderPaymentDetails)
+            {
+                if (detail.IsNew)
+                {
+                    PaymentDetailSecurity.Protect(detail);
+                }
+            }
+            
+            // Calculate or verify the order total
+            VerifyOrderTotal(order);
+            
+            List<OrderItemEntity> newOrderItems = order.OrderItems.Where(i => i.IsNew).ToList();
+            
+            // Apply default item status, if it contained token it has to be after the save and out of the transaction.
+            if (itemStatusHasTokens)
+            {
+                foreach (OrderItemEntity item in newOrderItems)
+                {
+                    // Don't overwrite what the downloader set
+                    if (string.IsNullOrEmpty(item.LocalStatus))
+                    {
+                        item.LocalStatus = TemplateTokenProcessor.ProcessTokens(itemStatusText, item.OrderItemID);
+                    }
+                }
+            }
+            else
+            {
+                // Apply default status to items.  If tokenized, it has to be done after the save.
+                foreach (OrderItemEntity item in newOrderItems)
+                {
+                    // Don't overwrite what the downloader set
+                    if (string.IsNullOrEmpty(item.LocalStatus))
+                    {
+                        item.LocalStatus = itemStatusText;
+                    }
+                }
+            }
+
+            // Everything has been set on the order, so calculate the hash key
+            OrderUtility.UpdateShipSenseHashKey(order);
+
+            // Update unprocessed shipment addresses if the order address has changed
+            AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
+            bool shippingAddressChanged = ShippingAddressBeforeDownload != newShippingAddress;
+            if (shippingAddressChanged)
+            {
+                SetAddressValidationStatus(order, false, "Ship", adapter);
+                adapter.SaveAndRefetch(order);
+
+                ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, ShippingAddressBeforeDownload, newShippingAddress);
+            }
+
+            // Update the customer's addresses if necessary
+            AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
+            bool billingAddressChanged = BillingAddressBeforeDownload != newBillingAddress;
+
+            if (billingAddressChanged)
+            {
+                SetAddressValidationStatus(order, false, "Bill", adapter);
+            }
+
+            CustomerEntity customer = null;
+            // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
+            if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
+                || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
+            {
+                customer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
+                if (customer != null)
+                {
+                    UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, customer, BillingAddressBeforeDownload, "Bill");
+                    UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, customer, ShippingAddressBeforeDownload, "Ship");
+                }
+            }
+
+            // Update the note counts
+            customer = customer ?? new CustomerEntity(order.CustomerID) {IsNew = false};
+            AdjustNoteCount(order, customer);
+
+            adapter.SaveEntity(customer, false);
+            adapter.SaveEntity(order, true);
+        }
+
+        /// <summary>
+        /// Adjust the note counts on the order and customer
+        /// </summary>
+        private static void AdjustNoteCount(OrderEntity order, CustomerEntity customer)
+        {
+            int noteCount = order.IsNew ? order.Notes.Count : order.Notes.Count(n => n.IsNew);
+
+            if (order.IsNew)
+            {
+                order.RollupNoteCount = noteCount;
+            }
+            else
+            {
+                order.Fields[(int) OrderFieldIndex.RollupNoteCount].ExpressionToApply = OrderFields.RollupNoteCount + noteCount;
+                order.IsDirty = true;
+            }
+
+            if (customer.IsNew)
+            {
+                customer.RollupNoteCount = noteCount;
+            }
+            else
+            {
+                customer.Fields[(int) CustomerFieldIndex.RollupNoteCount].ExpressionToApply = CustomerFields.RollupNoteCount + noteCount;
+                customer.IsDirty = true;
+            }
         }
 
         /// <summary>
@@ -762,7 +885,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Sets the address validation status on the order, depending on the store settings
         /// </summary>
-        private void SetAddressValidationStatus(OrderEntity order, string prefix, SqlAdapter adapter)
+        private void SetAddressValidationStatus(OrderEntity order, bool isNewOrder, string prefix, SqlAdapter adapter)
         {
             AddressAdapter address = new AddressAdapter(order, prefix);
 
@@ -773,8 +896,11 @@ namespace ShipWorks.Stores.Communication
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
             address.AddressType = (int) AddressType.NotChecked;
-
-            ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
+            
+            if (!isNewOrder)
+            {
+                ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
+            }
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
             {
@@ -941,11 +1067,11 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Add the given order to the download history
         /// </summary>
-        private void AddToDownloadHistory(OrderEntity order, OrderIdentifier orderIdentifier, bool alreadyDownloaded, SqlAdapter adapter)
+        private void AddToDownloadHistory(long orderID, OrderIdentifier orderIdentifier, bool alreadyDownloaded, SqlAdapter adapter)
         {
             DownloadDetailEntity history = new DownloadDetailEntity();
             history.DownloadID = downloadLogID;
-            history.OrderID = order.OrderID;
+            history.OrderID = orderID;
             history.InitialDownload = !alreadyDownloaded;
 
             orderIdentifier.ApplyTo(history);
