@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Interapptive.Shared.Security;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -52,7 +48,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 EntityQuery<BigCommerceStoreEntity> query = new QueryFactory().BigCommerceStore
                      .Where(BigCommerceStoreFields.Identifier == string.Empty);
 
-                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<BigCommerceStoreEntity>(query).Result;
+                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync(query).Result;
                 foreach (BigCommerceStoreEntity store in stores.OfType<BigCommerceStoreEntity>())
                 {
                     identifier.Set(store);

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 namespace ShipWorks.Common.Threading
@@ -32,7 +29,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// The StackTrace from the thread that started the background operation that led up to the execution 
+        /// The StackTrace from the thread that started the background operation that led up to the execution
         /// of the background thread.
         /// </summary>
         public StackTrace InvokingThreadTrace

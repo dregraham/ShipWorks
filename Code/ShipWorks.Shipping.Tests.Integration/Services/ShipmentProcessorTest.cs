@@ -16,8 +16,8 @@ using Moq;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Core.Messaging;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -220,7 +220,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             Assert.False(shipment.Processed);
         }
-        
+
         [Fact]
         public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsProcessed()
         {

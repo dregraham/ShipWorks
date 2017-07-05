@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Interapptive.Shared.Security;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -48,7 +48,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 EntityQuery<ShopSiteStoreEntity> query = new QueryFactory().ShopSiteStore
                      .Where(ShopSiteStoreFields.Identifier == string.Empty);
 
-                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<ShopSiteStoreEntity>(query).Result;
+                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync(query).Result;
                 foreach (ShopSiteStoreEntity store in stores.OfType<ShopSiteStoreEntity>())
                 {
                     identifier.Set(store, store.ApiUrl);

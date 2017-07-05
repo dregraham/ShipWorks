@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -43,13 +44,13 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         {
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
-            sqlAdapter.Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+            sqlAdapter.Setup(x => x.FetchQueryAsync(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
                 .ReturnsAsync(mock.CreateMock<IEntityCollection2>().Object);
             var testObject = mock.Create<V_05_13_00_02>();
 
             testObject.Update();
 
-            sqlAdapter.Verify(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()));
+            sqlAdapter.Verify(x => x.FetchQueryAsync(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()));
         }
 
         [Fact]
@@ -61,7 +62,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
 
             mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create())
-                .Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+                .Setup(x => x.FetchQueryAsync(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
                 .ReturnsAsync(collection);
             var testObject = mock.Create<V_05_13_00_02>();
 
@@ -77,7 +78,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
             var collection = mock.CreateMock<IEntityCollection2>().Object;
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
-            sqlAdapter.Setup(x => x.FetchQueryAsync<ShopSiteStoreEntity>(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
+            sqlAdapter.Setup(x => x.FetchQueryAsync(It.IsAny<EntityQuery<ShopSiteStoreEntity>>()))
                 .ReturnsAsync(collection);
             var testObject = mock.Create<V_05_13_00_02>();
 

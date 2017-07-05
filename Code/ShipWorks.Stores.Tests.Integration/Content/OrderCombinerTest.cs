@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
     public class OrderCombinerTest : IDisposable
     {
         private readonly DataContext context;
-        private OrderEntity secondOrder;
+        private readonly OrderEntity secondOrder;
 
         public OrderCombinerTest(DatabaseFixture db)
         {
