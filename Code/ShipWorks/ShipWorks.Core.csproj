@@ -1321,6 +1321,7 @@
     <Compile Include="Stores\Content\IOrderCombiner.cs" />
     <Compile Include="Stores\Content\IOrderCombineValidator.cs" />
     <Compile Include="Stores\Content\IStoreSpecificOrderCombiner.cs" />
+    <Compile Include="Stores\Content\OrderCombineValidator.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />

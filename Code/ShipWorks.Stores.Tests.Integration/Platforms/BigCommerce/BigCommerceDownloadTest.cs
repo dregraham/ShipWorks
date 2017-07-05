@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                 var order = Create.Order(store, context.Customer)
                     .Set(x => x.OrderNumber, 100)
                     .Set(x => x.OrderDate, DateTime.UtcNow)
-                    .Save(); ;
+                    .Save();
 
                 var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
                 updater.UpdateOrderStatus(order.OrderID, BigCommerceConstants.OrderStatusCompleted);

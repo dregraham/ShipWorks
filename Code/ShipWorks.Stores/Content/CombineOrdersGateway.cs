@@ -48,5 +48,55 @@ namespace ShipWorks.Stores.Content
                 return GenericResult.FromError<IEnumerable<IOrderEntity>>(ex);
             }
         }
+		
+		        private readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        public CombineOrdersGateway(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
+        /// <summary>
+        /// Load information needed for combining the orders
+        /// </summary>
+        /// <remarks>
+        /// We should change the return type from IOrderEntity to an
+        /// actual projection class, depending on our needs
+        /// </remarks>
+        public GenericResult<IEnumerable<IOrderEntity>> LoadOrders(IEnumerable<long> orderIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Can the given orders be combined
+        /// </summary>
+        public async Task<bool> CanCombine(IStoreEntity store, IEnumerable<long> orderIDs)
+        {
+            EntityRelationBasedJoin shipmentsJoin = Joins.Left(OrderEntity.Relations.ShipmentEntityUsingOrderID);
+            IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
+            IPredicate andWherePredicate = ShipmentFields.Processed == true;
+
+            if (store.TypeCode == (int)StoreTypeCode.Amazon)
+            {
+                shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("AmazonOrderEntity"));
+                orPredicate.Or(AmazonOrderFields.IsPrime == (int)AmazonMwsIsPrime.Yes)
+                    .Or(AmazonOrderFields.FulfillmentChannel == (int)AmazonMwsFulfillmentChannel.AFN);
+            }
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                QueryFactory queryFactory = new QueryFactory();
+                var query = queryFactory.Create()
+                    .From(shipmentsJoin)
+                    .Select(OrderFields.OrderID.Count())
+                    .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
+                    .AndWhere(andWherePredicate
+                        .Or(orPredicate));
+                long invalidOrders = await sqlAdapter.FetchScalarAsync<long>(query);
+
+                return invalidOrders == 0;
+            }
+        }
     }
 }

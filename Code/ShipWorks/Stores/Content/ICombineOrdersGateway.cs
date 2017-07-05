@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Content
 {
@@ -18,5 +20,10 @@ namespace ShipWorks.Stores.Content
         /// actual projection class, depending on our needs
         /// </remarks>
         Task<GenericResult<IEnumerable<IOrderEntity>>> LoadOrders(IEnumerable<long> orderIDs);
+
+        /// <summary>
+        /// Can the given orders be combined
+        /// </summary>
+        Task<bool> CanCombine(IStoreEntity store, IEnumerable<long> orderIDs);
     }
 }

@@ -600,6 +600,7 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
+    <Compile Include="Stores\Content\Combine\OrderCombineValidatorTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsWebClientSettingsTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderItemEntityTest.cs" />
