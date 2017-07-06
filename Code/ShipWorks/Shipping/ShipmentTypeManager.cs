@@ -185,8 +185,7 @@ namespace ShipWorks.Shipping
         /// Determines whether [is stamps DHL] or [is endicia DHL] [the specified postal service].
         /// </summary>
         public static bool IsDhl(PostalServiceType postalService) =>
-            IsEndiciaDhl(postalService) || IsStampsDhl(postalService) ||
-            UspsUtility.IsInternationalDhlServiceType(postalService);
+            IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
 
         /// <summary>
         /// Determines whether [is DHL smart mail] [the specified postal service].
