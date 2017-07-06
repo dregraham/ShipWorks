@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -82,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </remarks>
         private void OnWeightChanged(object sender, EventArgs e)
         {
-            if (LoadedShipments.Count == 1)
+            if (LoadedShipments.IsCountEqualTo(1))
             {
                 foreach (Binding binding in weight.DataBindings.OfType<Binding>().Where(x => x.PropertyName == nameof(weight.Weight)))
                 {
