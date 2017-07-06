@@ -11,6 +11,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping
@@ -184,7 +185,8 @@ namespace ShipWorks.Shipping
         /// Determines whether [is stamps DHL] or [is endicia DHL] [the specified postal service].
         /// </summary>
         public static bool IsDhl(PostalServiceType postalService) =>
-            IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
+            IsEndiciaDhl(postalService) || IsStampsDhl(postalService) ||
+            UspsUtility.IsInternationalDhlServiceType(postalService);
 
         /// <summary>
         /// Determines whether [is DHL smart mail] [the specified postal service].
