@@ -284,7 +284,6 @@ namespace ShipWorks.ApplicationCore.Logging
                             return;
                         }
                     }
-
                 }
             }
             catch (Exception ex) when (ex is SecurityException || ex is DirectoryNotFoundException)
