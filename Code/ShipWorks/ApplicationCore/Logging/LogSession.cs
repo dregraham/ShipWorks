@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Logging
             logPath = Path.Combine(DataPath.LogRoot, DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + (!string.IsNullOrWhiteSpace(sessionName) ? " - " + sessionName : ""));
 
             // The thing gets initialized in the static contructor... this ensures it
-            DynamicQueryEngine.ArithAbortOn = DynamicQueryEngine.ArithAbortOn;
+            DynamicQueryEngine.ArithAbortOn = DynamicQueryEngine.ArithAbortOn ? true : false;
 
             // Prviate logging is not encrypted for interapptive users
             IsPrivateLoggingEncrypted = !InterapptiveOnly.IsInterapptiveUser;
@@ -265,21 +265,21 @@ namespace ShipWorks.ApplicationCore.Logging
                     return;
                 }
 
-                DateTime logDeletionDate = GetLogDeletionDate();
+                DateTime logExpirationDate = GetLogExpirationDate();
 
                 DirectoryInfo logRoot = new DirectoryInfo(DataPath.LogRoot);
 
                 // Look at each entry in the log directory
                 foreach (FileSystemInfo fsi in logRoot.GetFileSystemInfos())
                 {
-                    // Never delete the current
+                    // Never delete the current log entry
                     if (fsi.Name == new DirectoryInfo(LogFolder).Name)
                     {
                         continue;
                     }
 
                     // Deletes the log entry if the entry, and its contents, are out of date.
-                    CleanupLogEntry(fsi, logDeletionDate);
+                    CleanupLogEntry(fsi, logExpirationDate);
 
                     // Quit if we leave the idle state
                     if (!IdleWatcher.IsIdle)
@@ -295,29 +295,11 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Checks to see if the log entry is past the log deletion date and deletes the entry if it is
+        /// Checks to see if the log entry is past the log expiration date and deletes the entry if it is
         /// </summary>
-        private static void CleanupLogEntry(FileSystemInfo fsi, DateTime logDeletionDate)
+        private static void CleanupLogEntry(FileSystemInfo fsi, DateTime logExpirationDate)
         {
-            bool shouldDelete = false;
-            try
-            {
-                // Created far enough back to delete
-                if (fsi.CreationTimeUtc < logDeletionDate)
-                {
-                    shouldDelete = true;
-                }
-            }
-            catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true, CultureInfo.InvariantCulture))
-            {
-                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
-                // and continuing to delete the file, since it is most likely corrupt.
-                shouldDelete = true;
-                log.Error(
-                    "File or directory has an invalid Windows timestamp. ShipWorks will attempt to delete this, as it is likely corrupt.");
-            }
-
-            if (shouldDelete)
+            if (IsLogEntryExpired(fsi, logExpirationDate))
             {
                 try
                 {
@@ -325,7 +307,7 @@ namespace ShipWorks.ApplicationCore.Logging
                     DirectoryInfo di = fsi as DirectoryInfo;
                     if (di != null)
                     {
-                        CleanupDirectory(di, logDeletionDate, fsi);
+                        CleanupLogEntryChildren(di, logExpirationDate, fsi);
                     }
                     else
                     {
@@ -344,47 +326,86 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Checks if all of the directories contents are past the log deletion date and deletes the directory if they are
+        /// Determines if the log entry has expired
         /// </summary>
-        private static void CleanupDirectory(DirectoryInfo di, DateTime logDeletionDate, FileSystemInfo fsi)
+        private static bool IsLogEntryExpired(FileSystemInfo fsi, DateTime logExpirationDate)
         {
-            bool shouldDeleteDirectory = true;
+            bool isExpired = true;
+            try
+            {
+                // Created far enough back to delete
+                if (fsi.CreationTimeUtc >= logExpirationDate)
+                {
+                    isExpired = false;
+                }
+            }
+            catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
+                CultureInfo.InvariantCulture))
+            {
+                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // and continuing to delete the file, since it is most likely corrupt.
+                isExpired = true;
+                log.Error("File or directory has an invalid Windows timestamp. ShipWorks will attempt to delete it, " +
+                          "as it is likely corrupt.");
+            }
 
+            return isExpired;
+        }
+
+        /// <summary>
+        /// Checks if all of the directories contents are past the log expiration date and deletes the directory if they are
+        /// </summary>
+        private static void CleanupLogEntryChildren(DirectoryInfo di, DateTime logExpirationDate, FileSystemInfo fsi)
+        {
             foreach (FileSystemInfo childFsi in di.GetFileSystemInfos())
             {
-                try
+                // If any file in the folder has been written to in the proper amount of time, then dont delete the directory
+                if (!IsLogEntryChildExpired(childFsi, logExpirationDate))
                 {
-                    // If any file in the folder has been written to in the proper amount of time, then dont delete the directory
-                    if (childFsi.LastWriteTimeUtc >= logDeletionDate)
-                    {
-                        shouldDeleteDirectory = false;
-                    }
+                    return;
                 }
-                catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true, CultureInfo.InvariantCulture)) 
+            }
+            
+            log.InfoFormat("Deleting log '{0}'", fsi.Name);
+            Directory.Delete(fsi.FullName, true);
+        }
+
+        /// <summary>
+        /// Determines whether the given log entry child has expired
+        /// </summary>
+        private static bool IsLogEntryChildExpired(FileSystemInfo childFsi, DateTime logExpirationDate)
+        {
+            bool isExpired = true;
+            try
+            {
+                // The file is considered expired if it has not been modified since the expiration date (not created date)
+                if (childFsi.LastWriteTimeUtc >= logExpirationDate)
                 {
-                    // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
-                    // and continuing to delete the directory, since the file is most likely corrupt.
-                    log.Error("File found with an invalid Windows timestamp. ShipWorks will continue to check if this directory should be deleted.");
+                    isExpired = false;
                 }
+            }
+            catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
+                CultureInfo.InvariantCulture))
+            {
+                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // and continuing to delete the file, since it is most likely corrupt.
+                log.Error("File found with an invalid Windows timestamp. ShipWorks will continue " +
+                          "to check if this directory should be deleted.");
             }
 
-            if (shouldDeleteDirectory)
-            {
-                log.InfoFormat("Deleting log '{0}'", fsi.Name);
-                Directory.Delete(fsi.FullName, true);
-            }
+            return isExpired;
         }
 
         /// <summary>
         /// Gets the maximum date that logs are allowed to live, without ShipWorks trying to delete them
         /// </summary>
-        private static DateTime GetLogDeletionDate()
+        private static DateTime GetLogExpirationDate()
         {
-            DateTime deletionDate = DateTime.UtcNow - TimeSpan.FromDays(Options.MaxLogAgeDays);
+            DateTime expirationDate = DateTime.UtcNow - TimeSpan.FromDays(Options.MaxLogAgeDays);
 
             // Date a log must be to survive
-            log.InfoFormat("Deleting logs older than {0}.", deletionDate.ToLocalTime());
-            return deletionDate;
+            log.InfoFormat("Deleting logs older than {0}.", expirationDate.ToLocalTime());
+            return expirationDate;
         }
     }
 }
