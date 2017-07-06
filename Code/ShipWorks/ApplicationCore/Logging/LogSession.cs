@@ -273,19 +273,18 @@ namespace ShipWorks.ApplicationCore.Logging
                 foreach (FileSystemInfo fsi in logRoot.GetFileSystemInfos())
                 {
                     // Never delete the current log entry
-                    if (fsi.Name == new DirectoryInfo(LogFolder).Name)
+                    if (fsi.Name != new DirectoryInfo(LogFolder).Name)
                     {
-                        continue;
+                        // Deletes the log entry if the entry, and its contents, are out of date.
+                        CleanupLogEntry(fsi, logExpirationDate);
+
+                        // Quit if we leave the idle state
+                        if (!IdleWatcher.IsIdle)
+                        {
+                            return;
+                        }
                     }
 
-                    // Deletes the log entry if the entry, and its contents, are out of date.
-                    CleanupLogEntry(fsi, logExpirationDate);
-
-                    // Quit if we leave the idle state
-                    if (!IdleWatcher.IsIdle)
-                    {
-                        return;
-                    }
                 }
             }
             catch (Exception ex) when (ex is SecurityException || ex is DirectoryNotFoundException)
