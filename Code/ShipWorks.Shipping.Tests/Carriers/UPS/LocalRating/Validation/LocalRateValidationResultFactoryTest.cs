@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
         public void Create_GetsPassedLocalRateValidationResult_WhenNoDiscrepancies()
         {
             var testObject = mock.Create<LocalRateValidationResultFactory>();
-            var result = testObject.Create(new List<UpsLocalRateDiscrepancy>(), 1, () => { });
+            var result = testObject.Create(new List<UpsLocalRateDiscrepancy>(), null, () => { });
             Assert.IsType<SuccessfulLocalRateValidationResult>(result);
         }
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             };
 
             var testObject = mock.Create<LocalRateValidationResultFactory>();
-            var result = testObject.Create(discrepancies, 2, () => { });
+            var result = testObject.Create(discrepancies, null, () => { });
             Assert.IsType<FailedLocalRateValidationResult>(result);
         }
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             };
 
             var testObject = mock.Create<LocalRateValidationResultFactory>();
-            testObject.Create(discrepancies, 1, () => { });
+            testObject.Create(discrepancies, null, () => { });
 
             dialogIndex.Verify(i => i["UpsLocalRateDiscrepancyDialog"], Times.Once);
         }
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             Action snooze = () => { };
-            testObject.Create(discrepancies, 1, snooze);
+            testObject.Create(discrepancies, null, snooze);
             mock.Mock<IUpsLocalRateDiscrepancyViewModel>()
                 .VerifySet(m=>m.Snooze = snooze, Times.Once);
         }
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             var testObject = mock.Create<LocalRateValidationResultFactory>();
             Action snooze = () => { };
-            testObject.Create(discrepancies, 1, snooze);
+            testObject.Create(discrepancies, null, snooze);
             mock.Mock<IUpsLocalRateDiscrepancyViewModel>()
                 .VerifySet(m => m.Close = dialog.Object.Close, Times.Once);
         }

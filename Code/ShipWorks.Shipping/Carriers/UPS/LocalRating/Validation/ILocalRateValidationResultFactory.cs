@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
@@ -8,12 +9,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Creates a LocalRateValidationResult
         /// </summary>
-        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, int totalShipmentValidated, Action snooze);
+        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments, Action snooze);
 
         /// <summary>
         /// Creates a LocalRateValidationResult with the specified rate discrepancies.
         /// </summary>
         /// <param name="rateDiscrepancies">The rate discrepancies.</param>
-        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies);
+        /// <param name="shipments"></param>
+        ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments);
     }
 }
