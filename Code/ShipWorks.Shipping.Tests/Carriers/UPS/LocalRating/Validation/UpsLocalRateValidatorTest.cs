@@ -9,8 +9,6 @@ using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -56,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 0, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -72,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 0, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -88,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -107,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -126,7 +124,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -145,7 +143,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -165,7 +163,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             testObject.ValidateShipments(shipments);
 
             resultFactory.Verify(
-                r => r.Create(It.Is<IEnumerable<UpsLocalRateDiscrepancy>>(d => !d.Any()), 1, It.IsAny<Action>()),
+                r => r.Create(It.Is<IEnumerable<UpsLocalRateDiscrepancy>>(d => !d.Any()), shipments, It.IsAny<Action>()),
                 Times.Once);
         }
 
@@ -185,7 +183,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 1, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -208,7 +206,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 2), 2, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 2), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -231,7 +229,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), 2, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments, It.IsAny<Action>()), Times.Once());
         }
 
         [Fact]
@@ -254,7 +252,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateShipments(shipments);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), 2, It.IsAny<Action>()), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments, It.IsAny<Action>()), Times.Once());
         }
         
         [Fact]
@@ -319,7 +317,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments), Times.Once());
         }
 
         [Fact]
@@ -336,7 +334,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments), Times.Once());
         }
 
         [Fact]
@@ -363,7 +361,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments), Times.Once());
         }
 
         [Fact]
@@ -391,7 +389,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments), Times.Once());
         }
 
         [Fact]
@@ -419,7 +417,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments), Times.Once());
         }
 
         [Fact]
@@ -447,7 +445,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), shipments), Times.Once());
         }
 
         [Fact]
@@ -474,7 +472,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments), Times.Once());
         }
 
         [Fact]
@@ -505,7 +503,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 2)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 2), shipments), Times.Once());
         }
 
         [Fact]
@@ -536,7 +534,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1)), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments), Times.Once());
         }
 
         [Fact]
@@ -567,7 +565,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
 
             testObject.ValidateRecentShipments(account);
 
-            resultFactory.Verify(r => r.Create(It.Is<IEnumerable<UpsLocalRateDiscrepancy>>(d => !d.Any())), Times.Once());
+            resultFactory.Verify(r => r.Create(It.Is<IEnumerable<UpsLocalRateDiscrepancy>>(d => !d.Any()), shipments), Times.Once());
         }
 
         [Fact]
