@@ -71,14 +71,12 @@ namespace ShipWorks.Stores.Content
                 orPredicate = orPredicate.Or(AmazonOrderFields.IsPrime.In((int)AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
                     .Or(AmazonOrderFields.FulfillmentChannel.In((int)AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
             }
-
-            if (store.TypeCode == (int) StoreTypeCode.Ebay)
+            else if (store.TypeCode == (int) StoreTypeCode.Ebay)
             {
                 shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("EbayOrderEntity"));
                 orPredicate = orPredicate.Or(EbayOrderFields.GspEligible == true);
             }
-
-            if (store.TypeCode == (int) StoreTypeCode.ChannelAdvisor)
+            else if (store.TypeCode == (int) StoreTypeCode.ChannelAdvisor)
             {
                 shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("ChannelAdvisorOrderEntity"))
                     .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)

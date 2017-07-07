@@ -1,44 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.AddressValidation;
+using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.EntityInterfaces;
+using Moq;
 using Xunit;
 using ShipWorks.Stores.Content;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Tests.Stores.Content.Combine
 {
-    public class OrderCombineValidatorTest
+    public class OrderCombineValidatorTest : IDisposable
     {
-        [Fact]
-        public void GetValidate_Success()
+        private AutoMock mock;
+        private OrderCombineValidator testObject;
+
+        public OrderCombineValidatorTest()
         {
-            var validate = new OrderCombineValidator();
-            /*  IF the combination orders are from the same store.
-             * AND the combination orders are not processed.
-             * AND the combination orders are not prime. 
-             */
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<OrderCombineValidator>();
+
+            mock.Mock<ISecurityContext>()
+                .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
+                .Returns(true);
         }
 
         [Fact]
-        public void GetValidate_Failure_Processed()
+        public void Validate_ReturnSuccess_WhenOrderCountIsGreaterThaOne()
         {
-            var validate = new OrderCombineValidator();
-            /*  IF the combination orders are from the same store.
-             * AND the combination orders are processed.
-             * AND the combination orders are not prime. 
-             */
+            var result = testObject.Validate(new long[] { 1, 2 });
+            Assert.True(result.Success);
         }
 
         [Fact]
-        public void GetValidate_Failure_isPrimeShipment()
+        public void Validate_ReturnFailure_WhenOrderCountIsLessThanTwo()
         {
-            var validate = new OrderCombineValidator();
-            /*  IF the combination orders are from the same store.
-             * AND the combination orders are not processed.
-             * AND the combination orders are prime. 
-             */
+            var result = testObject.Validate(new long[] { 1 });
+            Assert.False(result.Success);
+        }
+
+        [Fact]
+        public void Validate_ReturnFailure_WhenUserDoesNotHavePermission()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
+                .Returns(false);
+
+            var testObject = mock.Create<OrderCombineValidator>();
+            var result = testObject.Validate(new long[] { 1, 2 });
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void Validate_ReturnFalse_WhenOrderCanNotBeCombined()
+        {
+            mock.Mock<ICombineOrdersGateway>()
+                .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
+                .ReturnsAsync(false);
+
+            var testObject = mock.Create<OrderCombineValidator>();
+            var result = testObject.Validate(new long[] { 1, 2 });
+
+            Assert.False(result.Success);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
