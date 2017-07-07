@@ -14,11 +14,14 @@ namespace ShipWorks.ApplicationCore.Interaction
 
         OneOrder,
         OneOrMoreOrders,
+        TwoOrMoreOrders,
 
         OneCustomer,
         OneOrMoreCustomers,
 
         OneRow,
-        OneOrMoreRows
+        OneOrMoreRows,
+
+        AppliesFunction
     }
 }

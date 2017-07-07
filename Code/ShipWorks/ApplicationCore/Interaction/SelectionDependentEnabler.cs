@@ -5,17 +5,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data.Grid;
 using ShipWorks.Filters;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
+
+    public struct SelectionDependentEntry
+    {
+        public SelectionDependentType SelectionDependentType;
+        public Func<IEnumerable<long>, bool> Applies;
+    }
+
     /// <summary>
     /// Provides design-time declarative UI state management for menu and buttons
     /// </summary>
     [ProvideProperty("EnabledWhen", typeof(Component))]
     public partial class SelectionDependentEnabler : Component, IExtenderProvider
     {
-        Dictionary<Component, SelectionDependentType> componentMap = new Dictionary<Component, SelectionDependentType>();
+        Dictionary<Component, SelectionDependentEntry> componentMap = new Dictionary<Component, SelectionDependentEntry>();
 
         /// <summary>
         /// Constructor
@@ -64,20 +72,48 @@ namespace ShipWorks.ApplicationCore.Interaction
         [EditorBrowsable(EditorBrowsableState.Never)]
         public SelectionDependentType GetEnabledWhen(Component component)
         {
-            SelectionDependentType state;
-            if (!componentMap.TryGetValue(component, out state))
+            SelectionDependentEntry selectionDependentEntry;
+            if (!componentMap.TryGetValue(component, out selectionDependentEntry))
             {
                 return SelectionDependentType.Ignore;
             }
 
-            return state;
+            return selectionDependentEntry.SelectionDependentType;
         }
+
+        ///// <summary>
+        ///// Necessary piece of the extender provider plumbing
+        ///// </summary>
+        //[EditorBrowsable(EditorBrowsableState.Never)]
+        //public void SetEnabledWhen(Component component, SelectionDependentType state)
+        //{
+        //    if (!CanExtend(component))
+        //    {
+        //        throw new ArgumentException("The object type is not supported by the ExtenderProvider.", "component");
+        //    }
+
+        //    if (state == SelectionDependentType.Ignore)
+        //    {
+        //        componentMap.Remove(component);
+
+        //        // Now that we are ignoring it, make sure it's enabled
+        //        EnableComponent(component, true);
+        //    }
+        //    else
+        //    {
+        //        componentMap[component] = new SelectionDependentEntry()
+        //        {
+        //            SelectionDependentType = state,
+        //            Applies = null
+        //        };
+        //    }
+        //}
 
         /// <summary>
         /// Necessary piece of the extender provider plumbing
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void SetEnabledWhen(Component component, SelectionDependentType state)
+        public void SetEnabledWhen(Component component, SelectionDependentType state, Func<IEnumerable<long>, bool> applies = null)
         {
             if (!CanExtend(component))
             {
@@ -93,33 +129,40 @@ namespace ShipWorks.ApplicationCore.Interaction
             }
             else
             {
-                componentMap[component] = state;
+                componentMap[component] = new SelectionDependentEntry()
+                {
+                    SelectionDependentType = state,
+                    Applies = applies
+                };
             }
         }
 
         /// <summary>
         /// Update the command state based on the selection state of the given grid control
         /// </summary>
-        public void UpdateCommandState(int selectionCount, FilterTarget target)
+        public void UpdateCommandState(IGridSelection selection, FilterTarget target)
         {
-            bool oneOrder = target == FilterTarget.Orders && selectionCount == 1;
-            bool oneOrMoreOrders = target == FilterTarget.Orders && selectionCount > 0;
+            bool oneOrder = target == FilterTarget.Orders && selection.Count == 1;
+            bool oneOrMoreOrders = target == FilterTarget.Orders && selection.Count > 0;
+            bool twoOrMoreOrders = target == FilterTarget.Orders && selection.Count > 1;
 
-            bool oneCustomer = target == FilterTarget.Customers && selectionCount == 1;
-            bool oneOrMoreCustomers = target == FilterTarget.Customers && selectionCount > 0;
+            bool oneCustomer = target == FilterTarget.Customers && selection.Count == 1;
+            bool oneOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 0;
+            bool twoOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 1;
 
             // Go through each registered component
-            foreach (KeyValuePair<Component, SelectionDependentType> entry in componentMap)
+            foreach (KeyValuePair<Component, SelectionDependentEntry> entry in componentMap)
             {
+                Component component = entry.Key;
+                SelectionDependentType selectionDependentType = entry.Value.SelectionDependentType;
+
                 // Skip any that are being updated manually
-                if (entry.Value == SelectionDependentType.Ignore)
+                if (entry.Value.SelectionDependentType == SelectionDependentType.Ignore)
                 {
                     continue;
                 }
 
-                Component component = entry.Key;
-
-                switch (entry.Value)
+                switch (selectionDependentType)
                 {
                     case SelectionDependentType.OneOrder:
                         EnableComponent(component, oneOrder);
@@ -127,6 +170,10 @@ namespace ShipWorks.ApplicationCore.Interaction
 
                     case SelectionDependentType.OneOrMoreOrders:
                         EnableComponent(component, oneOrMoreOrders);
+                        break;
+
+                    case SelectionDependentType.TwoOrMoreOrders:
+                        EnableComponent(component, twoOrMoreOrders || twoOrMoreCustomers);
                         break;
 
                     case SelectionDependentType.OneCustomer:
@@ -143,6 +190,13 @@ namespace ShipWorks.ApplicationCore.Interaction
 
                     case SelectionDependentType.OneOrMoreRows:
                         EnableComponent(component, oneOrMoreOrders || oneOrMoreCustomers);
+                        break;
+
+                    case SelectionDependentType.AppliesFunction:
+                        if (entry.Value.Applies != null)
+                        {
+                            EnableComponent(component, entry.Value.Applies(selection.Keys));
+                        }
                         break;
                 }
             }
