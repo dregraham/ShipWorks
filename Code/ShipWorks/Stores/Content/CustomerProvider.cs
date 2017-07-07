@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Creates or loads a customer record based on configuration and the specified order.
         /// </summary>
-        public static CustomerEntity AcquireCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter, bool persist)
+        public static CustomerEntity AcquireCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
         {
             CustomerEntity customer = null;
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Content
                 {
                     log.InfoFormat("  Creating new customer.");
 
-                    customer = CreateCustomer(order, adapter, persist);
+                    customer = CreateCustomer(order, adapter);
                 }
                 // We found it, we may need to update it
                 else
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create a new customer record based on the properties of the order
         /// </summary>
-        private static CustomerEntity CreateCustomer(OrderEntity order, SqlAdapter adapter, bool persist)
+        private static CustomerEntity CreateCustomer(OrderEntity order, SqlAdapter adapter)
         {
             CustomerEntity customer = new CustomerEntity();
 
@@ -321,10 +321,7 @@ namespace ShipWorks.Stores.Content
             customer.RollupOrderTotal = 0;
             customer.RollupNoteCount = 0;
 
-            if (persist)
-            {
-                adapter.SaveEntity(customer);
-            }
+            adapter.SaveEntity(customer);
 
             return customer;
         }

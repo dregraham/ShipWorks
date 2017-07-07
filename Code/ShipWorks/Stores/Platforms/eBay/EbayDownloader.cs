@@ -317,30 +317,26 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 affectedOrders.Add(affectedOrder);
             }
 
-            // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
-            using (CreateOrderAuditScope(order))
+            SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
+
+            sqlDeadlockRetry.ExecuteWithRetry(() =>
             {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
-
-                sqlDeadlockRetry.ExecuteWithRetry(() =>
+                using (DbTransaction transaction = connection.BeginTransaction())
                 {
-                    using (DbTransaction transaction = connection.BeginTransaction())
+                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
-                        using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
-                        {
-                            // Save the new order
-                            SaveDownloadedOrder(order, transaction);
+                        // Save the new order
+                        SaveDownloadedOrder(order, transaction);
 
-                            // Remove the abandoned items
-                            DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
+                        // Remove the abandoned items
+                        DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
 
-                            // Copy Notes, Shipments from affected orders into the combined order
-                            // delete the affected orders
-                            ConsolidateOrderResources(order, affectedOrders, adapter);
-                        }
+                        // Copy Notes, Shipments from affected orders into the combined order
+                        // delete the affected orders
+                        ConsolidateOrderResources(order, affectedOrders, adapter);
                     }
-                });
-            }
+                }
+            });
         }
 
         /// <summary>

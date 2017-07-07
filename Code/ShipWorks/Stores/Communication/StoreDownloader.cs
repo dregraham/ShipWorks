@@ -483,57 +483,56 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        protected virtual async void SaveDownloadedOrder(OrderEntity order)
+        protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
             using (DbTransaction transaction = connection.BeginTransaction())
             {
-                await SaveDownloadedOrder(order, transaction);
+                SaveDownloadedOrder(order, transaction);
             }
         }
 
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
+        protected virtual void SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
             if (order == null)
             {
                 throw new ArgumentNullException("order");
             }
 
-            using (new LoggedStopwatch(log, $"SaveDownloadedOrder: {order.OrderNumber}"))
+            try
             {
-                // Update the address casing of the order
-                if (config.AddressCasing)
+                using (new LoggedStopwatch(log, $"SaveDownloadedOrder: {order.OrderNumber}"))
                 {
-                    ApplyAddressCasing(order);
-                }
+                    // Update the address casing of the order
+                    if (config.AddressCasing)
+                    {
+                        ApplyAddressCasing(order);
+                    }
 
-                // if the downloaders specified they parsed the name, also put the name in the unparsed field
-                PersonAdapter ship = new PersonAdapter(order, "Ship");
-                PersonAdapter bill = new PersonAdapter(order, "Bill");
+                    // if the downloaders specified they parsed the name, also put the name in the unparsed field
+                    PersonAdapter ship = new PersonAdapter(order, "Ship");
+                    PersonAdapter bill = new PersonAdapter(order, "Bill");
 
-                if (ship.NameParseStatus == PersonNameParseStatus.Simple)
-                {
-                    ship.UnparsedName = new PersonName(ship.FirstName, ship.MiddleName, ship.LastName).FullName;
-                }
+                    if (ship.NameParseStatus == PersonNameParseStatus.Simple)
+                    {
+                        ship.UnparsedName = new PersonName(ship.FirstName, ship.MiddleName, ship.LastName).FullName;
+                    }
 
-                if (bill.NameParseStatus == PersonNameParseStatus.Simple)
-                {
-                    bill.UnparsedName = new PersonName(bill.FirstName, bill.MiddleName, bill.LastName).FullName;
-                }
+                    if (bill.NameParseStatus == PersonNameParseStatus.Simple)
+                    {
+                        bill.UnparsedName = new PersonName(bill.FirstName, bill.MiddleName, bill.LastName).FullName;
+                    }
 
-                // We have to get this order's identifier
-                OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(order);
+                    // We have to get this order's identifier
+                    OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(order);
 
-                // Now we have to see if it was new
-                Task<bool> alreadyDownloaded = Task.Run(() => HasDownloadHistory(orderIdentifier));
+                    // Now we have to see if it was new
+                    Task<bool> alreadyDownloaded = Task.Run(() => HasDownloadHistory(orderIdentifier));
 
-                ResetAddressIfRequired(order.IsNew, order, transaction);
+                    ResetAddressIfRequired(order.IsNew, order, transaction);
 
-                // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
-                using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
-                {
                     using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
                         if (order.IsNew)
@@ -545,8 +544,7 @@ namespace ShipWorks.Stores.Communication
                             SaveExistingOrder(order, adapter);
                         }
 
-                        // TODO:  This Wait() should probably be moved outside the transaction!!!
-                        await alreadyDownloaded;
+                        alreadyDownloaded.Wait();
                         log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded.Result ? "not " : "");
 
                         // Log this download
@@ -557,21 +555,26 @@ namespace ShipWorks.Stores.Communication
 
                         adapter.Commit();
                     }
-                }
 
-                quantitySaved++;
+                    quantitySaved++;
 
-                if (!alreadyDownloaded.Result)
-                {
-                    quantityNew++;
+                    if (!alreadyDownloaded.Result)
+                    {
+                        quantityNew++;
+                    }
                 }
             }
-
+            catch (AggregateException ae)
+            {
+                throw ae.InnerException ?? ae;
+            }
         }
 
         /// <summary>
         /// Save a new order
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         private void SaveNewOrder(OrderEntity order, SqlAdapter adapter)
         {
             if (!order.IsNew)
@@ -585,7 +588,7 @@ namespace ShipWorks.Stores.Communication
             {
                 try
                 {
-                    return CustomerProvider.AcquireCustomer(order, storeType, adapter, true);
+                    return CustomerProvider.AcquireCustomer(order, storeType, adapter);
                 }
                 catch (CustomerAcquisitionLockException)
                 {
@@ -646,6 +649,12 @@ namespace ShipWorks.Stores.Communication
 
             try
             {
+                // If note count changed, save the customer
+                if (customer.IsDirty)
+                {
+                    adapter.SaveEntity(customer, false);
+                }
+
                 order.CustomerID = customer.CustomerID;
 
                 // Save the order so we can get its OrderID
@@ -700,6 +709,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save an existing order
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void SaveExistingOrder(OrderEntity order, SqlAdapter adapter)
         {
             // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
@@ -969,16 +979,6 @@ namespace ShipWorks.Stores.Communication
 
             return string.IsNullOrEmpty(personAdapter.City) &&
                    string.IsNullOrEmpty(personAdapter.PostalCode);
-        }
-
-        /// <summary>
-        /// Create the proper AuditBehaviorScope to used based on the configuration of auditing new orders.
-        /// </summary>
-        public static AuditBehaviorScope CreateOrderAuditScope(OrderEntity order)
-        {
-            ConfigurationEntity config = ConfigurationData.Fetch();
-
-            return new AuditBehaviorScope((config.AuditNewOrders || !order.IsNew) ? AuditState.Default : AuditState.NoDetails);
         }
 
         /// <summary>
