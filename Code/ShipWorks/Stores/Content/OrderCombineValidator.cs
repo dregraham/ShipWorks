@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -18,25 +20,29 @@ namespace ShipWorks.Stores.Content
     [Component]
     public class OrderCombineValidator : IOrderCombineValidator
     {
-        readonly ICombineOrdersGateway gateway;
-        readonly ISecurityContext securityContext;
-        readonly IStoreEntity storeEntity;
+        private readonly ICombineOrdersGateway gateway;
+        private readonly ISecurityContext securityContext;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderCombineValidator(ICombineOrdersGateway gateway, 
-            ISecurityContext securityContext,
-            IStoreEntity storeEntity)
+        public OrderCombineValidator(ICombineOrdersGateway gateway, ISecurityContext securityContext, IStoreManager storeManager)
         {
             this.gateway = gateway;
             this.securityContext = securityContext;
-            this.storeEntity = storeEntity;
+            this.storeManager = storeManager;
         }
 
         public Result Validate(IEnumerable<long> orderIDs)
         {
-            var loadResult = gateway.CanCombine(storeEntity, orderIDs);
+            if (orderIDs.None())
+            {
+                return Result.FromSuccess();
+            }
+            
+            IStoreEntity storeEntity = storeManager.GetRelatedStore(orderIDs.First());
+            Task<bool> loadResult = gateway.CanCombine(storeEntity, orderIDs);
             bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, orderIDs.First());
 
             if (orderIDs.Count() < 2)

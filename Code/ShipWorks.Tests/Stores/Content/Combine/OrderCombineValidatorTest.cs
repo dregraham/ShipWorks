@@ -37,6 +37,13 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         }
 
         [Fact]
+        public void Validate_ReturnSuccess_WhenOrderCountNone()
+        {
+            var result = testObject.Validate(new long[] { });
+            Assert.True(result.Success);
+        }
+
+        [Fact]
         public void Validate_ReturnFailure_WhenOrderCountIsLessThanTwo()
         {
             var result = testObject.Validate(new long[] { 1 });
@@ -56,18 +63,18 @@ namespace ShipWorks.Tests.Stores.Content.Combine
             Assert.True(result.Failure);
         }
 
-        //[Fact]
-        //public void Validate_ReturnFalse_WhenOrderCanNotBeCombined()
-        //{
-        //    mock.Mock<ICombineOrdersGateway>()
-        //        .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
-        //        .ReturnsAsync(false);
+        [Fact]
+        public void Validate_ReturnFalse_WhenOrderCanNotBeCombined()
+        {
+            mock.Mock<ICombineOrdersGateway>()
+                .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
+                .ReturnsAsync(false);
 
-        //    var testObject = mock.Create<OrderCombineValidator>();
-        //    var result = testObject.Validate(new long[] { 1, 2 });
+            var testObject = mock.Create<OrderCombineValidator>();
+            var result = testObject.Validate(new long[] { 1, 2 });
 
-        //    Assert.False(result.Success);
-        //}
+            Assert.False(result.Success);
+        }
 
         public void Dispose()
         {
