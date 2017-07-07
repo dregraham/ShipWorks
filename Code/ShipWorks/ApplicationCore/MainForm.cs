@@ -57,6 +57,7 @@ using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Email;
@@ -156,6 +157,21 @@ namespace ShipWorks
             // Persist size\position of the window
             new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
+
+            InitializeCustomEnablerComponents();
+        }
+
+        /// <summary>
+        /// Setup the SetEnabledWhen for components that need actions to determine enabled state
+        /// </summary>
+        private void InitializeCustomEnablerComponents()
+        {
+                selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.TwoOrMoreOrders,
+                    (x) => ShouldCombineOrderBeEnabled(x));
+
+                selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
+                    SelectionDependentType.TwoOrMoreOrders,
+                    (x) => ShouldCombineOrderBeEnabled(x));
         }
 
         /// <summary>
@@ -1383,13 +1399,22 @@ namespace ShipWorks
             return Panels.FirstOrDefault(d => d.Name == "dockableWindowShipment");
         }
 
+        private bool ShouldCombineOrderBeEnabled(IEnumerable<long> keys)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IOrderCombineValidator ocv = scope.Resolve<IOrderCombineValidator>();
+                return ocv.Validate(keys).Success;
+            }
+        }
+
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
         private void UpdateCommandState()
         {
             int selectionCount = gridControl.Selection.Count;
-            selectionDependentEnabler.UpdateCommandState(selectionCount, gridControl.ActiveFilterTarget);
+            selectionDependentEnabler.UpdateCommandState(gridControl.Selection, gridControl.ActiveFilterTarget);
 
             if (selectionCount == 0 || gridControl.ActiveFilterTarget != FilterTarget.Orders)
             {
@@ -2915,6 +2940,14 @@ namespace ShipWorks
         private void EditCustomer(long customerID)
         {
             CustomerEditorDlg.Open(customerID, this);
+        }
+
+        /// <summary>
+        /// The delete key was pressed in the grid
+        /// </summary>
+        private void OnCombine(object sender, EventArgs e)
+        {
+            MessageBox.Show(this, "Combined!");
         }
 
         /// <summary>

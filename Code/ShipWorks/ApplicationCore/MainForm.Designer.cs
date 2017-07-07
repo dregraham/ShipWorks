@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks
@@ -70,9 +71,10 @@ namespace ShipWorks
             this.buttonRestore = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
+            this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
             this.buttonNewOrder = new Divelements.SandRibbon.Button();
-            this.buttonCombineOrders = new Divelements.SandRibbon.Button();
             this.buttonDeleteOrders = new Divelements.SandRibbon.Button();
+            this.buttonCombine = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
             this.panelDockingArea = new System.Windows.Forms.Panel();
@@ -118,6 +120,7 @@ namespace ShipWorks
             this.label19 = new System.Windows.Forms.Label();
             this.contextMenuOrderGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextOrderEditOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOrderCombineOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderLocalStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.stuffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -731,12 +734,20 @@ namespace ShipWorks
             // stripLayoutModifyOrders
             //
             this.stripLayoutModifyOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.buttonNewOrder,
-            this.buttonDeleteOrders,
-            this.buttonCombineOrders });
+                this.buttonNewOrder,
+                this.buttonDeleteOrders});
             this.stripLayoutModifyOrders.ItemSpacing = 6;
             this.stripLayoutModifyOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
             this.stripLayoutModifyOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
+            //
+            // stripLayoutCombineSplitOrders
+            //
+            this.stripLayoutCombineSplitOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.buttonCombine,
+                });
+            this.stripLayoutCombineSplitOrders.ItemSpacing = 6;
+            this.stripLayoutCombineSplitOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
+            this.stripLayoutCombineSplitOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
             //
             // buttonNewOrder
             //
@@ -747,15 +758,6 @@ namespace ShipWorks
             this.buttonNewOrder.Text = "New";
             this.buttonNewOrder.Activate += new System.EventHandler(this.OnNewOrder);
             //
-            // buttonCombineOrders
-            //
-            this.buttonCombineOrders.Guid = new System.Guid("69DAE715-64CB-40E3-BD24-0DC683BCC4D1");
-            this.buttonCombineOrders.Image = global::ShipWorks.Properties.Resources.order_add;
-            this.ribbonSecurityProvider.SetPermission(this.buttonCombineOrders, ShipWorks.Users.Security.PermissionType.CustomersAddOrder);
-            this.buttonCombineOrders.QuickAccessKey = "OC";
-            this.buttonCombineOrders.Text = "Combine";
-            this.buttonCombineOrders.Activate += new System.EventHandler(this.OnCombineOrders);
-            //
             // buttonDeleteOrders
             //
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonDeleteOrders, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
@@ -765,6 +767,16 @@ namespace ShipWorks
             this.buttonDeleteOrders.QuickAccessKey = "OD";
             this.buttonDeleteOrders.Text = "Delete";
             this.buttonDeleteOrders.Activate += new System.EventHandler(this.OnDelete);
+            //
+            // buttonCombine
+            //
+            this.buttonCombine.Guid = new System.Guid("A8BF47AA-A2E2-4B59-B871-E5FF993623E6");
+            this.buttonCombine.Image = global::ShipWorks.Properties.Resources.data_disk16;
+            this.ribbonSecurityProvider.SetPermission(this.buttonCombine, ShipWorks.Users.Security.PermissionType.OrdersModify);
+            this.buttonCombine.QuickAccessKey = "OC";
+            this.buttonCombine.Text = "Combine";
+            this.buttonCombine.Activate += new System.EventHandler(this.OnCombine);
+           
             //
             // buttonEditCustomer
             //
@@ -1276,6 +1288,8 @@ namespace ShipWorks
             this.contextMenuOrderGrid.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenuOrderGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextOrderEditOrder,
+            this.contextOrderCombineOrder,
+            
             this.contextOrderSep1,
             this.contextOrderLocalStatus,
             this.contextOrderOnlineUpdate,
@@ -1312,6 +1326,17 @@ namespace ShipWorks
             this.contextOrderEditOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderEditOrder.Text = "Edit Order";
             this.contextOrderEditOrder.Click += new System.EventHandler(this.OnEditOrder);
+            //
+            // contextOrderCombineOrder
+            //
+            this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.order_edit;
+            this.contextOrderCombineOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCombineOrder, new System.Guid("E537A928-2B0C-4453-8F7D-1C1F1FD7D0FD"));
+            this.contextOrderCombineOrder.Name = "contextOrderCombineOrder";
+            this.contextOrderCombineOrder.Size = new System.Drawing.Size(169, 22);
+            this.contextOrderCombineOrder.Text = "Combine Orders";
+            this.contextOrderCombineOrder.Click += new System.EventHandler(this.OnEditOrder);
+            
             //
             // contextOrderSep1
             //
@@ -2112,6 +2137,7 @@ namespace ShipWorks
             this.ribbonChunkOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonEditOrder,
             this.stripLayoutModifyOrders,
+            this.stripLayoutCombineSplitOrders,
             this.ribbonChunkOrdersSep1,
             this.buttonLocalStatus,
             this.buttonUpdateOnline});
@@ -2830,9 +2856,9 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrders;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkCustomers;
         private Divelements.SandRibbon.Button buttonNewOrder;
-        private Divelements.SandRibbon.Button buttonCombineOrders;
         private Divelements.SandRibbon.Button buttonEditOrder;
         private Divelements.SandRibbon.Button buttonDeleteOrders;
+        private Divelements.SandRibbon.Button buttonCombine;
         private Divelements.SandRibbon.Button buttonNewCustomer;
         private Divelements.SandRibbon.Button buttonEditCustomer;
         private Divelements.SandRibbon.Button buttonDeleteCustomer;
@@ -2855,6 +2881,7 @@ namespace ShipWorks
         private TD.SandDock.DockContainer dockContainer;
         private System.Windows.Forms.ContextMenuStrip contextMenuOrderGrid;
         private System.Windows.Forms.ToolStripMenuItem contextOrderEditOrder;
+        private System.Windows.Forms.ToolStripMenuItem contextOrderCombineOrder;
         private System.Windows.Forms.ToolStripMenuItem contextOrderEditCustomer;
         private System.Windows.Forms.ToolStripMenuItem contextOrderLookupCustomer;
         private System.Windows.Forms.ToolStripSeparator contextOrderSep2;
@@ -2963,6 +2990,7 @@ namespace ShipWorks
         private ShipWorks.Stores.Content.Panels.OrdersPanel panelOrders;
         private ShipWorks.Stores.Content.Panels.PrintResultsPanel panelPrinted;
         private Divelements.SandRibbon.StripLayout stripLayoutModifyOrders;
+        private Divelements.SandRibbon.StripLayout stripLayoutCombineSplitOrders;
         private ShipWorks.Users.Security.RibbonSecurityProvider ribbonSecurityProvider;
         private Divelements.SandRibbon.Button buttonAudit;
         private Divelements.SandRibbon.Button buttonShippingSettings;
