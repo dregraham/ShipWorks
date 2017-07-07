@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -74,12 +75,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// When code changes the weight, we need to force the binding to write its value. This isn't necessary when running
         /// ShipWorks through Visual Studio, but is necessary when running an obfuscated build. This would imply that there
         /// is an obfuscation issue, but I can't quite tell what it is.
+        /// 
+        /// UPDATE: 7/6/2017 Mirza Mulaosmanovic
+        /// Only write value when count is one because it was writing the multi value text to the view model which gets 
+        /// converted to zero and sets the weight of all of the selected shipments to zero
         /// </remarks>
         private void OnWeightChanged(object sender, EventArgs e)
         {
-            foreach (Binding binding in weight.DataBindings.OfType<Binding>().Where(x => x.PropertyName == nameof(weight.Weight)))
+            if (LoadedShipments.IsCountEqualTo(1))
             {
-                binding.WriteValue();
+                foreach (Binding binding in weight.DataBindings.OfType<Binding>().Where(x => x.PropertyName == nameof(weight.Weight)))
+                {
+                    binding.WriteValue();
+                }
             }
         }
 
