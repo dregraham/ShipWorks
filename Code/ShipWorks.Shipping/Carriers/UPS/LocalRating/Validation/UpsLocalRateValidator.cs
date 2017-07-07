@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using Autofac.Features.Indexed;
@@ -9,8 +8,6 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -61,15 +58,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public ILocalRateValidationResult ValidateShipments(IEnumerable<ShipmentEntity> shipments)
         {
             // Reset discrepancy list every validation run
-            List<ShipmentEntity> processedShipments = null;
+            List<ShipmentEntity> shipmentsToValidate = null;
 
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
             if (DateTime.Now > wakeTime)
             {
-                processedShipments = shipments.Where(s => s.Processed).ToList();
+                shipmentsToValidate = shipments.Where(s => s.Processed && RequiresValidation(s, true)).ToList();
 
-                foreach (ShipmentEntity shipment in processedShipments)
+                foreach (ShipmentEntity shipment in shipmentsToValidate)
                 {
                     EnsureLocalRatesMatchShipmentCost(shipment);
                 }
@@ -77,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 
             LogRateDiscrepancies(CreateLabelLogFileName);
 
-            return validationResultFactory.Create(rateDiscrepancies, processedShipments?.Count ?? 0, Snooze);
+            return validationResultFactory.Create(rateDiscrepancies, shipmentsToValidate, Snooze);
         }
 
         /// <summary>
@@ -88,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             // Reset discrepancy list every validation run
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
-            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account);
+            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -97,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             
             LogRateDiscrepancies(UploadRatesLogFileName);
 
-            return validationResultFactory.Create(rateDiscrepancies);
+            return validationResultFactory.Create(rateDiscrepancies, shipments);
         }
 
         /// <summary>
@@ -117,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                 }
             }
 
-            return new SuccessfulLocalRateValidationResult();
+            return new SuccessfulLocalRateValidationResult(Enumerable.Empty<ShipmentEntity>());
         }
 
         /// <summary>
@@ -179,22 +176,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private void EnsureLocalRatesMatchApiRates(ShipmentEntity shipment)
         {
-            if (RequiresValidation(shipment, false))
+            GenericResult<List<UpsServiceRate>> localRateResult = rateClientFactory[UpsRatingMethod.LocalOnly].GetRates(shipment);
+
+            if (localRateResult.Success)
             {
-                GenericResult<List<UpsServiceRate>> localRateResult = rateClientFactory[UpsRatingMethod.LocalOnly].GetRates(shipment);
+                UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
 
-                if (localRateResult.Success)
+                UpsLocalServiceRate localRate =
+                    localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
+                UpsServiceRate apiRate = rateClientFactory[UpsRatingMethod.ApiOnly].GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
+
+                if (HasRateDiscrepancy(localRate, apiRate))
                 {
-                    UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
-
-                    UpsLocalServiceRate localRate =
-                        localRateResult.Value.Cast<UpsLocalServiceRate>().SingleOrDefault(r => r.Service == serviceType);
-                    UpsServiceRate apiRate = rateClientFactory[UpsRatingMethod.ApiOnly].GetRates(shipment).Value.SingleOrDefault(r => r.Service == serviceType);
-
-                    if (HasRateDiscrepancy(localRate, apiRate))
-                    {
-                        rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, localRate, apiRate));
-                    }
+                    rateDiscrepancies.Add(new UpsLocalRateDiscrepancy(shipment, localRate, apiRate));
                 }
             }
         }

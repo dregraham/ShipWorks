@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// </summary>
     public class FailedLocalRateValidationResult : ILocalRateValidationResult
     {
-        private readonly int totalShipmentsValidated;
         private readonly IDialog upsLocalRateDiscrepancyDialog;
         private readonly IUpsLocalRateDiscrepancyViewModel discrepancyViewModel;
         private readonly Uri helpArticleUrl = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
@@ -23,13 +22,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Constructor
         /// </summary>
         public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies,
-            int totalShipmentsValidated,
+            IEnumerable<ShipmentEntity> shipments,
             IDialog upsLocalRateDiscrepancyDialog,
             IUpsLocalRateDiscrepancyViewModel discrepancyViewModel)
         {
             RateDiscrepancies = rateDiscrepancies;
 
-            this.totalShipmentsValidated = totalShipmentsValidated;
+            Shipments = shipments;
             this.upsLocalRateDiscrepancyDialog = upsLocalRateDiscrepancyDialog;
             this.discrepancyViewModel = discrepancyViewModel;
         }
@@ -38,10 +37,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// Initializes a new instance of the <see cref="FailedLocalRateValidationResult"/> class.
         /// </summary>
         /// <param name="rateDiscrepancies">The rate discrepancies.</param>
-        public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies)
+        /// <param name="shipments"></param>
+        public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments)
         {
+            Shipments = shipments;
             RateDiscrepancies = rateDiscrepancies;
         }
+
+        public IEnumerable<ShipmentEntity> Shipments { get; }
 
         /// <summary>
         /// Gets the local rates that we're validated to get this result
@@ -87,8 +90,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private string GetMessage()
         {
-            string startOfMessage = totalShipmentsValidated > 1 ?
-                $"{RateDiscrepancies.Count()} of the {totalShipmentsValidated} successfully processed UPS shipments" :
+            int shipmentCount = Shipments.Count();
+
+            string startOfMessage = shipmentCount > 1 ?
+                $"{RateDiscrepancies.Count()} of the {shipmentCount} successfully processed UPS shipments" :
                 "The UPS shipment";
             string endOfMessage =
                 "had local rates that did not match the rates on your UPS account. Please review and update your local rates.";

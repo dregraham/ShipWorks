@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Dashboard;
-using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
@@ -10,6 +10,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
     /// </summary>
     public interface ILocalRateValidationResult
     {
+        /// <summary>
+        /// The shipments that were validated
+        /// </summary>
+        IEnumerable<ShipmentEntity> Shipments { get; }
+
         /// <summary>
         /// Rate discrepancies associated with this result
         /// </summary>

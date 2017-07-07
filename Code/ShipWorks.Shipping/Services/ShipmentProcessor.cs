@@ -135,7 +135,10 @@ namespace ShipWorks.Shipping.Services
                 }
             }
 
-            result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
+            result.LocalRateValidationResult =
+                upsLocalRateValidator.ValidateShipments(
+                    clonedShipments.Where(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
+                                               s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip));
 
             HandleProcessingException(result);
 
