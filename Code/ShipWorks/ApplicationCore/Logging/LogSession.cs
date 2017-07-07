@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Security;
+using System.Threading;
+using Common.Logging;
+using Common.Logging.Configuration;
+using Common.Logging.Log4Net;
 using log4net.Appender;
 using log4net.Config;
-using log4net.Core;
 using log4net.Filter;
 using log4net.Layout;
-using ShipWorks.Common.Threading;
-using System.Diagnostics;
-using System.IO;
 using SD.LLBLGen.Pro.DQE.SqlServer;
-using System.Threading;
 using ShipWorks.ApplicationCore.Interaction;
-using System.Security;
-using Common.Logging.Log4Net;
-using Common.Logging;
-using Interapptive.Shared;
-using Interapptive.Shared.Net;
-using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
@@ -26,26 +24,24 @@ namespace ShipWorks.ApplicationCore.Logging
     public static class LogSession
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(LogSession));
+        private static readonly ILog log = LogManager.GetLogger(typeof(LogSession));
 
         // File from which to save and restore settings
-        static readonly string filename = Path.Combine(DataPath.InstanceSettings, "logging.xml");
+        private static readonly string filename = Path.Combine(DataPath.InstanceSettings, "logging.xml");
 
         // Base path for log files for this session
-        static string logPath;
+        private static string logPath;
 
         // Current logging options
-        static LogOptions logOptions = new LogOptions();
+        private static LogOptions logOptions = new LogOptions();
 
         // Indicates if private logging should be encrypted
-        static bool privateLoggingEncrypted = true;
 
         // Cache of log sources known to be private or not
-        static Dictionary<ApiLogSource, bool> privateLogSources = new Dictionary<ApiLogSource, bool>();
+        private static Dictionary<ApiLogSource, bool> privateLogSources = new Dictionary<ApiLogSource, bool>();
 
         // Log pattern
-        const string traceLayoutPattern = "%date{HH:mm:ss.fff} %-5level [%logger] [%thread] --> %message%newline";
-        const string queryLayoutPattern = "%date{HH:mm:ss.fff} [%thread] %message%newline";
+        private const string traceLayoutPattern = "%date{HH:mm:ss.fff} %-5level [%logger] [%thread] --> %message%newline";
 
         /// <summary>
         /// Initialize the configuration of the logger.  If sessionName is specified, it's appeneded to the default log folder name.
@@ -58,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Logging
             DynamicQueryEngine.ArithAbortOn = DynamicQueryEngine.ArithAbortOn ? true : false;
 
             // Prviate logging is not encrypted for interapptive users
-            privateLoggingEncrypted = !InterapptiveOnly.IsInterapptiveUser;
+            IsPrivateLoggingEncrypted = !InterapptiveOnly.IsInterapptiveUser;
 
             logOptions = LoadLogOptions();
             ApplyLogOptions();
@@ -90,13 +86,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Gets a copy of the current effective LogOptions.
         /// </summary>
-        public static LogOptions Options
-        {
-            get
-            {
-                return new LogOptions(logOptions);
-            }
-        }
+        public static LogOptions Options => new LogOptions(logOptions);
 
         /// <summary>
         /// Path to the root of logging for this session.
@@ -122,17 +112,13 @@ namespace ShipWorks.ApplicationCore.Logging
                 privateLogSources[logSource] = isPrivate;
             }
 
-            return isPrivate && privateLoggingEncrypted;
+            return isPrivate && IsPrivateLoggingEncrypted;
         }
 
         /// <summary>
         /// Gets \ sets wether private (Interapptive only) logging is encrypted
         /// </summary>
-        public static bool IsPrivateLoggingEncrypted
-        {
-            get { return privateLoggingEncrypted; }
-            set { privateLoggingEncrypted = value; }
-        }
+        public static bool IsPrivateLoggingEncrypted { get; set; } = true;
 
         /// <summary>
         /// Indicates if the given log source should be logged
@@ -242,8 +228,6 @@ namespace ShipWorks.ApplicationCore.Logging
 
             CleanTraceAppender appender = new CleanTraceAppender();
             appender.Layout = layout;
-            // appender.AddFilter(new LoggerMatchFilter { LoggerToMatch = typeof(PagedEntityGrid).FullName, AcceptOnMatch = false });
-            // appender.AddFilter(new LoggerMatchFilter { LoggerToMatch = typeof(PagedEntityGateway).FullName, AcceptOnMatch = false });
             appender.ActivateOptions();
 
             return appender;
@@ -254,14 +238,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         private static LogOptions LoadLogOptions()
         {
-            if (!File.Exists(filename))
-            {
-                return new LogOptions();
-            }
-            else
-            {
-                return LogOptions.Load(filename);
-            }
+            return !File.Exists(filename) ? new LogOptions() : LogOptions.Load(filename);
         }
 
         /// <summary>
@@ -272,102 +249,161 @@ namespace ShipWorks.ApplicationCore.Logging
             options.Save(filename);
 
             // In case the cleanup options got tighter, cleanup now
-            ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem((WaitCallback) delegate { CleanupThread(); }));
+            ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(delegate { CleanupThread(); }));
         }
 
         /// <summary>
         /// Runs on a schedule to see if any log files are in need of deleting.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static void CleanupThread()
         {
             try
             {
-                string current = new DirectoryInfo(LogFolder).Name;
-                LogOptions options = LogSession.Options;
-
-                if (options.MaxLogAgeDays <= 0)
+                if (Options.MaxLogAgeDays <= 0)
                 {
                     log.Info("LogCleanup: Never");
                     return;
                 }
 
-                // Date a log must be to survive
-                DateTime mustBeDate = DateTime.UtcNow - TimeSpan.FromDays(options.MaxLogAgeDays);
-                log.InfoFormat("Deleting logs older than {0}.", mustBeDate.ToLocalTime());
+                DateTime logExpirationDate = GetLogExpirationDate();
 
                 DirectoryInfo logRoot = new DirectoryInfo(DataPath.LogRoot);
 
                 // Look at each entry in the log directory
                 foreach (FileSystemInfo fsi in logRoot.GetFileSystemInfos())
                 {
-                    // Never delete the current
-                    if (fsi.Name == current)
+                    // Never delete the current log entry
+                    if (fsi.Name != new DirectoryInfo(LogFolder).Name)
                     {
-                        continue;
-                    }
+                        // Deletes the log entry if the entry, and its contents, are out of date.
+                        CleanupLogEntry(fsi, logExpirationDate);
 
-                    // Created far enough back to delete
-                    if (fsi.CreationTimeUtc < mustBeDate)
-                    {
-                        try
+                        // Quit if we leave the idle state
+                        if (!IdleWatcher.IsIdle)
                         {
-                            // See if its a folder.  Make sure all entries are old enough
-                            DirectoryInfo di = fsi as DirectoryInfo;
-                            if (di != null)
-                            {
-                                bool delete = true;
-
-                                // If any file in the folder has been written too in the proper amount of time, then dont delete the directory
-                                foreach (FileSystemInfo childFsi in di.GetFileSystemInfos())
-                                {
-                                    if (childFsi.LastWriteTimeUtc >= mustBeDate)
-                                    {
-                                        delete = false;
-                                        break;
-                                    }
-                                }
-
-                                if (delete)
-                                {
-                                    log.InfoFormat("Deleting log '{0}'", fsi.Name);
-                                    Directory.Delete(fsi.FullName, true);
-                                }
-                            }
-                            else
-                            {
-                                log.InfoFormat("Deleting file '{0}'", fsi.Name);
-                                fsi.Delete();
-                            }
+                            return;
                         }
-                        catch (IOException ex)
-                        {
-                            log.Error("Failed deleting log entry.", ex);
-                        }
-                        catch (UnauthorizedAccessException ex)
-                        {
-                            log.Error("Failed deleting log entry.", ex);
-                        }
-
-                        // If there's a bunch of stuff to delete, we don't want to peg the cpu
-                        Thread.Sleep(2);
-                    }
-
-                    // Quit if we leave the idle state
-                    if (!IdleWatcher.IsIdle)
-                    {
-                        return;
                     }
                 }
             }
-            catch (SecurityException ex)
+            catch (Exception ex) when (ex is SecurityException || ex is DirectoryNotFoundException)
             {
                 log.Error("Failed during log cleanup.", ex);
             }
-            catch (DirectoryNotFoundException ex)
+        }
+
+        /// <summary>
+        /// Checks to see if the log entry is past the log expiration date and deletes the entry if it is
+        /// </summary>
+        private static void CleanupLogEntry(FileSystemInfo fsi, DateTime logExpirationDate)
+        {
+            if (IsLogEntryExpired(fsi, logExpirationDate))
             {
-                log.Error("Failed during log cleanup.", ex);
+                try
+                {
+                    // See if its a folder.  Make sure all entries are old enough
+                    DirectoryInfo di = fsi as DirectoryInfo;
+                    if (di != null)
+                    {
+                        CleanupLogEntryChildren(di, logExpirationDate, fsi);
+                    }
+                    else
+                    {
+                        log.InfoFormat("Deleting file '{0}'", fsi.Name);
+                        fsi.Delete();
+                    }
+                }
+                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                {
+                    log.Error("Failed deleting log entry.", ex);
+                }
+
+                // If there's a bunch of stuff to delete, we don't want to peg the cpu
+                Thread.Sleep(2);
             }
+        }
+
+        /// <summary>
+        /// Determines if the log entry has expired
+        /// </summary>
+        private static bool IsLogEntryExpired(FileSystemInfo fsi, DateTime logExpirationDate)
+        {
+            bool isExpired = true;
+            try
+            {
+                // Created far enough back to delete
+                if (fsi.CreationTimeUtc >= logExpirationDate)
+                {
+                    isExpired = false;
+                }
+            }
+            catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
+                CultureInfo.InvariantCulture))
+            {
+                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // and continuing to delete the file, since it is most likely corrupt.
+                isExpired = true;
+                log.Error("File or directory has an invalid Windows timestamp. ShipWorks will attempt to delete it, " +
+                          "as it is likely corrupt.");
+            }
+
+            return isExpired;
+        }
+
+        /// <summary>
+        /// Checks if all of the directories contents are past the log expiration date and deletes the directory if they are
+        /// </summary>
+        private static void CleanupLogEntryChildren(DirectoryInfo di, DateTime logExpirationDate, FileSystemInfo fsi)
+        {
+            foreach (FileSystemInfo childFsi in di.GetFileSystemInfos())
+            {
+                // If any file in the folder has been written to in the proper amount of time, then dont delete the directory
+                if (!IsLogEntryChildExpired(childFsi, logExpirationDate))
+                {
+                    return;
+                }
+            }
+            
+            log.InfoFormat("Deleting log '{0}'", fsi.Name);
+            Directory.Delete(fsi.FullName, true);
+        }
+
+        /// <summary>
+        /// Determines whether the given log entry child has expired
+        /// </summary>
+        private static bool IsLogEntryChildExpired(FileSystemInfo childFsi, DateTime logExpirationDate)
+        {
+            bool isExpired = true;
+            try
+            {
+                // The file is considered expired if it has not been modified since the expiration date (not created date)
+                if (childFsi.LastWriteTimeUtc >= logExpirationDate)
+                {
+                    isExpired = false;
+                }
+            }
+            catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
+                CultureInfo.InvariantCulture))
+            {
+                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // and continuing to delete the file, since it is most likely corrupt.
+                log.Error("File found with an invalid Windows timestamp. ShipWorks will continue " +
+                          "to check if this directory should be deleted.");
+            }
+
+            return isExpired;
+        }
+
+        /// <summary>
+        /// Gets the maximum date that logs are allowed to live, without ShipWorks trying to delete them
+        /// </summary>
+        private static DateTime GetLogExpirationDate()
+        {
+            DateTime expirationDate = DateTime.UtcNow - TimeSpan.FromDays(Options.MaxLogAgeDays);
+
+            // Date a log must be to survive
+            log.InfoFormat("Deleting logs older than {0}.", expirationDate.ToLocalTime());
+            return expirationDate;
         }
     }
 }
