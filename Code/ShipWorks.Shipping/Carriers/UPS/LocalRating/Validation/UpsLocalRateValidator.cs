@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         public ILocalRateValidationResult ValidateShipments(IEnumerable<ShipmentEntity> shipments)
         {
             // Reset discrepancy list every validation run
-            List<ShipmentEntity> shipmentsToValidate = null;
+            List<ShipmentEntity> shipmentsToValidate = new List<ShipmentEntity>();
 
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             // Reset discrepancy list every validation run
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
-            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account).ToList();
+            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account).Where(s => RequiresValidation(s, true)).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {
