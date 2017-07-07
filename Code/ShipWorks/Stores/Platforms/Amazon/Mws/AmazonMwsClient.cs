@@ -534,7 +534,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 if (ShipmentTypeManager.IsDhl(service))
                 {
                     // The DHL carrier for Endicia/Stamps is:
-                    carrier = "DHL Global Mail";
+                    carrier = "DHL eCommerce";
                 }
                 else if (ShipmentTypeManager.IsConsolidator(service))
                 {

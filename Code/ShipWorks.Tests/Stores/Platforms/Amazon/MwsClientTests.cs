@@ -65,25 +65,25 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsDhlGlobalMail_WhenEndiciaAndDhl()
+        public void GetCarrierName_ReturnsDhl_WhenEndiciaAndDhl()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
-            Assert.Equal("DHL Global Mail", carrierName);
+            Assert.Equal("DHL eCommerce", carrierName);
         }
 
         [Fact]
-        public void GetCarrierName_ReturnsDhlGlobalMail_WhenUspsAndDhl()
+        public void GetCarrierName_ReturnsDhl_WhenUspsAndDhl()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
-            Assert.Equal("DHL Global Mail", carrierName);
+            Assert.Equal("DHL eCommerce", carrierName);
         }
 
         [Fact]
