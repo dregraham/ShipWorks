@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private void LogTelemetry(ILocalRateValidationResult result)
         {
-            foreach (ShipmentEntity shipment in result.Shipments)
+            foreach (ShipmentEntity shipment in result.ValidatedShipments)
             {
                 UpsLocalRateDiscrepancy discrepancyForShipment =
                     result.RateDiscrepancies.SingleOrDefault(r => r.Shipment.ShipmentID == shipment.ShipmentID);

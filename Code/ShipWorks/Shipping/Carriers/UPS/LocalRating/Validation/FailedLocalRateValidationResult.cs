@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             RateDiscrepancies = rateDiscrepancies;
 
-            Shipments = shipments;
+            ValidatedShipments = shipments;
             this.upsLocalRateDiscrepancyDialog = upsLocalRateDiscrepancyDialog;
             this.discrepancyViewModel = discrepancyViewModel;
         }
@@ -40,11 +40,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <param name="shipments"></param>
         public FailedLocalRateValidationResult(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments)
         {
-            Shipments = shipments;
+            ValidatedShipments = shipments;
             RateDiscrepancies = rateDiscrepancies;
         }
 
-        public IEnumerable<ShipmentEntity> Shipments { get; }
+        public IEnumerable<ShipmentEntity> ValidatedShipments { get; }
 
         /// <summary>
         /// Gets the local rates that we're validated to get this result
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         private string GetMessage()
         {
-            int shipmentCount = Shipments.Count();
+            int shipmentCount = ValidatedShipments.Count();
 
             string startOfMessage = shipmentCount > 1 ?
                 $"{RateDiscrepancies.Count()} of the {shipmentCount} successfully processed UPS shipments" :

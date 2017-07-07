@@ -15,13 +15,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// </summary>
         public SuccessfulLocalRateValidationResult(IEnumerable<ShipmentEntity> shipments)
         {
-            Shipments = shipments;
+            ValidatedShipments = shipments;
         }
 
         /// <summary>
         /// The shipments that were validated
         /// </summary>
-        public IEnumerable<ShipmentEntity> Shipments { get; }
+        public IEnumerable<ShipmentEntity> ValidatedShipments { get; }
 
         /// <summary>
         /// Rate discrepancies associated with this result
