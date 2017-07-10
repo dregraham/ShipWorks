@@ -275,7 +275,7 @@ namespace ShipWorks.ApplicationCore.Options
             // autoPrint
             // 
             this.autoPrint.AutoSize = true;
-            this.autoPrint.Location = new System.Drawing.Point(47, 402);
+            this.autoPrint.Location = new System.Drawing.Point(47, 425);
             this.autoPrint.Name = "autoPrint";
             this.autoPrint.Size = new System.Drawing.Size(227, 17);
             this.autoPrint.TabIndex = 23;
@@ -306,7 +306,7 @@ namespace ShipWorks.ApplicationCore.Options
             // autoWeigh
             // 
             this.autoWeigh.AutoSize = true;
-            this.autoWeigh.Location = new System.Drawing.Point(66, 425);
+            this.autoWeigh.Location = new System.Drawing.Point(47, 402);
             this.autoWeigh.Name = "autoWeigh";
             this.autoWeigh.Size = new System.Drawing.Size(251, 17);
             this.autoWeigh.TabIndex = 29;
@@ -317,7 +317,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically on a barcode scan.\r\n\r\nThe weight " +
     "is imported if the scale registers a weight greater than 0.";
-            this.infoTipAutoWeigh.Location = new System.Drawing.Point(316, 427);
+            this.infoTipAutoWeigh.Location = new System.Drawing.Point(297, 404);
             this.infoTipAutoWeigh.Name = "infoTipAutoWeigh";
             this.infoTipAutoWeigh.Size = new System.Drawing.Size(13, 12);
             this.infoTipAutoWeigh.TabIndex = 30;
@@ -327,7 +327,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infoTipAutoPrint.Caption = "Labels print automatically when a barcode is scanned.\r\n\r\nLabels are generated usi" +
     "ng the currently configured shipping rules.";
-            this.infoTipAutoPrint.Location = new System.Drawing.Point(273, 404);
+            this.infoTipAutoPrint.Location = new System.Drawing.Point(273, 427);
             this.infoTipAutoPrint.Name = "infoTipAutoPrint";
             this.infoTipAutoPrint.Size = new System.Drawing.Size(12, 12);
             this.infoTipAutoPrint.TabIndex = 31;

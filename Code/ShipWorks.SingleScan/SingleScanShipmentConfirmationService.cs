@@ -27,7 +27,7 @@ namespace ShipWorks.SingleScan
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
-        private readonly IAutoPrintSettings autoPrintSettings;
+        private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
@@ -46,7 +46,7 @@ namespace ShipWorks.SingleScan
             IShipmentFactory shipmentFactory,
             IMessageHelper messageHelper,
             Func<string, ITrackedDurationEvent> trackedDurationEventFactory,
-            IAutoPrintSettings autoPrintSettings,
+            ISingleScanAutomationSettings singleScanAutomationSettings,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.orderLoader = orderLoader;
@@ -55,7 +55,7 @@ namespace ShipWorks.SingleScan
             this.shipmentFactory = shipmentFactory;
             this.messageHelper = messageHelper;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
-            this.autoPrintSettings = autoPrintSettings;
+            this.singleScanAutomationSettings = singleScanAutomationSettings;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
         }
 
@@ -126,7 +126,7 @@ namespace ShipWorks.SingleScan
                     }
                 }
 
-                if (autoPrintSettings.IsAutoWeighEnabled() && confirmedShipments.IsCountEqualTo(1))
+                if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
                 {
                     ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
                     int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdapters().Count();
@@ -218,7 +218,7 @@ namespace ShipWorks.SingleScan
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
             string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
-            if (autoPrintSettings.IsAutoWeighEnabled())
+            if (singleScanAutomationSettings.IsAutoWeighEnabled)
             {
                 multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
             }

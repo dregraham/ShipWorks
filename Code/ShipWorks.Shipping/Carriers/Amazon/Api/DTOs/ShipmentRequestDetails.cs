@@ -13,6 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public CurrencyAmount Insurance { get; set; }
         public DateTime? MustArriveByDate { get; set; }
         public bool SendDateMustArriveBy { get; set; }
+        public DateTime ShipDate { get; set; }
         public virtual ShippingServiceOptions ShippingServiceOptions { get; set; }
     }
 
