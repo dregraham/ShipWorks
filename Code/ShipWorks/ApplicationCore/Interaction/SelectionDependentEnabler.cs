@@ -81,34 +81,6 @@ namespace ShipWorks.ApplicationCore.Interaction
             return selectionDependentEntry.SelectionDependentType;
         }
 
-        ///// <summary>
-        ///// Necessary piece of the extender provider plumbing
-        ///// </summary>
-        //[EditorBrowsable(EditorBrowsableState.Never)]
-        //public void SetEnabledWhen(Component component, SelectionDependentType state)
-        //{
-        //    if (!CanExtend(component))
-        //    {
-        //        throw new ArgumentException("The object type is not supported by the ExtenderProvider.", "component");
-        //    }
-
-        //    if (state == SelectionDependentType.Ignore)
-        //    {
-        //        componentMap.Remove(component);
-
-        //        // Now that we are ignoring it, make sure it's enabled
-        //        EnableComponent(component, true);
-        //    }
-        //    else
-        //    {
-        //        componentMap[component] = new SelectionDependentEntry()
-        //        {
-        //            SelectionDependentType = state,
-        //            Applies = null
-        //        };
-        //    }
-        //}
-
         /// <summary>
         /// Necessary piece of the extender provider plumbing
         /// </summary>
