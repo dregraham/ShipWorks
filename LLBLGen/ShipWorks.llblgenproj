@@ -453,6 +453,7 @@
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
+          <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ClickCartProOrder" ObjectID="d483348d-8aef-4b58-a81e-b06b4592c323" InheritanceType="2">
@@ -3719,7 +3720,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-11T16:12:30.2202201Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3933,7 +3934,6 @@
                     <Field Name="MarketplaceID" Ordinal="16" DbType="12" Length="50" />
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
-                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z'" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -4135,7 +4135,7 @@
                     <Field Name="AmazonMerchantID" Ordinal="6" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
-                    <Field Name="AmazonShippingToken" Ordinal="9" DbType="12" Length="500" />
+                    <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -9418,6 +9418,7 @@
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
+            <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
