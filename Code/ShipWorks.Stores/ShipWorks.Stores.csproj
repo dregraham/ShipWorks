@@ -175,6 +175,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClient.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
