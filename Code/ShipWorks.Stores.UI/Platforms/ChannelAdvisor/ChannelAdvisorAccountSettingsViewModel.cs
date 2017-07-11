@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -14,7 +15,11 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
-    public class ChannelAdvisorAccountSettingsViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Account settings page for ChannelAdvisor
+    /// </summary>
+    [Component]
+    public class ChannelAdvisorAccountSettingsViewModel : INotifyPropertyChanged, IChannelAdvisorAccountSettingsViewModel
     {
         private readonly IChannelAdvisorRestClient webClient;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
@@ -24,6 +29,9 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         private readonly PropertyChangedHandler handler;
         private string accessCode;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelAdvisorAccountSettingsViewModel(IChannelAdvisorRestClient webClient, 
             IEncryptionProviderFactory encryptionProviderFactory,
             IWin32Window window, 

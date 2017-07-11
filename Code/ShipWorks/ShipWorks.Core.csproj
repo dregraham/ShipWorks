@@ -5558,12 +5558,6 @@
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\CreLoaded\CreLoadedStoreType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackConditionStatusType.cs" />
     <Compile Include="Stores\Platforms\Ebay\OrderCombining\AcceptedPayments.cs" />
@@ -9567,9 +9561,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.resx">
-      <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.resx">
       <DependentUpon>EbayAccountSettingsControl.cs</DependentUpon>

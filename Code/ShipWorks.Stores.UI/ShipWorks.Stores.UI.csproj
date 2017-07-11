@@ -194,7 +194,14 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.xaml.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>ChannelAdvisorAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

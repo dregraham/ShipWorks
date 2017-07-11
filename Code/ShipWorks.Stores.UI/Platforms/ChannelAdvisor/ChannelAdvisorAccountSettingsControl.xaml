@@ -9,7 +9,7 @@
              d:DesignWidth="500"
              FontFamily="Tahoma"
              FontSize="11"
-             DataContext="{d:DesignInstance local:ChannelAdvisorAccountSettingsViewModel}">
+             d:DataContext="{d:DesignInstance local:ChannelAdvisorAccountSettingsViewModel}">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

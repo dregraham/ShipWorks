@@ -10,7 +10,6 @@ using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using log4net;
@@ -133,16 +132,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override StoreDownloader CreateDownloader() =>
            new ChannelAdvisorDownloader(Store);
-
-        /// <summary>
-        /// Create the wizard pages used to set the store up
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope) =>
-            new List<WizardPage>
-            {
-                new ChannelAdvisorAccountPage()
-            };
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
