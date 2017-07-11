@@ -14,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
         private const string TokenEndpoint = "https://api.channeladvisor.com/oauth2/token";
+        private const string AuthorizeEndpoint = "https://api.channeladvisor.com/oauth2/authorize";
         private const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
         private const string SharedSecret = "Preb8E42ckWZZpFHh6OV2w";
         private const string RedirectUri = "https://www.interapptive.com/channeladvisor/subscribe.php";
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             get
             {
                 string redirectUrl = WebUtility.UrlEncode(RedirectUri);
-                string url = $"/authorize?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&redirect_uri={redirectUrl}";
+                string url = $"{AuthorizeEndpoint}/authorize?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&redirect_uri={redirectUrl}";
                 return new Uri(url);
             }
         }

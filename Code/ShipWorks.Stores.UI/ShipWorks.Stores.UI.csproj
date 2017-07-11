@@ -201,6 +201,12 @@
       <DependentUpon>ChannelAdvisorAccountSettingsControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.Designer.cs">
+      <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>

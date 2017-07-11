@@ -26,6 +26,8 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         {
             this.viewModel = viewModel;
             InitializeComponent();
+
+            storeSetupControl.DataContext = viewModel;
         }
 
         public override bool SaveToEntity(StoreEntity store)
