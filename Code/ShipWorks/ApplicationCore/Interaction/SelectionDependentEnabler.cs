@@ -135,7 +135,7 @@ namespace ShipWorks.ApplicationCore.Interaction
                         break;
 
                     case SelectionDependentType.TwoOrMoreOrders:
-                        EnableComponent(component, twoOrMoreOrders || twoOrMoreCustomers);
+                        EnableComponent(component, twoOrMoreOrders);
                         break;
 
                     case SelectionDependentType.OneCustomer:

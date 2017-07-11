@@ -1406,8 +1406,8 @@ namespace ShipWorks
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                IOrderCombineValidator ocv = scope.Resolve<IOrderCombineValidator>();
-                return ocv.Validate(keys).Success;
+                IOrderCombineValidator orderCombineValidator = scope.Resolve<IOrderCombineValidator>();
+                return orderCombineValidator.Validate(keys).Success;
             }
         }
 
