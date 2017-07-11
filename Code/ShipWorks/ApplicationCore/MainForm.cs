@@ -2948,7 +2948,7 @@ namespace ShipWorks
         /// <summary>
         /// When the combine button is pressed
         /// </summary>
-        private void OnCombine(IEnumerable<long> orderIDs)
+        private void OnCombine(object sender, EventArgs e)
         {
             MessageBox.Show(this, "Combined!");
         }
