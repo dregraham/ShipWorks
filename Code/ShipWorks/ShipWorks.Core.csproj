@@ -723,6 +723,7 @@
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
+    <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />

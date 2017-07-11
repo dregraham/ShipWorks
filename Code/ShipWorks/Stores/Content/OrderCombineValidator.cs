@@ -34,35 +34,33 @@ namespace ShipWorks.Stores.Content
             this.storeManager = storeManager;
         }
 
+        /// <summary>
+        /// Validate the list of orders
+        /// </summary>
         public Result Validate(IEnumerable<long> orderIDs)
         {
-            if (orderIDs.None())
-            {
-                return Result.FromSuccess();
-            }
-            
-            IStoreEntity storeEntity = storeManager.GetRelatedStore(orderIDs.First());
-            Task<bool> loadResult = gateway.CanCombine(storeEntity, orderIDs);
-            bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, orderIDs.First());
-
+           
             if (orderIDs.Count() < 2)
             {
-                return Result.FromError("Only two or more orders can be combined");
+                return Result.FromError("A minimum of two orders must be selected to combine orders");
             }
+
+            bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, orderIDs.First());
 
             if (!hasPermission)
             {
-                return Result.FromError("User does not have permission to modify orders");
+                return Result.FromError("The current user does not have permission to modify orders");
             }
+
+            IStoreEntity storeEntity = storeManager.GetRelatedStore(orderIDs.First());
+            Task<bool> loadResult = gateway.CanCombine(storeEntity, orderIDs);
 
             if (loadResult.Result == false)
             {
-                return Result.FromError("Orders can't be combined");
+                return Result.FromError("Selected orders cannot be combined");
             }
 
             return Result.FromSuccess();
-
-
         }
     }
 }

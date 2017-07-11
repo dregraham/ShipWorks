@@ -1399,6 +1399,9 @@ namespace ShipWorks
             return Panels.FirstOrDefault(d => d.Name == "dockableWindowShipment");
         }
 
+        /// <summary>
+        /// Allow the combine button to be enabled
+        /// </summary>
         private bool ShouldCombineOrderBeEnabled(IEnumerable<long> keys)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
@@ -2877,7 +2880,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Create a new order
+        /// Create a new combined order
         /// </summary>
         private async void OnCombineOrders(object sender, EventArgs e)
         {
@@ -2943,9 +2946,9 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The delete key was pressed in the grid
+        /// When the combine button is pressed
         /// </summary>
-        private void OnCombine(object sender, EventArgs e)
+        private void OnCombine(IEnumerable<long> orderIDs)
         {
             MessageBox.Show(this, "Combined!");
         }

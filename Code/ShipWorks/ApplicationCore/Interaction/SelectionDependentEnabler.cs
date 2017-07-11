@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Grid;
 using ShipWorks.Filters;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
-
-    public struct SelectionDependentEntry
-    {
-        public SelectionDependentType SelectionDependentType;
-        public Func<IEnumerable<long>, bool> Applies;
-    }
-
     /// <summary>
     /// Provides design-time declarative UI state management for menu and buttons
     /// </summary>
