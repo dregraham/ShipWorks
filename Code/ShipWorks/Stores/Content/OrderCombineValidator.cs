@@ -39,6 +39,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public Result Validate(IEnumerable<long> orderIDs)
         {
+
+            if (orderIDs.None())
+            {
+                return Result.FromError("A minimum of two orders must be selected to combine orders");
+            }
            
             if (orderIDs.Count() < 2)
             {

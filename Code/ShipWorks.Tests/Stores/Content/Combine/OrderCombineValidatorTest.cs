@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         public void Validate_ReturnSuccess_WhenOrderCountNone()
         {
             var result = testObject.Validate(new long[] { });
-            Assert.True(result.Success);
+            Assert.True(result.Failure);
         }
 
         [Fact]
