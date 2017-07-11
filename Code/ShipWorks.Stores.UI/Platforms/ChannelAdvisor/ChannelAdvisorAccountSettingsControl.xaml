@@ -8,7 +8,8 @@
              d:DesignHeight="300" 
              d:DesignWidth="500"
              FontFamily="Tahoma"
-             FontSize="11">
+             FontSize="11"
+             DataContext="{d:DesignInstance local:ChannelAdvisorAccountSettingsViewModel}">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -39,7 +40,8 @@
                 Grid.Column="0" 
                 Margin="0 0 12 0" 
                 Padding="15 0 15 0"
-                Height="23">
+                Height="23"
+                Command="{Binding GetAccessCodeCommand}">
             Get Access Code
         </Button>
         <Label Grid.Row="2" 
@@ -47,8 +49,7 @@
         <TextBox Grid.Row="2" 
                  Grid.Column="2"
                  Height="23"
-                 VerticalContentAlignment="Center">
-                    7Y3CfJo2PobkBBK0SV3GAZW-ky0JhsKR32ZOOZLTICY-14382
-        </TextBox>
+                 VerticalContentAlignment="Center"
+                 Text="{Binding AccessCode, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

@@ -194,6 +194,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.xaml.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
