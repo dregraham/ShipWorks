@@ -226,8 +226,8 @@ namespace ShipWorks.Core.Tests.Integration.Actions
         [InlineData(true, ActionQueueType.UserInterface, false, false)]
         [InlineData(false, ActionQueueType.DefaultPrint, true, true)]
         [InlineData(false, ActionQueueType.DefaultPrint, false, true)]
-        [InlineData(false, ActionQueueType.Scheduled, true, true)]
-        [InlineData(false, ActionQueueType.Scheduled, false, true)]
+        [InlineData(false, ActionQueueType.Scheduled, true, false)]
+        [InlineData(false, ActionQueueType.Scheduled, false, false)]
         [InlineData(false, ActionQueueType.UserInterface, true, true)]
         [InlineData(false, ActionQueueType.UserInterface, false, true)]
         public void AnyWorkToDo_ExpectedValueIsCorrect_WhenOnlyDefaultPrintEnabledQueueEntries(bool defaultPrintEnabled,
