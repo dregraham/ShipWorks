@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Communication;
+using System.Web;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -16,6 +17,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
         private const string SharedSecret = "Preb8E42ckWZZpFHh6OV2w";
         private const string RedirectUri = "https://www.interapptive.com/channeladvisor/subscribe.php";
+
+        public Uri AuthorizeUrl
+        {
+            get
+            {
+                string redirectUrl = WebUtility.UrlEncode(RedirectUri);
+                string url = $"/authorize?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&redirect_uri={redirectUrl}";
+                return new Uri(url);
+            }
+        }
 
         /// <summary>
         /// Gets the refresh token.
