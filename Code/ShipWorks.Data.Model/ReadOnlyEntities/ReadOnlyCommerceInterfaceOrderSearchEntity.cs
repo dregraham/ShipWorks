@@ -38,14 +38,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             CommerceInterfaceOrderSearchID = source.CommerceInterfaceOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             CommerceInterfaceOrderNumber = source.CommerceInterfaceOrderNumber;
             
             
             CommerceInterfaceOrder = source.CommerceInterfaceOrder?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
             
 
             CopyCustomCommerceInterfaceOrderSearchData(source);
@@ -64,24 +60,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity CommerceInterfaceOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "CommerceInterfaceOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity CommerceInterfaceOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "CommerceInterfaceOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity CommerceInterfaceOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "CommerceInterfaceOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The CommerceInterfaceOrderNumber property of the Entity CommerceInterfaceOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "CommerceInterfaceOrderSearch"."CommerceInterfaceOrderNumber"<br/>
@@ -91,8 +69,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public ICommerceInterfaceOrderEntity CommerceInterfaceOrder { get; }
-        
-        public IStoreEntity Store { get; }
         
         
         /// <summary>

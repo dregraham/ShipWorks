@@ -30,26 +30,10 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
-			toReturn.Add(this.EtsyOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
-
-		/// <summary>Returns a new IEntityRelation object, between EtsyOrderEntity and EtsyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// EtsyOrder.OrderID - EtsyOrderSearch.OrderID
-		/// </summary>
-		public virtual IEntityRelation EtsyOrderSearchEntityUsingOrderID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EtsyOrderSearch" , true);
-				relation.AddEntityFieldPair(EtsyOrderFields.OrderID, EtsyOrderSearchFields.OrderID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderSearchEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between EtsyOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// EtsyOrder.OrderID - Note.EntityID
@@ -224,7 +208,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticEtsyOrderRelations
 	{
-		internal static readonly IEntityRelation EtsyOrderSearchEntityUsingOrderIDStatic = new EtsyOrderRelations().EtsyOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new EtsyOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new EtsyOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new EtsyOrderRelations().OrderItemEntityUsingOrderID;

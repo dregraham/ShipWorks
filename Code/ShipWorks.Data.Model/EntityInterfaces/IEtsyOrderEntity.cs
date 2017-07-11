@@ -36,7 +36,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
-        IEnumerable<IEtsyOrderSearchEntity> EtsyOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -63,7 +62,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
-        IEnumerable<IEtsyOrderSearchEntity> IEtsyOrderEntity.EtsyOrderSearch => EtsyOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

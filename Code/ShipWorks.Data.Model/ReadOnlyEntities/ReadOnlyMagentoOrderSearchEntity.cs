@@ -38,14 +38,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             MagentoOrderSearchID = source.MagentoOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             MagentoOrderID = source.MagentoOrderID;
             
             
             MagentoOrder = source.MagentoOrder?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
             
 
             CopyCustomMagentoOrderSearchData(source);
@@ -64,24 +60,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity MagentoOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MagentoOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity MagentoOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MagentoOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity MagentoOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MagentoOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The MagentoOrderID property of the Entity MagentoOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "MagentoOrderSearch"."MagentoOrderID"<br/>
@@ -91,8 +69,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IMagentoOrderEntity MagentoOrder { get; }
-        
-        public IStoreEntity Store { get; }
         
         
         /// <summary>

@@ -80,13 +80,11 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             columnMaskTableMap[EntityType.ClickCartProOrderSearchEntity] = FilterNodeColumnMaskTable.ClickCartProOrderSearch;
             columnMaskTableMap[EntityType.CommerceInterfaceOrderSearchEntity] = FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch;
             columnMaskTableMap[EntityType.EbayOrderSearchEntity] = FilterNodeColumnMaskTable.EbayOrderSearch;
-            columnMaskTableMap[EntityType.EtsyOrderSearchEntity] = FilterNodeColumnMaskTable.EtsyOrderSearch;
             columnMaskTableMap[EntityType.GrouponOrderSearchEntity] = FilterNodeColumnMaskTable.GrouponOrderSearch;
             columnMaskTableMap[EntityType.LemonStandOrderSearchEntity] = FilterNodeColumnMaskTable.LemonStandOrderSearch;
             columnMaskTableMap[EntityType.MagentoOrderSearchEntity] = FilterNodeColumnMaskTable.MagentoOrderSearch;
             columnMaskTableMap[EntityType.MarketplaceAdvisorOrderSearchEntity] = FilterNodeColumnMaskTable.MarketplaceAdvisorOrderSearch;
             columnMaskTableMap[EntityType.NetworkSolutionsOrderSearchEntity] = FilterNodeColumnMaskTable.NetworkSolutionsOrderSearch;
-            columnMaskTableMap[EntityType.NeweggOrderSearchEntity] = FilterNodeColumnMaskTable.NeweggOrderSearch;
             columnMaskTableMap[EntityType.OrderMotionOrderSearchEntity] = FilterNodeColumnMaskTable.OrderMotionOrderSearch;
             columnMaskTableMap[EntityType.OrderSearchEntity] = FilterNodeColumnMaskTable.OrderSearch;
             columnMaskTableMap[EntityType.PayPalOrderSearchEntity] = FilterNodeColumnMaskTable.PayPalOrderSearch;

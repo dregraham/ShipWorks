@@ -38,14 +38,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ClickCartProOrderSearchID = source.ClickCartProOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             ClickCartProOrderID = source.ClickCartProOrderID;
             
             
             ClickCartProOrder = source.ClickCartProOrder?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
             
 
             CopyCustomClickCartProOrderSearchData(source);
@@ -64,24 +60,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity ClickCartProOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ClickCartProOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity ClickCartProOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ClickCartProOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity ClickCartProOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ClickCartProOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The ClickCartProOrderID property of the Entity ClickCartProOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ClickCartProOrderSearch"."ClickCartProOrderID"<br/>
@@ -91,8 +69,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IClickCartProOrderEntity ClickCartProOrder { get; }
-        
-        public IStoreEntity Store { get; }
         
         
         /// <summary>

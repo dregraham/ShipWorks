@@ -38,15 +38,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             MarketplaceAdvisorOrderSearchID = source.MarketplaceAdvisorOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             InvoiceNumber = source.InvoiceNumber;
             SellerOrderNumber = source.SellerOrderNumber;
             
             
             MarketplaceAdvisorOrder = source.MarketplaceAdvisorOrder?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
             
 
             CopyCustomMarketplaceAdvisorOrderSearchData(source);
@@ -65,24 +61,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity MarketplaceAdvisorOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MarketplaceAdvisorOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity MarketplaceAdvisorOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MarketplaceAdvisorOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity MarketplaceAdvisorOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "MarketplaceAdvisorOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The InvoiceNumber property of the Entity MarketplaceAdvisorOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "MarketplaceAdvisorOrderSearch"."InvoiceNumber"<br/>
@@ -98,8 +76,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IMarketplaceAdvisorOrderEntity MarketplaceAdvisorOrder { get; }
-        
-        public IStoreEntity Store { get; }
         
         
         /// <summary>

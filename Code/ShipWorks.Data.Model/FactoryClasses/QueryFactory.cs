@@ -406,12 +406,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<EtsyOrderEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the EtsyOrderSearch entity</summary>
-		public EntityQuery<EtsyOrderSearchEntity> EtsyOrderSearch
-		{
-			get { return Create<EtsyOrderSearchEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the EtsyStore entity</summary>
 		public EntityQuery<EtsyStoreEntity> EtsyStore
 		{
@@ -722,12 +716,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<NeweggOrderItemEntity> NeweggOrderItem
 		{
 			get { return Create<NeweggOrderItemEntity>(); }
-		}
-
-		/// <summary>Creates and returns a new EntityQuery for the NeweggOrderSearch entity</summary>
-		public EntityQuery<NeweggOrderSearchEntity> NeweggOrderSearch
-		{
-			get { return Create<NeweggOrderSearchEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the NeweggStore entity</summary>

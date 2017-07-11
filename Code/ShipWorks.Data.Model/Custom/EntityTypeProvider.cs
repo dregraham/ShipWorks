@@ -70,7 +70,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "EndiciaScanFormEntity": return EntityType.EndiciaScanFormEntity;
 				case "EndiciaShipmentEntity": return EntityType.EndiciaShipmentEntity;
 				case "EtsyOrderEntity": return EntityType.EtsyOrderEntity;
-				case "EtsyOrderSearchEntity": return EntityType.EtsyOrderSearchEntity;
 				case "EtsyStoreEntity": return EntityType.EtsyStoreEntity;
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
@@ -123,7 +122,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "NetworkSolutionsStoreEntity": return EntityType.NetworkSolutionsStoreEntity;
 				case "NeweggOrderEntity": return EntityType.NeweggOrderEntity;
 				case "NeweggOrderItemEntity": return EntityType.NeweggOrderItemEntity;
-				case "NeweggOrderSearchEntity": return EntityType.NeweggOrderSearchEntity;
 				case "NeweggStoreEntity": return EntityType.NeweggStoreEntity;
 				case "NoteEntity": return EntityType.NoteEntity;
 				case "ObjectLabelEntity": return EntityType.ObjectLabelEntity;

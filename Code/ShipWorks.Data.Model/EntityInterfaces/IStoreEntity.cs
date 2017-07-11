@@ -204,27 +204,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
-        IEnumerable<IAmazonOrderSearchEntity> AmazonOrderSearch { get; }
-        IEnumerable<IChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch { get; }
-        IEnumerable<IClickCartProOrderSearchEntity> ClickCartProOrderSearch { get; }
-        IEnumerable<ICommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch { get; }
-        IEnumerable<IEbayOrderSearchEntity> EbayOrderSearch { get; }
-        IEnumerable<IEtsyOrderSearchEntity> EtsyOrderSearch { get; }
-        IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
-        IEnumerable<ILemonStandOrderSearchEntity> LemonStandOrderSearch { get; }
-        IEnumerable<IMagentoOrderSearchEntity> MagentoOrderSearch { get; }
-        IEnumerable<IMarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch { get; }
-        IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
-        IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
-        IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
         IEnumerable<IOrderSearchEntity> OrderSearch { get; }
-        IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
-        IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
-        IEnumerable<ISearsOrderSearchEntity> SearsOrderSearch { get; }
-        IEnumerable<IShopifyOrderSearchEntity> ShopifyOrderSearch { get; }
-        IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
-        IEnumerable<IWalmartOrderSearchEntity> WalmartOrderSearch { get; }
-        IEnumerable<IYahooOrderSearchEntity> YahooOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -251,27 +231,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
-        IEnumerable<IAmazonOrderSearchEntity> IStoreEntity.AmazonOrderSearch => AmazonOrderSearch;
-        IEnumerable<IChannelAdvisorOrderSearchEntity> IStoreEntity.ChannelAdvisorOrderSearch => ChannelAdvisorOrderSearch;
-        IEnumerable<IClickCartProOrderSearchEntity> IStoreEntity.ClickCartProOrderSearch => ClickCartProOrderSearch;
-        IEnumerable<ICommerceInterfaceOrderSearchEntity> IStoreEntity.CommerceInterfaceOrderSearch => CommerceInterfaceOrderSearch;
-        IEnumerable<IEbayOrderSearchEntity> IStoreEntity.EbayOrderSearch => EbayOrderSearch;
-        IEnumerable<IEtsyOrderSearchEntity> IStoreEntity.EtsyOrderSearch => EtsyOrderSearch;
-        IEnumerable<IGrouponOrderSearchEntity> IStoreEntity.GrouponOrderSearch => GrouponOrderSearch;
-        IEnumerable<ILemonStandOrderSearchEntity> IStoreEntity.LemonStandOrderSearch => LemonStandOrderSearch;
-        IEnumerable<IMagentoOrderSearchEntity> IStoreEntity.MagentoOrderSearch => MagentoOrderSearch;
-        IEnumerable<IMarketplaceAdvisorOrderSearchEntity> IStoreEntity.MarketplaceAdvisorOrderSearch => MarketplaceAdvisorOrderSearch;
-        IEnumerable<INetworkSolutionsOrderSearchEntity> IStoreEntity.NetworkSolutionsOrderSearch => NetworkSolutionsOrderSearch;
-        IEnumerable<INeweggOrderSearchEntity> IStoreEntity.NeweggOrderSearch => NeweggOrderSearch;
-        IEnumerable<IOrderMotionOrderSearchEntity> IStoreEntity.OrderMotionOrderSearch => OrderMotionOrderSearch;
         IEnumerable<IOrderSearchEntity> IStoreEntity.OrderSearch => OrderSearch;
-        IEnumerable<IPayPalOrderSearchEntity> IStoreEntity.PayPalOrderSearch => PayPalOrderSearch;
-        IEnumerable<IProStoresOrderSearchEntity> IStoreEntity.ProStoresOrderSearch => ProStoresOrderSearch;
-        IEnumerable<ISearsOrderSearchEntity> IStoreEntity.SearsOrderSearch => SearsOrderSearch;
-        IEnumerable<IShopifyOrderSearchEntity> IStoreEntity.ShopifyOrderSearch => ShopifyOrderSearch;
-        IEnumerable<IThreeDCartOrderSearchEntity> IStoreEntity.ThreeDCartOrderSearch => ThreeDCartOrderSearch;
-        IEnumerable<IWalmartOrderSearchEntity> IStoreEntity.WalmartOrderSearch => WalmartOrderSearch;
-        IEnumerable<IYahooOrderSearchEntity> IStoreEntity.YahooOrderSearch => YahooOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

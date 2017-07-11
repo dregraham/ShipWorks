@@ -31,7 +31,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.GrouponOrderEntityUsingOrderID);
-			toReturn.Add(this.StoreEntityUsingStoreID);
 			return toReturn;
 		}
 
@@ -53,20 +52,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between GrouponOrderSearchEntity and StoreEntity over the m:1 relation they have, using the relation between the fields:
-		/// GrouponOrderSearch.StoreID - Store.StoreID
-		/// </summary>
-		public virtual IEntityRelation StoreEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Store", false);
-				relation.AddEntityFieldPair(StoreFields.StoreID, GrouponOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderSearchEntity", true);
-				return relation;
-			}
-		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -82,7 +67,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticGrouponOrderSearchRelations
 	{
 		internal static readonly IEntityRelation GrouponOrderEntityUsingOrderIDStatic = new GrouponOrderSearchRelations().GrouponOrderEntityUsingOrderID;
-		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new GrouponOrderSearchRelations().StoreEntityUsingStoreID;
 
 		/// <summary>CTor</summary>
 		static StaticGrouponOrderSearchRelations()

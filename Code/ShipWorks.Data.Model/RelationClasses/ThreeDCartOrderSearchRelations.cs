@@ -30,7 +30,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.StoreEntityUsingStoreID);
 			toReturn.Add(this.ThreeDCartOrderEntityUsingOrderID);
 			return toReturn;
 		}
@@ -39,20 +38,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between ThreeDCartOrderSearchEntity and StoreEntity over the m:1 relation they have, using the relation between the fields:
-		/// ThreeDCartOrderSearch.StoreID - Store.StoreID
-		/// </summary>
-		public virtual IEntityRelation StoreEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Store", false);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ThreeDCartOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderSearchEntity", true);
-				return relation;
-			}
-		}
 		/// <summary>Returns a new IEntityRelation object, between ThreeDCartOrderSearchEntity and ThreeDCartOrderEntity over the m:1 relation they have, using the relation between the fields:
 		/// ThreeDCartOrderSearch.OrderID - ThreeDCartOrder.OrderID
 		/// </summary>
@@ -81,7 +66,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticThreeDCartOrderSearchRelations
 	{
-		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new ThreeDCartOrderSearchRelations().StoreEntityUsingStoreID;
 		internal static readonly IEntityRelation ThreeDCartOrderEntityUsingOrderIDStatic = new ThreeDCartOrderSearchRelations().ThreeDCartOrderEntityUsingOrderID;
 
 		/// <summary>CTor</summary>

@@ -1099,26 +1099,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty EtsyOrderSearchEntity objects.</summary>
-	[Serializable]
-	public partial class EtsyOrderSearchEntityFactory : EntityFactoryBase2<EtsyOrderSearchEntity> {
-		/// <summary>CTor</summary>
-		public EtsyOrderSearchEntityFactory() : base("EtsyOrderSearchEntity", ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity, false) { }
-		
-		/// <summary>Creates a new EtsyOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new EtsyOrderSearchEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderSearchUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty EtsyStoreEntity objects.</summary>
 	[Serializable]
 	public partial class EtsyStoreEntityFactory : EntityFactoryBase2<EtsyStoreEntity> {
@@ -2159,26 +2139,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty NeweggOrderSearchEntity objects.</summary>
-	[Serializable]
-	public partial class NeweggOrderSearchEntityFactory : EntityFactoryBase2<NeweggOrderSearchEntity> {
-		/// <summary>CTor</summary>
-		public NeweggOrderSearchEntityFactory() : base("NeweggOrderSearchEntity", ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity, false) { }
-		
-		/// <summary>Creates a new NeweggOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new NeweggOrderSearchEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderSearchUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty NeweggStoreEntity objects.</summary>
 	[Serializable]
 	public partial class NeweggStoreEntityFactory : EntityFactoryBase2<NeweggStoreEntity> {
@@ -2512,7 +2472,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new OrderSearchEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderSearchUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -4402,9 +4361,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					factoryToUse = new EtsyOrderEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity:
-					factoryToUse = new EtsyOrderSearchEntityFactory();
-					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					factoryToUse = new EtsyStoreEntityFactory();
 					break;
@@ -4560,9 +4516,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggOrderItemEntity:
 					factoryToUse = new NeweggOrderItemEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity:
-					factoryToUse = new NeweggOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggStoreEntity:
 					factoryToUse = new NeweggStoreEntityFactory();

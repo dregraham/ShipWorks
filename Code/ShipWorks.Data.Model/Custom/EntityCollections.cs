@@ -2856,63 +2856,6 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of EtsyOrderSearchEntity
-	/// </summary>
-	public class EtsyOrderSearchCollection : EntityCollection<EtsyOrderSearchEntity>
-	{
-        /// <summary>
-        /// Gets the count of all EtsyOrderSearchEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all EtsyOrderSearchEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new EtsyOrderSearchEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static EtsyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static EtsyOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            EtsyOrderSearchCollection collection = new EtsyOrderSearchCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of EtsyStoreEntity
 	/// </summary>
 	public class EtsyStoreCollection : EntityCollection<EtsyStoreEntity>
@@ -5861,63 +5804,6 @@ namespace ShipWorks.Data.Model.Custom
         public static NeweggOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             NeweggOrderItemCollection collection = new NeweggOrderItemCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
-	/// Strongly typed collection of NeweggOrderSearchEntity
-	/// </summary>
-	public class NeweggOrderSearchCollection : EntityCollection<NeweggOrderSearchEntity>
-	{
-        /// <summary>
-        /// Gets the count of all NeweggOrderSearchEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all NeweggOrderSearchEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new NeweggOrderSearchEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static NeweggOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static NeweggOrderSearchCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            NeweggOrderSearchCollection collection = new NeweggOrderSearchCollection();
 
             RelationPredicateBucket bucket = null;
 

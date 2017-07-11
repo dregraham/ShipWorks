@@ -33,7 +33,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private LemonStandOrderEntity _lemonStandOrder;
-		private StoreEntity _store;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -48,8 +47,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name LemonStandOrder</summary>
 			public static readonly string LemonStandOrder = "LemonStandOrder";
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
 		}
 		#endregion
 		
@@ -112,11 +109,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_lemonStandOrder.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				_store = (StoreEntity)info.GetValue("_store", typeof(StoreEntity));
-				if(_store!=null)
-				{
-					_store.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -132,9 +124,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case LemonStandOrderSearchFieldIndex.OrderID:
 					DesetupSyncLemonStandOrder(true, false);
-					break;
-				case LemonStandOrderSearchFieldIndex.StoreID:
-					DesetupSyncStore(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -152,9 +141,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "LemonStandOrder":
 					this.LemonStandOrder = (LemonStandOrderEntity)entity;
-					break;
-				case "Store":
-					this.Store = (StoreEntity)entity;
 					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
@@ -180,9 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "LemonStandOrder":
 					toReturn.Add(Relations.LemonStandOrderEntityUsingOrderID);
-					break;
-				case "Store":
-					toReturn.Add(Relations.StoreEntityUsingStoreID);
 					break;
 				default:
 					break;				
@@ -215,9 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "LemonStandOrder":
 					SetupSyncLemonStandOrder(relatedEntity);
 					break;
-				case "Store":
-					SetupSyncStore(relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -233,9 +213,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "LemonStandOrder":
 					DesetupSyncLemonStandOrder(false, true);
-					break;
-				case "Store":
-					DesetupSyncStore(false, true);
 					break;
 				default:
 					break;
@@ -260,10 +237,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				toReturn.Add(_lemonStandOrder);
 			}
-			if(_store!=null)
-			{
-				toReturn.Add(_store);
-			}
 			return toReturn;
 		}
 		
@@ -284,7 +257,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_lemonStandOrder", (!this.MarkedForDeletion?_lemonStandOrder:null));
-				info.AddValue("_store", (!this.MarkedForDeletion?_store:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -306,15 +278,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(LemonStandOrderFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
-			return bucket;
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Store' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoStore()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StoreFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
 			return bucket;
 		}
 		
@@ -362,7 +325,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("LemonStandOrder", _lemonStandOrder);
-			toReturn.Add("Store", _store);
 			return toReturn;
 		}
 
@@ -388,12 +350,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LemonStandOrderSearchID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumberComplete", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("LemonStandOrderID", fieldHashtable);
 		}
@@ -424,39 +380,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnLemonStandOrderPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
-		/// <summary> Removes the sync logic for member _store</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncStore(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticLemonStandOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, signalRelatedEntity, "LemonStandOrderSearch", resetFKFields, new int[] { (int)LemonStandOrderSearchFieldIndex.StoreID } );
-			_store = null;
-		}
-
-		/// <summary> setups the sync logic for member _store</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncStore(IEntityCore relatedEntity)
-		{
-			if(_store!=relatedEntity)
-			{
-				DesetupSyncStore(true, true);
-				_store = (StoreEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticLemonStandOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnStorePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -503,13 +426,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(LemonStandOrderEntityFactory))),	(IEntityRelation)GetRelationsForField("LemonStandOrder")[0], (int)ShipWorks.Data.Model.EntityType.LemonStandOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.LemonStandOrderEntity, 0, null, null, null, null, "LemonStandOrder", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Store' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathStore
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(StoreEntityFactory))),	(IEntityRelation)GetRelationsForField("Store")[0], (int)ShipWorks.Data.Model.EntityType.LemonStandOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.StoreEntity, 0, null, null, null, null, "Store", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
-		}
-
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -554,36 +470,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)LemonStandOrderSearchFieldIndex.OrderID, value); }
 		}
 
-		/// <summary> The StoreID property of the Entity LemonStandOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."StoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StoreID
-		{
-			get { return (System.Int64)GetValue((int)LemonStandOrderSearchFieldIndex.StoreID, true); }
-			set	{ SetValue((int)LemonStandOrderSearchFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The OrderNumber property of the Entity LemonStandOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."OrderNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OrderNumber
-		{
-			get { return (System.Int64)GetValue((int)LemonStandOrderSearchFieldIndex.OrderNumber, true); }
-			set	{ SetValue((int)LemonStandOrderSearchFieldIndex.OrderNumber, value); }
-		}
-
-		/// <summary> The OrderNumberComplete property of the Entity LemonStandOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."OrderNumberComplete"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OrderNumberComplete
-		{
-			get { return (System.String)GetValue((int)LemonStandOrderSearchFieldIndex.OrderNumberComplete, true); }
-			set	{ SetValue((int)LemonStandOrderSearchFieldIndex.OrderNumberComplete, value); }
-		}
-
 		/// <summary> The LemonStandOrderID property of the Entity LemonStandOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "LemonStandOrderSearch"."LemonStandOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
@@ -608,24 +494,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				else
 				{
 					SetSingleRelatedEntityNavigator(value, "LemonStandOrderSearch", "LemonStandOrder", _lemonStandOrder, true); 
-				}
-			}
-		}
-
-		/// <summary> Gets / sets related entity of type 'StoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual StoreEntity Store
-		{
-			get	{ return _store; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncStore(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "LemonStandOrderSearch", "Store", _store, true); 
 				}
 			}
 		}

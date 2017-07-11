@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<NeweggOrderSearchEntity> _neweggOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -49,8 +48,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Customer = "Customer";
 			/// <summary>Member name Store</summary>
 			public static readonly string Store = "Store";
-			/// <summary>Member name NeweggOrderSearch</summary>
-			public static readonly string NeweggOrderSearch = "NeweggOrderSearch";
 			/// <summary>Member name Notes</summary>
 			public static readonly string Notes = "Notes";
 			/// <summary>Member name OrderCharges</summary>
@@ -129,7 +126,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_neweggOrderSearch = (EntityCollection<NeweggOrderSearchEntity>)info.GetValue("_neweggOrderSearch", typeof(EntityCollection<NeweggOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -145,9 +141,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "NeweggOrderSearch":
-					this.NeweggOrderSearch.Add((NeweggOrderSearchEntity)entity);
-					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -170,9 +163,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "NeweggOrderSearch":
-					toReturn.Add(Relations.NeweggOrderSearchEntityUsingOrderID);
-					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -202,9 +192,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "NeweggOrderSearch":
-					this.NeweggOrderSearch.Add((NeweggOrderSearchEntity)relatedEntity);
-					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -219,9 +206,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "NeweggOrderSearch":
-					this.PerformRelatedEntityRemoval(this.NeweggOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
-					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -252,7 +236,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.NeweggOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -282,7 +265,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_neweggOrderSearch", ((_neweggOrderSearch!=null) && (_neweggOrderSearch.Count>0) && !this.MarkedForDeletion)?_neweggOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -304,15 +286,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new NeweggOrderRelations().GetAllRelations();
 		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'NeweggOrderSearch' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoNeweggOrderSearch()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(NeweggOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
-			return bucket;
-		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -326,7 +299,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._neweggOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -334,7 +306,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._neweggOrderSearch = (EntityCollection<NeweggOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -343,7 +314,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._neweggOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -353,7 +323,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<NeweggOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(NeweggOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -361,7 +330,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
-			toReturn.Add("NeweggOrderSearch", _neweggOrderSearch);
 			return toReturn;
 		}
 
@@ -416,13 +384,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'NeweggOrderSearch' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathNeweggOrderSearch
-		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<NeweggOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(NeweggOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("NeweggOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.NeweggOrderEntity, (int)ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity, 0, null, null, null, null, "NeweggOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
-		}
-
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -475,13 +436,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)NeweggOrderFieldIndex.IsAutoVoid, false); }
 			set	{ SetValue((int)NeweggOrderFieldIndex.IsAutoVoid, value); }
-		}
-
-		/// <summary> Gets the EntityCollection with the related entities of type 'NeweggOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(NeweggOrderSearchEntity))]
-		public virtual EntityCollection<NeweggOrderSearchEntity> NeweggOrderSearch
-		{
-			get { return GetOrCreateEntityCollection<NeweggOrderSearchEntity, NeweggOrderSearchEntityFactory>("NeweggOrder", true, false, ref _neweggOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -25,9 +25,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
                 .Select(x => new AmazonOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    StoreID = x.StoreID,
-                    OrderNumber = x.OrderNumber,
-                    OrderNumberComplete = x.OrderNumberComplete,
                     AmazonOrderID = x.AmazonOrderID
                 });
 

@@ -1016,7 +1016,6 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
-    <Compile Include="Filters\Content\Conditions\ICombinedOrderCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
@@ -1338,7 +1337,6 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
-    <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1730,23 +1728,16 @@
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
-    <Compile Include="Stores\Platforms\ClickCartPro\CoreExtensions\Filters\Orders\ClickCartProCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\Etsy\CoreExtensions\Filters\EtsyCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
-    <Compile Include="Stores\Platforms\Magento\CoreExtensions\Filters\MagentoCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
@@ -1778,21 +1769,12 @@
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
-    <Compile Include="Stores\Platforms\MarketplaceAdvisor\CoreExtensions\Filters\MarketplaceAdvisorCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\NetworkSolutions\CoreExtensions\Filters\NetworkSolutionsCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\Newegg\CoreExtensions\Filters\NeweggCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
-    <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\PayPal\CoreExtensions\Filters\PayPalCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\ProStores\CoreExtensions\Filters\ProStoresCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
-    <Compile Include="Stores\Platforms\Sears\CoreExtensions\Filters\SearsCombinedOrderNumberCondition.cs" />
-    <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
-    <Compile Include="Stores\Platforms\ThreeDCart\CoreExtensions\Filters\ThreeDCartCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
@@ -1849,7 +1831,6 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
-    <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Filters\YahooCombinedOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

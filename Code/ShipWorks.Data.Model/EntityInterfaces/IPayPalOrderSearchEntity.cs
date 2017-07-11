@@ -33,24 +33,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String OrderNumberComplete { get; }
         /// <summary> The TransactionID property of the Entity PayPalOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "PayPalOrderSearch"."TransactionID"<br/>
@@ -60,7 +42,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IPayPalOrderEntity PayPalOrder { get; }
-        IStoreEntity Store { get; }
         
 
         /// <summary>
@@ -88,7 +69,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         IPayPalOrderEntity IPayPalOrderSearchEntity.PayPalOrder => PayPalOrder;
-        IStoreEntity IPayPalOrderSearchEntity.Store => Store;
         
 
         /// <summary>

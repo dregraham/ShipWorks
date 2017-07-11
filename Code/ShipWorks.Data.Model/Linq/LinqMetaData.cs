@@ -212,9 +212,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					toReturn = this.EtsyOrder;
 					break;
-				case ShipWorks.Data.Model.EntityType.EtsyOrderSearchEntity:
-					toReturn = this.EtsyOrderSearch;
-					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
 					break;
@@ -370,9 +367,6 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggOrderItemEntity:
 					toReturn = this.NeweggOrderItem;
-					break;
-				case ShipWorks.Data.Model.EntityType.NeweggOrderSearchEntity:
-					toReturn = this.NeweggOrderSearch;
 					break;
 				case ShipWorks.Data.Model.EntityType.NeweggStoreEntity:
 					toReturn = this.NeweggStore;
@@ -999,12 +993,6 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<EtsyOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting EtsyOrderSearchEntity instances in the database.</summary>
-		public DataSource2<EtsyOrderSearchEntity> EtsyOrderSearch
-		{
-			get { return new DataSource2<EtsyOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting EtsyStoreEntity instances in the database.</summary>
 		public DataSource2<EtsyStoreEntity> EtsyStore
 		{
@@ -1315,12 +1303,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<NeweggOrderItemEntity> NeweggOrderItem
 		{
 			get { return new DataSource2<NeweggOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting NeweggOrderSearchEntity instances in the database.</summary>
-		public DataSource2<NeweggOrderSearchEntity> NeweggOrderSearch
-		{
-			get { return new DataSource2<NeweggOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting NeweggStoreEntity instances in the database.</summary>

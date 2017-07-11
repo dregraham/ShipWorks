@@ -25,9 +25,6 @@ namespace ShipWorks.Stores.Platforms.Magento.Content
                 .Select(x => new MagentoOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    StoreID = x.StoreID,
-                    OrderNumber = x.OrderNumber,
-                    OrderNumberComplete = x.OrderNumberComplete,
                     MagentoOrderID = x.MagentoOrderID
                 });
 

@@ -33,7 +33,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EbayOrderEntity _ebayOrder;
-		private StoreEntity _store;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -48,8 +47,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name EbayOrder</summary>
 			public static readonly string EbayOrder = "EbayOrder";
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
 		}
 		#endregion
 		
@@ -112,11 +109,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_ebayOrder.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				_store = (StoreEntity)info.GetValue("_store", typeof(StoreEntity));
-				if(_store!=null)
-				{
-					_store.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -132,9 +124,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case EbayOrderSearchFieldIndex.OrderID:
 					DesetupSyncEbayOrder(true, false);
-					break;
-				case EbayOrderSearchFieldIndex.StoreID:
-					DesetupSyncStore(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -152,9 +141,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayOrder":
 					this.EbayOrder = (EbayOrderEntity)entity;
-					break;
-				case "Store":
-					this.Store = (StoreEntity)entity;
 					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
@@ -180,9 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayOrder":
 					toReturn.Add(Relations.EbayOrderEntityUsingOrderID);
-					break;
-				case "Store":
-					toReturn.Add(Relations.StoreEntityUsingStoreID);
 					break;
 				default:
 					break;				
@@ -215,9 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EbayOrder":
 					SetupSyncEbayOrder(relatedEntity);
 					break;
-				case "Store":
-					SetupSyncStore(relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -233,9 +213,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayOrder":
 					DesetupSyncEbayOrder(false, true);
-					break;
-				case "Store":
-					DesetupSyncStore(false, true);
 					break;
 				default:
 					break;
@@ -260,10 +237,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				toReturn.Add(_ebayOrder);
 			}
-			if(_store!=null)
-			{
-				toReturn.Add(_store);
-			}
 			return toReturn;
 		}
 		
@@ -284,7 +257,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_ebayOrder", (!this.MarkedForDeletion?_ebayOrder:null));
-				info.AddValue("_store", (!this.MarkedForDeletion?_store:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -306,15 +278,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(EbayOrderFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
-			return bucket;
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Store' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoStore()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StoreFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
 			return bucket;
 		}
 		
@@ -362,7 +325,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("EbayOrder", _ebayOrder);
-			toReturn.Add("Store", _store);
 			return toReturn;
 		}
 
@@ -388,12 +350,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EbayOrderSearchID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumberComplete", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EbayOrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -428,39 +384,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnEbayOrderPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
-		/// <summary> Removes the sync logic for member _store</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncStore(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticEbayOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, signalRelatedEntity, "EbayOrderSearch", resetFKFields, new int[] { (int)EbayOrderSearchFieldIndex.StoreID } );
-			_store = null;
-		}
-
-		/// <summary> setups the sync logic for member _store</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncStore(IEntityCore relatedEntity)
-		{
-			if(_store!=relatedEntity)
-			{
-				DesetupSyncStore(true, true);
-				_store = (StoreEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticEbayOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnStorePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -507,13 +430,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderEntityFactory))),	(IEntityRelation)GetRelationsForField("EbayOrder")[0], (int)ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.EbayOrderEntity, 0, null, null, null, null, "EbayOrder", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Store' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathStore
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(StoreEntityFactory))),	(IEntityRelation)GetRelationsForField("Store")[0], (int)ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.StoreEntity, 0, null, null, null, null, "Store", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
-		}
-
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
@@ -556,36 +472,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.OrderID, true); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.OrderID, value); }
-		}
-
-		/// <summary> The StoreID property of the Entity EbayOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "EbayOrderSearch"."StoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StoreID
-		{
-			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.StoreID, true); }
-			set	{ SetValue((int)EbayOrderSearchFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The OrderNumber property of the Entity EbayOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "EbayOrderSearch"."OrderNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OrderNumber
-		{
-			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.OrderNumber, true); }
-			set	{ SetValue((int)EbayOrderSearchFieldIndex.OrderNumber, value); }
-		}
-
-		/// <summary> The OrderNumberComplete property of the Entity EbayOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "EbayOrderSearch"."OrderNumberComplete"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OrderNumberComplete
-		{
-			get { return (System.String)GetValue((int)EbayOrderSearchFieldIndex.OrderNumberComplete, true); }
-			set	{ SetValue((int)EbayOrderSearchFieldIndex.OrderNumberComplete, value); }
 		}
 
 		/// <summary> The EbayOrderID property of the Entity EbayOrderSearch<br/><br/></summary>
@@ -632,24 +518,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				else
 				{
 					SetSingleRelatedEntityNavigator(value, "EbayOrderSearch", "EbayOrder", _ebayOrder, true); 
-				}
-			}
-		}
-
-		/// <summary> Gets / sets related entity of type 'StoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual StoreEntity Store
-		{
-			get	{ return _store; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncStore(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "EbayOrderSearch", "Store", _store, true); 
 				}
 			}
 		}

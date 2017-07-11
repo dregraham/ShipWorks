@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private StoreEntity _store;
 		private ThreeDCartOrderEntity _threeDCartOrder;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +45,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
 			/// <summary>Member name ThreeDCartOrder</summary>
 			public static readonly string ThreeDCartOrder = "ThreeDCartOrder";
 		}
@@ -107,11 +104,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_store = (StoreEntity)info.GetValue("_store", typeof(StoreEntity));
-				if(_store!=null)
-				{
-					_store.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				_threeDCartOrder = (ThreeDCartOrderEntity)info.GetValue("_threeDCartOrder", typeof(ThreeDCartOrderEntity));
 				if(_threeDCartOrder!=null)
 				{
@@ -133,9 +125,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case ThreeDCartOrderSearchFieldIndex.OrderID:
 					DesetupSyncThreeDCartOrder(true, false);
 					break;
-				case ThreeDCartOrderSearchFieldIndex.StoreID:
-					DesetupSyncStore(true, false);
-					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -150,9 +139,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "Store":
-					this.Store = (StoreEntity)entity;
-					break;
 				case "ThreeDCartOrder":
 					this.ThreeDCartOrder = (ThreeDCartOrderEntity)entity;
 					break;
@@ -178,9 +164,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "Store":
-					toReturn.Add(Relations.StoreEntityUsingStoreID);
-					break;
 				case "ThreeDCartOrder":
 					toReturn.Add(Relations.ThreeDCartOrderEntityUsingOrderID);
 					break;
@@ -212,9 +195,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Store":
-					SetupSyncStore(relatedEntity);
-					break;
 				case "ThreeDCartOrder":
 					SetupSyncThreeDCartOrder(relatedEntity);
 					break;
@@ -231,9 +211,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Store":
-					DesetupSyncStore(false, true);
-					break;
 				case "ThreeDCartOrder":
 					DesetupSyncThreeDCartOrder(false, true);
 					break;
@@ -256,10 +233,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_store!=null)
-			{
-				toReturn.Add(_store);
-			}
 			if(_threeDCartOrder!=null)
 			{
 				toReturn.Add(_threeDCartOrder);
@@ -283,7 +256,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_store", (!this.MarkedForDeletion?_store:null));
 				info.AddValue("_threeDCartOrder", (!this.MarkedForDeletion?_threeDCartOrder:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -298,15 +270,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new ThreeDCartOrderSearchRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Store' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoStore()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StoreFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
-			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ThreeDCartOrder' to this entity.</summary>
@@ -361,7 +324,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("Store", _store);
 			toReturn.Add("ThreeDCartOrder", _threeDCartOrder);
 			return toReturn;
 		}
@@ -389,48 +351,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumberComplete", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ThreeDCartOrderID", fieldHashtable);
 		}
 		#endregion
-
-		/// <summary> Removes the sync logic for member _store</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncStore(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticThreeDCartOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, signalRelatedEntity, "ThreeDCartOrderSearch", resetFKFields, new int[] { (int)ThreeDCartOrderSearchFieldIndex.StoreID } );
-			_store = null;
-		}
-
-		/// <summary> setups the sync logic for member _store</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncStore(IEntityCore relatedEntity)
-		{
-			if(_store!=relatedEntity)
-			{
-				DesetupSyncStore(true, true);
-				_store = (StoreEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticThreeDCartOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnStorePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Removes the sync logic for member _threeDCartOrder</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -496,13 +419,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Store' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathStore
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(StoreEntityFactory))),	(IEntityRelation)GetRelationsForField("Store")[0], (int)ShipWorks.Data.Model.EntityType.ThreeDCartOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.StoreEntity, 0, null, null, null, null, "Store", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
-		}
-
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ThreeDCartOrder' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathThreeDCartOrder
@@ -554,36 +470,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ThreeDCartOrderSearchFieldIndex.OrderID, value); }
 		}
 
-		/// <summary> The StoreID property of the Entity ThreeDCartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ThreeDCartOrderSearch"."StoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StoreID
-		{
-			get { return (System.Int64)GetValue((int)ThreeDCartOrderSearchFieldIndex.StoreID, true); }
-			set	{ SetValue((int)ThreeDCartOrderSearchFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The OrderNumber property of the Entity ThreeDCartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ThreeDCartOrderSearch"."OrderNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OrderNumber
-		{
-			get { return (System.Int64)GetValue((int)ThreeDCartOrderSearchFieldIndex.OrderNumber, true); }
-			set	{ SetValue((int)ThreeDCartOrderSearchFieldIndex.OrderNumber, value); }
-		}
-
-		/// <summary> The OrderNumberComplete property of the Entity ThreeDCartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ThreeDCartOrderSearch"."OrderNumberComplete"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OrderNumberComplete
-		{
-			get { return (System.String)GetValue((int)ThreeDCartOrderSearchFieldIndex.OrderNumberComplete, true); }
-			set	{ SetValue((int)ThreeDCartOrderSearchFieldIndex.OrderNumberComplete, value); }
-		}
-
 		/// <summary> The ThreeDCartOrderID property of the Entity ThreeDCartOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ThreeDCartOrderSearch"."ThreeDCartOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
@@ -592,24 +478,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderID, true); }
 			set	{ SetValue((int)ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderID, value); }
-		}
-
-		/// <summary> Gets / sets related entity of type 'StoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual StoreEntity Store
-		{
-			get	{ return _store; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncStore(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "ThreeDCartOrderSearch", "Store", _store, true); 
-				}
-			}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ThreeDCartOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

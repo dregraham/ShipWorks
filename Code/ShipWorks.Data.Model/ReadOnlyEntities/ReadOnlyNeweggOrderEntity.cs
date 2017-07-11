@@ -42,8 +42,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            NeweggOrderSearch = source.NeweggOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<INeweggOrderSearchEntity>();
 
             CopyCustomNeweggOrderData(source);
         }
@@ -69,8 +67,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public Nullable<System.Boolean> IsAutoVoid { get; }
         
         
-        
-        public IEnumerable<INeweggOrderSearchEntity> NeweggOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

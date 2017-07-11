@@ -255,12 +255,9 @@
       </EntityDefinition>
       <EntityDefinition Name="AmazonOrderSearch" ObjectID="dbef2212-4582-498d-b3fe-adea0014e615">
         <Fields>
-          <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="5" />
+          <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="2" />
           <Field Name="AmazonOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonProfile" ObjectID="2b74a416-5d2b-4e35-9bdc-09330904a10f">
@@ -458,11 +455,8 @@
       <EntityDefinition Name="ChannelAdvisorOrderSearch" ObjectID="fff00b34-ee7d-4254-a1f2-7b17c2524003">
         <Fields>
           <Field Name="ChannelAdvisorOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="CustomOrderIdentifier" Type="string" MaxLength="50" FieldIndex="5" />
+          <Field Name="CustomOrderIdentifier" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ChannelAdvisorStore" ObjectID="72a2ba72-deb0-4a13-9de6-7595ad6e7bbe" InheritanceType="2">
@@ -483,12 +477,9 @@
       </EntityDefinition>
       <EntityDefinition Name="ClickCartProOrderSearch" ObjectID="ad5ed666-d1ac-4617-809f-0c03d306b057">
         <Fields>
-          <Field Name="ClickCartProOrderID" Type="string" MaxLength="25" FieldIndex="5" />
+          <Field Name="ClickCartProOrderID" Type="string" MaxLength="25" FieldIndex="2" />
           <Field Name="ClickCartProOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="CommerceInterfaceOrder" ObjectID="88b2902e-95e4-4444-9e66-825518baca1d" InheritanceType="2">
@@ -498,12 +489,9 @@
       </EntityDefinition>
       <EntityDefinition Name="CommerceInterfaceOrderSearch" ObjectID="37cb1cfd-ee58-49b5-b238-e9fdd2166ace">
         <Fields>
-          <Field Name="CommerceInterfaceOrderNumber" Type="string" MaxLength="60" FieldIndex="5" />
+          <Field Name="CommerceInterfaceOrderNumber" Type="string" MaxLength="60" FieldIndex="2" />
           <Field Name="CommerceInterfaceOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Computer" ObjectID="e9411829-fd01-4153-99db-64494cf07d29">
@@ -674,14 +662,11 @@
       </EntityDefinition>
       <EntityDefinition Name="EbayOrderSearch" ObjectID="5071fe5f-0360-4d85-813f-875585fc9f27">
         <Fields>
-          <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="6" />
-          <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="5" />
+          <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="SellingManagerRecord" Type="int" Precision="10" FieldIndex="7" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
+          <Field Name="SellingManagerRecord" Type="int" Precision="10" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EbayStore" ObjectID="2e8defc6-0c64-47b3-be80-0c2b097d304e" InheritanceType="2">
@@ -835,15 +820,6 @@
         <Fields>
           <Field Name="WasPaid" Type="bool" FieldIndex="0" />
           <Field Name="WasShipped" Type="bool" FieldIndex="1" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="EtsyOrderSearch" ObjectID="0df40ede-ed96-4c0f-aca0-31a90a786668">
-        <Fields>
-          <Field Name="EtsyOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EtsyStore" ObjectID="b71e1a57-e10a-461d-8ce4-df530fb72b96" InheritanceType="2">
@@ -1358,12 +1334,9 @@
       </EntityDefinition>
       <EntityDefinition Name="GrouponOrderSearch" ObjectID="cf72da0d-0d1d-44a7-bfc8-90c3dc5ef60e">
         <Fields>
-          <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="5" />
+          <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="GrouponOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponStore" ObjectID="76e408ac-3288-492e-af17-dbfca6e5aee7" InheritanceType="2">
@@ -1508,12 +1481,9 @@
       </EntityDefinition>
       <EntityDefinition Name="LemonStandOrderSearch" ObjectID="ff47c954-59c1-48bd-9950-50ecd260cdd2">
         <Fields>
-          <Field Name="LemonStandOrderID" Type="string" MaxLength="20" FieldIndex="5" />
+          <Field Name="LemonStandOrderID" Type="string" MaxLength="20" FieldIndex="2" />
           <Field Name="LemonStandOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="LemonStandStore" ObjectID="baa2cdc3-9229-41cd-a639-0c6e792f1508" InheritanceType="2">
@@ -1530,12 +1500,9 @@
       </EntityDefinition>
       <EntityDefinition Name="MagentoOrderSearch" ObjectID="4603d115-8d11-4c61-8ed6-a85100b46748">
         <Fields>
-          <Field Name="MagentoOrderID" Type="long" Precision="19" FieldIndex="5" />
+          <Field Name="MagentoOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="MagentoOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="MagentoStore" ObjectID="8220c083-862b-4d98-a211-c23a0eee0f22" InheritanceType="2">
@@ -1554,13 +1521,10 @@
       </EntityDefinition>
       <EntityDefinition Name="MarketplaceAdvisorOrderSearch" ObjectID="33e447bb-ef13-4187-8026-d9deb71c5f21">
         <Fields>
-          <Field Name="InvoiceNumber" Type="string" MaxLength="50" FieldIndex="5" />
+          <Field Name="InvoiceNumber" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="MarketplaceAdvisorOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="SellerOrderNumber" Type="long" Precision="19" FieldIndex="6" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
+          <Field Name="SellerOrderNumber" Type="long" Precision="19" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="MarketplaceAdvisorStore" ObjectID="415c1db7-f32b-41fa-8496-172743ffcff4" InheritanceType="2">
@@ -1594,12 +1558,9 @@
       </EntityDefinition>
       <EntityDefinition Name="NetworkSolutionsOrderSearch" ObjectID="070d02de-5dda-4b3b-b07f-f66235b5a4e5">
         <Fields>
-          <Field Name="NetworkSolutionsOrderID" Type="long" Precision="19" FieldIndex="5" />
+          <Field Name="NetworkSolutionsOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="NetworkSolutionsOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="NetworkSolutionsStore" ObjectID="651b0adf-355f-4bbb-821f-3b39eb2de608" InheritanceType="2">
@@ -1625,15 +1586,6 @@
           <Field Name="SellerPartNumber" Type="string" IsOptional="true" MaxLength="64" FieldIndex="0" />
           <Field Name="ShippingStatusDescription" Type="string" IsOptional="true" MaxLength="32" FieldIndex="4" />
           <Field Name="ShippingStatusID" Type="int" IsOptional="true" FieldIndex="3" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="NeweggOrderSearch" ObjectID="71069474-f407-49fb-a950-39333ab068e9">
-        <Fields>
-          <Field Name="NeweggOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="NeweggStore" ObjectID="bbfeef29-d087-474d-ad28-1753d0db5aaf" InheritanceType="2">
@@ -1890,10 +1842,7 @@
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OrderMotionOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="OrderMotionShipmentID" Type="int" Precision="10" FieldIndex="5" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
+          <Field Name="OrderMotionShipmentID" Type="int" Precision="10" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderMotionStore" ObjectID="8312e1a9-71d5-4099-b768-63ed4a58045f" InheritanceType="2">
@@ -1946,11 +1895,8 @@
       <EntityDefinition Name="PayPalOrderSearch" ObjectID="ccaa1231-659b-4c8c-8f61-9c73577d7401">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="PayPalOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
-          <Field Name="TransactionID" Type="string" MaxLength="50" FieldIndex="5" />
+          <Field Name="TransactionID" Type="string" MaxLength="50" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="PayPalStore" ObjectID="ae091968-b676-42d6-a21c-e12321c9953a" InheritanceType="2">
@@ -2060,12 +2006,9 @@
       </EntityDefinition>
       <EntityDefinition Name="ProStoresOrderSearch" ObjectID="28ad35ff-dd68-4c11-8e11-7c3169382ce5">
         <Fields>
-          <Field Name="ConfirmationNumber" Type="string" MaxLength="12" FieldIndex="5" />
+          <Field Name="ConfirmationNumber" Type="string" MaxLength="12" FieldIndex="2" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="ProStoresOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ProStoresStore" ObjectID="a49f7ba9-61e6-4f6a-aebe-0720275a4cf3" InheritanceType="2">
@@ -2136,11 +2079,8 @@
       <EntityDefinition Name="SearsOrderSearch" ObjectID="8e0da013-05fe-4a2b-94ad-6679f9780ad7">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="PoNumber" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="PoNumber" Type="string" MaxLength="30" FieldIndex="2" />
           <Field Name="SearsOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="SearsStore" ObjectID="6f644012-f866-400b-a77b-ef2ee7b4b568" InheritanceType="2">
@@ -2441,11 +2381,8 @@
       <EntityDefinition Name="ShopifyOrderSearch" ObjectID="d04b9ae4-96bf-495e-b01b-a13c694ecb27">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="ShopifyOrderID" Type="long" Precision="19" FieldIndex="5" />
+          <Field Name="ShopifyOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="ShopifyOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ShopifyStore" ObjectID="b487fe76-68db-4c54-a4ef-61fd84f96a38" InheritanceType="2">
@@ -2614,10 +2551,7 @@
       <EntityDefinition Name="ThreeDCartOrderSearch" ObjectID="b0577b29-ff18-4928-9b0a-11c25b927084">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
-          <Field Name="ThreeDCartOrderID" Type="long" Precision="19" FieldIndex="5" />
+          <Field Name="ThreeDCartOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="ThreeDCartOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3041,10 +2975,7 @@
       <EntityDefinition Name="WalmartOrderSearch" ObjectID="0f104b64-2c28-414b-b3df-9de63987f694">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="5" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
+          <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="2" />
           <Field Name="WalmartOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3223,10 +3154,7 @@
       <EntityDefinition Name="YahooOrderSearch" ObjectID="8e1c9b4b-3157-495f-9219-6b9f58fe251d">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
-          <Field Name="StoreID" Type="long" FieldIndex="2" />
-          <Field Name="YahooOrderID" Type="string" MaxLength="50" FieldIndex="5" />
+          <Field Name="YahooOrderID" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="YahooOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3288,11 +3216,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="AmazonOrderSearch.Store-Store.AmazonOrderSearch" Start=":AmazonOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="AmazonOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="AmazonProfile.ShippingProfile-ShippingProfile.Amazon" Start=":AmazonProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Amazon" Type="1" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -3338,29 +3261,14 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ChannelAdvisorOrderSearch.Store-Store.ChannelAdvisorOrderSearch" Start=":ChannelAdvisorOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="ChannelAdvisorOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="ClickCartProOrderSearch.ClickCartProOrder-ClickCartProOrder.ClickCartProOrderSearch" Start=":ClickCartProOrderSearch" End=":ClickCartProOrder" StartNavigator="ClickCartProOrder" EndNavigator="ClickCartProOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ClickCartProOrderSearch.Store-Store.ClickCartProOrderSearch" Start=":ClickCartProOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="ClickCartProOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="CommerceInterfaceOrderSearch.CommerceInterfaceOrder-CommerceInterfaceOrder.CommerceInterfaceOrderSearch" Start=":CommerceInterfaceOrderSearch" End=":CommerceInterfaceOrder" StartNavigator="CommerceInterfaceOrder" EndNavigator="CommerceInterfaceOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="CommerceInterfaceOrderSearch.Store-Store.CommerceInterfaceOrderSearch" Start=":CommerceInterfaceOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="CommerceInterfaceOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="Download.Computer-Computer." Start=":Download" End=":Computer" StartNavigator="Computer" Type="4">
@@ -3403,11 +3311,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="EbayOrderSearch.Store-Store.EbayOrderSearch" Start=":EbayOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="EbayOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="EmailOutboundRelation.EmailOutbound-EmailOutbound.RelatedObjects" Start=":EmailOutboundRelation" End=":EmailOutbound" StartNavigator="EmailOutbound" EndNavigator="RelatedObjects" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="EmailOutboundID" PkField="EmailOutboundID" />
@@ -3431,16 +3334,6 @@
       <NormalRelationship Name="EndiciaShipment.ScanFormBatch-ScanFormBatch.EndiciaShipment" Start=":EndiciaShipment" End=":ScanFormBatch" StartNavigator="ScanFormBatch" EndNavigator="EndiciaShipment" Type="4" EndIsOptional="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ScanFormBatchID" PkField="ScanFormBatchID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="EtsyOrderSearch.EtsyOrder-EtsyOrder.EtsyOrderSearch" Start=":EtsyOrderSearch" End=":EtsyOrder" StartNavigator="EtsyOrder" EndNavigator="EtsyOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="EtsyOrderSearch.Store-Store.EtsyOrderSearch" Start=":EtsyOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="EtsyOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="FedExPackage.FedExShipment-FedExShipment.Packages" Start=":FedExPackage" End=":FedExShipment" StartNavigator="FedExShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
@@ -3533,11 +3426,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="GrouponOrderSearch.Store-Store.GrouponOrderSearch" Start=":GrouponOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="GrouponOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="InsurancePolicy.Shipment-Shipment.InsurancePolicy" Start=":InsurancePolicy" End=":Shipment" StartNavigator="Shipment" EndNavigator="InsurancePolicy" Type="1" ModelOnly="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -3568,19 +3456,9 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="LemonStandOrderSearch.Store-Store.LemonStandOrderSearch" Start=":LemonStandOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="LemonStandOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="MagentoOrderSearch.MagentoOrder-MagentoOrder.MagentoOrderSearch" Start=":MagentoOrderSearch" End=":MagentoOrder" StartNavigator="MagentoOrder" EndNavigator="MagentoOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="MagentoOrderSearch.Store-Store.MagentoOrderSearch" Start=":MagentoOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="MagentoOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="MarketplaceAdvisorOrderSearch.MarketplaceAdvisorOrder-MarketplaceAdvisorOrder.MarketplaceAdvisorOrderSearch" Start=":MarketplaceAdvisorOrderSearch" End=":MarketplaceAdvisorOrder" StartNavigator="MarketplaceAdvisorOrder" EndNavigator="MarketplaceAdvisorOrderSearch" Type="4">
@@ -3588,29 +3466,9 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="MarketplaceAdvisorOrderSearch.Store-Store.MarketplaceAdvisorOrderSearch" Start=":MarketplaceAdvisorOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="MarketplaceAdvisorOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="NetworkSolutionsOrderSearch.NetworkSolutionsOrder-NetworkSolutionsOrder.NetworkSolutionsOrderSearch" Start=":NetworkSolutionsOrderSearch" End=":NetworkSolutionsOrder" StartNavigator="NetworkSolutionsOrder" EndNavigator="NetworkSolutionsOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="NetworkSolutionsOrderSearch.Store-Store.NetworkSolutionsOrderSearch" Start=":NetworkSolutionsOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="NetworkSolutionsOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="NeweggOrderSearch.NeweggOrder-NeweggOrder.NeweggOrderSearch" Start=":NeweggOrderSearch" End=":NeweggOrder" StartNavigator="NeweggOrder" EndNavigator="NeweggOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="NeweggOrderSearch.Store-Store.NeweggOrderSearch" Start=":NeweggOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="NeweggOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="Note.-User." Start=":Note" End=":User" Type="4" EndIsOptional="true">
@@ -3663,11 +3521,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="OrderMotionOrderSearch.Store-Store.OrderMotionOrderSearch" Start=":OrderMotionOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="OrderMotionOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="OrderMotionStore.OrderMotionEmailAccount-EmailAccount.OrderMotionStore" Start=":OrderMotionStore" End=":EmailAccount" StartNavigator="OrderMotionEmailAccount" EndNavigator="OrderMotionStore" Type="4" ModelOnly="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderMotionEmailAccountID" PkField="EmailAccountID" />
@@ -3703,11 +3556,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="PayPalOrderSearch.Store-Store.PayPalOrderSearch" Start=":PayPalOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="PayPalOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="Permission.User-User." Start=":Permission" End=":User" StartNavigator="User" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="UserID" PkField="UserID" />
@@ -3733,19 +3581,9 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProStoresOrderSearch.Store-Store.ProStoresOrderSearch" Start=":ProStoresOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="ProStoresOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="SearsOrderSearch.Store-Store.SearsOrderSearch" Start=":SearsOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="SearsOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="ServerMessageSignoff.-Computer." Start=":ServerMessageSignoff" End=":Computer" Type="4" DeleteRuleAction="1">
@@ -3803,11 +3641,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ShopifyOrderSearch.Store-Store.ShopifyOrderSearch" Start=":ShopifyOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="ShopifyOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="StatusPreset.-Store." Start=":StatusPreset" End=":Store" Type="4" EndIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
@@ -3846,11 +3679,6 @@
       <NormalRelationship Name="TemplateUserSettings.Template-Template.UserSettings" Start=":TemplateUserSettings" End=":Template" StartNavigator="Template" EndNavigator="UserSettings" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="TemplateID" PkField="TemplateID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="ThreeDCartOrderSearch.Store-Store.ThreeDCartOrderSearch" Start=":ThreeDCartOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="ThreeDCartOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="ThreeDCartOrderSearch.ThreeDCartOrder-ThreeDCartOrder.ThreeDCartOrderSearch" Start=":ThreeDCartOrderSearch" End=":ThreeDCartOrder" StartNavigator="ThreeDCartOrder" EndNavigator="ThreeDCartOrderSearch" Type="4">
@@ -3963,11 +3791,6 @@
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="WalmartOrderSearch.Store-Store.WalmartOrderSearch" Start=":WalmartOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="WalmartOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="WalmartOrderSearch.WalmartOrder-WalmartOrder.WalmartOrderSearch" Start=":WalmartOrderSearch" End=":WalmartOrder" StartNavigator="WalmartOrder" EndNavigator="WalmartOrderSearch" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
@@ -3991,11 +3814,6 @@
       <NormalRelationship Name="WorldShipShipment.WorldShipProcessed-WorldShipProcessed.WorldShipShipment" Start=":WorldShipShipment" End=":WorldShipProcessed" StartNavigator="WorldShipProcessed" EndNavigator="WorldShipShipment" Type="2" StartIsOptional="true" StartIsPkSide="true" ModelOnly="true">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentIdCalculated" PkField="ShipmentID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="YahooOrderSearch.Store-Store.YahooOrderSearch" Start=":YahooOrderSearch" End=":Store" StartNavigator="Store" EndNavigator="YahooOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="YahooOrderSearch.YahooOrder-YahooOrder.YahooOrderSearch" Start=":YahooOrderSearch" End=":YahooOrder" StartNavigator="YahooOrder" EndNavigator="YahooOrderSearch" Type="4">
@@ -4142,7 +3960,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-06-28T13:42:08.5754087Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-11T15:40:29.0068395Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4274,10 +4092,7 @@
                   <Fields>
                     <Field Name="AmazonOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="AmazonOrderID" Ordinal="6" DbType="24" Length="32" />
+                    <Field Name="AmazonOrderID" Ordinal="3" DbType="24" Length="32" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonProfile">
@@ -4562,10 +4377,7 @@
                   <Fields>
                     <Field Name="ChannelAdvisorOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="CustomOrderIdentifier" Ordinal="6" DbType="12" Length="50" />
+                    <Field Name="CustomOrderIdentifier" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -4593,10 +4405,7 @@
                   <Fields>
                     <Field Name="ClickCartProOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="ClickCartProOrderID" Ordinal="6" DbType="24" Length="25" />
+                    <Field Name="ClickCartProOrderID" Ordinal="3" DbType="24" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="CommerceInterfaceOrder">
@@ -4611,10 +4420,7 @@
                   <Fields>
                     <Field Name="CommerceInterfaceOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="CommerceInterfaceOrderNumber" Ordinal="6" DbType="12" Length="60" />
+                    <Field Name="CommerceInterfaceOrderNumber" Ordinal="3" DbType="12" Length="60" />
                   </Fields>
                 </Table>
                 <Table Name="Computer">
@@ -4870,12 +4676,9 @@
                   <Fields>
                     <Field Name="EbayOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="EbayOrderID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="EbayBuyerID" Ordinal="7" DbType="12" Length="50" />
-                    <Field Name="SellingManagerRecord" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="EbayOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="SellingManagerRecord" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -5060,16 +4863,6 @@
                         <CustomProperty Name="AuditFormat" Value="120" />
                       </CustomProperties>
                     </Field>
-                  </Fields>
-                </Table>
-                <Table Name="EtsyOrderSearch">
-                  <PkConstraintName Name="PK_EtsyOrderSearch" />
-                  <Fields>
-                    <Field Name="EtsyOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyStore">
@@ -6238,10 +6031,7 @@
                   <Fields>
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="GrouponOrderID" Ordinal="6" DbType="12" Length="50" />
+                    <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -6418,10 +6208,7 @@
                   <Fields>
                     <Field Name="LemonStandOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="LemonStandOrderID" Ordinal="6" DbType="12" Length="20" />
+                    <Field Name="LemonStandOrderID" Ordinal="3" DbType="12" Length="20" />
                   </Fields>
                 </Table>
                 <Table Name="LemonStandStore">
@@ -6445,10 +6232,7 @@
                   <Fields>
                     <Field Name="MagentoOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="MagentoOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="MagentoOrderID" Ordinal="3" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="MagentoStore">
@@ -6474,11 +6258,8 @@
                   <Fields>
                     <Field Name="MarketplaceAdvisorOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="InvoiceNumber" Ordinal="6" DbType="12" Length="50" />
-                    <Field Name="SellerOrderNumber" Ordinal="7" DbType="0" Precision="19" />
+                    <Field Name="InvoiceNumber" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="SellerOrderNumber" Ordinal="4" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="MarketplaceAdvisorStore">
@@ -6523,10 +6304,7 @@
                   <Fields>
                     <Field Name="NetworkSolutionsOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="NetworkSolutionsOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="NetworkSolutionsOrderID" Ordinal="3" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="NetworkSolutionsStore">
@@ -6558,16 +6336,6 @@
                     <Field Name="ShippingStatusID" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ShippingStatusDescription" Ordinal="6" IsOptional="true" DbType="24" Length="32" />
                     <Field Name="QuantityShipped" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
-                  </Fields>
-                </Table>
-                <Table Name="NeweggOrderSearch">
-                  <PkConstraintName Name="PK_NeweggOrderSearch" />
-                  <Fields>
-                    <Field Name="NeweggOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="NeweggStore">
@@ -6853,7 +6621,7 @@
                     <Field Name="ShipSenseHashKey" Ordinal="72" DbType="12" Length="64" />
                     <Field Name="ShipSenseRecognitionStatus" Ordinal="73" DbType="8" Precision="10" />
                     <Field Name="ShipAddressType" Ordinal="74" DbType="8" Precision="10" />
-                    <Field Name="CombineSplitStatus" Ordinal="75" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="CombineSplitStatus" Ordinal="75" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -6937,10 +6705,7 @@
                   <Fields>
                     <Field Name="OrderMotionOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="OrderMotionShipmentID" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="OrderMotionShipmentID" Ordinal="3" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="OrderMotionStore">
@@ -7007,10 +6772,7 @@
                   <Fields>
                     <Field Name="PayPalOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="TransactionID" Ordinal="6" DbType="12" Length="50" />
+                    <Field Name="TransactionID" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="PayPalStore">
@@ -7163,10 +6925,7 @@
                   <Fields>
                     <Field Name="ProStoresOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="ConfirmationNumber" Ordinal="6" DbType="24" Length="12" />
+                    <Field Name="ConfirmationNumber" Ordinal="3" DbType="24" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="ProStoresStore">
@@ -7382,10 +7141,7 @@
                   <Fields>
                     <Field Name="SearsOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="PoNumber" Ordinal="6" DbType="24" Length="30" />
+                    <Field Name="PoNumber" Ordinal="3" DbType="24" Length="30" />
                   </Fields>
                 </Table>
                 <Table Name="SearsStore">
@@ -7791,10 +7547,7 @@
                   <Fields>
                     <Field Name="ShopifyOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="ShopifyOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ShopifyOrderID" Ordinal="3" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopifyStore">
@@ -7993,10 +7746,7 @@
                   <Fields>
                     <Field Name="ThreeDCartOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="ThreeDCartOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ThreeDCartOrderID" Ordinal="3" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ThreeDCartStore">
@@ -8586,10 +8336,7 @@
                   <Fields>
                     <Field Name="WalmartOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="PurchaseOrderID" Ordinal="6" DbType="24" Length="32" />
+                    <Field Name="PurchaseOrderID" Ordinal="3" DbType="24" Length="32" />
                   </Fields>
                 </Table>
                 <Table Name="WalmartStore">
@@ -8779,10 +8526,7 @@
                   <Fields>
                     <Field Name="YahooOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
-                    <Field Name="YahooOrderID" Ordinal="6" DbType="24" Length="50" />
+                    <Field Name="YahooOrderID" Ordinal="3" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="YahooProduct">
@@ -8916,11 +8660,6 @@
                 <FieldPair PkField="dbo:AmazonOrder:OrderID" FkField="dbo:AmazonOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:AmazonOrderSearch:FK_AmazonOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmazonOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:AmazonProfile:FK_AmazonProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:AmazonProfile:ShippingProfileID" />
@@ -9006,11 +8745,6 @@
                 <FieldPair PkField="dbo:ChannelAdvisorOrder:OrderID" FkField="dbo:ChannelAdvisorOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ChannelAdvisorOrderSearch:FK_ChannelAdvisorOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ChannelAdvisorOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ChannelAdvisorStore:FK_ChannelAdvisorStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ChannelAdvisorStore:StoreID" />
@@ -9026,11 +8760,6 @@
                 <FieldPair PkField="dbo:ClickCartProOrder:OrderID" FkField="dbo:ClickCartProOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ClickCartProOrderSearch:FK_ClickCartProOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ClickCartProOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrder:FK_CommerceInterfaceOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:CommerceInterfaceOrder:OrderID" />
@@ -9039,11 +8768,6 @@
             <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder">
               <FieldPairs>
                 <FieldPair PkField="dbo:CommerceInterfaceOrder:OrderID" FkField="dbo:CommerceInterfaceOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:CommerceInterfaceOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Download:FK_Download_Computer">
@@ -9096,11 +8820,6 @@
                 <FieldPair PkField="dbo:EbayOrder:OrderID" FkField="dbo:EbayOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:EbayOrderSearch:FK_EbayOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:EbayOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:EbayStore:FK_EbayStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:EbayStore:StoreID" />
@@ -9134,16 +8853,6 @@
             <ForeignKeyConstraint Name="dbo:EtsyOrder:FK_EtsyOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:EtsyOrder:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:EtsyOrderSearch:FK_EtsyOrderSearch_EtsyOrder">
-              <FieldPairs>
-                <FieldPair PkField="dbo:EtsyOrder:OrderID" FkField="dbo:EtsyOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:EtsyOrderSearch:FK_EtsyOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:EtsyOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:EtsyStore:FK_EtsyStore_Store">
@@ -9261,11 +8970,6 @@
                 <FieldPair PkField="dbo:GrouponOrder:OrderID" FkField="dbo:GrouponOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:GrouponOrderSearch:FK_GrouponOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:GrouponOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:GrouponStore:FK_GrouponStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:GrouponStore:StoreID" />
@@ -9321,11 +9025,6 @@
                 <FieldPair PkField="dbo:LemonStandOrder:OrderID" FkField="dbo:LemonStandOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:LemonStandOrderSearch:FK_LemonStandOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:LemonStandOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:LemonStandStore:FK_LemonStandStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:LemonStandStore:StoreID" />
@@ -9341,11 +9040,6 @@
                 <FieldPair PkField="dbo:MagentoOrder:OrderID" FkField="dbo:MagentoOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:MagentoOrderSearch:FK_MagentoOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:MagentoOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:MagentoStore:FK_MagentoStore_GenericModuleStore">
               <FieldPairs>
                 <FieldPair PkField="dbo:GenericModuleStore:StoreID" FkField="dbo:MagentoStore:StoreID" />
@@ -9359,11 +9053,6 @@
             <ForeignKeyConstraint Name="dbo:MarketplaceAdvisorOrderSearch:FK_MarketplaceAdvisorOrderSearch_MarketplaceAdvisorOrder">
               <FieldPairs>
                 <FieldPair PkField="dbo:MarketplaceAdvisorOrder:OrderID" FkField="dbo:MarketplaceAdvisorOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:MarketplaceAdvisorOrderSearch:FK_MarketplaceAdvisorOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:MarketplaceAdvisorOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:MarketplaceAdvisorStore:FK_MarketworksStore_Store">
@@ -9391,11 +9080,6 @@
                 <FieldPair PkField="dbo:NetworkSolutionsOrder:OrderID" FkField="dbo:NetworkSolutionsOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:NetworkSolutionsOrderSearch:FK_NetworkSolutionsOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:NetworkSolutionsOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:NetworkSolutionsStore:FK_NetworkSolutionsStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:NetworkSolutionsStore:StoreID" />
@@ -9409,16 +9093,6 @@
             <ForeignKeyConstraint Name="dbo:NeweggOrderItem:FK_NeweggOrderItem_OrderItem">
               <FieldPairs>
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:NeweggOrderItem:OrderItemID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:NeweggOrderSearch:FK_NeweggOrderSearch_NeweggOrder">
-              <FieldPairs>
-                <FieldPair PkField="dbo:NeweggOrder:OrderID" FkField="dbo:NeweggOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:NeweggOrderSearch:FK_NeweggOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:NeweggOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:NeweggStore:FK_NeweggStore_Store">
@@ -9481,11 +9155,6 @@
                 <FieldPair PkField="dbo:OrderMotionOrder:OrderID" FkField="dbo:OrderMotionOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:OrderMotionOrderSearch:FK_OrderMotionOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OrderMotionOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:OrderMotionStore:FK_OrderMotionStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OrderMotionStore:StoreID" />
@@ -9526,11 +9195,6 @@
                 <FieldPair PkField="dbo:PayPalOrder:OrderID" FkField="dbo:PayPalOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:PayPalOrderSearch:FK_PayPalOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:PayPalOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:PayPalStore:FK_PayPalStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:PayPalStore:StoreID" />
@@ -9564,11 +9228,6 @@
             <ForeignKeyConstraint Name="dbo:ProStoresOrderSearch:FK_ProStoresOrderSearch_ProStoresOrder">
               <FieldPairs>
                 <FieldPair PkField="dbo:ProStoresOrder:OrderID" FkField="dbo:ProStoresOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProStoresOrderSearch:FK_ProStoresOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ProStoresOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresStore:FK_ProStoresStore_Store">
@@ -9617,11 +9276,6 @@
             <ForeignKeyConstraint Name="dbo:SearsOrderSearch:FK_SearsOrderSearch_SearsOrder">
               <FieldPairs>
                 <FieldPair PkField="dbo:SearsOrder:OrderID" FkField="dbo:SearsOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:SearsOrderSearch:FK_SearsOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:SearsOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:SearsStore:FK_SearsStore_Store">
@@ -9694,11 +9348,6 @@
                 <FieldPair PkField="dbo:ShopifyOrder:OrderID" FkField="dbo:ShopifyOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ShopifyOrderSearch:FK_ShopifyOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ShopifyOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ShopifyStore:FK_ShopifyStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ShopifyStore:StoreID" />
@@ -9762,11 +9411,6 @@
             <ForeignKeyConstraint Name="dbo:ThreeDCartOrderItem:FK_ThreeDCartOrderItem_OrderItem">
               <FieldPairs>
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:ThreeDCartOrderItem:OrderItemID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ThreeDCartOrderSearch:FK_ThreeDCartOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ThreeDCartOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ThreeDCartOrderSearch:FK_ThreeDCartOrderSearch_ThreeDCartOrder">
@@ -9889,11 +9533,6 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:WalmartOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:WalmartOrderSearch:FK_WalmartOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:WalmartOrderSearch:StoreID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:WalmartOrderSearch:FK_WalmartOrderSearch_WalmartOrder">
               <FieldPairs>
                 <FieldPair PkField="dbo:WalmartOrder:OrderID" FkField="dbo:WalmartOrderSearch:OrderID" />
@@ -9927,11 +9566,6 @@
             <ForeignKeyConstraint Name="dbo:YahooOrderItem:FK_YahooOrderItem_OrderItem">
               <FieldPairs>
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:YahooOrderItem:OrderItemID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:YahooOrderSearch:FK_YahooOrderSearch_Store">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:YahooOrderSearch:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:YahooOrderSearch:FK_YahooOrderSearch_YahooOrder">
@@ -10078,9 +9712,6 @@
             <FieldMapping FieldName="AmazonOrderID" TargetFieldName="AmazonOrderID" />
             <FieldMapping FieldName="AmazonOrderSearchID" TargetFieldName="AmazonOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonProfile" TargetName="ShipWorksLocal:dbo:AmazonProfile">
@@ -10288,9 +9919,6 @@
             <FieldMapping FieldName="ChannelAdvisorOrderSearchID" TargetFieldName="ChannelAdvisorOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="CustomOrderIdentifier" TargetFieldName="CustomOrderIdentifier" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ChannelAdvisorStore" TargetName="ShipWorksLocal:dbo:ChannelAdvisorStore">
@@ -10316,9 +9944,6 @@
             <FieldMapping FieldName="ClickCartProOrderID" TargetFieldName="ClickCartProOrderID" />
             <FieldMapping FieldName="ClickCartProOrderSearchID" TargetFieldName="ClickCartProOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":CommerceInterfaceOrder" TargetName="ShipWorksLocal:dbo:CommerceInterfaceOrder">
@@ -10332,9 +9957,6 @@
             <FieldMapping FieldName="CommerceInterfaceOrderNumber" TargetFieldName="CommerceInterfaceOrderNumber" />
             <FieldMapping FieldName="CommerceInterfaceOrderSearchID" TargetFieldName="CommerceInterfaceOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Computer" TargetName="ShipWorksLocal:dbo:Computer">
@@ -10506,10 +10128,7 @@
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
             <FieldMapping FieldName="EbayOrderSearchID" TargetFieldName="EbayOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="SellingManagerRecord" TargetFieldName="SellingManagerRecord" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":EbayStore" TargetName="ShipWorksLocal:dbo:EbayStore">
@@ -10665,15 +10284,6 @@
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="WasPaid" TargetFieldName="WasPaid" />
             <FieldMapping FieldName="WasShipped" TargetFieldName="WasShipped" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":EtsyOrderSearch" TargetName="ShipWorksLocal:dbo:EtsyOrderSearch">
-          <FieldMappings>
-            <FieldMapping FieldName="EtsyOrderSearchID" TargetFieldName="EtsyOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":EtsyStore" TargetName="ShipWorksLocal:dbo:EtsyStore">
@@ -11196,9 +10806,6 @@
             <FieldMapping FieldName="GrouponOrderID" TargetFieldName="GrouponOrderID" />
             <FieldMapping FieldName="GrouponOrderSearchID" TargetFieldName="GrouponOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponStore" TargetName="ShipWorksLocal:dbo:GrouponStore">
@@ -11351,9 +10958,6 @@
             <FieldMapping FieldName="LemonStandOrderID" TargetFieldName="LemonStandOrderID" />
             <FieldMapping FieldName="LemonStandOrderSearchID" TargetFieldName="LemonStandOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":LemonStandStore" TargetName="ShipWorksLocal:dbo:LemonStandStore">
@@ -11375,9 +10979,6 @@
             <FieldMapping FieldName="MagentoOrderID" TargetFieldName="MagentoOrderID" />
             <FieldMapping FieldName="MagentoOrderSearchID" TargetFieldName="MagentoOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":MagentoStore" TargetName="ShipWorksLocal:dbo:MagentoStore">
@@ -11401,10 +11002,7 @@
             <FieldMapping FieldName="InvoiceNumber" TargetFieldName="InvoiceNumber" />
             <FieldMapping FieldName="MarketplaceAdvisorOrderSearchID" TargetFieldName="MarketplaceAdvisorOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="SellerOrderNumber" TargetFieldName="SellerOrderNumber" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":MarketplaceAdvisorStore" TargetName="ShipWorksLocal:dbo:MarketplaceAdvisorStore">
@@ -11445,9 +11043,6 @@
             <FieldMapping FieldName="NetworkSolutionsOrderID" TargetFieldName="NetworkSolutionsOrderID" />
             <FieldMapping FieldName="NetworkSolutionsOrderSearchID" TargetFieldName="NetworkSolutionsOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":NetworkSolutionsStore" TargetName="ShipWorksLocal:dbo:NetworkSolutionsStore">
@@ -11476,15 +11071,6 @@
             <FieldMapping FieldName="SellerPartNumber" TargetFieldName="SellerPartNumber" />
             <FieldMapping FieldName="ShippingStatusDescription" TargetFieldName="ShippingStatusDescription" />
             <FieldMapping FieldName="ShippingStatusID" TargetFieldName="ShippingStatusID" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":NeweggOrderSearch" TargetName="ShipWorksLocal:dbo:NeweggOrderSearch">
-          <FieldMappings>
-            <FieldMapping FieldName="NeweggOrderSearchID" TargetFieldName="NeweggOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":NeweggStore" TargetName="ShipWorksLocal:dbo:NeweggStore">
@@ -11745,9 +11331,6 @@
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OrderMotionOrderSearchID" TargetFieldName="OrderMotionOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderMotionShipmentID" TargetFieldName="OrderMotionShipmentID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OrderMotionStore" TargetName="ShipWorksLocal:dbo:OrderMotionStore">
@@ -11802,10 +11385,7 @@
         <EntityMapping EntityName=":PayPalOrderSearch" TargetName="ShipWorksLocal:dbo:PayPalOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="PayPalOrderSearchID" TargetFieldName="PayPalOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="TransactionID" TargetFieldName="TransactionID" />
           </FieldMappings>
         </EntityMapping>
@@ -11920,10 +11500,7 @@
           <FieldMappings>
             <FieldMapping FieldName="ConfirmationNumber" TargetFieldName="ConfirmationNumber" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="ProStoresOrderSearchID" TargetFieldName="ProStoresOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ProStoresStore" TargetName="ShipWorksLocal:dbo:ProStoresStore">
@@ -11997,11 +11574,8 @@
         <EntityMapping EntityName=":SearsOrderSearch" TargetName="ShipWorksLocal:dbo:SearsOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="PoNumber" TargetFieldName="PoNumber" />
             <FieldMapping FieldName="SearsOrderSearchID" TargetFieldName="SearsOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":SearsStore" TargetName="ShipWorksLocal:dbo:SearsStore">
@@ -12299,11 +11873,8 @@
         <EntityMapping EntityName=":ShopifyOrderSearch" TargetName="ShipWorksLocal:dbo:ShopifyOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="ShopifyOrderID" TargetFieldName="ShopifyOrderID" />
             <FieldMapping FieldName="ShopifyOrderSearchID" TargetFieldName="ShopifyOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ShopifyStore" TargetName="ShipWorksLocal:dbo:ShopifyStore">
@@ -12477,9 +12048,6 @@
         <EntityMapping EntityName=":ThreeDCartOrderSearch" TargetName="ShipWorksLocal:dbo:ThreeDCartOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="ThreeDCartOrderID" TargetFieldName="ThreeDCartOrderID" />
             <FieldMapping FieldName="ThreeDCartOrderSearchID" TargetFieldName="ThreeDCartOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
@@ -12908,10 +12476,7 @@
         <EntityMapping EntityName=":WalmartOrderSearch" TargetName="ShipWorksLocal:dbo:WalmartOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
             <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="WalmartOrderSearchID" TargetFieldName="WalmartOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>
@@ -13093,9 +12658,6 @@
         <EntityMapping EntityName=":YahooOrderSearch" TargetName="ShipWorksLocal:dbo:YahooOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
-            <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />
-            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="YahooOrderID" TargetFieldName="YahooOrderID" />
             <FieldMapping FieldName="YahooOrderSearchID" TargetFieldName="YahooOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>

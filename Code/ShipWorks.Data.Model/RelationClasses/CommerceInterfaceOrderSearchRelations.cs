@@ -31,7 +31,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.CommerceInterfaceOrderEntityUsingOrderID);
-			toReturn.Add(this.StoreEntityUsingStoreID);
 			return toReturn;
 		}
 
@@ -53,20 +52,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between CommerceInterfaceOrderSearchEntity and StoreEntity over the m:1 relation they have, using the relation between the fields:
-		/// CommerceInterfaceOrderSearch.StoreID - Store.StoreID
-		/// </summary>
-		public virtual IEntityRelation StoreEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Store", false);
-				relation.AddEntityFieldPair(StoreFields.StoreID, CommerceInterfaceOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("CommerceInterfaceOrderSearchEntity", true);
-				return relation;
-			}
-		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -82,7 +67,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticCommerceInterfaceOrderSearchRelations
 	{
 		internal static readonly IEntityRelation CommerceInterfaceOrderEntityUsingOrderIDStatic = new CommerceInterfaceOrderSearchRelations().CommerceInterfaceOrderEntityUsingOrderID;
-		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new CommerceInterfaceOrderSearchRelations().StoreEntityUsingStoreID;
 
 		/// <summary>CTor</summary>
 		static StaticCommerceInterfaceOrderSearchRelations()

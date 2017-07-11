@@ -30,94 +30,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.AmazonOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.ChannelAdvisorOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.ClickCartProOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.CommerceInterfaceOrderSearchEntityUsingStoreID);
 			toReturn.Add(this.DownloadEntityUsingStoreID);
-			toReturn.Add(this.EbayOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.EtsyOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.GrouponOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.LemonStandOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.MagentoOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.MarketplaceAdvisorOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.NetworkSolutionsOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.NeweggOrderSearchEntityUsingStoreID);
 			toReturn.Add(this.OrderEntityUsingStoreID);
-			toReturn.Add(this.OrderMotionOrderSearchEntityUsingStoreID);
 			toReturn.Add(this.OrderSearchEntityUsingStoreID);
-			toReturn.Add(this.PayPalOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.ProStoresOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.SearsOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.ShopifyOrderSearchEntityUsingStoreID);
 			toReturn.Add(this.StatusPresetEntityUsingStoreID);
-			toReturn.Add(this.ThreeDCartOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.WalmartOrderSearchEntityUsingStoreID);
-			toReturn.Add(this.YahooOrderSearchEntityUsingStoreID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and AmazonOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - AmazonOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation AmazonOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AmazonOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, AmazonOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ChannelAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - ChannelAdvisorOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ChannelAdvisorOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ChannelAdvisorOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ClickCartProOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - ClickCartProOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation ClickCartProOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ClickCartProOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ClickCartProOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ClickCartProOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and CommerceInterfaceOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - CommerceInterfaceOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "CommerceInterfaceOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, CommerceInterfaceOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("CommerceInterfaceOrderSearchEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and DownloadEntity over the 1:n relation they have, using the relation between the fields:
 		/// Store.StoreID - Download.StoreID
@@ -130,126 +50,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(StoreFields.StoreID, DownloadFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DownloadEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EbayOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - EbayOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation EbayOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, EbayOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EtsyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - EtsyOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation EtsyOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EtsyOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, EtsyOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GrouponOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - GrouponOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation GrouponOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "GrouponOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, GrouponOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and LemonStandOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - LemonStandOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation LemonStandOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "LemonStandOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, LemonStandOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("LemonStandOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and MagentoOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - MagentoOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation MagentoOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MagentoOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, MagentoOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and MarketplaceAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - MarketplaceAdvisorOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MarketplaceAdvisorOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, MarketplaceAdvisorOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MarketplaceAdvisorOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NetworkSolutionsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - NetworkSolutionsOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NetworkSolutionsOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, NetworkSolutionsOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NetworkSolutionsOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NeweggOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - NeweggOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation NeweggOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NeweggOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, NeweggOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -269,21 +69,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OrderMotionOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - OrderMotionOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation OrderMotionOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderMotionOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, OrderMotionOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderMotionOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// Store.StoreID - OrderSearch.StoreID
 		/// </summary>
@@ -299,66 +84,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - PayPalOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation PayPalOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "PayPalOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, PayPalOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ProStoresOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - ProStoresOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation ProStoresOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProStoresOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ProStoresOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SearsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - SearsOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation SearsOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "SearsOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, SearsOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ShopifyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - ShopifyOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation ShopifyOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ShopifyOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ShopifyOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShopifyOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// Store.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -370,51 +95,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(StoreFields.StoreID, StatusPresetFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StatusPresetEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ThreeDCartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - ThreeDCartOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation ThreeDCartOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ThreeDCartOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, ThreeDCartOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and WalmartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - WalmartOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation WalmartOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WalmartOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, WalmartOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WalmartOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and YahooOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// Store.StoreID - YahooOrderSearch.StoreID
-		/// </summary>
-		public virtual IEntityRelation YahooOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "YahooOrderSearch" , true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, YahooOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -804,30 +484,10 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticStoreRelations
 	{
-		internal static readonly IEntityRelation AmazonOrderSearchEntityUsingStoreIDStatic = new StoreRelations().AmazonOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreIDStatic = new StoreRelations().ChannelAdvisorOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ClickCartProOrderSearchEntityUsingStoreIDStatic = new StoreRelations().ClickCartProOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreIDStatic = new StoreRelations().CommerceInterfaceOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new StoreRelations().DownloadEntityUsingStoreID;
-		internal static readonly IEntityRelation EbayOrderSearchEntityUsingStoreIDStatic = new StoreRelations().EbayOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation EtsyOrderSearchEntityUsingStoreIDStatic = new StoreRelations().EtsyOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation GrouponOrderSearchEntityUsingStoreIDStatic = new StoreRelations().GrouponOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation LemonStandOrderSearchEntityUsingStoreIDStatic = new StoreRelations().LemonStandOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation MagentoOrderSearchEntityUsingStoreIDStatic = new StoreRelations().MagentoOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreIDStatic = new StoreRelations().MarketplaceAdvisorOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreIDStatic = new StoreRelations().NetworkSolutionsOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new StoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new StoreRelations().OrderEntityUsingStoreID;
-		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new StoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new StoreRelations().OrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new StoreRelations().PayPalOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new StoreRelations().ProStoresOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new StoreRelations().SearsOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ShopifyOrderSearchEntityUsingStoreIDStatic = new StoreRelations().ShopifyOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new StoreRelations().StatusPresetEntityUsingStoreID;
-		internal static readonly IEntityRelation ThreeDCartOrderSearchEntityUsingStoreIDStatic = new StoreRelations().ThreeDCartOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation WalmartOrderSearchEntityUsingStoreIDStatic = new StoreRelations().WalmartOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation YahooOrderSearchEntityUsingStoreIDStatic = new StoreRelations().YahooOrderSearchEntityUsingStoreID;
 
 		/// <summary>CTor</summary>
 		static StaticStoreRelations()

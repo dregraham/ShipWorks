@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private StoreEntity _store;
 		private WalmartOrderEntity _walmartOrder;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +45,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
 			/// <summary>Member name WalmartOrder</summary>
 			public static readonly string WalmartOrder = "WalmartOrder";
 		}
@@ -107,11 +104,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_store = (StoreEntity)info.GetValue("_store", typeof(StoreEntity));
-				if(_store!=null)
-				{
-					_store.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				_walmartOrder = (WalmartOrderEntity)info.GetValue("_walmartOrder", typeof(WalmartOrderEntity));
 				if(_walmartOrder!=null)
 				{
@@ -133,9 +125,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case WalmartOrderSearchFieldIndex.OrderID:
 					DesetupSyncWalmartOrder(true, false);
 					break;
-				case WalmartOrderSearchFieldIndex.StoreID:
-					DesetupSyncStore(true, false);
-					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -150,9 +139,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "Store":
-					this.Store = (StoreEntity)entity;
-					break;
 				case "WalmartOrder":
 					this.WalmartOrder = (WalmartOrderEntity)entity;
 					break;
@@ -178,9 +164,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "Store":
-					toReturn.Add(Relations.StoreEntityUsingStoreID);
-					break;
 				case "WalmartOrder":
 					toReturn.Add(Relations.WalmartOrderEntityUsingOrderID);
 					break;
@@ -212,9 +195,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Store":
-					SetupSyncStore(relatedEntity);
-					break;
 				case "WalmartOrder":
 					SetupSyncWalmartOrder(relatedEntity);
 					break;
@@ -231,9 +211,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Store":
-					DesetupSyncStore(false, true);
-					break;
 				case "WalmartOrder":
 					DesetupSyncWalmartOrder(false, true);
 					break;
@@ -256,10 +233,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_store!=null)
-			{
-				toReturn.Add(_store);
-			}
 			if(_walmartOrder!=null)
 			{
 				toReturn.Add(_walmartOrder);
@@ -283,7 +256,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_store", (!this.MarkedForDeletion?_store:null));
 				info.AddValue("_walmartOrder", (!this.MarkedForDeletion?_walmartOrder:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -298,15 +270,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new WalmartOrderSearchRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Store' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoStore()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StoreFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
-			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'WalmartOrder' to this entity.</summary>
@@ -361,7 +324,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("Store", _store);
 			toReturn.Add("WalmartOrder", _walmartOrder);
 			return toReturn;
 		}
@@ -389,48 +351,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderNumberComplete", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PurchaseOrderID", fieldHashtable);
 		}
 		#endregion
-
-		/// <summary> Removes the sync logic for member _store</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncStore(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticWalmartOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, signalRelatedEntity, "WalmartOrderSearch", resetFKFields, new int[] { (int)WalmartOrderSearchFieldIndex.StoreID } );
-			_store = null;
-		}
-
-		/// <summary> setups the sync logic for member _store</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncStore(IEntityCore relatedEntity)
-		{
-			if(_store!=relatedEntity)
-			{
-				DesetupSyncStore(true, true);
-				_store = (StoreEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _store, new PropertyChangedEventHandler( OnStorePropertyChanged ), "Store", ShipWorks.Data.Model.RelationClasses.StaticWalmartOrderSearchRelations.StoreEntityUsingStoreIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnStorePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Removes the sync logic for member _walmartOrder</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
@@ -496,13 +419,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Store' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathStore
-		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(StoreEntityFactory))),	(IEntityRelation)GetRelationsForField("Store")[0], (int)ShipWorks.Data.Model.EntityType.WalmartOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.StoreEntity, 0, null, null, null, null, "Store", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
-		}
-
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WalmartOrder' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathWalmartOrder
@@ -554,36 +470,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WalmartOrderSearchFieldIndex.OrderID, value); }
 		}
 
-		/// <summary> The StoreID property of the Entity WalmartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "WalmartOrderSearch"."StoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StoreID
-		{
-			get { return (System.Int64)GetValue((int)WalmartOrderSearchFieldIndex.StoreID, true); }
-			set	{ SetValue((int)WalmartOrderSearchFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The OrderNumber property of the Entity WalmartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "WalmartOrderSearch"."OrderNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OrderNumber
-		{
-			get { return (System.Int64)GetValue((int)WalmartOrderSearchFieldIndex.OrderNumber, true); }
-			set	{ SetValue((int)WalmartOrderSearchFieldIndex.OrderNumber, value); }
-		}
-
-		/// <summary> The OrderNumberComplete property of the Entity WalmartOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "WalmartOrderSearch"."OrderNumberComplete"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String OrderNumberComplete
-		{
-			get { return (System.String)GetValue((int)WalmartOrderSearchFieldIndex.OrderNumberComplete, true); }
-			set	{ SetValue((int)WalmartOrderSearchFieldIndex.OrderNumberComplete, value); }
-		}
-
 		/// <summary> The PurchaseOrderID property of the Entity WalmartOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WalmartOrderSearch"."PurchaseOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
@@ -592,24 +478,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WalmartOrderSearchFieldIndex.PurchaseOrderID, true); }
 			set	{ SetValue((int)WalmartOrderSearchFieldIndex.PurchaseOrderID, value); }
-		}
-
-		/// <summary> Gets / sets related entity of type 'StoreEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(true)]
-		public virtual StoreEntity Store
-		{
-			get	{ return _store; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncStore(value);
-				}
-				else
-				{
-					SetSingleRelatedEntityNavigator(value, "WalmartOrderSearch", "Store", _store, true); 
-				}
-			}
 		}
 
 		/// <summary> Gets / sets related entity of type 'WalmartOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

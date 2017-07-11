@@ -2525,9 +2525,6 @@
     <Compile Include=".\EntityClasses\EbayOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\EtsyOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\EntityClasses\GrouponOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -2541,9 +2538,6 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\EntityClasses\NetworkSolutionsOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityClasses\NeweggOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\EntityClasses\OrderMotionOrderSearchEntity.cs">
@@ -2585,9 +2579,6 @@
     <Compile Include=".\EntityInterfaces\IEbayOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityInterfaces\IEtsyOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\EntityInterfaces\IGrouponOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -2601,9 +2592,6 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\EntityInterfaces\INetworkSolutionsOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityInterfaces\INeweggOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\EntityInterfaces\IOrderMotionOrderSearchEntity.cs">
@@ -2645,9 +2633,6 @@
     <Compile Include=".\ReadOnlyEntities\ReadOnlyEbayOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\ReadOnlyEntities\ReadOnlyEtsyOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\ReadOnlyEntities\ReadOnlyGrouponOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -2661,9 +2646,6 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\ReadOnlyEntities\ReadOnlyNetworkSolutionsOrderSearchEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\ReadOnlyEntities\ReadOnlyNeweggOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\ReadOnlyEntities\ReadOnlyOrderMotionOrderSearchEntity.cs">
@@ -2705,9 +2687,6 @@
     <Compile Include=".\RelationClasses\EbayOrderSearchRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\RelationClasses\EtsyOrderSearchRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\RelationClasses\GrouponOrderSearchRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -2721,9 +2700,6 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\NetworkSolutionsOrderSearchRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\NeweggOrderSearchRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\OrderMotionOrderSearchRelations.cs">

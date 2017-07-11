@@ -38,13 +38,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             WalmartOrderSearchID = source.WalmartOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             PurchaseOrderID = source.PurchaseOrderID;
             
             
-            Store = source.Store?.AsReadOnly(objectMap);
             WalmartOrder = source.WalmartOrder?.AsReadOnly(objectMap);
             
 
@@ -64,24 +60,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity WalmartOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "WalmartOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity WalmartOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "WalmartOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity WalmartOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "WalmartOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The PurchaseOrderID property of the Entity WalmartOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartOrderSearch"."PurchaseOrderID"<br/>
@@ -89,8 +67,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String PurchaseOrderID { get; }
         
-        
-        public IStoreEntity Store { get; }
         
         public IWalmartOrderEntity WalmartOrder { get; }
         

@@ -35,66 +35,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and AmazonOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - AmazonOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation AmazonOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "AmazonOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, AmazonOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and ChannelAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - ChannelAdvisorOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ChannelAdvisorOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, ChannelAdvisorOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and ClickCartProOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - ClickCartProOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation ClickCartProOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ClickCartProOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, ClickCartProOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ClickCartProOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and CommerceInterfaceOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - CommerceInterfaceOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "CommerceInterfaceOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, CommerceInterfaceOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("CommerceInterfaceOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and DownloadEntity over the 1:n relation they have, using the relation between the fields:
 		/// PayPalStore.StoreID - Download.StoreID
 		/// </summary>
@@ -106,126 +46,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, DownloadFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DownloadEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and EbayOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - EbayOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation EbayOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, EbayOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and EtsyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - EtsyOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation EtsyOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EtsyOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, EtsyOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EtsyOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and GrouponOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - GrouponOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation GrouponOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "GrouponOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, GrouponOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and LemonStandOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - LemonStandOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation LemonStandOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "LemonStandOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, LemonStandOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("LemonStandOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and MagentoOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - MagentoOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation MagentoOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MagentoOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, MagentoOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and MarketplaceAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - MarketplaceAdvisorOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "MarketplaceAdvisorOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, MarketplaceAdvisorOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MarketplaceAdvisorOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and NetworkSolutionsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - NetworkSolutionsOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NetworkSolutionsOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, NetworkSolutionsOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NetworkSolutionsOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and NeweggOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - NeweggOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation NeweggOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "NeweggOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, NeweggOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -245,21 +65,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and OrderMotionOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - OrderMotionOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation OrderMotionOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderMotionOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, OrderMotionOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderMotionOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
 		/// PayPalStore.StoreID - OrderSearch.StoreID
 		/// </summary>
@@ -275,66 +80,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and PayPalOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - PayPalOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation PayPalOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "PayPalOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, PayPalOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and ProStoresOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - ProStoresOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation ProStoresOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProStoresOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, ProStoresOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProStoresOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and SearsOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - SearsOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation SearsOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "SearsOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, SearsOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("SearsOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and ShopifyOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - ShopifyOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation ShopifyOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ShopifyOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, ShopifyOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShopifyOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// PayPalStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -346,51 +91,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, StatusPresetFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StatusPresetEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and ThreeDCartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - ThreeDCartOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation ThreeDCartOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ThreeDCartOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, ThreeDCartOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and WalmartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - WalmartOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation WalmartOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WalmartOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, WalmartOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WalmartOrderSearchEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PayPalStoreEntity and YahooOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
-		/// PayPalStore.StoreID - YahooOrderSearch.StoreID
-		/// </summary>
-		public override IEntityRelation YahooOrderSearchEntityUsingStoreID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "YahooOrderSearch" , true);
-				relation.AddEntityFieldPair(PayPalStoreFields.StoreID, YahooOrderSearchFields.StoreID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PayPalStoreEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -435,30 +135,10 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticPayPalStoreRelations
 	{
-		internal static readonly IEntityRelation AmazonOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().AmazonOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ChannelAdvisorOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().ChannelAdvisorOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ClickCartProOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().ClickCartProOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation CommerceInterfaceOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().CommerceInterfaceOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new PayPalStoreRelations().DownloadEntityUsingStoreID;
-		internal static readonly IEntityRelation EbayOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().EbayOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation EtsyOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().EtsyOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation GrouponOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().GrouponOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation LemonStandOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().LemonStandOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation MagentoOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().MagentoOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation MarketplaceAdvisorOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().MarketplaceAdvisorOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation NetworkSolutionsOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().NetworkSolutionsOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation NeweggOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().NeweggOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new PayPalStoreRelations().OrderEntityUsingStoreID;
-		internal static readonly IEntityRelation OrderMotionOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().OrderMotionOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().OrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation PayPalOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().PayPalOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ProStoresOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().ProStoresOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation SearsOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().SearsOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation ShopifyOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().ShopifyOrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new PayPalStoreRelations().StatusPresetEntityUsingStoreID;
-		internal static readonly IEntityRelation ThreeDCartOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().ThreeDCartOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation WalmartOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().WalmartOrderSearchEntityUsingStoreID;
-		internal static readonly IEntityRelation YahooOrderSearchEntityUsingStoreIDStatic = new PayPalStoreRelations().YahooOrderSearchEntityUsingStoreID;
 
 		/// <summary>CTor</summary>
 		static StaticPayPalStoreRelations()

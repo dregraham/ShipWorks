@@ -38,14 +38,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             PayPalOrderSearchID = source.PayPalOrderSearchID;
             OrderID = source.OrderID;
-            StoreID = source.StoreID;
-            OrderNumber = source.OrderNumber;
-            OrderNumberComplete = source.OrderNumberComplete;
             TransactionID = source.TransactionID;
             
             
             PayPalOrder = source.PayPalOrder?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
             
 
             CopyCustomPayPalOrderSearchData(source);
@@ -64,24 +60,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OrderID { get; }
-        /// <summary> The StoreID property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."StoreID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 StoreID { get; }
-        /// <summary> The OrderNumber property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."OrderNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 OrderNumber { get; }
-        /// <summary> The OrderNumberComplete property of the Entity PayPalOrderSearch<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "PayPalOrderSearch"."OrderNumberComplete"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String OrderNumberComplete { get; }
         /// <summary> The TransactionID property of the Entity PayPalOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "PayPalOrderSearch"."TransactionID"<br/>
@@ -91,8 +69,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IPayPalOrderEntity PayPalOrder { get; }
-        
-        public IStoreEntity Store { get; }
         
         
         /// <summary>

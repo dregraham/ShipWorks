@@ -418,12 +418,6 @@ namespace ShipWorks.Data.Model
 		AmazonOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>AmazonOrderID. </summary>
 		AmazonOrderID,
 		/// <summary></summary>
@@ -1304,12 +1298,6 @@ namespace ShipWorks.Data.Model
 		ChannelAdvisorOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>CustomOrderIdentifier. </summary>
 		CustomOrderIdentifier,
 		/// <summary></summary>
@@ -1564,12 +1552,6 @@ namespace ShipWorks.Data.Model
 		ClickCartProOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>ClickCartProOrderID. </summary>
 		ClickCartProOrderID,
 		/// <summary></summary>
@@ -1742,12 +1724,6 @@ namespace ShipWorks.Data.Model
 		CommerceInterfaceOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
 		CommerceInterfaceOrderNumber,
 		/// <summary></summary>
@@ -2254,12 +2230,6 @@ namespace ShipWorks.Data.Model
 		EbayOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>EbayOrderID. </summary>
 		EbayOrderID,
 		///<summary>EbayBuyerID. </summary>
@@ -2768,22 +2738,6 @@ namespace ShipWorks.Data.Model
 		WasPaid,
 		///<summary>WasShipped. </summary>
 		WasShipped,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrderSearch.</summary>
-	public enum EtsyOrderSearchFieldIndex
-	{
-		///<summary>EtsyOrderSearchID. </summary>
-		EtsyOrderSearchID,
-		///<summary>OrderID. </summary>
-		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4142,12 +4096,6 @@ namespace ShipWorks.Data.Model
 		GrouponOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
 		/// <summary></summary>
@@ -4768,12 +4716,6 @@ namespace ShipWorks.Data.Model
 		LemonStandOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>LemonStandOrderID. </summary>
 		LemonStandOrderID,
 		/// <summary></summary>
@@ -5020,12 +4962,6 @@ namespace ShipWorks.Data.Model
 		MagentoOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>MagentoOrderID. </summary>
 		MagentoOrderID,
 		/// <summary></summary>
@@ -5316,12 +5252,6 @@ namespace ShipWorks.Data.Model
 		MarketplaceAdvisorOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>InvoiceNumber. </summary>
 		InvoiceNumber,
 		///<summary>SellerOrderNumber. </summary>
@@ -5718,12 +5648,6 @@ namespace ShipWorks.Data.Model
 		NetworkSolutionsOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>NetworkSolutionsOrderID. </summary>
 		NetworkSolutionsOrderID,
 		/// <summary></summary>
@@ -6022,22 +5946,6 @@ namespace ShipWorks.Data.Model
 		ShippingStatusDescription,
 		///<summary>QuantityShipped. </summary>
 		QuantityShipped,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NeweggOrderSearch.</summary>
-	public enum NeweggOrderSearchFieldIndex
-	{
-		///<summary>NeweggOrderSearchID. </summary>
-		NeweggOrderSearchID,
-		///<summary>OrderID. </summary>
-		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6798,12 +6706,6 @@ namespace ShipWorks.Data.Model
 		OrderMotionOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>OrderMotionShipmentID. </summary>
 		OrderMotionShipmentID,
 		/// <summary></summary>
@@ -7112,12 +7014,6 @@ namespace ShipWorks.Data.Model
 		PayPalOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>TransactionID. </summary>
 		TransactionID,
 		/// <summary></summary>
@@ -7542,12 +7438,6 @@ namespace ShipWorks.Data.Model
 		ProStoresOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>ConfirmationNumber. </summary>
 		ConfirmationNumber,
 		/// <summary></summary>
@@ -7930,12 +7820,6 @@ namespace ShipWorks.Data.Model
 		SearsOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>PoNumber. </summary>
 		PoNumber,
 		/// <summary></summary>
@@ -8746,12 +8630,6 @@ namespace ShipWorks.Data.Model
 		ShopifyOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>ShopifyOrderID. </summary>
 		ShopifyOrderID,
 		/// <summary></summary>
@@ -9440,12 +9318,6 @@ namespace ShipWorks.Data.Model
 		ThreeDCartOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>ThreeDCartOrderID. </summary>
 		ThreeDCartOrderID,
 		/// <summary></summary>
@@ -10554,12 +10426,6 @@ namespace ShipWorks.Data.Model
 		WalmartOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>PurchaseOrderID. </summary>
 		PurchaseOrderID,
 		/// <summary></summary>
@@ -11154,12 +11020,6 @@ namespace ShipWorks.Data.Model
 		YahooOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>StoreID. </summary>
-		StoreID,
-		///<summary>OrderNumber. </summary>
-		OrderNumber,
-		///<summary>OrderNumberComplete. </summary>
-		OrderNumberComplete,
 		///<summary>YahooOrderID. </summary>
 		YahooOrderID,
 		/// <summary></summary>
@@ -11361,8 +11221,6 @@ namespace ShipWorks.Data.Model
 		EndiciaShipmentEntity,
 		///<summary>EtsyOrder</summary>
 		EtsyOrderEntity,
-		///<summary>EtsyOrderSearch</summary>
-		EtsyOrderSearchEntity,
 		///<summary>EtsyStore</summary>
 		EtsyStoreEntity,
 		///<summary>ExcludedPackageType</summary>
@@ -11467,8 +11325,6 @@ namespace ShipWorks.Data.Model
 		NeweggOrderEntity,
 		///<summary>NeweggOrderItem</summary>
 		NeweggOrderItemEntity,
-		///<summary>NeweggOrderSearch</summary>
-		NeweggOrderSearchEntity,
 		///<summary>NeweggStore</summary>
 		NeweggStoreEntity,
 		///<summary>Note</summary>

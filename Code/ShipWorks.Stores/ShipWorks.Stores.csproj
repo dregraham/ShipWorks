@@ -240,7 +240,6 @@
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
-    <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandCombinedOrderNumberCondition.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandBillingAddress.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandCustomer.cs" />
@@ -414,7 +413,6 @@
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartCombinedOrderNumberCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartItemOnlineStatusCondition.cs" />

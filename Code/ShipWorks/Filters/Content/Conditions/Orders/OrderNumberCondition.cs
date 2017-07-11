@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Filters.Content.SqlGeneration;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
@@ -36,9 +30,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
 
             orderSearchSql = GenerateCombinedOrderSearchSql(context);
 
-            storeCombinedOrderSearchSql = GenerateStoreCombinedOrderSearchSql(context);
-
-            return $"{orderNumberSql} OR {orderSearchSql} OR {storeCombinedOrderSearchSql}";
+            return $"{orderNumberSql} OR {orderSearchSql}";
         }
 
         /// <summary>
@@ -64,46 +56,6 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
             }
 
             return combinedOrderNumberCondition.GenerateSql(context);
-        }
-
-        /// <summary>
-        /// Get the SQL for searching store specific combined order numbers
-        /// </summary>
-        private string GenerateStoreCombinedOrderSearchSql(SqlGenerationContext context)
-        {
-            List<string> storeConditionSqls = new List<string>();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IStoreManager storeManager = lifetimeScope.Resolve<IStoreManager>();
-                List<StoreTypeCode> existingStoreTypeCodes = storeManager.GetUniqueStoreTypes().Select(s => s.TypeCode).ToList();
-
-                foreach (ICombinedOrderCondition combinedOrderCondition in lifetimeScope.Resolve<IEnumerable<ICombinedOrderCondition>>())
-                {
-                    ConditionStoreTypeAttribute attribute = (ConditionStoreTypeAttribute) Attribute.GetCustomAttribute(combinedOrderCondition.GetType(), typeof(ConditionStoreTypeAttribute));
-
-                    if (existingStoreTypeCodes.Any(st => st == attribute.StoreType))
-                    {
-                        combinedOrderCondition.IsNumeric = IsNumeric;
-
-                        if (IsNumeric)
-                        {
-                            combinedOrderCondition.Operator = Operator;
-                            combinedOrderCondition.Value1 = Value1;
-                            combinedOrderCondition.Value2 = Value2;
-                        }
-                        else
-                        {
-                            combinedOrderCondition.StringOperator = StringOperator;
-                            combinedOrderCondition.StringValue = StringValue;
-                        }
-
-                        storeConditionSqls.Add(combinedOrderCondition.GenerateSql(context));
-                    }
-                }
-            }
-
-            return string.Join(" OR ", storeConditionSqls);
         }
     }
 }
