@@ -20,7 +20,9 @@ namespace ShipWorks.Actions
             log = LogManager.GetLogger(typeof(ActionQueueGatewayStandard));
 
             // If default printing is NOT enabled, then this gateway should process default print tasks.
-            if (!configurationData.FetchReadOnly().UseParallelActionQueue)
+            // as long as its in the UI, we dont want the background process printing at the same time 
+            // as the UI because it will be out of order
+            if (!configurationData.FetchReadOnly().UseParallelActionQueue && configurationData.ExecutionModeActionQueueType == ActionQueueType.UserInterface)
             {
                 isProcessableQueueType = ActionQueueFields.ActionQueueType == (int) ActionQueueType.DefaultPrint;
             }
