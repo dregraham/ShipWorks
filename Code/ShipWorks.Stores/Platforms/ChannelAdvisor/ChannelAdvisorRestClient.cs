@@ -3,15 +3,16 @@ using System.Net;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
-using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Communication;
-using System.Web;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
+    /// <summary>
+    /// Web client for interacting with ChannelAdvisors REST API
+    /// </summary>
     [Component]
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
@@ -23,6 +24,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string authorizeEndpoint = $"{EndpointBase}/authorize";
         private readonly string tokenEndpoint = $"{EndpointBase}/token";
 
+        /// <summary>
+        /// Gets the Authorization URL
+        /// </summary>
         public Uri AuthorizeUrl
         {
             get
@@ -81,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Gets the authorization header.
+        /// Gets the authorization header value.
         /// </summary>
         private string AuthorizationHeaderValue => $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ApplicationID}:{SharedSecret}"))}";
     }
