@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
@@ -17,7 +18,6 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
@@ -33,6 +33,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
+        public static readonly string RedirectUrl = WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php");
+        public const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
+
+        /// <summary>
+        /// Gets the Authorization URL parameters
+        /// </summary>
+        public static string AuthorizeUrlParameters => $"?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri={RedirectUrl}";
 
         /// <summary>
         /// Store Type

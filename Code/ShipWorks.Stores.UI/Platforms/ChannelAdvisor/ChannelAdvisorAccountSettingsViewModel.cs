@@ -35,9 +35,9 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorAccountSettingsViewModel(IChannelAdvisorRestClient webClient, 
+        public ChannelAdvisorAccountSettingsViewModel(IChannelAdvisorRestClient webClient,
             IEncryptionProviderFactory encryptionProviderFactory,
-            IWin32Window window, 
+            IWin32Window window,
             IMessageHelper messageHelper)
         {
             this.webClient = webClient;
@@ -70,13 +70,14 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void GetAccessCode()
         {
-            WebHelper.OpenUrl(webClient.AuthorizeUrl, window);
+            string authorizationUrl = $"{ChannelAdvisorRestClient.EndpointBase}/authorize{ChannelAdvisorStoreType.AuthorizeUrlParameters}";
+            WebHelper.OpenUrl(authorizationUrl, window);
         }
 
         /// <summary>
         /// Saves the specified store.
         /// </summary>
-        /// <returns>True if sucessfull</returns>
+        /// <returns>True if successful</returns>
         public bool Save(ChannelAdvisorStoreEntity store)
         {
             if (string.IsNullOrWhiteSpace(AccessCode))
@@ -99,7 +100,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
                 catch (ChannelAdvisorException ex)
                 {
                     messageHelper.ShowMessage(
-                        "An error occured requesting access. Please get a new access code and try again." +
+                        "An error occurred requesting access. Please get a new access code and try again." +
                         $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
                     return false;
                 }
