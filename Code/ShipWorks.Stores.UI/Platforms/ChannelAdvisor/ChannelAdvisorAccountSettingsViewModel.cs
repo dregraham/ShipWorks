@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
@@ -28,6 +29,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string accessCode;
+        private readonly Dictionary<string,string> encryptedRefreshTokenCache = new Dictionary<string, string>();
 
         /// <summary>
         /// Constructor
@@ -76,10 +78,18 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// <returns>True if sucessfull</returns>
         public bool Save(ChannelAdvisorStoreEntity store)
         {
+            // Get cached refresh token because we can't get the refresh token twice for the same AccessCode
+            if (encryptedRefreshTokenCache.ContainsKey(AccessCode))
+            {
+                store.RefreshToken = encryptedRefreshTokenCache[AccessCode];
+                return true;
+            }
+
             try
             {
                 string token = webClient.GetRefreshToken(AccessCode);
                 store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor").Encrypt(token);
+                encryptedRefreshTokenCache.Add(AccessCode, store.RefreshToken);
                 return true;
             }
             catch (ChannelAdvisorException ex)

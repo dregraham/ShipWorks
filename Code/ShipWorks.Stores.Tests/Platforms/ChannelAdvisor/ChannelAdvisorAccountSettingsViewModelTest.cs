@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.AccessCode = "accessCode";
             testObject.Save(store);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetRefreshToken("accessCode"));
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetRefreshToken("accessCode"), Times.Once);
         }
 
         [Fact]
@@ -76,10 +76,50 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Verify(e=>e.Encrypt("refreshToken"), Times.Exactly(1));
         }
 
+        [Fact]
+        public void Save_CallsGetRefreshTokenOnce_WhenSaveCalledTwice_AndAccessCodeIsTheSame()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Returns("refreshToken");
+            var store = new ChannelAdvisorStoreEntity();
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+
+            testObject.Save(store);
+            
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void Save_CallsGetRefreshTokenTwice_WhenSaveCalledTwice_AndAccessCodeChanged()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Returns("refreshToken");
+            var store = new ChannelAdvisorStoreEntity();
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+
+            testObject.AccessCode = "accessCode2";
+            testObject.Save(store);
+
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Exactly(2));
+        }
+
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }
