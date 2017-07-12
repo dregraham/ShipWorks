@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -262,6 +263,8 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is not used for binding.")]
         protected virtual OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             if (orderIdentifier == null)
@@ -495,6 +498,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is not used for binding.")]
         protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
             if (order == null)
