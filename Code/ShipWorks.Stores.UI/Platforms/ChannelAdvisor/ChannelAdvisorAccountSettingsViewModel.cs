@@ -29,7 +29,8 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string accessCode;
-        private readonly Dictionary<string,string> encryptedRefreshTokenCache = new Dictionary<string, string>();
+
+        private string accessCodeForSavedRefreshToken = string.Empty;
 
         /// <summary>
         /// Constructor
@@ -78,10 +79,15 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// <returns>True if sucessfull</returns>
         public bool Save(ChannelAdvisorStoreEntity store)
         {
-            // Get cached refresh token because we can't get the refresh token twice for the same AccessCode
-            if (encryptedRefreshTokenCache.ContainsKey(AccessCode))
+            if (string.IsNullOrWhiteSpace(AccessCode))
             {
-                store.RefreshToken = encryptedRefreshTokenCache[AccessCode];
+                messageHelper.ShowMessage("Access code required");
+                return false;
+            }
+
+            // If the access code has not changedince the last time we saved, continue.
+            if (AccessCodeNotChanged)
+            {
                 return true;
             }
 
@@ -89,7 +95,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             {
                 string token = webClient.GetRefreshToken(AccessCode);
                 store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor").Encrypt(token);
-                encryptedRefreshTokenCache.Add(AccessCode, store.RefreshToken);
+                accessCodeForSavedRefreshToken = AccessCode;
                 return true;
             }
             catch (ChannelAdvisorException ex)
@@ -97,7 +103,13 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
                 messageHelper.ShowMessage("An error occured requesting access. Please get a new access code and try again." +
                                           $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
             }
+
             return false;
         }
+
+        /// <summary>
+        /// Returns true if access code has not been changed since the last change
+        /// </summary>
+        private bool AccessCodeNotChanged => accessCodeForSavedRefreshToken == AccessCode;
     }
 }
