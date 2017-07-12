@@ -22,6 +22,6 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Can the given orders be combined
         /// </summary>
-        Task<bool> CanCombine(IStoreEntity store, IEnumerable<long> orderIDs);
+        bool CanCombine(IStoreEntity store, IEnumerable<long> orderIDs);
     }
 }

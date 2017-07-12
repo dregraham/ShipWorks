@@ -39,7 +39,6 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public Result Validate(IEnumerable<long> orderIDs)
         {
-
             if (orderIDs.None() || orderIDs.Count() < 2)
             {
                 return Result.FromError("A minimum of two orders must be selected to combine orders");
@@ -53,9 +52,9 @@ namespace ShipWorks.Stores.Content
             }
 
             IStoreEntity storeEntity = storeManager.GetRelatedStore(orderIDs.First());
-            Task<bool> loadResult = gateway.CanCombine(storeEntity, orderIDs);
+            bool canCombine = gateway.CanCombine(storeEntity, orderIDs);
 
-            if (loadResult.Result == false)
+            if (canCombine == false)
             {
                 return Result.FromError("Selected orders cannot be combined");
             }

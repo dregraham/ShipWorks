@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Can the given orders be combined
         /// </summary>
-        public async Task<bool> CanCombine(IStoreEntity store, IEnumerable<long> orderIDs)
+        public bool CanCombine(IStoreEntity store, IEnumerable<long> orderIDs)
         {
             IJoinOperand shipmentsJoin = Joins.Left(OrderEntity.Relations.ShipmentEntityUsingOrderID);
             IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Content
                     .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
                     .AndWhere(andWherePredicate
                         .Or(orPredicate));
-                long invalidOrders = await sqlAdapter.FetchScalarAsync<long>(query);
+                long invalidOrders = sqlAdapter.FetchScalar<long>(query);
 
                 return invalidOrders == 0;
             }

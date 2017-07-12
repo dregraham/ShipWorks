@@ -166,11 +166,11 @@ namespace ShipWorks
         /// </summary>
         private void InitializeCustomEnablerComponents()
         {
-                selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.TwoOrMoreOrders,
+                selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.AppliesFunction,
                     (x) => ShouldCombineOrderBeEnabled(x));
 
                 selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
-                    SelectionDependentType.TwoOrMoreOrders,
+                    SelectionDependentType.AppliesFunction,
                     (x) => ShouldCombineOrderBeEnabled(x));
         }
 
