@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Communication;
 using System.Web;
+using Newtonsoft.Json;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -43,7 +45,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("code", code);
             submitter.Variables.Add("redirect_uri", RedirectUri);
 
-            return JObject.Parse(ProcessRequest(submitter, "GetRefreshToken"))["refresh_token"].ToString();
+            ChannelAdvisorOAuthResponse response =
+                JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetRefreshToken"));
+
+            if (string.IsNullOrWhiteSpace(response.RefreshToken))
+            {
+                throw new ChannelAdvisorException("Response did not contain a refresh token.");
+            }
+
+            return response.RefreshToken;
         }
 
         /// <summary>
