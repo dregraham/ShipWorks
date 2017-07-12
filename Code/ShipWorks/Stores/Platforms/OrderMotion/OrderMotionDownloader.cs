@@ -262,23 +262,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // address
                 LoadAddressInfo(order, xpath);
 
-                if (order.IsNew)
-                {
-                    // notes
-                    LoadNotes(order, xpath);
-
-                    // order items
-                    LoadItems(order, xpath);
-
-                    // order charges
-                    LoadCharges(order, xpath);
-
-                    // payment details
-                    LoadPaymentDetails(order, xpath);
-
-                    // calculate the total
-                    order.OrderTotal = OrderUtility.CalculateTotal(order);
-                }
+                // Load new order values if the order is new
+                LoadNewOrderValues(order, xpath);
 
                 // save the order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
@@ -289,6 +274,30 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // Field wasn't found, skip it
                 log.Warn(ex);
                 return Task.CompletedTask;
+            }
+        }
+
+        /// <summary>
+        /// Load values for a new order.
+        /// </summary>
+        private void LoadNewOrderValues(OrderMotionOrderEntity order, XPathNavigator xpath)
+        {
+            if (order.IsNew)
+            {
+                // notes
+                LoadNotes(order, xpath);
+
+                // order items
+                LoadItems(order, xpath);
+
+                // order charges
+                LoadCharges(order, xpath);
+
+                // payment details
+                LoadPaymentDetails(order, xpath);
+
+                // calculate the total
+                order.OrderTotal = OrderUtility.CalculateTotal(order);
             }
         }
 
