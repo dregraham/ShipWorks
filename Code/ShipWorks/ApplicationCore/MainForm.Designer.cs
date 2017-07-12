@@ -776,7 +776,6 @@ namespace ShipWorks
             this.buttonCombine.QuickAccessKey = "OC";
             this.buttonCombine.Text = "Combine";
             this.buttonCombine.Activate += new System.EventHandler(this.OnCombine);
-           
             //
             // buttonEditCustomer
             //
@@ -1329,7 +1328,7 @@ namespace ShipWorks
             //
             // contextOrderCombineOrder
             //
-            this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.order_edit;
+            this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.data_disk16;
             this.contextOrderCombineOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCombineOrder, new System.Guid("E537A928-2B0C-4453-8F7D-1C1F1FD7D0FD"));
             this.contextOrderCombineOrder.Name = "contextOrderCombineOrder";
