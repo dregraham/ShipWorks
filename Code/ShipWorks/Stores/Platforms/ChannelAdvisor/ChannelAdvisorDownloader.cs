@@ -7,6 +7,8 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -25,10 +27,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// </summary>
     public class ChannelAdvisorDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorDownloader));
         // total download count
         private int totalCount;
 
-        private List<string> itemAttributesToDownload = new List<string>(); 
+        private List<string> itemAttributesToDownload = new List<string>();
 
         /// <summary>
         /// Constructor
@@ -49,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private ChannelAdvisorStoreEntity ChannelAdvisorStore
         {
-            get { return (ChannelAdvisorStoreEntity)Store; }
+            get { return (ChannelAdvisorStoreEntity) Store; }
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download data
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -166,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 LoadOrder(client, caOrder);
 
                 // update the status, 100 max
-                Progress.PercentComplete = Math.Min(100*QuantitySaved/totalCount, 100);
+                Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);
             }
         }
 
@@ -178,7 +181,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             int orderNumber = caOrder.OrderID;
 
             // get the order instance
-            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity)InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) result.Value;
 
             order.OrderDate = caOrder.OrderTimeGMT.Value;
             order.OnlineLastModified = caOrder.LastUpdateDate ?? order.OrderDate;
@@ -190,9 +200,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             order.OnlineCustomerID = null;
 
             // statuses
-            order.OnlinePaymentStatus = (int)ChannelAdvisorHelper.GetShipWorksPaymentStatus(caOrder.OrderStatus.PaymentStatus);
-            order.OnlineCheckoutStatus = (int)ChannelAdvisorHelper.GetShipWorksCheckoutStatus(caOrder.OrderStatus.CheckoutStatus);
-            order.OnlineShippingStatus = (int)ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus);
+            order.OnlinePaymentStatus = (int) ChannelAdvisorHelper.GetShipWorksPaymentStatus(caOrder.OrderStatus.PaymentStatus);
+            order.OnlineCheckoutStatus = (int) ChannelAdvisorHelper.GetShipWorksCheckoutStatus(caOrder.OrderStatus.CheckoutStatus);
+            order.OnlineShippingStatus = (int) ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus);
 
             // flags
             SetChannelAdvisorOrderFlags(order, caOrder);
@@ -250,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     order.RequestedShipping = $"{carrier} - {shippingClass}";
                 }
 
-                order.IsPrime = (int)ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
+                order.IsPrime = (int) ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
             }
         }
 
@@ -269,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // any reason to inspect the results of the TryParse here.
             ChannelAdvisorFlagType flagType = ChannelAdvisorFlagType.NoFlag;
             Enum.TryParse(caOrder.FlagStyle, true, out flagType);
-            order.FlagType = (int)flagType;
+            order.FlagType = (int) flagType;
         }
 
         /// <summary>
@@ -330,7 +340,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         name = "VAT Shipping";
                         type = "VAT";
                         // Skip pulling in 'VAT Shipping'
-                        // it is included in the tax 
+                        // it is included in the tax
                         // see FreshDesk 593454
                         continue;
 
@@ -412,7 +422,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)
             {
-                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity)InstantiateOrderItem(order);
+                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity) InstantiateOrderItem(order);
 
                 item.Name = caItem.Title;
                 item.Quantity = caItem.Quantity;
@@ -426,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Convert KG to LBS if needed
                 if (caItem.UnitWeight.UnitOfMeasure == "KG")
                 {
-                    item.Weight = item.Weight*2.20462262;
+                    item.Weight = item.Weight * 2.20462262;
                 }
 
                 // CA-specific
@@ -510,7 +520,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         {
                             orderItem.MPN = matchingItem.MPN;
                         }
-                        
+
                         PopulateItemAttributes(client, orderItem);
                         PopulateImages(client, orderItem);
                     }
@@ -528,7 +538,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 IEnumerable<AttributeInfo> attributes = client.GetInventoryItemAttributes(orderItem.SKU);
 
-                // ItemAttributesEnabled is true so we have at least one attribute to download.  
+                // ItemAttributesEnabled is true so we have at least one attribute to download.
                 // Filter out all the others that don't match.
                 attributes = attributes.Where(a => itemAttributesToDownload.Contains(a.Name.ToUpperInvariant()));
 
@@ -592,24 +602,24 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             List<OrderLineItemItem> giftItems = caOrder.ShoppingCart.LineItemSKUList.Select(item => item).Where(i => i.GiftMessage.Length > 0).ToList();
             foreach (OrderLineItemItem item in giftItems)
             {
-                string giftMessage = string.Format("Gift messsage for {0}: {1}", item.Title, item.GiftMessage);
+                string giftMessage = string.Format("Gift message for {0}: {1}", item.Title, item.GiftMessage);
                 InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public);
             }
         }
 
         /// <summary>
-        /// Determine the state/provice based on the region from CA.  
+        /// Determine the state/province based on the region from CA.
         /// </summary>
         private static string GetStateProvCode(string region)
         {
-            // CA will send 001 if they don't know what to do with the region.  
+            // CA will send 001 if they don't know what to do with the region.
             // So we'll just return ""
             if (region == "001")
             {
                 return string.Empty;
             }
-            
-            return Geography.GetStateProvCode(region);   
+
+            return Geography.GetStateProvCode(region);
         }
 
         /// <summary>
@@ -620,7 +630,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             // shipping address
             ShippingInfo shipping = caOrder.ShippingInfo;
-            order.ShipNameParseStatus = (int)PersonNameParseStatus.Simple;
+            order.ShipNameParseStatus = (int) PersonNameParseStatus.Simple;
             order.ShipFirstName = shipping.FirstName;
             order.ShipLastName = shipping.LastName;
             order.ShipCompany = shipping.CompanyName;
@@ -648,7 +658,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
             else
             {
-                order.BillNameParseStatus = (int)PersonNameParseStatus.Simple;
+                order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
                 order.BillFirstName = billing.FirstName;
                 order.BillLastName = billing.LastName;
                 order.BillCompany = billing.CompanyName;

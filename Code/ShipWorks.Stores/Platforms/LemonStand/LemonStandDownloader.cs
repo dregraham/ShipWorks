@@ -6,6 +6,8 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Administration.Retry;
@@ -13,7 +15,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(LemonStandDownloader));
         private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
@@ -69,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Download orders from LemonStand
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
@@ -146,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 // Set the progress detail
                 Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
-                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
                 LoadOrder(jsonOrder);
             }
@@ -158,9 +160,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public void LoadOrder(JToken jsonOrder)
         {
-            LemonStandOrderEntity order = PrepareOrder(jsonOrder);
+            GenericResult<LemonStandOrderEntity> order = PrepareOrder(jsonOrder);
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            if (order.Success)
+            {
+                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order.Value));
+            }
         }
 
         /// <summary>
@@ -169,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="jsonOrder">The json order.</param>
         /// <returns>Order Entity to be saved to database</returns>
         /// <exception cref="LemonStandException"></exception>
-        public LemonStandOrderEntity PrepareOrder(JToken jsonOrder)
+        public GenericResult<LemonStandOrderEntity> PrepareOrder(JToken jsonOrder)
         {
             //                              order
             //                          /     |      \
@@ -188,8 +193,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int orderID = int.Parse(lsOrder.ID);
 
-                LemonStandOrderEntity order =
-                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+                GenericResult<OrderEntity> result = InstantiateOrder(new LemonStandOrderIdentifier(orderID));
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", orderID, result.Message);
+                    return GenericResult.FromError<LemonStandOrderEntity>(result.Message);
+                }
+
+                LemonStandOrderEntity order = (LemonStandOrderEntity) result.Value;
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
                 order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
@@ -241,7 +252,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                     order.OrderTotal = decimal.Parse(lsOrder.Total);
                 }
-                return order;
+
+                return GenericResult.FromSuccess(order);
             }
             catch (Exception e)
             {
@@ -341,7 +353,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             // We're going to have our starting point default to either the initial download days setting or 30 days back
             int previousDaysToDownload = Store.InitialDownloadDays ?? 30;
-            DateTime startingPoint = DateTime.UtcNow.AddDays(-1*previousDaysToDownload);
+            DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
@@ -508,7 +520,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             Progress.Detail = "Updating status codes...";
 
             // refresh the status codes from LemonStand
-            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity) Store);
             statusProvider.UpdateFromOnlineStore();
         }
     }

@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         }
 
         /// <summary>
-        /// Apply the identifier to the order passed in 
+        /// Apply the identifier to the order passed in
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
@@ -45,11 +46,14 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.NetworkSolutionsOrderSearch.Where(NetworkSolutionsOrderSearchFields.NetworkSolutionsOrderID == networkSolutionsOrderID);
+
+        /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return string.Format("NetworkSolutionsOrderID:{0}", networkSolutionsOrderID);
-        }
+        public override string ToString() => $"NetworkSolutionsOrderID:{networkSolutionsOrderID}";
     }
 }

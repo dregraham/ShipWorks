@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Data.Connection;
-using log4net;
+﻿using System.Data.SqlClient;
 using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Xsl;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Import.Xml;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -22,11 +15,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     /// Downloader implementation for importing from XML files
     /// </summary>
     public class GenericFileXmlDownloader : GenericFileDownloaderBase
-    {        
+    {
         // Transform to use, if any
         XslCompiledTransform xslTransform = null;
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileXmlDownloader));
 
         /// <summary>
@@ -80,7 +73,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         private void LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = InstantiateOrder(xpath);
+            GenericResult<OrderEntity> result = InstantiateOrder(xpath);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order: {1}.", result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             GenericXmlOrderLoader.LoadOrder(order, this, null, xpath);
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        private OrderEntity InstantiateOrder(XPathNavigator xpath)
+        private GenericResult<OrderEntity> InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
@@ -105,9 +105,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
     }
 }

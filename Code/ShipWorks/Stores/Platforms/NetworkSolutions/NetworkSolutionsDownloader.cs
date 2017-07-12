@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using log4net;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
-using Interapptive.Shared.Business;
-using ShipWorks.Stores.Content;
 using System.Globalization;
+using System.Linq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Retrieve new orders from NetworkSolutions
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -45,12 +45,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             {
                 Progress.Detail = "Updating status codes...";
 
-                statusProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity)Store);
+                statusProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity) Store);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
 
-                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity)Store);
+                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity) Store);
 
                 // check for cancel
                 if (Progress.IsCancelRequested)
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                             return;
                         }
 
-                        // after the first order pull, we can get the total number of orders available for progress 
+                        // after the first order pull, we can get the total number of orders available for progress
                         Progress.Detail = String.Format("Downloading order {0} of {1}...", QuantitySaved + 1, webClient.TotalCount);
 
                         // import the order
@@ -113,7 +113,14 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             long networkSolutionsOrderId = nsOrder.OrderId;
 
-            NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity)InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId));
+            GenericResult<OrderEntity> result = InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", networkSolutionsOrderId, result.Message);
+                return;
+            }
+
+            NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity) result.Value;
 
             // populate things that can change between downloads
             order.OrderDate = nsOrder.CreateDate;
@@ -399,9 +406,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
 
             TextAnswerType textAnswer = answer as TextAnswerType;
-            return textAnswer != null ? 
-                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } : 
-                new BooleanAnswerType { Value = false};
+            return textAnswer != null ?
+                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } :
+                new BooleanAnswerType { Value = false };
         }
 
         /// <summary>

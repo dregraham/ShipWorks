@@ -56,7 +56,8 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
             store.TypeCode = 68;
         }
 
-        private string GetEmbeddedResourceJson(string embeddedResourceName) {
+        private string GetEmbeddedResourceJson(string embeddedResourceName)
+        {
             string txt = string.Empty;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
@@ -76,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         {
             testObject = new FakeLemonStandDownloader(store, webClient.Object, adapter.Object, new LemonStandStoreType(store));
             JObject jsonOrder = JObject.Parse(singleOrder);
-            testObject.Order = testObject.PrepareOrder(jsonOrder);
+            testObject.Order = testObject.PrepareOrder(jsonOrder).Value;
 
             return testObject;
         }

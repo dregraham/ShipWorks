@@ -10,6 +10,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,6 +24,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public class VolusionDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(VolusionDownloader));
+
         // total number of orders to be imported
         // shipping method map
         VolusionShippingMethods shippingMethods;
@@ -142,8 +145,14 @@ namespace ShipWorks.Stores.Platforms.Volusion
             long orderNumber = XPathUtility.Evaluate(xpath, "OrderID", 0);
 
             // find an existing order in ShipWorks or create a new one
-            OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(orderNumber);
-            OrderEntity order = InstantiateOrder(orderIdentifier);
+            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             order.OrderDate = GetDate(xpath, "OrderDate");
 

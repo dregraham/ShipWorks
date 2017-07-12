@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using System.Globalization;
+using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
@@ -23,16 +22,15 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// </summary>
     public class InfopiaDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(InfopiaDownloader));
+
         // count of orders to be downloaded
         int totalCount = 0;
 
         /// <summary>
         /// Convenience property for quick access to the specific store entity
         /// </summary>
-        private InfopiaStoreEntity InfopiaStore
-        {
-            get { return (InfopiaStoreEntity)Store; }
-        }
+        private InfopiaStoreEntity InfopiaStore => (InfopiaStoreEntity) Store;
 
         /// <summary>
         /// Constructor
@@ -45,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Download the data
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -120,8 +118,15 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 // extract the order number
                 int orderNumber = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ID*']", 0);
 
-                // get the order instance, creates one if neccessary
-                OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+                // get the order instance, creates one if necessary
+                GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                    return;
+                }
+
+                OrderEntity order = result.Value;
 
                 // test the ORDER TM.  We have had problems in the past where all order information was blank due to some Infopia server problems.
                 string orderDate = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER TM*']", "");
@@ -130,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                     // if this is happening, just notify the user and stop.
                     throw new InfopiaException("Infopia provided ShipWorks with incomplete or blank order information.  ShipWorks cannot continue to download.");
                 }
-                 
+
                 // basic properties
                 order.OrderDate = InfopiaUtility.ConvertFromInfopiaTimeZone(InfopiaUtility.ParseDate(orderDate));
                 order.OnlineLastModified = InfopiaUtility.ConvertFromInfopiaTimeZone(InfopiaUtility.ParseDate(XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER STATUS LAST CHANGED TM*']", "")));
@@ -203,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
             // make sure these are allready cached
             InfopiaWebClient client = new InfopiaWebClient(InfopiaStore);
             client.EnsureProducts(productsToDownload);
-            
+
         }
 
         /// <summary>
@@ -220,8 +225,8 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 LoadPaymentDetail(order, "Card Number", cardNumber);
             }
 
-           // Payment details
-           LoadPaymentDetail(order, "Payment Type", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER PAY TERM*']", ""));
+            // Payment details
+            LoadPaymentDetail(order, "Payment Type", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER PAY TERM*']", ""));
         }
 
         /// <summary>
@@ -311,7 +316,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
 
             charge.Type = type.ToUpper(CultureInfo.InvariantCulture);
             charge.Description = name;
-            charge.Amount = (decimal)amount;
+            charge.Amount = (decimal) amount;
         }
 
         /// <summary>
@@ -319,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// </summary>
         private void LoadItem(InfopiaWebClient client, OrderEntity order, XPathNavigator xpath)
         {
-            InfopiaOrderItemEntity item = (InfopiaOrderItemEntity)InstantiateOrderItem(order);
+            InfopiaOrderItemEntity item = (InfopiaOrderItemEntity) InstantiateOrderItem(order);
 
             item.Name = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER PRODUCT LINE TITLE*']", "");
             item.Code = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER PRODUCT LINE PRODUCT CODE*']", "");
@@ -365,7 +370,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
 
             option.Name = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ATTRIBUTE LINE NAME*']", "");
             option.Description = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ATTRIBUTE LINE VALUE*']", "");
-            option.UnitPrice  = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ATTRIBUTE LINE PRICE*']", 0.0M);
+            option.UnitPrice = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ATTRIBUTE LINE PRICE*']", 0.0M);
 
             return option.UnitPrice;
         }
@@ -431,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         {
             order.SetNewFieldValue(dbPrefix + "FirstName", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER " + xmlAddressType + " FIRST NAME*']", ""));
             order.SetNewFieldValue(dbPrefix + "LastName", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER " + xmlAddressType + " LAST NAME*']", ""));
-            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)PersonNameParseStatus.Simple);
+            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) PersonNameParseStatus.Simple);
 
             order.SetNewFieldValue(dbPrefix + "Company", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER " + xmlAddressType + " COMPANY*']", ""));
             order.SetNewFieldValue(dbPrefix + "Street1", XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER " + xmlAddressType + " STREET*']", ""));

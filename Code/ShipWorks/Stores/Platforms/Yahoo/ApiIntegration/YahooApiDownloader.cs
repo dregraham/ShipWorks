@@ -149,9 +149,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
-        public YahooOrderEntity CreateOrder(YahooOrder order)
+        public void CreateOrder(YahooOrder order)
         {
-            YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())) as YahooOrderEntity;
+            GenericResult<OrderEntity> result = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString()));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", order.OrderID.ToString(), result.Message);
+                return;
+            }
+
+            YahooOrderEntity orderEntity = result.Value as YahooOrderEntity;
 
             if (orderEntity == null)
             {
@@ -164,8 +171,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
             }
-
-            return orderEntity;
         }
 
         /// <summary>
@@ -435,7 +440,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             if (!item.ThumbnailUrl.IsNullOrWhiteSpace())
             {
                 // Thumbnail node format - <img border=0 width=42 height=70 src=Actual_Thumbnail_URL>
-                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[]{"src="}, StringSplitOptions.RemoveEmptyEntries);
+                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[] { "src=" }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (thumbnailSplit.Length == 2)
                 {

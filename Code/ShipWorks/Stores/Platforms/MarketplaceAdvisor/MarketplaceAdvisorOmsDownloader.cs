@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
-using ShipWorks.Stores.Content;
+using Common.Logging;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
@@ -22,13 +20,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// </summary>
     class MarketplaceAdvisorOmsDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsDownloader));
+
         // Download page size
         const int pageSize = 200;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorOmsDownloader(MarketplaceAdvisorStoreEntity store) 
+        public MarketplaceAdvisorOmsDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
             if (store == null)
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Download the orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             catch (SqlForeignKeyException ex)
             {
                 throw new DownloadException(ex.Message, ex);
-            }   
+            }
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private bool DownloadNextOrdersPage(int currentPage)
         {
-            OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).GetOrders(currentPage);
+            OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity) Store).GetOrders(currentPage);
 
             if (orders.Orders.Length == 0)
             {
@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Only make the call if there are any to do
                 if (markAsProcessed.Count > 0)
                 {
-                    MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).MarkOrdersProcessed(markAsProcessed);
+                    MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity) Store).MarkOrdersProcessed(markAsProcessed);
                 }
             }
         }
@@ -175,7 +175,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private bool CreateMasterOrder(OMOrder omsOrder)
         {
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid));
+            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
+                return false;
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // Setup the basic proprites
             LoadCommonOrderProperties(order, omsOrder);
@@ -189,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             bool isNew = order.IsNew;
             if (isNew)
             {
-                // If there are more than 1 parcel, we have to add a charge to make up 
+                // If there are more than 1 parcel, we have to add a charge to make up
                 // for the fact that some line items arent on the master order
                 if (omsOrder.Parcels.OrderParcels.Length > 1)
                 {
@@ -230,9 +237,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private void CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
         {
             // Create a new order instance with parce information
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
-                omsOrder.OrderUid, 
+            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
+                omsOrder.OrderUid,
                 Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
+                return;
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // Setup the basic proprites
             LoadCommonOrderProperties(order, omsOrder);

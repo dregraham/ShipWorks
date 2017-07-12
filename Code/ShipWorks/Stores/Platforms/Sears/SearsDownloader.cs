@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using System.Xml.Linq;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -26,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// </summary>
     public class SearsDownloader : StoreDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SearsDownloader));
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Downloader for sears
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -139,7 +136,14 @@ namespace ShipWorks.Stores.Platforms.Sears
             string poNumber = XPathUtility.Evaluate(xpath, "po-number", "");
 
             // get the order instance, creates one if neccessary
-            SearsOrderEntity order = (SearsOrderEntity) InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            SearsOrderEntity order = (SearsOrderEntity) result.Value;
 
             order.OrderDate = GetOrderDate(xpath);
             order.OnlineCustomerID = null;
@@ -222,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             order.ShipPostalCode = XPathUtility.Evaluate(xpath, "shipping-detail/zipcode", "");
             order.ShipCountryCode = "US";
             order.ShipPhone = XPathUtility.Evaluate(xpath, "shipping-detail/phone", "");
-            
+
             // Use the shipping info for the customer info as well
             PersonAdapter.Copy(order, "Ship", order, "Bill");
 

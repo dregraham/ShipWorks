@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+﻿using System.Data.SqlClient;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats
@@ -16,6 +14,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
     /// </summary>
     public abstract class GenericFileSpreadsheetDownloaderBase : GenericFileDownloaderBase
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -35,7 +35,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// </summary>
         protected void LoadOrder(GenericSpreadsheetReader reader)
         {
-            OrderEntity order = InstantiateOrder(reader);
+            GenericResult<OrderEntity> result = InstantiateOrder(reader);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order: {1}.", result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             GenericSpreadsheetOrderLoader loader = new GenericSpreadsheetOrderLoader();
             loader.Load(order, reader, this);
@@ -48,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private OrderEntity InstantiateOrder(GenericSpreadsheetReader reader)
+        private GenericResult<OrderEntity> InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
             long orderNumber = reader.ReadField("Order.Number", 0L, false);
@@ -61,11 +68,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
-
 
         /// <summary>
         /// Load the orders from the given GenericFileInstance

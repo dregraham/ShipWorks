@@ -12,6 +12,8 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -240,17 +242,22 @@ namespace ShipWorks.Stores.Communication
         /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
         /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
-        protected long GetNextOrderNumber()
-        {
-            return OrderUtility.GetNextOrderNumber(store.StoreID);
-        }
+        protected long GetNextOrderNumber() => OrderUtility.GetNextOrderNumber(store.StoreID);
 
         /// <summary>
         /// Instantiates the order identified by the given identifier.  If no order exists in the database,
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
-        protected virtual OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected virtual GenericResult<OrderEntity> InstantiateOrder(long orderNumber) =>
+            InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+
+        /// <summary>
+        /// Instantiates the order identified by the given identifier.  If no order exists in the database,
+        /// a new one is initialized, created, and returned.  If the order does exist in the database,
+        /// that order is returned.
+        /// </summary>
+        protected virtual GenericResult<OrderEntity> InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             if (orderIdentifier == null)
             {
@@ -270,38 +277,63 @@ namespace ShipWorks.Stores.Communication
                 BillingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Bill", BillingAddressBeforeDownload);
 
-                return order;
+                return GenericResult.FromSuccess(order);
             }
-            else
+
+            if (IsCombinedOrder(orderIdentifier))
             {
-                log.InfoFormat("{0} not found, creating", orderIdentifier);
+                log.InfoFormat("{0} was combined, skipping", orderIdentifier);
 
-                // Create a new order
-                order = storeType.CreateOrder();
-
-                // Its for this store
-                order.StoreID = store.StoreID;
-
-                // Apply the identifier values to the order
-                orderIdentifier.ApplyTo(order);
-                order.IsManual = false;
-
-                // Set defaults
-                order.OnlineStatus = "";
-                order.LocalStatus = "";
-                PersonAdapter.ApplyDefaults(order, "Bill");
-                PersonAdapter.ApplyDefaults(order, "Ship");
-
-                // Rollup defaults
-                order.RollupNoteCount = 0;
-                order.RollupItemCount = 0;
-                order.RollupItemTotalWeight = 0;
-
-                order.ShipSenseHashKey = string.Empty;
-                order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
+                return GenericResult.FromError<OrderEntity>("Combined");
             }
+
+            order = CreateOrder(orderIdentifier);
+            return GenericResult.FromSuccess(order);
+        }
+
+        private OrderEntity CreateOrder(OrderIdentifier orderIdentifier)
+        {
+            log.InfoFormat("{0} not found, creating", orderIdentifier);
+
+            // Create a new order
+            OrderEntity order = storeType.CreateOrder();
+
+            // Its for this store
+            order.StoreID = store.StoreID;
+
+            // Apply the identifier values to the order
+            orderIdentifier.ApplyTo(order);
+            order.IsManual = false;
+
+            // Set defaults
+            order.OnlineStatus = "";
+            order.LocalStatus = "";
+            PersonAdapter.ApplyDefaults(order, "Bill");
+            PersonAdapter.ApplyDefaults(order, "Ship");
+
+            // Rollup defaults
+            order.RollupNoteCount = 0;
+            order.RollupItemCount = 0;
+            order.RollupItemTotalWeight = 0;
+
+            order.ShipSenseHashKey = string.Empty;
+            order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
 
             return order;
+        }
+
+        private bool IsCombinedOrder(OrderIdentifier orderIdentifier)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create();
+
+                QueryFactory factory = new QueryFactory();
+                QuerySpec combinedSearchQuery = orderIdentifier.CreateCombinedSearchQuery(factory);
+                DynamicQuery query = factory.Create().Select(combinedSearchQuery.Any());
+
+                return sqlAdapter.FetchScalar<bool?>(query) ?? false;
+            }
         }
 
         /// <summary>

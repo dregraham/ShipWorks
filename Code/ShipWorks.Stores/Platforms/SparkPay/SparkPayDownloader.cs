@@ -5,6 +5,8 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -18,19 +20,24 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     /// </summary>
     public class SparkPayDownloader : StoreDownloader
     {
-        readonly SparkPayStoreEntity store;
-        readonly SparkPayWebClient webClient;
-        readonly SparkPayStatusCodeProvider statusProvider;
+        private readonly SparkPayStoreEntity store;
+        private readonly SparkPayWebClient webClient;
+        private readonly SparkPayStatusCodeProvider statusProvider;
+        private readonly ILog log;
 
         /// <summary>
         /// The spark pay downloader
         /// </summary>
-        public SparkPayDownloader(StoreEntity store, SparkPayWebClient webClient, Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory)
+        public SparkPayDownloader(StoreEntity store,
+            SparkPayWebClient webClient,
+            Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory,
+            Func<Type, ILog> logFactory)
             : base(store)
         {
             this.webClient = webClient;
             this.store = (SparkPayStoreEntity) store;
             statusProvider = statusProviderFactory(this.store);
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -102,7 +109,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 return;
             }
 
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(sparkPayOrder.Id.Value));
+            GenericResult<OrderEntity> result = InstantiateOrder(sparkPayOrder.Id.Value);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", sparkPayOrder.Id.Value, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             order.OnlineStatus = statusProvider.GetCodeName((int) sparkPayOrder.OrderStatusId);
             order.OnlineStatusCode = sparkPayOrder.OrderStatusId.ToString();

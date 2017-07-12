@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using System.Text;
-using log4net;
-using Newtonsoft.Json.Linq;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
-using Interapptive.Shared;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -61,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Download data for the Etsy store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -142,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             using (EntityCollection<EtsyOrderEntity> collection = new EntityCollection<EtsyOrderEntity>(orders))
             {
                 SqlAdapter.Default.SaveEntityCollection(collection);
-            }            
+            }
         }
 
         /// <summary>
@@ -251,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Gets the current time from Etsy and subtracts 5 minutes.
             endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
 
-            //The most recent order date. 
+            //The most recent order date.
             DateTime? calculatedStartDate = GetOrderDateStartingPoint();
 
             if (calculatedStartDate.HasValue)
@@ -324,8 +323,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
             long orderNumber = (long) orderFromEtsy["receipt_id"];
 
             // Get the order instance
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
-            EtsyOrderEntity order = (EtsyOrderEntity)orderEntity;
+            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            EtsyOrderEntity order = (EtsyOrderEntity) result.Value;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = orderFromEtsy.GetValue("grandtotal", 0m);
@@ -373,7 +378,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                             JToken transactionToken = webClient.GetTransactionsForReceipt(orderNumber, limit, offset);
 
                             totalTransactions = transactionToken.GetValue("count", 0);
-                            loadedItems = LoadItems(order, (JArray)transactionToken["results"]);
+                            loadedItems = LoadItems(order, (JArray) transactionToken["results"]);
 
                             offset = offset + loadedItems;
 
@@ -496,14 +501,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity item, JArray variations)
         {
-            if (variations!=null)
+            if (variations != null)
             {
                 foreach (JToken variation in variations)
                 {
                     item.OrderItemAttributes.Add(new OrderItemAttributeEntity()
                     {
-                        Name = variation.GetValue("formatted_name",""),
-                        Description = variation.GetValue("formatted_value",""),
+                        Name = variation.GetValue("formatted_name", ""),
+                        Description = variation.GetValue("formatted_value", ""),
                         IsManual = false,
                         UnitPrice = 0
                     });
@@ -546,7 +551,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value, bool ignoreDuplicates = false)
         {

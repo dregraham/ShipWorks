@@ -1,27 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.Users;
-using log4net;
-using ShipWorks.Common.Threading;
-using System.Diagnostics;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -42,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public ShopifyDownloader(ShopifyStoreEntity store)
             : base(store)
         {
-            requestedShippingField = (ShopifyRequestedShippingField)store.ShopifyRequestedShippingOption;
+            requestedShippingField = (ShopifyRequestedShippingField) store.ShopifyRequestedShippingOption;
         }
 
         /// <summary>
@@ -65,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Download data for the Shopify store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -146,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(180));
             }
-            
+
             // Add a second to the start date so we don't redownload the previous order over and over
             startDate = startDate.Value.AddSeconds(1);
 
@@ -257,7 +252,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 long shopifyOrderId = jsonOrder.GetValue<long>("id");
 
                 //Get the order instance.
-                ShopifyOrderEntity order = (ShopifyOrderEntity)InstantiateOrder(new ShopifyOrderIdentifier(shopifyOrderId));
+                GenericResult<OrderEntity> result = InstantiateOrder(new ShopifyOrderIdentifier(shopifyOrderId));
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", shopifyOrderId, result.Message);
+                    return;
+                }
+
+                ShopifyOrderEntity order = (ShopifyOrderEntity) result.Value;
 
                 //Set the total.  It will be calculated and verified later.
                 order.OrderTotal = jsonOrder.GetValue<decimal>("total_price", 0.0m);
@@ -267,7 +269,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 //Get the customer
                 long onlineCustomerID = jsonOrder.GetValue<long>("customer.id", -1);
-                order.OnlineCustomerID = (onlineCustomerID == -1) ? (long?)null : onlineCustomerID;
+                order.OnlineCustomerID = (onlineCustomerID == -1) ? (long?) null : onlineCustomerID;
 
                 //Requested shipping
                 if (requestedShippingField == ShopifyRequestedShippingField.Code)
@@ -332,7 +334,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             string fullOrderNumber = jsonOrder.GetValue<string>("name");
 
             int numericIndex = fullOrderNumber.IndexOf(order.OrderNumber.ToString());
-            
+
             // Shouldn't happen, but bail if it does
             if (numericIndex < 0)
             {
@@ -380,7 +382,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 log.Debug(ex);
             }
             order.PaymentStatusCode = (int) onlineFinancialStatus;
-            
+
             // If the order hasn't been fulfilled, no need to display that info
             //Add Fulfillment status
             if (string.IsNullOrWhiteSpace(jsonOnlineFulfillmentStatus))
@@ -391,11 +393,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 try
                 {
-                    order.FulfillmentStatusCode = (int)EnumHelper.GetEnumByApiValue<ShopifyFulfillmentStatus>(jsonOnlineFulfillmentStatus);
+                    order.FulfillmentStatusCode = (int) EnumHelper.GetEnumByApiValue<ShopifyFulfillmentStatus>(jsonOnlineFulfillmentStatus);
                 }
                 catch (InvalidOperationException ex)
                 {
-                    order.FulfillmentStatusCode = (int)ShopifyFulfillmentStatus.Unknown;
+                    order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Unknown;
                     // Sometimes Shopify adds new statuses which keeps users from downloading.  So, we'll leave assigned to unknown and carry on.
                     // Log the msg so we know what status was missing, if the customer contacts us.
                     log.Debug(ex);
@@ -442,11 +444,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
             ShopifyOrderItemEntity item = (ShopifyOrderItemEntity) InstantiateOrderItem(order);
 
             // Set item properties
-            item.Name = lineItem.GetValue<string>("title", string.Empty); 
-            item.Code = lineItem.GetValue<string>("sku", string.Empty); 
+            item.Name = lineItem.GetValue<string>("title", string.Empty);
+            item.Code = lineItem.GetValue<string>("sku", string.Empty);
             item.SKU = item.Code;
-            item.Quantity = lineItem.GetValue<int>("quantity", 0); 
-            item.UnitPrice = lineItem.GetValue<decimal>("price", 0.0m); 
+            item.Quantity = lineItem.GetValue<int>("quantity", 0);
+            item.UnitPrice = lineItem.GetValue<decimal>("price", 0.0m);
             item.Weight = GetLineItemWeight(lineItem);
 
             decimal lineDiscount = lineItem.GetValue("total_discount", 0.0m);
@@ -703,7 +705,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             string addressKey = string.Format("{0}_address", addressType);
 
             //See if the NameParts entries exist
-            string first = jsonOrder.GetValue<string>(string.Format("{0}.first_name", addressKey), ""); 
+            string first = jsonOrder.GetValue<string>(string.Format("{0}.first_name", addressKey), "");
             string middle = string.Empty;
             string last = jsonOrder.GetValue<string>(string.Format("{0}.last_name", addressKey), "");
 

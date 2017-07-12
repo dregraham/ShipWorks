@@ -1,20 +1,19 @@
 using System;
 using System.Data.SqlClient;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
-using Autofac;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -26,23 +25,27 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     {
         private int totalCount = 0;
         private readonly IShopSiteWebClient webClient;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(IShopSiteStoreEntity store, IShopSiteWebClientFactory webClientFactory)
+        public ShopSiteDownloader(IShopSiteStoreEntity store,
+            IShopSiteWebClientFactory webClientFactory,
+            Func<Type, ILog> logFactory)
             : base(store as StoreEntity)
         {
             IShopSiteStoreEntity shopSiteStore = store;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
 
             webClient = webClientFactory.Create(shopSiteStore);
+            log = logFactory(GetType());
         }
 
         /// <summary>
         /// Download data for the ShopSite store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -139,7 +142,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
 
             // Get the order instance
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = XPathUtility.Evaluate(xpath, "Totals/GrandTotal", 0.0m);
@@ -394,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Use name parts if we can, otherwise revert to what we parsed.
             order.SetNewFieldValue(dbPrefix + "UnparsedName", fullName.FullName);
-            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)PersonNameParseStatus.Simple);
+            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) PersonNameParseStatus.Simple);
             order.SetNewFieldValue(dbPrefix + "FirstName", first != "" ? first : fullName.First);
             order.SetNewFieldValue(dbPrefix + "MiddleName", middle != "" ? middle : fullName.Middle);
             order.SetNewFieldValue(dbPrefix + "LastName", last != "" ? last : fullName.Last);

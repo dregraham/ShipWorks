@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks
@@ -775,7 +774,7 @@ namespace ShipWorks
             this.ribbonSecurityProvider.SetPermission(this.buttonCombine, ShipWorks.Users.Security.PermissionType.OrdersModify);
             this.buttonCombine.QuickAccessKey = "OC";
             this.buttonCombine.Text = "Combine";
-            this.buttonCombine.Activate += new System.EventHandler(this.OnCombine);
+            this.buttonCombine.Activate += new System.EventHandler(this.OnCombineOrders);
             //
             // buttonEditCustomer
             //
@@ -1288,7 +1287,7 @@ namespace ShipWorks
             this.contextMenuOrderGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextOrderEditOrder,
             this.contextOrderCombineOrder,
-            
+
             this.contextOrderSep1,
             this.contextOrderLocalStatus,
             this.contextOrderOnlineUpdate,
@@ -1335,7 +1334,7 @@ namespace ShipWorks
             this.contextOrderCombineOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderCombineOrder.Text = "Combine Orders";
             this.contextOrderCombineOrder.Click += new System.EventHandler(this.OnEditOrder);
-            
+
             //
             // contextOrderSep1
             //

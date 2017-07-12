@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -31,15 +28,15 @@ namespace ShipWorks.Tests.Stores.LemonStand
         {
         }
 
-        protected override OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected override GenericResult<OrderEntity> InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             Order = new LemonStandOrderEntity();
-            return Order;
+            return GenericResult.FromSuccess<OrderEntity>(Order);
         }
 
         protected override void SaveDownloadedOrder(OrderEntity orderEntity)
         {
-            SavedOrder = (LemonStandOrderEntity)orderEntity;
+            SavedOrder = (LemonStandOrderEntity) orderEntity;
         }
     }
 }

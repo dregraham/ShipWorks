@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using System.Text.RegularExpressions;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -100,11 +100,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            // apply details 
+            // apply details
             downloadDetail.ExtraBigIntData1 = ebayOrderId;
             downloadDetail.ExtraBigIntData2 = ebayItemId;
             downloadDetail.ExtraBigIntData3 = transactionId;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.EbayOrderSearch.Where(EbayOrderSearchFields.EbayOrderID == EbayOrderID);
 
         /// <summary>
         /// String representation

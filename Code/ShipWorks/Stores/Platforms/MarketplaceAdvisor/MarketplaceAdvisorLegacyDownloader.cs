@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
@@ -24,10 +21,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// </summary>
     class MarketplaceAdvisorLegacyDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorLegacyDownloader));
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store) 
+        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
             if (store == null)
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Download the orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -152,9 +151,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     totalRecords);
 
                 XPathNavigator order = orders.Current.Clone();
-                long orderNumber = LoadOrder(order);
+                GenericResult<long> orderNumber = LoadOrder(order);
 
-                markAsProcessed.Add(orderNumber);
+                if (orderNumber.Success)
+                {
+                    markAsProcessed.Add(orderNumber.Value);
+                }
 
                 // update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalRecords;
@@ -173,13 +175,20 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Extract the order from the XML
         /// </summary>
-        private long LoadOrder(XPathNavigator xpath)
+        private GenericResult<long> LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             long orderNumber = XPathUtility.Evaluate(xpath, "Number", (long) 0);
 
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return GenericResult.FromError<long>(result.Message);
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // MarketplaceAdvisor sends shit down locally to their own server, stupid
             DateTime date = DateTime.Parse(XPathUtility.Evaluate(xpath, "Date", ""));
@@ -232,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorLegacyDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
 
-            return orderNumber;
+            return GenericResult.FromSuccess(orderNumber);
         }
 
         /// <summary>

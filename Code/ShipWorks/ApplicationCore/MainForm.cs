@@ -57,7 +57,6 @@ using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Email;
@@ -167,11 +166,11 @@ namespace ShipWorks
         private void InitializeCustomEnablerComponents()
         {
                 selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.AppliesFunction,
-                    (x) => ShouldCombineOrderBeEnabled(x));
+                (x) => ShouldCombineOrderBeEnabled(x));
 
-                selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
+            selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
                     SelectionDependentType.AppliesFunction,
-                    (x) => ShouldCombineOrderBeEnabled(x));
+                (x) => ShouldCombineOrderBeEnabled(x));
         }
 
         /// <summary>
@@ -2943,14 +2942,6 @@ namespace ShipWorks
         private void EditCustomer(long customerID)
         {
             CustomerEditorDlg.Open(customerID, this);
-        }
-
-        /// <summary>
-        /// When the combine button is pressed
-        /// </summary>
-        private void OnCombine(object sender, EventArgs e)
-        {
-            MessageBox.Show(this, "Combined!");
         }
 
         /// <summary>

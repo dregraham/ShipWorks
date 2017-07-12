@@ -1,5 +1,8 @@
 ﻿using System;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -18,6 +21,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public LemonStandOrderIdentifier(string lemonStandStoreOrderID)
         {
             this.lemonStandStoreOrderID = lemonStandStoreOrderID;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LemonStandOrderIdentifier(int orderID) : this(orderID.ToString())
+        {
+
         }
 
         /// <summary>
@@ -50,11 +61,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.LemonStandOrderSearch
+                .Where(LemonStandOrderSearchFields.LemonStandOrderID == lemonStandStoreOrderID);
+
+        /// <summary>
         ///     String representation
         /// </summary>
-        public override string ToString()
-        {
-            return $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
-        }
+        public override string ToString() => $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
     }
 }

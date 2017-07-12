@@ -7,11 +7,11 @@ using System.Linq;
 using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -278,7 +278,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             BigCommerceOrderIdentifier bigCommerceOrderIdentifier = new BigCommerceOrderIdentifier(order.id, orderNumberPostfix);
 
             // Get the order instance.
-            OrderEntity orderEntity = InstantiateOrder(bigCommerceOrderIdentifier);
+            GenericResult<OrderEntity> result = InstantiateOrder(bigCommerceOrderIdentifier);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", order.id, result.Message);
+                return;
+            }
+
+            OrderEntity orderEntity = result.Value;
 
             // If the order does not have sub orders, set the order total.  If it does have sub orders, each order should be calculated based on it's
             // content

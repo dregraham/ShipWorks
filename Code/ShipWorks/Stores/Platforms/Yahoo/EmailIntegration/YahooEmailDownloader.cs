@@ -5,7 +5,9 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using Rebex.Mail;
@@ -18,9 +20,6 @@ using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using Interapptive.Shared;
-using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 {
@@ -49,13 +48,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Initiate the download
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity)Store).YahooEmailAccountID);
+                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
                 if (emailAccount == null)
                 {
                     throw new DownloadException("The email account configured for downloading has been deleted.");
@@ -214,7 +213,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             int orderNumber = Convert.ToInt32(yahooOrderID.Substring(lastSlash + 1));
 
             // Create a new order for it
-            YahooOrderEntity order = (YahooOrderEntity) InstantiateOrder(new YahooOrderIdentifier(yahooOrderID));
+            GenericResult<OrderEntity> result = InstantiateOrder(new YahooOrderIdentifier(yahooOrderID));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", yahooOrderID, result.Message);
+                return;
+            }
+
+            YahooOrderEntity order = (YahooOrderEntity) result.Value;
 
             long numericTime = XPathUtility.Evaluate(xpath, "NumericTime", 0L);
 

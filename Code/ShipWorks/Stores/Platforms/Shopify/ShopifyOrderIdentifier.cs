@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -55,6 +57,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             downloadDetail.ExtraBigIntData1 = shopifyOrderIdentifier;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.ShopifyOrderSearch.Where(ShopifyOrderSearchFields.ShopifyOrderID == shopifyOrderIdentifier);
 
         /// <summary>
         /// String representation

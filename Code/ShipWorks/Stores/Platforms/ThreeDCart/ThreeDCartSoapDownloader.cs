@@ -11,13 +11,13 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 if (webClient == null)
                 {
                     //Create the web client used for downloading
-                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store, Progress);
+                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity) Store, Progress);
                 }
 
                 return webClient;
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Download orders and statuses for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -141,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             Progress.Detail = "Updating status codes...";
 
             // refresh the status codes from 3dcart
-            statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
+            statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) Store);
             statusProvider.UpdateFromOnlineStore();
         }
 
@@ -308,7 +308,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = CreateOrderIdentifier(xmlOrderXPath, invoiceNumberPostFix);
 
             // Get the order instance.
-            OrderEntity order = InstantiateOrder(threeDCartOrderIdentifier);
+            GenericResult<OrderEntity> result = InstantiateOrder(threeDCartOrderIdentifier);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", threeDCartOrderIdentifier.OrderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             if (order is ThreeDCartOrderEntity)
             {
@@ -500,7 +507,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         private void LoadItem(OrderEntity order, XPathNavigator xpath)
         {
-            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity)InstantiateOrderItem(order);
+            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
 
             // Set item properties
             // The item name will be determined in the LoadProductAndRelatedObjects as we

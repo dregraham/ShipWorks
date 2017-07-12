@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
-using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -25,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartOrderLoader walmartOrderLoader;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ILog log;
         private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
@@ -34,14 +33,16 @@ namespace ShipWorks.Stores.Platforms.Walmart
             IWalmartWebClient walmartWebClient,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             IWalmartOrderLoader walmartOrderLoader,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            Func<Type, ILog> logFactory)
             : base(store)
         {
             this.walmartWebClient = walmartWebClient;
             this.walmartOrderLoader = walmartOrderLoader;
             this.dateTimeProvider = dateTimeProvider;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
-            
+            log = logFactory(GetType());
+
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -143,8 +144,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
             // See remarks in WalmartOrderIdentifier for why we use this vs OrderNumberIdentifier
-            WalmartOrderEntity orderToSave =
-                (WalmartOrderEntity) InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId));
+            GenericResult<OrderEntity> result = InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.purchaseOrderId, result.Message);
+                return;
+            }
+
+            WalmartOrderEntity orderToSave = (WalmartOrderEntity) result.Value;
 
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
@@ -154,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
         /// <summary>
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
-        /// will be used to calculate the initial number of days back to. We then compare that with the 
+        /// will be used to calculate the initial number of days back to. We then compare that with the
         /// date calculated from DownloadModifiedNumberOfDaysBack and send the earlier of the two dates.
         /// </summary>
         protected new DateTime GetOrderDateStartingPoint()

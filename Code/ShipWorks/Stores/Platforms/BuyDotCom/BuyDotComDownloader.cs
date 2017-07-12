@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using System.IO;
-using System.Reflection;
-using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
-using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
+using System.Windows.Forms;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Spreadsheet;
+using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
-using System.Windows.Forms;
-using System.Threading.Tasks;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -27,13 +23,14 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// Heavily leverages GenericSpreadsheetOrderLoader to load orders.
     /// </summary>
     public class BuyDotComDownloader : OrderElementFactoryDownloaderBase
-    {        
+    {
+        static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
         GenericCsvMap csvMap;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComDownloader(BuyDotComStoreEntity store) 
+        public BuyDotComDownloader(BuyDotComStoreEntity store)
             : base(store)
         {
             string mapXml = ResourceUtility.ReadString("ShipWorks.Stores.Platforms.BuyDotCom.BuyDotComOrderImportMap.swcsvm");
@@ -44,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Download Orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -90,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                         // Get all the files we know about
                         foreach (string fileName in fileNames)
                         {
-                            // Check if it has been cancelled
+                            // Check if it has been canceled
                             if (Progress.IsCancelRequested)
                             {
                                 return;
@@ -105,8 +102,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 }
             }
             catch (BuyDotComException ex)
-            { 
-                throw new DownloadException(ex.Message,ex);
+            {
+                throw new DownloadException(ex.Message, ex);
             }
             catch (SqlForeignKeyException ex)
             {
@@ -140,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 throw new BuyDotComException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Load Buy.com orders from the given file content
         /// </summary>
@@ -154,7 +151,14 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
 
                     // Create and load in the order data
-                    OrderEntity order = InstantiateOrder(csvReader);
+                    GenericResult<OrderEntity> result = InstantiateOrder(csvReader);
+                    if (result.Failure)
+                    {
+                        log.InfoFormat("Skipping order: {1}.", result.Message);
+                        continue;
+                    }
+
+                    OrderEntity order = result.Value;
 
                     BuyDotComOrderLoader loader = new BuyDotComOrderLoader();
                     loader.Load(order, csvReader, this);
@@ -175,15 +179,13 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private OrderEntity InstantiateOrder(GenericCsvReader reader)
+        private GenericResult<OrderEntity> InstantiateOrder(GenericCsvReader reader)
         {
             // pull out the order number
             long orderNumber = reader.ReadField("Order.Number", 0L, false);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
-
-            return order;
+            return InstantiateOrder(new OrderNumberIdentifier(orderNumber));
         }
     }
 }

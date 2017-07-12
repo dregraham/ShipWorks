@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Business;
-using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -26,6 +21,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
     /// </summary>
     public class ProStoresDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
+
         // total download count
         int totalCount = 0;
 
@@ -44,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download orders from the ProStores online store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -54,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
                 // For legacy login methods, checks the version has been updatd and tokens are now supported
                 ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
-                
+
                 // Downloading baed on the last modified time
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
@@ -117,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                     Progress.Detail = "Done";
                     return false;
                 }
-                
+
             }
             catch (ProStoresApiException ex)
             {
@@ -159,10 +156,10 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
         /// <summary>
         /// Parses out the ProStores customer number into an Online Customer ID.
-        /// 
+        ///
         /// Customer Numbers can be changed by the store admin to include a prefix
         /// and a set number of digits in the order number.
-        /// 
+        ///
         /// Guest purchases always end with a dash and a 0 padded representation of -1,
         /// like ABC-000001.
         /// </summary>
@@ -188,7 +185,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
 
-            ProStoresOrderEntity order = (ProStoresOrderEntity) InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            ProStoresOrderEntity order = (ProStoresOrderEntity) result.Value;
 
             // Setup the basic proprites
             order.OrderNumber = orderNumber;
@@ -244,8 +248,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
                     {
                         LoadItem(order, xpathItem);
                     }
-                } 
-                
+                }
+
                 // Load all the charges
                 LoadOrderCharges(order, xpath);
 
@@ -266,7 +270,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         {
             PersonName shipFullName = PersonName.Parse(XPathUtility.Evaluate(xpath, "Recipient", ""));
 
-            order.ShipNameParseStatus = (int)shipFullName.ParseStatus;
+            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
             order.ShipUnparsedName = shipFullName.UnparsedName;
             order.ShipFirstName = shipFullName.First;
             order.ShipMiddleName = shipFullName.Middle;
@@ -282,7 +286,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             order.BillFirstName = XPathUtility.Evaluate(xpath, "FirstName", "");
             order.BillLastName = XPathUtility.Evaluate(xpath, "LastName", "");
-            order.BillNameParseStatus = (int)PersonNameParseStatus.Simple;
+            order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
             order.BillUnparsedName = new PersonName(order.BillFirstName, "", order.BillLastName).FullName;
             order.BillCompany = XPathUtility.Evaluate(xpath, "BillToCompany", "");
             order.BillStreet1 = XPathUtility.Evaluate(xpath, "BillToStreet", "");

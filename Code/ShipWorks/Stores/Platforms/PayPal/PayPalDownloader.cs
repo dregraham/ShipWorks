@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
@@ -187,7 +182,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             if (ShouldImportTransaction(transaction))
             {
-                PayPalOrderEntity order = (PayPalOrderEntity) InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
+                GenericResult<OrderEntity> result = InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", transaction.PaymentInfo.TransactionID, result.Message);
+                    return;
+                }
+
+                PayPalOrderEntity order = (PayPalOrderEntity) result.Value;
 
                 order.TransactionID = transaction.PaymentInfo.TransactionID;
                 order.PayPalFee = GetAmount(transaction.PaymentInfo.FeeAmount);

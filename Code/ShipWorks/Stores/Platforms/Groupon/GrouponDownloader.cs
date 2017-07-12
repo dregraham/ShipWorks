@@ -2,24 +2,32 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Enums;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
-using System.Reflection;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
+    /// <summary>
+    /// Downloader for the Groupon store
+    /// </summary>
     class GrouponDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(GrouponDownloader));
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GrouponDownloader(StoreEntity store)
             : base(store)
         {
@@ -29,13 +37,13 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Downloading New Orders...";
 
-            GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
+            GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity) Store);
 
             DateTime start = DateTime.UtcNow.AddDays(-7);
 
@@ -53,16 +61,16 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     int numberOfPages = 1;
                     do
                     {
-                        //Grab orders 
+                        //Grab orders
                         JToken result = client.GetOrders(start, currentPage);
 
                         //Update numberOfPages
-                        numberOfPages = (int)result["meta"]["no_of_pages"];
+                        numberOfPages = (int) result["meta"]["no_of_pages"];
 
                         // get JSON result objects into a list
                         IList<JToken> jsonOrders = result["data"].Children().ToList();
 
-                        //Load orders 
+                        //Load orders
                         foreach (JToken jsonOrder in jsonOrders)
                         {
                             // check for cancellation
@@ -102,7 +110,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
         private void LoadOrder(JToken jsonOrder)
         {
             string orderid = jsonOrder["orderid"].ToString();
-            GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponOrderIdentifier(orderid));
+
+            GenericResult<OrderEntity> result = InstantiateOrder(new GrouponOrderIdentifier(orderid));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderid, result.Message);
+                return;
+            }
+
+            GrouponOrderEntity order = (GrouponOrderEntity) result.Value;
 
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
@@ -134,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
                     order.OrderNumber = GetNextOrderNumber();
 
-                    //Unit of measurement used for weight  
+                    //Unit of measurement used for weight
                     string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
 
                     //List of order items
@@ -147,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     }
 
                     //OrderTotal
-                    order.OrderTotal = (decimal)jsonOrder["amount"]["total"];
+                    order.OrderTotal = (decimal) jsonOrder["amount"]["total"];
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
@@ -160,10 +176,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private void LoadItem(GrouponOrderEntity order, GrouponItem grouponItem, string itemWeightUnit)
         {
-            GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
+            GrouponOrderItemEntity item = (GrouponOrderItemEntity) InstantiateOrderItem(order);
 
             double itemWeight = (String.IsNullOrWhiteSpace(grouponItem.Weight)) ? 0 : Convert.ToDouble(grouponItem.Weight);
-            
+
             item.SKU = grouponItem.Sku;
             item.Code = grouponItem.FulfillmentLineitemId;
             item.Name = grouponItem.Name;
@@ -195,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             shipAdapter.Street1 = customer.Address1;
             shipAdapter.Street2 = customer.Address2;
             shipAdapter.City = customer.City;
-            //Groupon can send "null" as the state, check for null test and use blank instead 
+            //Groupon can send "null" as the state, check for null test and use blank instead
             shipAdapter.StateProvCode = Geography.GetStateProvCode(customer.State);
             shipAdapter.PostalCode = customer.Zip;
             shipAdapter.CountryCode = Geography.GetCountryCode(customer.Country);

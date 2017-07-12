@@ -1,27 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
-using System.Text.RegularExpressions;
-using System.Xml;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
+using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Xml;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -30,13 +22,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// </summary>
     class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
 
         // total download count
         int totalCount = 0;
 
-        // Status code container 
+        // Status code container
         GenericStoreStatusCodeProvider statusCodeProvider;
 
         /// <summary>
@@ -55,14 +47,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             get
             {
-                return (GenericModuleStoreEntity)Store;
+                return (GenericModuleStoreEntity) Store;
             }
         }
 
         /// <summary>
         /// Begin order download
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
@@ -71,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 bool supportMode = InterapptiveOnly.MagicKeysDown;
 
-                GenericModuleStoreType storeType = (GenericModuleStoreType)StoreTypeManager.GetType(Store);
+                GenericModuleStoreType storeType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
                 if (!supportMode)
                 {
@@ -231,10 +223,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (orderNodes.Count > 0)
             {
                 // import the downloaded orders
-                LoadOrders(orderNodes);
-
-                // signal that we imported some orders
-                return true;
+                return LoadOrders(orderNodes);
             }
             else
             {
@@ -248,26 +237,30 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Imports the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNodeIterator orderNodes)
+        private bool LoadOrders(XPathNodeIterator orderNodes)
         {
+            bool anyProcessed = false;
+
             // go through each order in the batch
             while (orderNodes.MoveNext())
             {
                 // check for cancel again
                 if (Progress.IsCancelRequested)
                 {
-                    return;
+                    return false;
                 }
 
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                anyProcessed |= LoadOrder(order);
 
                 // update the status
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
             }
+
+            return anyProcessed;
         }
 
         /// <summary>
@@ -292,31 +285,34 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual void AssignOrderNumber(OrderEntity order)
         {
             // this is an extension point for derived class.  The GenericStoreDownloader
-            // implementation uses the OrderNumberIdentifier which has already applied an order number 
+            // implementation uses the OrderNumberIdentifier which has already applied an order number
         }
 
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        protected OrderEntity InstantiateOrder(XPathNavigator xpath)
+        protected GenericResult<OrderEntity> InstantiateOrder(XPathNavigator xpath)
         {
             // Construct the order identifier based on the incoming xml
             OrderIdentifier orderIdentifier = CreateOrderIdentifier(xpath);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
-            AssignOrderNumber(order);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
 
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private bool LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = InstantiateOrder(xpath);
+            GenericResult<OrderEntity> result = InstantiateOrder(xpath);
+            if (result.Failure)
+            {
+                return false;
+            }
+
+            OrderEntity order = result.Value;
+            AssignOrderNumber(order);
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
@@ -368,6 +364,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+
+            return true;
         }
 
         /// <summary>

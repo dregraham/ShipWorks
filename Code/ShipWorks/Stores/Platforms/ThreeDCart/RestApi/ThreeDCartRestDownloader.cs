@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Download orders for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -222,7 +222,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         $"Checking order {orderIdentifier} for modifications..." :
                         $"Processing new order {++newOrderCount}";
 
-                    OrderEntity order = InstantiateOrder(orderIdentifier);
+                    GenericResult<OrderEntity> result = InstantiateOrder(orderIdentifier);
+                    if (result.Failure)
+                    {
+                        log.InfoFormat("Skipping order '{0}': {1}.", threeDCartOrder, result.Message);
+                        return;
+                    }
+
+                    OrderEntity order = result.Value;
 
                     order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
 

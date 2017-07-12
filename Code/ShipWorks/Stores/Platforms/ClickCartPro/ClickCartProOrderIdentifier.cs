@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.ClickCartPro
 {
@@ -17,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Constructor
         /// </summary>
-        public ClickCartProOrderIdentifier(string clickCartProOrderId) 
+        public ClickCartProOrderIdentifier(string clickCartProOrderId)
         {
             this.clickCartProOrderId = clickCartProOrderId;
         }
@@ -43,6 +44,12 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
 
             ccpOrder.ClickCartProOrderID = clickCartProOrderId;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.ClickCartProOrderSearch.Where(ClickCartProOrderSearchFields.ClickCartProOrderID == clickCartProOrderId);
 
         /// <summary>
         /// String representation

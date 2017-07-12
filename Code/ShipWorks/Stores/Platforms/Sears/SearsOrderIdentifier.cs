@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
     /// <summary>
-    /// Class for uniquely identifiying a sears order
+    /// Class for uniquely identifying a sears order
     /// </summary>
     public class SearsOrderIdentifier : OrderIdentifier
     {
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             searsOrder.OrderNumber = confirmationNumber;
             searsOrder.PoNumber = poNumber;
         }
-        
+
         /// <summary>
         /// Apply the unique order information to the download detail
         /// </summary>
@@ -48,5 +49,18 @@ namespace ShipWorks.Stores.Platforms.Sears
             downloadDetail.OrderNumber = confirmationNumber;
             downloadDetail.ExtraStringData1 = poNumber;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.SearsOrderSearch
+                .Where(SearsOrderSearchFields.PoNumber == poNumber)
+                .AndWhere(SearsOrderSearchFields.OrderID == confirmationNumber);
+
+        /// <summary>
+        /// String representation
+        /// </summary>
+        public override string ToString() => $"ConfirmationNumber:{confirmationNumber};PoNumber:{poNumber}";
     }
 }

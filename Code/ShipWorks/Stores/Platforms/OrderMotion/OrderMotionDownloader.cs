@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Email.Accounts;
-using Rebex.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.Email;
-using ShipWorks.ApplicationCore.Logging;
-using Rebex.Mail;
-using System.Xml;
-using Interapptive.Shared.IO.Text.Csv;
 using System.IO;
-using ShipWorks.Stores.Content;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.IO.Text.Csv;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Net;
-using Rebex.Mime.Headers;
+using Interapptive.Shared.Utility;
+using log4net;
+using Rebex.Mail;
+using Rebex.Net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
+using ShipWorks.Email.Accounts;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {
@@ -34,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     /// </summary>
     public class OrderMotionDownloader : StoreDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionDownloader));
 
         // number of email messages to be downloaded
@@ -60,13 +55,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Start the download process
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((OrderMotionStoreEntity)Store).OrderMotionEmailAccountID);
+                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((OrderMotionStoreEntity) Store).OrderMotionEmailAccountID);
                 if (emailAccount == null)
                 {
                     throw new DownloadException("The email account configured for downloading has been deleted.");
@@ -229,7 +224,14 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 int shipmentId = Convert.ToInt32(invoiceId.Substring(slash + 1));
 
                 OrderMotionOrderIdentifier identifier = new OrderMotionOrderIdentifier(orderNumber, shipmentId);
-                OrderMotionOrderEntity order = (OrderMotionOrderEntity)InstantiateOrder(identifier);
+                GenericResult<OrderEntity> result = InstantiateOrder(identifier);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                    return;
+                }
+
+                OrderMotionOrderEntity order = (OrderMotionOrderEntity) result.Value;
 
                 // set the order postfix
                 if (shipmentId > 1)
@@ -273,7 +275,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
                     // order items
                     LoadItems(order, xpath);
-                   
+
                     // order charges
                     LoadCharges(order, xpath);
 
@@ -348,7 +350,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 charge.Description = "Tax";
                 charge.Amount = XPathUtility.Evaluate(xpath, @"sum(//LineItem/Tax)", 0.0M);
 
-                // Shipping 
+                // Shipping
                 charge = InstantiateOrderCharge(order);
                 charge.Type = "SHIPPING";
                 charge.Description = "Shipping";
@@ -659,7 +661,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             if (!orderResponseCache.ContainsKey(orderNumber))
             {
                 // make a web service call to get the order information from OrderMotion
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity)Store);
+                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
 
                 // get the order xml and cache it
                 orderResponseCache[orderNumber] = client.GetOrder(orderNumber);
@@ -688,7 +690,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             // now look for the attributeID
             if (itemAttributes.ContainsKey(attributeHashKey))
             {
-                attributeName = (string)itemAttributes[attributeHashKey];
+                attributeName = (string) itemAttributes[attributeHashKey];
             }
 
             return attributeName;
@@ -701,7 +703,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         {
             try
             {
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity)Store);
+                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
 
                 // get the detail information for this itemcode
                 XPathNavigator xpath = client.GetItemInformation(itemCode).CreateNavigator();

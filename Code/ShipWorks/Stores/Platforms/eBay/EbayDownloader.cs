@@ -190,7 +190,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            GenericResult<OrderEntity> result = InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderType.OrderID, result.Message);
+                return;
+            }
+
+            EbayOrderEntity order = (EbayOrderEntity) result.Value;
 
             // Special processing for canceled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)

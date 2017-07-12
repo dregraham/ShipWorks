@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
@@ -20,6 +20,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     /// </summary>
     public class AmeriCommerceDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceDownloader));
+
         // total number of orders to be downloaded
         int totalCount = 0;
 
@@ -38,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Download orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -47,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 Progress.Detail = "Updating status codes...";
 
                 // refresh the status codes from AmeriCommerce
-                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity)Store);
+                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
@@ -55,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
                 // create the web client
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity)Store);
+                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
 
                 // get orders
                 List<OrderTrans> orders = client.GetOrders(lastModified);
@@ -116,7 +118,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // begin pulling into ShipWorks now
             int orderNumber = orderTrans.orderID.GetValue(0);
 
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             // populate the few properties that are allowed to change between downloads
             order.OrderDate = orderTrans.orderDate.GetValue(DateTime.UtcNow);
@@ -134,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // address information
             LoadAddressInfo(client, order, orderTrans);
-            
+
             // do the rest only on new orders
             if (order.IsNew)
             {
@@ -155,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Loads the various notes from the AmeriCommerce order 
+        /// Loads the various notes from the AmeriCommerce order
         /// </summary>
         private void LoadNotes(OrderTrans orderTrans, OrderEntity order)
         {
@@ -309,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 item.UnitCost = orderItemTrans.cost.GetValue(0M);
 
                 // URLs come down as relative, so we need to prefix them with the store URL
-                item.Thumbnail = orderItemTrans.ItemThumb == null ? string.Empty : ((AmeriCommerceStoreEntity)Store).StoreUrl + orderItemTrans.ItemThumb;
+                item.Thumbnail = orderItemTrans.ItemThumb == null ? string.Empty : ((AmeriCommerceStoreEntity) Store).StoreUrl + orderItemTrans.ItemThumb;
                 item.Image = item.Thumbnail;
 
                 item.Weight = client.GetWeightInPounds(orderItemTrans.Weight.GetValue(0M), orderItemTrans.WeightUnitID.GetValue(0));
@@ -430,7 +439,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             person.City = address.City ?? "";
             person.PostalCode = address.ZipCode ?? "";
             person.Phone = address.Phone;
-            person.Fax = address.Fax; 
+            person.Fax = address.Fax;
 
             person.StateProvCode = client.GetStateCode(address.StateID.GetValue(0));
             person.CountryCode = client.GetCountryCode(address.CountryID.GetValue(0));
