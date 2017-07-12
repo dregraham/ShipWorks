@@ -16,6 +16,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     [Component]
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
+        private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private const string EndpointBase = "https://api.channeladvisor.com/oauth2";
         private const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
         private const string SharedSecret = "Preb8E42ckWZZpFHh6OV2w";
@@ -23,6 +25,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string redirectUrl = WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php");
         private readonly string authorizeEndpoint = $"{EndpointBase}/authorize";
         private readonly string tokenEndpoint = $"{EndpointBase}/token";
+
+        public ChannelAdvisorRestClient(Func<IHttpVariableRequestSubmitter> submitterFactory,
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        {
+            this.submitterFactory = submitterFactory;
+            this.apiLogEntryFactory = apiLogEntryFactory;
+        }
 
         /// <summary>
         /// Gets the Authorization URL
@@ -41,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public string GetRefreshToken(string code)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+            IHttpVariableRequestSubmitter submitter = submitterFactory();
             submitter.Uri = new Uri(tokenEndpoint);
             submitter.Verb = HttpVerb.Post;
             submitter.ContentType = "application/x-www-form-urlencoded";
@@ -64,9 +73,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private string ProcessRequest(HttpVariableRequestSubmitter request, string action)
+        private string ProcessRequest(IHttpRequestSubmitter request, string action)
         {
-            ApiLogEntry apiLogEntry = new ApiLogEntry(ApiLogSource.ChannelAdvisor, action);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, action);
             apiLogEntry.LogRequest(request);
 
             try
