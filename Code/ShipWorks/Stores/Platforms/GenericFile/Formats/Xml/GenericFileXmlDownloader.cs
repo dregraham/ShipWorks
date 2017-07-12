@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Data.Connection;
-using log4net;
+﻿using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Xsl;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Import.Xml;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -22,11 +16,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     /// Downloader implementation for importing from XML files
     /// </summary>
     public class GenericFileXmlDownloader : GenericFileDownloaderBase
-    {        
+    {
         // Transform to use, if any
         XslCompiledTransform xslTransform = null;
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileXmlDownloader));
 
         /// <summary>
@@ -50,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Load the orders from the given GenericFileInstance
         /// </summary>
-        protected override bool ImportFile(GenericFileInstance file)
+        protected override async Task<bool> ImportFile(GenericFileInstance file)
         {
             XmlDocument xmlDocument = GenericFileXmlUtility.LoadAndValidateDocument(file.ReadAllText(), xslTransform);
 
@@ -64,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
                 Progress.Detail = string.Format("Importing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order);
 
                 if (Progress.IsCancelRequested)
                 {
@@ -78,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             OrderEntity order = InstantiateOrder(xpath);
 
@@ -86,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileXmlDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

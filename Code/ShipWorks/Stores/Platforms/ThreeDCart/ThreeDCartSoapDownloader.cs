@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
@@ -11,13 +12,13 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 if (webClient == null)
                 {
                     //Create the web client used for downloading
-                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity)Store, Progress);
+                    webClient = new ThreeDCartWebClient((ThreeDCartStoreEntity) Store, Progress);
                 }
 
                 return webClient;
@@ -67,9 +68,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Download orders and statuses for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -86,8 +87,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 if (totalCount != 0)
                 {
-                    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
-                    DownloadOrders(orderSearchCriteria);
+                    // Download any newly created orders (their modified dates could be older than the last modified date SW has)
+                    await DownloadOrders(orderSearchCriteria);
                 }
 
                 if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
@@ -113,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     Progress.PercentComplete = QuantitySaved / totalCount;
 
                     // Download the modified orders
-                    DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria);
                 }
             }
             catch (ThreeDCartException ex)
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             Progress.Detail = "Updating status codes...";
 
             // refresh the status codes from 3dcart
-            statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
+            statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) Store);
             statusProvider.UpdateFromOnlineStore();
         }
 
@@ -149,11 +150,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Download orders for specified order search criteria
         /// </summary>
         /// <param name="orderSearchCriteria"></param>
-        private void DownloadOrders(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
+        private async Task DownloadOrders(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
             while (true)
             {
-                if (!DownloadOrderRange(orderSearchCriteria))
+                bool shouldContinue = await DownloadOrderRange(orderSearchCriteria);
+                if (!shouldContinue)
                 {
                     return;
                 }
@@ -174,12 +176,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         /// <param name="orderSearchCriteria">The ThreeDCartWebClientOrderSearchCriteria for which to download orders.</param>
         /// <returns>True if orders were loaded, false if the user clicks cancel or if no orders were left to download</returns>
-        private bool DownloadOrderRange(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
+        private Task<bool> DownloadOrderRange(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
             // Check for cancel
             if (Progress.IsCancelRequested)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             // Update progress reporter that we are now downloading orders
@@ -195,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 Progress.Detail = "No additional orders to download.";
                 Progress.PercentComplete = 100;
-                return false;
+                return Task.FromResult(false);
             }
 
             // Return the result of loading the orders.
@@ -250,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Load all the orders contained in the list
         /// </summary>
         /// <returns>True, if all orders were loaded.  False if the user pressed cancel</returns>
-        private bool LoadOrders(List<XmlNode> orderNodes)
+        private async Task<bool> LoadOrders(List<XmlNode> orderNodes)
         {
             // Go through each order in the XML Document
             foreach (XmlNode order in orderNodes)
@@ -284,7 +286,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                     string invoiceNumberPostFix = hasSubOrders ? string.Format("-{0}", shipmentIndex) : string.Empty;
 
-                    LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders);
+                    await LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders);
 
                     shipmentIndex++;
 
@@ -302,7 +304,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Extract and save the order from the XML
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
+        private async Task LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
         {
             // Create a ThreeDCartOrderIdentifier
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = CreateOrderIdentifier(xmlOrderXPath, invoiceNumberPostFix);
@@ -430,7 +432,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             //Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartSoapDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
 
             lastModifiedOrderDateProcessed = order.OnlineLastModified;
         }
@@ -500,7 +502,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         private void LoadItem(OrderEntity order, XPathNavigator xpath)
         {
-            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity)InstantiateOrderItem(order);
+            ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
 
             // Set item properties
             // The item name will be determined in the LoadProductAndRelatedObjects as we
@@ -787,16 +789,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 // Load charge for each promo code
                 // If the promoTotal matches the discount, we want to add the actual promo amount.  Otherwise, we'll just
-                // set it to zero so so the order will total up.
+                // set it to zero so the order will total up.
                 decimal promoAmount = -XPathUtility.Evaluate(promotion, "./Amount", 0.0m);
                 string promoCode = XPathUtility.Evaluate(promotion, "./Code", "Unknown Promo Code");
 
-                // If the promoTotal matches the discount, we want to to use the promo description.  If they do not match,
+                // If the promoTotal matches the discount, we want to use the promo description.  If they do not match,
                 // we will add the amount to the end of the description.
 
                 if (!promoTotalMatchesDiscount)
                 {
-                    // If the promoTotal matches the discount, we want to to use the promo description.  If they do not match,
+                    // If the promoTotal matches the discount, we want to use the promo description.  If they do not match,
                     // we will add the amount to the end of the description.
                     promoAmount = 0.0m;
                     promoCode = string.Format("{0} : {1:C}", promoCode, XPathUtility.Evaluate(promotion, "./Amount", 0.0m));
@@ -863,7 +865,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {
@@ -922,7 +924,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             //Bill only properties
             order.BillEmail = XPathUtility.Evaluate(xpath, "./BillingAddress/Email", "");
 
-            // ThreeDCart doesnt have a ShipTo email, so set it to the bill email
+            // ThreeDCart doesn't have a ShipTo email, so set it to the bill email
             order.ShipEmail = order.BillEmail;
         }
 

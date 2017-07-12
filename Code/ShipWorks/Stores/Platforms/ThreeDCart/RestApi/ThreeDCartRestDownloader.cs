@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -63,9 +64,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Download orders for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -109,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     return;
                 }
 
-                DownloadOrders(startDate.Value);
+                await DownloadOrders(startDate.Value);
             }
             catch (Exception ex)
             {
@@ -125,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Downloads orders on or after the startDate
         /// </summary>
-        private void DownloadOrders(DateTime startDate)
+        private async Task DownloadOrders(DateTime startDate)
         {
             int offset = 1;
             bool ordersToDownload = true;
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
                 else
                 {
-                    LoadOrders(orders);
+                    await LoadOrders(orders);
                     offset += orders.Count();
                 }
             }
@@ -197,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the orders.
         /// </summary>
-        public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
+        public async Task LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
@@ -226,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
 
-                    sqlAdapterRetry.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                    await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
 
                     shipmentIndex++;
                     threeDCartOrder.IsSubOrder = true;
@@ -405,7 +406,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
             LoadItemNameAndAttributes(item, threeDCartItem);
 
-            // There are some cases where discounts don't show in order discount field and actually appear as a seperate item.
+            // There are some cases where discounts don't show in order discount field and actually appear as a separate item.
             // When this happens, it has no item price, but an item option price, which we usually ignore since we
             // extract item attribute costs from the item description. So if an item matches that criteria, set the
             // item's price to the attribute price.
@@ -548,7 +549,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {

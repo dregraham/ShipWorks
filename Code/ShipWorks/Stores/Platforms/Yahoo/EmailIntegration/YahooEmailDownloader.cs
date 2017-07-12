@@ -3,9 +3,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using Rebex.Mail;
@@ -18,9 +21,6 @@ using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using Interapptive.Shared;
-using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 {
@@ -49,13 +49,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Initiate the download
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity)Store).YahooEmailAccountID);
+                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((YahooStoreEntity) Store).YahooEmailAccountID);
                 if (emailAccount == null)
                 {
                     throw new DownloadException("The email account configured for downloading has been deleted.");
@@ -78,13 +78,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     // Get all the messages we know about
                     for (int i = 1; i <= messageCount; i++)
                     {
-                        // Check if it has been cancelled
+                        // Check if it has been canceled
                         if (Progress.IsCancelRequested)
                         {
                             return;
                         }
 
-                        DownloadMailMessage(popClient, i);
+                        await DownloadMailMessage(popClient, i);
                     }
 
                     // Must be called to finalize delete
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Download and process the mail message given by the specified sequence number
         /// </summary>
-        private void DownloadMailMessage(Pop3 popClient, int sequenceNumber)
+        private async Task DownloadMailMessage(Pop3 popClient, int sequenceNumber)
         {
             Progress.Detail = string.Format("Processing message {0} of {1}...", sequenceNumber, messageCount);
 
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(xmlContent);
 
-                    LoadOrders(xmlDocument);
+                    await LoadOrders(xmlDocument);
                 }
                 catch (XmlException ex)
                 {
@@ -189,14 +189,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Load orders from the given Yahoo! xml content
         /// </summary>
-        private void LoadOrders(XmlDocument xmlDocument)
+        private async Task LoadOrders(XmlDocument xmlDocument)
         {
             XPathNavigator xpath = xmlDocument.CreateNavigator();
 
             // Go through each order in the XML Document
             foreach (XPathNavigator order in xpath.Select("//Order"))
             {
-                LoadOrder(order);
+                await LoadOrder(order);
             }
         }
 
@@ -204,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// Extract the order from the XML
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // Get the OrderID
             string yahooOrderID = xpath.GetAttribute("id", "");
@@ -218,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             long numericTime = XPathUtility.Evaluate(xpath, "NumericTime", 0L);
 
-            // Setup the basic proprites
+            // Setup the basic properties
             order.OrderNumber = orderNumber;
             order.OrderDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds(numericTime);
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "Shipping", "");
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             LoadAddressInfo(new PersonAdapter(order, "Ship"), xpath.SelectSingleNode("AddressInfo[@type='ship']"));
             LoadAddressInfo(new PersonAdapter(order, "Bill"), xpath.SelectSingleNode("AddressInfo[@type='bill']"));
 
-            // Yahoo! doesnt automatically fill in the ShipTo email even if ShipTo\BillTo are the same
+            // Yahoo! doesn't automatically fill in the ShipTo email even if ShipTo\BillTo are the same
             UpdateShipToEmail(order);
 
             if (order.IsNew)
@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooEmailDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

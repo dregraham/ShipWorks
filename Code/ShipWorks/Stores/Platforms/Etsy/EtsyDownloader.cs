@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using System.Text;
-using log4net;
-using Newtonsoft.Json.Linq;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
-using Interapptive.Shared;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -61,9 +61,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Download data for the Etsy store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 UpdatePaidOrders();
 
                 Progress.Detail = "Checking for new orders...";
-                DownloadNewOrders();
+                await DownloadNewOrders();
             }
             catch (EtsyException ex)
             {
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             using (EntityCollection<EtsyOrderEntity> collection = new EntityCollection<EtsyOrderEntity>(orders))
             {
                 SqlAdapter.Default.SaveEntityCollection(collection);
-            }            
+            }
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Handles the downloading of orders.
         /// </summary>
-        private void DownloadNewOrders()
+        private async Task DownloadNewOrders()
         {
             while (true)
             {
@@ -198,7 +198,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return;
                 }
 
-                if (!DownloadNextOrdersPage())
+                bool morePages = await DownloadNextOrdersPage();
+                if (!morePages)
                 {
                     return;
                 }
@@ -208,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Download the next page of orders. Return True if more to process.
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
             DateTime startDate;
             DateTime endDate;
@@ -231,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             if (orders.Count > 0)
             {
                 //Load orders into the database
-                LoadOrders(orders);
+                await LoadOrders(orders);
             }
 
             if (offset == 0)
@@ -251,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Gets the current time from Etsy and subtracts 5 minutes.
             endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
 
-            //The most recent order date. 
+            //The most recent order date.
             DateTime? calculatedStartDate = GetOrderDateStartingPoint();
 
             if (calculatedStartDate.HasValue)
@@ -293,7 +294,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(List<JToken> orders)
+        private async Task LoadOrders(List<JToken> orders)
         {
             // Go through each order in the XML Document
             foreach (var order in orders)
@@ -307,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                LoadOrder(order);
+                await LoadOrder(order);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -318,14 +319,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Extract and save the order from the downloaded order
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(JToken orderFromEtsy)
+        private Task LoadOrder(JToken orderFromEtsy)
         {
             // Now extract the Order#
             long orderNumber = (long) orderFromEtsy["receipt_id"];
 
             // Get the order instance
             OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
-            EtsyOrderEntity order = (EtsyOrderEntity)orderEntity;
+            EtsyOrderEntity order = (EtsyOrderEntity) orderEntity;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = orderFromEtsy.GetValue("grandtotal", 0m);
@@ -373,7 +374,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                             JToken transactionToken = webClient.GetTransactionsForReceipt(orderNumber, limit, offset);
 
                             totalTransactions = transactionToken.GetValue("count", 0);
-                            loadedItems = LoadItems(order, (JArray)transactionToken["results"]);
+                            loadedItems = LoadItems(order, (JArray) transactionToken["results"]);
 
                             offset = offset + loadedItems;
 
@@ -394,7 +395,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "EtsyDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -496,14 +497,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity item, JArray variations)
         {
-            if (variations!=null)
+            if (variations != null)
             {
                 foreach (JToken variation in variations)
                 {
                     item.OrderItemAttributes.Add(new OrderItemAttributeEntity()
                     {
-                        Name = variation.GetValue("formatted_name",""),
-                        Description = variation.GetValue("formatted_value",""),
+                        Name = variation.GetValue("formatted_name", ""),
+                        Description = variation.GetValue("formatted_value", ""),
                         IsManual = false,
                         UnitPrice = 0
                     });

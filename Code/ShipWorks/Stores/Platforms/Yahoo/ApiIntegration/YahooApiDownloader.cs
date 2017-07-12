@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for new orders...";
 
@@ -89,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     Progress.Detail = "Downloading new orders...";
 
-                    DownloadNewOrders(orderList);
+                    await DownloadNewOrders(orderList);
 
                     ((YahooStoreEntity) Store).BackupOrderNumber = null;
                     StoreManager.SaveStore(Store);
@@ -109,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Downloads the new orders.
         /// </summary>
         /// <param name="orderList">The order list.</param>
-        private void DownloadNewOrders(List<long> orderList)
+        private async Task DownloadNewOrders(List<long> orderList)
         {
             int expectedCount = orderList.Count;
 
@@ -134,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
+                await CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
 
                 // Check for cancellation
                 if (Progress.IsCancelRequested)
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
-        public YahooOrderEntity CreateOrder(YahooOrder order)
+        public async Task<YahooOrderEntity> CreateOrder(YahooOrder order)
         {
             YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())) as YahooOrderEntity;
 
@@ -162,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 orderEntity = LoadOrder(order, orderEntity);
 
-                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
             }
 
             return orderEntity;
@@ -198,7 +199,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Get Online Status
         /// </summary>
         /// <param name="order"></param>
-        /// <param name="orderEntity"></param>
         /// <returns></returns>
         private string GetOnlineStatusCode(YahooOrder order)
         {
@@ -435,7 +435,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             if (!item.ThumbnailUrl.IsNullOrWhiteSpace())
             {
                 // Thumbnail node format - <img border=0 width=42 height=70 src=Actual_Thumbnail_URL>
-                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[]{"src="}, StringSplitOptions.RemoveEmptyEntries);
+                string[] thumbnailSplit = item.ThumbnailUrl.Split(new[] { "src=" }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (thumbnailSplit.Length == 2)
                 {
@@ -443,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 }
                 else
                 {
-                    log.Error("An error occured retrieving the item thumbnail url");
+                    log.Error("An error occurred retrieving the item thumbnail url");
                 }
             }
 

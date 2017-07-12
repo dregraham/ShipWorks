@@ -4,10 +4,12 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Administration.Retry;
@@ -16,7 +18,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -53,9 +54,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com using the Marketplace Web Service (MWS)
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.PercentComplete = 0;
 
                         // load each order in this result page
-                        LoadOrders(client, xpath);
+                        await LoadOrders(client, xpath);
                     }
 
                     trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
@@ -132,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load orders from a page of results
         /// </summary>
-        private void LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             int totalCount = quantitySeen + XPathUtility.Evaluate(xpath, "count(//amz:Order)", 0);
 
@@ -151,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
 
                 XPathNamespaceNavigator orderXPath = new XPathNamespaceNavigator(tempXPath, xpath.Namespaces);
-                LoadOrder(client, orderXPath);
+                await LoadOrder(client, orderXPath);
 
                 // update progress
                 Progress.PercentComplete = Math.Min(100 * quantitySeen / totalCount, 100);
@@ -162,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
@@ -174,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (String.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
             {
                 log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderID);
-                return;
+                return Task.CompletedTask;
             }
 
             // basic properties
@@ -248,7 +249,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonMwsDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

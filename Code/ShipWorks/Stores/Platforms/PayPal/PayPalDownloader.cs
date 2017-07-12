@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
@@ -54,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -94,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 DateTime rangeCap = rangeEnd.AddDays(-maxIntialDownload);
                 if (rangeCap > startDate) startDate = rangeCap;
 
-                DownloadTransactions(client, startDate.Value, rangeEnd);
+                await DownloadTransactions(client, startDate.Value, rangeEnd);
 
                 Progress.Detail = "Done";
             }
@@ -111,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Download PayPal transactions that occur in the given date range
         /// </summary>
-        private void DownloadTransactions(PayPalWebClient client, DateTime rangeStart, DateTime rangeEnd)
+        private async Task DownloadTransactions(PayPalWebClient client, DateTime rangeStart, DateTime rangeEnd)
         {
             List<PaymentTransactionSearchResultType> transactions = client.GetTransactions(rangeStart, rangeEnd, true);
 
@@ -138,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
                 try
                 {
-                    LoadTransaction(client, transaction.TransactionID);
+                    await LoadTransaction(client, transaction.TransactionID);
                 }
                 catch (PayPalException ex)
                 {
@@ -178,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Downloads the specified transaction from PayPal and creates a ShipWorks order
         /// </summary>
-        private void LoadTransaction(PayPalWebClient client, string transactionID)
+        private async Task LoadTransaction(PayPalWebClient client, string transactionID)
         {
             log.InfoFormat("Preparing to load PayPal transaction '{0}'.", transactionID);
 
@@ -203,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
 
                 // update the last valid transaction date field
                 if (paymentDate.HasValue && PayPalStore.LastValidTransactionDate < paymentDate)

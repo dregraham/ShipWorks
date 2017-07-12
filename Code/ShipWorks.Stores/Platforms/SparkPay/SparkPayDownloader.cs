@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                             return;
                         }
 
-                        LoadOrders(response.Orders);
+                        await LoadOrders(response.Orders);
                     }
                     else
                     {
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Load all downloaded orders
         /// </summary>
-        private void LoadOrders(IEnumerable<Order> sparkPayOrders)
+        private async Task LoadOrders(IEnumerable<Order> sparkPayOrders)
         {
             if (Progress.IsCancelRequested || !sparkPayOrders.Any())
             {
@@ -88,18 +89,18 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             foreach (Order sparkPayOrder in sparkPayOrders)
             {
-                LoadOrder(sparkPayOrder);
+                await LoadOrder(sparkPayOrder);
             }
         }
 
         /// <summary>
         /// Load an individual order
         /// </summary>
-        private void LoadOrder(Order sparkPayOrder)
+        private Task LoadOrder(Order sparkPayOrder)
         {
             if (Progress.IsCancelRequested || sparkPayOrder == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(sparkPayOrder.Id.Value));
@@ -126,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             LoadOrderNotes(order, sparkPayOrder);
 
             ISqlAdapterRetry retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SparkPayDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

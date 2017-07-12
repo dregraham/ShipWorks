@@ -1,20 +1,19 @@
 using System;
 using System.Data.SqlClient;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
-using Autofac;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
@@ -42,9 +41,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Download data for the ShopSite store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -58,7 +57,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage())
+                    bool morePages = await DownloadNextOrdersPage();
+                    if (!morePages)
                     {
                         return;
                     }
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Download the next page of orders.
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
             long lastOrderNumber = GetOrderNumberStartingPoint();
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 totalCount += orderNodes.Count;
 
                 // Add this to the XML to be loaded into the database
-                LoadOrders(orderNodes);
+                await LoadOrders(orderNodes);
 
                 return true;
             }
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNodeIterator orderNodes)
+        private async Task LoadOrders(XPathNodeIterator orderNodes)
         {
             // Go through each order in the XML Document
             while (orderNodes.MoveNext())
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
@@ -157,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Load address info
             LoadAddressInfo(order, xpath);
 
-            // ShopSite doesnt automatically fill in the ShipTo email even if ShipTo\BillTo are the same
+            // ShopSite doesn't automatically fill in the ShipTo email even if ShipTo\BillTo are the same
             UpdateShipToEmail(order);
 
             // Only update the rest for brand new orders
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopSiteDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 option.UnitPrice = 0;
             }
 
-            // Shopsite incluedes the option price in the item price
+            // Shopsite includes the option price in the item price
             item.UnitPrice -= option.UnitPrice;
         }
 
@@ -346,7 +346,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {
@@ -364,7 +364,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Customer comments
             InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public);
 
-            // Odrder instructions
+            // Order instructions
             InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public);
         }
 
@@ -394,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Use name parts if we can, otherwise revert to what we parsed.
             order.SetNewFieldValue(dbPrefix + "UnparsedName", fullName.FullName);
-            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)PersonNameParseStatus.Simple);
+            order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) PersonNameParseStatus.Simple);
             order.SetNewFieldValue(dbPrefix + "FirstName", first != "" ? first : fullName.First);
             order.SetNewFieldValue(dbPrefix + "MiddleName", middle != "" ? middle : fullName.Middle);
             order.SetNewFieldValue(dbPrefix + "LastName", last != "" ? last : fullName.Last);

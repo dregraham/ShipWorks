@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content
 {
@@ -67,7 +60,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// User wants to create the customer
         /// </summary>
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOK(object sender, EventArgs e)
         {
             shipBillControl.SavePendingChanges();
 
@@ -80,7 +73,7 @@ namespace ShipWorks.Stores.Content
                 return;
             }
 
-            long? foundID = CustomerProvider.FindExistingCustomer(customer, true, false, SqlAdapter.Default)?.CustomerID;
+            long? foundID = (await CustomerProvider.FindExistingCustomer(customer, true, false, SqlAdapter.Default))?.CustomerID;
             if (foundID != null)
             {
                 DialogResult result = MessageHelper.ShowQuestion(this,
@@ -93,7 +86,7 @@ namespace ShipWorks.Stores.Content
                 }
             }
 
-            foundID = CustomerProvider.FindExistingCustomer(customer, false, true, SqlAdapter.Default)?.CustomerID;
+            foundID = (await CustomerProvider.FindExistingCustomer(customer, false, true, SqlAdapter.Default))?.CustomerID;
             if (foundID != null)
             {
                 DialogResult result = MessageHelper.ShowQuestion(this,

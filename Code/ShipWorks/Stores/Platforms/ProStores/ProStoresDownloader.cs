@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Business;
-using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -44,18 +40,18 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download orders from the ProStores online store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Checking for orders...";
 
-                // For legacy login methods, checks the version has been updatd and tokens are now supported
+                // For legacy login methods, checks the version has been updated and tokens are now supported
                 ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
-                
-                // Downloading baed on the last modified time
+
+                // Downloading based on the last modified time
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
                 totalCount = ProStoresWebClient.GetOrderCount((ProStoresStoreEntity) Store, lastModified);
@@ -72,13 +68,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // keep going until none are left
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage())
+                    bool morePages = await DownloadNextOrdersPage();
+                    if (!morePages)
                     {
                         return;
                     }
@@ -97,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download the next page of orders until there are no more
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
             try
             {
@@ -109,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // see if there are any orders in the response
                 if (invoiceIterator.Count > 0)
                 {
-                    LoadOrders(invoiceIterator);
+                    await LoadOrders(invoiceIterator);
                     return true;
                 }
                 else
@@ -117,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                     Progress.Detail = "Done";
                     return false;
                 }
-                
+
             }
             catch (ProStoresApiException ex)
             {
@@ -126,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 {
                     isProVersion = false;
 
-                    return DownloadNextOrdersPage();
+                    return await DownloadNextOrdersPage();
                 }
                 else
                 {
@@ -138,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Load all the "Invoices" out of the given iterator into ShipWorks orders
         /// </summary>
-        private void LoadOrders(XPathNodeIterator invoiceIterator)
+        private async Task LoadOrders(XPathNodeIterator invoiceIterator)
         {
             foreach (XPathNavigator xpathOrder in invoiceIterator)
             {
@@ -150,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                LoadOrder(xpathOrder);
+                await LoadOrder(xpathOrder);
 
                 // Update progress
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
@@ -159,10 +156,10 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
         /// <summary>
         /// Parses out the ProStores customer number into an Online Customer ID.
-        /// 
+        ///
         /// Customer Numbers can be changed by the store admin to include a prefix
         /// and a set number of digits in the order number.
-        /// 
+        ///
         /// Guest purchases always end with a dash and a 0 padded representation of -1,
         /// like ABC-000001.
         /// </summary>
@@ -183,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// Extract the order from the xml
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
@@ -244,8 +241,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
                     {
                         LoadItem(order, xpathItem);
                     }
-                } 
-                
+                }
+
                 // Load all the charges
                 LoadOrderCharges(order, xpath);
 
@@ -255,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ProStoresDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -266,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         {
             PersonName shipFullName = PersonName.Parse(XPathUtility.Evaluate(xpath, "Recipient", ""));
 
-            order.ShipNameParseStatus = (int)shipFullName.ParseStatus;
+            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
             order.ShipUnparsedName = shipFullName.UnparsedName;
             order.ShipFirstName = shipFullName.First;
             order.ShipMiddleName = shipFullName.Middle;
@@ -282,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             order.BillFirstName = XPathUtility.Evaluate(xpath, "FirstName", "");
             order.BillLastName = XPathUtility.Evaluate(xpath, "LastName", "");
-            order.BillNameParseStatus = (int)PersonNameParseStatus.Simple;
+            order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
             order.BillUnparsedName = new PersonName(order.BillFirstName, "", order.BillLastName).FullName;
             order.BillCompany = XPathUtility.Evaluate(xpath, "BillToCompany", "");
             order.BillStreet1 = XPathUtility.Evaluate(xpath, "BillToStreet", "");

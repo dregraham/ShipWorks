@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -13,7 +15,6 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
@@ -53,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Download orders for the Magento store
         /// </summary>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
             Progress.Detail = "Checking for orders...";
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         return;
                     }
 
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
@@ -95,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         {
                             // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
                             // we have downloaded this order before used its entity id as the order number so use it again
-                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                         }
                         else
                         {
@@ -104,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         }
 
                         MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
-                        LoadOrder(orderEntity, magentoOrder, Progress);
+                        await LoadOrder(orderEntity, magentoOrder, Progress);
                     }
                 } while (ordersResponse.TotalCount > 0);
 
@@ -123,24 +124,24 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <remarks>
         /// The magento EntityId and IncrementId are the same 90% of the time, customers have the ability to customize the IncrementId to be something different
         /// the IncrementId is the value that shows up in the Magento UI, when this downloader was built we would pull the orders EntityId into the OrderNumber field
-        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we dont duplicate them 
+        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we don't duplicate them
         /// </remarks>
         private bool IsLegacyRestOrder(int magentoOrderId)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 RelationPredicateBucket bucket =
-                    new RelationPredicateBucket(MagentoOrderFields.StoreID == Store.StoreID & 
-                    MagentoOrderFields.IsManual == false & 
-                    MagentoOrderFields.MagentoOrderID == magentoOrderId & 
+                    new RelationPredicateBucket(MagentoOrderFields.StoreID == Store.StoreID &
+                    MagentoOrderFields.IsManual == false &
+                    MagentoOrderFields.MagentoOrderID == magentoOrderId &
                     MagentoOrderFields.OrderNumber == magentoOrderId);
-                
+
                 MagentoOrderEntity order = adapter.FetchNewEntity<MagentoOrderEntity>(bucket);
 
                 return !order.IsNew;
             }
         }
-        
+
         /// <summary>
         /// Get the start date for the download cycle
         /// </summary>
@@ -160,12 +161,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
+        public Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
-            // Check if it has been cancelled
+            // Check if it has been canceled
             if (progressReporter.IsCancelRequested)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // Update the status
@@ -200,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadOrderPayment(orderEntity, magentoOrder);
             }
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
         }
 
         /// <summary>

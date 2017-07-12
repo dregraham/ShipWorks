@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using System.Xml.Linq;
+using System.Threading.Tasks;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -26,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// </summary>
     public class SearsDownloader : StoreDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SearsDownloader));
 
         /// <summary>
@@ -41,9 +39,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Downloader for sears
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -68,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 Progress.Detail = "Downloading orders...";
 
-                while (DownloadNextOrdersPage(client))
+                while (await DownloadNextOrdersPage(client))
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -92,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Downloads and imports the next batch of orders into ShipWorks
         /// </summary>
-        private bool DownloadNextOrdersPage(SearsWebClient webClient)
+        private async Task<bool> DownloadNextOrdersPage(SearsWebClient webClient)
         {
             SearsOrdersPage page = webClient.GetNextOrdersPage();
 
@@ -104,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (orderNodes.Count > 0)
             {
                 // import the downloaded orders
-                LoadOrders(orderNodes);
+                await LoadOrders(orderNodes);
             }
 
             return !page.IsLastPage;
@@ -113,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Imports the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNodeIterator orderNodes)
+        private async Task LoadOrders(XPathNodeIterator orderNodes)
         {
             // go through each order in the batch
             while (orderNodes.MoveNext())
@@ -125,20 +123,20 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order);
             }
         }
 
         /// <summary>
         /// Load the given order
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // extract the order number
             long orderNumber = XPathUtility.Evaluate(xpath, "customer-order-confirmation-number", 0L);
             string poNumber = XPathUtility.Evaluate(xpath, "po-number", "");
 
-            // get the order instance, creates one if neccessary
+            // get the order instance, creates one if necessary
             SearsOrderEntity order = (SearsOrderEntity) InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber));
 
             order.OrderDate = GetOrderDate(xpath);
@@ -180,8 +178,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SearsDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
-
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -222,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             order.ShipPostalCode = XPathUtility.Evaluate(xpath, "shipping-detail/zipcode", "");
             order.ShipCountryCode = "US";
             order.ShipPhone = XPathUtility.Evaluate(xpath, "shipping-detail/phone", "");
-            
+
             // Use the shipping info for the customer info as well
             PersonAdapter.Copy(order, "Ship", order, "Bill");
 
@@ -236,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Load all item informatino from the given XPath into the order
+        /// Load all item information from the given XPath into the order
         /// </summary>
         private void LoadItem(SearsOrderEntity order, XPathNavigator xpath)
         {
@@ -260,7 +257,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Update exsting items online status
+        /// Update existing items online status
         /// </summary>
         private void UpdateItems(SearsOrderEntity order, XPathNodeIterator itemNodes)
         {

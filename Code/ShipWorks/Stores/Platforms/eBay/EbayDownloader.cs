@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -71,7 +72,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Get the official eBay time in UTC
                 eBayOfficialTime = webClient.GetOfficialTime();
 
-                if (!DownloadOrders())
+                bool morePages = await DownloadOrders();
+                if (!morePages)
                 {
                     return;
                 }
@@ -104,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Download all orders from eBay
         /// </summary>
-        private bool DownloadOrders()
+        private async Task<bool> DownloadOrders()
         {
             // Controls whether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
             //bool usePagedDownload = true;
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     //    }
                     //}
 
-                    ProcessOrder(orderType);
+                    await ProcessOrder(orderType);
 
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
@@ -187,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given eBay order
         /// </summary>
-        private void ProcessOrder(OrderType orderType)
+        private Task ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
             EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
@@ -196,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
             {
                 log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
-                return;
+                return Task.CompletedTask;
             }
 
             // If its new it needs a ShipWorks order number
@@ -263,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Make totals adjustments
             BalanceOrderTotal(order, orderType);
 
-            SaveOrder(order, abandonedItems);
+            return SaveOrder(order, abandonedItems);
         }
 
         /// <summary>
@@ -303,7 +305,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Save the given order, handling all the given abandoned items that have now moved to the new order
         /// </summary>
-        private void SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
+        private Task SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
         {
             List<OrderEntity> affectedOrders = new List<OrderEntity>();
 
@@ -319,14 +321,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-            sqlDeadlockRetry.ExecuteWithRetry(() =>
+            return sqlDeadlockRetry.ExecuteWithRetryAsync(async () =>
             {
                 using (DbTransaction transaction = connection.BeginTransaction())
                 {
                     using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
                         // Save the new order
-                        SaveDownloadedOrder(order, transaction);
+                        await SaveDownloadedOrder(order, transaction);
 
                         // Remove the abandoned items
                         DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);

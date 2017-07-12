@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
-using Interapptive.Shared.Business;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -41,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             this.walmartOrderLoader = walmartOrderLoader;
             this.dateTimeProvider = dateTimeProvider;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
-            
+
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -50,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -75,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 while (ordersList?.elements?.Any() ?? false)
                 {
-                    LoadOrders(ordersList);
+                    await LoadOrders(ordersList);
 
                     ordersList = GetNextBatch(ordersList);
                 }
@@ -120,23 +118,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Saves the orders.
         /// </summary>
         /// <param name="ordersList">The orders list.</param>
-        private void LoadOrders(ordersListType ordersList)
+        private async Task LoadOrders(ordersListType ordersList)
         {
             foreach (Order downloadedOrder in ordersList.elements)
             {
-                LoadOrder(downloadedOrder);
+                await LoadOrder(downloadedOrder);
             }
         }
 
         /// <summary>
         /// Loads the order.
         /// </summary>
-        private void LoadOrder(Order downloadedOrder)
+        private Task LoadOrder(Order downloadedOrder)
         {
             // Check if it has been canceled
             if (Progress.IsCancelRequested)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // Update the status
@@ -149,12 +147,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
             // Save the downloaded order
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderToSave));
+            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToSave));
         }
 
         /// <summary>
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
-        /// will be used to calculate the initial number of days back to. We then compare that with the 
+        /// will be used to calculate the initial number of days back to. We then compare that with the
         /// date calculated from DownloadModifiedNumberOfDaysBack and send the earlier of the two dates.
         /// </summary>
         protected new DateTime GetOrderDateStartingPoint()
