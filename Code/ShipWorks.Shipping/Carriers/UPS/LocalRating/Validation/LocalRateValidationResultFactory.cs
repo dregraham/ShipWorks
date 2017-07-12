@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
 {
@@ -29,31 +30,31 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Creates a ILocalRateValidationResult
         /// </summary>
-        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, int totalShipmentsValidated, Action snooze)
+        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments, Action snooze)
         {
             if (!rateDiscrepancies.Any())
             {
-                return new SuccessfulLocalRateValidationResult();
+                return new SuccessfulLocalRateValidationResult(shipments);
             }
 
             IDialog upsLocalRateDiscrepancyDialog = windowFactory["UpsLocalRateDiscrepancyDialog"];
             discrepancyViewModel.Snooze = snooze;
             discrepancyViewModel.Close = upsLocalRateDiscrepancyDialog.Close;
 
-            return new FailedLocalRateValidationResult(rateDiscrepancies, totalShipmentsValidated, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
+            return new FailedLocalRateValidationResult(rateDiscrepancies, shipments, upsLocalRateDiscrepancyDialog, discrepancyViewModel);
         }
 
         /// <summary>
         /// Creates a LocalRateValidationResult with the specified rate discrepancies.
         /// </summary>
-        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies)
+        public ILocalRateValidationResult Create(IEnumerable<UpsLocalRateDiscrepancy> rateDiscrepancies, IEnumerable<ShipmentEntity> shipments)
         {
             if (!rateDiscrepancies.Any())
             {
-                return new SuccessfulLocalRateValidationResult();
+                return new SuccessfulLocalRateValidationResult(shipments);
             }
 
-            return new FailedLocalRateValidationResult(rateDiscrepancies);
+            return new FailedLocalRateValidationResult(rateDiscrepancies, shipments);
         }
     }
 }

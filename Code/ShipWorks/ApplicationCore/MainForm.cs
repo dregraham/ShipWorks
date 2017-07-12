@@ -4272,7 +4272,14 @@ namespace ShipWorks
         /// <summary>
         /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
         /// </summary>
-        public bool AdditionalFormsOpen() => Visible && !CanFocus;
+        public bool AdditionalFormsOpen()
+        {
+            if (InvokeRequired)
+            {
+                return (bool) Invoke(new Func<bool>(AdditionalFormsOpen));
+            }
+            return Visible && !CanFocus;
+        }
 
         #endregion
 

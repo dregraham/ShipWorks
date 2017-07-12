@@ -10,7 +10,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -28,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         int totalCount = 0;
-        private ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
+        private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
 
         ShopifyWebClient webClient = null;
 
@@ -527,6 +526,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
+            GetImage(item, shopifyProduct);
+            GetBarcode(item, lineItem, shopifyProduct);
+        }
+
+        /// <summary>
+        /// Gets the image from the shopifyProduct and copies them into the ShopifyOrderItemEntity
+        /// </summary>
+        private static void GetImage(ShopifyOrderItemEntity item, JToken shopifyProduct)
+        {
             JToken images = shopifyProduct.SelectToken("product.images");
 
             if (images != null)
@@ -543,6 +551,25 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 item.Image = imageUrl;
                 item.Thumbnail = imageUrl;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the corresponding variant barcode from the Shopify product and stores it as the UPC of the ShopifyOrderItemEntity
+        /// </summary>
+        private void GetBarcode(ShopifyOrderItemEntity item, JToken lineItem, JToken shopifyProduct)
+        {
+            // The barcode is stored as part of the product variant, so we need the variantID.
+            long variantID = lineItem.GetValue<long>("variant_id");
+
+            // Grab all the variants of the product
+            JToken variants = shopifyProduct.SelectToken("product.variants");
+
+            // Get the variant with a corresponding variantID
+            JToken variant = variants.FirstOrDefault(v => v.GetValue<long>("id") == variantID);
+            if (variant != null)
+            {
+                item.UPC = variant.GetValue<string>("barcode");
             }
         }
 

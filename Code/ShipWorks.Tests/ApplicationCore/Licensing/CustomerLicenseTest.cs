@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -18,7 +19,9 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Policies;
 using Xunit;
+using ShipmentType = ShipWorks.Stores.Platforms.Ebay.WebServices.ShipmentType;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
@@ -1031,9 +1034,15 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.Setup(l => l.GetShipmentTypeFunctionality(ShipmentTypeCode.BestRate, ShippingPolicyType.BestRateUpsRestriction)).Returns("True");
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>())).Returns(licenseCapabilities.Object);
+                
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
-
-                List<UpsRatingMethod> result = new List<UpsRatingMethod>()
+                customerLicense.ForceRefresh();
+                
+                List<UpsRatingMethod> result = new List<UpsRatingMethod>
                 {
                     UpsRatingMethod.ApiOnly,
                     UpsRatingMethod.LocalOnly,
@@ -1047,6 +1056,31 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             }
         }
 
+        [Fact]
+        public void ApplyShippingPolicy_ConfiguresBestRateUpsRestrictionShippingPolicyWithLicenseCapabilities()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.Setup(l => l.GetShipmentTypeFunctionality(ShipmentTypeCode.BestRate, ShippingPolicyType.BestRateUpsRestriction)).Returns("False");
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>())).Returns(licenseCapabilities.Object);
+
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                customerLicense.ForceRefresh();
+
+                List<UpsRatingMethod> result = new List<UpsRatingMethod>
+                {
+                    UpsRatingMethod.ApiOnly,
+                    UpsRatingMethod.LocalOnly,
+                    UpsRatingMethod.LocalWithApiFailover
+                };
+
+                customerLicense.ApplyShippingPolicy(ShipmentTypeCode.BestRate, result);
+                Assert.Equal(3, result.Distinct().Count());
+            }
+        }
+        
         [Fact]
         public void ApplyShippingPolicy_DoesNotApplyBestRateUpsRestrictionShippingPolicy_WhenShipmentTypeCodeIsNotBestRateAndObjectIsListOfShipmentTypeCode()
         {
@@ -1067,7 +1101,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         {
             using (var mock = AutoMock.GetLoose())
             {
+                Mock<ILicenseCapabilities> licenseCapabilities = mock.Mock<ILicenseCapabilities>();
+                licenseCapabilities.Setup(l => l.GetShipmentTypeFunctionality(ShipmentTypeCode.BestRate, ShippingPolicyType.BestRateUpsRestriction)).Returns("True");
+                Mock<ITangoWebClient> tangoWebClient = mock.Mock<ITangoWebClient>();
+                tangoWebClient.Setup(w => w.GetLicenseCapabilities(It.IsAny<ICustomerLicense>())).Returns(licenseCapabilities.Object);
+
                 CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+                customerLicense.ForceRefresh();
 
                 RateControl result = new RateControl();
 

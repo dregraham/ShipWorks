@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         {
             ILocalRateValidationResult result = rateValidator.ValidateShipments(shipments);
 
-            LogTelemetry(shipments, result);
+            LogTelemetry(result);
 
             return result;
         }
@@ -70,9 +70,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         /// <summary>
         /// Logs the telemetry.
         /// </summary>
-        private void LogTelemetry(IEnumerable<ShipmentEntity> shipments, ILocalRateValidationResult result)
+        private void LogTelemetry(ILocalRateValidationResult result)
         {
-            foreach (ShipmentEntity shipment in shipments)
+            foreach (ShipmentEntity shipment in result.ValidatedShipments)
             {
                 UpsLocalRateDiscrepancy discrepancyForShipment =
                     result.RateDiscrepancies.SingleOrDefault(r => r.Shipment.ShipmentID == shipment.ShipmentID);

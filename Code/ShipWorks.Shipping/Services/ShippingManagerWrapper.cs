@@ -71,6 +71,14 @@ namespace ShipWorks.Shipping.Services
         public ICarrierShipmentAdapter GetShipment(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+            return GetShipmentAdapter(shipment);
+        }
+
+        /// <summary>
+        /// Gets the shipment adapter, order will be attached.
+        /// </summary>
+        public ICarrierShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)
+        {
             EnsureShipmentLoaded(shipment);
             return shipmentAdapterFactory.Get(shipment);
         }

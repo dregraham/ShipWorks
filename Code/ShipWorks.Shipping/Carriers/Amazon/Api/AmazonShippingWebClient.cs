@@ -168,6 +168,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
+            request.Variables.Add("ShipmentRequestDetails.ShipDate", FormatDate(requestDetails.ShipDate));
 
             AddItemInfo(request, requestDetails);
             AddFromAddressInfo(request, requestDetails);
