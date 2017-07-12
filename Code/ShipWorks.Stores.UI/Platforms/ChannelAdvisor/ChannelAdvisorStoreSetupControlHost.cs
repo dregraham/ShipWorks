@@ -12,6 +12,9 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
     {
         private readonly IChannelAdvisorAccountSettingsViewModel viewModel;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelAdvisorStoreSetupControlHost(IChannelAdvisorAccountSettingsViewModel viewModel)
         {
             this.viewModel = viewModel;
@@ -21,6 +24,9 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             storeSetupControl.DataContext = viewModel;
         }
 
+        /// <summary>
+        /// Called when [step next].
+        /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             if (!viewModel.Save(GetStore<ChannelAdvisorStoreEntity>()))

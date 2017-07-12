@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
     /// </summary>
     public partial class ChannelAdvisorAccountSettingsControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ChannelAdvisorAccountSettingsControl()
         {
             InitializeComponent();
