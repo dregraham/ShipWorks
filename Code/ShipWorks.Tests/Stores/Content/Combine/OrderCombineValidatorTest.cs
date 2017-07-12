@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
-using ShipWorks.Data.Model.EntityInterfaces;
 using Moq;
-using Xunit;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Content.Combine
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
 
             mock.Mock<ICombineOrdersGateway>()
                 .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
-                .ReturnsAsync(true);
+                .Returns(true);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         {
             mock.Mock<ICombineOrdersGateway>()
                 .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
-                .ReturnsAsync(false);
+                .Returns(false);
 
             var testObject = mock.Create<OrderCombineValidator>();
             var result = testObject.Validate(new long[] { 1, 2 });
