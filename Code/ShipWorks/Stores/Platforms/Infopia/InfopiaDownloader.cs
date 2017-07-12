@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                         return;
                     }
 
-                    await LoadOrders(client);
+                    await LoadOrders(client).ConfigureAwait(false);
                 }
 
                 Progress.Detail = "Done";
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "InfopiaDownloader.LoadOrder");
-                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                 // update the status, 100 max
                 Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);

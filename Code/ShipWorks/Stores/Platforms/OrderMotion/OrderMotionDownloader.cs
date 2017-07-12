@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                             return;
                         }
 
-                        await DownloadMailMessage(popClient, i);
+                        await DownloadMailMessage(popClient, i).ConfigureAwait(false);
                     }
 
                     // Must be called to finalize delete
@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
                     try
                     {
-                        await LoadOrders(attachment);
+                        await LoadOrders(attachment).ConfigureAwait(false);
                     }
                     catch (MalformedCsvException ex)
                     {
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // Excel spreadsheets and the like don't get put into ContentSting
                 using (StreamReader reader = new StreamReader(attachment.GetContentStream()))
                 {
-                    attachmentBody = await reader.ReadToEndAsync();
+                    attachmentBody = await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
 
                 if (String.IsNullOrEmpty(attachmentBody))
@@ -204,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     while (reader.ReadNextRecord())
                     {
                         // load the order information ffrom the current record
-                        await LoadOrder(reader);
+                        await LoadOrder(reader).ConfigureAwait(false);
                     }
                 }
             }

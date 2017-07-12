@@ -65,7 +65,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
                     if (!string.IsNullOrEmpty(fileName))
                     {
-                        await LoadOrdersFromCsv(File.ReadAllText(fileName));
+                        string fileText = await ReadAllTextAsync(fileName).ConfigureAwait(false);
+                        await LoadOrdersFromCsv(fileText).ConfigureAwait(false);
 
                         Progress.Detail = "Done";
                     }
@@ -92,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                                 return;
                             }
 
-                            await DownloadFtpFile(fileName, ftpClient);
+                            await DownloadFtpFile(fileName, ftpClient).ConfigureAwait(false);
                         }
                     }
                 }
@@ -104,6 +105,20 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             catch (SqlForeignKeyException ex)
             {
                 throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Read all text async
+        /// </summary>
+        private async Task<string> ReadAllTextAsync(string fileName)
+        {
+            using (Stream stream = File.OpenRead(fileName))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return await reader.ReadToEndAsync();
+                }
             }
         }
 
@@ -153,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     loader.Load(order, csvReader, this);
 
                     SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BuyDotComDownloader.LoadOrder");
-                    await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                    await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                     if (Progress.IsCancelRequested)
                     {

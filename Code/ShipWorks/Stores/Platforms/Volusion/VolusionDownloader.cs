@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved, totalCount);
 
                         // load each order
-                        await LoadOrder(client, orders.Current.Clone());
+                        await LoadOrder(client, orders.Current.Clone()).ConfigureAwait(false);
 
                         Progress.PercentComplete = Math.Min(100, 100 * (quantitySaved) / totalCount);
 

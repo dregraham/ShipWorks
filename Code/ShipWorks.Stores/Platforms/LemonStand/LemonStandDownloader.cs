@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                bool shouldContinue = await ProcessOrders(jsonOrders, expectedCount);
+                bool shouldContinue = await ProcessOrders(jsonOrders, expectedCount).ConfigureAwait(false);
                 if (!shouldContinue)
                 {
                     return;
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                await LoadOrder(jsonOrder);
+                await LoadOrder(jsonOrder).ConfigureAwait(false);
             }
 
             return true;

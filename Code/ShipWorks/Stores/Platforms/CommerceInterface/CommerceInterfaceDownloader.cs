@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface
 {

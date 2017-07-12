@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 UpdatePaidOrders();
 
                 Progress.Detail = "Checking for new orders...";
-                await DownloadNewOrders();
+                await DownloadNewOrders().ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return;
                 }
 
-                bool morePages = await DownloadNextOrdersPage();
+                bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
                 if (!morePages)
                 {
                     return;
@@ -232,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             if (orders.Count > 0)
             {
                 //Load orders into the database
-                await LoadOrders(orders);
+                await LoadOrders(orders).ConfigureAwait(false);
             }
 
             if (offset == 0)
@@ -308,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;

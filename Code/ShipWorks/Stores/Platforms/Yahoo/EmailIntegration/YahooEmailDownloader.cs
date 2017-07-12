@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                             return;
                         }
 
-                        await DownloadMailMessage(popClient, i);
+                        await DownloadMailMessage(popClient, i).ConfigureAwait(false);
                     }
 
                     // Must be called to finalize delete
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.LoadXml(xmlContent);
 
-                    await LoadOrders(xmlDocument);
+                    await LoadOrders(xmlDocument).ConfigureAwait(false);
                 }
                 catch (XmlException ex)
                 {
@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             // Go through each order in the XML Document
             foreach (XPathNavigator order in xpath.Select("//Order"))
             {
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
             }
         }
 

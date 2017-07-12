@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 {
                     Progress.Detail = "Downloading new orders...";
 
-                    await DownloadNewOrders(orderList);
+                    await DownloadNewOrders(orderList).ConfigureAwait(false);
 
                     ((YahooStoreEntity) Store).BackupOrderNumber = null;
                     StoreManager.SaveStore(Store);
@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 Progress.Detail = $"Processing order {QuantitySaved + 1} of {expectedCount} ...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                await CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault());
+                await CreateOrder(response.ResponseResourceList.OrderList.Order.FirstOrDefault()).ConfigureAwait(false);
 
                 // Check for cancellation
                 if (Progress.IsCancelRequested)
@@ -163,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 orderEntity = LoadOrder(order, orderEntity);
 
-                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
+                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
             }
 
             return orderEntity;

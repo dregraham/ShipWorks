@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                         return;
                     }
 
-                    bool morePages = await DownloadNextOrdersPage(currentPage++);
+                    bool morePages = await DownloadNextOrdersPage(currentPage++).ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             }
             else
             {
-                await LoadOrders(orders);
+                await LoadOrders(orders).ConfigureAwait(false);
 
                 return true;
             }
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Always add to this list, even if already downloaded
                 markAsProcessed.Add(order.OrderUid);
 
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
                 Progress.PercentComplete = 100 * quantityDownloaded / ordersResult.TotalRecords;
@@ -154,14 +154,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private async Task LoadOrder(OMOrder omsOrder)
         {
-            bool isNew = await CreateMasterOrder(omsOrder);
+            bool isNew = await CreateMasterOrder(omsOrder).ConfigureAwait(false);
 
             if (isNew)
             {
                 // Now, create an extra order for each additional parcels
                 for (int i = 1; i < omsOrder.Parcels.OrderParcels.Length; i++)
                 {
-                    await CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]);
+                    await CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]).ConfigureAwait(false);
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateMasterOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return isNew;
         }

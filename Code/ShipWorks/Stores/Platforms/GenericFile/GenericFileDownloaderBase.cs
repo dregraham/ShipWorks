@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         }
 
         /// <summary>
-        /// Import data from the given file.  Must throw GenericFileStoreException (or derived) on error.  Return false to indicate cancled beofre completion.
+        /// Import data from the given file.  Must throw GenericFileStoreException (or derived) on error.  Return false to indicate canceled before completion.
         /// </summary>
         protected abstract Task<bool> ImportFile(GenericFileInstance file);
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                     // keep going until none are left
                     while (true)
                     {
-                        bool morePages = await ImportNextFile(fileSource);
+                        bool morePages = await ImportNextFile(fileSource).ConfigureAwait(false);
                         if (!morePages)
                         {
                             if (fileCount == 0)
@@ -125,10 +125,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             try
             {
                 // Return of false means canceled before completed
-                bool continueProcessing = await ImportFile(file);
+                bool continueProcessing = await ImportFile(file).ConfigureAwait(false);
                 if (!continueProcessing)
                 {
-                    // We still return true to caller b\c there ARE more (or could be).. the caller will check the Cancelled flag.
+                    // We still return true to caller b\c there ARE more (or could be).. the caller will check the Canceled flag.
                     return false;
                 }
             }

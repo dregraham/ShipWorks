@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
                     Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
 
-                    await LoadOrder(client, order);
+                    await LoadOrder(client, order).ConfigureAwait(false);
 
                     Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
                 }

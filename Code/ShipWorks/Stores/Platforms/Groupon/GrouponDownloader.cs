@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                                 return;
                             }
 
-                            await LoadOrder(jsonOrder);
+                            await LoadOrder(jsonOrder).ConfigureAwait(false);
                         }
 
                         currentPage++;

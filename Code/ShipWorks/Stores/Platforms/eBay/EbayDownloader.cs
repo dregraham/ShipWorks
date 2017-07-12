@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Get the official eBay time in UTC
                 eBayOfficialTime = webClient.GetOfficialTime();
 
-                bool morePages = await DownloadOrders();
+                bool morePages = await DownloadOrders().ConfigureAwait(false);
                 if (!morePages)
                 {
                     return;
@@ -157,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     //    }
                     //}
 
-                    await ProcessOrder(orderType);
+                    await ProcessOrder(orderType).ConfigureAwait(false);
 
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
@@ -328,7 +328,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
                         // Save the new order
-                        await SaveDownloadedOrder(order, transaction);
+                        await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
 
                         // Remove the abandoned items
                         DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);

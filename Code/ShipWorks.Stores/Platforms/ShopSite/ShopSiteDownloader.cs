@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                         return;
                     }
 
-                    bool morePages = await DownloadNextOrdersPage();
+                    bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 totalCount += orderNodes.Count;
 
                 // Add this to the XML to be loaded into the database
-                await LoadOrders(orderNodes);
+                await LoadOrders(orderNodes).ConfigureAwait(false);
 
                 return true;
             }
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;

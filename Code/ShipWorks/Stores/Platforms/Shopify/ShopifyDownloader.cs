@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     // Keep going until there are no more to download
                     while (true)
                     {
-                        bool shouldContinue = await DownloadOrderRange(dateRange.Item1, dateRange.Item2);
+                        bool shouldContinue = await DownloadOrderRange(dateRange.Item1, dateRange.Item2).ConfigureAwait(false);
                         if (!shouldContinue)
                         {
                             return;
@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     orders = orders.OrderBy(o => o.GetValue<DateTime>("updated_at")).ToList();
 
                     // Load the orders
-                    bool wasSuccessful = await LoadOrders(orders);
+                    bool wasSuccessful = await LoadOrders(orders).ConfigureAwait(false);
                     if (!wasSuccessful)
                     {
                         return false;
@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 // Call LoadOrder to process the jsonOrder
-                await LoadOrder(jsonOrder);
+                await LoadOrder(jsonOrder).ConfigureAwait(false);
 
                 // Update the PercentComplete
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 // Save the downloaded order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopifyDownloader.LoadOrder");
-                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
             catch (JsonException jsonEx)
             {

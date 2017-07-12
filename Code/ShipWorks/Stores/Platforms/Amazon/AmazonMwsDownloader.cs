@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.PercentComplete = 0;
 
                         // load each order in this result page
-                        await LoadOrders(client, xpath);
+                        await LoadOrders(client, xpath).ConfigureAwait(false);
                     }
 
                     trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
 
                 XPathNamespaceNavigator orderXPath = new XPathNamespaceNavigator(tempXPath, xpath.Namespaces);
-                await LoadOrder(client, orderXPath);
+                await LoadOrder(client, orderXPath).ConfigureAwait(false);
 
                 // update progress
                 Progress.PercentComplete = Math.Min(100 * quantitySeen / totalCount, 100);

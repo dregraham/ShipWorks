@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             try
             {
                 Progress.Detail = "Syncing existing orders with Newegg...";
-                await SyncUnfulfilledShipWorksOrdersWithNewegg();
+                await SyncUnfulfilledShipWorksOrdersWithNewegg().ConfigureAwait(false);
 
                 Progress.Detail = "Checking for new orders...";
 
@@ -60,14 +60,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 {
                     // We don't want to download orders that are being shipped by Newegg, so we have to
                     // download the individual order types one at a time
-                    await DownloadNewOrders(NeweggOrderType.ShipBySeller);
-                    await DownloadNewOrders(NeweggOrderType.MultiChannel);
+                    await DownloadNewOrders(NeweggOrderType.ShipBySeller).ConfigureAwait(false);
+                    await DownloadNewOrders(NeweggOrderType.MultiChannel).ConfigureAwait(false);
                 }
                 else
                 {
                     // The store is not configured to exclude orders shipped by Neweegg, so
                     // we're downloading all order types
-                    await DownloadNewOrders(NeweggOrderType.All);
+                    await DownloadNewOrders(NeweggOrderType.All).ConfigureAwait(false);
                 }
             }
             catch (NeweggException ex)
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                             }
 
                             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NeweggDownloader.SyncUnfulfilledShipWorksOrdersWithNewegg");
-                            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToUpdate));
+                            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToUpdate)).ConfigureAwait(false);
                         }
                     }
 
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                     // All the orders have been downloaded for the current page now load them into ShipWorks
                     // and decrement our page counter for the next iteration
-                    await LoadOrders(downloadInfo, orders.ToList());
+                    await LoadOrders(downloadInfo, orders.ToList()).ConfigureAwait(false);
                     pagesToDownload--;
 
                     if (Progress.IsCancelRequested)
@@ -237,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             {
                 Progress.Detail = String.Format("Processing order {0} of {1}...", QuantitySaved + 1, downloadInfo.TotalOrders);
 
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
                 Progress.PercentComplete = Math.Min(100, 100 * (QuantitySaved) / downloadInfo.TotalOrders);
 
                 if (Progress.IsCancelRequested)

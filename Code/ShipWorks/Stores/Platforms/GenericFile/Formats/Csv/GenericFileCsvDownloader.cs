@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using System.Xml.XPath;
+using Interapptive.Shared.IO.Text.Csv;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.IO.Text.Csv;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using System.Data.SqlClient;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
     /// </summary>
     public class GenericFileCsvDownloader : GenericFileSpreadsheetDownloaderBase
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileCsvDownloader));
 
         GenericCsvMap csvMap;
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         }
 
         /// <summary>
-        /// Create the spreadhseet reader for the given file
+        /// Create the spreadsheet reader for the given file
         /// </summary>
         protected override GenericSpreadsheetReader CreateReader(GenericFileInstance file)
         {

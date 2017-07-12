@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             {
                 Progress.Detail = "Downloading orders...";
 
-                while (await DownloadNextOrdersPage(client))
+                while (await DownloadNextOrdersPage(client).ConfigureAwait(false))
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             if (orderNodes.Count > 0)
             {
                 // import the downloaded orders
-                await LoadOrders(orderNodes);
+                await LoadOrders(orderNodes).ConfigureAwait(false);
             }
 
             return !page.IsLastPage;
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
             }
         }
 

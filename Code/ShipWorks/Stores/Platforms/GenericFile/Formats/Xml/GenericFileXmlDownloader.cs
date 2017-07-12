@@ -46,7 +46,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         protected override async Task<bool> ImportFile(GenericFileInstance file)
         {
-            XmlDocument xmlDocument = GenericFileXmlUtility.LoadAndValidateDocument(file.ReadAllText(), xslTransform);
+            string fileText = await file.ReadAllTextAsync().ConfigureAwait(false);
+            XmlDocument xmlDocument = GenericFileXmlUtility.LoadAndValidateDocument(fileText, xslTransform);
 
             XPathNavigator xpath = xmlDocument.CreateNavigator();
             XPathNodeIterator orderNodes = xpath.Select("//Order");
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
                 Progress.Detail = string.Format("Importing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                await LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 if (Progress.IsCancelRequested)
                 {

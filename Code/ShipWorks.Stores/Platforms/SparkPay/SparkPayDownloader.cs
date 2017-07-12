@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                             return;
                         }
 
-                        await LoadOrders(response.Orders);
+                        await LoadOrders(response.Orders).ConfigureAwait(false);
                     }
                     else
                     {
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             foreach (Order sparkPayOrder in sparkPayOrders)
             {
-                await LoadOrder(sparkPayOrder);
+                await LoadOrder(sparkPayOrder).ConfigureAwait(false);
             }
         }
 

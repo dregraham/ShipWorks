@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 DateTime rangeCap = rangeEnd.AddDays(-maxIntialDownload);
                 if (rangeCap > startDate) startDate = rangeCap;
 
-                await DownloadTransactions(client, startDate.Value, rangeEnd);
+                await DownloadTransactions(client, startDate.Value, rangeEnd).ConfigureAwait(false);
 
                 Progress.Detail = "Done";
             }
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
                 try
                 {
-                    await LoadTransaction(client, transaction.TransactionID);
+                    await LoadTransaction(client, transaction.TransactionID).ConfigureAwait(false);
                 }
                 catch (PayPalException ex)
                 {
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
-                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                 // update the last valid transaction date field
                 if (paymentDate.HasValue && PayPalStore.LastValidTransactionDate < paymentDate)

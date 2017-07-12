@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         return;
                     }
 
-                    bool morePages = await DownloadNextOrdersPage(client);
+                    bool morePages = await DownloadNextOrdersPage(client).ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             MarkOrdersAsExported(client, caOrders);
 
-            await LoadOrders(client, caOrders);
+            await LoadOrders(client, caOrders).ConfigureAwait(false);
 
             return true;
         }
@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
 
                 Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
-                await LoadOrder(client, caOrder);
+                await LoadOrder(client, caOrder).ConfigureAwait(false);
 
                 // update the status, 100 max
                 Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);

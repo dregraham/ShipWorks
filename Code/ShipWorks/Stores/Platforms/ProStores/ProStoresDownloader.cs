@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                         return;
                     }
 
-                    bool morePages = await DownloadNextOrdersPage();
+                    bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // see if there are any orders in the response
                 if (invoiceIterator.Count > 0)
                 {
-                    await LoadOrders(invoiceIterator);
+                    await LoadOrders(invoiceIterator).ConfigureAwait(false);
                     return true;
                 }
                 else
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 {
                     isProVersion = false;
 
-                    return await DownloadNextOrdersPage();
+                    return await DownloadNextOrdersPage().ConfigureAwait(false);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                await LoadOrder(xpathOrder);
+                await LoadOrder(xpathOrder).ConfigureAwait(false);
 
                 // Update progress
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);

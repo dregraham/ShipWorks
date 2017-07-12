@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
                         // import the order
-                        await LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // move the progress bar along
                         Progress.PercentComplete = Math.Min(100 * QuantitySaved / orders.Length, 100);

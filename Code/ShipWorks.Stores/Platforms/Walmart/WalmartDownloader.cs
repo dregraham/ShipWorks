@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 while (ordersList?.elements?.Any() ?? false)
                 {
-                    await LoadOrders(ordersList);
+                    await LoadOrders(ordersList).ConfigureAwait(false);
 
                     ordersList = GetNextBatch(ordersList);
                 }
@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             foreach (Order downloadedOrder in ordersList.elements)
             {
-                await LoadOrder(downloadedOrder);
+                await LoadOrder(downloadedOrder).ConfigureAwait(false);
             }
         }
 

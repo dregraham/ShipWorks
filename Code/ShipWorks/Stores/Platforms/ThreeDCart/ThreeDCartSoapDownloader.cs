@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 if (totalCount != 0)
                 {
                     // Download any newly created orders (their modified dates could be older than the last modified date SW has)
-                    await DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
 
                 if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     Progress.PercentComplete = QuantitySaved / totalCount;
 
                     // Download the modified orders
-                    await DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
             }
             catch (ThreeDCartException ex)
@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             while (true)
             {
-                bool shouldContinue = await DownloadOrderRange(orderSearchCriteria);
+                bool shouldContinue = await DownloadOrderRange(orderSearchCriteria).ConfigureAwait(false);
                 if (!shouldContinue)
                 {
                     return;
@@ -286,7 +286,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                     string invoiceNumberPostFix = hasSubOrders ? string.Format("-{0}", shipmentIndex) : string.Empty;
 
-                    await LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders);
+                    await LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders).ConfigureAwait(false);
 
                     shipmentIndex++;
 
@@ -432,7 +432,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             //Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartSoapDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             lastModifiedOrderDateProcessed = order.OnlineLastModified;
         }
@@ -547,10 +547,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
              * The item's product name text contains multiple lines, with the first line being the
              * actual product name, then the next lines are the attributes, one per line.
              *
-				<ProductName>
-					<![CDATA[Custom Cap
+                <ProductName>
+                    <![CDATA[Custom Cap
                              Size: Small - $1.00]]>
-				</ProductName>
+                </ProductName>
              */
             string[] splitProductName = Regex.Split(productName, newLine, regexOptions);
             if (splitProductName.Count() > 1)

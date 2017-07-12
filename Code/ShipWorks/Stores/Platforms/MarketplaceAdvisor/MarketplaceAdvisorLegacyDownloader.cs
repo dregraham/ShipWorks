@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                         return;
                     }
 
-                    bool morePages = await DownloadNextOrdersPage(currentPage++);
+                    bool morePages = await DownloadNextOrdersPage(currentPage++).ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             }
             else
             {
-                await LoadOrders(xpath);
+                await LoadOrders(xpath).ConfigureAwait(false);
 
                 return true;
             }
@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     totalRecords);
 
                 XPathNavigator order = orders.Current.Clone();
-                long orderNumber = await LoadOrder(order);
+                long orderNumber = await LoadOrder(order).ConfigureAwait(false);
 
                 markAsProcessed.Add(orderNumber);
 
@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorLegacyDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return orderNumber;
         }

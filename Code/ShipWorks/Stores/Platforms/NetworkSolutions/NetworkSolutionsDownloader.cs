@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                         Progress.Detail = String.Format("Downloading order {0} of {1}...", QuantitySaved + 1, webClient.TotalCount);
 
                         // import the order
-                        await LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // update progress
                         Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / webClient.TotalCount);

@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 if (totalCount != 0)
                 {
                     // Download any newly created orders (their modified dates could be older than the last modified date SW has)
-                    await DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
 
                 if (bigCommerceStore.DownloadModifiedNumberOfDaysBack != 0)
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     Progress.PercentComplete = QuantitySaved / totalCount;
 
                     // Download the modified orders
-                    await DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
 
                 Progress.PercentComplete = 100;
@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 try
                 {
-                    bool morePages = await DownloadOrderRange(orderSearchCriteria);
+                    bool morePages = await DownloadOrderRange(orderSearchCriteria).ConfigureAwait(false);
                     if (!morePages)
                     {
                         return;
@@ -210,7 +210,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             }
 
             // Return the result of loading the orders.
-            return await LoadOrders(orders);
+            return await LoadOrders(orders).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                         // If there are multiple ship to addresses, create the post fix.  Otherwise leave it blank.
                         string orderPostfix = hasSubOrders ? string.Format("-{0}", shipToAddressIndex) : string.Empty;
 
-                        await LoadOrder(order, orderPostfix, shipToAddress, isSubOrder, hasSubOrders);
+                        await LoadOrder(order, orderPostfix, shipToAddress, isSubOrder, hasSubOrders).ConfigureAwait(false);
 
                         // Set the flag to note the next order will be a sub order
                         isSubOrder = true;
@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 else
                 {
                     // It must be a digital order since no shipping was provided
-                    await LoadOrder(order, string.Empty, null, false, false);
+                    await LoadOrder(order, string.Empty, null, false, false).ConfigureAwait(false);
                 }
 
                 //Update the PercentComplete

@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         }
 
                         MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
-                        await LoadOrder(orderEntity, magentoOrder, Progress);
+                        await LoadOrder(orderEntity, magentoOrder, Progress).ConfigureAwait(false);
                     }
                 } while (ordersResponse.TotalCount > 0);
 

@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 {
                     EnsureRecordIdentifiersAreNotNull(orderGroups);
 
-                    await LoadOrders(orderGroups, orderCount);
+                    await LoadOrders(orderGroups, orderCount).ConfigureAwait(false);
                 }
             }
             catch (ShipWorksOdbcException ex)
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 try
                 {
-                    await SaveDownloadedOrder(downloadedOrder);
+                    await SaveDownloadedOrder(downloadedOrder).ConfigureAwait(false);
                 }
                 catch (ORMQueryExecutionException ex)
                 {

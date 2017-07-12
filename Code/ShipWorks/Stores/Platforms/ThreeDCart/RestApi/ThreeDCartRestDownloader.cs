@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     return;
                 }
 
-                await DownloadOrders(startDate.Value);
+                await DownloadOrders(startDate.Value).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
                 else
                 {
-                    await LoadOrders(orders);
+                    await LoadOrders(orders).ConfigureAwait(false);
                     offset += orders.Count();
                 }
             }
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
 
-                    await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                    await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                     shipmentIndex++;
                     threeDCartOrder.IsSubOrder = true;
