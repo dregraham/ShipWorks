@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Administration.Retry;
@@ -52,6 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
             webClient.Setup(w => w.GetProduct("1")).Returns(JObject.Parse(product));
 
             adapter.Setup(retry => retry.ExecuteWithRetry(It.IsAny<Action>())).Callback((Action x) => x.Invoke());
+            adapter.Setup(retry => retry.ExecuteWithRetryAsync(It.IsAny<Func<Task>>())).Callback((Func<Task> x) => x.Invoke());
 
             store.TypeCode = 68;
         }
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         public void LoadOrder_SqlAdapterIsCalledOnce_WhenOrderIsLoaded()
         {
             testObject = SetupLoadOrderTests();
-            adapter.Verify(a => a.ExecuteWithRetry(It.IsAny<Action>()), Times.Exactly(1));
+            adapter.Verify(a => a.ExecuteWithRetryAsync(It.IsAny<Func<Task>>()), Times.Exactly(1));
         }
 
         [Fact]

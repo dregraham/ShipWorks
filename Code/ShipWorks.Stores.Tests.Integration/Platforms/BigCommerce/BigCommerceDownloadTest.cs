@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var orderID = await GetNewestOrderIDForStore(store);

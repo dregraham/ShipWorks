@@ -697,6 +697,9 @@ namespace ShipWorks.Stores.Communication
             }
         }
 
+        /// <summary>
+        /// Get a customer for the given order using CustomerProvider
+        /// </summary>
         private async Task<CustomerEntity> GetCustomer(OrderEntity order, SqlAdapter adapter)
         {
             try
