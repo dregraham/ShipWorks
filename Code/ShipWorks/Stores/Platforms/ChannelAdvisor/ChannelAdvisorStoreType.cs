@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
@@ -10,7 +9,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using log4net;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ShipWorks.Stores.Communication
+﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// ChannelAdvisor Rest Web Client

@@ -4,7 +4,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.UI.Platforms.ChannelAdvisor;
 using Xunit;
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void Save_EncryptsRefreshToken()
         {
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
-            
+
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
                 .Returns("refreshToken");
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
 
             testObject.Save(store);
-            
+
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
         }
 

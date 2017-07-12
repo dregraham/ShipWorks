@@ -148,7 +148,8 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
-    <Compile Include="Communication\IChannelAdvisorRestClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestClient.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />

@@ -11,7 +11,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor

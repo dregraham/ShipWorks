@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Net;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Communication;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -18,17 +18,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly IEncryptionProvider encryptionProvider;
         public const string EndpointBase = "https://api.channeladvisor.com/oauth2";
         private readonly string tokenEndpoint = $"{EndpointBase}/token";
-		private const string SharedSecret = "Preb8E42ckWZZpFHh6OV2w";
-		
+        private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
+        /// </summary>
+        /// <param name="submitterFactory">The submitter factory.</param>
+        /// <param name="apiLogEntryFactory">The API log entry factory.</param>
+        /// <param name="encryptionProviderFactory"></param>
         public ChannelAdvisorRestClient(Func<IHttpVariableRequestSubmitter> submitterFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
         }
-        
 
         /// <summary>
         /// Gets the refresh token.
@@ -39,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Uri = new Uri(tokenEndpoint);
             submitter.Verb = HttpVerb.Post;
             submitter.ContentType = "application/x-www-form-urlencoded";
-            submitter.Headers.Add("Authorization", GetAuthorizationHeaderValue);
+            submitter.Headers.Add("Authorization", GetAuthorizationHeaderValue());
             submitter.Variables.Add("grant_type", "authorization_code");
             submitter.Variables.Add("code", code);
             submitter.Variables.Add(new HttpVariable("redirect_uri", ChannelAdvisorStoreType.RedirectUrl, false));
@@ -81,6 +89,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the authorization header value.
         /// </summary>
-        private static string GetAuthorizationHeaderValue => $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ChannelAdvisorStoreType.ApplicationID}:{SharedSecret}"))}";
+        private string GetAuthorizationHeaderValue()
+        {
+            try
+            {
+                return
+                    $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ChannelAdvisorStoreType.ApplicationID}:{encryptionProvider.Decrypt(EncryptedSharedSecret)}"))}";
+            }
+            catch (EncryptionException ex)
+            {
+                throw new ChannelAdvisorException("Failed to decrypt the shared secret", ex);
+            }
+        }
     }
 }
