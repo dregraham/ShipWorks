@@ -86,30 +86,31 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             }
 
             // If the access code has not changedince the last time we saved, continue.
-            if (AccessCodeNotChanged)
+            if (AccessCodeChanged)
             {
-                return true;
+                try
+                {
+                    string token = webClient.GetRefreshToken(AccessCode);
+                    store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
+                        .Encrypt(token);
+                    accessCodeForSavedRefreshToken = AccessCode;
+                    return true;
+                }
+                catch (ChannelAdvisorException ex)
+                {
+                    messageHelper.ShowMessage(
+                        "An error occured requesting access. Please get a new access code and try again." +
+                        $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
+                    return false;
+                }
             }
 
-            try
-            {
-                string token = webClient.GetRefreshToken(AccessCode);
-                store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor").Encrypt(token);
-                accessCodeForSavedRefreshToken = AccessCode;
-                return true;
-            }
-            catch (ChannelAdvisorException ex)
-            {
-                messageHelper.ShowMessage("An error occured requesting access. Please get a new access code and try again." +
-                                          $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
-            }
-
-            return false;
+            return true;
         }
 
         /// <summary>
         /// Returns true if access code has not been changed since the last change
         /// </summary>
-        private bool AccessCodeNotChanged => accessCodeForSavedRefreshToken == AccessCode;
+        private bool AccessCodeChanged => accessCodeForSavedRefreshToken != AccessCode;
     }
 }

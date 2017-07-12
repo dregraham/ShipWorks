@@ -29,8 +29,8 @@
             ChannelAdvisor requires you to authorize Shipworks to connect
             to your ChannelAdvisor account. This is done by logging into
             a special ChannelAdvisor page, granting ShipWorks access, and
-            copying and pasting the code on the last page into the code field
-            below.  For help,
+            copying and pasting the code on the last page into the Access 
+            Code field below. For help,
             <Hyperlink
                 NavigateUri="http://support.shipworks.com/support/solutions/articles/4000105565-adding-a-channeladvisor-store-oauth-">
                 click here.
