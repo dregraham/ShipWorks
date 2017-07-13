@@ -19,8 +19,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
-        public const string EndpointBase = "https://api.channeladvisor.com/oauth2";
-        private readonly string tokenEndpoint = $"{EndpointBase}/token";
+        public const string EndpointBase = "https://api.channeladvisor.com";
+        private readonly string tokenEndpoint = $"{EndpointBase}/oauth2/token";
+        private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
         private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
 
         /// <summary>
@@ -46,8 +47,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IHttpVariableRequestSubmitter submitter = submitterFactory();
             submitter.Uri = new Uri(tokenEndpoint);
             submitter.Verb = HttpVerb.Post;
-            submitter.ContentType = "application/x-www-form-urlencoded";
-            submitter.Headers.Add("Authorization", GetAuthorizationHeaderValue());
             submitter.Variables.Add("grant_type", "authorization_code");
             submitter.Variables.Add("code", code);
             submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
@@ -64,11 +63,43 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Get the access token given a refresh token
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
+        private string GetAccessToken(string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = submitterFactory();
+            submitter.Uri = new Uri(tokenEndpoint);
+            submitter.Verb = HttpVerb.Post;
+            submitter.Variables.Add("grant_type", "refresh_token");
+            submitter.Variables.Add("refresh_token", refreshToken);
+
+            ChannelAdvisorOAuthResponse response =
+                JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetAccessToken"));
+
+            if (string.IsNullOrWhiteSpace(response.AccessToken))
+            {
+                throw new ChannelAdvisorException("Response did not contain an access token.");
+            }
+
+            return response.AccessToken;
+        }
+
+        /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, ChannelAdvisorStoreEntity store)
         {
-            throw new NotImplementedException();
+            IHttpVariableRequestSubmitter submitter = submitterFactory();
+            submitter.Uri = new Uri(ordersEndpoint);
+            submitter.Verb = HttpVerb.Get;
+
+            submitter.Variables.Add("access_token", GetAccessToken(store.RefreshToken));
+            submitter.Variables.Add("filter", $"CreatedDateUtc gt {start:s}");
+            submitter.Variables.Add("orderby", "orderby=CreatedDateUtc desc");
+            
+            return JsonConvert.DeserializeObject<ChannelAdvisorOrderResult>(ProcessRequest(submitter, "GetOrders"));
         }
 
         /// <summary>
@@ -76,6 +107,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private string ProcessRequest(IHttpRequestSubmitter request, string action)
         {
+            request.ContentType = "application/x-www-form-urlencoded";
+            AuthenticateRequest(request);
+
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, action);
             apiLogEntry.LogRequest(request);
 
@@ -97,12 +131,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the authorization header value.
         /// </summary>
-        private string GetAuthorizationHeaderValue()
+        private void AuthenticateRequest(IHttpRequestSubmitter request)
         {
             try
             {
-                return
+                string authHeader =
                     $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ChannelAdvisorStoreType.ApplicationID}:{encryptionProvider.Decrypt(EncryptedSharedSecret)}"))}";
+                request.Headers.Add("Authorization", authHeader);
             }
             catch (EncryptionException ex)
             {
