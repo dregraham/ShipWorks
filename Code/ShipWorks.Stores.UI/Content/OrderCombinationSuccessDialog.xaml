@@ -21,6 +21,7 @@
         MinHeight="120"
         MinWidth="220"
         SizeToContent="Height"
+        MaxHeight="400"
         Width="420">
     <Window.Resources>
         <ResourceDictionary>
@@ -50,7 +51,8 @@
                       Stroke="{StaticResource Green}" />
             </Border>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1"
+                  Margin="4,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -59,12 +61,15 @@
                 <TextBlock Grid.Row="0"
                         TextWrapping="Wrap"
                         VerticalAlignment="Center"
-                        Margin="4,0,0,0">
+                        Margin="0,0,0,4">
                     <Run>The following orders were combined into Order #</Run><Run Text="{Binding OrderNumber, Mode=OneWay}" />
                 </TextBlock>
 
-                <ListBox Grid.Row="1"
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl
                          ItemsSource="{Binding CombinedOrders, Mode=OneWay}"/>
+                </ScrollViewer>
             </Grid>
         </Grid>
 
