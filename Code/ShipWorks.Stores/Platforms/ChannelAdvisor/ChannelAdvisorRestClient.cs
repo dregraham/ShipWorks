@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -60,6 +61,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             return response.RefreshToken;
+        }
+
+        /// <summary>
+        /// Get orders from the start date for the store
+        /// </summary>
+        public ChannelAdvisorOrderResult GetOrders(DateTime start, ChannelAdvisorStoreEntity store)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
