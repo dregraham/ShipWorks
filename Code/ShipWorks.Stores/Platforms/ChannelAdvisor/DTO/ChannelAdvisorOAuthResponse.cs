@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 {
     /// <summary>
     /// DTO for the ChannelAdvisor OAuth Response
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class ChannelAdvisorOAuthResponse
     {
         [JsonProperty("access_token")]
