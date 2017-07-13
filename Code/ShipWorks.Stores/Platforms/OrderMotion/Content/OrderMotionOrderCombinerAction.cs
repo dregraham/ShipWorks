@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.Content
                 .Select(x => new OrderMotionOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    //CustomOrderIdentifier = x.CustomOrderIdentifier
+                    OrderMotionShipmentID = x.OrderMotionShipmentID
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
