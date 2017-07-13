@@ -137,6 +137,10 @@
       <DependentUpon>CombineOrdersDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Content\DesignModeCombineOrderViewModel.cs" />
+    <Compile Include="Content\DesignModeOrderCombinationSuccessViewModel.cs" />
+    <Compile Include="Content\OrderCombinationSuccessDialog.xaml.cs">
+      <DependentUpon>OrderCombinationSuccessDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -585,6 +589,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Content\CombineOrdersDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Content\OrderCombinationSuccessDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

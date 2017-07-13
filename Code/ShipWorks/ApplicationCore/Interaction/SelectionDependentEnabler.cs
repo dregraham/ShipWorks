@@ -110,6 +110,7 @@ namespace ShipWorks.ApplicationCore.Interaction
 
             bool oneCustomer = target == FilterTarget.Customers && selection.Count == 1;
             bool oneOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 0;
+            Dictionary<Func<IEnumerable<long>, bool>, bool> appliesCache = new Dictionary<Func<IEnumerable<long>, bool>, bool>();
 
             // Go through each registered component
             foreach (KeyValuePair<Component, SelectionDependentEntry> entry in componentMap)
@@ -156,7 +157,14 @@ namespace ShipWorks.ApplicationCore.Interaction
                     case SelectionDependentType.AppliesFunction:
                         if (entry.Value.Applies != null)
                         {
-                            EnableComponent(component, entry.Value.Applies(selection.Keys));
+                            bool result = false;
+                            if (!appliesCache.TryGetValue(entry.Value.Applies, out result))
+                            {
+                                result = entry.Value.Applies(selection.Keys);
+                                appliesCache.Add(entry.Value.Applies, result);
+                            }
+
+                            EnableComponent(component, result);
                         }
                         break;
                 }

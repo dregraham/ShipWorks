@@ -1318,6 +1318,7 @@
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
+    <Compile Include="Stores\Content\Controls\IOrderCombinationUserInteraction.cs" />
     <Compile Include="Stores\Content\ICombineOrdersGateway.cs" />
     <Compile Include="Stores\Content\IOrderCombinationOrchestrator.cs" />
     <Compile Include="Stores\Content\IOrderCombiner.cs" />

@@ -151,8 +151,12 @@
     <Compile Include="Content\CombineOrdersGateway.cs" />
     <Compile Include="Content\CombineOrdersViewModel.cs" />
     <Compile Include="Content\ICombineOrdersDialog.cs" />
+    <Compile Include="Content\IOrderCombinationSuccessDialog.cs" />
+    <Compile Include="Content\IOrderCombinationSuccessViewModel.cs" />
     <Compile Include="Content\IOrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombinationOrchestrator.cs" />
+    <Compile Include="Content\OrderCombinationSuccessViewModel.cs" />
+    <Compile Include="Content\OrderCombinationUserInteraction.cs" />
     <Compile Include="Content\OrderCombineAddressComparer.cs" />
     <Compile Include="Content\OrderCombiner.cs" />
     <Compile Include="Content\OrderCombinerActions\IOrderCombinerAction.cs" />

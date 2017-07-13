@@ -1333,7 +1333,7 @@ namespace ShipWorks
             this.contextOrderCombineOrder.Name = "contextOrderCombineOrder";
             this.contextOrderCombineOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderCombineOrder.Text = "Combine Orders";
-            this.contextOrderCombineOrder.Click += new System.EventHandler(this.OnEditOrder);
+            this.contextOrderCombineOrder.Click += new System.EventHandler(this.OnCombineOrders);
 
             //
             // contextOrderSep1

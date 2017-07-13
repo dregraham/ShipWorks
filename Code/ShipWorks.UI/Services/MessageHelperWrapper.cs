@@ -17,13 +17,16 @@ namespace ShipWorks.UI.Services
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
+        private readonly ICurrentUserSettings currentUserSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider,
+            ICurrentUserSettings currentUserSettings,
             Func<IUserConditionalNotification> createUserConditionalNotification)
         {
+            this.currentUserSettings = currentUserSettings;
             this.createUserConditionalNotification = createUserConditionalNotification;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;

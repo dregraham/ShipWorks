@@ -6,8 +6,8 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Stores.Content;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Content
@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Content
     {
         readonly ICombineOrdersGateway gateway;
         readonly IMessageHelper messageHelper;
-        readonly ICombineOrdersViewModel viewModel;
+        readonly IOrderCombinationUserInteraction userInteraction;
         readonly IOrderCombiner orderCombiner;
         readonly ISecurityContext securityContext;
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Content
         /// Constructor
         /// </summary>
         public OrderCombinationOrchestrator(ICombineOrdersGateway gateway,
-            ICombineOrdersViewModel viewModel,
+            IOrderCombinationUserInteraction userInteraction,
             IOrderCombiner orderCombiner,
             ISecurityContext securityContext,
             IMessageHelper messageHelper)
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Content
             this.securityContext = securityContext;
             this.orderCombiner = orderCombiner;
             this.gateway = gateway;
-            this.viewModel = viewModel;
+            this.userInteraction = userInteraction;
             this.messageHelper = messageHelper;
         }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Content
                 return GenericResult.FromError<long>("User does not have permission to modify orders");
             }
 
-            var combinationDetails = viewModel.GetCombinationDetailsFromUser(orders);
+            var combinationDetails = userInteraction.GetCombinationDetailsFromUser(orders);
             if (combinationDetails.Failure)
             {
                 return GenericResult.FromError<long>(combinationDetails.Message);
@@ -91,8 +91,9 @@ namespace ShipWorks.Stores.Content
         {
             if (combineResults.Success)
             {
-                string message = $"{CombineOrderNumbers(orders)} combined into Order #{newOrderNumber}";
-                messageHelper.ShowUserConditionalInformation("Combine Orders", message, UserConditionalNotificationType.CombineOrders);
+                //string message = $"{CombineOrderNumbers(orders)} combined into Order #{newOrderNumber}";
+                //messageHelper.ShowUserConditionalInformation("Combine Orders", message, UserConditionalNotificationType.CombineOrders);
+                userInteraction.ShowSuccessConfirmation(newOrderNumber, orders);
             }
             else
             {

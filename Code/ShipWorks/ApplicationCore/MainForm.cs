@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -165,12 +166,22 @@ namespace ShipWorks
         /// </summary>
         private void InitializeCustomEnablerComponents()
         {
-                selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.AppliesFunction,
-                (x) => ShouldCombineOrderBeEnabled(x));
+            selectionDependentEnabler.SetEnabledWhen(buttonCombine,
+                SelectionDependentType.AppliesFunction,
+                ShouldCombineOrderBeEnabled);
 
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
-                    SelectionDependentType.AppliesFunction,
-                (x) => ShouldCombineOrderBeEnabled(x));
+                SelectionDependentType.AppliesFunction,
+                ShouldCombineOrderBeEnabled);
+        }
+
+        /// <summary>
+        /// Disable the SetEnabledWhen for components that need actions to determine enabled state
+        /// </summary>
+        private void DisableCustomEnablerComponents()
+        {
+            selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.Ignore);
+            selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder, SelectionDependentType.Ignore);
         }
 
         /// <summary>
@@ -2885,12 +2896,17 @@ namespace ShipWorks
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IOrderCombinationOrchestrator orchestrator = lifetimeScope.Resolve<IOrderCombinationOrchestrator>();
-                GenericResult<long> result = await orchestrator.Combine(gridControl.Selection.OrderedKeys);
-
-                if (result.Success)
+                using (Disposable.Create(() => InitializeCustomEnablerComponents()))
                 {
-                    LookupOrder(result.Value);
+                    DisableCustomEnablerComponents();
+
+                    IOrderCombinationOrchestrator orchestrator = lifetimeScope.Resolve<IOrderCombinationOrchestrator>();
+                    GenericResult<long> result = await orchestrator.Combine(gridControl.Selection.OrderedKeys);
+
+                    if (result.Success)
+                    {
+                        LookupOrder(result.Value);
+                    }
                 }
             }
         }
@@ -2992,7 +3008,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// An edit has occurred in one of hte panels
+        /// An edit has occurred in one of the panels
         /// </summary>
         private void OnPanelDataChanged(object sender, EventArgs e)
         {

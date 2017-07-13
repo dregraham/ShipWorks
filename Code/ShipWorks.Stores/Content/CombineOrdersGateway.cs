@@ -94,6 +94,7 @@ namespace ShipWorks.Stores.Content
                     .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
                     .AndWhere(andWherePredicate
                         .Or(orPredicate));
+                
                 long invalidOrders = sqlAdapter.FetchScalar<long>(query);
 
                 return invalidOrders == 0;
