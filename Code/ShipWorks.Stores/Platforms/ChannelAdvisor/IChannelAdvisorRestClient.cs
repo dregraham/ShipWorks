@@ -6,8 +6,8 @@
     public interface IChannelAdvisorRestClient
     {
         /// <summary>
-        /// Given a Channel Advisor Authorization Code, request and return the refresh token
+        /// Given a Channel Advisor Authorization Code and RedirectUrl, request and return the refresh token
         /// </summary>
-        string GetRefreshToken(string code);
+        string GetRefreshToken(string code, string redirectUrl);
     }
 }

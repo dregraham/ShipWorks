@@ -28,8 +28,8 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string accessCode;
-
         private string accessCodeForSavedRefreshToken = string.Empty;
+        private string authorizeUrlParameters;
 
         /// <summary>
         /// Constructor
@@ -69,8 +69,18 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void GetAccessCode()
         {
-            string authorizationUrl = $"{ChannelAdvisorRestClient.EndpointBase}/authorize{ChannelAdvisorStoreType.AuthorizeUrlParameters}";
+            string authorizationUrl = $"{ChannelAdvisorRestClient.EndpointBase}/authorize{authorizeUrlParameters}";
             WebHelper.OpenUrl(authorizationUrl, window);
+        }
+
+        /// <summary>
+        /// Loads the specified store.
+        /// </summary>
+        /// <param name="store"></param>
+        /// <returns></returns>
+        public void Load(ChannelAdvisorStoreEntity store)
+        {
+            authorizeUrlParameters = new ChannelAdvisorStoreType(store).AuthorizeUrlParameters;
         }
 
         /// <summary>
@@ -85,12 +95,12 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
                 return false;
             }
 
-            // If the access code has not changedince the last time we saved, continue.
+            // If the access code has not changed since the last time we saved, continue.
             if (AccessCodeChanged)
             {
                 try
                 {
-                    string token = webClient.GetRefreshToken(AccessCode);
+                    string token = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl);
                     store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                         .Encrypt(token);
                     accessCodeForSavedRefreshToken = AccessCode;

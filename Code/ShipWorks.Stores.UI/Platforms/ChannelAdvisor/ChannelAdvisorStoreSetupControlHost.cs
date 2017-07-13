@@ -25,6 +25,14 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Called when stepping into this wizard page
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            viewModel.Load(GetStore<ChannelAdvisorStoreEntity>());
+        }
+
+        /// <summary>
         /// Called when [step next].
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)

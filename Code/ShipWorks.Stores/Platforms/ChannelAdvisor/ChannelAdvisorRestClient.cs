@@ -5,7 +5,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
-using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -41,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the refresh token.
         /// </summary>
-        public string GetRefreshToken(string code)
+        public string GetRefreshToken(string code, string redirectUrl)
         {
             IHttpVariableRequestSubmitter submitter = submitterFactory();
             submitter.Uri = new Uri(tokenEndpoint);
@@ -50,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Headers.Add("Authorization", GetAuthorizationHeaderValue());
             submitter.Variables.Add("grant_type", "authorization_code");
             submitter.Variables.Add("code", code);
-            submitter.Variables.Add(new HttpVariable("redirect_uri", ChannelAdvisorStoreType.RedirectUrl, false));
+            submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
 
             ChannelAdvisorOAuthResponse response =
                 JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetRefreshToken"));
