@@ -110,7 +110,6 @@ namespace ShipWorks.ApplicationCore.Interaction
 
             bool oneCustomer = target == FilterTarget.Customers && selection.Count == 1;
             bool oneOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 0;
-            bool twoOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 1;
 
             // Go through each registered component
             foreach (KeyValuePair<Component, SelectionDependentEntry> entry in componentMap)
