@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content.OrderCombinerActions
 {
@@ -18,15 +17,16 @@ namespace ShipWorks.Stores.Content.OrderCombinerActions
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<OrderSearchEntity> orderSearches = orders.Select(x => new OrderSearchEntity
-            {
-                OrderID = combinedOrder.OrderID,
-                StoreID = x.StoreID,
-                OrderNumber = x.OrderNumber,
-                OrderNumberComplete = x.OrderNumberComplete
-            });
+            var recordCreator = new SearchRecordMerger<IOrderEntity>(combinedOrder, orders, sqlAdapter);
 
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
+            return recordCreator.Perform(OrderSearchFields.OrderID,
+                x => new OrderSearchEntity
+                {
+                    OrderID = combinedOrder.OrderID,
+                    StoreID = x.StoreID,
+                    OrderNumber = x.OrderNumber,
+                    OrderNumberComplete = x.OrderNumberComplete
+                });
         }
     }
 }

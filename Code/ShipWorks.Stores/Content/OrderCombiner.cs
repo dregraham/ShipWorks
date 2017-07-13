@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -108,6 +109,7 @@ namespace ShipWorks.Stores.Content
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
             combinedOrder.ApplyOrderNumberPostfix("-C");
+            combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {

@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.Content
     /// Combination action that is specific to LemonStand
     /// </summary>
     [KeyedComponent(typeof(IStoreSpecificOrderCombinerAction), StoreTypeCode.LemonStand)]
-    public class LemonStandOrderCombinerAction
+    public class LemonStandOrderCombinerAction : IStoreSpecificOrderCombinerAction
     {
         /// <summary>
         /// Perform the platform specific action

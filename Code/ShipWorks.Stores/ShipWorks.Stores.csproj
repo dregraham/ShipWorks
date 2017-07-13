@@ -166,6 +166,7 @@
     <Compile Include="Content\OrderCombinerActions\MovePaymentDetailsAction.cs" />
     <Compile Include="Content\OrderCombinerActions\PlatformSpecificAction.cs" />
     <Compile Include="Content\OrderCombinerActions\SearchRecordCreationAction.cs" />
+    <Compile Include="Content\OrderCombinerActions\SearchRecordMerger.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
