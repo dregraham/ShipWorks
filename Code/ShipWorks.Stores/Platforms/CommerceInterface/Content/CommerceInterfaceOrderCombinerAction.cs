@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface.Content
@@ -12,6 +12,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.Content
     /// <summary>
     /// Combination action that is specific to CommerceInterface
     /// </summary>
+    [KeyedComponent(typeof(IStoreSpecificOrderCombinerAction), StoreTypeCode.CommerceInterface)]
     public class CommerceInterfaceOrderCombinerAction : IStoreSpecificOrderCombinerAction
     {
         /// <summary>
@@ -19,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<CommerceInterfaceOrderSearchEntity> orderSearches = orders.Cast<ICommerceInterfaceOrderEntity>()
-                .Select(x => new CommerceInterfaceOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<ICommerceInterfaceOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(CommerceInterfaceOrderSearchFields.OrderID,
+                x => new CommerceInterfaceOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     CommerceInterfaceOrderNumber = x.CommerceInterfaceOrderNumber
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

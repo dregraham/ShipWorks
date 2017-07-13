@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
@@ -21,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<ClickCartProOrderSearchEntity> orderSearches = orders.Cast<IClickCartProOrderEntity>()
-                .Select(x => new ClickCartProOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IClickCartProOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(ClickCartProOrderFields.OrderID,
+                x => new ClickCartProOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     ClickCartProOrderID = x.ClickCartProOrderID
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

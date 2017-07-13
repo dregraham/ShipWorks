@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.Walmart.Content
@@ -21,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.Walmart.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<WalmartOrderSearchEntity> orderSearches = orders.Cast<IWalmartOrderEntity>()
-                .Select(x => new WalmartOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IWalmartOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(WalmartOrderSearchFields.OrderID,
+                x => new WalmartOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     PurchaseOrderID = x.PurchaseOrderID
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

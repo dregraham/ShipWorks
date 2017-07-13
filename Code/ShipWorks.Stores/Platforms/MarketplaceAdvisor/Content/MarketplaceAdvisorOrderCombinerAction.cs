@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.Content
@@ -21,15 +20,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<MarketplaceAdvisorOrderSearchEntity> orderSearches = orders.Cast<IMarketplaceAdvisorOrderEntity>()
-                .Select(x => new MarketplaceAdvisorOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IMarketplaceAdvisorOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(MarketplaceAdvisorOrderSearchFields.OrderID,
+                x => new MarketplaceAdvisorOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     SellerOrderNumber = x.SellerOrderNumber,
                     InvoiceNumber = x.InvoiceNumber
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

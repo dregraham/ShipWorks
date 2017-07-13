@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.Groupon.Content
@@ -21,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.Groupon.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<GrouponOrderSearchEntity> orderSearches = orders.Cast<IGrouponOrderEntity>()
-                .Select(x => new GrouponOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IGrouponOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(GrouponOrderSearchFields.OrderID,
+                x => new GrouponOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     GrouponOrderID = x.GrouponOrderID
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

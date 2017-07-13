@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.OrderCombinerActions;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.Content
@@ -21,14 +20,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<YahooOrderSearchEntity> orderSearches = orders.Cast<IYahooOrderEntity>()
-                .Select(x => new YahooOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IYahooOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(YahooOrderSearchFields.OrderID,
+                x => new YahooOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
                     YahooOrderID = x.YahooOrderID
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }
