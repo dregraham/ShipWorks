@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.Content
                 .Select(x => new PayPalOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    //CustomOrderIdentifier = x.CustomOrderIdentifier
+                    TransactionID = x.TransactionID
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
