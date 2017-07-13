@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Content
                 .Select(x => new ShopifyOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    //CustomOrderIdentifier = x.CustomOrderIdentifier
+                    ShopifyOrderID = x.ShopifyOrderID
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
