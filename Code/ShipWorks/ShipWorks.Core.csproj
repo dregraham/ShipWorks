@@ -958,6 +958,8 @@
     <Compile Include="Common\IValidator.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\CancellationTokenProgressProvider.cs" />
+    <Compile Include="Common\Threading\ProgressUpdater.cs" />
+    <Compile Include="Common\Threading\SingleItemProgressDialog.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />

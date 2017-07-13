@@ -66,7 +66,7 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a new progress dialog
         /// </summary>
-        public IDisposable ShowProgressDialog(string title, string description)
+        public ISingleItemProgressDialog ShowProgressDialog(string title, string description)
         {
             ProgressItem progressItem = new ProgressItem(title);
             progressItem.Starting();
@@ -78,11 +78,7 @@ namespace ShipWorks.UI.Services
 
             IDisposable disposable = ShowProgressDialog(title, description, progressProvider, TimeSpan.Zero);
 
-            return Disposable.Create(() =>
-            {
-                progressItem.Completed();
-                disposable.Dispose();
-            });
+            return new SingleItemProgressDialog(disposable, progressItem);
         }
 
         /// <summary>

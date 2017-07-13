@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using SD.LLBLGen.Pro.QuerySpec.Adapter;
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
     {
         private readonly DataContext context;
         private readonly OrderEntity secondOrder;
+        private readonly IProgressReporter progress;
 
         public OrderCombinerTest(DatabaseFixture db)
         {
@@ -37,6 +39,8 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             secondOrder = Create.Order(context.Store, context.Customer)
                 .WithShipAddress("Bar", string.Empty, "Chicago", "IL", "12345", "US")
                 .Save();
+
+            progress = context.Mock.Mock<IProgressReporter>().Object;
         }
 
         [Fact]
@@ -44,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         {
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             Assert.True(result.Success);
 
@@ -72,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(order1.OrderID, new IOrderEntity[] { order1, order2 }, "1234-C");
+            var result = await testObject.Combine(order1.OrderID, new IOrderEntity[] { order1, order2 }, "1234-C", progress);
 
             var newOrder = await GetOrder(result.Value);
             Assert.IsAssignableFrom<IMagentoOrderEntity>(newOrder);
@@ -94,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             var newOrder = await GetOrder(result.Value, OrderEntity.PrefetchPathOrderItems);
 
@@ -118,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             var newOrder = await GetOrder(result.Value, OrderEntity.PrefetchPathNotes);
 
@@ -142,7 +146,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             var newOrder = await GetOrder(result.Value, OrderEntity.PrefetchPathOrderPaymentDetails);
 
@@ -165,7 +169,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             var query = new QueryFactory().OrderSearch.Where(OrderSearchFields.OrderID == result.Value);
 
@@ -191,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         {
             var testObject = context.Mock.Create<OrderCombiner>();
 
-            await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C");
+            await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {

@@ -271,6 +271,7 @@
     <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
+    <Compile Include="Threading\ISingleItemProgressDialog.cs" />
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\FileDialogFactory.cs" />

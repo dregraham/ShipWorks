@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +25,7 @@ namespace ShipWorks.Stores.Content
         private readonly IDeletionService deletionService;
         readonly IConfigurationData configurationData;
         readonly IEnumerable<IOrderCombinerAction> combinationActions;
+        readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -29,12 +33,14 @@ namespace ShipWorks.Stores.Content
         public OrderCombiner(IOrderManager orderManager,
             IDeletionService deletionService,
             IConfigurationData configurationData,
-            IEnumerable<IOrderCombinerAction> combinationActions)
+            IEnumerable<IOrderCombinerAction> combinationActions,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.combinationActions = combinationActions;
             this.configurationData = configurationData;
             this.deletionService = deletionService;
             this.orderManager = orderManager;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -43,35 +49,53 @@ namespace ShipWorks.Stores.Content
         /// <remarks>
         /// I've purposely left the excessive spacing in this method to help extract each section into its own class
         /// </remarks>
-        public async Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders, string newOrderNumber)
+        public async Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
+            string newOrderNumber, IProgressReporter progressReporter)
         {
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(configurationData.FetchReadOnly().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            int totalCount = combinationActions.Count() + orders.Count() + 2;
+            ProgressUpdater progress = new ProgressUpdater(progressReporter, totalCount);
+
+            using (new AuditBehaviorScope(configurationData.FetchReadOnly().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                using (SqlAdapter sqlAdapter = SqlAdapter.Create(true))
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, sqlAdapter);
-
-                    bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
-
-                    if (!saveResult)
-                    {
-                        sqlAdapter.Rollback();
-                        return GenericResult.FromError<long>("Save failed");
-                    }
-
-                    foreach (IOrderCombinerAction action in combinationActions)
-                    {
-                        await action.Perform(combinedOrder, orders, sqlAdapter).ConfigureAwait(false);
-                    }
-
-                    DeleteOriginalOrders(orders);
-
-                    await sqlAdapter.SaveEntityAsync(combinedOrder).ConfigureAwait(false);
-
-                    sqlAdapter.Commit();
-                    return GenericResult.FromSuccess(combinedOrder.OrderID);
+                    return await PerformCombination(survivingOrderID, orders, progress, sqlAdapter);
                 }
             }
+        }
+
+        /// <summary>
+        /// Perform the actual combination
+        /// </summary>
+        private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, IEnumerable<IOrderEntity> orders,
+            ProgressUpdater progress, ISqlAdapter sqlAdapter)
+        {
+            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, sqlAdapter);
+
+            bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
+
+            if (!saveResult)
+            {
+                sqlAdapter.Rollback();
+                return GenericResult.FromError<long>("Save failed");
+            }
+
+            progress.Update();
+
+            foreach (IOrderCombinerAction action in combinationActions)
+            {
+                await action.Perform(combinedOrder, orders, sqlAdapter).ConfigureAwait(false);
+                progress.Update();
+            }
+
+            DeleteOriginalOrders(orders, progress);
+
+            await sqlAdapter.SaveEntityAsync(combinedOrder).ConfigureAwait(false);
+
+            sqlAdapter.Commit();
+            progress.Update();
+
+            return GenericResult.FromSuccess(combinedOrder.OrderID);
         }
 
         /// <summary>
@@ -96,11 +120,12 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Delete the original orders
         /// </summary>
-        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders)
+        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders, ProgressUpdater progress)
         {
             foreach (IOrderEntity order in orders)
             {
                 deletionService.DeleteOrder(order.OrderID);
+                progress.Update();
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Stores.Content;
@@ -71,7 +72,12 @@ namespace ShipWorks.Stores.Content
 
             long survivingOrderId = combinationDetails.Value.Item1;
             string newOrderNumber = combinationDetails.Value.Item2;
-            var combineResults = await orderCombiner.Combine(survivingOrderId, orders, newOrderNumber);
+            GenericResult<long> combineResults;
+
+            using (ISingleItemProgressDialog dialog = messageHelper.ShowProgressDialog("Combining orders", "Combining orders"))
+            {
+                combineResults = await orderCombiner.Combine(survivingOrderId, orders, newOrderNumber, dialog.ProgressItem);
+            }
 
             DisplayCombinationResults(orders, newOrderNumber, combineResults);
 

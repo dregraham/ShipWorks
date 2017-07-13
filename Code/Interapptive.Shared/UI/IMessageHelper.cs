@@ -32,7 +32,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a new progress dialog
         /// </summary>
-        IDisposable ShowProgressDialog(string title, string description);
+        ISingleItemProgressDialog ShowProgressDialog(string title, string description);
 
         /// <summary>
         /// Show a new progress dialog

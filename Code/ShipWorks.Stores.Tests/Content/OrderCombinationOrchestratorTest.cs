@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -45,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Content
                 .Returns(GenericResult.FromSuccess(Tuple.Create(6L, "6-C")));
 
             mock.Mock<IOrderCombiner>()
-                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>()))
+                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(GenericResult.FromSuccess(23L));
         }
 
@@ -161,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Content
         public async Task Combine_ShowsErrorMessage_WhenCombinationFails()
         {
             mock.Mock<IOrderCombiner>()
-                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>()))
+                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(GenericResult.FromError<long>("Error"));
 
             var testObject = mock.Create<OrderCombinationOrchestrator>();
@@ -176,7 +177,7 @@ namespace ShipWorks.Stores.Tests.Content
         public async Task Combine_ReturnsFailure_WhenCombinationFails()
         {
             mock.Mock<IOrderCombiner>()
-                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>()))
+                .Setup(x => x.Combine(It.IsAny<long>(), It.IsAny<IEnumerable<IOrderEntity>>(), It.IsAny<string>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(GenericResult.FromError<long>("Error"));
 
             var testObject = mock.Create<OrderCombinationOrchestrator>();
@@ -195,7 +196,7 @@ namespace ShipWorks.Stores.Tests.Content
             await testObject.Combine(new long[] { 1, 2 });
 
             mock.Mock<IOrderCombiner>()
-                .Verify(x => x.Combine(6, orders, "6-C"));
+                .Verify(x => x.Combine(6, orders, "6-C", It.IsAny<IProgressReporter>()));
         }
 
         [Theory]
