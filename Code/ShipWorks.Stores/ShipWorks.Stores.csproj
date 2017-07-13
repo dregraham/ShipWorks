@@ -190,6 +190,9 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorOrderCombinerAction.cs" />
+    <Compile Include="Platforms\ClickCartPro\Content\ClickCartProOrderCombinerAction.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceOrderCombinerAction.cs" />
+    <Compile Include="Platforms\Ebay\Content\EbayOrderCombinerAction.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
@@ -237,8 +240,10 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponOrderCombinerAction.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandOrderCombinerAction.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -272,6 +277,8 @@
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
+    <Compile Include="Platforms\MarketplaceAdvisor\Content\MarketplaceAdvisorOrderCombinerAction.cs" />
+    <Compile Include="Platforms\NetworkSolutions\Content\NetworkSolutionsOrderCombinerAction.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
@@ -358,8 +365,13 @@
     <Compile Include="Platforms\Odbc\Download\OdbcTableDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
+    <Compile Include="Platforms\OrderMotion\Content\OrderMotionOrderCombinerAction.cs" />
+    <Compile Include="Platforms\PayPal\Content\PayPalOrderCombinerAction.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresOrderCombinerAction.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsOrderCombinerAction.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\Shopify\Content\ShopifyOrderCombinerAction.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />
@@ -413,6 +425,8 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartOrderCombinerAction.cs" />
+    <Compile Include="Platforms\Walmart\Content\WalmartOrderCombinerAction.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
@@ -436,6 +450,7 @@
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\Content\YahooOrderCombinerAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
