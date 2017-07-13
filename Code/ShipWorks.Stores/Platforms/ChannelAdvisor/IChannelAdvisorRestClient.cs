@@ -15,8 +15,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         string GetRefreshToken(string code, string redirectUrl);
 
         /// <summary>
+        /// Get an access token from the refresh token
+        /// </summary>
+        string GetAccessToken(string refreshToken);
+
+        /// <summary>
         /// GetOrders from the given start time
         /// </summary>
-        ChannelAdvisorOrderResult GetOrders(DateTime start, ChannelAdvisorStoreEntity store);
+        ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken);
+
+
     }
 }

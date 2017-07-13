@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
 
             ChannelAdvisorOAuthResponse response =
-                JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetRefreshToken"));
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetRefreshToken");
 
             if (string.IsNullOrWhiteSpace(response.RefreshToken))
             {
@@ -65,9 +65,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the access token given a refresh token
         /// </summary>
-        /// <param name="refreshToken"></param>
-        /// <returns></returns>
-        private string GetAccessToken(string refreshToken)
+        public string GetAccessToken(string refreshToken)
         {
             IHttpVariableRequestSubmitter submitter = submitterFactory();
             submitter.Uri = new Uri(tokenEndpoint);
@@ -76,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("refresh_token", refreshToken);
 
             ChannelAdvisorOAuthResponse response =
-                JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetAccessToken"));
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetAccessToken");
 
             if (string.IsNullOrWhiteSpace(response.AccessToken))
             {
@@ -89,23 +87,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(DateTime start, ChannelAdvisorStoreEntity store)
+        public ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken)
         {
             IHttpVariableRequestSubmitter submitter = submitterFactory();
             submitter.Uri = new Uri(ordersEndpoint);
             submitter.Verb = HttpVerb.Get;
 
-            submitter.Variables.Add("access_token", GetAccessToken(store.RefreshToken));
+            submitter.Variables.Add("access_token", accessToken);
             submitter.Variables.Add("filter", $"CreatedDateUtc gt {start:s}");
             submitter.Variables.Add("orderby", "orderby=CreatedDateUtc desc");
-            
-            return JsonConvert.DeserializeObject<ChannelAdvisorOrderResult>(ProcessRequest(submitter, "GetOrders"));
+
+            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
         }
 
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private string ProcessRequest(IHttpRequestSubmitter request, string action)
+        private T ProcessRequest<T>(IHttpRequestSubmitter request, string action)
         {
             request.ContentType = "application/x-www-form-urlencoded";
             AuthenticateRequest(request);
@@ -119,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                return result;
+                return JsonConvert.DeserializeObject<T>(result);
             }
             catch (Exception ex)
             {

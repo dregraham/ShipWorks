@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using Xunit;
 using It = Moq.It;
@@ -132,6 +133,53 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             string refreshToken = testObject.GetRefreshToken("blah", "blah");
 
             Assert.Equal("rtoken", refreshToken);
+        }
+
+        [Fact]
+        public void GetOrders_SetsReqiestVerbToGet()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.VerifySet(r => r.Verb = HttpVerb.Get);
+        }
+
+        [Fact]
+        public void GetOrders_SetsUriToOrdersEndPoint()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.VerifySet(r => r.Uri = new Uri("https://api.channeladvisor.com/v1/Orders"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsFilterVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            var start = DateTime.UtcNow;
+
+            testObject.GetOrders(start, "token");
+
+            submitter.Verify(s => s.Variables.Add("filter", $"CreatedDateUtc gt {start:s}"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsOrderByVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("orderby", "orderby=CreatedDateUtc desc"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsAccesstokenVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("access_token", "token"));
         }
 
         public void Dispose()
