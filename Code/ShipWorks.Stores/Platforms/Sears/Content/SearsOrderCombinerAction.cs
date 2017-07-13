@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Sears.Content
                 .Select(x => new SearsOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    //CustomOrderIdentifier = x.CustomOrderIdentifier
+                    PoNumber = x.PoNumber
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
