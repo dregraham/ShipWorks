@@ -2,6 +2,7 @@
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
@@ -15,7 +16,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly AutoMock mock;
         private readonly Mock<IHttpVariableRequestSubmitter> submitter;
         private readonly Mock<IApiLogEntry> logger;
-        private readonly Mock<IHttpResponseReader> responseReader;
 
         private readonly string getTokenResult = @"{
                     ""access_token"": ""atoken"",
@@ -37,26 +37,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 .Returns(logger.Object);
             mock.Provide(logFactory.Object);
 
-            responseReader = mock.CreateMock<IHttpResponseReader>();
+            var responseReader = mock.CreateMock<IHttpResponseReader>();
             submitter.Setup(s => s.GetResponse()).Returns(responseReader);
-            
-            responseReader.Setup(r => r.ReadResult()).Returns(getTokenResult);
-        }
 
-        [Fact]
-        public void AuthorizeUrl_IsExpectedUrl()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            Assert.Equal(
-                @"https://api.channeladvisor.com/oauth2/authorize?client_id=wx76dgzjcwlfy1ck3nb8oke7ql2ukv05&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri=https:%2F%2Fwww.interapptive.com%2Fchanneladvisor%2Fsubscribe.php",
-                testObject.AuthorizeUrl.ToString());
+            responseReader.Setup(r => r.ReadResult()).Returns(getTokenResult);
         }
 
         [Fact]
         public void GetRefreshToken_UsesExpectedEndpoint()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
             submitter.VerifySet(s => s.Uri =
                 It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/oauth2/token"));
         }
@@ -65,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_SetsVerbToPost()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
             submitter.VerifySet(s => s.Verb = HttpVerb.Post);
         }
 
@@ -73,17 +64,23 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_SetsContentTypeToWwwForm()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
             submitter.VerifySet(s => s.ContentType = "application/x-www-form-urlencoded");
         }
 
         [Fact]
         public void GetRefreshToken_SetsCorrectAuthorization()
         {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            var encryptionProvider = mock.Mock<IEncryptionProvider>();
+            encryptionProvider.Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=")).Returns("Preb8E42ckWZZpFHh6OV2w");
+            mock.Mock<IEncryptionProviderFactory>()
+                .Setup(f => f.CreateChannelAdvisorEncryptionProvider())
+                .Returns(encryptionProvider);
 
-            submitter.Verify(s => s.Headers.Add("Authorization", 
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetRefreshToken("blah", "https%3A%2F%2Fwww.interapptive.com%2Fchanneladvisor%2Fsubscribe.php");
+
+            submitter.Verify(s => s.Headers.Add("Authorization",
                 "Basic d3g3NmRnempjd2xmeTFjazNuYjhva2U3cWwydWt2MDU6UHJlYjhFNDJja1daWnBGSGg2T1Yydw=="));
         }
 
@@ -93,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_VariablesSetCorrectly(string variableName, string value)
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
 
             submitter.Verify(s => s.Variables.Add(variableName, value));
         }
@@ -102,7 +99,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_RedirectUriSetCorrectly()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "https%3A%2F%2Fwww.interapptive.com%2Fchanneladvisor%2Fsubscribe.php");
 
             submitter.Verify(s => s.Variables.Add(
                 It.Is<HttpVariable>(v => v.Name == "redirect_uri" &&
@@ -114,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_RequestIsLogged()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
 
             logger.Verify(l=>l.LogRequest(submitter.Object));
         }
@@ -123,7 +120,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_ResponseIsLogged()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetRefreshToken("blah");
+            testObject.GetRefreshToken("blah", "blah");
 
             logger.Verify(l => l.LogResponse(getTokenResult, "json"));
         }
@@ -132,7 +129,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_ReturnsRefreshToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            string refreshToken = testObject.GetRefreshToken("blah");
+            string refreshToken = testObject.GetRefreshToken("blah", "blah");
 
             Assert.Equal("rtoken", refreshToken);
         }

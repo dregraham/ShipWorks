@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         event PropertyChangedEventHandler PropertyChanged;
 
-
         /// <summary>
         /// Loads the specified store.
         /// </summary>

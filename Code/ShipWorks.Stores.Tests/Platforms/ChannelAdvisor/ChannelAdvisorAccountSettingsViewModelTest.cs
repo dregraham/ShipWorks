@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
@@ -31,9 +32,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("refreshToken");
-            var store = new ChannelAdvisorStoreEntity();
+            var store = new ChannelAdvisorStoreEntity {StoreTypeCode = StoreTypeCode.ChannelAdvisor};
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
@@ -48,15 +49,32 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("refreshToken");
-            var store = new ChannelAdvisorStoreEntity();
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
             testObject.Save(store);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetRefreshToken("accessCode"), Times.Once);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetRefreshToken("accessCode", It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void Save_DelegatesToWebClientWithRedirectUrl()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns("refreshToken");
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store);
+
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php")), Times.Once);
         }
 
         [Fact]
@@ -65,9 +83,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("refreshToken");
-            var store = new ChannelAdvisorStoreEntity();
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
@@ -82,18 +100,18 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("refreshToken");
-            var store = new ChannelAdvisorStoreEntity();
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
             testObject.Save(store);
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             testObject.Save(store);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -102,19 +120,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
 
             mock.Mock<IChannelAdvisorRestClient>()
-                .Setup(c => c.GetRefreshToken(It.IsAny<string>()))
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("refreshToken");
-            var store = new ChannelAdvisorStoreEntity();
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
             testObject.Save(store);
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Once);
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             testObject.AccessCode = "accessCode2";
             testObject.Save(store);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>()), Times.Exactly(2));
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(2));
         }
 
         public void Dispose()
