@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
@@ -12,6 +13,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
@@ -135,8 +137,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create the custom downloader
         /// </summary>
-        public override StoreDownloader CreateDownloader() =>
-           new ChannelAdvisorDownloader(Store);
+        public override StoreDownloader CreateDownloader()
+        {
+            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
+
+            if (string.IsNullOrWhiteSpace(caStore.RefreshToken))
+            {
+                return new ChannelAdvisorDownloader(Store);
+            }
+
+            return IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelAdvisorRestDownloader>(
+                new TypedParameter(typeof(StoreEntity), Store)) as StoreDownloader;
+        }
+           
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
