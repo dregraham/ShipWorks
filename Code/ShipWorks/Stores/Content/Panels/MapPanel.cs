@@ -329,7 +329,7 @@ namespace ShipWorks.Stores.Content.Panels
         private async Task<GoogleResponse> GetImageFromGoogle(PersonAdapter person, Size size, string hash)
         {
             GoogleResponse response;
-            response = isPanelShown || Visible ? 
+            response = ShouldLoadImageFromGoogle() ? 
                 await LoadImageFromGoogle(person, size) : 
                 new GoogleResponse();
 
@@ -341,6 +341,40 @@ namespace ShipWorks.Stores.Content.Panels
             response.Address = person;
 
             return response;
+        }
+
+        /// <summary>
+        /// Returns true if we know the panel is visible.
+        /// </summary>
+        private bool ShouldLoadImageFromGoogle()
+        {
+            if (isPanelShown)
+            {
+                return true;
+            }
+
+            DockControl dockControl = GetDockControl(this);
+
+            return (dockControl?.DockSituation ?? DockSituation.None) != DockSituation.None;
+        }
+
+        /// <summary>
+        /// Gets the dock control.
+        /// </summary>
+        private DockControl GetDockControl(Control control)
+        {
+            if (control == null)
+            {
+                return null;
+            }
+
+            DockControl dockControl = control as DockControl;
+            if (dockControl != null)
+            {
+                return dockControl;
+            }
+
+            return GetDockControl(control.Parent);
         }
 
         /// <summary>
