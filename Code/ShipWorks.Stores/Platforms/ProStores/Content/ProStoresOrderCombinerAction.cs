@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.Content
                 .Select(x => new ProStoresOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    //CustomOrderIdentifier = x.CustomOrderIdentifier
+                    ConfirmationNumber = x.ConfirmationNumber
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
