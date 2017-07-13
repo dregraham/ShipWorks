@@ -3127,6 +3127,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AmazonApiRegion);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.RefreshToken field instance</summary>
+		public static EntityField2 RefreshToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.RefreshToken);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>

@@ -1354,6 +1354,8 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. </summary>
 		AmazonApiRegion,
+		///<summary>RefreshToken. </summary>
+		RefreshToken,
 		/// <summary></summary>
 		AmountOfFields
 	}

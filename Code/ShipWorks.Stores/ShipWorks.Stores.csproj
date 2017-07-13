@@ -148,6 +148,8 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestClient.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
@@ -174,6 +176,8 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOAuthResponse.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
