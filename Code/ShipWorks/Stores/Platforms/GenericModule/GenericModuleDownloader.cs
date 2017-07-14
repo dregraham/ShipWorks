@@ -43,13 +43,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Convenience property for quick access to the specific entity
         /// </summary>
-        protected GenericModuleStoreEntity GenericModuleStoreEntity
-        {
-            get
-            {
-                return (GenericModuleStoreEntity) Store;
-            }
-        }
+        protected GenericModuleStoreEntity GenericModuleStoreEntity => (GenericModuleStoreEntity) Store;
 
         /// <summary>
         /// Begin order download

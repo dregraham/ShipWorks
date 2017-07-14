@@ -181,12 +181,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get the number of orders from Etsy between startDate and endDate
         /// </summary>
-        public int GetOrderCount(DateTime startDate, DateTime endDate)
+        public int GetOrderCount(Range<DateTime> dateRange)
         {
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
-            oAuth.OtherParameters.Add("min_created", DateTimeUtility.ToUnixTimestamp(startDate).ToString());
-            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
+            oAuth.OtherParameters.Add("min_created", DateTimeUtility.ToUnixTimestamp(dateRange.Start).ToString());
+            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(dateRange.End).ToString());
             oAuth.OtherParameters.Add("limit", "1");
 
             string response = ProcessRequest(oAuth, "GetOrderCount");
@@ -199,13 +199,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get's orders created after startDate.
         /// </summary>
-        public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int limit, int offset)
+        public List<JToken> GetOrders(Range<DateTime> dateRange, int limit, int offset)
         {
-            double startDateStamp = DateTimeUtility.ToUnixTimestamp(startDate);
+            double startDateStamp = DateTimeUtility.ToUnixTimestamp(dateRange.Start);
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
             oAuth.OtherParameters.Add("min_created", startDateStamp.ToString());
-            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
+            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(dateRange.End).ToString());
             oAuth.OtherParameters.Add("includes", EtsyEndpoints.OrderIncludes);
             oAuth.OtherParameters.Add("limit", limit.ToString());
             oAuth.OtherParameters.Add("offset", offset.ToString());

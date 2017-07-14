@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Keep going until no more to download
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;

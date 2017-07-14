@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void UpdatePaymentInformationBatch(IEnumerable<EtsyOrderEntity> pageOfOrderNumbers)
         {
-            //format the order numbers into a comma seperated list
+            //format the order numbers into a comma separated list
             string formattedOrderNumbers = string.Join(",", pageOfOrderNumbers.Select(x => x.OrderNumber.ToString()));
 
             var orderDetails = webClient.GetPaymentInformation(formattedOrderNumbers);
@@ -209,13 +209,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private bool DownloadNextOrdersPage()
         {
-            DateTime startDate;
-            DateTime endDate;
             bool isMoreToProcess = true;
 
-            GetDateRange(out startDate, out endDate);
+            Range<DateTime> dateRange = GetDateRange();
 
-            int offset = GetOffset(startDate, endDate);
+            int offset = GetOffset(dateRange);
 
             // 'GetOffset' sets the total count.  Should probably be refactored
             if (totalCount == 0)
@@ -224,7 +222,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 return false;
             }
 
-            List<JToken> orders = webClient.GetOrders(startDate, endDate, limit, offset);
+            List<JToken> orders = webClient.GetOrders(dateRange, limit, offset);
 
             // If any orders were downloaded we have to import them
             if (orders.Count > 0)
@@ -245,33 +243,31 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Gets the date range for the next batch of orders.
         /// </summary>
-        private void GetDateRange(out DateTime startDate, out DateTime endDate)
+        private Range<DateTime> GetDateRange()
         {
             // Gets the current time from Etsy and subtracts 5 minutes.
-            endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
+            DateTime endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
 
             //The most recent order date.
             DateTime? calculatedStartDate = GetOrderDateStartingPoint();
 
             if (calculatedStartDate.HasValue)
             {
-                startDate = calculatedStartDate.Value;
+                return calculatedStartDate.Value.To(endDate);
             }
-            else
-            {
-                //They must have chosen all orders. Start at the beginning of time for store.
-                startDate = webClient.GetStoreCreationDate();
-            }
+
+            //They must have chosen all orders. Start at the beginning of time for store.
+            return webClient.GetStoreCreationDate().To(endDate);
         }
 
         /// <summary>
         /// Get the offset to use for an Etsy Query.
         /// (If there are 1000 orders and the limit is 100, 900 will be returned. When offset is used, the 100 oldest orders will download)
         /// </summary>
-        private int GetOffset(DateTime startDate, DateTime endDate)
+        private int GetOffset(Range<DateTime> dateRange)
         {
             //Gets number of orders between dates.
-            int currentCount = webClient.GetOrderCount(startDate, endDate);
+            int currentCount = webClient.GetOrderCount(dateRange);
 
             //If totalCount hasn't been set, this is the first time through. Set it.
             if (totalCount == 0)
