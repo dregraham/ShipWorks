@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
+﻿using System.Reflection;
+
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
 {
     /// <summary>
     /// Fulfillment delivery status enum for ChannelAdvisor
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ChannelAdvisorFulfillmentDeliveryStatus
     {
         NoChange = 1,
