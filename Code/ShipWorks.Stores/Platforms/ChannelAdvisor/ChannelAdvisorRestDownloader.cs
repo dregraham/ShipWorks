@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly IChannelAdvisorRestClient restClient;
         private readonly string refreshToken;
-        private ChannelAdvisorStoreEntity caStore;
+        private readonly ChannelAdvisorStoreEntity caStore;
         private readonly ISqlAdapterRetry sqlAdapter;
 
         /// <summary>
