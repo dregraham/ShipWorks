@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Content
         private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, IEnumerable<IOrderEntity> orders,
             ProgressUpdater progress, ISqlAdapter sqlAdapter)
         {
-            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, sqlAdapter);
+            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, orders, sqlAdapter);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create the combined order from the surviving order id
         /// </summary>
-        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, ISqlAdapter sqlAdapter)
+        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             OrderEntity combinedOrder = await orderManager.LoadOrderAsync(survivingOrderID, sqlAdapter).ConfigureAwait(false);
 
@@ -110,6 +110,10 @@ namespace ShipWorks.Stores.Content
             combinedOrder.OrderID = 0;
             combinedOrder.ApplyOrderNumberPostfix("-C");
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
+            combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
+            combinedOrder.RollupItemCount = 0;
+            combinedOrder.RollupItemTotalWeight = 0;
+            combinedOrder.RollupNoteCount = 0;
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {

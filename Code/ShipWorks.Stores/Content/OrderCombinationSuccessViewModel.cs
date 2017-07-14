@@ -29,6 +29,9 @@ namespace ShipWorks.Stores.Content
         private UserConditionalNotificationType notificationType;
         readonly IMessageHelper messageHelper;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderCombinationSuccessViewModel(IOrderCombinationSuccessDialog dialog, ICurrentUserSettings currentUserSettings, IMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
@@ -39,6 +42,7 @@ namespace ShipWorks.Stores.Content
 
             Dismiss = new RelayCommand(() => DismissAction());
         }
+
         /// <summary>
         /// Notify of changing properties
         /// </summary>
