@@ -25,7 +25,8 @@ namespace ShipWorks.Stores.Content.OrderCombinerActions
                     OrderID = combinedOrder.OrderID,
                     StoreID = x.StoreID,
                     OrderNumber = x.OrderNumber,
-                    OrderNumberComplete = x.OrderNumberComplete
+                    OrderNumberComplete = x.OrderNumberComplete,
+                    IsManual = x.IsManual
                 });
         }
     }

@@ -15832,6 +15832,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderNumberComplete);}
 		}
+		/// <summary>Creates a new OrderSearchEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.IsManual);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OtherProfileEntity</summary>

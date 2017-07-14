@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Communication
@@ -23,5 +19,11 @@ namespace ShipWorks.Stores.Communication
         /// will be used to calculate the initial number of days back to.
         /// </summary>
         DateTime? OrderDate(IStoreEntity store);
+
+        /// <summary>
+        /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
+        /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
+        /// </summary>
+        long OrderNumber(IStoreEntity store);
     }
 }

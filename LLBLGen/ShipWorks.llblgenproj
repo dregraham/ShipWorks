@@ -1862,6 +1862,7 @@
       </EntityDefinition>
       <EntityDefinition Name="OrderSearch" ObjectID="e9ae11b7-a1c0-42a9-926b-d9c3ca4b1ddd">
         <Fields>
+          <Field Name="IsManual" Type="bool" FieldIndex="5" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OrderNumber" Type="long" Precision="19" FieldIndex="3" />
           <Field Name="OrderNumberComplete" Type="string" MaxLength="50" FieldIndex="4" />
@@ -3960,7 +3961,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-11T15:40:29.0068395Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-14T14:56:20.9995845Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6734,6 +6735,7 @@
                     <Field Name="StoreID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="OrderNumber" Ordinal="4" DbType="0" Precision="19" />
                     <Field Name="OrderNumberComplete" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="IsManual" Ordinal="6" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="OtherProfile">
@@ -11351,6 +11353,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":OrderSearch" TargetName="ShipWorksLocal:dbo:OrderSearch">
           <FieldMappings>
+            <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OrderNumber" TargetFieldName="OrderNumber" />
             <FieldMapping FieldName="OrderNumberComplete" TargetFieldName="OrderNumberComplete" />

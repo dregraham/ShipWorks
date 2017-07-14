@@ -1,4 +1,5 @@
-﻿PRINT N'Altering [dbo].[Order]'
+﻿
+PRINT N'Altering [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD
 [CombineSplitStatus] [int] NOT NULL CONSTRAINT [DF_Order_CombineSplitStatus] DEFAULT ((0))
@@ -20,7 +21,8 @@ CREATE TABLE [dbo].[OrderSearch]
 [OrderID] [bigint] NOT NULL,
 [StoreID] [bigint] NOT NULL,
 [OrderNumber] [bigint] NOT NULL,
-[OrderNumberComplete] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[OrderNumberComplete] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsManual] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderSearch] on [dbo].[OrderSearch]'

@@ -2251,12 +2251,13 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderSearchEntity's mappings</summary>
 		private void InitOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("OrderSearchEntity", @"ShipWorksLocal", @"dbo", "OrderSearch", 5, 0);
+			this.AddElementMapping("OrderSearchEntity", @"ShipWorksLocal", @"dbo", "OrderSearch", 6, 0);
 			this.AddElementFieldMapping("OrderSearchEntity", "OrderSearchID", "OrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("OrderSearchEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 			this.AddElementFieldMapping("OrderSearchEntity", "OrderNumber", "OrderNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 			this.AddElementFieldMapping("OrderSearchEntity", "OrderNumberComplete", "OrderNumberComplete", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("OrderSearchEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 		}
 
 		/// <summary>Inits OtherProfileEntity's mappings</summary>

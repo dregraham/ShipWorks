@@ -6812,6 +6812,8 @@ namespace ShipWorks.Data.Model
 		OrderNumber,
 		///<summary>OrderNumberComplete. </summary>
 		OrderNumberComplete,
+		///<summary>IsManual. </summary>
+		IsManual,
 		/// <summary></summary>
 		AmountOfFields
 	}

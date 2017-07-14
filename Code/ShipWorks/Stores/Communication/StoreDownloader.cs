@@ -40,15 +40,8 @@ namespace ShipWorks.Stores.Communication
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
 
-        StoreEntity store;
-        IProgressReporter progress;
         long downloadLogID;
         protected DbConnection connection;
-
-        StoreType storeType;
-
-        int quantitySaved = 0;
-        int quantityNew = 0;
 
         /// <summary>
         /// Constructor
@@ -67,8 +60,8 @@ namespace ShipWorks.Stores.Communication
                 throw new ArgumentNullException(nameof(store));
             }
 
-            this.store = store;
-            this.storeType = storeType;
+            Store = store;
+            StoreType = storeType;
         }
 
         /// <summary>
@@ -84,55 +77,33 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// The store the downloader downloads from
         /// </summary>
-        public StoreEntity Store
-        {
-            get { return store; }
-        }
+        public StoreEntity Store { get; private set; }
 
         /// <summary>
         /// The StoreType instance for the store
         /// </summary>
-        protected StoreType StoreType
-        {
-            get { return storeType; }
-        }
+        protected StoreType StoreType { get; private set; }
 
         /// <summary>
         /// Gets the address validation setting.
         /// </summary>
-        private AddressValidationStoreSettingType addressValidationSetting
-        {
-            get
-            {
-                AddressValidationStoreSettingType storeSetting =
-                    ((AddressValidationStoreSettingType) store.AddressValidationSetting);
-                return storeSetting;
-            }
-        }
+        private AddressValidationStoreSettingType addressValidationSetting =>
+            (AddressValidationStoreSettingType) Store.AddressValidationSetting;
 
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.
         /// </summary>
-        public IProgressReporter Progress
-        {
-            get { return progress; }
-        }
+        public IProgressReporter Progress { get; private set; }
 
         /// <summary>
         /// How many orders have been saved so far.  Utility function intended for progress calculation convenience.
         /// </summary>
-        public int QuantitySaved
-        {
-            get { return quantitySaved; }
-        }
+        public int QuantitySaved { get; private set; }
 
         /// <summary>
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
-        public int QuantityNew
-        {
-            get { return quantityNew; }
-        }
+        public int QuantityNew { get; private set; }
 
         /// <summary>
         /// Download data from the configured store.
@@ -144,12 +115,12 @@ namespace ShipWorks.Stores.Communication
                 throw new ArgumentNullException("progress");
             }
 
-            if (this.progress != null)
+            if (Progress != null)
             {
                 throw new InvalidOperationException("Download should only be called once per instance.");
             }
 
-            this.progress = progress;
+            Progress = progress;
             this.downloadLogID = downloadLogID;
             this.connection = connection;
 
@@ -179,7 +150,7 @@ namespace ShipWorks.Stores.Communication
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
-                return startingPoint.OnlineLastModified(store);
+                return startingPoint.OnlineLastModified(Store);
             }
         }
 
@@ -192,7 +163,7 @@ namespace ShipWorks.Stores.Communication
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
-                return startingPoint.OrderDate(store);
+                return startingPoint.OrderDate(Store);
             }
         }
 
@@ -200,41 +171,12 @@ namespace ShipWorks.Stores.Communication
         /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>
-        /// <returns></returns>
         protected long GetOrderNumberStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
-
-                long orderNumber;
-
-                if (result is DBNull)
-                {
-                    if (store.InitialDownloadOrder != null)
-                    {
-                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
-                        // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
-                        // to back off by one to include it.
-                        orderNumber = Math.Max(0, store.InitialDownloadOrder.Value - 1);
-                        log.InfoFormat("Max(OrderNumber) - applying initial download policy.");
-                    }
-                    else
-                    {
-                        orderNumber = 0;
-                    }
-                }
-                else
-                {
-                    orderNumber = (long) result;
-                }
-
-                log.InfoFormat("MAX(OrderNumber) = {0}", orderNumber);
-
-                return orderNumber;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return startingPoint.OrderNumber(Store);
             }
         }
 
@@ -242,7 +184,7 @@ namespace ShipWorks.Stores.Communication
         /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
         /// order numbers for ShipWorks, such as Amazon and eBay.
         /// </summary>
-        protected long GetNextOrderNumber() => OrderUtility.GetNextOrderNumber(store.StoreID);
+        protected long GetNextOrderNumber() => OrderUtility.GetNextOrderNumber(Store.StoreID);
 
         /// <summary>
         /// Instantiates the order identified by the given identifier.  If no order exists in the database,
@@ -296,10 +238,10 @@ namespace ShipWorks.Stores.Communication
             log.InfoFormat("{0} not found, creating", orderIdentifier);
 
             // Create a new order
-            OrderEntity order = storeType.CreateOrder();
+            OrderEntity order = StoreType.CreateOrder();
 
             // Its for this store
-            order.StoreID = store.StoreID;
+            order.StoreID = Store.StoreID;
 
             // Apply the identifier values to the order
             orderIdentifier.ApplyTo(order);
@@ -347,7 +289,7 @@ namespace ShipWorks.Stores.Communication
                     new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
                 // We use a prototype approach to determine what to search for
-                OrderEntity prototype = storeType.CreateOrder();
+                OrderEntity prototype = StoreType.CreateOrder();
                 prototype.IsNew = false;
                 prototype.RollbackChanges();
                 orderIdentifier.ApplyTo(prototype);
@@ -380,7 +322,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected OrderItemEntity InstantiateOrderItem(OrderEntity order)
         {
-            OrderItemEntity item = storeType.CreateOrderItemInstance();
+            OrderItemEntity item = StoreType.CreateOrderItemInstance();
             item.Order = order;
 
             // Downloaded items are assumed not manual
@@ -397,7 +339,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected OrderItemAttributeEntity InstantiateOrderItemAttribute(OrderItemEntity item)
         {
-            OrderItemAttributeEntity attribute = storeType.CreateOrderItemAttributeInstance();
+            OrderItemAttributeEntity attribute = StoreType.CreateOrderItemAttributeInstance();
             attribute.OrderItem = item;
 
             // downloaded attributes are not manual
@@ -530,8 +472,8 @@ namespace ShipWorks.Stores.Communication
 
             ConfigurationEntity config = ConfigurationData.Fetch();
 
-            string orderStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.Order).StatusText;
-            string itemStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.OrderItem).StatusText;
+            string orderStatusText = StatusPresetManager.GetStoreDefault(Store, StatusPresetTarget.Order).StatusText;
+            string itemStatusText = StatusPresetManager.GetStoreDefault(Store, StatusPresetTarget.OrderItem).StatusText;
 
             bool orderStatusHasTokens = TemplateTokenProcessor.HasTokens(orderStatusText);
             bool itemStatusHasTokens = TemplateTokenProcessor.HasTokens(itemStatusText);
@@ -559,7 +501,7 @@ namespace ShipWorks.Stores.Communication
             }
 
             // We have to get this order's identifier
-            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(order);
+            OrderIdentifier orderIdentifier = StoreType.CreateOrderIdentifier(order);
 
             // Now we have to see if it was new
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
@@ -576,7 +518,7 @@ namespace ShipWorks.Stores.Communication
                     {
                         try
                         {
-                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                            order.CustomerID = CustomerProvider.AcquireCustomer(order, StoreType, adapter);
                         }
                         catch (CustomerAcquisitionLockException)
                         {
@@ -721,11 +663,11 @@ namespace ShipWorks.Stores.Communication
                 }
             }
 
-            quantitySaved++;
+            QuantitySaved++;
 
             if (!alreadyDownloaded)
             {
-                quantityNew++;
+                QuantityNew++;
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
@@ -946,7 +888,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private bool HasDownloadHistory(OrderIdentifier orderIdentifier)
         {
-            RelationPredicateBucket bucket = new RelationPredicateBucket(DownloadFields.StoreID == store.StoreID);
+            RelationPredicateBucket bucket = new RelationPredicateBucket(DownloadFields.StoreID == Store.StoreID);
             bucket.Relations.Add(DownloadDetailEntity.Relations.DownloadEntityUsingDownloadID);
 
             // We make a prototype history that will allow us to determinate what to search for

@@ -394,6 +394,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderNumberComplete", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("IsManual", fieldHashtable);
 		}
 		#endregion
 
@@ -580,6 +582,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderSearchFieldIndex.OrderNumberComplete, true); }
 			set	{ SetValue((int)OrderSearchFieldIndex.OrderNumberComplete, value); }
+		}
+
+		/// <summary> The IsManual property of the Entity OrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderSearch"."IsManual"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean IsManual
+		{
+			get { return (System.Boolean)GetValue((int)OrderSearchFieldIndex.IsManual, true); }
+			set	{ SetValue((int)OrderSearchFieldIndex.IsManual, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

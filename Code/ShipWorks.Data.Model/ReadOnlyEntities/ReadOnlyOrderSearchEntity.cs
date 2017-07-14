@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             StoreID = source.StoreID;
             OrderNumber = source.OrderNumber;
             OrderNumberComplete = source.OrderNumberComplete;
+            IsManual = source.IsManual;
             
             
             Order = source.Order?.AsReadOnly(objectMap);
@@ -81,6 +82,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String OrderNumberComplete { get; }
+        /// <summary> The IsManual property of the Entity OrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderSearch"."IsManual"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean IsManual { get; }
         
         
         public IOrderEntity Order { get; }
