@@ -180,6 +180,9 @@ namespace ShipWorks.Stores.Content.Panels
                 .OfType<OrderSelectionChangingMessage>()
                 .Subscribe(x =>
                 {
+                    MethodConditions.EnsureArgumentIsNotNull(googleImage, "googleImage");
+                    MethodConditions.EnsureArgumentIsNotNull(errorLabel, "ErrorLabel");
+
                     googleImage.Tag = null;
                     googleImage.Visible = false;
                     errorLabel.Text = string.Empty;
@@ -192,7 +195,6 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void BuildOrderSelectionChangedHandler()
         {
-            
             Messenger.Current
                 .OfType<OrderSelectionChangedMessage>()
                 .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
@@ -317,7 +319,7 @@ namespace ShipWorks.Stores.Content.Panels
             string hash = GetAddressHash(person, adjustedSize);
 
             return imageCache[hash] ??
-                await GetImageFromGoogle(person, adjustedSize, hash);
+                await GetImage(person, adjustedSize, hash);
         }
 
         /// <summary>
@@ -325,6 +327,8 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private static string GetAddressHash(PersonAdapter person, Size size)
         {
+            MethodConditions.EnsureArgumentIsNotNull(person, "person");
+            
             string hashValue = string.Join("|", person.Street1, person.City,
                 person.StateProvCode, size.Width.ToString(), size.Height.ToString());
             return new StringHash().Hash(hashValue, "somesalt");
@@ -333,7 +337,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Get the requested image from Google
         /// </summary>
-        private async Task<GoogleResponse> GetImageFromGoogle(PersonAdapter person, Size size, string hash)
+        private async Task<GoogleResponse> GetImage(PersonAdapter person, Size size, string hash)
         {
             GoogleResponse response;
             response = ShouldLoadImageFromGoogle() ? 
@@ -389,6 +393,8 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private async Task<GoogleResponse> LoadImageFromGoogle(PersonAdapter addressAdapter, Size size)
         {
+            MethodConditions.EnsureArgumentIsNotNull(addressAdapter, "addressAdapter");
+
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.GoogleMaps, MapType.ToString());
             try
             {
@@ -419,7 +425,7 @@ namespace ShipWorks.Stores.Content.Panels
                 // and we couldn't track it down...
 
                 logEntry.LogResponse(ex);
-
+                log.Error(ex);
                 return new GoogleResponse
                 {
                     IsThrottled = (((ex as WebException)?.Response as HttpWebResponse)?.StatusCode ?? HttpStatusCode.Accepted) == HttpStatusCode.Forbidden
