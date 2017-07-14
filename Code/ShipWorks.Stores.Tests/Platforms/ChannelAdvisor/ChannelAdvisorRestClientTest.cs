@@ -260,6 +260,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Equal("atoken", refreshToken);
         }
 
+        [Fact]
+        public void GetProfiles_UsesProfilesEndpoint()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetProfiles("blah");
+            submitter.VerifySet(s => s.Uri =
+                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Profiles"));
+        }
+
         public void Dispose()
         {
             mock.Dispose();
