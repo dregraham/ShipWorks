@@ -43,6 +43,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             
             while (true)
             {
+                
                 ChannelAdvisorOrderResult result = restClient.GetOrders(start, token);
                 
                 if (result.Orders.None())

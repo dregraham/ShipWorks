@@ -24,6 +24,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken);
 
+        /// <summary>
+        /// Get the profile
+        /// </summary>
+        /// <param name="accessToken"></param>
+        ChannelAdvisorProfilesResponse GetProfiles(string accessToken);
+
 
     }
 }

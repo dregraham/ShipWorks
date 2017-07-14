@@ -159,6 +159,7 @@
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemAdjustment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemBundleComponents.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderResult.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProfilesResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorPromotion.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipRequest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Enums\ChannelAdvisorAdjustmentReason.cs" />

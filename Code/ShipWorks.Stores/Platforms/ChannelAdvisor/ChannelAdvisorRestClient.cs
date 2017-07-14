@@ -5,7 +5,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -19,10 +18,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
+
+        private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
+
         public const string EndpointBase = "https://api.channeladvisor.com";
         private readonly string tokenEndpoint = $"{EndpointBase}/oauth2/token";
         private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
-        private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
+        private readonly string profilesEndpoint = $"{EndpointBase}/v1/Profiles";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -44,9 +46,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public string GetRefreshToken(string code, string redirectUrl)
         {
-            IHttpVariableRequestSubmitter submitter = submitterFactory();
-            submitter.Uri = new Uri(tokenEndpoint);
-            submitter.Verb = HttpVerb.Post;
+            IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
+
             submitter.Variables.Add("grant_type", "authorization_code");
             submitter.Variables.Add("code", code);
             submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
@@ -67,9 +68,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public string GetAccessToken(string refreshToken)
         {
-            IHttpVariableRequestSubmitter submitter = submitterFactory();
-            submitter.Uri = new Uri(tokenEndpoint);
-            submitter.Verb = HttpVerb.Post;
+            IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
+
             submitter.Variables.Add("grant_type", "refresh_token");
             submitter.Variables.Add("refresh_token", refreshToken);
 
@@ -85,13 +85,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Get profile info for the given token
+        /// </summary>
+        public ChannelAdvisorProfilesResponse GetProfiles(string accessToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", accessToken);
+
+            return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles");
+        }
+
+        /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken)
         {
-            IHttpVariableRequestSubmitter submitter = submitterFactory();
-            submitter.Uri = new Uri(ordersEndpoint);
-            submitter.Verb = HttpVerb.Get;
+            IHttpVariableRequestSubmitter submitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", accessToken);
             submitter.Variables.Add("filter", $"CreatedDateUtc gt {start:s}");
@@ -101,13 +111,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Create a request to channel advisor
+        /// </summary>
+        private IHttpVariableRequestSubmitter CreateRequest(string endpoint, HttpVerb method)
+        {
+            IHttpVariableRequestSubmitter submitter = submitterFactory();
+            submitter.Uri = new Uri(endpoint);
+            submitter.Verb = method;
+
+            submitter.ContentType = "application/x-www-form-urlencoded";
+            AuthenticateRequest(submitter);
+
+            return submitter;
+        }
+
+        /// <summary>
         /// Processes the request.
         /// </summary>
         private T ProcessRequest<T>(IHttpRequestSubmitter request, string action)
         {
-            request.ContentType = "application/x-www-form-urlencoded";
-            AuthenticateRequest(request);
-
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, action);
             apiLogEntry.LogRequest(request);
 

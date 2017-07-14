@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
@@ -100,9 +102,12 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             {
                 try
                 {
-                    string token = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl);
+                    string refreshToken = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl);
                     store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
-                        .Encrypt(token);
+                        .Encrypt(refreshToken);
+
+                    UpdateStoreInfo(store, refreshToken);
+
                     accessCodeForSavedRefreshToken = AccessCode;
                     return true;
                 }
@@ -116,6 +121,19 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Update the store info from ChannelAdvisor
+        /// </summary>
+        private void UpdateStoreInfo(ChannelAdvisorStoreEntity store, string refreshToken)
+        {
+            string accessToken = webClient.GetAccessToken(refreshToken);
+            ChannelAdvisorProfile profile = webClient.GetProfiles(accessToken)?.Profiles.First();
+
+            store.ProfileID = profile?.ProfileId ?? 0;
+            store.StoreName = profile?.AccountName ?? string.Empty;
+            store.Company = profile?.CompanyName ?? string.Empty;
         }
 
         /// <summary>
