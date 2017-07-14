@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -133,12 +134,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 orderElementFactory.CreateItemAttribute(itemToSave, attribute.Name, attribute.Value, 0, false);
             }
 
-            LoadImages(itemToSave, product, orderElementFactory);
-        }
-
-        private void LoadImages(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product, IOrderElementFactory orderElementFactory)
-        {
-            throw new NotImplementedException();
+            ChannelAdvisorProductImage image = product.Images.FirstOrDefault();
+            itemToSave.Image = image?.Url ?? string.Empty;
+            itemToSave.Thumbnail = itemToSave.Image;
         }
 
         /// <summary>
