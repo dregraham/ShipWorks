@@ -128,6 +128,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Walmart,
 		SellerActive,
 		GeekSeller,
-        UpsLocalRating
+        UpsLocalRating,
+        GoogleMaps
     }
 }

@@ -206,6 +206,15 @@ namespace ShipWorks.ApplicationCore.Logging
             WriteLog(xml, ApiLogCategory.Response);
         }
 
+
+        /// <summary>
+        /// Logs the response.
+        /// </summary>
+        public void LogResponse(byte[] data, string extension)
+        {
+            WriteLog(data, ApiLogCategory.Response, null, extension);
+        }
+
         /// <summary>
         /// Log the API's response to ShipWorks
         /// </summary>

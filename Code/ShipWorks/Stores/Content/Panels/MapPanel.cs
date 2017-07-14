@@ -12,7 +12,9 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -31,16 +33,19 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        private readonly static FilterTarget[] supportedTargets = { FilterTarget.Orders, FilterTarget.Customers };
-        private LruCache<string, GoogleResponse> imageCache = new LruCache<string, GoogleResponse>(100);
+        private static readonly FilterTarget[] supportedTargets = { FilterTarget.Orders, FilterTarget.Customers };
+        private readonly LruCache<string, GoogleResponse> imageCache = new LruCache<string, GoogleResponse>(100);
         private IObserver<PersonAdapter> imageLoadingObserver;
         private bool isPanelShown = false;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapPanel"/> class.
         /// </summary>
         public MapPanel()
         {
+            log = LogManager.GetLogger("MapPanel");
+
             InitializeComponent();
             Load += OnMapPanelLoad;
 
@@ -170,6 +175,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void BuildOrderSelectionChangingHandler()
         {
+            log.Info("In BuildOrderSelectionChangingHandler - Subscribing to OrderSelectionChangingMessage");
             Messenger.Current
                 .OfType<OrderSelectionChangingMessage>()
                 .Subscribe(x =>
@@ -178,6 +184,7 @@ namespace ShipWorks.Stores.Content.Panels
                     googleImage.Visible = false;
                     errorLabel.Text = string.Empty;
                 });
+            log.Info("In BuildOrderSelectionChangingHandler - Subscribed to OrderSelectionChangingMessage");
         }
 
         /// <summary>
@@ -185,6 +192,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void BuildOrderSelectionChangedHandler()
         {
+            
             Messenger.Current
                 .OfType<OrderSelectionChangedMessage>()
                 .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
@@ -296,10 +304,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private async Task<GoogleResponse> GetImage(PersonAdapter person, Size size)
         {
-            if (person == null)
-            {
-                return null;
-            }
+            // This is called via reactive and there is a filter keeps this from beeing called
+            // if person is null, so this should never happen
+            MethodConditions.EnsureArgumentIsNotNull(person, "person");
 
             // We need to keep the requested person adapter around so that got/lost focus can
             // get the image if it hasn't already been downloaded.
@@ -382,30 +389,40 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private async Task<GoogleResponse> LoadImageFromGoogle(PersonAdapter addressAdapter, Size size)
         {
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.GoogleMaps, MapType.ToString());
             try
             {
                 byte[] image;
 
-                using (WebClient imageDownloader = new WebClient())
+                using (WebClient webClient = new WebClient())
                 {
-                    image = await imageDownloader.DownloadDataTaskAsync(string.Format(GetImageUrl(),
+                    string imageUrl = string.Format(GetImageUrl(),
                         addressAdapter.Street1,
                         addressAdapter.City,
                         addressAdapter.StateProvCode,
                         size.Width,
-                        size.Height));
+                        size.Height);
+                    logEntry.LogRequest(imageUrl, "txt");
+                    image = await webClient.DownloadDataTaskAsync(imageUrl);
                 }
+
+                logEntry.LogResponse(image, MapType == MapPanelType.Satellite ? "png" : "jpg");
 
                 using (MemoryStream stream = new MemoryStream(image))
                 {
-                    return new GoogleResponse { ReturnedImage = Image.FromStream(stream) };
+                    return new GoogleResponse {ReturnedImage = Image.FromStream(stream)};
                 }
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
+                // catching general exception because there was an error being thrown in an earlier version
+                // and we couldn't track it down...
+
+                logEntry.LogResponse(ex);
+
                 return new GoogleResponse
                 {
-                    IsThrottled = ((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Forbidden
+                    IsThrottled = (((ex as WebException)?.Response as HttpWebResponse)?.StatusCode ?? HttpStatusCode.Accepted) == HttpStatusCode.Forbidden
                 };
             }
         }
@@ -428,7 +445,6 @@ namespace ShipWorks.Stores.Content.Panels
             return MapType == MapPanelType.Satellite ?
                 "http://maps.google.com/maps/api/staticmap?center={0}+{1}+{2}&zoom=18&size={3}x{4}&maptype=hybrid&sensor=false&markers=size:medium%7Ccolor:blue%7C{0}+{1}+{2}" :
                 "http://maps.googleapis.com/maps/api/streetview?size={3}x{4}&location={0}+{1}+{2}&fov=120&heading=235&pitch=10&sensor=false";
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         }
 
         /// <summary>
