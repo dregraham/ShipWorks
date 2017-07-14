@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -16,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// </summary>
     public static class ChannelAdvisorHelper
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorHelper));
 
         /// <summary>
@@ -35,8 +36,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 default:
                     // ChannelAdvisor passes payment status around as a string, so they can add additional
                     // functionality without having applications update their WSDLs. If we get here, CA
-                    // has added a new status string, so return an unknown status rather than crashing the 
-                    // system not allowing a user to download any orders until we have updated the integration 
+                    // has added a new status string, so return an unknown status rather than crashing the
+                    // system not allowing a user to download any orders until we have updated the integration
                     log.Warn(string.Format("An invalid/unknown value ({0}) was encountered for CA payment status", caPaymentStatus));
                     return ChannelAdvisorPaymentStatus.Unknown;
             }
@@ -59,8 +60,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 default:
                     // ChannelAdvisor passes checkout status around as a string, so they can add additional
                     // functionality without having applications update their WSDLs. If we get here, CA
-                    // has added a new status string, so return an unknown status rather than crashing the 
-                    // system and not allowing a user to download any orders until we have updated the integration 
+                    // has added a new status string, so return an unknown status rather than crashing the
+                    // system and not allowing a user to download any orders until we have updated the integration
                     log.Warn(string.Format("An invalid/unknown value ({0}) was encountered for CA checkout status", caCheckoutStatus));
                     return ChannelAdvisorCheckoutStatus.Unknown;
             }
@@ -81,8 +82,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 default:
                     // ChannelAdvisor passes shipping status around as a string, so they can add additional
                     // functionality without having applications update their WSDLs. If we get here, CA
-                    // has added a new status string, so return an unknown status rather than crashing the 
-                    // system and not allowing a user to download any orders until we have updated the integration 
+                    // has added a new status string, so return an unknown status rather than crashing the
+                    // system and not allowing a user to download any orders until we have updated the integration
                     log.Warn(string.Format("An invalid/unknown value ({0}) was encountered for CA shipping status", caShippingStatus));
                     return ChannelAdvisorShippingStatus.Unknown;
             }
@@ -101,6 +102,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 &&
                    carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 ?
                 ChannelAdvisorIsAmazonPrime.Yes : ChannelAdvisorIsAmazonPrime.No;
+        }
+
+        /// <summary>
+        /// Determine the state/province based on the region from CA.
+        /// </summary>
+        public static string GetStateProvCode(string region)
+        {
+            // CA will send 001 if they don't know what to do with the region.
+            // So we'll just return ""
+            if (region == "001")
+            {
+                return string.Empty;
+            }
+
+            return Geography.GetStateProvCode(region);
+        }
+
+        /// <summary>
+        /// Gets the country code from ChannelAdvisor
+        /// </summary>
+        public static string GetCountryCode(string country)
+        {
+            // in some cases, we've seen CA provide invalid data here
+            return string.CompareOrdinal(country, "-1") == 0 ? string.Empty : country;
         }
     }
 }

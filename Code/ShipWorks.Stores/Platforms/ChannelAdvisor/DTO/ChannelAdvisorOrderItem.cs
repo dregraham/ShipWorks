@@ -57,16 +57,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public int RecyclingFee { get; set; }
 
         [JsonProperty("GiftMessage")]
-        public object GiftMessage { get; set; }
+        public string GiftMessage { get; set; }
 
         [JsonProperty("GiftNotes")]
-        public object GiftNotes { get; set; }
+        public string GiftNotes { get; set; }
 
         [JsonProperty("GiftPrice")]
-        public int GiftPrice { get; set; }
+        public decimal GiftPrice { get; set; }
 
         [JsonProperty("GiftTaxPrice")]
-        public int GiftTaxPrice { get; set; }
+        public decimal GiftTaxPrice { get; set; }
 
         [JsonProperty("IsBundle")]
         public bool IsBundle { get; set; }

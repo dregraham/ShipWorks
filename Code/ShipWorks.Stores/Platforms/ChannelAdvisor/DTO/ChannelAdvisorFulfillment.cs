@@ -19,10 +19,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public int OrderID { get; set; }
 
         [JsonProperty("CreatedDateUtc")]
-        public DateTime CreatedDateUtc { get; set; }
+        public DateTimeOffset CreatedDateUtc { get; set; }
 
         [JsonProperty("UpdatedDateUtc")]
-        public DateTime UpdatedDateUtc { get; set; }
+        public DateTimeOffset UpdatedDateUtc { get; set; }
 
         [JsonProperty("Type")]
         public string Type { get; set; }
@@ -31,25 +31,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string DeliveryStatus { get; set; }
 
         [JsonProperty("TrackingNumber")]
-        public object TrackingNumber { get; set; }
+        public string TrackingNumber { get; set; }
 
         [JsonProperty("ShippingCarrier")]
-        public object ShippingCarrier { get; set; }
+        public string ShippingCarrier { get; set; }
 
         [JsonProperty("ShippingClass")]
-        public object ShippingClass { get; set; }
+        public string ShippingClass { get; set; }
 
         [JsonProperty("DistributionCenterID")]
         public int DistributionCenterID { get; set; }
 
         [JsonProperty("ExternalFulfillmentCenterCode")]
-        public object ExternalFulfillmentCenterCode { get; set; }
+        public string ExternalFulfillmentCenterCode { get; set; }
 
         [JsonProperty("ShippedDateUtc")]
-        public object ShippedDateUtc { get; set; }
+        public DateTimeOffset ShippedDateUtc { get; set; }
 
         [JsonProperty("SellerFulfillmentID")]
-        public object SellerFulfillmentID { get; set; }
+        public string SellerFulfillmentID { get; set; }
 
         [JsonProperty("Items")]
         public IList<ChannelAdvisorFulfillmentItem> Items { get; set; }

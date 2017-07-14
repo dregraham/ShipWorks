@@ -411,6 +411,16 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Create a new payment detail based on the given order, label, and value
+        /// </summary>
+        protected OrderPaymentDetailEntity InstantiateOrderPaymentDetail(OrderEntity order, string label, string value) => new OrderPaymentDetailEntity
+        {
+            Order = order,
+            Label = label,
+            Value = value
+        };
+
+        /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.
         /// </summary>
         protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime? noteDate,

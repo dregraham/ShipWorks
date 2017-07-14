@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         // total download count
         private int totalCount;
 
-        private List<string> itemAttributesToDownload = new List<string>(); 
+        private List<string> itemAttributesToDownload = new List<string>();
 
         /// <summary>
         /// Constructor
@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download data
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -330,7 +330,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         name = "VAT Shipping";
                         type = "VAT";
                         // Skip pulling in 'VAT Shipping'
-                        // it is included in the tax 
+                        // it is included in the tax
                         // see FreshDesk 593454
                         continue;
 
@@ -510,7 +510,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         {
                             orderItem.MPN = matchingItem.MPN;
                         }
-                        
+
                         PopulateItemAttributes(client, orderItem);
                         PopulateImages(client, orderItem);
                     }
@@ -528,7 +528,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 IEnumerable<AttributeInfo> attributes = client.GetInventoryItemAttributes(orderItem.SKU);
 
-                // ItemAttributesEnabled is true so we have at least one attribute to download.  
+                // ItemAttributesEnabled is true so we have at least one attribute to download.
                 // Filter out all the others that don't match.
                 attributes = attributes.Where(a => itemAttributesToDownload.Contains(a.Name.ToUpperInvariant()));
 
@@ -592,24 +592,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             List<OrderLineItemItem> giftItems = caOrder.ShoppingCart.LineItemSKUList.Select(item => item).Where(i => i.GiftMessage.Length > 0).ToList();
             foreach (OrderLineItemItem item in giftItems)
             {
-                string giftMessage = string.Format("Gift messsage for {0}: {1}", item.Title, item.GiftMessage);
+                string giftMessage = string.Format("Gift message for {0}: {1}", item.Title, item.GiftMessage);
                 InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public);
             }
-        }
-
-        /// <summary>
-        /// Determine the state/provice based on the region from CA.  
-        /// </summary>
-        private static string GetStateProvCode(string region)
-        {
-            // CA will send 001 if they don't know what to do with the region.  
-            // So we'll just return ""
-            if (region == "001")
-            {
-                return string.Empty;
-            }
-            
-            return Geography.GetStateProvCode(region);   
         }
 
         /// <summary>
@@ -627,9 +612,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             order.ShipStreet1 = shipping.AddressLine1;
             order.ShipStreet2 = shipping.AddressLine2;
             order.ShipCity = shipping.City;
-            order.ShipStateProvCode = GetStateProvCode(shipping.Region);
+            order.ShipStateProvCode = ChannelAdvisorHelper.GetStateProvCode(shipping.Region);
             order.ShipPostalCode = shipping.PostalCode;
-            order.ShipCountryCode = shipping.CountryCode.Trim();
+            order.ShipCountryCode = ChannelAdvisorHelper.GetCountryCode(shipping.CountryCode.Trim());
             order.ShipPhone = shipping.PhoneNumberDay;
 
             // In ChannelAdvsior if the buyer selected Use Shipping as Billing during checkout,
@@ -655,21 +640,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.BillStreet1 = billing.AddressLine1;
                 order.BillStreet2 = billing.AddressLine2;
                 order.BillCity = billing.City;
-                order.BillStateProvCode = GetStateProvCode(billing.Region);
+                order.BillStateProvCode = ChannelAdvisorHelper.GetStateProvCode(billing.Region);
                 order.BillPostalCode = billing.PostalCode;
-                order.BillCountryCode = billing.CountryCode.Trim();
+                order.BillCountryCode = ChannelAdvisorHelper.GetCountryCode(billing.CountryCode.Trim());
                 order.BillPhone = billing.PhoneNumberDay;
-            }
-
-            // in some cases, we've seen CA provide invalid data here
-            if (string.CompareOrdinal(order.BillCountryCode, "-1") == 0)
-            {
-                order.BillCountryCode = "";
-            }
-
-            if (string.CompareOrdinal(order.ShipCountryCode, "-1") == 0)
-            {
-                order.ShipCountryCode = "";
             }
 
             // email address

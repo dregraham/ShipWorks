@@ -47,6 +47,14 @@ namespace ShipWorks.Data.Import
         }
 
         /// <summary>
+        /// Create a new charge attached to the order
+        /// </summary>
+        public OrderChargeEntity CreateCharge(OrderEntity order, string type, string description, decimal amount)
+        {
+            return InstantiateOrderCharge(order, type, description, amount);
+        }
+
+        /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
         NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
@@ -60,6 +68,14 @@ namespace ShipWorks.Data.Import
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order)
         {
             return InstantiateOrderPaymentDetail(order);
+        }
+
+        /// <summary>
+        /// Create a new payment detail attached to the order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
+        {
+            return InstantiateOrderPaymentDetail(order, label, value);
         }
     }
 }

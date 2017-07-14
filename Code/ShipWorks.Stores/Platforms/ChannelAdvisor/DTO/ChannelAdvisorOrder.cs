@@ -28,13 +28,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string SiteOrderID { get; set; }
 
         [JsonProperty("SecondarySiteOrderID")]
-        public object SecondarySiteOrderID { get; set; }
+        public string SecondarySiteOrderID { get; set; }
 
         [JsonProperty("SellerOrderID")]
-        public object SellerOrderID { get; set; }
+        public string SellerOrderID { get; set; }
 
         [JsonProperty("CheckoutSourceID")]
-        public object CheckoutSourceID { get; set; }
+        public byte CheckoutSourceID { get; set; }
 
         [JsonProperty("CreatedDateUtc")]
         public DateTime CreatedDateUtc { get; set; }
@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public DateTime ImportDateUtc { get; set; }
 
         [JsonProperty("PublicNotes")]
-        public object PublicNotes { get; set; }
+        public string PublicNotes { get; set; }
 
         [JsonProperty("PrivateNotes")]
         public string PrivateNotes { get; set; }
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public decimal TotalShippingPrice { get; set; }
 
         [JsonProperty("TotalShippingTaxPrice")]
-        public object TotalShippingTaxPrice { get; set; }
+        public decimal TotalShippingTaxPrice { get; set; }
 
         [JsonProperty("TotalInsurancePrice")]
         public decimal TotalInsurancePrice { get; set; }
@@ -70,28 +70,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public decimal TotalGiftOptionPrice { get; set; }
 
         [JsonProperty("TotalGiftOptionTaxPrice")]
-        public object TotalGiftOptionTaxPrice { get; set; }
+        public decimal TotalGiftOptionTaxPrice { get; set; }
 
         [JsonProperty("AdditionalCostOrDiscount")]
         public decimal AdditionalCostOrDiscount { get; set; }
 
         [JsonProperty("EstimatedShipDateUtc")]
-        public object EstimatedShipDateUtc { get; set; }
+        public DateTimeOffset EstimatedShipDateUtc { get; set; }
 
         [JsonProperty("DeliverByDateUtc")]
-        public object DeliverByDateUtc { get; set; }
+        public DateTimeOffset DeliverByDateUtc { get; set; }
 
         [JsonProperty("ResellerID")]
-        public object ResellerID { get; set; }
+        public string ResellerID { get; set; }
 
         [JsonProperty("FlagID")]
-        public decimal FlagID { get; set; }
+        public int FlagID { get; set; }
 
         [JsonProperty("FlagDescription")]
-        public object FlagDescription { get; set; }
+        public string FlagDescription { get; set; }
 
         [JsonProperty("OrderTags")]
-        public object OrderTags { get; set; }
+        public string OrderTags { get; set; }
 
         [JsonProperty("DistributionCenterTypeRollup")]
         public string DistributionCenterTypeRollup { get; set; }
@@ -106,13 +106,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string ShippingStatus { get; set; }
 
         [JsonProperty("CheckoutDateUtc")]
-        public DateTime CheckoutDateUtc { get; set; }
+        public DateTimeOffset CheckoutDateUtc { get; set; }
 
         [JsonProperty("PaymentDateUtc")]
-        public DateTime PaymentDateUtc { get; set; }
+        public DateTimeOffset PaymentDateUtc { get; set; }
 
         [JsonProperty("ShippingDateUtc")]
-        public object ShippingDateUtc { get; set; }
+        public DateTimeOffset ShippingDateUtc { get; set; }
 
         [JsonProperty("BuyerUserId")]
         public string BuyerUserId { get; set; }
@@ -136,19 +136,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string PaymentMethod { get; set; }
 
         [JsonProperty("PaymentTransactionID")]
-        public object PaymentTransactionID { get; set; }
+        public string PaymentTransactionID { get; set; }
 
         [JsonProperty("PaymentPaypalAccountID")]
-        public object PaymentPaypalAccountID { get; set; }
+        public string PaymentPaypalAccountID { get; set; }
 
         [JsonProperty("PaymentCreditCardLast4")]
         public string PaymentCreditCardLast4 { get; set; }
 
         [JsonProperty("PaymentMerchantReferenceNumber")]
-        public object PaymentMerchantReferenceNumber { get; set; }
+        public string PaymentMerchantReferenceNumber { get; set; }
 
         [JsonProperty("ShippingTitle")]
-        public object ShippingTitle { get; set; }
+        public string ShippingTitle { get; set; }
 
         [JsonProperty("ShippingFirstName")]
         public string ShippingFirstName { get; set; }
@@ -157,19 +157,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string ShippingLastName { get; set; }
 
         [JsonProperty("ShippingSuffix")]
-        public object ShippingSuffix { get; set; }
+        public string ShippingSuffix { get; set; }
 
         [JsonProperty("ShippingCompanyName")]
-        public object ShippingCompanyName { get; set; }
+        public string ShippingCompanyName { get; set; }
 
         [JsonProperty("ShippingCompanyJobTitle")]
-        public object ShippingCompanyJobTitle { get; set; }
+        public string ShippingCompanyJobTitle { get; set; }
 
         [JsonProperty("ShippingDaytimePhone")]
         public string ShippingDaytimePhone { get; set; }
 
         [JsonProperty("ShippingEveningPhone")]
-        public object ShippingEveningPhone { get; set; }
+        public string ShippingEveningPhone { get; set; }
 
         [JsonProperty("ShippingAddressLine1")]
         public string ShippingAddressLine1 { get; set; }
@@ -190,7 +190,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string ShippingCountry { get; set; }
 
         [JsonProperty("BillingTitle")]
-        public object BillingTitle { get; set; }
+        public string BillingTitle { get; set; }
 
         [JsonProperty("BillingFirstName")]
         public string BillingFirstName { get; set; }
@@ -205,13 +205,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string BillingCompanyName { get; set; }
 
         [JsonProperty("BillingCompanyJobTitle")]
-        public object BillingCompanyJobTitle { get; set; }
+        public string BillingCompanyJobTitle { get; set; }
 
         [JsonProperty("BillingDaytimePhone")]
         public string BillingDaytimePhone { get; set; }
 
         [JsonProperty("BillingEveningPhone")]
-        public object BillingEveningPhone { get; set; }
+        public string BillingEveningPhone { get; set; }
 
         [JsonProperty("BillingAddressLine1")]
         public string BillingAddressLine1 { get; set; }
@@ -232,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string BillingCountry { get; set; }
 
         [JsonProperty("PromotionCode")]
-        public object PromotionCode { get; set; }
+        public string PromotionCode { get; set; }
 
         [JsonProperty("PromotionAmount")]
         public decimal PromotionAmount { get; set; }

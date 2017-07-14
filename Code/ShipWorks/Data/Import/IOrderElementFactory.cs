@@ -29,6 +29,11 @@ namespace ShipWorks.Data.Import
         OrderChargeEntity CreateCharge(OrderEntity order);
 
         /// <summary>
+        /// Create a new charge attached to the order
+        /// </summary>
+        OrderChargeEntity CreateCharge(OrderEntity order, string type, string description, decimal amount);
+
+        /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
         NoteEntity CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility);
@@ -37,5 +42,10 @@ namespace ShipWorks.Data.Import
         /// Create a new payment detail attached to the order
         /// </summary>
         OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order);
+
+        /// <summary>
+        /// Creates the payment detail.
+        /// </summary>
+        OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order, string label, string value);
     }
 }
