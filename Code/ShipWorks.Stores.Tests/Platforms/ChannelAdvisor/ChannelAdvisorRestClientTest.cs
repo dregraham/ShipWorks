@@ -173,6 +173,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void GetOrders_SetsExpandVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("$expand", "Fulfillments"));
+        }
+
+        [Fact]
         public void GetOrders_SetsCountVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();

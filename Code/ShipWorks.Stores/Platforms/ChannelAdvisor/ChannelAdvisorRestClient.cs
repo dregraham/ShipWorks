@@ -109,7 +109,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ff'Z'}");
             submitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             submitter.Variables.Add("$count", "true");
-
+            submitter.Variables.Add("$expand", "Fulfillments");
+            
             return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
         }
 
