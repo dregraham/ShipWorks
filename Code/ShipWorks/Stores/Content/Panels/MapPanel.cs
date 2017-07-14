@@ -422,9 +422,12 @@ namespace ShipWorks.Stores.Content.Panels
             }
             catch (Exception ex)
             {
-                // catching general exception because there was an error being thrown in an earlier version
-                // and we couldn't track it down...
-                logEntry.LogResponse(image, MapType == MapPanelType.Satellite ? "png" : "jpg");
+                if (image != null)
+                {
+                    // catching general exception because there was an error being thrown in an earlier version
+                    // and we couldn't track it down...
+                    logEntry.LogResponse(image, MapType == MapPanelType.Satellite ? "png" : "jpg");
+                }
 
                 logEntry.LogResponse(ex);
                 log.Error(ex);
