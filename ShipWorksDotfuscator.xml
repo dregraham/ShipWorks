@@ -4,7 +4,6 @@
   <global>
     <option>error</option>
     <option>nodotfuscatorattribute</option>
-    <option>debug</option>
     <option>quiet</option>
   </global>
   <input>
