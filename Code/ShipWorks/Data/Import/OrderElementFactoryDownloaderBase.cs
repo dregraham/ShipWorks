@@ -25,7 +25,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new item attached to the order
         /// </summary>
-        OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order)
+        public OrderItemEntity CreateItem(OrderEntity order)
         {
             return InstantiateOrderItem(order);
         }
@@ -33,15 +33,24 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new item attribute attached to the order
         /// </summary>
-        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item)
+        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item)
         {
             return InstantiateOrderItemAttribute(item);
         }
 
         /// <summary>
+        /// Creates and populates a new OrderItemAttribute based on the given OrderItemEntity, name, description, unitPrice, and isManual flag
+        /// </summary>
+        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
+            decimal unitPrice, bool isManual)
+        {
+            return InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
+        }
+
+        /// <summary>
         /// Create a new charge attached to the order
         /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order)
+        public OrderChargeEntity CreateCharge(OrderEntity order)
         {
             return InstantiateOrderCharge(order);
         }
@@ -57,7 +66,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
-        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
+        public NoteEntity CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
         {
             return InstantiateNote(order, noteText, noteDate, noteVisibility, true);
         }
@@ -65,7 +74,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new payment detail attached to the order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order)
+        public OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order)
         {
             return InstantiateOrderPaymentDetail(order);
         }
@@ -73,7 +82,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new payment detail attached to the order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
+        public OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order, string label, string value)
         {
             return InstantiateOrderPaymentDetail(order, label, value);
         }

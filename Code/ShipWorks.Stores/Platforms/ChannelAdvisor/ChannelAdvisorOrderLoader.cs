@@ -17,17 +17,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IOrderRepository orderRepository;
+        private readonly IChannelAdvisorRestClient webClient;
 
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IOrderRepository orderRepository)
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IOrderRepository orderRepository, IChannelAdvisorRestClient webClient)
         {
             this.orderChargeCalculator = orderChargeCalculator;
             this.orderRepository = orderRepository;
+            this.webClient = webClient;
         }
 
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
+        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string refreshToken)
         {
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
@@ -51,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
 
                 // items
-                LoadItems(orderToSave, downloadedOrder, orderElementFactory);
+                LoadItems(orderToSave, downloadedOrder, orderElementFactory, refreshToken);
 
                 // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
@@ -64,74 +66,79 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
-        private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
+        private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string refreshToken)
         {
             foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
             {
-                LoadItem(orderToSave, downloadedOrder, item, orderElementFactory);
+                LoadItem(orderToSave, downloadedOrder, item, orderElementFactory, refreshToken);
             }
         }
 
-        private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder order, ChannelAdvisorOrderItem item, IOrderElementFactory orderElementFactory)
+        private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string refreshToken)
         {
             ChannelAdvisorOrderItemEntity itemToSave = (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
 
-            itemToSave.Name = item.Title;
-            itemToSave.Quantity = item.Quantity;
-            itemToSave.UnitPrice = item.UnitPrice;
-            itemToSave.Code = item.Sku;
-            itemToSave.SKU = item.Sku;
+            itemToSave.Name = downloadedItem.Title;
+            itemToSave.Quantity = downloadedItem.Quantity;
+            itemToSave.UnitPrice = downloadedItem.UnitPrice;
+            itemToSave.Code = downloadedItem.Sku;
+            itemToSave.SKU = downloadedItem.Sku;
 
             // CA-specific
-            itemToSave.MarketplaceName = item.SiteOrderItemID;
-            itemToSave.MarketplaceBuyerID = order.BuyerUserId;
+            itemToSave.MarketplaceName = downloadedItem.SiteOrderItemID;
+            itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserId;
 
-            if (!string.IsNullOrWhiteSpace(item.GiftNotes))
+            if (!string.IsNullOrWhiteSpace(downloadedItem.GiftNotes))
             {
                 OrderItemAttributeEntity attribute = orderElementFactory.CreateItemAttribute(itemToSave);
                 attribute.Name = "Gift Notes";
-                attribute.Description = item.GiftNotes;
+                attribute.Description = downloadedItem.GiftNotes;
 
                 // gift wrap cost is already included as a Charge
                 attribute.UnitPrice = 0M;
             }
 
-            if (!string.IsNullOrWhiteSpace(item.GiftMessage))
+            if (!string.IsNullOrWhiteSpace(downloadedItem.GiftMessage))
             {
                 OrderItemAttributeEntity attribute = orderElementFactory.CreateItemAttribute(itemToSave);
                 attribute.Name = "Gift Message";
-                attribute.Description = item.GiftMessage;
+                attribute.Description = downloadedItem.GiftMessage;
                 attribute.UnitPrice = 0M;
             }
-
-            itemToSave.DistributionCenter = "";
-            itemToSave.Classification = "";
-            itemToSave.UnitCost = 0;
-            itemToSave.HarmonizedCode = "";
-            itemToSave.ISBN = "";
-            itemToSave.UPC = "";
-            itemToSave.MPN = "";
-
-            // LoadItemAttributes();
-            // LoadImages();
-
-            // Get from Product endpoint
-            // itemToSave.Weight =
-            // itemToSave.Location = item.WarehouseLocation;
+            string accessToken = webClient.GetAccessToken(refreshToken);
+            ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
+            LoadProductDetails(itemToSave, product, orderElementFactory);
 
             // Appear in SOAP, but not REST
+            // IsFBA, should be wrapped up in DC stuff
+            // UnitWeight.UnitOfMeasure, default is lbs for US profiles, KG all else, so we could hook into that
+            // SalesSourceID
+            // UserName
+        }
 
-            // itemToSave.IsFBA = item.IsFBA;
-            // // Convert KG to LBS if needed
-            // if (item.UnitWeight.UnitOfMeasure == "KG")
-            // {
-            //    itemToSave.Weight = itemToSave.Weight * 2.20462262;
-            // }
-            // itemToSave.MarketplaceSalesID = item.SalesSourceID;
-            // itemToSave.MarketplaceStoreName = !string.IsNullOrWhiteSpace(item.UserName) ? item.UserName : string.Empty;
+        private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product, IOrderElementFactory orderElementFactory)
+        {
+            itemToSave.Weight = (double) product.Weight;
+            itemToSave.Location = product.WarehouseLocation;
+            itemToSave.Classification = product.Classification;
+            itemToSave.UnitCost = product.Cost;
+            itemToSave.HarmonizedCode = product.HarmonizedCode;
+            itemToSave.ISBN = product.ISBN;
+            itemToSave.UPC = product.UPC;
+            itemToSave.MPN = product.MPN;
+            itemToSave.Description = product.Description;
 
-            //
-            //
+            foreach (ChannelAdvisorProductAttribute attribute in product.Attributes)
+            {
+                orderElementFactory.CreateItemAttribute(itemToSave, attribute.Name, attribute.Value, 0, false);
+            }
+
+            LoadImages(itemToSave, product, orderElementFactory);
+        }
+
+        private void LoadImages(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product, IOrderElementFactory orderElementFactory)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -170,7 +177,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     "ADDITIONAL COST OR DISCOUNT", downloadedOrder.AdditionalCostOrDiscount);
             }
         }
-
 
         private void LoadNotes(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
@@ -316,22 +322,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="orderToSave">The order to save.</param>
         /// <param name="downloadedOrder">The downloaded order.</param>
-        private static void LoadOrderStatuses(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder)
+        private static void LoadOrderStatuses(ChannelAdvisorOrderEntity orderToSave,
+            ChannelAdvisorOrder downloadedOrder)
         {
-            int paymentStatus;
-            orderToSave.OnlinePaymentStatus = Enum.TryParse(downloadedOrder.PaymentStatus, true, out paymentStatus) ?
+            ChannelAdvisorPaymentStatus paymentStatus;
+            orderToSave.OnlinePaymentStatus =
+                (int) (Enum.TryParse(downloadedOrder.PaymentStatus, true, out paymentStatus) ?
                 paymentStatus :
-                (int) ChannelAdvisorPaymentStatus.Unknown;
+                ChannelAdvisorPaymentStatus.Unknown);
 
-            int checkoutStatus;
-            orderToSave.OnlineCheckoutStatus = Enum.TryParse(downloadedOrder.CheckoutStatus, true, out checkoutStatus) ?
-                paymentStatus :
-                (int) ChannelAdvisorPaymentStatus.Unknown;
+            ChannelAdvisorPaymentStatus checkoutStatus;
+            orderToSave.OnlineCheckoutStatus =
+                (int) (Enum.TryParse(downloadedOrder.CheckoutStatus, true, out checkoutStatus) ?
+                checkoutStatus :
+                ChannelAdvisorPaymentStatus.Unknown);
 
-            int shippingStatus;
-            orderToSave.OnlineShippingStatus = Enum.TryParse(downloadedOrder.ShippingStatus, true, out shippingStatus) ?
-                paymentStatus :
-                (int) ChannelAdvisorPaymentStatus.Unknown;
+            ChannelAdvisorPaymentStatus shippingStatus;
+            orderToSave.OnlineShippingStatus =
+                (int) (Enum.TryParse(downloadedOrder.ShippingStatus, true, out shippingStatus) ?
+                shippingStatus :
+                ChannelAdvisorPaymentStatus.Unknown);
         }
     }
 }

@@ -24,6 +24,12 @@ namespace ShipWorks.Data.Import
         OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item);
 
         /// <summary>
+        /// Creates and populates a new OrderItemAttribute based on the given OrderItemEntity, name, description, unitPrice, and isManual flag
+        /// </summary>
+        OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
+            decimal unitPrice, bool isManual);
+
+        /// <summary>
         /// Create a new charge attached to the order
         /// </summary>
         OrderChargeEntity CreateCharge(OrderEntity order);
