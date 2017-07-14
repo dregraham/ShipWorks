@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
@@ -9,10 +9,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
-using ShipWorks.Stores.Platforms.Walmart;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
+    [Component(RegistrationType.Self)]
     public class ChannelAdvisorOrderLoader
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
