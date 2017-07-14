@@ -22,7 +22,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly IChannelAdvisorRestClient restClient;
         private readonly string refreshToken;
-        private readonly ChannelAdvisorStoreEntity caStore;
         private readonly ISqlAdapterRetry sqlAdapter;
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.restClient = restClient;
 
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
-            caStore = Store as ChannelAdvisorStoreEntity;
+            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
             refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                 .Decrypt(caStore.RefreshToken);
