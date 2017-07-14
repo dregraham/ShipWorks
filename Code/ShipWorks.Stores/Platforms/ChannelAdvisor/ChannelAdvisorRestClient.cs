@@ -157,7 +157,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                return JsonConvert.DeserializeObject<T>(result);
+                return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
             }
             catch (Exception ex)
             {

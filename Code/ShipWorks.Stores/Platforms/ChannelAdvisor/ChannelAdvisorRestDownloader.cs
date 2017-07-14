@@ -7,6 +7,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -18,9 +19,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
     [Component]
-    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
+    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader, IOrderElementFactory
     {
         private readonly IChannelAdvisorRestClient restClient;
+        private readonly ChannelAdvisorOrderLoader orderLoader;
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
 
@@ -28,9 +30,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Constructor
         /// </summary>
         public ChannelAdvisorRestDownloader(StoreEntity store, IChannelAdvisorRestClient restClient, IEncryptionProviderFactory encryptionProviderFactory,
-        ISqlAdapterRetryFactory sqlAdapterRetryFactory) : base(store)
+        ISqlAdapterRetryFactory sqlAdapterRetryFactory, ChannelAdvisorOrderLoader orderLoader) : base(store)
         {
             this.restClient = restClient;
+            this.orderLoader = orderLoader;
 
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
             ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
@@ -45,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
-
+            
             try
             {
                 string token = restClient.GetAccessToken(refreshToken);
@@ -72,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return;
                         }
 
-                        // LoadOrder(caOrder);
+                        LoadOrder(caOrder);
                     }
 
                     ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
@@ -117,10 +120,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 new OrderNumberIdentifier(caOrder.ID));
 
             //Order loader loads the order
-
+            orderLoader.LoadOrder(order, caOrder, this);
 
             // Save the downloaded order
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
+
+        OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
+
+        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
+            InstantiateOrderItemAttribute(item);
+
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
+
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description, decimal amount) => InstantiateOrderCharge(order, type, description, amount);
+
+        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
+
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) => InstantiateOrderPaymentDetail(order);
+
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => InstantiateOrderPaymentDetail(order, label, value);
+
     }
 }

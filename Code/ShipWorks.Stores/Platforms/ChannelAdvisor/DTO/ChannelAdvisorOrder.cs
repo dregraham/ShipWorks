@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string SellerOrderID { get; set; }
 
         [JsonProperty("CheckoutSourceID")]
-        public byte CheckoutSourceID { get; set; }
+        public string CheckoutSourceID { get; set; }
 
         [JsonProperty("CreatedDateUtc")]
         public DateTime CreatedDateUtc { get; set; }
