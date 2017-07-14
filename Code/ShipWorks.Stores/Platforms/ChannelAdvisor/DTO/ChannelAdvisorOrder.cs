@@ -52,28 +52,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string SpecialInstructions { get; set; }
 
         [JsonProperty("TotalPrice")]
-        public int TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         [JsonProperty("TotalTaxPrice")]
-        public int TotalTaxPrice { get; set; }
+        public decimal TotalTaxPrice { get; set; }
 
         [JsonProperty("TotalShippingPrice")]
-        public int TotalShippingPrice { get; set; }
+        public decimal TotalShippingPrice { get; set; }
 
         [JsonProperty("TotalShippingTaxPrice")]
         public object TotalShippingTaxPrice { get; set; }
 
         [JsonProperty("TotalInsurancePrice")]
-        public int TotalInsurancePrice { get; set; }
+        public decimal TotalInsurancePrice { get; set; }
 
         [JsonProperty("TotalGiftOptionPrice")]
-        public int TotalGiftOptionPrice { get; set; }
+        public decimal TotalGiftOptionPrice { get; set; }
 
         [JsonProperty("TotalGiftOptionTaxPrice")]
         public object TotalGiftOptionTaxPrice { get; set; }
 
         [JsonProperty("AdditionalCostOrDiscount")]
-        public int AdditionalCostOrDiscount { get; set; }
+        public decimal AdditionalCostOrDiscount { get; set; }
 
         [JsonProperty("EstimatedShipDateUtc")]
         public object EstimatedShipDateUtc { get; set; }
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public object ResellerID { get; set; }
 
         [JsonProperty("FlagID")]
-        public int FlagID { get; set; }
+        public decimal FlagID { get; set; }
 
         [JsonProperty("FlagDescription")]
         public object FlagDescription { get; set; }
@@ -235,7 +235,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public object PromotionCode { get; set; }
 
         [JsonProperty("PromotionAmount")]
-        public int PromotionAmount { get; set; }
+        public decimal PromotionAmount { get; set; }
 
         [JsonProperty("Items")]
         public IList<ChannelAdvisorOrderItem> Items { get; set; }
