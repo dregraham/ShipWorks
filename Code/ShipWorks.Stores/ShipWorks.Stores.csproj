@@ -154,12 +154,16 @@
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillmentItem.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductDistributionCenterQuantity.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductImage.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrder.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderAdjustment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItem.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemAdjustment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemBundleComponents.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderResult.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProduct.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductAttribute.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProfilesResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorPromotion.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipRequest.cs" />

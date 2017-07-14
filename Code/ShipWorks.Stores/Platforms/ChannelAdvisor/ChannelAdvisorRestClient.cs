@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string tokenEndpoint = $"{EndpointBase}/oauth2/token";
         private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
         private readonly string profilesEndpoint = $"{EndpointBase}/v1/Profiles";
+        private readonly string productEndpoint = $"{EndpointBase}/v1/Products";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -110,8 +111,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             submitter.Variables.Add("$count", "true");
             submitter.Variables.Add("$expand", "Fulfillments");
-            
+
             return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
+        }
+
+        /// <summary>
+        /// Get detailed product information from ChannelAdvisor with the given product ID
+        /// </summary>
+        public ChannelAdvisorProduct GetProduct(int productID, string accessToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", accessToken);
+            submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
+
+            return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct");
         }
 
         /// <summary>
