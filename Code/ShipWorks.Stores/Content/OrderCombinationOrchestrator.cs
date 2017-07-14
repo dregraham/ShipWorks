@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
@@ -91,35 +90,12 @@ namespace ShipWorks.Stores.Content
         {
             if (combineResults.Success)
             {
-                //string message = $"{CombineOrderNumbers(orders)} combined into Order #{newOrderNumber}";
-                //messageHelper.ShowUserConditionalInformation("Combine Orders", message, UserConditionalNotificationType.CombineOrders);
                 userInteraction.ShowSuccessConfirmation(newOrderNumber, orders);
             }
             else
             {
                 messageHelper.ShowError(combineResults.Message);
             }
-        }
-
-        /// <summary>
-        /// Combine the order numbers to display
-        /// </summary>
-        private object CombineOrderNumbers(IEnumerable<IOrderEntity> orders)
-        {
-            List<string> orderNumbers = orders.Select(x => x.OrderNumberComplete).ToList();
-
-            if (orderNumbers.Count == 1)
-            {
-                return $"Order #{orders.Single().OrderNumberComplete} was";
-            }
-
-            if (orderNumbers.Count == 2)
-            {
-                return $"Orders #{orderNumbers.First()} and #{orderNumbers.Last()} were";
-            }
-
-            string firstPart = orders.Take(orders.Count() - 1).Select(x => $"#{x.OrderNumberComplete}, ").Combine();
-            return $"Orders {firstPart}and #{orders.Last().OrderNumberComplete} were";
         }
     }
 }

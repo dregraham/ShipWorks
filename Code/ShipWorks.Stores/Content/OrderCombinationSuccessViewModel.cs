@@ -19,15 +19,15 @@ namespace ShipWorks.Stores.Content
     [Component]
     public class OrderCombinationSuccessViewModel : IOrderCombinationSuccessViewModel
     {
+        private const UserConditionalNotificationType notificationType = UserConditionalNotificationType.CombineOrders;
         private readonly IOrderCombinationSuccessDialog dialog;
-        readonly ICurrentUserSettings currentUserSettings;
+        private readonly ICurrentUserSettings currentUserSettings;
+        private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
 
         private string orderNumber;
         private IEnumerable<string> combinedOrders;
         private bool doNotShowAgain;
-        private UserConditionalNotificationType notificationType;
-        readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
@@ -89,8 +89,6 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public void ShowSuccessConfirmation(string orderNumber, IEnumerable<IOrderEntity> orders)
         {
-            this.notificationType = notificationType;
-
             if (!currentUserSettings.ShouldShowNotification(notificationType))
             {
                 return;
