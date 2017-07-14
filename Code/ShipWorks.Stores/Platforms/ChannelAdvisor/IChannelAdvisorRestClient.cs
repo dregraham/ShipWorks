@@ -29,7 +29,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="accessToken"></param>
         ChannelAdvisorProfilesResponse GetProfiles(string accessToken);
-
-
     }
 }

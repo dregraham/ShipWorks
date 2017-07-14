@@ -106,6 +106,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("access_token", accessToken);
             submitter.Variables.Add("filter", $"CreatedDateUtc gt {start:s}");
             submitter.Variables.Add("orderby", "orderby=CreatedDateUtc desc");
+            submitter.Variables.Add("$count", "true");
 
             return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
         }

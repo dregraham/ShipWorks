@@ -11,6 +11,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         [JsonProperty("@odata.context")]
         public string OdataContext { get; set; }
 
+        [JsonProperty("@odata.count")]
+        public int ResultCount { get; set; }
+
         [JsonProperty("value")]
         public IList<ChannelAdvisorOrder> Orders { get; set; }
 
