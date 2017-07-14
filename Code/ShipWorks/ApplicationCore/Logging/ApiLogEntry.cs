@@ -205,8 +205,7 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             WriteLog(xml, ApiLogCategory.Response);
         }
-
-
+        
         /// <summary>
         /// Logs the response.
         /// </summary>

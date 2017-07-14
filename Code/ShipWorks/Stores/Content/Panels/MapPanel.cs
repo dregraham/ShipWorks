@@ -396,10 +396,10 @@ namespace ShipWorks.Stores.Content.Panels
             MethodConditions.EnsureArgumentIsNotNull(addressAdapter, "addressAdapter");
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.GoogleMaps, MapType.ToString());
+            byte[] image = null;
+
             try
             {
-                byte[] image;
-
                 using (WebClient webClient = new WebClient())
                 {
                     string imageUrl = string.Format(GetImageUrl(),
@@ -412,17 +412,19 @@ namespace ShipWorks.Stores.Content.Panels
                     image = await webClient.DownloadDataTaskAsync(imageUrl);
                 }
 
-                logEntry.LogResponse(image, MapType == MapPanelType.Satellite ? "png" : "jpg");
-
                 using (MemoryStream stream = new MemoryStream(image))
                 {
-                    return new GoogleResponse {ReturnedImage = Image.FromStream(stream)};
+                    Image returnedImage = Image.FromStream(stream);
+                    logEntry.LogResponse("Sucessfully parsed returned image","txt");
+
+                    return new GoogleResponse {ReturnedImage = returnedImage};
                 }
             }
             catch (Exception ex)
             {
                 // catching general exception because there was an error being thrown in an earlier version
                 // and we couldn't track it down...
+                logEntry.LogResponse(image, MapType == MapPanelType.Satellite ? "png" : "jpg");
 
                 logEntry.LogResponse(ex);
                 log.Error(ex);
