@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -42,18 +43,17 @@ namespace ShipWorks.Stores.Platforms.Newegg
             }
         }
 
-
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Syncing existing orders with Newegg...";
-                SyncUnfulfilledShipWorksOrdersWithNewegg();
+                await SyncUnfulfilledShipWorksOrdersWithNewegg().ConfigureAwait(false);
 
                 Progress.Detail = "Checking for new orders...";
 
@@ -61,14 +61,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 {
                     // We don't want to download orders that are being shipped by Newegg, so we have to
                     // download the individual order types one at a time
-                    DownloadNewOrders(NeweggOrderType.ShipBySeller);
-                    DownloadNewOrders(NeweggOrderType.MultiChannel);
+                    await DownloadNewOrders(NeweggOrderType.ShipBySeller).ConfigureAwait(false);
+                    await DownloadNewOrders(NeweggOrderType.MultiChannel).ConfigureAwait(false);
                 }
                 else
                 {
                     // The store is not configured to exclude orders shipped by Neweegg, so
                     // we're downloading all order types
-                    DownloadNewOrders(NeweggOrderType.All);
+                    await DownloadNewOrders(NeweggOrderType.All).ConfigureAwait(false);
                 }
             }
             catch (NeweggException ex)
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// orders not having a status of Invoiced or Voided) with orders in Newegg to account for
         /// any status changes occurring outside of ShipWorks.
         /// </summary>
-        public void SyncUnfulfilledShipWorksOrdersWithNewegg()
+        public async Task SyncUnfulfilledShipWorksOrdersWithNewegg()
         {
             // Get all of the Newegg orders that are in an unshipped state
             List<NeweggOrderEntity> unfulfilledShipWorksOrders = GetUnfulfilledShipWorksOrders();
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                             }
 
                             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NeweggDownloader.SyncUnfulfilledShipWorksOrdersWithNewegg");
-                            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderToUpdate));
+                            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToUpdate)).ConfigureAwait(false);
                         }
                     }
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                     if (Progress.IsCancelRequested)
                     {
-                        // The user cancelled the download
+                        // The user canceled the download
                         return;
                     }
                 }
@@ -178,13 +178,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <summary>
         /// Downloads the orders from Newegg and imports them into ShipWorks.
         /// </summary>
-        private void DownloadNewOrders(NeweggOrderType orderType)
+        private async Task DownloadNewOrders(NeweggOrderType orderType)
         {
             NeweggWebClient webClient = new NeweggWebClient(Store as NeweggStoreEntity);
 
             // Get the initial metadata of the order download to figure out how many pages and
             // the total number of orders we'll be downloading based on our starting point.
-            DateTime startingPoint = GetDownloadStartingPoint();
+            DateTime startingPoint = await GetDownloadStartingPoint();
             DownloadInfo downloadInfo = webClient.GetDownloadInfo(startingPoint, orderType);
             int pagesToDownload = downloadInfo.PageCount;
 
@@ -209,12 +209,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                     // All the orders have been downloaded for the current page now load them into ShipWorks
                     // and decrement our page counter for the next iteration
-                    LoadOrders(downloadInfo, orders.ToList());
+                    await LoadOrders(downloadInfo, orders.ToList()).ConfigureAwait(false);
                     pagesToDownload--;
 
                     if (Progress.IsCancelRequested)
                     {
-                        // The user cancelled the download
+                        // The user canceled the download
                         return;
                     }
                 }
@@ -228,9 +228,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="downloadInfo">The download info.</param>
         /// <param name="orders">The orders.</param>
-        private void LoadOrders(DownloadInfo downloadInfo, List<Order> orders)
+        private async Task LoadOrders(DownloadInfo downloadInfo, List<Order> orders)
         {
-            // Re-order the list by order date so in the event of the download being cancelled
+            // Re-order the list by order date so in the event of the download being canceled
             // in the middle of loading the orders any missing orders get downloaded again.
             orders.Sort((a, b) => a.OrderDateInPacificStandardTime.CompareTo(b.OrderDateInPacificStandardTime));
 
@@ -238,12 +238,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
             {
                 Progress.Detail = String.Format("Processing order {0} of {1}...", QuantitySaved + 1, downloadInfo.TotalOrders);
 
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
                 Progress.PercentComplete = Math.Min(100, 100 * (QuantitySaved) / downloadInfo.TotalOrders);
 
                 if (Progress.IsCancelRequested)
                 {
-                    // The user cancelled the download
+                    // The user canceled the download
                     return;
                 }
             }
@@ -254,13 +254,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Gets the download starting point.
         /// </summary>
         /// <returns>A DateTime object.</returns>
-        private DateTime GetDownloadStartingPoint()
+        private async Task<DateTime> GetDownloadStartingPoint()
         {
             // We're going to have our starting point default to either the initial download days setting or a year back
             int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
             DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
 
-            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+            DateTime? lastModifiedDate = await GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
             {
                 // We have a record of the last order date in the system, so
@@ -276,14 +276,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Loads the order based on the data downloaded from Newegg.
         /// </summary>
         /// <param name="downloadedOrder">The order data downloaded from the Newegg API.</param>
-        private void LoadOrder(Order downloadedOrder)
+        private Task LoadOrder(Order downloadedOrder)
         {
             OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(downloadedOrder.OrderNumber);
             GenericResult<OrderEntity> result = InstantiateOrder(orderIdentifier);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.OrderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             NeweggOrderEntity order = (NeweggOrderEntity) result.Value;
@@ -316,7 +316,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NeweggDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

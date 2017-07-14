@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
@@ -40,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         return;
                     }
 
-                    DateTime? maxOrderDate = GetOrderDateStartingPoint();
+                    DateTime? maxOrderDate = await GetOrderDateStartingPoint();
 
                     string[] orders = client.DownloadOrders(maxOrderDate);
 
@@ -87,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
                         // import the order
-                        LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // move the progress bar along
                         Progress.PercentComplete = Math.Min(100 * QuantitySaved / orders.Length, 100);
@@ -119,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Import the Order
         /// </summary>
-        private void LoadOrder(string orderXml)
+        private Task LoadOrder(string orderXml)
         {
             // load the document
             XmlDocument document = new XmlDocument();
@@ -136,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrder, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             AmazonOrderEntity order = (AmazonOrderEntity) result.Value;
@@ -144,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // basic properties
@@ -181,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

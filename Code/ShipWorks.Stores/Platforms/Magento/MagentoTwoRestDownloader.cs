@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Download orders for the Magento store
         /// </summary>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
             Progress.Detail = "Checking for orders...";
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 OrdersResponse ordersResponse;
                 do
                 {
-                    ordersResponse = webClient.GetOrders(GetStartDate(), 1);
+                    ordersResponse = webClient.GetOrders(await GetStartDate(), 1);
 
                     if (ordersResponse == null)
                     {
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         return;
                     }
 
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
@@ -112,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                             continue;
                         }
 
-                        LoadOrder((MagentoOrderEntity) result.Value, magentoOrder, Progress);
+                        await LoadOrder((MagentoOrderEntity) result.Value, magentoOrder, Progress).ConfigureAwait(false);
                     }
                 } while (ordersResponse.TotalCount > 0);
 
@@ -124,14 +125,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
-
         /// <summary>
         /// Check and see if the MagentoOrderId belongs to an order that was downloaded prior to us switching from using EntityId as the order number to IncrementId
         /// </summary>
         /// <remarks>
         /// The magento EntityId and IncrementId are the same 90% of the time, customers have the ability to customize the IncrementId to be something different
         /// the IncrementId is the value that shows up in the Magento UI, when this downloader was built we would pull the orders EntityId into the OrderNumber field
-        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we dont duplicate them
+        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we don't duplicate them
         /// </remarks>
         private bool IsLegacyRestOrder(int magentoOrderId)
         {
@@ -153,9 +153,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Get the start date for the download cycle
         /// </summary>
         /// <remarks>if we have not saved any orders yet use the start date minus 5 minutes</remarks>
-        private DateTime? GetStartDate()
+        private async Task<DateTime?> GetStartDate()
         {
-            DateTime? onlineLastModifiedStartingPoint = GetOnlineLastModifiedStartingPoint();
+            DateTime? onlineLastModifiedStartingPoint = await GetOnlineLastModifiedStartingPoint();
 
             // If we haven't saved any orders yet use the start date minus 5 minutes
             // add a 5 min buffer to overlap possible server time issues
@@ -168,12 +168,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
+        public Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
-            // Check if it has been cancelled
+            // Check if it has been canceled
             if (progressReporter.IsCancelRequested)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // Update the status
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadOrderPayment(orderEntity, magentoOrder);
             }
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
         }
 
         /// <summary>

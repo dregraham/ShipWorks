@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -51,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -63,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     return;
                 }
 
-                ordersListType ordersList = GetFirstBatch();
+                ordersListType ordersList = await GetFirstBatch().ConfigureAwait(false);
                 int totalOrders = ordersList.meta.totalCount;
 
                 if (totalOrders == 0)
@@ -76,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 while (ordersList?.elements?.Any() ?? false)
                 {
-                    LoadOrders(ordersList);
+                    await LoadOrders(ordersList).ConfigureAwait(false);
 
                     ordersList = GetNextBatch(ordersList);
                 }
@@ -97,9 +98,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Gets the first batch.
         /// </summary>
-        private ordersListType GetFirstBatch()
+        private async Task<ordersListType> GetFirstBatch()
         {
-            DateTime startTime = GetOrderDateStartingPoint();
+            DateTime startTime = await GetWalmartOrderDateStartingPoint();
             return walmartWebClient.GetOrders(walmartStore, startTime);
         }
 
@@ -121,23 +122,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Saves the orders.
         /// </summary>
         /// <param name="ordersList">The orders list.</param>
-        private void LoadOrders(ordersListType ordersList)
+        private async Task LoadOrders(ordersListType ordersList)
         {
             foreach (Order downloadedOrder in ordersList.elements)
             {
-                LoadOrder(downloadedOrder);
+                await LoadOrder(downloadedOrder).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Loads the order.
         /// </summary>
-        private void LoadOrder(Order downloadedOrder)
+        private Task LoadOrder(Order downloadedOrder)
         {
             // Check if it has been canceled
             if (Progress.IsCancelRequested)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // Update the status
@@ -148,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.purchaseOrderId, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             WalmartOrderEntity orderToSave = (WalmartOrderEntity) result.Value;
@@ -156,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
             // Save the downloaded order
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderToSave));
+            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToSave));
         }
 
         /// <summary>
@@ -164,9 +165,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// will be used to calculate the initial number of days back to. We then compare that with the
         /// date calculated from DownloadModifiedNumberOfDaysBack and send the earlier of the two dates.
         /// </summary>
-        protected new DateTime GetOrderDateStartingPoint()
+        protected async Task<DateTime> GetWalmartOrderDateStartingPoint()
         {
-            DateTime? defaultStartingPoint = base.GetOrderDateStartingPoint();
+            DateTime? defaultStartingPoint = await base.GetOrderDateStartingPoint();
             DateTime modifiedDaysBack = dateTimeProvider.UtcNow.AddDays(-walmartStore.DownloadModifiedNumberOfDaysBack);
 
             if (defaultStartingPoint == null || modifiedDaysBack < defaultStartingPoint.Value)

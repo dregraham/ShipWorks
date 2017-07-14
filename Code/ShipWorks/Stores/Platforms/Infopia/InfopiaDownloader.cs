@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -45,11 +46,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
-            DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+            DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
             if (!lastModified.HasValue)
             {
                 // If they chose to go back forever, still limit to a year
@@ -81,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                         return;
                     }
 
-                    LoadOrders(client);
+                    await LoadOrders(client).ConfigureAwait(false);
                 }
 
                 Progress.Detail = "Done";
@@ -100,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// Loads the next page of returned orders
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrders(InfopiaWebClient client)
+        private async Task LoadOrders(InfopiaWebClient client)
         {
             // don't do anything
             if (client.OrdersXml == null)
@@ -181,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "InfopiaDownloader.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                 // update the status, 100 max
                 Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);
@@ -205,10 +206,9 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 }
             }
 
-            // make sure these are allready cached
+            // make sure these are already cached
             InfopiaWebClient client = new InfopiaWebClient(InfopiaStore);
             client.EnsureProducts(productsToDownload);
-
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 LoadCharge(order, "Insurance", "Insurance", insurance);
             }
 
-            // Add surchage if any
+            // Add surcharge if any
             if (surcharge != 0)
             {
                 LoadCharge(order, "Surchage", "Surchage", surcharge);

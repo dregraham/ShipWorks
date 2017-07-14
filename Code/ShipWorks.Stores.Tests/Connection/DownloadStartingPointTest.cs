@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Connection
         }
 
         [Fact]
-        public void OnlineLastModified_DelegatesToSqlAdapter()
+        public async Task OnlineLastModified_DelegatesToSqlAdapter()
         {
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Connection
             store.SetupGet(x => x.StoreID).Returns(123);
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            testObject.OnlineLastModified(store.Object);
+            await testObject.OnlineLastModified(store.Object);
 
             sqlAdapter.Verify(x => x.GetScalar(
                 MatchesField(OrderFields.OnlineLastModified),
@@ -48,28 +48,28 @@ namespace ShipWorks.Stores.Tests.Connection
         [InlineData("DBNULL")]
         [InlineData(null)]
         [InlineData("123")]
-        public void OnlineLastModified_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
+        public async Task OnlineLastModified_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
         {
             SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OnlineLastModified(store.Object);
+            var result = await testObject.OnlineLastModified(store.Object);
             Assert.Null(result);
         }
 
         [Fact]
-        public void OnlineLastModified_ReturnsDateTime_WhenSqlReturnsDateTime()
+        public async Task OnlineLastModified_ReturnsDateTime_WhenSqlReturnsDateTime()
         {
             SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15));
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OnlineLastModified(store.Object);
+            var result = await testObject.OnlineLastModified(store.Object);
 
             Assert.Equal(new DateTime(2017, 4, 21, 15, 30, 15), result);
         }
 
         [Fact]
-        public void OnlineLastModified_ReturnsInitialDownloadDays_WhenSqlReturnsNull()
+        public async Task OnlineLastModified_ReturnsInitialDownloadDays_WhenSqlReturnsNull()
         {
             SetupSqlGetScalerToReturn(null);
 
@@ -81,13 +81,13 @@ namespace ShipWorks.Stores.Tests.Connection
 
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OnlineLastModified(store.Object);
+            var result = await testObject.OnlineLastModified(store.Object);
 
             Assert.Equal(new DateTime(2017, 4, 18, 17, 30, 15), result);
         }
 
         [Fact]
-        public void OnlineLastModified_SpecifiesUtc_WhenDateTypeIsUnspecified()
+        public async Task OnlineLastModified_SpecifiesUtc_WhenDateTypeIsUnspecified()
         {
             SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15, DateTimeKind.Unspecified));
 
@@ -97,13 +97,13 @@ namespace ShipWorks.Stores.Tests.Connection
 
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OnlineLastModified(store.Object);
+            var result = await testObject.OnlineLastModified(store.Object);
 
             Assert.Equal(DateTimeKind.Utc, result.Value.Kind);
         }
 
         [Fact]
-        public void OrderDate_DelegatesToSqlAdapter()
+        public async Task OrderDate_DelegatesToSqlAdapter()
         {
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create());
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Connection
             store.SetupGet(x => x.StoreID).Returns(123);
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            testObject.OrderDate(store.Object);
+            await testObject.OrderDate(store.Object);
 
             sqlAdapter.Verify(x => x.GetScalar(
                 MatchesField(OrderFields.OrderDate),
@@ -124,28 +124,28 @@ namespace ShipWorks.Stores.Tests.Connection
         [InlineData("DBNULL")]
         [InlineData(null)]
         [InlineData("123")]
-        public void OrderDate_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
+        public async Task OrderDate_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
         {
             SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OrderDate(store.Object);
+            var result = await testObject.OrderDate(store.Object);
             Assert.Null(result);
         }
 
         [Fact]
-        public void OrderDate_ReturnsDateTime_WhenSqlReturnsDateTime()
+        public async Task OrderDate_ReturnsDateTime_WhenSqlReturnsDateTime()
         {
             SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15));
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OrderDate(store.Object);
+            var result = await testObject.OrderDate(store.Object);
 
             Assert.Equal(new DateTime(2017, 4, 21, 15, 30, 15), result);
         }
 
         [Fact]
-        public void OrderDate_ReturnsInitialDownloadDays_WhenSqlReturnsNull()
+        public async Task OrderDate_ReturnsInitialDownloadDays_WhenSqlReturnsNull()
         {
             SetupSqlGetScalerToReturn(null);
 
@@ -157,13 +157,13 @@ namespace ShipWorks.Stores.Tests.Connection
 
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OrderDate(store.Object);
+            var result = await testObject.OrderDate(store.Object);
 
             Assert.Equal(new DateTime(2017, 4, 18, 17, 30, 15), result);
         }
 
         [Fact]
-        public void OrderDate_SpecifiesUtc_WhenDateTypeIsUnspecified()
+        public async Task OrderDate_SpecifiesUtc_WhenDateTypeIsUnspecified()
         {
             SetupSqlGetScalerToReturn(new DateTime(2017, 4, 21, 15, 30, 15, DateTimeKind.Unspecified));
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Tests.Connection
 
             var testObject = mock.Create<DownloadStartingPoint>();
 
-            var result = testObject.OrderDate(store.Object);
+            var result = await testObject.OrderDate(store.Object);
 
             Assert.Equal(DateTimeKind.Utc, result.Value.Kind);
         }

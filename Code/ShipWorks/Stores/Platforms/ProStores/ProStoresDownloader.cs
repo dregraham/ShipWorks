@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
@@ -43,17 +44,17 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Checking for orders...";
 
-                // For legacy login methods, checks the version has been updatd and tokens are now supported
+                // For legacy login methods, checks the version has been updated and tokens are now supported
                 ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
 
-                // Downloading baed on the last modified time
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                // Downloading based on the last modified time
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
 
                 totalCount = ProStoresWebClient.GetOrderCount((ProStoresStoreEntity) Store, lastModified);
 
@@ -69,13 +70,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // keep going until none are left
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage())
+                    bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -94,11 +96,12 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download the next page of orders until there are no more
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
             try
             {
-                XmlDocument response = ProStoresWebClient.GetNextOrderPage((ProStoresStoreEntity) Store, GetOnlineLastModifiedStartingPoint(), isProVersion);
+                DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
+                XmlDocument response = ProStoresWebClient.GetNextOrderPage((ProStoresStoreEntity) Store, startDate, isProVersion);
                 XPathNavigator xpath = response.CreateNavigator();
 
                 XPathNodeIterator invoiceIterator = xpath.Select("/XTE/Response/Invoice");
@@ -106,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // see if there are any orders in the response
                 if (invoiceIterator.Count > 0)
                 {
-                    LoadOrders(invoiceIterator);
+                    await LoadOrders(invoiceIterator).ConfigureAwait(false);
                     return true;
                 }
                 else
@@ -123,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 {
                     isProVersion = false;
 
-                    return DownloadNextOrdersPage();
+                    return await DownloadNextOrdersPage().ConfigureAwait(false);
                 }
                 else
                 {
@@ -135,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Load all the "Invoices" out of the given iterator into ShipWorks orders
         /// </summary>
-        private void LoadOrders(XPathNodeIterator invoiceIterator)
+        private async Task LoadOrders(XPathNodeIterator invoiceIterator)
         {
             foreach (XPathNavigator xpathOrder in invoiceIterator)
             {
@@ -147,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                LoadOrder(xpathOrder);
+                await LoadOrder(xpathOrder).ConfigureAwait(false);
 
                 // Update progress
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
@@ -180,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// Extract the order from the xml
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
@@ -189,12 +192,12 @@ namespace ShipWorks.Stores.Platforms.ProStores
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             ProStoresOrderEntity order = (ProStoresOrderEntity) result.Value;
 
-            // Setup the basic proprites
+            // Setup the basic properties
             order.OrderNumber = orderNumber;
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "EnterDate", "")).ToUniversalTime();
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModifiedDate", "")).ToUniversalTime();
@@ -259,7 +262,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ProStoresDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

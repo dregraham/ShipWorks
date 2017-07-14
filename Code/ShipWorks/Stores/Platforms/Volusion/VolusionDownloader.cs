@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -59,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -113,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved, totalCount);
 
                         // load each order
-                        LoadOrder(client, orders.Current.Clone());
+                        await LoadOrder(client, orders.Current.Clone()).ConfigureAwait(false);
 
                         Progress.PercentComplete = Math.Min(100, 100 * (quantitySaved) / totalCount);
 
@@ -140,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Processes a single order
         /// </summary>
-        private void LoadOrder(VolusionWebClient client, XPathNavigator xpath)
+        private Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
         {
             long orderNumber = XPathUtility.Evaluate(xpath, "OrderID", 0);
 
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = result.Value;
@@ -197,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "VolusionDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

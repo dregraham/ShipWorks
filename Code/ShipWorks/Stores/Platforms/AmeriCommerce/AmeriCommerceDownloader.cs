@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
                 Progress.Detail = "Checking for orders...";
 
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
 
                 // create the web client
                 AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
@@ -86,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
                     Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
 
-                    LoadOrder(client, order);
+                    await LoadOrder(client, order).ConfigureAwait(false);
 
                     Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
                 }
@@ -104,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private void LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -112,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // check for cancel since FillOrderDetail is pretty time-intensive
             if (Progress.IsCancelRequested)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             // begin pulling into ShipWorks now
@@ -122,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = result.Value;
@@ -160,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmeriCommerceDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -400,7 +401,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             CustomerTrans customer = client.GetCustomer(orderTrans.customerID.GetValue(0));
             billAdapter.Email = customer.email;
 
-            // AC only provides the customer level email.  Through correspondance with them they want us always using the customer email as the shipping email.
+            // AC only provides the customer level email.  Through correspondence with them they want us always using the customer email as the shipping email.
             shipAdapter.Email = customer.email;
 
             // fix bad/missing shipping information, take from the customer record

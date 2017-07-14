@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -43,9 +44,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Load the orders from the given GenericFileInstance
         /// </summary>
-        protected override bool ImportFile(GenericFileInstance file)
+        protected override async Task<bool> ImportFile(GenericFileInstance file)
         {
-            XmlDocument xmlDocument = GenericFileXmlUtility.LoadAndValidateDocument(file.ReadAllText(), xslTransform);
+            string fileText = await file.ReadAllTextAsync().ConfigureAwait(false);
+            XmlDocument xmlDocument = GenericFileXmlUtility.LoadAndValidateDocument(fileText, xslTransform);
 
             XPathNavigator xpath = xmlDocument.CreateNavigator();
             XPathNodeIterator orderNodes = xpath.Select("//Order");
@@ -57,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
                 Progress.Detail = string.Format("Importing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 if (Progress.IsCancelRequested)
                 {
@@ -71,13 +73,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             GenericResult<OrderEntity> result = InstantiateOrder(xpath);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order: {1}.", result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = result.Value;
@@ -86,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileXmlDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

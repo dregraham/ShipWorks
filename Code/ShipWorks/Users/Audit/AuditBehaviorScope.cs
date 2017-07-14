@@ -85,9 +85,9 @@ namespace ShipWorks.Users.Audit
         /// Push whether this is a super user, if necessary
         /// </summary>
         /// <param name="userBehavior"></param>
-        private void PushSuperUser(AuditBehaviorUser userBehavior)
+        private void PushSuperUser(AuditBehaviorUser behavior)
         {
-            if (userBehavior != AuditBehaviorUser.SuperUser)
+            if (behavior != AuditBehaviorUser.SuperUser)
             {
                 return;
             }

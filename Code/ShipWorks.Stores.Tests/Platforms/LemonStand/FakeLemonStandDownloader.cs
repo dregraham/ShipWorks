@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using System.Threading.Tasks;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -34,9 +35,10 @@ namespace ShipWorks.Tests.Stores.LemonStand
             return GenericResult.FromSuccess<OrderEntity>(Order);
         }
 
-        protected override void SaveDownloadedOrder(OrderEntity orderEntity)
+        protected override Task SaveDownloadedOrder(OrderEntity order)
         {
-            SavedOrder = (LemonStandOrderEntity) orderEntity;
+            SavedOrder = (LemonStandOrderEntity) order;
+            return Task.CompletedTask;
         }
     }
 }

@@ -1858,42 +1858,82 @@ namespace ShipWorks.Shipping
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
             {
-                if (anyAttempted && !getRatesTimer.Enabled)
-                {
-                    rateControl.ShowSpinner = false;
-
-                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates(_e.Result as RateGroup);
-                }
+                GetRatesWorkerCompleted(_e, anyAttempted);
             };
 
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
-                ShipmentEntity shipment = (ShipmentEntity) _e.Argument;
-                _e.Result = _e.Argument;
-
-                try
-                {
-                    anyAttempted = true;
-                    _e.Result = lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
-
-                    // Just in case it used to have an error remove it
-                    ErrorManager?.Remove(shipment.ShipmentID);
-                }
-                catch (InvalidRateGroupShippingException ex)
-                {
-                    log.Error("Shipping exception encountered while getting rates", ex);
-                    _e.Result = ex.InvalidRates;
-                }
-                catch (ShippingException ex)
-                {
-                    log.Error("Shipping exception encountered while getting rates", ex);
-                }
+                anyAttempted = GetRatesWorker(_e, anyAttempted);
             };
 
             rateControl.ShowSpinner = true;
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
+        }
+
+        /// <summary>
+        /// Gets the rates worker completed.
+        /// </summary>
+        private void GetRatesWorkerCompleted(RunWorkerCompletedEventArgs runWorkerCompletedEventArgs, bool anyAttempted)
+        {
+            if (anyAttempted && !getRatesTimer.Enabled)
+            {
+                rateControl.ShowSpinner = false;
+
+                ObjectDisposedException objectDisposedException = runWorkerCompletedEventArgs.Error as ObjectDisposedException;
+                if (closing && objectDisposedException != null)
+                {
+                    log.Error("Error occurs when trying to load rates after shipping dialog is closed", objectDisposedException);
+                    return;
+                }
+
+                try
+                {
+                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
+                    LoadDisplayedRates(runWorkerCompletedEventArgs.Result as RateGroup);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    if (closing)
+                    {
+                        log.Error("Error occurs when trying to load rates after shipping dialog is closed", ex);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Gets rates for each shipment 
+        /// </summary>
+        private bool GetRatesWorker(DoWorkEventArgs doWorkEventArgs, bool anyAttempted)
+        {
+            ShipmentEntity shipment = (ShipmentEntity) doWorkEventArgs.Argument;
+            doWorkEventArgs.Result = doWorkEventArgs.Argument;
+
+            try
+            {
+                anyAttempted = true;
+                doWorkEventArgs.Result = lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
+
+                // Just in case it used to have an error remove it
+                ErrorManager?.Remove(shipment.ShipmentID);
+            }
+            catch (InvalidRateGroupShippingException ex)
+            {
+                log.Error("Shipping exception encountered while getting rates", ex);
+                doWorkEventArgs.Result = ex.InvalidRates;
+            }
+            catch (ShippingException ex)
+            {
+                log.Error("Shipping exception encountered while getting rates", ex);
+            }
+
+            return anyAttempted;
         }
 
         /// <summary>

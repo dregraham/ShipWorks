@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -89,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                             return;
                         }
 
-                        DownloadMailMessage(popClient, i);
+                        await DownloadMailMessage(popClient, i).ConfigureAwait(false);
                     }
 
                     // Must be called to finalize delete
@@ -121,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Downloads an email message from the pop server and processes it for orders.
         /// </summary>
-        private void DownloadMailMessage(Pop3 popClient, int sequenceNumber)
+        private async Task DownloadMailMessage(Pop3 popClient, int sequenceNumber)
         {
             Progress.Detail = string.Format("Processing message {0} of {1}...", sequenceNumber, messageCount);
 
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
                     try
                     {
-                        LoadOrders(attachment);
+                        await LoadOrders(attachment).ConfigureAwait(false);
                     }
                     catch (MalformedCsvException ex)
                     {
@@ -172,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Processes an email attachment for OrderMotion orders
         /// </summary>
-        private void LoadOrders(Attachment attachment)
+        private async Task LoadOrders(Attachment attachment)
         {
             string attachmentBody = attachment.ContentString;
             if (attachmentBody == null)
@@ -180,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // Excel spreadsheets and the like don't get put into ContentSting
                 using (StreamReader reader = new StreamReader(attachment.GetContentStream()))
                 {
-                    attachmentBody = reader.ReadToEnd();
+                    attachmentBody = await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
 
                 if (String.IsNullOrEmpty(attachmentBody))
@@ -202,8 +203,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     // cycle through the records
                     while (reader.ReadNextRecord())
                     {
-                        // load the order information ffrom the current record
-                        LoadOrder(reader);
+                        // load the order information from the current record
+                        await LoadOrder(reader).ConfigureAwait(false);
                     }
                 }
             }
@@ -212,7 +213,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Load the order from the current CSV record
         /// </summary>
-        private void LoadOrder(CsvReader reader)
+        private Task LoadOrder(CsvReader reader)
         {
             try
             {
@@ -228,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 if (result.Failure)
                 {
                     log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 OrderMotionOrderEntity order = (OrderMotionOrderEntity) result.Value;
@@ -288,12 +289,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
                 // save the order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
             }
             catch (ArgumentException ex)
             {
                 // Field wasn't found, skip it
                 log.Warn(ex);
+                return Task.CompletedTask;
             }
         }
 
@@ -387,7 +389,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 item.UnitPrice = XPathUtility.Evaluate(itemNavigator, "Price", 0.0M);
                 item.LocalStatus = GetItemStatus(XPathUtility.Evaluate(itemNavigator, "LineStatus", ""));
 
-                // weight is a total weight.  need to divide by quanitty
+                // weight is a total weight.  need to divide by quantity
                 double weight = XPathUtility.Evaluate(itemNavigator, "DimensionData/Weight", 0.0);
                 if (item.Quantity > 0)
                 {

@@ -297,7 +297,7 @@ namespace ShipWorks.Stores.Content.Panels
 
                 if (keys.IsCountEqualTo(1))
                 {
-                    shipmentAdapter = loadedOrderSelection.ShipmentAdapters.FirstOrDefault(x => keys.Contains(x.Shipment.ShipmentID));
+                    shipmentAdapter = loadedOrderSelection.ShipmentAdapters?.FirstOrDefault(x => keys.Contains(x.Shipment.ShipmentID));
                 }
 
                 Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, keys, shipmentAdapter));

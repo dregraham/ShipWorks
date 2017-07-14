@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -71,7 +72,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Get the official eBay time in UTC
                 eBayOfficialTime = webClient.GetOfficialTime();
 
-                if (!DownloadOrders())
+                bool morePages = await DownloadOrders().ConfigureAwait(false);
+                if (!morePages)
                 {
                     return;
                 }
@@ -104,13 +106,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Download all orders from eBay
         /// </summary>
-        private bool DownloadOrders()
+        private async Task<bool> DownloadOrders()
         {
             // Controls whether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
             //bool usePagedDownload = true;
 
             // Get the date\time to start downloading from
-            DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
+            DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint()) ?? DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
 
             // Ebay only allows going back 30 days
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     //    }
                     //}
 
-                    ProcessOrder(orderType);
+                    await ProcessOrder(orderType).ConfigureAwait(false);
 
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
@@ -187,14 +189,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given eBay order
         /// </summary>
-        private void ProcessOrder(OrderType orderType)
+        private Task ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
             GenericResult<OrderEntity> result = InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderType.OrderID, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             EbayOrderEntity order = (EbayOrderEntity) result.Value;
@@ -203,7 +205,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
             {
                 log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
-                return;
+                return Task.CompletedTask;
             }
 
             // If its new it needs a ShipWorks order number
@@ -270,7 +272,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Make totals adjustments
             BalanceOrderTotal(order, orderType);
 
-            SaveOrder(order, abandonedItems);
+            return SaveOrder(order, abandonedItems);
         }
 
         /// <summary>
@@ -310,7 +312,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Save the given order, handling all the given abandoned items that have now moved to the new order
         /// </summary>
-        private void SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
+        private Task SaveOrder(EbayOrderEntity order, List<OrderItemEntity> abandonedItems)
         {
             List<OrderEntity> affectedOrders = new List<OrderEntity>();
 
@@ -324,30 +326,26 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 affectedOrders.Add(affectedOrder);
             }
 
-            // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
-            using (CreateOrderAuditScope(order))
+            SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
+
+            return sqlDeadlockRetry.ExecuteWithRetryAsync(async () =>
             {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
-
-                sqlDeadlockRetry.ExecuteWithRetry(() =>
+                using (DbTransaction transaction = connection.BeginTransaction())
                 {
-                    using (DbTransaction transaction = connection.BeginTransaction())
+                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                     {
-                        using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
-                        {
-                            // Save the new order
-                            SaveDownloadedOrder(order, transaction);
+                        // Save the new order
+                        await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
 
-                            // Remove the abandoned items
-                            DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
+                        // Remove the abandoned items
+                        DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
 
-                            // Copy Notes, Shipments from affected orders into the combined order
-                            // delete the affected orders
-                            ConsolidateOrderResources(order, affectedOrders, adapter);
-                        }
+                        // Copy Notes, Shipments from affected orders into the combined order
+                        // delete the affected orders
+                        ConsolidateOrderResources(order, affectedOrders, adapter);
                     }
-                });
-            }
+                }
+            });
         }
 
         /// <summary>
@@ -546,9 +544,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
         /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
         /// </summary>
-        protected override DateTime? GetOnlineLastModifiedStartingPoint()
+        protected override async Task<DateTime?> GetOnlineLastModifiedStartingPoint()
         {
-            DateTime? onlineLastModifiedStartingPoint = base.GetOnlineLastModifiedStartingPoint();
+            DateTime? onlineLastModifiedStartingPoint = await base.GetOnlineLastModifiedStartingPoint();
 
             if (((EbayStoreEntity) Store).DownloadOlderOrders)
             {

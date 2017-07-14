@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.ClickCartPro
 {
@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Constructor
         /// </summary>
-        public ClickCartProDownloader(StoreEntity store) 
+        public ClickCartProDownloader(StoreEntity store)
             : base(store)
         {
 

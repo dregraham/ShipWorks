@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -49,12 +50,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = GenerateDownloadCommand(store, trackedDurationEvent);
+                IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
                 trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
@@ -67,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 {
                     EnsureRecordIdentifiersAreNotNull(orderGroups);
 
-                    LoadOrders(orderGroups, orderCount);
+                    await LoadOrders(orderGroups, orderCount).ConfigureAwait(false);
                 }
             }
             catch (ShipWorksOdbcException ex)
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the download command based on the store entity
         /// </summary>
-        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
+        private async Task<IOdbcCommand> GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
 
                 // Get the starting point and include it for telemetry
-                DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+                DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
                 trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
                 return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
@@ -130,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Loads the order information into order entities
         /// </summary>
-        private void LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
+        private async Task LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
         {
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
@@ -147,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 {
                     try
                     {
-                        SaveDownloadedOrder(downloadedOrder.Value);
+                        await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
                     }
                     catch (ORMQueryExecutionException ex)
                     {

@@ -1,6 +1,9 @@
 ﻿using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
@@ -33,13 +36,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Load the order from the reader that is positioned on the row we want to load
         /// </summary>
-        protected void LoadOrder(GenericSpreadsheetReader reader)
+        protected Task LoadOrder(GenericSpreadsheetReader reader)
         {
             GenericResult<OrderEntity> result = InstantiateOrder(reader);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order: {1}.", result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = result.Value;
@@ -49,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileSpreadsheetDownloaderBase.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -74,22 +77,31 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Load the orders from the given GenericFileInstance
         /// </summary>
-        protected override bool ImportFile(GenericFileInstance file)
+        protected override async Task<bool> ImportFile(GenericFileInstance file)
         {
             try
             {
                 using (GenericSpreadsheetReader reader = CreateReader(file))
                 {
-                    while (reader.NextRecord())
+                    double speed = 0;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    using (new LoggedStopwatch(LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase)), "GenFile Importing orders time to run."))
                     {
-                        // Update the status
-                        Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
-
-                        LoadOrder(reader);
-
-                        if (Progress.IsCancelRequested)
+                        while (reader.NextRecord())
                         {
-                            return false;
+                            // Update the status
+                            Progress.Detail = $"Importing record {(QuantitySaved + 1)}... {speed:##.##} ms/order";
+
+                            await LoadOrder(reader);
+
+                            if (Progress.IsCancelRequested)
+                            {
+                                return false;
+                            }
+
+                            speed = sw.ElapsedMilliseconds * 1.0 / QuantitySaved * 1.0;
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
@@ -16,7 +17,7 @@ namespace ShipWorks.Common.Threading
         static readonly ILog log = LogManager.GetLogger(typeof(ExceptionMonitor));
 
         /// <summary>
-        /// Wrap the given call with exception handling that propogates the exception to the main UI thread.
+        /// Wrap the given call with exception handling that propagates the exception to the main UI thread.
         /// </summary>
         public static ThreadStart WrapThread(ThreadStart callback)
         {
@@ -26,7 +27,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Wrap the given call with exception handling that propogates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
+        /// Wrap the given call with exception handling that propagates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
         /// using the given text that stays active until the callback completes.  If it is null, no ApplicationBusyToken is created.
         /// </summary>
         public static ParameterizedThreadStart WrapThread(ParameterizedThreadStart callback, string uiOperationText = null)
@@ -44,7 +45,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Wrap the given call with exception handling that propogates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
+        /// Wrap the given call with exception handling that propagates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
         /// using the given text that stays active until the callback completes.  If it is null, no ApplicationBusyToken is created.
         /// </summary>
         public static WaitCallback WrapWorkItem(WaitCallback callback, string uiOperationText = null)

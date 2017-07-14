@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -66,7 +67,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
                     if (!string.IsNullOrEmpty(fileName))
                     {
-                        LoadOrdersFromCsv(File.ReadAllText(fileName));
+                        string fileText = await ReadAllTextAsync(fileName).ConfigureAwait(false);
+                        await LoadOrdersFromCsv(fileText).ConfigureAwait(false);
 
                         Progress.Detail = "Done";
                     }
@@ -93,10 +95,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                                 return;
                             }
 
-                            if (!DownloadFtpFile(fileName, ftpClient))
-                            {
-                                return;
-                            }
+                            await DownloadFtpFile(fileName, ftpClient).ConfigureAwait(false);
                         }
                     }
                 }
@@ -112,9 +111,23 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         }
 
         /// <summary>
+        /// Read all text async
+        /// </summary>
+        private async Task<string> ReadAllTextAsync(string fileName)
+        {
+            using (Stream stream = File.OpenRead(fileName))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return await reader.ReadToEndAsync();
+                }
+            }
+        }
+
+        /// <summary>
         /// Download File and process orders
         /// </summary>
-        private bool DownloadFtpFile(string fileName, BuyDotComFtpClient ftpClient)
+        private async Task<bool> DownloadFtpFile(string fileName, BuyDotComFtpClient ftpClient)
         {
             try
             {
@@ -122,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 string fileContent = ftpClient.GetOrderFileContent(fileName);
 
                 // Load orders from the content
-                bool result = LoadOrdersFromCsv(fileContent);
+                bool result = await LoadOrdersFromCsv(fileContent);
 
                 // Move the file to the Archive folder if configured (default)
                 if (BuyDotComUtility.ArchiveFileAfterDownload)
@@ -141,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Load Buy.com orders from the given file content
         /// </summary>
-        private bool LoadOrdersFromCsv(string csvContent)
+        private async Task<bool> LoadOrdersFromCsv(string csvContent)
         {
             using (GenericCsvReader csvReader = new GenericCsvReader(csvMap, csvContent))
             {
@@ -164,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     loader.Load(order, csvReader, this);
 
                     SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BuyDotComDownloader.LoadOrder");
-                    retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                    await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                     if (Progress.IsCancelRequested)
                     {

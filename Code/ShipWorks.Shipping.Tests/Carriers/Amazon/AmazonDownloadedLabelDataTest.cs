@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.IO;
 using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Collections;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
@@ -46,7 +47,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
         public AmazonDownloadedLabelDataTest()
         {
-            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Mock<ITemplateLabelUtility>()
+                .Setup(u => u.LoadImageFromResouceDirectory(It.IsAny<string>()))
+                .Returns<Image>(null);
         }
 
         [Fact]
@@ -77,6 +81,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
+        public void Save_ThrowsDownloadException_WhenLoadingImageThrowsOutOfMemoryException()
+        {
+            var testObject = mock.Create<AmazonDownloadedLabelData>(TypedParameter.From(defaultShipment), TypedParameter.From(defaultLabel));
+            mock.Mock<ITemplateLabelUtility>()
+                .Setup(u => u.LoadImageFromResouceDirectory(It.IsAny<string>()))
+                .Throws<OutOfMemoryException>();
+            Assert.Throws<DownloadException>(() => testObject.Save());
+        }
+
+        [Fact]
         public void Save_SavesPdfData_ToResourceManager()
         {
             defaultLabel.Label.FileContents.FileType = "application/pdf";
@@ -89,7 +103,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
         public void Dispose()
         {
-            mock?.Dispose();
+            mock.Dispose();
         }
     }
 }

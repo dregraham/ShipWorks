@@ -6,9 +6,11 @@ using System.IO;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -22,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonShipment labelResponse;
         private readonly IObjectReferenceManager objectReferenceManager;
         private readonly IDataResourceManager resourceManager;
+        private readonly ITemplateLabelUtility templateLabelUtility;
 
         /// <summary>
         /// Constructor
@@ -29,12 +32,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonDownloadedLabelData(ShipmentEntity shipment,
             AmazonShipment labelResponse,
             IObjectReferenceManager objectReferenceManager,
-            IDataResourceManager resourceManager)
+            IDataResourceManager resourceManager, 
+            ITemplateLabelUtility templateLabelUtility)
         {
             this.shipment = shipment;
             this.labelResponse = labelResponse;
             this.objectReferenceManager = objectReferenceManager;
             this.resourceManager = resourceManager;
+            this.templateLabelUtility = templateLabelUtility;
         }
 
         /// <summary>
@@ -83,7 +88,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             else
             {
                 // Save the label to the database
-                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+                DataResourceReference resourceReference =
+                    resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+
+                try
+                {
+                    templateLabelUtility.LoadImageFromResouceDirectory(resourceReference.Filename);
+                }
+                catch(OutOfMemoryException ex)
+                {
+                    throw new DownloadException(
+                        "ShipWorks was unable to read the label data. The label is likely invalid. Please void this label and create a new one. " +
+                        $"{Environment.NewLine} {Environment.NewLine}If the problem persists please make sure your comptuer has sufficient memory.",
+                        ex);
+                }
             }
         }
 

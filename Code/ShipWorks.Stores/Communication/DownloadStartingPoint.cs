@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -36,25 +37,25 @@ namespace ShipWorks.Stores.Communication
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to.
         /// </summary>
-        public DateTime? OnlineLastModified(IStoreEntity store) =>
+        public Task<DateTime?> OnlineLastModified(IStoreEntity store) =>
             GetDateStartingPoint(OrderFields.OnlineLastModified, store);
 
         /// <summary>
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to.
         /// </summary>
-        public DateTime? OrderDate(IStoreEntity store) =>
+        public Task<DateTime?> OrderDate(IStoreEntity store) =>
             GetDateStartingPoint(OrderFields.OrderDate, store);
 
         /// <summary>
         /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>
-        public long OrderNumber(IStoreEntity store)
+        public async Task<long> OrderNumber(IStoreEntity store)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                long? orderNumber = GetMaxOrderNumberFromDatabase(adapter, store.StoreID);
+                long? orderNumber = await GetMaxOrderNumberFromDatabase(adapter, store.StoreID);
 
                 if (!orderNumber.HasValue && store.InitialDownloadOrder != null)
                 {
@@ -74,7 +75,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Get the maximum order number from the database
         /// </summary>
-        private long? GetMaxOrderNumberFromDatabase(ISqlAdapter adapter, long storeID)
+        private async Task<long?> GetMaxOrderNumberFromDatabase(ISqlAdapter adapter, long storeID)
         {
             QueryFactory factory = new QueryFactory();
 
@@ -88,8 +89,8 @@ namespace ShipWorks.Stores.Communication
                 .Where(OrderSearchFields.StoreID == storeID)
                 .AndWhere(OrderSearchFields.IsManual == false);
 
-            long? maxOrder = adapter.FetchScalar<long?>(maxOrderQuery);
-            long? maxOrderSearch = adapter.FetchScalar<long?>(maxOrderSearchQuery);
+            long? maxOrder = await adapter.FetchScalarAsync<long?>(maxOrderQuery);
+            long? maxOrderSearch = await adapter.FetchScalarAsync<long?>(maxOrderSearchQuery);
 
             if (maxOrder.HasValue && maxOrderSearch.HasValue)
             {
@@ -102,16 +103,18 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Get the date starting point
         /// </summary>
-        private DateTime? GetDateStartingPoint(EntityField2 dateField, IStoreEntity store)
+        private async Task<DateTime?> GetDateStartingPoint(EntityField2 dateField, IStoreEntity store)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                object result = adapter.GetScalar(
-                    dateField,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
+                QueryFactory factory = new QueryFactory();
 
-                DateTime? dateTime = result as DateTime?;
+                DynamicQuery maxOrderQuery = factory.Order
+                    .Select(dateField.Max())
+                    .Where(OrderFields.StoreID == store.StoreID)
+                    .AndWhere(OrderFields.IsManual == false);
+
+                DateTime? dateTime = await adapter.FetchScalarAsync<DateTime?>(maxOrderQuery);
 
                 log.Info($"MAX({dateField.Name}) = {dateTime:u}");
 

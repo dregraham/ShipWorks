@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
@@ -74,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             UpdateOrderStatuses();
 
@@ -87,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 bool allOrdersRetrieved = false;
                 int currentPage = 1;
 
-                DateTime startDateTime = GetDownloadStartingPoint();
+                DateTime startDateTime = await GetDownloadStartingPoint();
                 string start = ToLemonStandDate(startDateTime);
 
                 // LemonStand does not return any information about number of pages, so we set the limit to 50 orders per page
@@ -117,7 +118,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                if (ProcessOrders(jsonOrders, expectedCount))
+                bool shouldContinue = await ProcessOrders(jsonOrders, expectedCount).ConfigureAwait(false);
+                if (!shouldContinue)
                 {
                     return;
                 }
@@ -135,7 +137,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
         }
 
-        private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
+        /// <summary>
+        /// Process the collection of orders
+        /// </summary>
+        private async Task<bool> ProcessOrders(List<JToken> jsonOrders, int expectedCount)
         {
             // Load orders
             foreach (JToken jsonOrder in jsonOrders)
@@ -143,29 +148,32 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // check for cancellation
                 if (Progress.IsCancelRequested)
                 {
-                    return true;
+                    return false;
                 }
 
                 // Set the progress detail
                 Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                LoadOrder(jsonOrder);
+                await LoadOrder(jsonOrder).ConfigureAwait(false);
             }
-            return false;
+
+            return true;
         }
 
         /// <summary>
         ///     Load Order from JToken
         /// </summary>
-        public void LoadOrder(JToken jsonOrder)
+        public Task LoadOrder(JToken jsonOrder)
         {
             GenericResult<LemonStandOrderEntity> order = PrepareOrder(jsonOrder);
 
             if (order.Success)
             {
-                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order.Value));
+                return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order.Value));
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -349,13 +357,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Gets the download starting point.
         /// </summary>
         /// <returns>A DateTime object.</returns>
-        private DateTime GetDownloadStartingPoint()
+        private async Task<DateTime> GetDownloadStartingPoint()
         {
             // We're going to have our starting point default to either the initial download days setting or 30 days back
             int previousDaysToDownload = Store.InitialDownloadDays ?? 30;
             DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
 
-            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+            DateTime? lastModifiedDate = await GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
             {
                 // We have a record of the last order date in the system, so
@@ -371,7 +379,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Loads Shipping and Billing address into the order entity
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
-        /// <param name="shipAddress">The shippping addres DTO</param>
+        /// <param name="shipAddress">The shipping address DTO</param>
         /// <param name="billAddress">The billing address DTO</param>
         /// <param name="email">The customers email address</param>
         private static void LoadAddressInfo(LemonStandOrderEntity order, LemonStandShippingAddress shipAddress,

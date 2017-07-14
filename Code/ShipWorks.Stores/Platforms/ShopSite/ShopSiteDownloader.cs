@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
@@ -47,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -61,7 +62,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage())
+                    bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -80,9 +82,9 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Download the next page of orders.
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
-            long lastOrderNumber = GetOrderNumberStartingPoint();
+            long lastOrderNumber = await GetOrderNumberStartingPoint();
 
             XmlDocument xmlDocument = webClient.GetOrders(lastOrderNumber + 1);
             XPathNavigator xpath = xmlDocument.CreateNavigator();
@@ -96,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 totalCount += orderNodes.Count;
 
                 // Add this to the XML to be loaded into the database
-                LoadOrders(orderNodes);
+                await LoadOrders(orderNodes).ConfigureAwait(false);
 
                 return true;
             }
@@ -111,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNodeIterator orderNodes)
+        private async Task LoadOrders(XPathNodeIterator orderNodes)
         {
             // Go through each order in the XML Document
             while (orderNodes.MoveNext())
@@ -126,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -136,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
@@ -146,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             OrderEntity order = result.Value;
@@ -167,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Load address info
             LoadAddressInfo(order, xpath);
 
-            // ShopSite doesnt automatically fill in the ShipTo email even if ShipTo\BillTo are the same
+            // ShopSite doesn't automatically fill in the ShipTo email even if ShipTo\BillTo are the same
             UpdateShipToEmail(order);
 
             // Only update the rest for brand new orders
@@ -191,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopSiteDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -250,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 option.UnitPrice = 0;
             }
 
-            // Shopsite incluedes the option price in the item price
+            // Shopsite includes the option price in the item price
             item.UnitPrice -= option.UnitPrice;
         }
 
@@ -356,7 +358,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {
@@ -374,7 +376,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Customer comments
             InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public);
 
-            // Odrder instructions
+            // Order instructions
             InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public);
         }
 

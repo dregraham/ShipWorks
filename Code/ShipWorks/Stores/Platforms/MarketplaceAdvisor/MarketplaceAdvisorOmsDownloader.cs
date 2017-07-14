@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Common.Logging;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -53,13 +54,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Keep going until no more to download
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(currentPage++))
+                    bool morePages = await DownloadNextOrdersPage(currentPage++).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -78,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Download the next page of MarketplaceAdvisor orders
         /// </summary>
-        private bool DownloadNextOrdersPage(int currentPage)
+        private async Task<bool> DownloadNextOrdersPage(int currentPage)
         {
             OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity) Store).GetOrders(currentPage);
 
@@ -98,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             }
             else
             {
-                LoadOrders(orders);
+                await LoadOrders(orders).ConfigureAwait(false);
 
                 return true;
             }
@@ -107,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Load the given OMS orders into ShipWorks
         /// </summary>
-        private void LoadOrders(OMOrders ordersResult)
+        private async Task LoadOrders(OMOrders ordersResult)
         {
             OMOrder[] orders = ordersResult.Orders;
 
@@ -135,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Always add to this list, even if already downloaded
                 markAsProcessed.Add(order.OrderUid);
 
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
                 Progress.PercentComplete = 100 * quantityDownloaded / ordersResult.TotalRecords;
@@ -154,16 +156,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Load the given OMS order into ShipWorks
         /// </summary>
-        private void LoadOrder(OMOrder omsOrder)
+        private async Task LoadOrder(OMOrder omsOrder)
         {
-            bool isNew = CreateMasterOrder(omsOrder);
+            bool isNew = await CreateMasterOrder(omsOrder).ConfigureAwait(false);
 
             if (isNew)
             {
                 // Now, create an extra order for each additional parcels
                 for (int i = 1; i < omsOrder.Parcels.OrderParcels.Length; i++)
                 {
-                    CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]);
+                    await CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]).ConfigureAwait(false);
                 }
             }
         }
@@ -172,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// Create the master order for the oms order.  If there is only one parcel,
         /// then this will be the only order.  Returns true if the order that was created was a newly downloaded order.
         /// </summary>
-        private bool CreateMasterOrder(OMOrder omsOrder)
+        private async Task<bool> CreateMasterOrder(OMOrder omsOrder)
         {
             // Create a new order instance
             GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid));
@@ -184,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
-            // Setup the basic proprites
+            // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);
 
             // First parcel
@@ -197,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             if (isNew)
             {
                 // If there are more than 1 parcel, we have to add a charge to make up
-                // for the fact that some line items arent on the master order
+                // for the fact that some line items aren't on the master order
                 if (omsOrder.Parcels.OrderParcels.Length > 1)
                 {
                     double otherParcelsTotal = 0;
@@ -226,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateMasterOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return isNew;
         }
@@ -234,21 +236,21 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create an order to represent the given additional parcel of the oms order.
         /// </summary>
-        private void CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
+        private Task CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
         {
-            // Create a new order instance with parce information
+            // Create a new order instance with parse information
             GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
                 omsOrder.OrderUid,
                 Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1));
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
-            // Setup the basic proprites
+            // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);
 
             // Load the parcel specific info for the order
@@ -263,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateParcelOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -410,7 +412,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             person.Phone = ship.PhoneNumber;
             person.Fax = ship.FaxNumber;
 
-            // If we had a state, and a province, use them both seperated by a space
+            // If we had a state, and a province, use them both separated by a space
             if (person.StateProvCode.Length > 0 && ship.Province.Length > 0)
             {
                 person.StateProvCode += " ";

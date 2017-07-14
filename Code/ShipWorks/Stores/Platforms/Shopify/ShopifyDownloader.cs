@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Downloading orders...";
 
@@ -70,10 +71,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 try
                 {
-                    Tuple<DateTime, DateTime> dateRange = GetNextDownloadDateRange();
+                    Range<DateTime> dateRange = await GetNextDownloadDateRange();
 
                     // Get count of orders
-                    totalCount = WebClient.GetOrderCount(dateRange.Item1, dateRange.Item2);
+                    totalCount = WebClient.GetOrderCount(dateRange.Start, dateRange.End);
                     if (totalCount == 0)
                     {
                         Progress.Detail = "No orders to download.";
@@ -84,10 +85,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     // Keep going until there are no more to download
                     while (true)
                     {
-                        if (!DownloadOrderRange(dateRange.Item1, dateRange.Item2))
+                        bool shouldContinue = await DownloadOrderRange(dateRange.Start, dateRange.End).ConfigureAwait(false);
+                        if (!shouldContinue)
                         {
                             return;
                         }
+
                         // Check for cancel
                         if (Progress.IsCancelRequested)
                         {
@@ -95,10 +98,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
                         }
 
                         // Update our date range to see if we can grab any orders that have come in while we've been downloading
-                        dateRange = GetNextDownloadDateRange();
+                        dateRange = await GetNextDownloadDateRange();
 
                         // Get how many have come in since we started
-                        int nextCount = WebClient.GetOrderCount(dateRange.Item1, dateRange.Item2);
+                        int nextCount = WebClient.GetOrderCount(dateRange.Start, dateRange.End);
 
                         if (nextCount > 0)
                         {
@@ -132,10 +135,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get the next download starting and ending date and time
         /// </summary>
-        private Tuple<DateTime, DateTime> GetNextDownloadDateRange()
+        private async Task<Range<DateTime>> GetNextDownloadDateRange()
         {
             // Getting last online modified starting point
-            DateTime? startDate = GetOnlineLastModifiedStartingPoint();
+            DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
 
             if (!startDate.HasValue)
             {
@@ -148,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // Use the web servers ending time, backed off by a little so we don't have to worry about race conditions
             DateTime endDate = WebClient.GetServerCurrentDateTime().Subtract(TimeSpan.FromMinutes(2));
 
-            return Tuple.Create(startDate.Value, endDate);
+            return startDate.Value.To(endDate);
         }
 
         /// <summary>
@@ -157,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <param name="startDate">Filter by shopify order modified date after this date</param>
         /// <param name="endDate">Filter by shopify order modified date before this date</param>
         /// <returns>Number of orders matching criteria</returns>
-        public bool DownloadOrderRange(DateTime startDate, DateTime endDate)
+        public async Task<bool> DownloadOrderRange(DateTime startDate, DateTime endDate)
         {
             // Check for cancel
             if (Progress.IsCancelRequested)
@@ -194,7 +197,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     orders = orders.OrderBy(o => o.GetValue<DateTime>("updated_at")).ToList();
 
                     // Load the orders
-                    if (!LoadOrders(orders))
+                    bool wasSuccessful = await LoadOrders(orders).ConfigureAwait(false);
+                    if (!wasSuccessful)
                     {
                         return false;
                     }
@@ -212,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private bool LoadOrders(List<JToken> jsonOrders)
+        private async Task<bool> LoadOrders(List<JToken> jsonOrders)
         {
             //Iterate through each jsonOrder
             foreach (JToken jsonOrder in jsonOrders)
@@ -227,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 // Call LoadOrder to process the jsonOrder
-                LoadOrder(jsonOrder);
+                await LoadOrder(jsonOrder).ConfigureAwait(false);
 
                 // Update the PercentComplete
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -239,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private void LoadOrder(JToken jsonOrder)
+        private async Task LoadOrder(JToken jsonOrder)
         {
             if (jsonOrder == null)
             {
@@ -313,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 // Save the downloaded order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopifyDownloader.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
             catch (JsonException jsonEx)
             {

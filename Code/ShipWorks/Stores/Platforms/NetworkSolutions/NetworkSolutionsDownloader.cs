@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                         Progress.Detail = String.Format("Downloading order {0} of {1}...", QuantitySaved + 1, webClient.TotalCount);
 
                         // import the order
-                        LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // update progress
                         Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / webClient.TotalCount);
@@ -103,12 +104,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Loads a NetworkSolutions order into ShipWorks
         /// </summary>
-        private void LoadOrder(OrderType nsOrder)
+        private Task LoadOrder(OrderType nsOrder)
         {
             if (string.IsNullOrWhiteSpace(nsOrder.OrderNumber))
             {
                 log.InfoFormat("Order with OrderId '{0}' did not have an order number.  Skipping it and continuing to the next order.", nsOrder.OrderId);
-                return;
+                return Task.CompletedTask;
             }
 
             long networkSolutionsOrderId = nsOrder.OrderId;
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", networkSolutionsOrderId, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity) result.Value;
@@ -159,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NetworkSolutionsDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -439,7 +440,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             // email address
             billAdapter.Email = nsOrder.Customer.EmailAddress;
 
-            // fix bad/missing shipping information, take from teh customer record
+            // fix bad/missing shipping information, take from the customer record
             if (shipAdapter.FirstName.Length == 0 && shipAdapter.LastName.Length == 0 && shipAdapter.City.Length == 0)
             {
                 PersonAdapter.Copy(billAdapter, shipAdapter);

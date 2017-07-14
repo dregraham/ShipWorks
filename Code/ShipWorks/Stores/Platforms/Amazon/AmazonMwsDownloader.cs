@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -55,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     client.TestServiceStatus();
 
                     // determine where to start downloading from
-                    DateTime? startDate = GetOnlineLastModifiedStartingPoint();
+                    DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
 
                     // Amazon's APIs are LastUpdateTime-inclusive, so skip over the order we already have
                     if (startDate.HasValue)
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.PercentComplete = 0;
 
                         // load each order in this result page
-                        LoadOrders(client, xpath);
+                        await LoadOrders(client, xpath).ConfigureAwait(false);
                     }
 
                     trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
@@ -132,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load orders from a page of results
         /// </summary>
-        private void LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             int totalCount = quantitySeen + XPathUtility.Evaluate(xpath, "count(//amz:Order)", 0);
 
@@ -151,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
 
                 XPathNamespaceNavigator orderXPath = new XPathNamespaceNavigator(tempXPath, xpath.Namespaces);
-                LoadOrder(client, orderXPath);
+                await LoadOrder(client, orderXPath).ConfigureAwait(false);
 
                 // update progress
                 Progress.PercentComplete = Math.Min(100 * quantitySeen / totalCount, 100);
@@ -162,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
@@ -171,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             AmazonOrderEntity order = (AmazonOrderEntity) result.Value;
@@ -181,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (String.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
             {
                 log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderID);
-                return;
+                return Task.CompletedTask;
             }
 
             // basic properties
@@ -255,7 +256,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonMwsDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

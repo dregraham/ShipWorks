@@ -846,7 +846,7 @@ namespace ShipWorks
                         ((TD.SandDock.DockControl)(this.dockableWindowCharges)),
                         ((TD.SandDock.DockControl)(this.dockableWindowMap)),
                         ((TD.SandDock.DockControl)(this.dockableWindowStreetView)),
-                        ((TD.SandDock.DockControl)(this.dockableWindowPaymentDetails))}, this.dockableWindowMap))),
+                        ((TD.SandDock.DockControl)(this.dockableWindowPaymentDetails))}, this.dockableWindowStreetView))),
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(337.3859F, 400F), new TD.SandDock.DockControl[] {
                         ((TD.SandDock.DockControl)(this.dockableWindowShipments)),
                         ((TD.SandDock.DockControl)(this.dockableWindowEmail)),

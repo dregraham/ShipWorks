@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -69,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -77,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 ChannelAdvisorClient client = new ChannelAdvisorClient(ChannelAdvisorStore);
 
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
 
                 // Initialize the download, which will also give us the total count to download
                 totalCount = client.InitializeDownload(lastModified);
@@ -101,7 +102,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(client))
+                    bool morePages = await DownloadNextOrdersPage(client).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -120,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download the next page of results from CA
         /// </summary>
-        private bool DownloadNextOrdersPage(ChannelAdvisorClient client)
+        private async Task<bool> DownloadNextOrdersPage(ChannelAdvisorClient client)
         {
             List<OrderResponseDetailComplete> caOrders = client.GetNextOrders();
             if (caOrders.Count == 0)
@@ -137,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             MarkOrdersAsExported(client, caOrders);
 
-            LoadOrders(client, caOrders);
+            await LoadOrders(client, caOrders).ConfigureAwait(false);
 
             return true;
         }
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="caOrders">The ca orders.</param>
-        private void LoadOrders(ChannelAdvisorClient client, List<OrderResponseDetailComplete> caOrders)
+        private async Task LoadOrders(ChannelAdvisorClient client, List<OrderResponseDetailComplete> caOrders)
         {
             foreach (OrderResponseDetailComplete caOrder in caOrders)
             {
@@ -166,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
 
                 Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
-                LoadOrder(client, caOrder);
+                await LoadOrder(client, caOrder).ConfigureAwait(false);
 
                 // update the status, 100 max
                 Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);
@@ -176,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Load order data from the CA response
         /// </summary>
-        private void LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
+        private Task LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
         {
             int orderNumber = caOrder.OrderID;
 
@@ -185,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) result.Value;
@@ -241,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -608,7 +610,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Determine the state/province based on the region from CA.
+        /// Determine the state/provice based on the region from CA.
         /// </summary>
         private static string GetStateProvCode(string region)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Downloading New Orders...";
 
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                                 return;
                             }
 
-                            LoadOrder(jsonOrder);
+                            await LoadOrder(jsonOrder).ConfigureAwait(false);
                         }
 
                         currentPage++;
@@ -92,7 +93,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
-
             }
             catch (GrouponException ex)
             {
@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// LoadORder from JToken
         /// </summary>
-        private void LoadOrder(JToken jsonOrder)
+        private Task LoadOrder(JToken jsonOrder)
         {
             string orderid = jsonOrder["orderid"].ToString();
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderid, result.Message);
-                return;
+                return Task.CompletedTask;
             }
 
             GrouponOrderEntity order = (GrouponOrderEntity) result.Value;
@@ -123,52 +123,54 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
-            // Order already exists or is new and of status open
-            if (!order.IsNew || status == "open")
+            if (order.IsNew && status != "open")
             {
-                order.OnlineStatus = GetOrderStatusName(status);
-                order.OnlineStatusCode = GetOrderStatusName(status);
+                return Task.CompletedTask;
+            }
 
-                // set the progress detail
-                Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
+            // Order already exists or is new and of status open
+            order.OnlineStatus = GetOrderStatusName(status);
+            order.OnlineStatusCode = GetOrderStatusName(status);
 
-                //Order Date
-                DateTime orderDate = GetDate(jsonOrder["date"].ToString());
-                order.OrderDate = orderDate;
-                order.OnlineLastModified = orderDate;
+            // set the progress detail
+            Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
-                //Order Address
-                GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
-                LoadAddressInfo(order, customer);
+            //Order Date
+            DateTime orderDate = GetDate(jsonOrder["date"].ToString());
+            order.OrderDate = orderDate;
+            order.OnlineLastModified = orderDate;
 
-                //Order requestedshipping
-                order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
+            //Order Address
+            GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
+            LoadAddressInfo(order, customer);
 
-                //Order is new and its status is open
-                if (order.IsNew)
+            //Order requestedshipping
+            order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
+
+            //Order is new and its status is open
+            if (order.IsNew)
+            {
+                // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
+                order.OrderNumber = GetNextOrderNumber();
+
+                //Unit of measurement used for weight
+                string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
+
+                //List of order items
+                IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
+                foreach (JToken jsonItem in jsonItems)
                 {
-                    // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-                    order.OrderNumber = GetNextOrderNumber();
-
-                    //Unit of measurement used for weight
-                    string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
-
-                    //List of order items
-                    IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
-                    foreach (JToken jsonItem in jsonItems)
-                    {
-                        //Deserialized into grouponitem
-                        GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
-                        LoadItem(order, item, itemWeightUnit);
-                    }
-
-                    //OrderTotal
-                    order.OrderTotal = (decimal) jsonOrder["amount"]["total"];
+                    //Deserialized into grouponitem
+                    GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
+                    LoadItem(order, item, itemWeightUnit);
                 }
 
-                SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                //OrderTotal
+                order.OrderTotal = (decimal) jsonOrder["amount"]["total"];
             }
+
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
+            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -226,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private static double GetWeight(double weight, string itemWeightUnit)
         {
-            //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
+            // Groupon sometimes sends weight in ounces, convert from ounces to lbs in that case
             switch (itemWeightUnit)
             {
                 case "ounces":

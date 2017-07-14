@@ -5,9 +5,11 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -132,7 +134,7 @@ namespace ShipWorks.Stores.Communication
 
         /// <summary>
         /// Initiates an auto-download for any stores that are due for an auto download.  By default we only actually do anything at most once every 15 seconds, but
-        /// if you really really need this to check right now-now, you can set forceCheckNow to true
+        /// if you really, really need this to check right now-now, you can set forceCheckNow to true
         /// </summary>
         public static void StartAutoDownloadIfNeeded(bool forceCheckNow = false)
         {
@@ -210,7 +212,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     DateTime? lastDownload = GetLastDownloadTime(store);
 
-                    // Its downloaded somwhere since we had the last cached time, so remove it.
+                    // Its downloaded somewhere since we had the last cached time, so remove it.
                     if (lastDownload.HasValue && lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
                     {
                         readyToDownload.Remove(store);
@@ -283,10 +285,8 @@ namespace ShipWorks.Stores.Communication
 
                     isDownloading = true;
 
-                    Thread thread = new Thread(ExceptionMonitor.WrapThread(DownloadWorkerThread));
-                    thread.Name = "DownloadThread";
-                    thread.IsBackground = true;
-                    thread.Start();
+                    Task.Run(DownloadWorkerTask)
+                        .RethrowException(() => Program.MainForm);
 
                     // Raise the starting event
                     if (DownloadStarting != null)
@@ -302,7 +302,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        private static void DownloadWorkerThread()
+        private static async Task DownloadWorkerTask()
         {
             log.InfoFormat("Download starting.");
 
@@ -419,7 +419,7 @@ namespace ShipWorks.Stores.Communication
                                 AuditBehaviorUser.SuperUser,
                                 new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
                             {
-                                downloader.Download(progressItem, downloadLog.DownloadID, con);
+                                await downloader.Download(progressItem, downloadLog.DownloadID, con).ConfigureAwait(false);
                             }
 
                             // Item is complete

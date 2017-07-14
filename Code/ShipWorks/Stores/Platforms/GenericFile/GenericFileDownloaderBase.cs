@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
-using ShipWorks.Stores.Communication;
 using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
-using ShipWorks.Stores.Content;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {
@@ -18,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
     /// </summary>
     public abstract class GenericFileDownloaderBase : OrderElementFactoryDownloaderBase
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileDownloaderBase));
 
         int fileCount = 0;
@@ -49,16 +45,16 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         }
 
         /// <summary>
-        /// Import data from the given file.  Must throw GenericFileStoreException (or derived) on error.  Return false to indicate cancled beofre completion.
+        /// Import data from the given file.  Must throw GenericFileStoreException (or derived) on error.  Return false to indicate canceled before completion.
         /// </summary>
-        protected abstract bool ImportFile(GenericFileInstance file);
+        protected abstract Task<bool> ImportFile(GenericFileInstance file);
 
         /// <summary>
         /// Import from the XML file
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -74,7 +70,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                     // keep going until none are left
                     while (true)
                     {
-                        if (!ImportNextFile(fileSource))
+                        bool morePages = await ImportNextFile(fileSource).ConfigureAwait(false);
+                        if (!morePages)
                         {
                             if (fileCount == 0)
                             {
@@ -89,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                             return;
                         }
 
-                        // Check if it has been cancelled
+                        // Check if it has been canceled
                         if (Progress.IsCancelRequested)
                         {
                             return;
@@ -110,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Import the next file from the source
         /// </summary>
-        private bool ImportNextFile(GenericFileSource fileSource)
+        private async Task<bool> ImportNextFile(GenericFileSource fileSource)
         {
             GenericFileInstance file = fileSource.GetNextFile();
 
@@ -128,9 +125,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             try
             {
                 // Return of false means canceled before completed
-                if (!ImportFile(file))
+                bool continueProcessing = await ImportFile(file).ConfigureAwait(false);
+                if (!continueProcessing)
                 {
-                    // We still return true to caller b\c there ARE more (or could be).. the caller will check the Cancelled flag.
+                    // We still return true to caller b\c there ARE more (or could be).. the caller will check the Canceled flag.
                     return false;
                 }
             }
