@@ -48,11 +48,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
-            
+
             try
             {
                 string token = restClient.GetAccessToken(refreshToken);
-                
+
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
                 ChannelAdvisorOrderResult ordersResult = GetOrders(start, token);
-                
+
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
                 while (ordersResult?.ResultCount > 0)
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private ChannelAdvisorOrderResult GetOrders(DateTime start, string token) =>
             restClient.GetOrders(start, token);
-        
+
 
         /// <summary>
         /// Load the given ChannelAdvisor order
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 new OrderNumberIdentifier(caOrder.ID));
 
             //Order loader loads the order
-            orderLoader.LoadOrder(order, caOrder, this);
+            orderLoader.LoadOrder(order, caOrder, this, refreshToken);
 
             // Save the downloaded order
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
@@ -131,6 +131,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
             InstantiateOrderItemAttribute(item);
 
+        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
+            decimal unitPrice,
+            bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
+
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
 
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description, decimal amount) => InstantiateOrderCharge(order, type, description, amount);
@@ -140,6 +144,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) => InstantiateOrderPaymentDetail(order);
 
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => InstantiateOrderPaymentDetail(order, label, value);
-
     }
 }
