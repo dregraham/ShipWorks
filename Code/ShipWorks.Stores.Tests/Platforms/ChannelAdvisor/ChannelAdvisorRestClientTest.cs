@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.GetOrders(start, "token");
 
-            submitter.Verify(s => s.Variables.Add("filter", $"CreatedDateUtc gt {start:s}"));
+            submitter.Verify(s => s.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ff'Z'}"));
         }
 
         [Fact]
@@ -169,7 +169,16 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetOrders(DateTime.UtcNow, "token");
 
-            submitter.Verify(s => s.Variables.Add("orderby", "orderby=CreatedDateUtc desc"));
+            submitter.Verify(s => s.Variables.Add("$orderby", "CreatedDateUtc desc"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsCountVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("$count", "true"));
         }
 
         [Fact]

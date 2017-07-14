@@ -56,11 +56,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return;
                 }
 
-                ChannelAdvisorOrderResult ordersResult = GetNextBatch(token);
+                DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
+
+                ChannelAdvisorOrderResult ordersResult = GetOrders(start, token);
                 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
-                while (ordersResult?.Orders?.Any() ?? false)
+                while (ordersResult?.ResultCount > 0)
                 {
                     foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
                     {
@@ -70,10 +72,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return;
                         }
 
-                        LoadOrder(caOrder);
+                        // LoadOrder(caOrder);
                     }
 
-                    ordersResult = GetNextBatch(token);
+                    ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
                 }
 
             }
@@ -91,13 +93,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Get the next batch of orders
+        /// Get orders from the start
         /// </summary>
-        private ChannelAdvisorOrderResult GetNextBatch(string token)
-        {
-            DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
-            return restClient.GetOrders(start, token);
-        }
+        private ChannelAdvisorOrderResult GetOrders(DateTime start, string token) =>
+            restClient.GetOrders(start, token);
+        
 
         /// <summary>
         /// Load the given ChannelAdvisor order
