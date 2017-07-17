@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
@@ -27,6 +23,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
 
         [Description("Unknown")]
         Unknown = 99
-
     }
 }
