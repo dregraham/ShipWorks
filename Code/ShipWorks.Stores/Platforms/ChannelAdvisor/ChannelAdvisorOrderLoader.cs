@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 orderElementFactory.CreateItemAttribute(itemToSave, attribute.Name, attribute.Value, 0, false);
             }
 
-            ChannelAdvisorProductImage image = product.Images.FirstOrDefault();
+            ChannelAdvisorProductImage image = product.Images?.FirstOrDefault();
             itemToSave.Image = image?.Url ?? string.Empty;
             itemToSave.Thumbnail = itemToSave.Image;
         }

@@ -22,6 +22,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly Mock<IOrderElementFactory> orderElementFactory;
         private readonly ChannelAdvisorOrderLoader testObject;
         private readonly Mock<IChannelAdvisorRestClient> channelAdvisorRestClient;
+        private readonly ChannelAdvisorProduct downloadedProduct;
 
 
         public ChannelAdvisorOrderLoaderTest()
@@ -36,12 +37,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             channelAdvisorRestClient = mock.Mock<IChannelAdvisorRestClient>();
             testObject = mock.Create<ChannelAdvisorOrderLoader>();
 
+            downloadedProduct = new ChannelAdvisorProduct()
+            {
+                Attributes = new List<ChannelAdvisorProductAttribute>(),
+                Images = new List<ChannelAdvisorProductImage>()
+            };
+
             channelAdvisorRestClient.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>()))
-                .Returns(new ChannelAdvisorProduct()
-                {
-                    Attributes = new List<ChannelAdvisorProductAttribute>(),
-                    Images = new List<ChannelAdvisorProductImage>()
-                });
+                .Returns(downloadedProduct);
 
             orderElementFactory.Setup(f => f.CreateItem(It.IsAny<OrderEntity>()))
                 .Returns<OrderEntity>(order =>
@@ -681,7 +684,173 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void LoadOrder_UsesAccessToken
+        public void LoadOrder_CallsGetProduct()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 123});
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+
+            channelAdvisorRestClient.Verify(c => c.GetProduct(123, "accessToken"), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_CallsGetProductTwice_WhenDownloadedOrderHasTwoItems()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 123});
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 555});
+            
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+
+            channelAdvisorRestClient.Verify(c => c.GetProduct(123, "accessToken"), Times.Once);
+            channelAdvisorRestClient.Verify(c => c.GetProduct(555, "accessToken"), Times.Once);
+            channelAdvisorRestClient.Verify(c => c.GetProduct(It.IsAny<int>(), "accessToken"), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void LoadOrder_SetsProductWeight()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.Weight = 11.2m;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal(11.2, orderToSave.OrderItems.Single().Weight);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsLocation()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.WarehouseLocation = "In the back";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("In the back", orderToSave.OrderItems.Single().Location);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsClassification()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.Classification = "First Class";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("First Class", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).Classification);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsUnitCost()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.Cost = 12.2m;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal(12.2m, orderToSave.OrderItems.Single().UnitCost);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsHarmonizedCode()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.HarmonizedCode = "code";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("code", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).HarmonizedCode);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsISBN()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.ISBN = "Isbn";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("Isbn", orderToSave.OrderItems.Single().ISBN);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsUPC()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.UPC = "upc";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("upc", orderToSave.OrderItems.Single().UPC);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsMPN()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.MPN = "mpn";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("mpn", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).MPN);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDescription()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.Description = "In the back";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            Assert.Equal("In the back", orderToSave.OrderItems.Single().Description);
+        }
+
+        [Fact]
+        public void LoadOrder_CreatesItemAttrbiute_WhenProductHasAttribute()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            var downloadedAttribute = new ChannelAdvisorProductAttribute()
+            {
+                Name = "Joe Attribute",
+                Value = "the value"
+            };
+            downloadedProduct.Attributes = new[] {downloadedAttribute};
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            
+            orderElementFactory.Verify(
+                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "Joe Attribute", "the value", 0, false),
+                Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_CreatesItemTwoAttrbiutes_WhenProductHasTwoAttributes()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            var downloadedAttribute = new ChannelAdvisorProductAttribute()
+            {
+                Name = "Joe Attribute",
+                Value = "the value"
+            };
+            downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+
+            orderElementFactory.Verify(
+                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "Joe Attribute", "the value", 0, false),
+                Times.Exactly(2));
+        }
+
+        [Fact]
+        public void LoadOrder_ImageSaved()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+
+            string url = "http://www.shipworks.com/giffy.gif";
+            downloadedProduct.Images = new[]
+            {
+                new ChannelAdvisorProductImage()
+                {
+                    Url = url
+                }
+            };
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            
+            Assert.Equal(url, orderToSave.OrderItems.Single().Image);
+            Assert.Equal(url, orderToSave.OrderItems.Single().Thumbnail);
+        }
 
         #endregion
 
