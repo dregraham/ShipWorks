@@ -163,6 +163,34 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Equal((int) ChannelAdvisorRestFlagType.BlueFlag, orderToSave.FlagType);
         }
 
+        [Fact]
+        public void LoadOrder_TotalCalculated_WhenOrderIsNew()
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            mock.Mock<IOrderChargeCalculator>().Verify(c=>c.CalculateTotal(orderToSave), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_TotalNotCalculated_WhenOrderIsNotNew()
+        {
+            orderToSave.IsNew = false;
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            mock.Mock<IOrderChargeCalculator>().Verify(c => c.CalculateTotal(orderToSave), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderTotalSet_WhenOrderIsNew()
+        {
+            orderToSave.OrderTotal = 12.23M;
+            mock.Mock<IOrderChargeCalculator>()
+                .Setup(c => c.CalculateTotal(orderToSave))
+                .Returns(45.73M);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            
+            Assert.Equal(45.73M, orderToSave.OrderTotal);
+        }
+
         #region ShippingAddressTests
         [Fact]
         public void LoadOrder_ShipFirstNameIsSet()
@@ -541,9 +569,142 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         #endregion
+
+        #region LoadCharges
+
+        [Fact]
+        public void LoadOrder_NoChargesCreated_WhenNoChargesToAdd()
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_NoChargesCreated_WhenChargesToAnd_AndNotNew()
+        {
+            orderToSave.IsNew = false;
+            downloadedOrder.TotalTaxPrice = 5.25M;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_ChargeCreatedForSalesTax()
+        {
+            downloadedOrder.TotalTaxPrice = 5.25M;
+            TestCharge("Sales Tax", "TAX", 5.25M);
+        }
+
+        [Fact]
+        public void LoadOrder_ChargeCreatedForShipping()
+        {
+            downloadedOrder.TotalShippingPrice = 11.73M;
+            TestCharge("Shipping", "SHIPPING", 11.73M);
+        }
+
+        [Fact]
+        public void LoadOrder_ChargeCreatedForInsurance()
+        {
+            downloadedOrder.TotalInsurancePrice = 1.73M;
+            TestCharge("Shipping Insurance", "INSURANCE", 1.73M);
+        }
+
+        [Fact]
+        public void LoadOrder_ChargeCreatedForGiftWrap()
+        {
+            downloadedOrder.TotalGiftOptionPrice = 112.73M;
+            TestCharge("Gift Wrap", "GIFT WRAP", 112.73M);
+        }
+
+        [Fact]
+        public void LoadOrder_ChargeCreatedForAdditionalCostOrDiscount()
+        {
+            downloadedOrder.AdditionalCostOrDiscount = -11.73M;
+            TestCharge("Additional Cost or Discount", "ADDITIONAL COST OR DISCOUNT", -11.73M);
+        }
+
+        private void TestCharge(string type, string description, decimal amount)
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            orderElementFactory.Verify(f => f.CreateCharge(orderToSave, type, description, amount), Times.Once);
+            orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<ChannelAdvisorOrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Once);
+        }
+        #endregion
+
+        #region LoadPayments
+        [Fact]
+        public void LoadOrder_PaymentDetailNotAdded_WhenOrderIsNotNew()
+        {
+            orderToSave.IsNew = false;
+            downloadedOrder.PaymentMethod = "Blah";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_PaymentDetailNotAdded_WhenNoPaymentInformation()
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_PaymentTypeAdded()
+        {
+            downloadedOrder.PaymentMethod = "Blah";
+            VerifyPaymentDetail("Payment Type", "Blah");
+        }
+
+        [Fact]
+        public void LoadOrder_CardNumber()
+        {
+            downloadedOrder.PaymentCreditCardLast4 = "1234";
+            VerifyPaymentDetail("Card Number", "1234");
+        }
+
+        [Fact]
+        public void LoadOrder_ReferenceAdded()
+        {
+            downloadedOrder.PaymentMerchantReferenceNumber = "ref";
+            VerifyPaymentDetail("Reference", "ref");
+        }
+
+        [Fact]
+        public void LoadOrder_TransactionIdAdded()
+        {
+            downloadedOrder.PaymentTransactionID = "trans";
+            VerifyPaymentDetail("TransactionID", "trans");
+        }
+
+        private void VerifyPaymentDetail(string label, string value)
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, label, value), Times.Once);
+        }
+
+        #endregion
         #endregion
 
         #region Order Item Level Tests
+
+        [Fact]
+        public void LoadOrder_OrderItemNotAdded_WhenOrderNotNew()
+        {
+            orderToSave.IsNew = false;
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Title = "My Title" });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Empty(orderToSave.OrderItems);
+        }
 
         [Fact]
         public void LoadOrder_OrderItemNameIsSet()
