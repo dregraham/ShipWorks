@@ -75,9 +75,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return;
                         }
 
-                        LoadOrder(caOrder);
+                        LoadOrder(caOrder, token);
                     }
 
+                    token = restClient.GetAccessToken(refreshToken);
                     ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
                 }
 
@@ -94,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
-
+        
         /// <summary>
         /// Get orders from the start
         /// </summary>
@@ -102,11 +103,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             restClient.GetOrders(start, token);
 
 
-        /// <summary>
-        /// Load the given ChannelAdvisor order
-        /// </summary>
-        private void LoadOrder(ChannelAdvisorOrder caOrder)
-        {
+    /// <summary>
+    /// Load the given ChannelAdvisor order
+    /// </summary>
+    private void LoadOrder(ChannelAdvisorOrder caOrder, string token)
+    {
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
@@ -120,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 new OrderNumberIdentifier(caOrder.ID));
 
             //Order loader loads the order
-            orderLoader.LoadOrder(order, caOrder, this, refreshToken);
+            orderLoader.LoadOrder(order, caOrder, this, token);
 
             // Save the downloaded order
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
@@ -8,6 +9,7 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.Linq;
 using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -29,13 +31,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         private readonly DataContext context;
         private readonly Mock<IProgressReporter> mockProgressReporter;
         private readonly ChannelAdvisorStoreEntity store;
-        private ChannelAdvisorOrderResult firstBatch;
+        private readonly ChannelAdvisorOrderResult firstBatch;
         private readonly DbConnection dbConnection;
         private readonly ChannelAdvisorRestDownloader testObject;
         private readonly DateTime utcNow;
         private readonly long downloadLogID;
         private readonly Mock<IChannelAdvisorRestClient> client;
-        private Mock<IEncryptionProviderFactory> encryptionProviderFactory;
+        private readonly Mock<IEncryptionProviderFactory> encryptionProviderFactory;
         private readonly Mock<IEncryptionProvider> encryptionProvider;
         private readonly ChannelAdvisorOrder order;
 
@@ -84,13 +86,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int)DownloadResult.Unfinished)
                 .Save().DownloadID;
-
+            
             client = mock.Mock<IChannelAdvisorRestClient>();
-            client.Setup(c => c.GetOrders(It.IsAny<DateTime>(), It.IsAny<string>()))
+            client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
 
+            client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
-            order = new ChannelAdvisorOrder();
+            order = SingleOrder();
             firstBatch = new ChannelAdvisorOrderResult()
             {
                 OdataContext = "",
@@ -106,15 +109,62 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         [Fact]
         public void Download_GetsAccessTokenFromClient()
         {
-            testObject.Download(mockProgressReporter.Object, 0, dbConnection);
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
             client.Verify(c => c.GetAccessToken(It.IsAny<string>()));
         }
 
         [Fact]
-        public void Download_DelegatesToOrderLoader()
+        public void Download_GetsOrdersFromClientUsingCreatedDateFromPreviousGetOrdersResponse()
         {
-            //testObject.Download(mockProgressReporter.Object, 0, dbConnection);
-            //mock.Mock<IChannelAdvisorOrderLoader>().Verify(l => l.LoadOrder(It.IsAny<ChannelAdvisorOrderEntity>(), order, testObject, It.IsAny<string>()));
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            client.Verify(c => c.GetOrders(order.CreatedDateUtc, It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void Download_SetsOrderNotes_WhenOrderContainsNotes()
+        {
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            NoteEntity note;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                note = new LinqMetaData(adapter).Note.SingleOrDefault();
+            }
+
+            Assert.Equal("This is a public note", note.Text);
+        }
+
+        private ChannelAdvisorOrder SingleOrder()
+        {
+            return new ChannelAdvisorOrder()
+            {
+                Fulfillments = new List<ChannelAdvisorFulfillment>(),
+                Items = new List<ChannelAdvisorOrderItem>()
+                {
+                    new ChannelAdvisorOrderItem()
+                },
+                CreatedDateUtc = utcNow.AddDays(5),
+                PublicNotes = "This is a public note"
+            };
+        }
+
+        private ChannelAdvisorProduct SingleItem()
+        {
+            return new ChannelAdvisorProduct()
+            {
+                Attributes = new List<ChannelAdvisorProductAttribute>(),
+                Weight = 123,
+                WarehouseLocation = "location",
+                Classification = "classification",
+                Cost = 123,
+                HarmonizedCode = "harmonizedcode",
+                ISBN = "isbn",
+                UPC = "upc",
+                MPN = "mpn",
+                Description = "description",
+                Images = new List<ChannelAdvisorProductImage>()
+            };
         }
 
         public void Dispose()
