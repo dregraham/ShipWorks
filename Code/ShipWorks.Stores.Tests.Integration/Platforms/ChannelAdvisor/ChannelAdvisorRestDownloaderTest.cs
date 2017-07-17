@@ -109,6 +109,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void Download_SetsProgressDetailWithOrderCount()
+        {
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            mockProgressReporter.VerifySet(r => r.Detail = $"Downloading {firstBatch.ResultCount} orders...");
+        }
+
+        [Fact]
         public void Download_GetsOrdersFromClientUsingCreatedDateFromPreviousGetOrdersResponse()
         {
             testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
