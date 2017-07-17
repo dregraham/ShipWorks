@@ -159,7 +159,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings
                 {
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
                 });
             }
             catch (Exception ex)

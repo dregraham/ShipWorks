@@ -14,9 +14,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string Code { get; set; }
 
         [JsonProperty("Amount")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [JsonProperty("ShippingAmount")]
-        public int ShippingAmount { get; set; }
+        public decimal ShippingAmount { get; set; }
     }
 }

@@ -45,16 +45,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public decimal UnitPrice { get; set; }
 
         [JsonProperty("TaxPrice")]
-        public int TaxPrice { get; set; }
+        public decimal TaxPrice { get; set; }
 
         [JsonProperty("ShippingPrice")]
-        public int ShippingPrice { get; set; }
+        public decimal ShippingPrice { get; set; }
 
         [JsonProperty("ShippingTaxPrice")]
-        public int ShippingTaxPrice { get; set; }
+        public decimal ShippingTaxPrice { get; set; }
 
         [JsonProperty("RecyclingFee")]
-        public int RecyclingFee { get; set; }
+        public decimal RecyclingFee { get; set; }
 
         [JsonProperty("GiftMessage")]
         public string GiftMessage { get; set; }

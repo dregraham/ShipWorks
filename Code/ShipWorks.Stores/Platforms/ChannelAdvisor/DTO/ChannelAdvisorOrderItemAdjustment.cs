@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public double RecyclingFeeAdjustment { get; set; }
 
         [JsonProperty("Type")]
-        public Type Type { get; set; }
+        public ChannelAdvisorAdjustmentType Type { get; set; }
 
         [JsonProperty("SellerAdjustmentID")]
         public string SellerAdjustmentID { get; set; }
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string Comment { get; set; }
 
         [JsonProperty("CreatedDateUtc")]
-        public string CreatedDateUtc { get; set; }
+        public DateTime CreatedDateUtc { get; set; }
 
         [JsonProperty("RequestStatus")]
         public ChannelAdvisorAdjustmentRequestStatus RequestStatus { get; set; }
