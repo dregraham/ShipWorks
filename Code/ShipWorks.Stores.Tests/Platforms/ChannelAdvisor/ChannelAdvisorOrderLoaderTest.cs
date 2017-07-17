@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
@@ -570,6 +571,135 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         #endregion
 
+        [Fact]
+        public void LoadOrder_RequestedShippingIsSet()
+        {
+            downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() {new ChannelAdvisorFulfillment() {ShippingCarrier = "UPS", ShippingClass = "Ground"} };
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal("UPS - Ground", orderToSave.RequestedShipping);
+        }
+
+        [Fact]
+        public void LoadOrder_IsPrimeIsSetToYes_WhenShippingCarrierIsAmazonAndShippingClassIsPrime()
+        {
+            downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() { new ChannelAdvisorFulfillment() { ShippingCarrier = "Amazon", ShippingClass = "Prime" } };
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal((int) ChannelAdvisorIsAmazonPrime.Yes, orderToSave.IsPrime);
+        }
+
+        [Fact]
+        public void LoadOrder_IsPrimeIsSetToNo_WhenShippingCarrierIsNotAmazon()
+        {
+            downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() { new ChannelAdvisorFulfillment() { ShippingCarrier = "UPS", ShippingClass = "Ground" } };
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.No, orderToSave.IsPrime);
+        }
+
+        [Fact]
+        public void LoadOrder_IsPrimeIsSetToUnknown_WhenShippingCarrierIsNotSet()
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.Unknown, orderToSave.IsPrime);
+        }
+
+        [Fact]
+        public void LoadOrder_ResellerIDIsSet_WhenOrderIsNew()
+        {
+            downloadedOrder.ResellerID = "ID";
+            orderToSave.IsNew = true;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal("ID", orderToSave.ResellerID);
+        }
+
+        [Fact]
+        public void LoadOrder_ResellerIDIsNotSet_WhenOrderIsNotNew()
+        {
+            downloadedOrder.ResellerID = "ID";
+            orderToSave.IsNew = false;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.True(string.IsNullOrWhiteSpace(orderToSave.ResellerID));
+        }
+
+        [Fact]
+        public void LoadOrder_MarketplaceNamesIsSet_WhenOrderIsNew()
+        {
+            downloadedOrder.SiteName = "Amazon";
+            orderToSave.IsNew = true;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal("Amazon", orderToSave.MarketplaceNames);
+        }
+
+        [Fact]
+        public void LoadOrder_MarketplaceNamesIsSet_WhenOrderIsNotNew()
+        {
+            downloadedOrder.ResellerID = "Amazon";
+            orderToSave.IsNew = false;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.True(string.IsNullOrWhiteSpace(orderToSave.ResellerID));
+        }
+
+        [Fact]
+        public void LoadOrder_CreatesNote_WhenPublicNotesFieldIsNotNullAndOrderIsNew()
+        {
+            downloadedOrder.PublicNotes = "public notes";
+            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            orderToSave.IsNew = true;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "public notes", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_CreatesNote_WhenSpecialInstructionsFieldIsNotNullAndOrderIsNew()
+        {
+            downloadedOrder.SpecialInstructions = "special instructions";
+            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            orderToSave.IsNew = true;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "special instructions", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_CreatesNote_WhenPrivateNotesFieldIsNotNullAndOrderIsNew()
+        {
+            downloadedOrder.PrivateNotes = "private notes";
+            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            orderToSave.IsNew = true;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "private notes", new DateTime(2017, 7, 7), NoteVisibility.Internal), Times.Once);
+        }
+
+        [Fact]
+        public void LoadOrder_DoesNotCreatesNote_WhenOrderIsNotNew()
+        {
+            downloadedOrder.PrivateNotes = "private notes";
+            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            orderToSave.IsNew = false;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<NoteVisibility>()), Times.Never);
+        }
         #region LoadCharges
 
         [Fact]
@@ -763,7 +893,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal(downloadedOrder.Items[0].SiteOrderItemID, 
+            Assert.Equal(downloadedOrder.Items[0].SiteOrderItemID,
                 ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems[0]).MarketplaceName);
         }
 
@@ -785,7 +915,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
-        
+
             orderElementFactory.Verify(f=>f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Never);
         }
 
@@ -846,7 +976,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 123});
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 555});
-            
+
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
 
             channelAdvisorRestClient.Verify(c => c.GetProduct(123, "accessToken"), Times.Once);
@@ -956,7 +1086,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedProduct.Attributes = new[] {downloadedAttribute};
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
-            
+
             orderElementFactory.Verify(
                 f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "Joe Attribute", "the value", 0, false),
                 Times.Once);
@@ -995,7 +1125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             };
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
-            
+
             Assert.Equal(url, orderToSave.OrderItems.Single().Image);
             Assert.Equal(url, orderToSave.OrderItems.Single().Thumbnail);
         }

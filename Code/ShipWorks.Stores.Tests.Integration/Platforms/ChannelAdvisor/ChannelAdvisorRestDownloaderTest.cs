@@ -4,13 +4,11 @@ using System.Data.Common;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
-using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
@@ -30,15 +28,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly Mock<IProgressReporter> mockProgressReporter;
-        private readonly ChannelAdvisorStoreEntity store;
         private readonly ChannelAdvisorOrderResult firstBatch;
         private readonly DbConnection dbConnection;
         private readonly ChannelAdvisorRestDownloader testObject;
         private readonly DateTime utcNow;
         private readonly long downloadLogID;
         private readonly Mock<IChannelAdvisorRestClient> client;
-        private readonly Mock<IEncryptionProviderFactory> encryptionProviderFactory;
-        private readonly Mock<IEncryptionProvider> encryptionProvider;
         private readonly ChannelAdvisorOrder order;
 
         public ChannelAdvisorRestDownloaderTest(DatabaseFixture db)
@@ -54,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             mock = context.Mock;
             mockProgressReporter = mock.Mock<IProgressReporter>();
 
-            store = Create.Store<ChannelAdvisorStoreEntity>()
+            var store = Create.Store<ChannelAdvisorStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "Channel Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.ChannelAdvisor)
@@ -111,6 +106,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         {
             testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
             client.Verify(c => c.GetAccessToken(It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void Download_SetsProgressDetailWithOrderCount()
+        {
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            mockProgressReporter.VerifySet(r => r.Detail = $"Downloading {firstBatch.ResultCount} orders...");
         }
 
         [Fact]
