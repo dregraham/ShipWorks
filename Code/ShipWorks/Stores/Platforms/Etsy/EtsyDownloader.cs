@@ -50,10 +50,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public EtsyDownloader(EtsyStoreType etsyStoreType, EtsyStoreEntity store)
             : base(store)
         {
-            if (etsyStoreType == null)
-            {
-                throw new ArgumentNullException("etsyStoreType");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(etsyStoreType, nameof(etsyStoreType));
+
             webClient = new EtsyWebClient(etsyStoreType.EtsyStore);
             storeType = etsyStoreType;
         }
@@ -150,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void UpdatePaymentInformationBatch(IEnumerable<EtsyOrderEntity> pageOfOrderNumbers)
         {
-            //format the order numbers into a comma seperated list
+            //format the order numbers into a comma separated list
             string formattedOrderNumbers = string.Join(",", pageOfOrderNumbers.Select(x => x.OrderNumber.ToString()));
 
             var orderDetails = webClient.GetPaymentInformation(formattedOrderNumbers);
@@ -319,13 +317,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Extract and save the order from the downloaded order
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(JToken orderFromEtsy)
+        private async Task LoadOrder(JToken orderFromEtsy)
         {
             // Now extract the Order#
             long orderNumber = (long) orderFromEtsy["receipt_id"];
 
             // Get the order instance
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            OrderEntity orderEntity = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
             EtsyOrderEntity order = (EtsyOrderEntity) orderEntity;
 
             // Set the total.  It will be calculated and verified later.
@@ -351,7 +349,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Only update the rest for brand new orders
             if (order.IsNew)
             {
-                InstantiateNote(order, WebUtility.HtmlDecode(orderFromEtsy.GetValue("message_from_buyer", "")), order.OrderDate, NoteVisibility.Public);
+                string noteText = WebUtility.HtmlDecode(orderFromEtsy.GetValue("message_from_buyer", ""));
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
                 // Items
                 int loadedItems = LoadItems(order, (JArray) orderFromEtsy["Transactions"]);
@@ -395,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "EtsyDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -547,7 +546,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value, bool ignoreDuplicates = false)
         {
@@ -568,7 +567,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 }
 
                 // Just check the label, since the Value could have been truncated and not exactly match
-                if (detailsToCheck.Any(pd => string.Compare(pd.Label, label, true) == 0))
+                if (detailsToCheck.Any(pd => string.Compare(pd.Label, label, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     return;
                 }

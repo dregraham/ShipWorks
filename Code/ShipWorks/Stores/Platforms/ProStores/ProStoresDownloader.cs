@@ -180,14 +180,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// Extract the order from the xml
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
 
-            ProStoresOrderEntity order = (ProStoresOrderEntity) InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            ProStoresOrderEntity order = (ProStoresOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
-            // Setup the basic proprites
+            // Setup the basic properties
             order.OrderNumber = orderNumber;
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "EnterDate", "")).ToUniversalTime();
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModifiedDate", "")).ToUniversalTime();
@@ -252,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ProStoresDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

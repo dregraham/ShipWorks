@@ -119,8 +119,8 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 // extract the order number
                 int orderNumber = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ID*']", 0);
 
-                // get the order instance, creates one if neccessary
-                OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+                // get the order instance, creates one if necessary
+                OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
                 // test the ORDER TM.  We have had problems in the past where all order information was blank due to some Infopia server problems.
                 string orderDate = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER TM*']", "");
@@ -148,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 if (order.IsNew)
                 {
                     // Notes
-                    LoadNotes(order, xpath);
+                    await LoadNotes(order, xpath).ConfigureAwait(false);
 
                     CacheProducts(xpath);
 
@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 }
             }
 
-            // make sure these are allready cached
+            // make sure these are already cached
             InfopiaWebClient client = new InfopiaWebClient(InfopiaStore);
             client.EnsureProducts(productsToDownload);
 
@@ -370,13 +370,13 @@ namespace ShipWorks.Stores.Platforms.Infopia
         }
 
         // Load notes from the order
-        private void LoadNotes(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderEntity order, XPathNavigator xpath)
         {
             // Customer comments
             string customerComments = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER NOTES*']", "");
             if (customerComments.Length > 0)
             {
-                InstantiateNote(order, CleanNoteText(customerComments), order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, CleanNoteText(customerComments), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // private notes
@@ -391,12 +391,12 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 note += XPathUtility.Evaluate(xpathNote, "Cell[@Name='*ORDER NOTE LINE NOTE*']", "");
 
                 // Pointless note
-                if (note.IndexOf("Buyer's IP Number") != -1)
+                if (note.IndexOf("Buyer's IP Number", StringComparison.Ordinal) != -1)
                 {
                     continue;
                 }
 
-                InstantiateNote(order, CleanNoteText(note), order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, CleanNoteText(note), order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 

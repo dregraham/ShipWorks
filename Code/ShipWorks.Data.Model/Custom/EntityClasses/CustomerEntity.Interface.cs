@@ -11,5 +11,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Gets the billing address as a person adapter
         /// </summary>
         PersonAdapter BillPerson { get; }
+
+        /// <summary>
+        /// Gets the shipping address as a person adapter
+        /// </summary>
+        PersonAdapter ShipPerson { get; }
     }
 }

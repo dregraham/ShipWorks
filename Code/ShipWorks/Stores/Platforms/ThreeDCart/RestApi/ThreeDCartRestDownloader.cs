@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <remarks>
         /// Extracted from ThreeDCartSoapDownloader
         /// </remarks>
-        private ThreeDCartOrderIdentifier CreateOrderIdentifier(ThreeDCartOrder order, string invoiceNumberPostFix)
+        private async Task<ThreeDCartOrderIdentifier> CreateOrderIdentifier(ThreeDCartOrder order, string invoiceNumberPostFix)
         {
             // Now extract the Invoice number and ThreeDCart Order Id
             long orderId = order.OrderID;
@@ -186,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
             // the upgrade.  If an order is found, we will not use the prefix.  If we don't find an order, we'll use the prefix.
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, string.Empty, invoiceNumberPostFix);
-            OrderEntity orderEntity = FindOrder(threeDCartOrderIdentifier);
+            OrderEntity orderEntity = await FindOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
             if (orderEntity == null)
             {
                 threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, invoiceNumberPrefix, invoiceNumberPostFix);
@@ -217,15 +217,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 {
                     string invoiceNumberPostFix = threeDCartOrder.HasSubOrders ? $"-{shipmentIndex}" : string.Empty;
 
-                    ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
+                    ThreeDCartOrderIdentifier orderIdentifier = await CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix).ConfigureAwait(false);
 
                     Progress.Detail = threeDCartOrder.OrderDate < modifiedOrderEndDate ?
                         $"Checking order {orderIdentifier} for modifications..." :
                         $"Processing new order {++newOrderCount}";
 
-                    OrderEntity order = InstantiateOrder(orderIdentifier);
+                    OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
-                    order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
+                    order = await LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix).ConfigureAwait(false);
 
                     await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
@@ -246,7 +246,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
+        public async Task<OrderEntity> LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, nameof(threeDCartOrder));
 
@@ -264,7 +264,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             LoadAddress(order, threeDCartOrder, threeDCartShipment);
 
-            LoadOrderNotes(order, threeDCartOrder);
+            await LoadOrderNotes(order, threeDCartOrder).ConfigureAwait(false);
 
             if (order.IsNew)
             {
@@ -494,11 +494,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order notes.
         /// </summary>
-        private void LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        private async Task LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            InstantiateNote(order, threeDCartOrder.CustomerComments, DateTime.Now, NoteVisibility.Public, true);
-            InstantiateNote(order, threeDCartOrder.InternalComments, DateTime.Now, NoteVisibility.Internal, true);
-            InstantiateNote(order, threeDCartOrder.ExternalComments, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(order, threeDCartOrder.CustomerComments, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
+            await InstantiateNote(order, threeDCartOrder.InternalComments, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
+            await InstantiateNote(order, threeDCartOrder.ExternalComments, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
 
             foreach (ThreeDCartQuestion question in threeDCartOrder.QuestionList)
             {
@@ -508,7 +508,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     questionNote += $" : {question.QuestionAnswer}";
                 }
 
-                InstantiateNote(order, questionNote, DateTime.Now, NoteVisibility.Internal, true);
+                await InstantiateNote(order, questionNote, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
             }
         }
 

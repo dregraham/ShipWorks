@@ -98,17 +98,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// LoadORder from JToken
         /// </summary>
-        private Task LoadOrder(JToken jsonOrder)
+        private async Task LoadOrder(JToken jsonOrder)
         {
             string orderid = jsonOrder["orderid"].ToString();
-            GrouponOrderEntity order = (GrouponOrderEntity) InstantiateOrder(new GrouponOrderIdentifier(orderid));
+            GrouponOrderEntity order = (GrouponOrderEntity) await InstantiateOrder(new GrouponOrderIdentifier(orderid)).ConfigureAwait(false);
 
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
             if (order.IsNew && status != "open")
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Order already exists or is new and of status open
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private static double GetWeight(double weight, string itemWeightUnit)
         {
-            //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
+            //Groupon sometimes sends weight in ounces, convert from ounces to lbs in that case
             switch (itemWeightUnit)
             {
                 case "ounces":
@@ -226,16 +226,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private static DateTime GetDate(string date)
         {
-            int TimeZonePos = date.IndexOf("UTC");
+            int TimeZonePos = date.IndexOf("UTC", StringComparison.Ordinal);
 
-            if (TimeZonePos > 0)
-            {
-                return DateTime.Parse(date.Substring(0, TimeZonePos));
-            }
-            else
-            {
-                return DateTime.Parse(date);
-            }
+            return TimeZonePos > 0 ?
+                DateTime.Parse(date.Substring(0, TimeZonePos)) :
+                DateTime.Parse(date);
         }
 
         /// <summary>

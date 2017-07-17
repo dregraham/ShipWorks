@@ -175,12 +175,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Load order data from the CA response
         /// </summary>
-        private Task LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
+        private async Task LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
         {
             int orderNumber = caOrder.OrderID;
 
             // get the order instance
-            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             order.OrderDate = caOrder.OrderTimeGMT.Value;
             order.OnlineLastModified = caOrder.LastUpdateDate ?? order.OrderDate;
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 IEnumerable<string> marketplaces = caOrder.ShoppingCart.LineItemSKUList.Select(item => item.ItemSaleSource).Distinct().OrderBy(source => source);
                 order.MarketplaceNames = string.Join(", ", marketplaces);
 
-                LoadNotes(order, caOrder);
+                await LoadNotes(order, caOrder).ConfigureAwait(false);
 
                 // items
                 LoadItems(client, order, caOrder);
@@ -233,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -577,16 +577,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Loads any notes from the CA order
         /// </summary>
-        private void LoadNotes(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
+        private async Task LoadNotes(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             if (caOrder.ShippingInfo != null && caOrder.ShippingInfo.ShippingInstructions.Length > 0)
             {
-                InstantiateNote(order, caOrder.ShippingInfo.ShippingInstructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, caOrder.ShippingInfo.ShippingInstructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             if (caOrder.TransactionNotes != null && caOrder.TransactionNotes.Length > 0)
             {
-                InstantiateNote(order, caOrder.TransactionNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, caOrder.TransactionNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             // A gift message can be associated with each item in the order, so we need to find any items containing
@@ -594,13 +594,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             List<OrderLineItemItem> giftItems = caOrder.ShoppingCart.LineItemSKUList.Select(item => item).Where(i => i.GiftMessage.Length > 0).ToList();
             foreach (OrderLineItemItem item in giftItems)
             {
-                string giftMessage = string.Format("Gift messsage for {0}: {1}", item.Title, item.GiftMessage);
-                InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public);
+                string giftMessage = string.Format("Gift message for {0}: {1}", item.Title, item.GiftMessage);
+                await InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 
         /// <summary>
-        /// Determine the state/provice based on the region from CA.
+        /// Determine the state/province based on the region from CA.
         /// </summary>
         private static string GetStateProvCode(string region)
         {

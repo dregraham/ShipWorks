@@ -203,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     // cycle through the records
                     while (reader.ReadNextRecord())
                     {
-                        // load the order information ffrom the current record
+                        // load the order information from the current record
                         await LoadOrder(reader).ConfigureAwait(false);
                     }
                 }
@@ -213,19 +213,19 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Load the order from the current CSV record
         /// </summary>
-        private Task LoadOrder(CsvReader reader)
+        private async Task LoadOrder(CsvReader reader)
         {
             try
             {
                 string invoiceId = reader["INVOICE_NO"];
-                int slash = invoiceId.IndexOf("-");
+                int slash = invoiceId.IndexOf("-", StringComparison.Ordinal);
 
                 // get the parts out we need. "ordernumber-shipmentid"
                 int orderNumber = Convert.ToInt32(invoiceId.Substring(0, slash));
                 int shipmentId = Convert.ToInt32(invoiceId.Substring(slash + 1));
 
                 OrderMotionOrderIdentifier identifier = new OrderMotionOrderIdentifier(orderNumber, shipmentId);
-                OrderMotionOrderEntity order = (OrderMotionOrderEntity) InstantiateOrder(identifier);
+                OrderMotionOrderEntity order = (OrderMotionOrderEntity) await InstantiateOrder(identifier).ConfigureAwait(false);
 
                 // set the order postfix
                 if (shipmentId > 1)
@@ -263,42 +263,44 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 LoadAddressInfo(order, xpath);
 
                 // Load new order values if the order is new
-                LoadNewOrderValues(order, xpath);
+                await LoadNewOrderValues(order, xpath).ConfigureAwait(false);
 
                 // save the order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
-                return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
             catch (ArgumentException ex)
             {
                 // Field wasn't found, skip it
                 log.Warn(ex);
-                return Task.CompletedTask;
+                return;
             }
         }
 
         /// <summary>
         /// Load values for a new order.
         /// </summary>
-        private void LoadNewOrderValues(OrderMotionOrderEntity order, XPathNavigator xpath)
+        private async Task LoadNewOrderValues(OrderMotionOrderEntity order, XPathNavigator xpath)
         {
-            if (order.IsNew)
+            if (!order.IsNew)
             {
-                // notes
-                LoadNotes(order, xpath);
-
-                // order items
-                LoadItems(order, xpath);
-
-                // order charges
-                LoadCharges(order, xpath);
-
-                // payment details
-                LoadPaymentDetails(order, xpath);
-
-                // calculate the total
-                order.OrderTotal = OrderUtility.CalculateTotal(order);
+                return;
             }
+
+            // notes
+            await LoadNotes(order, xpath).ConfigureAwait(false);
+
+            // order items
+            LoadItems(order, xpath);
+
+            // order charges
+            LoadCharges(order, xpath);
+
+            // payment details
+            LoadPaymentDetails(order, xpath);
+
+            // calculate the total
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
         }
 
         /// <summary>
@@ -338,7 +340,6 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
             PaymentDetailSecurity.Protect(detail);
         }
-
 
         /// <summary>
         /// Loads order charges from the order
@@ -391,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 item.UnitPrice = XPathUtility.Evaluate(itemNavigator, "Price", 0.0M);
                 item.LocalStatus = GetItemStatus(XPathUtility.Evaluate(itemNavigator, "LineStatus", ""));
 
-                // weight is a total weight.  need to divide by quanitty
+                // weight is a total weight.  need to divide by quantity
                 double weight = XPathUtility.Evaluate(itemNavigator, "DimensionData/Weight", 0.0);
                 if (item.Quantity > 0)
                 {
@@ -425,7 +426,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     }
 
                     string attributeName = GetItemAttributeName(item.Code, attributeID);
-                    if (attributeName != null && attributeName.Length > 0)
+                    if (!string.IsNullOrEmpty(attributeName))
                     {
                         // create an option
                         OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
@@ -535,7 +536,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 LoadAddressInfo(shipAdapter, shipAddressIterator.Current.Clone());
             }
 
-            // Billing addrss
+            // Billing address
             XPathNodeIterator billingIterator = xpath.Select(@"/OrderInformationResponse/Customer/Address[@type='BillTo']");
             if (billingIterator.MoveNext())
             {
@@ -646,18 +647,18 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             order.RequestedShipping = shipping;
         }
 
-        private void LoadNotes(OrderMotionOrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderMotionOrderEntity order, XPathNavigator xpath)
         {
             // order notes
             string notes = XPathUtility.Evaluate(xpath, "/OrderInformationResponse/ShippingInformation/SpecialInstructions", "");
             if (notes.Length > 0)
             {
-                InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 
         /// <summary>
-        /// Retrieves and temporarily caches the OrderMotion responsed ata for the order nubmer provided.
+        /// Retrieves and temporarily caches the OrderMotion response data for the order number provided.
         /// </summary>
         private XPathNavigator GetOrderMotionOrder(long orderNumber)
         {

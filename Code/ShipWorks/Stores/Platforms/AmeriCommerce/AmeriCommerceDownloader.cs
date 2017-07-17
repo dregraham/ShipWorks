@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private async Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -109,13 +109,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // check for cancel since FillOrderDetail is pretty time-intensive
             if (Progress.IsCancelRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // begin pulling into ShipWorks now
             int orderNumber = orderTrans.orderID.GetValue(0);
 
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             // populate the few properties that are allowed to change between downloads
             order.OrderDate = orderTrans.orderDate.GetValue(DateTime.UtcNow);
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // do the rest only on new orders
             if (order.IsNew)
             {
-                LoadNotes(orderTrans, order);
+                await LoadNotes(orderTrans, order).ConfigureAwait(false);
 
                 LoadOrderItems(client, order, orderTrans);
 
@@ -150,36 +150,36 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmeriCommerceDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Loads the various notes from the AmeriCommerce order
         /// </summary>
-        private void LoadNotes(OrderTrans orderTrans, OrderEntity order)
+        private async Task LoadNotes(OrderTrans orderTrans, OrderEntity order)
         {
             string publicComments = orderTrans.CommentsPublic ?? "";
             if (publicComments.Length > 0)
             {
-                InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string instructions = orderTrans.CommentsInstructions ?? "";
             if (instructions.Length > 0)
             {
-                InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string comments = orderTrans.comments ?? "";
             if (comments.Length > 0)
             {
-                InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             string giftMessage = orderTrans.GiftMessage ?? "";
             if (giftMessage.Length > 0)
             {
-                InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 
@@ -390,7 +390,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             CustomerTrans customer = client.GetCustomer(orderTrans.customerID.GetValue(0));
             billAdapter.Email = customer.email;
 
-            // AC only provides the customer level email.  Through correspondance with them they want us always using the customer email as the shipping email.
+            // AC only provides the customer level email.  Through correspondence with them they want us always using the customer email as the shipping email.
             shipAdapter.Email = customer.email;
 
             // fix bad/missing shipping information, take from the customer record

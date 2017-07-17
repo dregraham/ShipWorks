@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.XPath;
-using ShipWorks.Stores.Content;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Data.Import
 {
@@ -31,7 +28,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
-        NoteEntity CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility);
+        Task<NoteEntity> CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility);
 
         /// <summary>
         /// Create a new payment detail attached to the order

@@ -272,13 +272,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private Task LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
+        private async Task LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
         {
             // Create a BigCommerceOrderIdentifier
             BigCommerceOrderIdentifier bigCommerceOrderIdentifier = new BigCommerceOrderIdentifier(order.id, orderNumberPostfix);
 
             // Get the order instance.
-            OrderEntity orderEntity = InstantiateOrder(bigCommerceOrderIdentifier);
+            OrderEntity orderEntity = await InstantiateOrder(bigCommerceOrderIdentifier).ConfigureAwait(false);
 
             // If the order does not have sub orders, set the order total.  If it does have sub orders, each order should be calculated based on it's
             // content
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             LoadAddressInfo(orderEntity, order, shipToAddress);
 
             // Load any order notes
-            LoadOrderNotes(orderEntity, order);
+            await LoadOrderNotes(orderEntity, order).ConfigureAwait(false);
 
             // Only update the rest for brand new orders
             if (orderEntity.IsNew)
@@ -326,7 +326,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BigCommerceDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -652,13 +652,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// If the order has any notes, save them
         /// </summary>
-        private void LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
+        private async Task LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
         {
             string orderComment = order.customer_message;
-            InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true);
+            await InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
 
             string orderInternalComment = order.staff_notes;
-            InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -24,13 +24,13 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Get validated addresses for the given consuemer and prefix
+        /// Get validated addresses for the given consumer and prefix
         /// </summary>
         public IEnumerable<ValidatedAddressEntity> GetValidatedAddressesByConsumerAndPrefix(long consumerId, string prefix)
         {
             using (SqlAdapter adapter = SqlAdapter.Default)
             {
-                return adapter.GetCollectionFromPredicate<ValidatedAddressEntity>(new AddressSuggestionsForConsumerPredicate(consumerId, prefix)); 
+                return adapter.GetCollectionFromPredicate<ValidatedAddressEntity>(new AddressSuggestionsForConsumerPredicate(consumerId, prefix));
             }
         }
 

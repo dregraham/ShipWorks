@@ -213,7 +213,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                     if (Progress.IsCancelRequested)
                     {
-                        // The user cancelled the download
+                        // The user canceled the download
                         return;
                     }
                 }
@@ -229,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <param name="orders">The orders.</param>
         private async Task LoadOrders(DownloadInfo downloadInfo, List<Order> orders)
         {
-            // Re-order the list by order date so in the event of the download being cancelled
+            // Re-order the list by order date so in the event of the download being canceled
             // in the middle of loading the orders any missing orders get downloaded again.
             orders.Sort((a, b) => a.OrderDateInPacificStandardTime.CompareTo(b.OrderDateInPacificStandardTime));
 
@@ -242,12 +242,11 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                 if (Progress.IsCancelRequested)
                 {
-                    // The user cancelled the download
+                    // The user canceled the download
                     return;
                 }
             }
         }
-
 
         /// <summary>
         /// Gets the download starting point.
@@ -275,10 +274,10 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Loads the order based on the data downloaded from Newegg.
         /// </summary>
         /// <param name="downloadedOrder">The order data downloaded from the Newegg API.</param>
-        private Task LoadOrder(Order downloadedOrder)
+        private async Task LoadOrder(Order downloadedOrder)
         {
             OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(downloadedOrder.OrderNumber);
-            NeweggOrderEntity order = (NeweggOrderEntity) InstantiateOrder(orderIdentifier);
+            NeweggOrderEntity order = (NeweggOrderEntity) await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
             order.OrderDate = downloadedOrder.OrderDateToUtcTime();
             order.OrderTotal = downloadedOrder.OrderTotalAmount;
@@ -308,7 +307,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NeweggDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

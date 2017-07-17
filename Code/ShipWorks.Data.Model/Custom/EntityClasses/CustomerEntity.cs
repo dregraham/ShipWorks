@@ -11,5 +11,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Gets the billing address as a person adapter
         /// </summary>
         public PersonAdapter BillPerson => new PersonAdapter(this, "Bill");
+
+        /// <summary>
+        /// Gets the shipping address as a person adapter
+        /// </summary>
+        public PersonAdapter ShipPerson => new PersonAdapter(this, "Ship");
     }
 }

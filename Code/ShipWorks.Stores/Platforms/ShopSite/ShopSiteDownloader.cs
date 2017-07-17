@@ -133,13 +133,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
 
             // Get the order instance
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = XPathUtility.Evaluate(xpath, "Totals/GrandTotal", 0.0m);
@@ -163,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Only update the rest for brand new orders
             if (order.IsNew)
             {
-                LoadCustomerComments(order, xpath);
+                await LoadCustomerComments(order, xpath).ConfigureAwait(false);
 
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("Shipping//Product");
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopSiteDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -359,13 +359,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Load any customer entered comments from the online order
         /// </summary>
-        private void LoadCustomerComments(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadCustomerComments(OrderEntity order, XPathNavigator xpath)
         {
             // Customer comments
-            InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             // Order instructions
-            InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
         }
 
         /// <summary>

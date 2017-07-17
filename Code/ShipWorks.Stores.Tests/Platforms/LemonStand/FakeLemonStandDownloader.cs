@@ -14,6 +14,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
     class FakeLemonStandDownloader : LemonStandDownloader
     {
         public LemonStandOrderEntity Order { get; set; }
+
         public LemonStandOrderEntity SavedOrder { get; set; }
 
         public FakeLemonStandDownloader(StoreEntity store) : base(store)
@@ -28,10 +29,10 @@ namespace ShipWorks.Tests.Stores.LemonStand
         {
         }
 
-        protected override OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected override Task<OrderEntity> InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             Order = new LemonStandOrderEntity();
-            return Order;
+            return Task.FromResult(Order as OrderEntity);
         }
 
         protected override Task SaveDownloadedOrder(OrderEntity order)

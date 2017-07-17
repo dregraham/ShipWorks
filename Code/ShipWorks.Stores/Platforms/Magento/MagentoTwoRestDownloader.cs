@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
                         }
 
-                        MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
+                        MagentoOrderEntity orderEntity = await InstantiateOrder(orderIdentifier).ConfigureAwait(false) as MagentoOrderEntity;
                         await LoadOrder(orderEntity, magentoOrder, Progress).ConfigureAwait(false);
                     }
                 } while (ordersResponse.TotalCount > 0);
@@ -161,12 +161,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
+        public async Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
             // Check if it has been canceled
             if (progressReporter.IsCancelRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Update the status
@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
-            LoadNotes(orderEntity, magentoOrder);
+            await LoadNotes(orderEntity, magentoOrder).ConfigureAwait(false);
 
             if (orderEntity.IsNew)
             {
@@ -201,13 +201,13 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadOrderPayment(orderEntity, magentoOrder);
             }
 
-            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
+            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Load the orders notes
         /// </summary>
-        private void LoadNotes(OrderEntity orderEntity, Order magentoOrder)
+        private async Task LoadNotes(OrderEntity orderEntity, Order magentoOrder)
         {
             foreach (StatusHistory history in magentoOrder.StatusHistories)
             {
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     noteDate = DateTime.UtcNow;
                 }
 
-                InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true);
+                await InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true).ConfigureAwait(false);
             }
         }
 

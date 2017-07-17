@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 Progress.Detail = $"Processing order {QuantitySaved + 1}";
 
-                OrderEntity downloadedOrder = LoadOrder(odbcRecordsForOrder);
+                OrderEntity downloadedOrder = await LoadOrder(odbcRecordsForOrder).ConfigureAwait(false);
 
                 try
                 {
@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Downloads the order.
         /// </summary>
         /// <exception cref="DownloadException">Order number not found in map.</exception>
-        private OrderEntity LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
+        private async Task<OrderEntity> LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
         {
             OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             // Create an order using the order number
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long) odbcFieldMapEntry.ShipWorksField.Value));
+            OrderEntity orderEntity = await InstantiateOrder(new OrderNumberIdentifier((long) odbcFieldMapEntry.ShipWorksField.Value)).ConfigureAwait(false);
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
 

@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Import the Order
         /// </summary>
-        private Task LoadOrder(string orderXml)
+        private async Task LoadOrder(string orderXml)
         {
             // load the document
             XmlDocument document = new XmlDocument();
@@ -133,12 +133,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             string amazonOrder = XPathUtility.Evaluate(xpath, "amazonOrderID", "");
 
             // get the order instance
-            AmazonOrderEntity order = (AmazonOrderEntity) InstantiateOrder(new AmazonOrderIdentifier(amazonOrder));
+            AmazonOrderEntity order = (AmazonOrderEntity) await InstantiateOrder(new AmazonOrderIdentifier(amazonOrder)).ConfigureAwait(false);
 
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // basic properties
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

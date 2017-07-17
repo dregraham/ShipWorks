@@ -73,21 +73,21 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = InstantiateOrder(xpath);
+            OrderEntity order = await InstantiateOrder(xpath).ConfigureAwait(false);
 
             GenericXmlOrderLoader.LoadOrder(order, this, null, xpath);
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileXmlDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        private OrderEntity InstantiateOrder(XPathNavigator xpath)
+        private Task<OrderEntity> InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
@@ -100,9 +100,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
     }
 }

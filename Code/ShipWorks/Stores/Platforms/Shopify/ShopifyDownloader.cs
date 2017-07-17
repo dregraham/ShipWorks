@@ -244,10 +244,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         private async Task LoadOrder(JToken jsonOrder)
         {
-            if (jsonOrder == null)
-            {
-                throw new ArgumentNullException("jsonOrder");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(jsonOrder, nameof(jsonOrder));
 
             try
             {
@@ -255,13 +252,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 long shopifyOrderId = jsonOrder.GetValue<long>("id");
 
                 //Get the order instance.
-                ShopifyOrderEntity order = (ShopifyOrderEntity) InstantiateOrder(new ShopifyOrderIdentifier(shopifyOrderId));
+                ShopifyOrderEntity order = (ShopifyOrderEntity) await InstantiateOrder(new ShopifyOrderIdentifier(shopifyOrderId)).ConfigureAwait(false);
 
                 //Set the total.  It will be calculated and verified later.
-                order.OrderTotal = jsonOrder.GetValue<decimal>("total_price", 0.0m);
+                order.OrderTotal = jsonOrder.GetValue("total_price", 0.0m);
 
                 // Get order date
-                order.OrderDate = jsonOrder.GetValue<DateTime>("created_at", DateTime.MinValue).ToUniversalTime();
+                order.OrderDate = jsonOrder.GetValue("created_at", DateTime.MinValue).ToUniversalTime();
 
                 //Get the customer
                 long onlineCustomerID = jsonOrder.GetValue<long>("customer.id", -1);
@@ -270,15 +267,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 //Requested shipping
                 if (requestedShippingField == ShopifyRequestedShippingField.Code)
                 {
-                    order.RequestedShipping = jsonOrder.GetValue<string>("shipping_lines[0].code", string.Empty);
+                    order.RequestedShipping = jsonOrder.GetValue("shipping_lines[0].code", string.Empty);
                 }
                 else
                 {
-                    order.RequestedShipping = jsonOrder.GetValue<string>("shipping_lines[0].title", string.Empty);
+                    order.RequestedShipping = jsonOrder.GetValue("shipping_lines[0].title", string.Empty);
                 }
 
                 //Set OnlineLastModified to their last modified date
-                order.OnlineLastModified = jsonOrder.GetValue<DateTime>("updated_at", order.OnlineLastModified).ToUniversalTime();
+                order.OnlineLastModified = jsonOrder.GetValue("updated_at", order.OnlineLastModified).ToUniversalTime();
 
                 //Load Online Status
                 LoadStatus(order, jsonOrder);
@@ -287,7 +284,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 LoadAddressInfo(order, jsonOrder);
 
                 // Load any order notes
-                LoadOrderNote(order, jsonOrder);
+                await LoadOrderNote(order, jsonOrder).ConfigureAwait(false);
 
                 // Only update the rest for brand new orders
                 if (order.IsNew)
@@ -329,7 +326,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // the prefix\suffix is
             string fullOrderNumber = jsonOrder.GetValue<string>("name");
 
-            int numericIndex = fullOrderNumber.IndexOf(order.OrderNumber.ToString());
+            int numericIndex = fullOrderNumber.IndexOf(order.OrderNumber.ToString(), StringComparison.Ordinal);
 
             // Shouldn't happen, but bail if it does
             if (numericIndex < 0)
@@ -377,6 +374,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 // Log the msg so we know what status was missing, if the customer contacts us.
                 log.Debug(ex);
             }
+
             order.PaymentStatusCode = (int) onlineFinancialStatus;
 
             // If the order hasn't been fulfilled, no need to display that info
@@ -419,7 +417,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             else
             {
-                // Check to see if the order is 'completed' online, and mark it shipped localy if so.
+                // Check to see if the order is 'completed' online, and mark it shipped locally if so.
                 if (order.FulfillmentStatusCode == (int) ShopifyFulfillmentStatus.Fulfilled &&
                     onlineFinancialStatus == ShopifyPaymentStatus.Paid)
                 {
@@ -474,7 +472,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             //Instantiate the order item attribute
             OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
 
-            //Set the option propeties
+            //Set the option properties
             option.Name = "Variant";
             option.Description = name;
 
@@ -542,7 +540,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 string imageUrl = string.Empty;
                 foreach (JToken prodImg in shopifyProduct.SelectToken("product.images").Select(img => img))
                 {
-                    imageUrl = prodImg.GetValue<string>("src", string.Empty);
+                    imageUrl = prodImg.GetValue("src", string.Empty);
                     if (!string.IsNullOrWhiteSpace(imageUrl))
                     {
                         break;
@@ -668,7 +666,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {
@@ -685,13 +683,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// If a note is on the order, save it
         /// </summary>
-        private void LoadOrderNote(OrderEntity order, JToken jsonOrder)
+        private async Task LoadOrderNote(OrderEntity order, JToken jsonOrder)
         {
             string orderNote = jsonOrder.GetValue<string>("note", string.Empty);
 
             if (!string.IsNullOrWhiteSpace(orderNote))
             {
-                InstantiateNote(order, orderNote, order.OrderDate, NoteVisibility.Public, true);
+                await InstantiateNote(order, orderNote, order.OrderDate, NoteVisibility.Public, true).ConfigureAwait(false);
             }
         }
 
@@ -700,15 +698,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         private void LoadAddressInfo(OrderEntity order, JToken jsonOrder)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order", "order is required.");
-            }
-
-            if (jsonOrder == null)
-            {
-                throw new ArgumentNullException("jsonOrder", "jsonOrder is required.");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
+            MethodConditions.EnsureArgumentIsNotNull(jsonOrder, nameof(jsonOrder));
 
             // Load shipping address info
             LoadAddressInfo(order, jsonOrder, "shipping", "Ship");

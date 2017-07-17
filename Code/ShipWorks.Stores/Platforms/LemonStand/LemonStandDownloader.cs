@@ -162,11 +162,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Load Order from JToken
         /// </summary>
-        public Task LoadOrder(JToken jsonOrder)
+        public async Task LoadOrder(JToken jsonOrder)
         {
-            LemonStandOrderEntity order = PrepareOrder(jsonOrder);
+            LemonStandOrderEntity order = await PrepareOrder(jsonOrder).ConfigureAwait(false);
 
-            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="jsonOrder">The json order.</param>
         /// <returns>Order Entity to be saved to database</returns>
         /// <exception cref="LemonStandException"></exception>
-        public LemonStandOrderEntity PrepareOrder(JToken jsonOrder)
+        public async Task<LemonStandOrderEntity> PrepareOrder(JToken jsonOrder)
         {
             //                              order
             //                          /     |      \
@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 int orderID = int.Parse(lsOrder.ID);
 
                 LemonStandOrderEntity order =
-                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+                    (LemonStandOrderEntity) await InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString())).ConfigureAwait(false);
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
                 order.OnlineStatusCode = lsOrder.ShopOrderStatusID;

@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             if (ShouldImportTransaction(transaction))
             {
-                PayPalOrderEntity order = (PayPalOrderEntity) InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
+                PayPalOrderEntity order = (PayPalOrderEntity) await InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID)).ConfigureAwait(false);
 
                 order.TransactionID = transaction.PaymentInfo.TransactionID;
                 order.PayPalFee = GetAmount(transaction.PaymentInfo.FeeAmount);
@@ -194,7 +194,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 // only do the remainder for new orders
                 if (order.IsNew)
                 {
-                    LoadNewOrder(order, transaction);
+                    await LoadNewOrder(order, transaction).ConfigureAwait(false);
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
@@ -226,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Loads order information for new orders
         /// </summary>
-        private void LoadNewOrder(PayPalOrderEntity order, PaymentTransactionType transaction)
+        private async Task LoadNewOrder(PayPalOrderEntity order, PaymentTransactionType transaction)
         {
             order.OrderDate = GetOrderDate(transaction.PaymentInfo.PaymentDate);
             order.RequestedShipping = transaction.PaymentInfo.ShippingMethod ?? "";
@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             // no customer ids
             order.OnlineCustomerID = null;
 
-            InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             LoadItems(order, transaction);
 

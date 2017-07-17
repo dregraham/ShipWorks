@@ -152,7 +152,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
         public async Task<YahooOrderEntity> CreateOrder(YahooOrder order)
         {
-            YahooOrderEntity orderEntity = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())) as YahooOrderEntity;
+            OrderEntity loadedOrder = await InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())).ConfigureAwait(false);
+            YahooOrderEntity orderEntity = loadedOrder as YahooOrderEntity;
 
             if (orderEntity == null)
             {
@@ -161,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (orderEntity.IsNew)
             {
-                orderEntity = LoadOrder(order, orderEntity);
+                orderEntity = await LoadOrder(order, orderEntity).ConfigureAwait(false);
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
             }
@@ -174,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <param name="orderEntity">The order entity.</param>
-        public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
+        public async Task<YahooOrderEntity> LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
             orderEntity.OnlineStatusCode = GetOnlineStatusCode(order);
             orderEntity.OnlineStatus = GetOnlineStatus(orderEntity);
@@ -189,7 +190,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderTotals(orderEntity, order);
             LoadOrderCharges(orderEntity, order);
             LoadOrderGiftMessages(orderEntity, order);
-            LoadOrderNotes(orderEntity, order);
+            await LoadOrderNotes(orderEntity, order).ConfigureAwait(false);
             LoadOrderPayments(orderEntity, order);
 
             return orderEntity;
@@ -304,18 +305,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="orderEntity">The order entity.</param>
         /// <param name="order">The order DTO.</param>
-        private void LoadOrderNotes(YahooOrderEntity orderEntity, YahooOrder order)
+        private async Task LoadOrderNotes(YahooOrderEntity orderEntity, YahooOrder order)
         {
             if (!order.MerchantNotes.IsNullOrWhiteSpace())
             {
-                InstantiateNote(orderEntity, order.MerchantNotes, ParseYahooDateTime(order.CreationTime),
-                    NoteVisibility.Internal);
+                await InstantiateNote(orderEntity, order.MerchantNotes, ParseYahooDateTime(order.CreationTime),
+                    NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             if (!order.BuyerComments.IsNullOrWhiteSpace())
             {
-                InstantiateNote(orderEntity, order.BuyerComments, ParseYahooDateTime(order.CreationTime),
-                    NoteVisibility.Public);
+                await InstantiateNote(orderEntity, order.BuyerComments, ParseYahooDateTime(order.CreationTime),
+                    NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 

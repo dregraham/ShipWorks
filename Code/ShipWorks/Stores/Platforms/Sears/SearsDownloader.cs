@@ -130,14 +130,14 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Load the given order
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // extract the order number
             long orderNumber = XPathUtility.Evaluate(xpath, "customer-order-confirmation-number", 0L);
             string poNumber = XPathUtility.Evaluate(xpath, "po-number", "");
 
             // get the order instance, creates one if necessary
-            SearsOrderEntity order = (SearsOrderEntity) InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber));
+            SearsOrderEntity order = (SearsOrderEntity) await InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber)).ConfigureAwait(false);
 
             order.OrderDate = GetOrderDate(xpath);
             order.OnlineCustomerID = null;
@@ -178,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SearsDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

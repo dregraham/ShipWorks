@@ -292,13 +292,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        protected OrderEntity InstantiateOrder(XPathNavigator xpath)
+        protected async Task<OrderEntity> InstantiateOrder(XPathNavigator xpath)
         {
             // Construct the order identifier based on the incoming xml
             OrderIdentifier orderIdentifier = CreateOrderIdentifier(xpath);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
+            OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
             AssignOrderNumber(order);
 
@@ -308,9 +308,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = InstantiateOrder(xpath);
+            OrderEntity order = await InstantiateOrder(xpath).ConfigureAwait(false);
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
@@ -361,7 +361,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

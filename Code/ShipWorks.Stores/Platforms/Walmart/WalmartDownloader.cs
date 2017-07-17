@@ -129,12 +129,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Loads the order.
         /// </summary>
-        private Task LoadOrder(Order downloadedOrder)
+        private async Task LoadOrder(Order downloadedOrder)
         {
             // Check if it has been canceled
             if (Progress.IsCancelRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Update the status
@@ -142,12 +142,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
             // See remarks in WalmartOrderIdentifier for why we use this vs OrderNumberIdentifier
             WalmartOrderEntity orderToSave =
-                (WalmartOrderEntity) InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId));
+                (WalmartOrderEntity) await InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId)).ConfigureAwait(false);
 
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
             // Save the downloaded order
-            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToSave));
+            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderToSave)).ConfigureAwait(false);
         }
 
         /// <summary>

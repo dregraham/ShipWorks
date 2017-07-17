@@ -204,17 +204,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// Extract the order from the XML
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Get the OrderID
             string yahooOrderID = xpath.GetAttribute("id", "");
 
             // Now extract the Order#
-            int lastSlash = yahooOrderID.LastIndexOf("-");
+            int lastSlash = yahooOrderID.LastIndexOf("-", StringComparison.Ordinal);
             int orderNumber = Convert.ToInt32(yahooOrderID.Substring(lastSlash + 1));
 
             // Create a new order for it
-            YahooOrderEntity order = (YahooOrderEntity) InstantiateOrder(new YahooOrderIdentifier(yahooOrderID));
+            YahooOrderEntity order = (YahooOrderEntity) await InstantiateOrder(new YahooOrderIdentifier(yahooOrderID)).ConfigureAwait(false);
 
             long numericTime = XPathUtility.Evaluate(xpath, "NumericTime", 0L);
 
@@ -236,7 +236,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 string comments = XPathUtility.Evaluate(xpath, "Comments", "");
                 if (comments.Length > 0)
                 {
-                    InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Public);
+                    await InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
                 }
 
                 // Items
@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooEmailDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

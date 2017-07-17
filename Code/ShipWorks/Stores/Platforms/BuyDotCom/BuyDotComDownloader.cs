@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    return await reader.ReadToEndAsync();
+                    return await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 string fileContent = ftpClient.GetOrderFileContent(fileName);
 
                 // Load orders from the content
-                bool result = await LoadOrdersFromCsv(fileContent);
+                bool result = await LoadOrdersFromCsv(fileContent).ConfigureAwait(false);
 
                 // Move the file to the Archive folder if configured (default)
                 if (BuyDotComUtility.ArchiveFileAfterDownload)
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
 
                     // Create and load in the order data
-                    OrderEntity order = InstantiateOrder(csvReader);
+                    OrderEntity order = await InstantiateOrder(csvReader).ConfigureAwait(false);
 
                     BuyDotComOrderLoader loader = new BuyDotComOrderLoader();
                     loader.Load(order, csvReader, this);
@@ -183,15 +183,13 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private OrderEntity InstantiateOrder(GenericCsvReader reader)
+        private Task<OrderEntity> InstantiateOrder(GenericCsvReader reader)
         {
             // pull out the order number
             long orderNumber = reader.ReadField("Order.Number", 0L, false);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
-
-            return order;
+            return InstantiateOrder(new OrderNumberIdentifier(orderNumber));
         }
     }
 }

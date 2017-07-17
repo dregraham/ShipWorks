@@ -12,18 +12,18 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class AdapterAddressValidationDataAccess : IAddressValidationDataAccess
     {
-        private readonly SqlAdapter adapter;
+        private readonly ISqlAdapter adapter;
 
         /// <summary>
         /// Instantiate the object
         /// </summary>
-        public AdapterAddressValidationDataAccess(SqlAdapter adapter)
+        public AdapterAddressValidationDataAccess(ISqlAdapter adapter)
         {
             this.adapter = adapter;
         }
 
         /// <summary>
-        /// Get validated addresses for the given consuemer and prefix
+        /// Get validated addresses for the given consumer and prefix
         /// </summary>
         public IEnumerable<ValidatedAddressEntity> GetValidatedAddressesByConsumerAndPrefix(long consumerId, string prefix)
         {

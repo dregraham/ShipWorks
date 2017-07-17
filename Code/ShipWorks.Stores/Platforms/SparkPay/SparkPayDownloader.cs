@@ -96,14 +96,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Load an individual order
         /// </summary>
-        private Task LoadOrder(Order sparkPayOrder)
+        private async Task LoadOrder(Order sparkPayOrder)
         {
             if (Progress.IsCancelRequested || sparkPayOrder == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(sparkPayOrder.Id.Value));
+            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(sparkPayOrder.Id.Value)).ConfigureAwait(false);
 
             order.OnlineStatus = statusProvider.GetCodeName((int) sparkPayOrder.OrderStatusId);
             order.OnlineStatusCode = sparkPayOrder.OrderStatusId.ToString();
@@ -118,16 +118,16 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
                 LoadOrderItems(order, sparkPayOrder.Items);
                 LoadOrderCharges(order, sparkPayOrder);
-                LoadOrderGiftMessages(order, sparkPayOrder);
+                await LoadOrderGiftMessages(order, sparkPayOrder).ConfigureAwait(false);
 
                 LoadOrderPayments(order, sparkPayOrder);
             }
 
             LoadAddresses(order, sparkPayOrder);
-            LoadOrderNotes(order, sparkPayOrder);
+            await LoadOrderNotes(order, sparkPayOrder).ConfigureAwait(false);
 
             ISqlAdapterRetry retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SparkPayDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -157,16 +157,16 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Loads the orders notes
         /// </summary>
-        private void LoadOrderNotes(OrderEntity order, Order sparkPayOrder)
+        private async Task LoadOrderNotes(OrderEntity order, Order sparkPayOrder)
         {
             if (!string.IsNullOrWhiteSpace(sparkPayOrder.PublicComments))
             {
-                InstantiateNote(order, sparkPayOrder.PublicComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, sparkPayOrder.PublicComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             if (!string.IsNullOrWhiteSpace(sparkPayOrder.AdminComments))
             {
-                InstantiateNote(order, sparkPayOrder.AdminComments, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, sparkPayOrder.AdminComments, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
@@ -175,11 +175,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         /// <param name="order"></param>
         /// <param name="sparkPayOrder"></param>
-        private void LoadOrderGiftMessages(OrderEntity order, Order sparkPayOrder)
+        private async Task LoadOrderGiftMessages(OrderEntity order, Order sparkPayOrder)
         {
             if (!string.IsNullOrWhiteSpace(sparkPayOrder.GiftMessage))
             {
-                InstantiateNote(order, $"Gift Message: {sparkPayOrder.GiftMessage}", order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, $"Gift Message: {sparkPayOrder.GiftMessage}", order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 

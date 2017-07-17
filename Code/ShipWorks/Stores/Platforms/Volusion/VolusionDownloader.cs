@@ -138,13 +138,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Processes a single order
         /// </summary>
-        private Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
+        private async Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
         {
             long orderNumber = XPathUtility.Evaluate(xpath, "OrderID", 0);
 
             // find an existing order in ShipWorks or create a new one
             OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(orderNumber);
-            OrderEntity order = InstantiateOrder(orderIdentifier);
+            OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
             order.OrderDate = GetDate(xpath, "OrderDate");
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             // do the remaining only on new orders
             if (order.IsNew)
             {
-                LoadNotes(order, xpath);
+                await LoadNotes(order, xpath).ConfigureAwait(false);
 
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("OrderDetails");
@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "VolusionDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -340,26 +340,26 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Loads notes on the order
         /// </summary>
-        private void LoadNotes(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderEntity order, XPathNavigator xpath)
         {
             bool isGift = XPathUtility.Evaluate(xpath, "IsAGift", "N") == "Y";
             if (isGift)
             {
-                InstantiateNote(order, "Gift: Yes", order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Gift: Yes", order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // order comments
             string orderComments = XPathUtility.Evaluate(xpath, "Order_Comments", "");
             if (orderComments.Length > 0)
             {
-                InstantiateNote(order, orderComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, orderComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // order notes (private)
             string orderNotes = XPathUtility.Evaluate(xpath, "OrderNotes", "");
             if (orderNotes.Length > 0)
             {
-                InstantiateNote(order, orderNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, orderNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
