@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
+﻿using System.Reflection;
+
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
 {
     /// <summary>
     /// Flag type for ChannelAdvisor's REST API
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ChannelAdvisorRestFlagType
     {
         NotSpecified = -9999,

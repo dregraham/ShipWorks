@@ -249,10 +249,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             // In ChannelAdvsior if the buyer selected Use Shipping as Billing during checkout,
             // the values get copied to billing, but that data doesn't come down in Billing.
-            if (downloadedOrder.BillingFirstName.Length == 0
-                && downloadedOrder.BillingLastName.Length == 0
-                && downloadedOrder.BillingAddressLine1.Length == 0
-                && downloadedOrder.BillingCity.Length == 0)
+            if (string.IsNullOrWhiteSpace(downloadedOrder.BillingFirstName)
+                && string.IsNullOrWhiteSpace(downloadedOrder.BillingLastName)
+                && string.IsNullOrWhiteSpace(downloadedOrder.BillingAddressLine1)
+                && string.IsNullOrWhiteSpace(downloadedOrder.BillingCity))
             {
                 // copy shipping to billing
                 PersonAdapter.Copy(shipAdapter, billAdapter);
