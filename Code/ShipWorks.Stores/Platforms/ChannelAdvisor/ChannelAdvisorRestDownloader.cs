@@ -126,23 +126,51 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
+        /// <summary>
+        /// Create an item for the order
+        /// </summary>
         OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
 
+        /// <summary>
+        /// Create an item attribute for the item
+        /// </summary>
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
             InstantiateOrderItemAttribute(item);
 
+        /// <summary>
+        /// Create an item attribute for the item
+        /// </summary>
         public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
             decimal unitPrice,
             bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
 
+        /// <summary>
+        /// Crate a charge for the given order
+        /// </summary>
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
 
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description, decimal amount) => InstantiateOrderCharge(order, type, description, amount);
+        /// <summary>
+        /// Create a charge for the given order
+        /// </summary>
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description,
+            decimal amount) => InstantiateOrderCharge(order, type, description, amount);
 
-        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
+        /// <summary>
+        /// Create a note for the given order
+        /// </summary>
+        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
 
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) => InstantiateOrderPaymentDetail(order);
+        /// <summary>
+        /// Create a payment detail for the given order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) =>
+            InstantiateOrderPaymentDetail(order);
 
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => InstantiateOrderPaymentDetail(order, label, value);
+        /// <summary>
+        /// Create a payment detail for the given order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
+            => InstantiateOrderPaymentDetail(order, label, value);
     }
 }
