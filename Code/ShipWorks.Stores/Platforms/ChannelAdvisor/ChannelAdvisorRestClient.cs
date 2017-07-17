@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("access_token", accessToken);
 
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
-            submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ff'Z'}");
+            submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
             submitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             submitter.Variables.Add("$count", "true");
             submitter.Variables.Add("$expand", "Fulfillments");

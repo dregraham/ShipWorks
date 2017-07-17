@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.GetOrders(start, "token");
 
-            submitter.Verify(s => s.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'ff'Z'}"));
+            submitter.Verify(s => s.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}"));
         }
 
         [Fact]
