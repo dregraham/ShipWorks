@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -45,8 +46,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             orderElementFactory.Setup(f => f.CreateItem(It.IsAny<OrderEntity>()))
                 .Returns<OrderEntity>(order =>
                 {
-                    order.OrderItems.Add(new ChannelAdvisorOrderItemEntity());
-                    return order.OrderItems[0];
+                    var item = new ChannelAdvisorOrderItemEntity();
+                    order.OrderItems.Add(item);
+                    return item;
+                });
+
+            orderElementFactory.Setup(f => f.CreateItemAttribute(It.IsAny<ChannelAdvisorOrderItemEntity>()))
+                .Returns<ChannelAdvisorOrderItemEntity>(item =>
+                {
+                    var attribute = new OrderItemAttributeEntity();
+                    item.OrderItemAttributes.Add(attribute);
+                    return attribute;
                 });
         }
 
@@ -554,6 +564,124 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             Assert.Equal(downloadedOrder.Items[0].Title, orderToSave.OrderItems[0].Name);
         }
+
+        [Fact]
+        public void LoadOrder_OrderItemQuantityIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Quantity = 42 });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].Quantity, orderToSave.OrderItems[0].Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemUnitPriceIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { UnitPrice = 10.23m });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].UnitPrice, orderToSave.OrderItems[0].UnitPrice);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemCodeIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].Sku, orderToSave.OrderItems[0].Code);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemSkuIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].Sku, orderToSave.OrderItems[0].SKU);
+        }
+
+        [Fact]
+        public void LoadOrder_SiteOrderItemIDIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { SiteOrderItemID = "SO1"});
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].SiteOrderItemID, 
+                ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems[0]).MarketplaceName);
+        }
+
+        [Fact]
+        public void LoadOrder_BuyerUserIDIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.BuyerUserID = "Foo";
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.BuyerUserID,
+                ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems[0]).MarketplaceBuyerID);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemAttrbiuteNotCreated_WhenNoGiftNote()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+        
+            orderElementFactory.Verify(f=>f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Never);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemAttributeCreated_WhenGiftNote()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftNotes = "For You!"});
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            var giftAttributeToSave = orderToSave.OrderItems.Single().OrderItemAttributes.Single();
+
+            Assert.Equal("Gift Notes", giftAttributeToSave.Name);
+            Assert.Equal("For You!", giftAttributeToSave.Description);
+            Assert.Equal(0M, giftAttributeToSave.UnitPrice);
+        }
+
+        [Fact]
+        public void LoadOrder_OrderItemAttributeCreated_WhenGiftMessage()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftMessage = "For you!"});
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            var giftAttributeToSave = orderToSave.OrderItems.Single().OrderItemAttributes.Single();
+
+            Assert.Equal("Gift Message", giftAttributeToSave.Name);
+            Assert.Equal("For you!", giftAttributeToSave.Description);
+            Assert.Equal(0M, giftAttributeToSave.UnitPrice);
+        }
+
+        [Fact]
+        public void LoadOrder_HasTwoAttributes_WhenGiftNoteAndGiftMessageSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                GiftMessage = "For you!",
+                GiftNotes = "Some Note"
+            });
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            orderElementFactory.Verify(f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void LoadOrder_UsesAccessToken
 
         #endregion
 

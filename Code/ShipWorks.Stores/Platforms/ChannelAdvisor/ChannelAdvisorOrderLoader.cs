@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string refreshToken)
+        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
         {
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
 
                 // items
-                LoadItems(orderToSave, downloadedOrder, orderElementFactory, refreshToken);
+                LoadItems(orderToSave, downloadedOrder, orderElementFactory, accessToken);
 
                 // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
@@ -67,15 +67,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
-        private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string refreshToken)
+        private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
         {
             foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
             {
-                LoadItem(orderToSave, downloadedOrder, item, orderElementFactory, refreshToken);
+                LoadItem(orderToSave, downloadedOrder, item, orderElementFactory, accessToken);
             }
         }
 
-        private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string refreshToken)
+        private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string accessToken)
         {
             ChannelAdvisorOrderItemEntity itemToSave = (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // CA-specific
             itemToSave.MarketplaceName = downloadedItem.SiteOrderItemID;
-            itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserId;
+            itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserID;
 
             if (!string.IsNullOrWhiteSpace(downloadedItem.GiftNotes))
             {
@@ -106,7 +106,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attribute.Description = downloadedItem.GiftMessage;
                 attribute.UnitPrice = 0M;
             }
-            string accessToken = webClient.GetAccessToken(refreshToken);
             ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
             LoadProductDetails(itemToSave, product, orderElementFactory);
 
@@ -278,10 +277,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private void LoadPayments(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
-            orderElementFactory.CreatePaymentDetail(orderToSave, "Payment Type", downloadedOrder.PaymentMethod);
-            orderElementFactory.CreatePaymentDetail(orderToSave, "Card Number", downloadedOrder.PaymentCreditCardLast4);
-            orderElementFactory.CreatePaymentDetail(orderToSave, "Reference", downloadedOrder.PaymentMerchantReferenceNumber);
-            orderElementFactory.CreatePaymentDetail(orderToSave, "TransactionID", downloadedOrder.PaymentTransactionID);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Type", downloadedOrder.PaymentMethod);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Card Number", downloadedOrder.PaymentCreditCardLast4);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Reference", downloadedOrder.PaymentMerchantReferenceNumber);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "TransactionID", downloadedOrder.PaymentTransactionID);
+        }
+
+        /// <summary>
+        /// Creates the payment detail if value is not null or whitespace
+        /// </summary>
+        private void CreatePaymentDetail(IOrderElementFactory orderElementFactory, ChannelAdvisorOrderEntity orderToSave, string label, string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                orderElementFactory.CreatePaymentDetail(orderToSave, label, value);
+            }
         }
 
         /// <summary>

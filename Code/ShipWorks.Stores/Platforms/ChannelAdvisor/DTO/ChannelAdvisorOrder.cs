@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public DateTimeOffset ShippingDateUtc { get; set; }
 
         [JsonProperty("BuyerUserId")]
-        public string BuyerUserId { get; set; }
+        public string BuyerUserID { get; set; }
 
         [JsonProperty("BuyerEmailAddress")]
         public string BuyerEmailAddress { get; set; }

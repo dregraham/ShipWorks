@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public int Quantity { get; set; }
 
         [JsonProperty("UnitPrice")]
-        public int UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         [JsonProperty("TaxPrice")]
         public int TaxPrice { get; set; }
