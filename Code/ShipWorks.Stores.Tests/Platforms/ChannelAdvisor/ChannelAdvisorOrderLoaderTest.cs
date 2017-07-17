@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly Mock<IChannelAdvisorRestClient> channelAdvisorRestClient;
         private readonly ChannelAdvisorProduct downloadedProduct;
 
-
         public ChannelAdvisorOrderLoaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -117,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_CheckoutStatusIsSet()
         {
-            downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorRestCheckoutStatus.Completed);
+            downloadedOrder.CheckoutStatus = EnumHelper.GetDescription(ChannelAdvisorRestCheckoutStatus.Completed);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
@@ -127,7 +126,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_ShippingStatusIsSet()
         {
-            downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorRestShippingStatus.Shipped);
+            downloadedOrder.ShippingStatus = EnumHelper.GetDescription(ChannelAdvisorRestShippingStatus.Shipped);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
@@ -542,18 +541,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
 
         #region Order Item Level Tests
@@ -858,6 +845,5 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             mock.Dispose();
         }
-
     }
 }
