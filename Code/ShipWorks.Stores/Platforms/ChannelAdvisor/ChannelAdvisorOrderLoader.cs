@@ -358,7 +358,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="downloadedOrder">The downloaded order.</param>
         private void LoadOrderFlag(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder)
         {
-            orderToSave.FlagStyle = EnumHelper.GetDescription((ChannelAdvisorRestFlagType) downloadedOrder.FlagID);
+            orderToSave.FlagStyle = EnumHelper.GetDescription((ChannelAdvisorFlagType) downloadedOrder.FlagID);
             orderToSave.FlagDescription = downloadedOrder.FlagDescription;
             orderToSave.FlagType = downloadedOrder.FlagID;
         }
@@ -371,23 +371,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private static void LoadOrderStatuses(ChannelAdvisorOrderEntity orderToSave,
             ChannelAdvisorOrder downloadedOrder)
         {
-            ChannelAdvisorRestPaymentStatus paymentStatus;
+            ChannelAdvisorPaymentStatus paymentStatus;
             orderToSave.OnlinePaymentStatus =
                 (int) (Enum.TryParse(downloadedOrder.PaymentStatus, true, out paymentStatus) ?
                 paymentStatus :
-                ChannelAdvisorRestPaymentStatus.Unknown);
+                    ChannelAdvisorPaymentStatus.Unknown);
 
-            ChannelAdvisorRestCheckoutStatus checkoutStatus;
+            ChannelAdvisorCheckoutStatus checkoutStatus;
             orderToSave.OnlineCheckoutStatus =
                 (int) (Enum.TryParse(downloadedOrder.CheckoutStatus, true, out checkoutStatus) ?
                 checkoutStatus :
-                ChannelAdvisorRestCheckoutStatus.Unknown);
+                ChannelAdvisorCheckoutStatus.Unknown);
 
-            ChannelAdvisorRestShippingStatus shippingStatus;
+            ChannelAdvisorShippingStatus shippingStatus;
             orderToSave.OnlineShippingStatus =
                 (int) (Enum.TryParse(downloadedOrder.ShippingStatus, true, out shippingStatus) ?
                 shippingStatus :
-                ChannelAdvisorRestShippingStatus.Unknown);
+                ChannelAdvisorShippingStatus.Unknown);
         }
     }
 }

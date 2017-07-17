@@ -107,41 +107,41 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_PaymentStatusIsSet()
         {
-            downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorRestPaymentStatus.Submitted);
+            downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorPaymentStatus.Submitted);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal((int) ChannelAdvisorRestPaymentStatus.Submitted, orderToSave.OnlinePaymentStatus);
+            Assert.Equal((int) ChannelAdvisorPaymentStatus.Submitted, orderToSave.OnlinePaymentStatus);
         }
 
         [Fact]
         public void LoadOrder_CheckoutStatusIsSet()
         {
-            downloadedOrder.CheckoutStatus = EnumHelper.GetDescription(ChannelAdvisorRestCheckoutStatus.Completed);
+            downloadedOrder.CheckoutStatus = EnumHelper.GetDescription(ChannelAdvisorCheckoutStatus.Completed);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal((int)ChannelAdvisorRestCheckoutStatus.Completed, orderToSave.OnlineCheckoutStatus);
+            Assert.Equal((int)ChannelAdvisorCheckoutStatus.Completed, orderToSave.OnlineCheckoutStatus);
         }
 
         [Fact]
         public void LoadOrder_ShippingStatusIsSet()
         {
-            downloadedOrder.ShippingStatus = EnumHelper.GetDescription(ChannelAdvisorRestShippingStatus.Shipped);
+            downloadedOrder.ShippingStatus = EnumHelper.GetDescription(ChannelAdvisorShippingStatus.Shipped);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal((int)ChannelAdvisorRestShippingStatus.Shipped, orderToSave.OnlineShippingStatus);
+            Assert.Equal((int)ChannelAdvisorShippingStatus.Shipped, orderToSave.OnlineShippingStatus);
         }
 
         [Fact]
         public void LoadOrder_OrderFlagStyleIsSet()
         {
-            downloadedOrder.FlagID = (int) ChannelAdvisorRestFlagType.BlueFlag;
+            downloadedOrder.FlagID = (int) ChannelAdvisorFlagType.BlueFlag;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal(EnumHelper.GetDescription(ChannelAdvisorRestFlagType.BlueFlag), orderToSave.FlagStyle);
+            Assert.Equal(EnumHelper.GetDescription(ChannelAdvisorFlagType.BlueFlag), orderToSave.FlagStyle);
         }
 
         [Fact]
@@ -157,11 +157,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderFlagTypeIsSet()
         {
-            downloadedOrder.FlagID = (int) ChannelAdvisorRestFlagType.BlueFlag;
+            downloadedOrder.FlagID = (int) ChannelAdvisorFlagType.BlueFlag;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
 
-            Assert.Equal((int) ChannelAdvisorRestFlagType.BlueFlag, orderToSave.FlagType);
+            Assert.Equal((int) ChannelAdvisorFlagType.BlueFlag, orderToSave.FlagType);
         }
 
         [Fact]
