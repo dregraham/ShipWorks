@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -13,17 +12,23 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
+    /// <summary>
+    /// Populates a ChannelAdvisorOrderEntity from a downloaded ChannelAdvisor order
+    /// </summary>
     [Component(RegistrationType.Self)]
     public class ChannelAdvisorOrderLoader
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
-        private readonly IOrderRepository orderRepository;
         private readonly IChannelAdvisorRestClient webClient;
 
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IOrderRepository orderRepository, IChannelAdvisorRestClient webClient)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelAdvisorOrderLoader"/> class.
+        /// </summary>
+        /// <param name="orderChargeCalculator">The order charge calculator.</param>
+        /// <param name="webClient">The web client.</param>
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IChannelAdvisorRestClient webClient)
         {
             this.orderChargeCalculator = orderChargeCalculator;
-            this.orderRepository = orderRepository;
             this.webClient = webClient;
         }
 
@@ -67,6 +72,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
+        /// <summary>
+        /// Loads the items.
+        /// </summary>
+        /// <param name="orderToSave">The order to save.</param>
+        /// <param name="downloadedOrder">The downloaded order.</param>
+        /// <param name="orderElementFactory">The order element factory.</param>
+        /// <param name="accessToken">The access token.</param>
         private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
         {
             if (downloadedOrder.Items != null)
@@ -78,6 +90,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
         }
 
+        /// <summary>
+        /// Loads the item.
+        /// </summary>
+        /// <param name="orderToSave">The order to save.</param>
+        /// <param name="downloadedOrder">The downloaded order.</param>
+        /// <param name="downloadedItem">The downloaded item.</param>
+        /// <param name="orderElementFactory">The order element factory.</param>
+        /// <param name="accessToken">The access token.</param>
         private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string accessToken)
         {
             ChannelAdvisorOrderItemEntity itemToSave = (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
@@ -119,6 +139,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // UserName
         }
 
+        /// <summary>
+        /// Loads the product details.
+        /// </summary>
+        /// <param name="itemToSave">The item to save.</param>
+        /// <param name="product">The product.</param>
+        /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product, IOrderElementFactory orderElementFactory)
         {
             itemToSave.Weight = (double) product.Weight;
@@ -178,6 +204,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
+        /// <summary>
+        /// Loads the notes.
+        /// </summary>
+        /// <param name="orderToSave">The order to save.</param>
+        /// <param name="downloadedOrder">The downloaded order.</param>
+        /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadNotes(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
             orderElementFactory.CreateNote(orderToSave, downloadedOrder.PublicNotes, orderToSave.OrderDate, NoteVisibility.Public);
