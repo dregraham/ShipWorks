@@ -69,10 +69,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
         private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
         {
-            foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
+            if (downloadedOrder.Items != null)
+            {
+                foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
             {
                 LoadItem(orderToSave, downloadedOrder, item, orderElementFactory, accessToken);
             }
+                }
         }
 
         private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string accessToken)
@@ -183,12 +186,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // A gift message can be associated with each item in the order, so we need to find any items containing
             // gift messages and add each message as a note
-            foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
+            if (downloadedOrder.Items != null)
             {
-                if (!string.IsNullOrWhiteSpace(item.GiftMessage))
+                foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
                 {
-                    orderElementFactory.CreateNote(orderToSave, $"Gift message for {item.Title}: {item.GiftMessage}",
-                        orderToSave.OrderDate, NoteVisibility.Public);
+                    if (!string.IsNullOrWhiteSpace(item.GiftMessage))
+                    {
+                        orderElementFactory.CreateNote(orderToSave, $"Gift message for {item.Title}: {item.GiftMessage}",
+                            orderToSave.OrderDate, NoteVisibility.Public);
+                    }
                 }
             }
         }
