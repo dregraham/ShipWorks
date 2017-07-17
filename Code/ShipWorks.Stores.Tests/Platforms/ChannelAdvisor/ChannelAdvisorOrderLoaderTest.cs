@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly ChannelAdvisorOrder downloadedOrder;
         private readonly Mock<IOrderElementFactory> orderElementFactory;
         private readonly ChannelAdvisorOrderLoader testObject;
+        private readonly Mock<IChannelAdvisorRestClient> channelAdvisorRestClient;
 
 
         public ChannelAdvisorOrderLoaderTest()
@@ -30,7 +31,22 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>();
             downloadedOrder.Items = new List<ChannelAdvisorOrderItem>();
             orderElementFactory = mock.Mock<IOrderElementFactory>();
+            channelAdvisorRestClient = mock.Mock<IChannelAdvisorRestClient>();
             testObject = mock.Create<ChannelAdvisorOrderLoader>();
+
+            channelAdvisorRestClient.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(new ChannelAdvisorProduct()
+                {
+                    Attributes = new List<ChannelAdvisorProductAttribute>(),
+                    Images = new List<ChannelAdvisorProductImage>()
+                });
+
+            orderElementFactory.Setup(f => f.CreateItem(It.IsAny<OrderEntity>()))
+                .Returns<OrderEntity>(order =>
+                {
+                    order.OrderItems.Add(new ChannelAdvisorOrderItemEntity());
+                    return order.OrderItems[0];
+                });
         }
 
         #region Order Level Tests
@@ -47,6 +63,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         #region Order Item Level Tests
 
+        [Fact]
+        public void LoadOrder_OrderItemNameIsSet()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {Title = "My Title"});
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+
+            Assert.Equal(downloadedOrder.Items[0].Title, orderToSave.OrderItems[0].Name);
+        }
 
         #endregion
 
