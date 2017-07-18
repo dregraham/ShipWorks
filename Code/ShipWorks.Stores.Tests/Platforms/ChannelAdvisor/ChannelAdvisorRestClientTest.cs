@@ -164,15 +164,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void GetOrders_SetsOrderByVariable()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
-
-            submitter.Verify(s => s.Variables.Add("$orderby", "CreatedDateUtc desc"));
-        }
-
-        [Fact]
         public void GetOrders_SetsExpandVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
