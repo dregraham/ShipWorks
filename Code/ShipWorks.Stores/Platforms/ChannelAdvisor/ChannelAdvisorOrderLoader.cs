@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
+        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken, IEnumerable<string> attributesToDownload)
         {
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
@@ -59,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
 
                 // items
-                LoadItems(orderToSave, downloadedOrder, orderElementFactory, accessToken);
+                LoadItems(orderToSave, downloadedOrder, orderElementFactory, accessToken, attributesToDownload);
 
                 // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
@@ -79,29 +80,33 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="downloadedOrder">The downloaded order.</param>
         /// <param name="orderElementFactory">The order element factory.</param>
         /// <param name="accessToken">The access token.</param>
-        private void LoadItems(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
+        private void LoadItems(ChannelAdvisorOrderEntity orderToSave,
+            ChannelAdvisorOrder downloadedOrder,
+            IOrderElementFactory orderElementFactory,
+            string accessToken,
+            IEnumerable<string> attributesToDownload)
         {
             if (downloadedOrder.Items != null)
             {
-                foreach (ChannelAdvisorOrderItem item in downloadedOrder.Items)
-            {
-                LoadItem(orderToSave, downloadedOrder, item, orderElementFactory, accessToken);
-            }
+                foreach (ChannelAdvisorOrderItem downloadedItem in downloadedOrder.Items)
+                {
+                    ChannelAdvisorOrderItemEntity itemToSave =
+                        (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
+
+                    LoadItem(itemToSave, downloadedOrder, downloadedItem, orderElementFactory);
+                    LoadProductDetails(itemToSave, downloadedItem, orderElementFactory, accessToken, attributesToDownload);
                 }
+            }
         }
 
         /// <summary>
         /// Loads the item.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="downloadedItem">The downloaded item.</param>
-        /// <param name="orderElementFactory">The order element factory.</param>
-        /// <param name="accessToken">The access token.</param>
-        private void LoadItem(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, ChannelAdvisorOrderItem downloadedItem, IOrderElementFactory orderElementFactory, string accessToken)
+        private void LoadItem(ChannelAdvisorOrderItemEntity itemToSave,
+            ChannelAdvisorOrder downloadedOrder,
+            ChannelAdvisorOrderItem downloadedItem,
+            IOrderElementFactory orderElementFactory)
         {
-            ChannelAdvisorOrderItemEntity itemToSave = (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
-
             itemToSave.Name = downloadedItem.Title;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
@@ -129,14 +134,44 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attribute.Description = downloadedItem.GiftMessage;
                 attribute.UnitPrice = 0M;
             }
-            ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
-            LoadProductDetails(itemToSave, product, orderElementFactory);
 
             // Appear in SOAP, but not REST
             // IsFBA, should be wrapped up in DC stuff
             // UnitWeight.UnitOfMeasure, default is lbs for US profiles, KG all else, so we could hook into that
             // SalesSourceID
             // UserName
+        }
+
+        /// <summary>
+        /// Requests product details from Channel advisor and loads the product detail
+        /// </summary>
+        private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave,
+            ChannelAdvisorOrderItem downloadedItem,
+            IOrderElementFactory orderElementFactory,
+            string accessToken,
+            IEnumerable<string> attributesToDownload)
+        {
+            ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
+            LoadProductDetails(itemToSave, product, orderElementFactory);
+            LoadProductAttributes(itemToSave, product, orderElementFactory, attributesToDownload);
+        }
+
+        /// <summary>
+        /// Populates the specified order item attributes
+        /// </summary>
+        private void LoadProductAttributes(ChannelAdvisorOrderItemEntity itemToSave,
+            ChannelAdvisorProduct product,
+            IOrderElementFactory orderElementFactory,
+            IEnumerable<string> attributesToDownload)
+        {
+            if (attributesToDownload.Any())
+            {
+                var attributesToSave = product.Attributes.Where(a => attributesToDownload.Contains(a.Name));
+                foreach (ChannelAdvisorProductAttribute attribute in attributesToSave)
+                {
+                    orderElementFactory.CreateItemAttribute(itemToSave, attribute.Name, attribute.Value, 0, false);
+                }
+            }
         }
 
         /// <summary>
@@ -156,11 +191,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             itemToSave.UPC = product.UPC;
             itemToSave.MPN = product.MPN;
             itemToSave.Description = product.Description;
-
-            foreach (ChannelAdvisorProductAttribute attribute in product.Attributes)
-            {
-                orderElementFactory.CreateItemAttribute(itemToSave, attribute.Name, attribute.Value, 0, false);
-            }
 
             ChannelAdvisorProductImage image = product.Images?.FirstOrDefault();
             itemToSave.Image = image?.Url ?? string.Empty;

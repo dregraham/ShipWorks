@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ID = 123;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(123, orderToSave.OrderNumber);
         }
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(new DateTime(2017, 7, 7), orderToSave.OrderDate);
         }
@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(new DateTime(2017, 7, 7), orderToSave.OnlineLastModified);
         }
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ID = 123;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(123, orderToSave.OrderNumber);
         }
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorPaymentStatus.Submitted);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int) ChannelAdvisorPaymentStatus.Submitted, orderToSave.OnlinePaymentStatus);
         }
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.CheckoutStatus = EnumHelper.GetDescription(ChannelAdvisorCheckoutStatus.Completed);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int)ChannelAdvisorCheckoutStatus.Completed, orderToSave.OnlineCheckoutStatus);
         }
@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingStatus = EnumHelper.GetDescription(ChannelAdvisorShippingStatus.Shipped);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int)ChannelAdvisorShippingStatus.Shipped, orderToSave.OnlineShippingStatus);
         }
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.FlagID = (int) ChannelAdvisorFlagType.BlueFlag;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(EnumHelper.GetDescription(ChannelAdvisorFlagType.BlueFlag), orderToSave.FlagStyle);
         }
@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.FlagDescription = "flag";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("flag", orderToSave.FlagDescription);
         }
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.FlagID = (int) ChannelAdvisorFlagType.BlueFlag;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int) ChannelAdvisorFlagType.BlueFlag, orderToSave.FlagType);
         }
@@ -167,7 +167,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_TotalCalculated_WhenOrderIsNew()
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
             mock.Mock<IOrderChargeCalculator>().Verify(c=>c.CalculateTotal(orderToSave), Times.Once);
         }
 
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void LoadOrder_TotalNotCalculated_WhenOrderIsNotNew()
         {
             orderToSave.IsNew = false;
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
             mock.Mock<IOrderChargeCalculator>().Verify(c => c.CalculateTotal(orderToSave), Times.Never);
         }
 
@@ -187,7 +187,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 .Setup(c => c.CalculateTotal(orderToSave))
                 .Returns(45.73M);
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
             
             Assert.Equal(45.73M, orderToSave.OrderTotal);
         }
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingFirstName = "Foo";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Foo", orderToSave.ShipFirstName);
         }
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingLastName = "Bar";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Bar", orderToSave.ShipLastName);
         }
@@ -218,7 +218,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCompanyName = "Interapptive";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Interapptive", orderToSave.ShipCompany);
         }
@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingAddressLine1 = "1 S Memorial Dr";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("1 S Memorial Dr", orderToSave.ShipStreet1);
         }
@@ -238,7 +238,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingAddressLine2 = "Suite 2000";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Suite 2000", orderToSave.ShipStreet2);
         }
@@ -248,7 +248,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("St Louis", orderToSave.ShipCity);
         }
@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingStateOrProvince = "MO";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("MO", orderToSave.ShipStateProvCode);
         }
@@ -268,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingPostalCode = "63102";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("63102", orderToSave.ShipPostalCode);
         }
@@ -278,7 +278,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCountry = "US";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("US", orderToSave.ShipCountryCode);
         }
@@ -288,7 +288,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingDaytimePhone = "123-456-7890";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("123-456-7890", orderToSave.ShipPhone);
         }
@@ -306,7 +306,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.ShippingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("support@shipworks.com", orderToSave.ShipEmail);
         }
@@ -321,7 +321,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Foo", orderToSave.BillFirstName);
         }
@@ -334,7 +334,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Bar", orderToSave.BillLastName);
         }
@@ -348,7 +348,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Interapptive", orderToSave.BillCompany);
         }
@@ -361,7 +361,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("1 S Memorial Dr", orderToSave.BillStreet1);
         }
@@ -375,7 +375,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Suite 2000", orderToSave.BillStreet2);
         }
@@ -388,7 +388,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("St Louis", orderToSave.BillCity);
         }
@@ -402,7 +402,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("MO", orderToSave.BillStateProvCode);
         }
@@ -416,7 +416,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("63102", orderToSave.BillPostalCode);
         }
@@ -430,7 +430,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("US", orderToSave.BillCountryCode);
         }
@@ -444,7 +444,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.BillingAddressLine1 = "1 S Memorial Dr";
             downloadedOrder.BillingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("123-456-7890", orderToSave.BillPhone);
         }
@@ -454,7 +454,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.BuyerEmailAddress = "support@Billworks.com";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("support@Billworks.com", orderToSave.BillEmail);
         }
@@ -464,7 +464,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingFirstName = "Foo";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Foo", orderToSave.BillFirstName);
         }
@@ -474,7 +474,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingLastName = "Bar";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Bar", orderToSave.BillLastName);
         }
@@ -484,7 +484,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCompanyName = "Interapptive";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Interapptive", orderToSave.BillCompany);
         }
@@ -494,7 +494,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingAddressLine1 = "1 S Memorial Dr";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("1 S Memorial Dr", orderToSave.BillStreet1);
         }
@@ -504,7 +504,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingAddressLine2 = "Suite 2000";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Suite 2000", orderToSave.BillStreet2);
         }
@@ -514,7 +514,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCity = "St Louis";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("St Louis", orderToSave.BillCity);
         }
@@ -524,7 +524,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingStateOrProvince = "MO";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("MO", orderToSave.BillStateProvCode);
         }
@@ -534,7 +534,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingPostalCode = "63102";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("63102", orderToSave.BillPostalCode);
         }
@@ -544,7 +544,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingCountry = "US";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("US", orderToSave.BillCountryCode);
         }
@@ -554,7 +554,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.ShippingDaytimePhone = "123-456-7890";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("123-456-7890", orderToSave.BillPhone);
         }
@@ -564,7 +564,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.BuyerEmailAddress = "support@Billworks.com";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("support@Billworks.com", orderToSave.BillEmail);
         }
@@ -576,7 +576,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() {new ChannelAdvisorFulfillment() {ShippingCarrier = "UPS", ShippingClass = "Ground"} };
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("UPS - Ground", orderToSave.RequestedShipping);
         }
@@ -586,7 +586,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() { new ChannelAdvisorFulfillment() { ShippingCarrier = "Amazon", ShippingClass = "Prime" } };
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int) ChannelAdvisorIsAmazonPrime.Yes, orderToSave.IsPrime);
         }
@@ -596,7 +596,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() { new ChannelAdvisorFulfillment() { ShippingCarrier = "UPS", ShippingClass = "Ground" } };
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int)ChannelAdvisorIsAmazonPrime.No, orderToSave.IsPrime);
         }
@@ -604,7 +604,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_IsPrimeIsSetToUnknown_WhenShippingCarrierIsNotSet()
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal((int)ChannelAdvisorIsAmazonPrime.Unknown, orderToSave.IsPrime);
         }
@@ -615,7 +615,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.ResellerID = "ID";
             orderToSave.IsNew = true;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("ID", orderToSave.ResellerID);
         }
@@ -626,7 +626,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.ResellerID = "ID";
             orderToSave.IsNew = false;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.True(string.IsNullOrWhiteSpace(orderToSave.ResellerID));
         }
@@ -637,7 +637,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.SiteName = "Amazon";
             orderToSave.IsNew = true;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal("Amazon", orderToSave.MarketplaceNames);
         }
@@ -648,7 +648,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.ResellerID = "Amazon";
             orderToSave.IsNew = false;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.True(string.IsNullOrWhiteSpace(orderToSave.ResellerID));
         }
@@ -660,7 +660,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
             orderToSave.IsNew = true;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "public notes", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
         }
@@ -672,7 +672,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
             orderToSave.IsNew = true;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "special instructions", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
         }
@@ -684,7 +684,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
             orderToSave.IsNew = true;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "private notes", new DateTime(2017, 7, 7), NoteVisibility.Internal), Times.Once);
         }
@@ -696,16 +696,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
             orderToSave.IsNew = false;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<NoteVisibility>()), Times.Never);
         }
+
         #region LoadCharges
 
         [Fact]
         public void LoadOrder_NoChargesCreated_WhenNoChargesToAdd()
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Never);
         }
@@ -716,7 +717,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             orderToSave.IsNew = false;
             downloadedOrder.TotalTaxPrice = 5.25M;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Never);
         }
@@ -758,7 +759,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         private void TestCharge(string type, string description, decimal amount)
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
             orderElementFactory.Verify(f => f.CreateCharge(orderToSave, type, description, amount), Times.Once);
             orderElementFactory.Verify(f => f.CreateCharge(It.IsAny<ChannelAdvisorOrderEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Once);
         }
@@ -771,7 +772,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             orderToSave.IsNew = false;
             downloadedOrder.PaymentMethod = "Blah";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -779,7 +780,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_PaymentDetailNotAdded_WhenNoPaymentInformation()
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -814,7 +815,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         private void VerifyPaymentDetail(string label, string value)
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             orderElementFactory.Verify(f => f.CreatePaymentDetail(orderToSave, label, value), Times.Once);
@@ -831,7 +832,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             orderToSave.IsNew = false;
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Title = "My Title" });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Empty(orderToSave.OrderItems);
         }
@@ -841,7 +842,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {Title = "My Title"});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].Title, orderToSave.OrderItems[0].Name);
         }
@@ -851,7 +852,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Quantity = 42 });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].Quantity, orderToSave.OrderItems[0].Quantity);
         }
@@ -861,7 +862,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { UnitPrice = 10.23m });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].UnitPrice, orderToSave.OrderItems[0].UnitPrice);
         }
@@ -871,7 +872,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].Sku, orderToSave.OrderItems[0].Code);
         }
@@ -881,7 +882,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].Sku, orderToSave.OrderItems[0].SKU);
         }
@@ -891,7 +892,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { SiteOrderItemID = "SO1"});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.Items[0].SiteOrderItemID,
                 ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems[0]).MarketplaceName);
@@ -903,7 +904,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedOrder.BuyerUserID = "Foo";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             Assert.Equal(downloadedOrder.BuyerUserID,
                 ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems[0]).MarketplaceBuyerID);
@@ -914,7 +915,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f=>f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Never);
         }
@@ -924,7 +925,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftNotes = "For You!"});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             var giftAttributeToSave = orderToSave.OrderItems.Single().OrderItemAttributes.Single();
 
@@ -938,7 +939,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftMessage = "For you!"});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             var giftAttributeToSave = orderToSave.OrderItems.Single().OrderItemAttributes.Single();
 
@@ -956,7 +957,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 GiftNotes = "Some Note"
             });
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, string.Empty);
+            CallLoadOrder();
 
             orderElementFactory.Verify(f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Exactly(2));
         }
@@ -966,7 +967,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 123});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder("accessToken");
 
             channelAdvisorRestClient.Verify(c => c.GetProduct(123, "accessToken"), Times.Once);
         }
@@ -977,7 +978,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 123});
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {ProductID = 555});
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder("accessToken");
 
             channelAdvisorRestClient.Verify(c => c.GetProduct(123, "accessToken"), Times.Once);
             channelAdvisorRestClient.Verify(c => c.GetProduct(555, "accessToken"), Times.Once);
@@ -990,7 +991,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.Weight = 11.2m;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal(11.2, orderToSave.OrderItems.Single().Weight);
         }
 
@@ -1000,7 +1001,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.WarehouseLocation = "In the back";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("In the back", orderToSave.OrderItems.Single().Location);
         }
 
@@ -1010,7 +1011,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.Classification = "First Class";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("First Class", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).Classification);
         }
 
@@ -1020,7 +1021,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.Cost = 12.2m;
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal(12.2m, orderToSave.OrderItems.Single().UnitCost);
         }
 
@@ -1030,7 +1031,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.HarmonizedCode = "code";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("code", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).HarmonizedCode);
         }
 
@@ -1040,7 +1041,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.ISBN = "Isbn";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("Isbn", orderToSave.OrderItems.Single().ISBN);
         }
 
@@ -1050,7 +1051,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.UPC = "upc";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("upc", orderToSave.OrderItems.Single().UPC);
         }
 
@@ -1060,7 +1061,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.MPN = "mpn";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("mpn", ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).MPN);
         }
 
@@ -1070,7 +1071,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.Description = "In the back";
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
             Assert.Equal("In the back", orderToSave.OrderItems.Single().Description);
         }
 
@@ -1080,15 +1081,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             var downloadedAttribute = new ChannelAdvisorProductAttribute()
             {
-                Name = "Joe Attribute",
+                Name = "attributeName",
                 Value = "the value"
             };
             downloadedProduct.Attributes = new[] {downloadedAttribute};
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder(new [] { "attributeName" });
 
             orderElementFactory.Verify(
-                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "Joe Attribute", "the value", 0, false),
+                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "attributeName", "the value", 0, false),
                 Times.Once);
         }
 
@@ -1098,16 +1099,52 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             var downloadedAttribute = new ChannelAdvisorProductAttribute()
             {
-                Name = "Joe Attribute",
+                Name = "attributeName",
                 Value = "the value"
             };
             downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder(new[] { "attributeName" });
 
             orderElementFactory.Verify(
-                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "Joe Attribute", "the value", 0, false),
+                f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "attributeName", "the value", 0, false),
                 Times.Exactly(2));
+        }
+
+        [Fact]
+        public void Load_CreatesItemWithNoAttributes_WhenNoAttributesPassedIn()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            var downloadedAttribute = new ChannelAdvisorProductAttribute
+            {
+                Name = "attributeName",
+                Value = "the value"
+            };
+            downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
+
+            CallLoadOrder();
+
+            orderElementFactory.Verify(
+                f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), It.IsAny<bool>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public void Load_CreatesItemWithNoAttributes_WhenNoMatchingAttributesPassedIn()
+        {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            var downloadedAttribute = new ChannelAdvisorProductAttribute
+            {
+                Name = "attributeName",
+                Value = "the value"
+            };
+            downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
+
+            CallLoadOrder(new [] {"noMatch"});
+
+            orderElementFactory.Verify(
+                f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), It.IsAny<bool>()),
+                Times.Never);
         }
 
         [Fact]
@@ -1124,13 +1161,29 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 }
             };
 
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
+            CallLoadOrder();
 
             Assert.Equal(url, orderToSave.OrderItems.Single().Image);
             Assert.Equal(url, orderToSave.OrderItems.Single().Thumbnail);
         }
 
         #endregion
+
+        public void CallLoadOrder()
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken", new string[0]);
+        }
+
+        public void CallLoadOrder(string token)
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, token, new string[0]);
+
+        }
+
+        public void CallLoadOrder(IEnumerable<string> attributes)
+        {
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken", attributes);
+        }
 
         public void Dispose()
         {
