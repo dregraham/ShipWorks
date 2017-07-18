@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(StoreTypeCode.ChannelAdvisor,
-                new TypedParameter(typeof(StoreEntity), Store));
+                TypedParameter.From(Store));
         }
            
 
