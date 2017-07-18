@@ -13,8 +13,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         string prefix = "";
         string postfix = "";
 
-        bool settingOrderNumberComplete = false;
-
         // We cache this so we only have to look it up once
         static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
@@ -39,20 +37,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Trying to set a value of a field
-        /// </summary>
-        protected override void OnSetValue(int fieldIndex, object valueToSet, out bool cancel)
-        {
-            // User can't directly update OrderNumberComplete.
-            if (fieldIndex == (int) OrderFieldIndex.OrderNumberComplete && !settingOrderNumberComplete)
-            {
-                throw new InvalidOperationException("Cannot set OrderNumberComplete directly.  Use OrderNumber and ApplyOrderNumber*Fix.");
-            }
-
-            base.OnSetValue(fieldIndex, valueToSet, out cancel);
-        }
-
-        /// <summary>
         /// Field value is changing
         /// </summary>
         protected override void OnFieldValueChanged(object originalValue, int fieldIndex)
@@ -71,15 +55,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         private void UpdateOrderNumberComplete()
         {
-            settingOrderNumberComplete = true;
-
             OrderNumberComplete =
                 string.Format("{0}{1}{2}",
                 prefix,
                 OrderNumber,
                 postfix);
-
-            settingOrderNumberComplete = false;
         }
         /// <summary>
         /// Special processing to ensure change tracking for entity hierarchy

@@ -124,6 +124,17 @@ namespace ShipWorks.Stores.Tests.Content
         }
 
         [Fact]
+        public void GetCombinationDetailsFromUser_SetsNewOrderNumber_WithDifferentPostfix_BasedOnFirstOrder()
+        {
+            var testObject = mock.Create<CombineOrderViewModel>();
+
+            testObject.OrderNumberPostfix = "-newPostfix";
+            testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderNumber = x }));
+
+            Assert.Equal("1-newPostfix", testObject.NewOrderNumber);
+        }
+
+        [Fact]
         public void GetCombinationDetailsFromUser_SetsSurvivingOrder_ToFirstOrder()
         {
             var testObject = mock.Create<CombineOrderViewModel>();
@@ -143,6 +154,18 @@ namespace ShipWorks.Stores.Tests.Content
             testObject.GetCombinationDetailsFromUser(orders);
 
             Assert.Equal("1", testObject.AddressStreet);
+        }
+
+        [Fact]
+        public void GetCombinationDetailsFromUser_SetsOrderNumber_ToSecondOrder()
+        {
+            var testObject = mock.Create<CombineOrderViewModel>();
+
+            var orders = Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderNumber = x, ShipStreet1 = x.ToString() });
+            testObject.GetCombinationDetailsFromUser(orders);
+            testObject.SurvivingOrder = orders.ToList()[1];
+
+            Assert.Equal("2-C", testObject.NewOrderNumber);
         }
 
         [Theory]
@@ -221,7 +244,8 @@ namespace ShipWorks.Stores.Tests.Content
             var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = mock.Create<IOrderEntity>();
-            testObject.NewOrderNumber = "foo";
+            testObject.SelectedOrderNumber = "5";
+            testObject.OrderNumberPostfix = "foo";
 
             testObject.ConfirmCombine.Execute(null);
 
@@ -235,7 +259,8 @@ namespace ShipWorks.Stores.Tests.Content
             var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = mock.Create<IOrderEntity>();
-            testObject.NewOrderNumber = "foo";
+            testObject.SelectedOrderNumber = "5";
+            testObject.OrderNumberPostfix = "foo";
 
             testObject.ConfirmCombine.Execute(null);
 

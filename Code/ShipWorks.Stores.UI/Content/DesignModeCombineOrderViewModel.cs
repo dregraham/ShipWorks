@@ -40,7 +40,8 @@ namespace ShipWorks.Stores.UI.Content
                 }
             };
 
-            NewOrderNumber = "72278-C";
+            SelectedOrderNumber = "72278";
+            OrderNumberPostfix = "-C";
             SurvivingOrder = Orders.First();
             AddressName = "Jim Jefferson";
             AddressStreet = "123 Example St.";
@@ -48,9 +49,14 @@ namespace ShipWorks.Stores.UI.Content
         }
 
         /// <summary>
-        /// New order number
+        /// Selected order number
         /// </summary>
-        public string NewOrderNumber { get; set; }
+        public string SelectedOrderNumber { get; set; }
+
+        /// <summary>
+        /// New order number post fix
+        /// </summary>
+        public string OrderNumberPostfix { get; set; }
 
         /// <summary>
         /// Surviving order id

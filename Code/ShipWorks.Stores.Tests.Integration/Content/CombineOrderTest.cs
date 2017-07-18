@@ -61,6 +61,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             Assert.Equal("MO", shipAddress.StateProvCode);
             Assert.Equal("63123", shipAddress.PostalCode);
             Assert.Equal("US", shipAddress.CountryCode);
+            Assert.Equal("1234-C", newOrder.OrderNumberComplete);
         }
 
         [Fact]

@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Content
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    return await PerformCombination(survivingOrderID, orders, progress, sqlAdapter);
+                    return await PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter);
                 }
             }
         }
@@ -68,10 +68,10 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Perform the actual combination
         /// </summary>
-        private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, IEnumerable<IOrderEntity> orders,
+        private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders,
             ProgressUpdater progress, ISqlAdapter sqlAdapter)
         {
-            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, orders, sqlAdapter);
+            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, orderNumberComplete, orders, sqlAdapter);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
 
@@ -102,13 +102,13 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create the combined order from the surviving order id
         /// </summary>
-        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             OrderEntity combinedOrder = await orderManager.LoadOrderAsync(survivingOrderID, sqlAdapter).ConfigureAwait(false);
 
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
-            combinedOrder.ApplyOrderNumberPostfix("-C");
+            combinedOrder.OrderNumberComplete = orderNumberComplete;
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
             combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
             combinedOrder.RollupItemCount = 0;

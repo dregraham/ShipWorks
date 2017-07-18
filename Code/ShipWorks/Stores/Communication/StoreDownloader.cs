@@ -213,7 +213,7 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
-        [SuppressMessage("SW0002", "ShipWorks")]
+        [SuppressMessage("ShipWorks", "SW0002")]
         protected virtual GenericResult<OrderEntity> InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             if (orderIdentifier == null)
@@ -472,7 +472,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        [SuppressMessage("SW0002", "ShipWorks")]
+        [SuppressMessage("ShipWorks", "SW0002")]
         protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
             if (order == null)

@@ -27,7 +27,8 @@ namespace ShipWorks.Stores.Content
         private readonly ICombineOrderAddressComparer addressComparer;
         private readonly PropertyChangedHandler handler;
 
-        private string newOrderNumber;
+        private string selectedOrderNumber;
+        private string orderNumberPostfix;
         private IOrderEntity survivingOrder;
         private string addressName;
         private string addressStreet;
@@ -72,14 +73,30 @@ namespace ShipWorks.Stores.Content
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Order number to use for the new order
+        /// Selected order number to use for the new order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string NewOrderNumber
+        public string SelectedOrderNumber
         {
-            get { return newOrderNumber; }
-            set { handler.Set(nameof(NewOrderNumber), ref newOrderNumber, value); }
+            get { return selectedOrderNumber; }
+            set { handler.Set(nameof(SelectedOrderNumber), ref selectedOrderNumber, value); }
         }
+
+        /// <summary>
+        /// Order number postfix to use for the new order
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string OrderNumberPostfix
+        {
+            get { return orderNumberPostfix; }
+            set { handler.Set(nameof(OrderNumberPostfix), ref orderNumberPostfix, value); }
+        }
+
+        /// <summary>
+        /// Order number with postfix to use for the new order
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string NewOrderNumber => $"{SelectedOrderNumber}{OrderNumberPostfix}";
 
         /// <summary>
         /// Order that will be used as the basis for the combined order
@@ -93,6 +110,7 @@ namespace ShipWorks.Stores.Content
                 if (handler.Set(nameof(SurvivingOrder), ref survivingOrder, value))
                 {
                     SetAddress(value);
+                    SelectedOrderNumber = value.OrderNumberComplete;
                 }
             }
         }
@@ -169,7 +187,8 @@ namespace ShipWorks.Stores.Content
             Orders = orders.ToReadOnly();
 
             IOrderEntity firstOrder = orders.First();
-            NewOrderNumber = firstOrder.OrderNumberComplete + "-C";
+            SelectedOrderNumber = firstOrder.OrderNumberComplete;
+            OrderNumberPostfix = string.IsNullOrWhiteSpace(OrderNumberPostfix) ? "-C" : OrderNumberPostfix;
             SurvivingOrder = firstOrder;
             SetAddress(SurvivingOrder);
 
