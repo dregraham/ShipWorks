@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     (ChannelAdvisorOrderEntity) InstantiateOrder(new OrderNumberIdentifier(caOrder.ID));
 
                 //Order loader loads the order
-                orderLoader.LoadOrder(order, caOrder, this, token, caStore.ParsedAttributesToDownload);
+                orderLoader.LoadOrder(order, caOrder, this, token);
 
                 // Save the downloaded order
                 sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));

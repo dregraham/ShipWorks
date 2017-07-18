@@ -40,7 +40,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             store = new ChannelAdvisorStoreEntity()
             {
-                CountryCode = "US"
+                CountryCode = "US",
+                AttributesToDownload = "<Attributes />"
             };
 
             orderToSave = new ChannelAdvisorOrderEntity()
@@ -1109,7 +1110,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             };
             downloadedProduct.Attributes = new[] {downloadedAttribute};
 
-            CallLoadOrder(new [] { "attributeName" });
+            store.AttributesToDownload = "<Attributes><Attribute>attributeName</Attribute></Attributes>";
+
+            CallLoadOrder();
 
             orderElementFactory.Verify(
                 f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "attributeName", "the value", 0, false),
@@ -1126,8 +1129,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 Value = "the value"
             };
             downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
+            store.AttributesToDownload = "<Attributes><Attribute>attributeName</Attribute></Attributes>";
 
-            CallLoadOrder(new[] { "attributeName" });
+            CallLoadOrder();
 
             orderElementFactory.Verify(
                 f => f.CreateItemAttribute(orderToSave.OrderItems.Single(), "attributeName", "the value", 0, false),
@@ -1163,7 +1167,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             };
             downloadedProduct.Attributes = new[] { downloadedAttribute, downloadedAttribute };
 
-            CallLoadOrder(new [] {"noMatch"});
+            store.AttributesToDownload = "<Attributes><Attribute>noMatch</Attribute></Attributes>";
+
+            CallLoadOrder();
 
             orderElementFactory.Verify(
                 f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), It.IsAny<bool>()),
@@ -1194,17 +1200,12 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         public void CallLoadOrder()
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken", new string[0]);
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken");
         }
 
         public void CallLoadOrder(string token)
         {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, token, new string[0]);
-        }
-
-        public void CallLoadOrder(IEnumerable<string> attributes)
-        {
-            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, "accessToken", attributes);
+            testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, token);
         }
 
         public void Dispose()
