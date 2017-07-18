@@ -738,35 +738,35 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void LoadOrder_ChargeCreatedForSalesTax()
         {
             downloadedOrder.TotalTaxPrice = 5.25M;
-            TestCharge("Sales Tax", "TAX", 5.25M);
+            TestCharge("TAX", "Sales Tax", 5.25M);
         }
 
         [Fact]
         public void LoadOrder_ChargeCreatedForShipping()
         {
             downloadedOrder.TotalShippingPrice = 11.73M;
-            TestCharge("Shipping", "SHIPPING", 11.73M);
+            TestCharge("SHIPPING", "Shipping", 11.73M);
         }
 
         [Fact]
         public void LoadOrder_ChargeCreatedForInsurance()
         {
             downloadedOrder.TotalInsurancePrice = 1.73M;
-            TestCharge("Shipping Insurance", "INSURANCE", 1.73M);
+            TestCharge("INSURANCE", "Shipping Insurance", 1.73M);
         }
 
         [Fact]
         public void LoadOrder_ChargeCreatedForGiftWrap()
         {
             downloadedOrder.TotalGiftOptionPrice = 112.73M;
-            TestCharge("Gift Wrap", "GIFT WRAP", 112.73M);
+            TestCharge("GIFT WRAP", "Gift Wrap", 112.73M);
         }
 
         [Fact]
         public void LoadOrder_ChargeCreatedForAdditionalCostOrDiscount()
         {
             downloadedOrder.AdditionalCostOrDiscount = -11.73M;
-            TestCharge("Additional Cost or Discount", "ADDITIONAL COST OR DISCOUNT", -11.73M);
+            TestCharge("ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount", -11.73M);
         }
 
         private void TestCharge(string type, string description, decimal amount)
