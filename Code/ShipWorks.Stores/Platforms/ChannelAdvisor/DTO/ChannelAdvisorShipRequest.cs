@@ -17,9 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public string ShippingCarrier { get; set; }
 
         public string ShippingClass { get; set; }
-
-        public ChannelAdvisorFulfillmentDeliveryStatus DeliveryStatus { get; set; }
-
+        
         public int DistributionCenterID { get; set; }
 
         public string SellerFulfillmentID { get; set; }

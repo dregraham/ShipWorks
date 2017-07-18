@@ -27,9 +27,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         [JsonProperty("IsRestock")]
         public bool IsRestock { get; set; }
 
-        [JsonProperty("Reason")]
-        public ChannelAdvisorAdjustmentReason Reason { get; set; }
-
         [JsonProperty("PreventSiteProcessing")]
         public bool PreventSiteProcessing { get; set; }
 
@@ -53,10 +50,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 
         [JsonProperty("RecyclingFeeAdjustment")]
         public double RecyclingFeeAdjustment { get; set; }
-
-        [JsonProperty("Type")]
-        public ChannelAdvisorAdjustmentType Type { get; set; }
-
+        
         [JsonProperty("SellerAdjustmentID")]
         public string SellerAdjustmentID { get; set; }
 
@@ -68,11 +62,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 
         [JsonProperty("CreatedDateUtc")]
         public DateTime CreatedDateUtc { get; set; }
-
-        [JsonProperty("RequestStatus")]
-        public ChannelAdvisorAdjustmentRequestStatus RequestStatus { get; set; }
-
-        [JsonProperty("RestockStatus")]
-        public ChannelAdvisorAdjustmentRequestStatus RestockStatus { get; set; }
     }
 }
