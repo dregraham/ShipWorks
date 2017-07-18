@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
             orderToSave.OnlineLastModified = downloadedOrder.CreatedDateUtc;
             orderToSave.CustomOrderIdentifier = downloadedOrder.SiteOrderID;
-
+            
             LoadOrderStatuses(orderToSave, downloadedOrder);
             LoadOrderFlag(orderToSave, downloadedOrder);
             LoadAddresses(orderToSave, downloadedOrder);
@@ -112,6 +112,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
             itemToSave.Code = downloadedItem.Sku;
             itemToSave.SKU = downloadedItem.Sku;
+            itemToSave.MarketplaceSalesID = downloadedItem.SiteListingID;
 
             // CA-specific
             itemToSave.MarketplaceName = downloadedItem.SiteOrderItemID;
