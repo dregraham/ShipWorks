@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Creates or loads a customer record based on configuration and the specified order.
         /// </summary>
-        public static async Task<CustomerEntity> AcquireCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
+        public static async Task<CustomerEntity> AcquireCustomer(OrderEntity order, StoreType storeType, ISqlAdapter adapter)
         {
             CustomerEntity customer = null;
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Content
                 {
                     log.InfoFormat("  Creating new customer.");
 
-                    customer = CreateCustomer(order, adapter);
+                    customer = await CreateCustomer(order, adapter).ConfigureAwait(false);
                 }
                 // We found it, we may need to update it
                 else
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Find an existing customer that matches the properties of the given order for the specified store type
         /// </summary>
-        public static async Task<CustomerEntity> FindExistingCustomer(OrderEntity order, StoreType storeType, SqlAdapter adapter)
+        public static async Task<CustomerEntity> FindExistingCustomer(OrderEntity order, StoreType storeType, ISqlAdapter adapter)
         {
             CustomerEntity customer = await FindCustomerByOnlineIdentifier(adapter, order, storeType);
 
@@ -113,13 +113,13 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// See if there is an existing customer that matches the specified customer using the configuration in the options
         /// </summary>
-        public static Task<CustomerEntity> FindExistingCustomer(CustomerEntity customer, bool compareEmail, bool compareMailing, SqlAdapter adapter) =>
+        public static Task<CustomerEntity> FindExistingCustomer(CustomerEntity customer, bool compareEmail, bool compareMailing, ISqlAdapter adapter) =>
             FindExistingCustomer(customer.BillPerson, compareEmail, compareMailing, adapter);
 
         /// <summary>
         /// Find a customer with the given criteria
         /// </summary>
-        private static Task<CustomerEntity> FindCustomer(SqlAdapter adapter, IPredicate predicate, params IEntityRelation[] relations)
+        private static Task<CustomerEntity> FindCustomer(ISqlAdapter adapter, IPredicate predicate, params IEntityRelation[] relations)
         {
             if (predicate == null)
             {
@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Find an existing customer based on the address information in the given entity
         /// </summary>
-        private static async Task<CustomerEntity> FindExistingCustomer(PersonAdapter billPerson, bool compareEmail, bool compareMailing, SqlAdapter adapter)
+        private static async Task<CustomerEntity> FindExistingCustomer(PersonAdapter billPerson, bool compareEmail, bool compareMailing, ISqlAdapter adapter)
         {
             CustomerEntity customer = null;
 
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Attempt to find a customer using online identifier.  If no customer is found, null is returned.
         /// </summary>
-        private static async Task<CustomerEntity> FindCustomerByOnlineIdentifier(SqlAdapter adapter, OrderEntity order, StoreType storeType)
+        private static async Task<CustomerEntity> FindCustomerByOnlineIdentifier(ISqlAdapter adapter, OrderEntity order, StoreType storeType)
         {
             bool instanceLookup;
             IEnumerable<IEntityField2> identifierFields = storeType.CreateCustomerIdentifierFields(out instanceLookup);
@@ -302,7 +302,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create a new customer record based on the properties of the order
         /// </summary>
-        private static CustomerEntity CreateCustomer(OrderEntity order, SqlAdapter adapter)
+        private static async Task<CustomerEntity> CreateCustomer(OrderEntity order, ISqlAdapter adapter)
         {
             CustomerEntity customer = new CustomerEntity();
 
@@ -313,7 +313,7 @@ namespace ShipWorks.Stores.Content
             customer.RollupOrderTotal = 0;
             customer.RollupNoteCount = 0;
 
-            adapter.SaveEntity(customer);
+            await adapter.SaveEntityAsync(customer).ConfigureAwait(false);
 
             return customer;
         }

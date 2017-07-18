@@ -37,13 +37,15 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Base that all store types must implement to provide downloading store data
     /// </summary>
-    public abstract class StoreDownloader
+    public abstract class StoreDownloader : IStoreDownloader
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
+        private readonly IConfigurationEntity config;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+
         private long downloadLogID;
         protected DbConnection connection;
-        private readonly IConfigurationEntity config;
         private string orderStatusText = string.Empty;
         private string itemStatusText = string.Empty;
         private bool orderStatusHasTokens = false;
@@ -52,20 +54,38 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store) : this(store, StoreTypeManager.GetType(store))
+        protected StoreDownloader(StoreEntity store) :
+            this(store, StoreTypeManager.GetType(store), ConfigurationData.FetchReadOnly(), new SqlAdapterFactory())
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store, StoreType storeType)
+        protected StoreDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
+            this(store, storeTypeManager.GetType(store), configurationData.FetchReadOnly(), sqlAdapterFactory)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
+            this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             Store = store;
             StoreType = storeType;
-            config = ConfigurationData.FetchReadOnly();
+            config = configuration;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -180,7 +200,7 @@ namespace ShipWorks.Stores.Communication
         /// <returns></returns>
         protected long GetOrderNumberStartingPoint()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 object result = adapter.GetScalar(
                     OrderFields.OrderNumber,
@@ -305,7 +325,7 @@ namespace ShipWorks.Stores.Communication
                 .WithPath(OrderEntity.PrefetchPathStore)
                 .WithPath(OrderEntity.PrefetchPathOrderItems.WithSubPath(OrderItemEntity.PrefetchPathOrderItemAttributes));
 
-            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 OrderEntity order = await adapter.FetchFirstAsync(query).ConfigureAwait(false);
 
@@ -428,8 +448,11 @@ namespace ShipWorks.Stores.Communication
                 .AndWhere(NoteFields.Text == noteText)
                 .AndWhere(NoteFields.Source == (int) NoteSource.Downloaded);
 
-            int? count = await SqlAdapter.Default.FetchScalarAsync<int?>(query).ConfigureAwait(false);
-            return count.GetValueOrDefault() > 0;
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                int? count = await adapter.FetchScalarAsync<int?>(query).ConfigureAwait(false);
+                return count.GetValueOrDefault() > 0;
+            }
         }
 
         /// <summary>
@@ -488,7 +511,7 @@ namespace ShipWorks.Stores.Communication
 
                     ResetAddressIfRequired(order.IsNew, order, transaction);
 
-                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
+                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
                     {
                         if (order.IsNew)
                         {
@@ -504,7 +527,7 @@ namespace ShipWorks.Stores.Communication
                         log.InfoFormat("{0} is {1} new", orderIdentifier, isAlreadyDownloaded ? "not " : "");
 
                         // Log this download
-                        AddToDownloadHistory(order.OrderID, orderIdentifier, isAlreadyDownloaded, adapter);
+                        await AddToDownloadHistory(order.OrderID, orderIdentifier, isAlreadyDownloaded, adapter).ConfigureAwait(false);
 
                         // Dispatch the order downloaded action
                         ActionDispatcher.DispatchOrderDownloaded(order.OrderID, Store.StoreID, !isAlreadyDownloaded, adapter);
@@ -531,7 +554,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethod]
-        private async Task SaveNewOrder(OrderEntity order, SqlAdapter adapter)
+        private async Task SaveNewOrder(OrderEntity order, ISqlAdapter adapter)
         {
             if (!order.IsNew)
             {
@@ -605,6 +628,9 @@ namespace ShipWorks.Stores.Communication
             }
         }
 
+        /// <summary>
+        /// Perform the initial order save
+        /// </summary>
         private static async Task PerformInitialOrderSave(OrderEntity order, CustomerEntity customer, ISqlAdapter adapter)
         {
             try
@@ -672,7 +698,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Get a customer for the given order using CustomerProvider
         /// </summary>
-        private async Task<CustomerEntity> GetCustomer(OrderEntity order, SqlAdapter adapter)
+        private async Task<CustomerEntity> GetCustomer(OrderEntity order, ISqlAdapter adapter)
         {
             try
             {
@@ -688,8 +714,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save an existing order
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private async Task SaveExistingOrder(OrderEntity order, SqlAdapter adapter)
+        private async Task SaveExistingOrder(OrderEntity order, ISqlAdapter adapter)
         {
             // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
             bool isOrderNew = order.IsNew;
@@ -828,7 +853,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (!isOrderNew)
             {
-                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
                 {
                     bool shipAddressReset = ResetAddressIfRequired(order, "Ship", ShippingAddressBeforeDownload);
                     bool billAddressReset = ResetAddressIfRequired(order, "Bill", BillingAddressBeforeDownload);
@@ -851,7 +876,7 @@ namespace ShipWorks.Stores.Communication
         /// If address changed and the new address matches the address pre-address validation (the AV original address)
         /// from address validation, reset the address back to the original address.
         /// </remarks>
-        private static bool ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
+        private bool ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
         {
             if (addressBeforeDownload == null)
             {
@@ -863,17 +888,20 @@ namespace ShipWorks.Stores.Communication
 
             if (addressBeforeDownload != orderAddress)
             {
-                ValidatedAddressEntity addressBeforeValidation =
-                    ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, prefix);
-
-                if (addressBeforeValidation != null)
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
-                    AddressAdapter originalAddressAdapter = new AddressAdapter(addressBeforeValidation, string.Empty);
+                    ValidatedAddressEntity addressBeforeValidation =
+                    ValidatedAddressManager.GetOriginalAddress(adapter, order.OrderID, prefix);
 
-                    if (originalAddressAdapter == orderAddress)
+                    if (addressBeforeValidation != null)
                     {
-                        AddressAdapter.Copy(addressBeforeDownload, orderAddress);
-                        addressReset = true;
+                        AddressAdapter originalAddressAdapter = new AddressAdapter(addressBeforeValidation, string.Empty);
+
+                        if (originalAddressAdapter == orderAddress)
+                        {
+                            AddressAdapter.Copy(addressBeforeDownload, orderAddress);
+                            addressReset = true;
+                        }
                     }
                 }
             }
@@ -1038,7 +1066,7 @@ namespace ShipWorks.Stores.Communication
                 .Select(DownloadDetailFields.DownloadedDetailID.Count())
                 .Where(predicate);
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 int count = await adapter.FetchScalarAsync<int>(query).ConfigureAwait(false);
 
@@ -1067,7 +1095,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Add the given order to the download history
         /// </summary>
-        private void AddToDownloadHistory(long orderID, OrderIdentifier orderIdentifier, bool alreadyDownloaded, SqlAdapter adapter)
+        private Task AddToDownloadHistory(long orderID, OrderIdentifier orderIdentifier, bool alreadyDownloaded, ISqlAdapter adapter)
         {
             DownloadDetailEntity history = new DownloadDetailEntity()
             {
@@ -1078,7 +1106,7 @@ namespace ShipWorks.Stores.Communication
 
             orderIdentifier.ApplyTo(history);
 
-            adapter.SaveEntity(history);
+            return adapter.SaveEntityAsync(history);
         }
     }
 }

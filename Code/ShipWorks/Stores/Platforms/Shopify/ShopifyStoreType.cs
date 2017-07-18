@@ -1,36 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Model;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Shopify)]
+    [Component(RegistrationType.Self)]
     public class ShopifyStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyStoreType));
@@ -50,13 +43,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Shopify;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Shopify;
 
         /// <summary>
         /// This is a string that uniquely identifies the store.
@@ -106,22 +93,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
-            return new ShopifyOrderIdentifier(((ShopifyOrderEntity)order).ShopifyOrderID);
+            return new ShopifyOrderIdentifier(((ShopifyOrderEntity) order).ShopifyOrderID);
         }
 
         /// <summary>
         /// Create the custom Shopify entity
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            ShopifyOrderEntity order = new ShopifyOrderEntity();
-            return order;
-        }
+        protected override OrderEntity CreateOrderInstance() => new ShopifyOrderEntity();
 
         /// <summary>
         /// Creates the custom OrderItem entity.
@@ -150,14 +130,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Create a downloader for our current store instance
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new ShopifyDownloader((ShopifyStoreEntity) Store);
-        }
-
-        /// <summary>
         /// Create the pages to be displayed in the Add Store Wizard
         /// </summary>
         /// <param name="scope"></param>
@@ -171,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Create the control used to configurd the actions for online update after shipping
+        /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
@@ -204,17 +176,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(container, nameof(container));
 
-            var order = new Lazy<ShopifyOrderEntity>(() => (ShopifyOrderEntity)orderSource());
+            var order = new Lazy<ShopifyOrderEntity>(() => (ShopifyOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Shopify");
             outline.AddElement("OrderID", () => order.Value.ShopifyOrderID);
             outline.AddElement("FulfillmentStatus", () => EnumHelper.GetDescription((ShopifyFulfillmentStatus) order.Value.FulfillmentStatusCode));
-            outline.AddElement("PaymentStatus", () => EnumHelper.GetDescription((ShopifyPaymentStatus)order.Value.PaymentStatusCode));
+            outline.AddElement("PaymentStatus", () => EnumHelper.GetDescription((ShopifyPaymentStatus) order.Value.PaymentStatusCode));
         }
 
         /// <summary>
@@ -222,12 +191,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(container, nameof(container));
 
-            var item = new Lazy<ShopifyOrderItemEntity>(() => (ShopifyOrderItemEntity)itemSource());
+            var item = new Lazy<ShopifyOrderItemEntity>(() => (ShopifyOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("Shopify");
             outline.AddElement("ItemID", () => item.Value.ShopifyOrderItemID);

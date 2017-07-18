@@ -165,6 +165,8 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
+    <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
+    <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />

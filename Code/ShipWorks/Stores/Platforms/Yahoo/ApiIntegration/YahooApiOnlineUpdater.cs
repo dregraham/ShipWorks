@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
-using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
-using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// Uploads shipment details and order status to Yahoo
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class YahooApiOnlineUpdater
     {
         private readonly ILog log;
@@ -38,23 +37,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
-        public YahooApiOnlineUpdater(YahooStoreEntity store) :
-            this(LogManager.GetLogger(typeof(YahooApiOnlineUpdater)), new YahooApiWebClient(store, LogManager.GetLogger(typeof(YahooApiWebClient))),
-                IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IShippingManager>>().Value)
+        public YahooApiOnlineUpdater(YahooStoreEntity store,
+            Func<Type, ILog> createLog,
+            Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
+            IShippingManager shippingManager)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
-        /// </summary>
-        /// <param name="log">The logger</param>
-        /// <param name="client">The api web client.</param>
-        /// <param name="shippingManager"></param>
-        public YahooApiOnlineUpdater(ILog log, IYahooApiWebClient client, IShippingManager shippingManager)
-        {
-            this.log = log;
-            this.client = client;
+            this.log = createLog(GetType());
+            this.client = createWebClient(store);
             this.shippingManager = shippingManager;
         }
 
@@ -108,10 +97,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
 

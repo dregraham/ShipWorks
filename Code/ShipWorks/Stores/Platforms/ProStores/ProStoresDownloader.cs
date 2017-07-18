@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     /// <summary>
     /// Downloader for ProStores stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ProStores)]
     public class ProStoresDownloader : StoreDownloader
     {
         // total download count
@@ -31,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProStoresDownloader(ProStoresStoreEntity store)
+        public ProStoresDownloader(StoreEntity store)
             : base(store)
         {
 

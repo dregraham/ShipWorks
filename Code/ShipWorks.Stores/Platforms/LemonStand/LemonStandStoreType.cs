@@ -18,7 +18,6 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
@@ -164,14 +163,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
 
             return base.GridOnlineColumnSupported(column);
-        }
-
-        /// <summary>
-        ///     Creates the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new LemonStandDownloader(Store);
         }
 
         /// <summary>

@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using Interapptive.Shared.Net;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.UI.Wizard;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.SellerVantage
 {
     /// <summary>
     /// SellerVantage Store implementation.
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SellerVantage)]
+    [Component(RegistrationType.Self)]
     public class SellerVantageStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -23,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         {
 
         }
-       
+
         /// <summary>
         /// Identifying typecode for SellerVantage
         /// </summary>

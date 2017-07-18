@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -29,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// <summary>
     /// Downloader for EtsyStores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
     public class EtsyDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyDownloader));
@@ -37,7 +39,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         const int goBackDaysForUnpaid = 60;
         const int goBackDaysForUnshipped = 60;
         EtsyWebClient webClient;
-        EtsyStoreType storeType;
 
         /// <summary>
         /// Number of orders to download at a time.
@@ -47,13 +48,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyDownloader(EtsyStoreType etsyStoreType, EtsyStoreEntity store)
+        public EtsyDownloader(StoreEntity store)
             : base(store)
         {
-            MethodConditions.EnsureArgumentIsNotNull(etsyStoreType, nameof(etsyStoreType));
-
-            webClient = new EtsyWebClient(etsyStoreType.EtsyStore);
-            storeType = etsyStoreType;
+            webClient = new EtsyWebClient(store as EtsyStoreEntity);
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasShipped, false, goBackDaysForUnshipped, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(storeType, shipWorksOrders, "was_shipped", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
 
             //Update those statuses locally
             foreach (var changedOrder in newlyChangedOrders)
@@ -112,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasPaid, false, goBackDaysForUnpaid, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(storeType, shipWorksOrders, "was_paid", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
             UpdatePaymentInformation(newlyChangedOrders);
         }
 

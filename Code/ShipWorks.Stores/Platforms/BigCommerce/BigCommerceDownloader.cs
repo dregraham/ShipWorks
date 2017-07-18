@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Downloader for BigCommerce stores
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BigCommerce)]
     public class BigCommerceDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public BigCommerceDownloader(BigCommerceStoreEntity store,
+        public BigCommerceDownloader(StoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
             IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider)
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this.orderSearchCriteriaFactory = orderSearchCriteriaFactory;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
-            bigCommerceStore = store;
+            bigCommerceStore = (BigCommerceStoreEntity) store;
             totalCount = 0;
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// <summary>
     /// Downloader for sears.com
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Sears)]
     public class SearsDownloader : StoreDownloader
     {
         // Logger
@@ -30,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsDownloader(SearsStoreEntity store)
+        public SearsDownloader(StoreEntity store)
             : base(store)
         {
 

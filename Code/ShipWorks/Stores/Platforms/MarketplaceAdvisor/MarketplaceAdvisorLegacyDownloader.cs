@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
@@ -19,7 +20,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for legacy MarketplaceAdvisor store types
     /// </summary>
-    class MarketplaceAdvisorLegacyDownloader : StoreDownloader
+    [Component]
+    public class MarketplaceAdvisorLegacyDownloader : StoreDownloader, IMarketplaceAdvisorLegacyDownloader
     {
         /// <summary>
         /// Constructor

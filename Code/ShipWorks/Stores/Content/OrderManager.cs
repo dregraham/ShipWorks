@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
@@ -14,6 +18,16 @@ namespace ShipWorks.Stores.Content
     /// </summary>
     public class OrderManager : IOrderManager
     {
+        readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderManager(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
         /// <summary>
         /// Get a populated order from a given shipment
         /// </summary>
@@ -36,6 +50,25 @@ namespace ShipWorks.Stores.Content
         public OrderEntity FetchOrder(long orderID)
         {
             return OrderUtility.FetchOrder(orderID);
+        }
+
+        /// <summary>
+        /// Get the first order in the specified predicate
+        /// </summary>
+        public async Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<OrderEntity> query = factory.Order.Where(predicate);
+
+            foreach (IPrefetchPathElement2 path in prefetchPaths)
+            {
+                query = query.WithPath(path);
+            }
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                return await adapter.FetchFirstAsync(query).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

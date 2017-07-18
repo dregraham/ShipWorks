@@ -11,6 +11,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,14 +27,15 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
-    public class MagentoTwoRestDownloader : StoreDownloader
+    [Component]
+    public class MagentoTwoRestDownloader : StoreDownloader, IMagentoTwoRestDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
         private readonly MagentoStoreEntity magentoStore;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
@@ -41,8 +43,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="sqlAdapterRetryFactory">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory) : base(store)
+        public MagentoTwoRestDownloader(StoreEntity store,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
+            Func<Type, ILog> logFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<StoreEntity, MagentoStoreType> getStoreType,
+            IConfigurationData configurationData) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             magentoStore = (MagentoStoreEntity) store;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");

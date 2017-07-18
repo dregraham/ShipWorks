@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -24,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Order downloader for Amazon MWS
     /// </summary>
-    public class AmazonMwsDownloader : StoreDownloader
+    [Component]
+    public class AmazonMwsDownloader : StoreDownloader, IAmazonMwsDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
 
@@ -33,10 +35,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Gets the Amazon store entity
         /// </summary>
-        private AmazonStoreEntity AmazonStore
-        {
-            get { return (AmazonStoreEntity) Store; }
-        }
+        private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
         /// <summary>
         /// Constructor

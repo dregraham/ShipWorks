@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 
@@ -14,8 +16,8 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        protected OrderElementFactoryDownloaderBase(StoreEntity store)
-            : base(store)
+        protected OrderElementFactoryDownloaderBase(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeType, configurationData, sqlAdapterFactory)
         {
 
         }

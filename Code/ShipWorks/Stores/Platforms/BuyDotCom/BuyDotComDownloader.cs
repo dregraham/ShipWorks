@@ -4,9 +4,11 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -22,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// Downloader for Buy.com stores.
     /// Heavily leverages GenericSpreadsheetOrderLoader to load orders.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BuyDotCom)]
     public class BuyDotComDownloader : OrderElementFactoryDownloaderBase
     {
         GenericCsvMap csvMap;
@@ -29,8 +32,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComDownloader(BuyDotComStoreEntity store)
-            : base(store)
+        public BuyDotComDownloader(StoreEntity store,
+            Func<StoreEntity, BuyDotComStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             string mapXml = ResourceUtility.ReadString("ShipWorks.Stores.Platforms.BuyDotCom.BuyDotComOrderImportMap.swcsvm");
 

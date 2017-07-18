@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Text.Csv;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -28,6 +29,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     /// <summary>
     /// Order downloader for OrderMotion stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderMotion)]
     public class OrderMotionDownloader : StoreDownloader
     {
         // Logger

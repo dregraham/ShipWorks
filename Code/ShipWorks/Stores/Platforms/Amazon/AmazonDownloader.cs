@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,7 +22,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Retrieves orders from Amazon.com
     /// </summary>
-    public class AmazonDownloader : StoreDownloader
+    [Component]
+    public class AmazonDownloader : StoreDownloader, IAmazonLegacyDownloader
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonDownloader));

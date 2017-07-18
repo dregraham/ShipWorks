@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -27,7 +28,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
     /// <summary>
     /// Downloader for Yahoo! stores
     /// </summary>
-    public class YahooEmailDownloader : StoreDownloader
+    [Component]
+    public class YahooEmailDownloader : StoreDownloader, IYahooEmailDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailDownloader));
 

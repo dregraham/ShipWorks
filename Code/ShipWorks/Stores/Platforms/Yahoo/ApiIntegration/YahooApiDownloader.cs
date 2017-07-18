@@ -6,9 +6,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,7 +23,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// Downloader for Yahoo stores using the Yahoo Api
     /// </summary>
-    public class YahooApiDownloader : StoreDownloader
+    [Component]
+    public class YahooApiDownloader : StoreDownloader, IYahooApiDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooApiDownloader));
 
@@ -34,24 +37,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
         /// </summary>
-        /// <param name="store"></param>
-        public YahooApiDownloader(StoreEntity store) :
-            this(store,
-                new YahooApiWebClient((YahooStoreEntity) store, LogManager.GetLogger(typeof(YahooApiWebClient))),
-                new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
+        public YahooApiDownloader(YahooStoreEntity store,
+            Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<StoreEntity, YahooStoreType> getStoreType) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
-        public YahooApiDownloader(StoreEntity store, IYahooApiWebClient webClient, ISqlAdapterRetry sqlAdapter) : base(store, new YahooStoreType(store))
-        {
-            this.webClient = webClient;
-            this.sqlAdapter = sqlAdapter;
+            this.webClient = createWebClient(store);
+            this.sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
         }
 
         /// <summary>

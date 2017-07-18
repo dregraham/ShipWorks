@@ -1,39 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule.WizardPages;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Text.RegularExpressions;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Communication;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Common.Threading;
-using System.Net;
-using Interapptive.Shared.Net;
-using log4net;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Templates.Processing.TemplateXml;
 using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
 using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Grid;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Platforms.GenericFile;
-using ShipWorks.Stores.Platforms.GenericModule;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -41,6 +29,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// Base class for our PHP-module-based integrations as well as the store type used
     /// for generic order downloading from  a URL.
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.GenericModule)]
+    [Component(RegistrationType.Self)]
     public class GenericModuleStoreType : StoreType, IGenericModuleStoreType
     {
         // Logger
@@ -78,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             get
             {
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
 
                 Version currentSchemaVersion = GetSchemaVersion(genericStore);
 
@@ -152,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             base.InitializeStoreDefaults(store);
 
-            GenericModuleStoreEntity generic = (GenericModuleStoreEntity)store;
+            GenericModuleStoreEntity generic = (GenericModuleStoreEntity) store;
 
             generic.ModuleVersion = "0.0.0";
             generic.ModuleDeveloper = "";
@@ -168,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             generic.ModuleRequestTimeout = 60;
             generic.ModuleDownloadPageSize = 50;
             generic.ModuleHttpExpect100Continue = true;
-            generic.ModuleResponseEncoding = (int)GenericStoreResponseEncoding.UTF8;
+            generic.ModuleResponseEncoding = (int) GenericStoreResponseEncoding.UTF8;
 
         }
 
@@ -206,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             UpdateOnlineModuleInfo();
 
             // Grab the status selections right away
-            if (generic.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None)
+            if (generic.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
             {
                 CreateStatusCodeProvider().UpdateFromOnlineStore();
             }
@@ -222,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericStoreWebClient webClient = this.CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetModule();
 
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
             XPathNavigator xpath = webResponse.XPath;
 
             string platform = XPathUtility.Evaluate(xpath, "//Platform", "");
@@ -260,12 +250,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericModuleCapabilities capabilities = ReadModuleCapabilities(webResponse);
 
             // See if it used to support online status
-            if (store.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None)
+            if (store.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
             {
                 // The data type of the online status codes cannot change
                 if (capabilities.OnlineStatusSupport != GenericOnlineStatusSupport.None)
                 {
-                    if (store.ModuleOnlineStatusDataType != (int)capabilities.OnlineStatusDataType)
+                    if (store.ModuleOnlineStatusDataType != (int) capabilities.OnlineStatusDataType)
                     {
                         throw new GenericStoreException("The online module has been updated in an unsupported way: the online status dataType cannot be changed.");
                     }
@@ -278,11 +268,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             // Update the capabilities
-            store.ModuleDownloadStrategy = (int)capabilities.DownloadStrategy;
-            store.ModuleOnlineStatusSupport = (int)capabilities.OnlineStatusSupport;
-            store.ModuleOnlineStatusDataType = (int)capabilities.OnlineStatusDataType;
+            store.ModuleDownloadStrategy = (int) capabilities.DownloadStrategy;
+            store.ModuleOnlineStatusSupport = (int) capabilities.OnlineStatusSupport;
+            store.ModuleOnlineStatusDataType = (int) capabilities.OnlineStatusDataType;
             store.ModuleOnlineCustomerSupport = capabilities.OnlineCustomerSupport;
-            store.ModuleOnlineCustomerDataType = (int)capabilities.OnlineCustomerDataType;
+            store.ModuleOnlineCustomerDataType = (int) capabilities.OnlineCustomerDataType;
             store.ModuleOnlineShipmentDetails = capabilities.OnlineShipmentDetails;
 
             // Read communications settings
@@ -290,7 +280,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             // update the communications settings
             store.ModuleHttpExpect100Continue = communications.Expect100Continue;
-            store.ModuleResponseEncoding = (int)communications.ResponseEncoding;
+            store.ModuleResponseEncoding = (int) communications.ResponseEncoding;
         }
 
         /// <summary>
@@ -339,7 +329,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)
         {
-            if (((GenericModuleStoreEntity)Store).ModuleOnlineCustomerSupport)
+            if (((GenericModuleStoreEntity) Store).ModuleOnlineCustomerSupport)
             {
                 instanceLookup = true;
 
@@ -349,14 +339,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 return base.CreateCustomerIdentifierFields(out instanceLookup);
             }
-        }
-
-        /// <summary>
-        /// Create the order downloader for the store
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new GenericModuleDownloader(Store);
         }
 
         /// <summary>
@@ -377,11 +359,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
 
             if (store.ModuleOnlineShipmentDetails ||
-                store.ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.StatusOnly ||
-                store.ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.StatusWithComment)
+                store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusOnly ||
+                store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusWithComment)
             {
                 return new GenericStoreModuleActionControl();
             }
@@ -413,7 +395,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual GenericStoreWebClient CreateWebClient()
         {
-            return new GenericStoreWebClient((GenericModuleStoreEntity)Store);
+            return new GenericStoreWebClient((GenericModuleStoreEntity) Store);
         }
 
         /// <summary>
@@ -421,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual GenericStoreOnlineUpdater CreateOnlineUpdater()
         {
-            return new GenericStoreOnlineUpdater((GenericModuleStoreEntity)Store);
+            return new GenericStoreOnlineUpdater((GenericModuleStoreEntity) Store);
         }
 
         /// <summary>
@@ -430,7 +412,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public override ICollection<string> GetOnlineStatusChoices()
         {
             // if this isn't pointed to a field, online status isn't suported
-            if (((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.None)
+            if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.None)
             {
                 return base.GetOnlineStatusChoices();
             }
@@ -455,16 +437,16 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
 
             if (column == OnlineGridColumnSupport.LastModified)
             {
-                return store.ModuleDownloadStrategy == (int)GenericStoreDownloadStrategy.ByModifiedTime;
+                return store.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime;
             }
 
             if (column == OnlineGridColumnSupport.OnlineStatus)
             {
-                return store.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None;
+                return store.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None;
             }
 
             return base.GridOnlineColumnSupported(column);
@@ -477,9 +459,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             get
             {
-                GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
 
-                if (store.ModuleDownloadStrategy == (int)GenericStoreDownloadStrategy.ByOrderNumber)
+                if (store.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
                 {
                     return new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber);
                 }
@@ -495,7 +477,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport)((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport;
+            GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport) ((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport;
 
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -531,7 +513,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             // Check if we can add the ability to upload tracking number
-            if (((GenericModuleStoreEntity)Store).ModuleOnlineShipmentDetails)
+            if (((GenericModuleStoreEntity) Store).ModuleOnlineShipmentDetails)
             {
                 // Add the option to Upload shipment details
                 MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
@@ -642,9 +624,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
-            object[] state = (object[])userState;
+            object[] state = (object[]) userState;
             object code = state[0];
-            string comment = (string)state[1];
+            string comment = (string) state[1];
 
             try
             {
@@ -666,12 +648,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public GenericStoreStatusCodeProvider CreateStatusCodeProvider()
         {
-            if (((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.None)
+            if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.None)
             {
                 throw new InvalidOperationException("Unable to create the status code container because the store does not support online status codes.");
             }
 
-            return new GenericStoreStatusCodeProvider((GenericModuleStoreEntity)Store);
+            return new GenericStoreStatusCodeProvider((GenericModuleStoreEntity) Store);
         }
 
         /// <summary>
@@ -687,7 +669,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual string GetOnlineCarrierName(ShipmentEntity shipment)
         {
-            return ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType);
+            return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
 
         /// <summary>

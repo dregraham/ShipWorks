@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -24,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Downloader for ChannelAdvisor
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ChannelAdvisor)]
     public class ChannelAdvisorDownloader : StoreDownloader
     {
         // total download count

@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// <summary>
     /// Downloader for Walmart
     /// </summary>
-    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Walmart, ExternallyOwned = true)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Walmart)]
     public class WalmartDownloader : StoreDownloader
     {
         private readonly IWalmartWebClient walmartWebClient;

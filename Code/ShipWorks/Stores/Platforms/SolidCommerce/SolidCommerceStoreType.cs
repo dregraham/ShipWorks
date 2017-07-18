@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -10,6 +10,8 @@ namespace ShipWorks.Stores.Platforms.SolidCommerce
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SolidCommerce)]
+    [Component(RegistrationType.Self)]
     public class SolidCommerceStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -42,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.SolidCommerce
         {
             get
             {
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
 
                 string moduleUrl = genericStore.ModuleUrl;
 

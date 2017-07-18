@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// <summary>
     /// Order downloader for Volusion stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Volusion)]
     public class VolusionDownloader : StoreDownloader
     {
         // total number of orders to be imported
@@ -43,13 +45,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Convenience property for quick access to the specific entity
         /// </summary>
-        protected VolusionStoreEntity VolusionStoreEntity
-        {
-            get
-            {
-                return (VolusionStoreEntity) Store;
-            }
-        }
+        protected VolusionStoreEntity VolusionStoreEntity => (VolusionStoreEntity) Store;
 
         /// <summary>
         /// Download orders from the store

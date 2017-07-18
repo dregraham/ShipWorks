@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -23,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
     /// A Newegg implementation of the StoreDownloader class that interacts with the NeweggWebClient
     /// to download orders from Newegg and import them into ShipWorks.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NeweggMarketplace)]
     public class NeweggDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NeweggDownloader));

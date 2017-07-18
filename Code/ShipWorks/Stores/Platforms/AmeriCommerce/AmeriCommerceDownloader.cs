@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -17,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     /// <summary>
     /// Downloads order information from AmeriCommerce
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.AmeriCommerce)]
     public class AmeriCommerceDownloader : StoreDownloader
     {
         // total number of orders to be downloaded

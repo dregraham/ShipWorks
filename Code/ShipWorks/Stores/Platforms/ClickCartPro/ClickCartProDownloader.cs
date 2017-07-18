@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.XPath;
+﻿using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -13,13 +13,17 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
     /// <summary>
     /// Click Cart Pro order downloader
     /// </summary>
-    class ClickCartProDownloader : GenericModuleDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ClickCartPro)]
+    public class ClickCartProDownloader : GenericModuleDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ClickCartProDownloader(StoreEntity store)
-            : base(store)
+        public ClickCartProDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
 
         }

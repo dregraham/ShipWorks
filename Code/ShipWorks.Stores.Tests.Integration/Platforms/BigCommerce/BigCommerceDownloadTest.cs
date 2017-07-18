@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             using (var webApp = replayServer.Start("Download_PopulatesStatusCodes.har"))
             {
                 var storeType = StoreTypeManager.GetType(store);
-                var downloader = storeType.CreateDownloader();
+                var downloader = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreDownloader>(StoreTypeCode.BigCommerce, TypedParameter.From<StoreEntity>(store));
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
@@ -102,8 +102,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         {
             using (var webApp = replayServer.Start("Download_CreatesOrder.har"))
             {
-                var storeType = StoreTypeManager.GetType(store);
-                var downloader = storeType.CreateDownloader();
+                var downloader = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreDownloader>(StoreTypeCode.BigCommerce, TypedParameter.From<StoreEntity>(store));
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {

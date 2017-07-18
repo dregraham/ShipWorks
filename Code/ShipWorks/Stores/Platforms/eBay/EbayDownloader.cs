@@ -12,6 +12,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -35,10 +36,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// Downloader for eBay
     /// </summary>
     [NDependIgnoreLongTypes]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Ebay)]
     public class EbayDownloader : StoreDownloader
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
+        private readonly Func<EbayToken, EbayWebClient> webClientFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
@@ -52,10 +55,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store)
+        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory)
             : base(store)
         {
-            webClient = new EbayWebClient(EbayToken.FromStore((EbayStoreEntity) store));
+            this.webClientFactory = webClientFactory;
         }
 
         /// <summary>
@@ -65,6 +68,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            webClient = webClientFactory(EbayToken.FromStore((EbayStoreEntity) Store));
+
             try
             {
                 Progress.Detail = "Connecting to eBay...";

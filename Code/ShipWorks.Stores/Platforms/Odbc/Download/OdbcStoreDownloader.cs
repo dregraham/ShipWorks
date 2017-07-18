@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -18,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// <summary>
     /// Downloader for an OdbcStoreDownloader
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Odbc)]
     public class OdbcStoreDownloader : StoreDownloader
     {
         private readonly IOdbcDownloadCommandFactory downloadCommandFactory;

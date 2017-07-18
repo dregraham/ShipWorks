@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,16 +23,17 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
-
     /// <summary>
     /// Downloader for 3dcart that uses their REST API
     /// </summary>
-    public class ThreeDCartRestDownloader : StoreDownloader
+    [Component]
+    public class ThreeDCartRestDownloader : StoreDownloader, IThreeDCartRestDownloader
     {
         const int MissingCustomerID = 0;
         private readonly IThreeDCartRestWebClient restWebClient;
         private readonly ThreeDCartStoreEntity threeDCartStore;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
+        private readonly IOrderManager orderManager;
         private readonly ILog log;
         private int newOrderCount;
         private DateTime modifiedOrderEndDate;
@@ -38,26 +41,22 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private int ordersProcessed;
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="store">Store for which this downloader will operate</param>
-        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store)
-            : this(store,
-                new ThreeDCartRestWebClient(store),
-                new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder"),
-                LogManager.GetLogger(typeof(ThreeDCartRestDownloader)))
-        {
-        }
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestDownloader"/> class.
         /// </summary>
-        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient restWebClient, ISqlAdapterRetry sqlAdapterRetry, ILog log) : base(store)
+        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store,
+            Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient> restWebClientFactory,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            IOrderManager orderManager,
+            Func<StoreEntity, ThreeDCartStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<Type, ILog> createLogger) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
-            this.restWebClient = restWebClient;
-            this.sqlAdapterRetry = sqlAdapterRetry;
-            this.log = log;
+            this.restWebClient = restWebClientFactory(store);
+            this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder");
+            this.orderManager = orderManager;
+            this.log = createLogger(GetType());
             threeDCartStore = store;
         }
 
@@ -225,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                     OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
-                    order = await LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix).ConfigureAwait(false);
+                    order = await LoadOrder(order, threeDCartOrder, shipment).ConfigureAwait(false);
 
                     await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
@@ -246,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public async Task<OrderEntity> LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
+        public async Task<OrderEntity> LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, nameof(threeDCartOrder));
 
@@ -357,7 +356,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void AdjustAndSetOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            decimal total = new OrderManager().CalculateOrderTotal(order);
+            decimal total = orderManager.CalculateOrderTotal(order);
 
             var items = order.OrderItems;
 

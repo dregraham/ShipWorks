@@ -1,11 +1,15 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Xml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
@@ -15,7 +19,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     /// <summary>
     /// Downloader implementation for importing from XML files
     /// </summary>
-    public class GenericFileXmlDownloader : GenericFileDownloaderBase
+    [Component]
+    public class GenericFileXmlDownloader : GenericFileDownloaderBase, IGenericFileXmlDownloader
     {
         // Transform to use, if any
         XslCompiledTransform xslTransform = null;
@@ -26,8 +31,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericFileXmlDownloader(GenericFileStoreEntity store)
-            : base(store)
+        public GenericFileXmlDownloader(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
 
         }

@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,8 +24,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Constructor
         /// </summary>
-        protected GenericFileDownloaderBase(GenericFileStoreEntity store)
-            : base(store)
+        protected GenericFileDownloaderBase(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
 
         }
@@ -31,10 +36,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// The store being downloaded
         /// </summary>
-        protected GenericFileStoreEntity GenericStore
-        {
-            get { return (GenericFileStoreEntity) Store; }
-        }
+        protected GenericFileStoreEntity GenericStore => (GenericFileStoreEntity) Store;
 
         /// <summary>
         /// Can be used by derived classes to perform one-time download initialization

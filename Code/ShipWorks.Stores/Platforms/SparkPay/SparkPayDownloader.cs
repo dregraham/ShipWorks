@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     /// <summary>
     /// Spark pay downloader
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SparkPay)]
     public class SparkPayDownloader : StoreDownloader
     {
         readonly SparkPayStoreEntity store;

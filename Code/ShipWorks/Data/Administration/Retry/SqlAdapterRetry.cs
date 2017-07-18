@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -13,6 +14,7 @@ namespace ShipWorks.Data.Administration.Retry
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
+    [Component]
     public class SqlAdapterRetry<TException> : ISqlAdapterRetry where TException : Exception
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file

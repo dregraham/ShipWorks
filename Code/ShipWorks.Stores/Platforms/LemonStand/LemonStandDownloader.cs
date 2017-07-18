@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -21,50 +24,31 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// <summary>
     ///     Downloader for LemonStand
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LemonStand)]
     public class LemonStandDownloader : StoreDownloader
     {
         private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
-        private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ISqlAdapterRetry sqlAdapterRetry;
 
         LemonStandStatusCodeProvider statusProvider;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
-        /// <param name="store">The store entity</param>
-        public LemonStandDownloader(StoreEntity store)
-            : this(
-                store, new LemonStandWebClient((LemonStandStoreEntity) store),
-                new SqlAdapterRetry<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder"))
-        {
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
-        /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        /// <param name="storeType">The storetype, used for tests</param>
-        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter, StoreType storeType)
-            : base(store, storeType)
+        public LemonStandDownloader(StoreEntity store,
+            Func<LemonStandStoreEntity, ILemonStandWebClient> webClientFactory,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
-            client = webClient;
-            this.sqlAdapter = sqlAdapter;
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
-        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
-            : base(store, (LemonStandStoreType) StoreTypeManager.GetType(store))
-        {
-            client = webClient;
-            this.sqlAdapter = sqlAdapter;
+            client = webClientFactory((LemonStandStoreEntity) store);
+            this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder");
         }
 
         /// <summary>
@@ -166,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             LemonStandOrderEntity order = await PrepareOrder(jsonOrder).ConfigureAwait(false);
 
-            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+            await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

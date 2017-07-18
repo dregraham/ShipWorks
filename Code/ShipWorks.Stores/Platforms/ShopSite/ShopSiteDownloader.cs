@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     /// <summary>
     /// Downloader for ShopSiteStores
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ShopSite)]
     public class ShopSiteDownloader : StoreDownloader
     {
         private int totalCount = 0;
@@ -29,10 +29,10 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(IShopSiteStoreEntity store, IShopSiteWebClientFactory webClientFactory)
-            : base(store as StoreEntity)
+        public ShopSiteDownloader(StoreEntity store, IShopSiteWebClientFactory webClientFactory)
+            : base(store)
         {
-            IShopSiteStoreEntity shopSiteStore = store;
+            IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
 
             webClient = webClientFactory.Create(shopSiteStore);

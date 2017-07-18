@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Management;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Sears.CoreExtensions.Filters;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
     /// <summary>
     /// Sears specific ShipWorks store type implementation
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Sears)]
+    [Component(RegistrationType.Self)]
     public class SearsStoreType : StoreType
     {
         // Logger
@@ -38,13 +38,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Returns the identifying code for Infopia stores
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Sears;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Sears;
 
         /// <summary>
         /// Create a new instance of a sears store
@@ -93,14 +87,6 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
 
             return new SearsOrderIdentifier(searsOrder.OrderNumber, searsOrder.PoNumber);
-        }
-
-        /// <summary>
-        /// Create a downloader for pulling in Sears.com orders
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new SearsDownloader((SearsStoreEntity) Store);
         }
 
         /// <summary>
@@ -156,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Create the license identifier for uniquely identifiying Sears.com stores
+        /// Create the license identifier for uniquely identifying Sears.com stores
         /// </summary>
         protected override string InternalLicenseIdentifier
         {

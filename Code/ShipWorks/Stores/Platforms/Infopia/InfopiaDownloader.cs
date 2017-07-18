@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Order downloader for retrieving Infopia orders.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Infopia)]
     public class InfopiaDownloader : StoreDownloader
     {
         // count of orders to be downloaded
@@ -36,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Constructor
         /// </summary>
-        public InfopiaDownloader(InfopiaStoreEntity store)
+        public InfopiaDownloader(StoreEntity store)
             : base(store)
         {
         }

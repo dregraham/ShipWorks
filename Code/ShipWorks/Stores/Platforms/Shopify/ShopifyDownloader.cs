@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -23,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// <summary>
     /// Downloader for ShopifyStores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopify)]
     public class ShopifyDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
@@ -34,10 +36,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopifyDownloader(ShopifyStoreEntity store)
+        public ShopifyDownloader(StoreEntity store)
             : base(store)
         {
-            requestedShippingField = (ShopifyRequestedShippingField) store.ShopifyRequestedShippingOption;
+            requestedShippingField = (ShopifyRequestedShippingField) ((ShopifyStoreEntity) store).ShopifyRequestedShippingOption;
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using log4net;
 using ShipWorks.Data;
@@ -21,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
     /// <summary>
     /// Order downloader for PayPal.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PayPal)]
     public class PayPalDownloader : StoreDownloader
     {
         const int maxIntialDownload = 365;
@@ -31,10 +33,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Convenience property for quick access to the specific store entity
         /// </summary>
-        private PayPalStoreEntity PayPalStore
-        {
-            get { return (PayPalStoreEntity) Store; }
-        }
+        private PayPalStoreEntity PayPalStore => (PayPalStoreEntity) Store;
 
         /// <summary>
         /// Constructor

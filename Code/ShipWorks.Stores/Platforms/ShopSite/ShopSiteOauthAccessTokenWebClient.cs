@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
@@ -41,8 +40,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             this.encryptionProvider = encryptionProvider;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.variableRequestSubmitterFactory = variableRequestSubmitterFactory;
-
-            ValidateApiAccessData(store);
         }
 
         /// <summary>
@@ -81,6 +78,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         public AccessResponse FetchAuthAccessResponse()
         {
+            ValidateApiAccessData(shopSiteStore);
+
             string nonceString = GenerateNonce();
             string rawCredentials = shopSiteStore.OauthClientID + ":" + nonceString;
             string clientCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(rawCredentials));

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -18,8 +19,15 @@ using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    class GrouponDownloader : StoreDownloader
+    /// <summary>
+    /// Downloader for Groupon
+    /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Groupon)]
+    public class GrouponDownloader : StoreDownloader
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GrouponDownloader(StoreEntity store)
             : base(store)
         {

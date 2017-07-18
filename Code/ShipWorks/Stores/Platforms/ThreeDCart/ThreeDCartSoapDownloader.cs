@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -25,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Downloader for 3dcart stores
     /// </summary>
-    public class ThreeDCartSoapDownloader : StoreDownloader
+    [Component]
+    public class ThreeDCartSoapDownloader : StoreDownloader, IThreeDCartSoapDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapDownloader));
         int totalCount;

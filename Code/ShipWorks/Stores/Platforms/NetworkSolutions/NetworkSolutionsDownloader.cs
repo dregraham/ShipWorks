@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// <summary>
     /// Order downloader for NetworkSolutions stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NetworkSolutions)]
     public class NetworkSolutionsDownloader : StoreDownloader
     {
         // Logger
