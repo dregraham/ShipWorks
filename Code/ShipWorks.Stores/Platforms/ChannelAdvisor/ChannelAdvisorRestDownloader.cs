@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly ChannelAdvisorOrderLoader orderLoader;
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ChannelAdvisorStoreEntity caStore;
 
         /// <summary>
         /// Constructor
@@ -36,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.orderLoader = orderLoader;
 
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
-            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
+            caStore = Store as ChannelAdvisorStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
             refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                 .Decrypt(caStore.RefreshToken);
@@ -121,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 new OrderNumberIdentifier(caOrder.ID));
 
             //Order loader loads the order
-            orderLoader.LoadOrder(order, caOrder, this, token, new string[0]);
+            orderLoader.LoadOrder(order, caOrder, this, token, caStore.ParsedAttributesToDownload);
 
             // Save the downloaded order
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));

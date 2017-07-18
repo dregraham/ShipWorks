@@ -1177,7 +1177,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void CallLoadOrder(string token)
         {
             testObject.LoadOrder(orderToSave, downloadedOrder, orderElementFactory.Object, token, new string[0]);
-
         }
 
         public void CallLoadOrder(IEnumerable<string> attributes)
