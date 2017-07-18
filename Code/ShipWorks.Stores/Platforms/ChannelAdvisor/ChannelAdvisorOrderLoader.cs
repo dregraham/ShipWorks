@@ -20,17 +20,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorOrderLoader
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
-        private readonly IChannelAdvisorRestClient webClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorOrderLoader"/> class.
         /// </summary>
         /// <param name="orderChargeCalculator">The order charge calculator.</param>
-        /// <param name="webClient">The web client.</param>
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IChannelAdvisorRestClient webClient)
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderChargeCalculator = orderChargeCalculator;
-            this.webClient = webClient;
         }
 
         /// <summary>
@@ -39,7 +36,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <remarks>
         /// Order to save must have store loaded
         /// </remarks>
-        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
+        public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder,
+            List<ChannelAdvisorProduct> downloadedProducts, IOrderElementFactory orderElementFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
 
@@ -65,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
 
                 // items
-                LoadItems(orderToSave, downloadedOrder, orderElementFactory, accessToken);
+                LoadItems(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory);
 
                 // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
@@ -83,12 +81,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="orderToSave">The order to save.</param>
         /// <param name="downloadedOrder">The downloaded order.</param>
+        /// <param name="downloadedProducts">The downloaded products.</param>
         /// <param name="orderElementFactory">The order element factory.</param>
-        /// <param name="accessToken">The access token.</param>
         private void LoadItems(ChannelAdvisorOrderEntity orderToSave,
             ChannelAdvisorOrder downloadedOrder,
-            IOrderElementFactory orderElementFactory,
-            string accessToken)
+            List<ChannelAdvisorProduct> downloadedProducts,
+            IOrderElementFactory orderElementFactory)
         {
             if (downloadedOrder.Items != null)
             {
@@ -98,7 +96,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         (ChannelAdvisorOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
 
                     LoadItem(itemToSave, downloadedOrder, downloadedItem, orderElementFactory);
-                    LoadProductDetails(itemToSave, downloadedItem, orderElementFactory, accessToken);
+
+                    ChannelAdvisorProduct downloadedProduct = downloadedProducts.FirstOrDefault(p => p.ID == downloadedItem.ProductID);
+
+                    if (downloadedProduct != null)
+                    {
+                        LoadProductDetails(itemToSave, downloadedProduct);
+                        LoadProductAttributes(itemToSave, downloadedProduct, orderElementFactory);
+                    }
                 }
             }
         }
@@ -139,24 +144,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attribute.Description = downloadedItem.GiftMessage;
                 attribute.UnitPrice = 0M;
             }
-
-            // Appear in SOAP, but not REST
-            // IsFBA, should be wrapped up in DC stuff
-            // SalesSourceID
-            // UserName
-        }
-
-        /// <summary>
-        /// Requests product details from Channel advisor and loads the product detail
-        /// </summary>
-        private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave,
-            ChannelAdvisorOrderItem downloadedItem,
-            IOrderElementFactory orderElementFactory,
-            string accessToken)
-        {
-            ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
-            LoadProductDetails(itemToSave, product);
-            LoadProductAttributes(itemToSave, product, orderElementFactory);
         }
 
         /// <summary>
@@ -213,28 +200,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private void LoadCharges(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
-            if (!downloadedOrder.TotalTaxPrice.IsEquivalentTo(0))
+            if (downloadedOrder.TotalTaxPrice != 0)
             {
                 // Total tax price includes shipping tax and gift wrap tax, so no need to load them
                 orderElementFactory.CreateCharge(orderToSave, "TAX", "Sales Tax",  downloadedOrder.TotalTaxPrice);
             }
 
-            if (!downloadedOrder.TotalShippingPrice.IsEquivalentTo(0))
+            if (downloadedOrder.TotalShippingPrice != 0)
             {
                 orderElementFactory.CreateCharge(orderToSave, "SHIPPING", "Shipping",  downloadedOrder.TotalShippingPrice);
             }
 
-            if (!downloadedOrder.TotalInsurancePrice.IsEquivalentTo(0))
+            if (downloadedOrder.TotalInsurancePrice != 0)
             {
                 orderElementFactory.CreateCharge(orderToSave, "INSURANCE", "Shipping Insurance",  downloadedOrder.TotalInsurancePrice);
             }
 
-            if (!downloadedOrder.TotalGiftOptionPrice.IsEquivalentTo(0))
+            if (downloadedOrder.TotalGiftOptionPrice != 0)
             {
                 orderElementFactory.CreateCharge(orderToSave, "GIFT WRAP", "Gift Wrap",  downloadedOrder.TotalGiftOptionPrice);
             }
 
-            if (!downloadedOrder.AdditionalCostOrDiscount.IsEquivalentTo(0))
+            if (downloadedOrder.AdditionalCostOrDiscount != 0)
             {
                 orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount",
                     downloadedOrder.AdditionalCostOrDiscount);
@@ -412,7 +399,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             orderToSave.OnlinePaymentStatus =
                 (int) (Enum.TryParse(downloadedOrder.PaymentStatus, true, out paymentStatus) ?
                 paymentStatus :
-                    ChannelAdvisorPaymentStatus.Unknown);
+                ChannelAdvisorPaymentStatus.Unknown);
 
             ChannelAdvisorCheckoutStatus checkoutStatus;
             orderToSave.OnlineCheckoutStatus =

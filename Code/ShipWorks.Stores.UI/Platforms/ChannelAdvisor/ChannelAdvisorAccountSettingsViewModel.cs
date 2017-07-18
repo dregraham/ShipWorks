@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             {
                 try
                 {
-                    string refreshToken = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl);
+                    string refreshToken = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl).Value;
                     store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                         .Encrypt(refreshToken);
 
@@ -128,7 +128,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void UpdateStoreInfo(ChannelAdvisorStoreEntity store, string refreshToken)
         {
-            string accessToken = webClient.GetAccessToken(refreshToken);
+            string accessToken = webClient.GetAccessToken(refreshToken).Value;
             ChannelAdvisorProfile profile = webClient.GetProfiles(accessToken)?.Profiles?.First();
 
             store.ProfileID = profile?.ProfileId ?? 0;

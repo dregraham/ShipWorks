@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.RefreshToken = "refreshToken")
                 .Set(x=> x.AttributesToDownload = "<Attributes></Attributes>")
                 .Save();
-            
+
             Create.Entity<StatusPresetEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.StatusTarget = 0)
@@ -82,14 +82,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int)DownloadResult.Unfinished)
                 .Save().DownloadID;
-            
+
             client = mock.Mock<IChannelAdvisorRestClient>();
             client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
 
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
-            order = SingleOrder(store);
+            order = SingleOrder();
             firstBatch = new ChannelAdvisorOrderResult()
             {
                 OdataContext = "",
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             Assert.Equal("This is a public note", note.Text);
         }
 
-        private ChannelAdvisorOrder SingleOrder(StoreEntity store)
+        private ChannelAdvisorOrder SingleOrder()
         {
             return new ChannelAdvisorOrder()
             {

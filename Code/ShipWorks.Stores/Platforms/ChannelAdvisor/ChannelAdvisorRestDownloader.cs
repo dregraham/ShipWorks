@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
-                ChannelAdvisorOrderResult ordersResult = GetOrders(start, token);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, token);
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
@@ -78,12 +79,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return;
                         }
 
-                        LoadOrder(caOrder, token);
+                        // Get the products for the order to pass into the loader
+                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, token)).ToList();
+
+                        LoadOrder(caOrder, caProducts);
                     }
 
                     token = GetAccessToken(restClient);
 
-                    ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
+                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -113,17 +117,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             return tokenreResult.Value;
         }
-        
-        /// <summary>
-        /// Get orders from the start
-        /// </summary>
-        private ChannelAdvisorOrderResult GetOrders(DateTime start, string token) =>
-            restClient.GetOrders(start, token);
 
         /// <summary>
         /// Load the given ChannelAdvisor order
         /// </summary>
-        private void LoadOrder(ChannelAdvisorOrder caOrder, string token)
+        private void LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
@@ -138,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.Store = Store;
 
                 //Order loader loads the order
-                orderLoader.LoadOrder(order, caOrder, this, token);
+                orderLoader.LoadOrder(order, caOrder, caProducts, this);
 
                 // Save the downloaded order
                 sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
