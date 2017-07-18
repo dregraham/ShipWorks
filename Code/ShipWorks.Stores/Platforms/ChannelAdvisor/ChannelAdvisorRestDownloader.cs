@@ -82,7 +82,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     token = restClient.GetAccessToken(refreshToken);
                     ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
                 }
-
             }
             catch (ChannelAdvisorException ex)
             {
@@ -103,29 +102,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private ChannelAdvisorOrderResult GetOrders(DateTime start, string token) =>
             restClient.GetOrders(start, token);
 
-
-    /// <summary>
-    /// Load the given ChannelAdvisor order
-    /// </summary>
-    private void LoadOrder(ChannelAdvisorOrder caOrder, string token)
-    {
+        /// <summary>
+        /// Load the given ChannelAdvisor order
+        /// </summary>
+        private void LoadOrder(ChannelAdvisorOrder caOrder, string token)
+        {
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
             // Check if it has been canceled
-            if (Progress.IsCancelRequested)
+            if (!Progress.IsCancelRequested)
             {
-                return;
+                ChannelAdvisorOrderEntity order =
+                    (ChannelAdvisorOrderEntity) InstantiateOrder(new OrderNumberIdentifier(caOrder.ID));
+
+                //Order loader loads the order
+                orderLoader.LoadOrder(order, caOrder, this, token, caStore.ParsedAttributesToDownload);
+
+                // Save the downloaded order
+                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
             }
-
-            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) InstantiateOrder(
-                new OrderNumberIdentifier(caOrder.ID));
-
-            //Order loader loads the order
-            orderLoader.LoadOrder(order, caOrder, this, token, caStore.ParsedAttributesToDownload);
-
-            // Save the downloaded order
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
@@ -142,7 +138,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create an item attribute for the item
         /// </summary>
-        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
+        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item,
+            string name,
+            string description,
             decimal unitPrice,
             bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
 
@@ -154,13 +152,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create a charge for the given order
         /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description,
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order,
+            string type,
+            string description,
             decimal amount) => InstantiateOrderCharge(order, type, description, amount);
 
         /// <summary>
         /// Create a note for the given order
         /// </summary>
-        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order,
+            string noteText,
+            DateTime noteDate,
             NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
 
         /// <summary>
@@ -172,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create a payment detail for the given order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
-            => InstantiateOrderPaymentDetail(order, label, value);
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
+            InstantiateOrderPaymentDetail(order, label, value);
     }
 }
