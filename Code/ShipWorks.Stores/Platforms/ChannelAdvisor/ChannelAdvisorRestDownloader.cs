@@ -117,6 +117,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 ChannelAdvisorOrderEntity order =
                     (ChannelAdvisorOrderEntity) InstantiateOrder(new OrderNumberIdentifier(caOrder.ID));
 
+                // Required by order loader
+                order.Store = Store;
+
                 //Order loader loads the order
                 orderLoader.LoadOrder(order, caOrder, this, token);
 

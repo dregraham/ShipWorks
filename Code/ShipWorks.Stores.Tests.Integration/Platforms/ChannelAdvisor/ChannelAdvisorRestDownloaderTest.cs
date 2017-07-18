@@ -54,6 +54,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.StoreName, "Channel Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.ChannelAdvisor)
                 .Set(x => x.RefreshToken = "refreshToken")
+                .Set(x=> x.AttributesToDownload = "<Attributes></Attributes>")
                 .Save();
             
             Create.Entity<StatusPresetEntity>()
@@ -88,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
 
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
-            order = SingleOrder();
+            order = SingleOrder(store);
             firstBatch = new ChannelAdvisorOrderResult()
             {
                 OdataContext = "",
@@ -137,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             Assert.Equal("This is a public note", note.Text);
         }
 
-        private ChannelAdvisorOrder SingleOrder()
+        private ChannelAdvisorOrder SingleOrder(StoreEntity store)
         {
             return new ChannelAdvisorOrder()
             {

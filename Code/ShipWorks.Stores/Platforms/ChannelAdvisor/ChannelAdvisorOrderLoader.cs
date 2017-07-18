@@ -34,10 +34,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Loads the order.
+        /// Loads the order
         /// </summary>
+        /// <remarks>
+        /// Order to save must have store loaded
+        /// </remarks>
         public void LoadOrder(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory, string accessToken)
         {
+            MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
+
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
             orderToSave.OnlineLastModified = downloadedOrder.CreatedDateUtc;
