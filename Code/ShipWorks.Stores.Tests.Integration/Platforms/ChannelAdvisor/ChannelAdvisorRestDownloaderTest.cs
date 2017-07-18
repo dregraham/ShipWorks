@@ -98,8 +98,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 Orders = new List<ChannelAdvisorOrder>() {order}
             };
 
-            this.dbConnection = SqlSession.Current.OpenConnection();
-            testObject = mock.Create<ChannelAdvisorRestDownloader>(new TypedParameter(typeof(StoreEntity), store));
+            dbConnection = SqlSession.Current.OpenConnection();
+            testObject = mock.Create<ChannelAdvisorRestDownloader>(TypedParameter.From<StoreEntity>(store));
         }
 
         [Fact]
