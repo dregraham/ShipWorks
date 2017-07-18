@@ -64,7 +64,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrderSearch] = 3;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.MagentoOrderSearch] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.NetworkSolutionsOrderSearch] = 3;
