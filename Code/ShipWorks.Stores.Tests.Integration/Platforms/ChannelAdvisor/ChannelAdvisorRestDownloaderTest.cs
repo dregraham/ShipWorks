@@ -5,6 +5,7 @@ using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -86,6 +87,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             client = mock.Mock<IChannelAdvisorRestClient>();
             client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
+            client.Setup(c => c.GetAccessToken(It.IsAny<string>())).Returns(GenericResult.FromSuccess("token"));
 
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
