@@ -34,6 +34,5 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             Assert.Contains("a1", parsedAttributes);
             Assert.Contains("a2", parsedAttributes);
         }
-
     }
 }

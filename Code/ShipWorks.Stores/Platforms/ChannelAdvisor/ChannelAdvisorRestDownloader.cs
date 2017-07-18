@@ -30,8 +30,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorRestDownloader(StoreEntity store, IChannelAdvisorRestClient restClient, IEncryptionProviderFactory encryptionProviderFactory,
-        ISqlAdapterRetryFactory sqlAdapterRetryFactory, ChannelAdvisorOrderLoader orderLoader) : base(store)
+        public ChannelAdvisorRestDownloader(StoreEntity store, IChannelAdvisorRestClient restClient,
+            IEncryptionProviderFactory encryptionProviderFactory,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory, ChannelAdvisorOrderLoader orderLoader) : base(store)
         {
             this.restClient = restClient;
             this.orderLoader = orderLoader;
@@ -95,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
-        
+
         /// <summary>
         /// Get orders from the start
         /// </summary>

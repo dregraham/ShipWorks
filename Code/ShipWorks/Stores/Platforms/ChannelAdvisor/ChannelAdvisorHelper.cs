@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Business.Geography;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using log4net;
@@ -111,12 +105,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             // CA will send 001 if they don't know what to do with the region.
             // So we'll just return ""
-            if (region == "001")
-            {
-                return string.Empty;
-            }
-
-            return Geography.GetStateProvCode(region);
+            return region == "001" ? string.Empty : Geography.GetStateProvCode(region);
         }
 
         /// <summary>
