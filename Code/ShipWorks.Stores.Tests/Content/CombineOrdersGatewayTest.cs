@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Content
                 .Mock(x => x.Create())
                 .Object;
 
-            var testObject = mock.Create<CombineOrdersGateway>();
+            var testObject = mock.Create<CombineOrderGateway>();
 
             await testObject.LoadOrders(new[] { 1L, 2L });
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Content
                 .Setup(x => x.LoadOrdersAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ISqlAdapter>()))
                 .ReturnsAsync(new[] { order1, order2 });
 
-            var testObject = mock.Create<CombineOrdersGateway>();
+            var testObject = mock.Create<CombineOrderGateway>();
 
             var results = await testObject.LoadOrders(new[] { 1L, 2L });
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Content
                 .Setup(x => x.LoadOrdersAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ISqlAdapter>()))
                 .ThrowsAsync(new ORMException("Foo"));
 
-            var testObject = mock.Create<CombineOrdersGateway>();
+            var testObject = mock.Create<CombineOrderGateway>();
 
             var results = await testObject.LoadOrders(new[] { 1L, 2L });
 

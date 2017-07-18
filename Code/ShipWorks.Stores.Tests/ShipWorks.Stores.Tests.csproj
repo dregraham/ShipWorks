@@ -173,7 +173,7 @@
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
     <Compile Include="Content\CombineOrdersGatewayTest.cs" />
     <Compile Include="Content\CombineOrdersViewModelTest.cs" />
-    <Compile Include="Content\OrderCombinationOrchestratorTest.cs" />
+    <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersistenceStrategyTest.cs" />

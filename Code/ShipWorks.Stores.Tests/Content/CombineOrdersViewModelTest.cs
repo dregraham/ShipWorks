@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void SurvivingOrder_UpdatesAddress_WhenChanged()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = new OrderEntity
             {
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Content
         [InlineData("123 Main", "Suite 2000", "123 Main, Suite 2000")]
         public void AddressStreet_IsFormmattedCorrectly(string street1, string street2, string expected)
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = new OrderEntity
             {
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Content
         [InlineData("St. Louis", "MO", "63123", "St. Louis, MO 63123")]
         public void AddressCityStateZip_IsFormmattedCorrectly(string city, string state, string zip, string expected)
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = new OrderEntity
             {
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_ThrowsArgumentException_WhenOrdersAreNull()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             Assert.Throws<ArgumentException>(() => testObject.GetCombinationDetailsFromUser(null));
         }
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_ThrowsArgumentException_WhenOrdersAreEmpty()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             Assert.Throws<ArgumentException>(() => testObject.GetCombinationDetailsFromUser(Enumerable.Empty<IOrderEntity>()));
         }
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_SetsOrdersProperty_WhenOrdersAreValid()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderID = x }));
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_SetsNewOrderNumber_BasedOnFirstOrder()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderNumber = x }));
 
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_SetsSurvivingOrder_ToFirstOrder()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             var orders = Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderID = x });
             testObject.GetCombinationDetailsFromUser(orders);
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_SetsAddress_ToFirstOrder()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             var orders = Enumerable.Range(1, 2).Select(x => new OrderEntity { ShipStreet1 = x.ToString() });
             testObject.GetCombinationDetailsFromUser(orders);
@@ -150,10 +150,10 @@ namespace ShipWorks.Stores.Tests.Content
         [InlineData(false, false)]
         public void GetCombinationDetailsFromUser_SetsAllAddressesMatch(bool addressesMatch, bool expected)
         {
-            mock.Mock<IOrderCombineAddressComparer>()
+            mock.Mock<ICombineOrderAddressComparer>()
                 .Setup(x => x.Equals(It.IsAny<PersonAdapter>(), It.IsAny<PersonAdapter>()))
                 .Returns(addressesMatch);
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity()));
 
@@ -163,19 +163,19 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void GetCombinationDetailsFromUser_SetsDataContext_OnDialog()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity()));
 
-            mock.Mock<ICombineOrdersDialog>()
+            mock.Mock<ICombineOrderDialog>()
                 .VerifySet(x => x.DataContext = testObject);
         }
 
         [Fact]
         public void GetCombinationDetailsFromUser_DelegatesToMessageHelper_ToShowDialog()
         {
-            var dialog = mock.Mock<ICombineOrdersDialog>().Object;
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var dialog = mock.Mock<ICombineOrderDialog>().Object;
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity()));
 
@@ -191,7 +191,7 @@ namespace ShipWorks.Stores.Tests.Content
             mock.Mock<IMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<IDialog>()))
                 .Returns(returnValue);
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             var result = testObject.GetCombinationDetailsFromUser(Enumerable.Range(1, 2).Select(x => new OrderEntity()));
 
@@ -205,7 +205,7 @@ namespace ShipWorks.Stores.Tests.Content
             mock.Mock<IMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<IDialog>()))
                 .Returns(true);
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             var orders = Enumerable.Range(1, 2).Select(x => new OrderEntity { OrderID = x, OrderNumber = x });
             var result = testObject.GetCombinationDetailsFromUser(orders);
@@ -218,28 +218,28 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public void ConfirmCombine_SetsDialogResultToTrue()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = mock.Create<IOrderEntity>();
             testObject.NewOrderNumber = "foo";
 
             testObject.ConfirmCombine.Execute(null);
 
-            mock.Mock<ICombineOrdersDialog>()
+            mock.Mock<ICombineOrderDialog>()
                 .VerifySet(x => x.DialogResult = true);
         }
 
         [Fact]
         public void ConfirmCombine_ClosesDialog()
         {
-            var testObject = mock.Create<CombineOrdersViewModel>();
+            var testObject = mock.Create<CombineOrderViewModel>();
 
             testObject.SurvivingOrder = mock.Create<IOrderEntity>();
             testObject.NewOrderNumber = "foo";
 
             testObject.ConfirmCombine.Execute(null);
 
-            mock.Mock<ICombineOrdersDialog>().Verify(x => x.Close());
+            mock.Mock<ICombineOrderDialog>().Verify(x => x.Close());
         }
 
         public void Dispose()

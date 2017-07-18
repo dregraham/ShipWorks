@@ -2902,7 +2902,7 @@ namespace ShipWorks
                 {
                     DisableCustomEnablerComponents();
 
-                    IOrderCombinationOrchestrator orchestrator = lifetimeScope.Resolve<IOrderCombinationOrchestrator>();
+                    ICombineOrderOrchestrator orchestrator = lifetimeScope.Resolve<ICombineOrderOrchestrator>();
                     GenericResult<long> result = await orchestrator.Combine(gridControl.Selection.OrderedKeys);
 
                     if (result.Success)

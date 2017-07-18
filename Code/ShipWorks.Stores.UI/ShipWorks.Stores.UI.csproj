@@ -133,13 +133,13 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="Content\CombineOrdersDialog.xaml.cs">
-      <DependentUpon>CombineOrdersDialog.xaml</DependentUpon>
+    <Compile Include="Content\CombineOrderDialog.xaml.cs">
+      <DependentUpon>CombineOrderDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Content\DesignModeCombineOrderViewModel.cs" />
-    <Compile Include="Content\DesignModeOrderCombinationSuccessViewModel.cs" />
-    <Compile Include="Content\OrderCombinationSuccessDialog.xaml.cs">
-      <DependentUpon>OrderCombinationSuccessDialog.xaml</DependentUpon>
+    <Compile Include="Content\DesignModeCombineOrderSuccessViewModel.cs" />
+    <Compile Include="Content\CombineOrderSuccessDialog.xaml.cs">
+      <DependentUpon>CombineOrderSuccessDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
@@ -588,11 +588,11 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Content\CombineOrdersDialog.xaml">
+    <Page Include="Content\CombineOrderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Content\OrderCombinationSuccessDialog.xaml">
+    <Page Include="Content\CombineOrderSuccessDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

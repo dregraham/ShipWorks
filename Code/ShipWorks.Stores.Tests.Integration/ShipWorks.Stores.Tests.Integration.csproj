@@ -158,12 +158,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Content\OrderCombinerTest.cs" />
+    <Compile Include="Content\CombineOrderTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
-    <Compile Include="Content\CombineOrdersGatewayTest.cs" />
+    <Compile Include="Content\CombineOrderGatewayTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />

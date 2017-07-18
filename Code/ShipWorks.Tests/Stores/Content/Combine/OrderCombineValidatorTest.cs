@@ -13,18 +13,18 @@ namespace ShipWorks.Tests.Stores.Content.Combine
     public class OrderCombineValidatorTest : IDisposable
     {
         private AutoMock mock;
-        private OrderCombineValidator testObject;
+        private CombineOrderValidator testObject;
 
         public OrderCombineValidatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<OrderCombineValidator>();
+            testObject = mock.Create<CombineOrderValidator>();
 
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
                 .Returns(true);
 
-            mock.Mock<ICombineOrdersGateway>()
+            mock.Mock<ICombineOrderGateway>()
                 .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
                 .Returns(true);
         }
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
                 .Returns(false);
 
-            var testObject = mock.Create<OrderCombineValidator>();
+            var testObject = mock.Create<CombineOrderValidator>();
             var result = testObject.Validate(new long[] { 1, 2 });
 
             Assert.True(result.Failure);
@@ -66,11 +66,11 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         [Fact]
         public void Validate_ReturnFalse_WhenOrderCanNotBeCombined()
         {
-            mock.Mock<ICombineOrdersGateway>()
+            mock.Mock<ICombineOrderGateway>()
                 .Setup(x => x.CanCombine(It.IsAny<IStoreEntity>(), It.IsAny<IEnumerable<long>>()))
                 .Returns(false);
 
-            var testObject = mock.Create<OrderCombineValidator>();
+            var testObject = mock.Create<CombineOrderValidator>();
             var result = testObject.Validate(new long[] { 1, 2 });
 
             Assert.False(result.Success);
