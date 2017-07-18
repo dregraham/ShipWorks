@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IEnumerable<string> attributesToDownload)
         {
             ChannelAdvisorProduct product = webClient.GetProduct(downloadedItem.ProductID, accessToken);
-            LoadProductDetails(itemToSave, product, orderElementFactory);
+            LoadProductDetails(itemToSave, product);
             LoadProductAttributes(itemToSave, product, orderElementFactory, attributesToDownload);
         }
 
@@ -180,8 +180,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         /// <param name="itemToSave">The item to save.</param>
         /// <param name="product">The product.</param>
-        /// <param name="orderElementFactory">The order element factory.</param>
-        private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product, IOrderElementFactory orderElementFactory)
+        private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product)
         {
             itemToSave.Weight = (double) product.Weight;
             itemToSave.Location = product.WarehouseLocation;
@@ -210,28 +209,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             if (!downloadedOrder.TotalTaxPrice.IsEquivalentTo(0))
             {
                 // Total tax price includes shipping tax and gift wrap tax, so no need to load them
-                orderElementFactory.CreateCharge(orderToSave, "Sales Tax", "TAX", downloadedOrder.TotalTaxPrice);
+                orderElementFactory.CreateCharge(orderToSave, "TAX", "Sales Tax",  downloadedOrder.TotalTaxPrice);
             }
 
             if (!downloadedOrder.TotalShippingPrice.IsEquivalentTo(0))
             {
-                orderElementFactory.CreateCharge(orderToSave, "Shipping", "SHIPPING", downloadedOrder.TotalShippingPrice);
+                orderElementFactory.CreateCharge(orderToSave, "SHIPPING", "Shipping",  downloadedOrder.TotalShippingPrice);
             }
 
             if (!downloadedOrder.TotalInsurancePrice.IsEquivalentTo(0))
             {
-                orderElementFactory.CreateCharge(orderToSave, "Shipping Insurance", "INSURANCE", downloadedOrder.TotalInsurancePrice);
+                orderElementFactory.CreateCharge(orderToSave, "INSURANCE", "Shipping Insurance",  downloadedOrder.TotalInsurancePrice);
             }
 
             if (!downloadedOrder.TotalGiftOptionPrice.IsEquivalentTo(0))
             {
-                orderElementFactory.CreateCharge(orderToSave, "Gift Wrap", "GIFT WRAP", downloadedOrder.TotalGiftOptionPrice);
+                orderElementFactory.CreateCharge(orderToSave, "GIFT WRAP", "Gift Wrap",  downloadedOrder.TotalGiftOptionPrice);
             }
 
             if (!downloadedOrder.AdditionalCostOrDiscount.IsEquivalentTo(0))
             {
-                orderElementFactory.CreateCharge(orderToSave, "Additional Cost or Discount",
-                    "ADDITIONAL COST OR DISCOUNT", downloadedOrder.AdditionalCostOrDiscount);
+                orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount",
+                    downloadedOrder.AdditionalCostOrDiscount);
             }
         }
 
