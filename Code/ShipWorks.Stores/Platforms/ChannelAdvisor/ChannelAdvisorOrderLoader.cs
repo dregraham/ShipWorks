@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
             orderToSave.OnlineLastModified = downloadedOrder.CreatedDateUtc;
             orderToSave.CustomOrderIdentifier = downloadedOrder.SiteOrderID;
-            
+
             LoadOrderStatuses(orderToSave, downloadedOrder);
             LoadOrderFlag(orderToSave, downloadedOrder);
             LoadAddresses(orderToSave, downloadedOrder);
@@ -138,7 +138,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Appear in SOAP, but not REST
             // IsFBA, should be wrapped up in DC stuff
-            // UnitWeight.UnitOfMeasure, default is lbs for US profiles, KG all else, so we could hook into that
             // SalesSourceID
             // UserName
         }
@@ -182,7 +181,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="product">The product.</param>
         private void LoadProductDetails(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorProduct product)
         {
-            itemToSave.Weight = (double) product.Weight;
+            // Default unit of measure for US profiles is pounds, kilograms for everything else
+            itemToSave.Weight = itemToSave.Order.Store.CountryCode.ToUpperInvariant() == "US" ?
+                Convert.ToDouble(product.Weight) :
+                Convert.ToDouble(product.Weight.ConvertFromKilogramsToPounds());
+
             itemToSave.Location = product.WarehouseLocation;
             itemToSave.Classification = product.Classification;
             itemToSave.UnitCost = product.Cost;

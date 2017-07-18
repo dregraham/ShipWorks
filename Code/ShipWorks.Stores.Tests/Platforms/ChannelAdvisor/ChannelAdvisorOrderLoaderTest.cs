@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Import;
@@ -18,6 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
     public class ChannelAdvisorOrderLoaderTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly ChannelAdvisorStoreEntity store;
         private readonly ChannelAdvisorOrderEntity orderToSave;
         private readonly ChannelAdvisorOrder downloadedOrder;
         private readonly Mock<IOrderElementFactory> orderElementFactory;
@@ -29,13 +31,22 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            orderToSave = new ChannelAdvisorOrderEntity();
             downloadedOrder = new ChannelAdvisorOrder();
             downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>();
             downloadedOrder.Items = new List<ChannelAdvisorOrderItem>();
             orderElementFactory = mock.Mock<IOrderElementFactory>();
             channelAdvisorRestClient = mock.Mock<IChannelAdvisorRestClient>();
             testObject = mock.Create<ChannelAdvisorOrderLoader>();
+
+            store = new ChannelAdvisorStoreEntity()
+            {
+                CountryCode = "US"
+            };
+
+            orderToSave = new ChannelAdvisorOrderEntity()
+            {
+                Store = store
+            };
 
             downloadedProduct = new ChannelAdvisorProduct()
             {
@@ -188,7 +199,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 .Returns(45.73M);
 
             CallLoadOrder();
-            
+
             Assert.Equal(45.73M, orderToSave.OrderTotal);
         }
 
@@ -986,13 +997,25 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void LoadOrder_SetsProductWeight()
+        public void LoadOrder_SetsProductWeightInPounds_WhenStoreCountryIsUS()
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
             downloadedProduct.Weight = 11.2m;
 
             CallLoadOrder();
             Assert.Equal(11.2, orderToSave.OrderItems.Single().Weight);
+        }
+
+        [Fact]
+        public void LoadOrder_ConvertsProductWeightToPounds_WhenStoreCountryIsNotUS()
+        {
+            store.CountryCode = "UK";
+
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedProduct.Weight = 11.2m;
+
+            CallLoadOrder();
+            Assert.Equal(Convert.ToDouble(11.2m.ConvertFromKilogramsToPounds()), orderToSave.OrderItems.Single().Weight);
         }
 
         [Fact]

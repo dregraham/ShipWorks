@@ -13,5 +13,9 @@ namespace Interapptive.Shared.Extensions
         public static bool IsEquivalentTo(this decimal value, decimal number) =>
             Math.Abs(value - number) < .001M;
 
+        /// <summary>
+        /// Converts the value in kilograms to pounds.
+        /// </summary>
+        public static decimal ConvertFromKilogramsToPounds(this decimal value) => value * 2.20462262m;
     }
 }
