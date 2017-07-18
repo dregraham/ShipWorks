@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using RestSharp;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -53,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             try
             {
-                string token = restClient.GetAccessToken(refreshToken);
+                string token = GetAccessToken(restClient);
 
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
@@ -80,7 +81,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         LoadOrder(caOrder, token);
                     }
 
-                    token = restClient.GetAccessToken(refreshToken);
+                    token = GetAccessToken(restClient);
+
                     ordersResult = GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
                 }
             }
@@ -97,6 +99,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.Detail = "Done";
         }
 
+        /// <summary>
+        /// Get the access token
+        /// </summary>
+        private string GetAccessToken(IChannelAdvisorRestClient client)
+        {
+            GenericResult<string> tokenreResult = client.GetAccessToken(refreshToken);
+
+            if (tokenreResult.Failure)
+            {
+                throw new DownloadException(tokenreResult.Message);
+            }
+
+            return tokenreResult.Value;
+        }
+        
         /// <summary>
         /// Get orders from the start
         /// </summary>

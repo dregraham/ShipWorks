@@ -3,6 +3,7 @@ using System.Text;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
@@ -45,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the refresh token.
         /// </summary>
-        public string GetRefreshToken(string code, string redirectUrl)
+        public GenericResult<string> GetRefreshToken(string code, string redirectUrl)
         {
             IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
 
@@ -58,16 +59,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (string.IsNullOrWhiteSpace(response.RefreshToken))
             {
-                throw new ChannelAdvisorException("Response did not contain a refresh token.");
+                return GenericResult.FromError<string>("Response did not contain a refresh token.");
             }
 
-            return response.RefreshToken;
+            return GenericResult.FromSuccess(response.RefreshToken);
         }
 
         /// <summary>
         /// Get the access token given a refresh token
         /// </summary>
-        public string GetAccessToken(string refreshToken)
+        public GenericResult<string> GetAccessToken(string refreshToken)
         {
             IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
 
@@ -79,10 +80,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (string.IsNullOrWhiteSpace(response.AccessToken))
             {
-                throw new ChannelAdvisorException("Response did not contain an access token.");
+                return GenericResult.FromError<string>("Response did not contain an access token.");
             }
 
-            return response.AccessToken;
+            return GenericResult.FromSuccess(response.AccessToken);
         }
 
         /// <summary>
@@ -176,9 +177,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             try
             {
-                string authHeader =
-                    $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ChannelAdvisorStoreType.ApplicationID}:{encryptionProvider.Decrypt(EncryptedSharedSecret)}"))}";
-                request.Headers.Add("Authorization", authHeader);
+                string appId = ChannelAdvisorStoreType.ApplicationID;
+                string sharedSecret = encryptionProvider.Decrypt(EncryptedSharedSecret);
+                string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{appId}:{sharedSecret}"));
+
+                request.Headers.Add("Authorization", $"Basic {auth}");
             }
             catch (EncryptionException ex)
             {

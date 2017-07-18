@@ -71,11 +71,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void GetRefreshToken_SetsCorrectAuthorization()
         {
-            var encryptionProvider = mock.Mock<IEncryptionProvider>();
-            encryptionProvider.Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=")).Returns("Preb8E42ckWZZpFHh6OV2w");
-            mock.Mock<IEncryptionProviderFactory>()
-                .Setup(f => f.CreateChannelAdvisorEncryptionProvider())
-                .Returns(encryptionProvider);
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(f => f.CreateChannelAdvisorEncryptionProvider())
+                .Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4="))
+                .Returns("Preb8E42ckWZZpFHh6OV2w");
 
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetRefreshToken("blah", "https%3A%2F%2Fwww.interapptive.com%2Fchanneladvisor%2Fsubscribe.php");
@@ -129,9 +128,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_ReturnsRefreshToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            string refreshToken = testObject.GetRefreshToken("blah", "blah");
+            var refreshToken = testObject.GetRefreshToken("blah", "blah");
 
-            Assert.Equal("rtoken", refreshToken);
+            Assert.Equal("rtoken", refreshToken.Value);
         }
 
         [Fact]
@@ -218,11 +217,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void GetAccessToken_SetsCorrectAuthorization()
         {
-            var encryptionProvider = mock.Mock<IEncryptionProvider>();
-            encryptionProvider.Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=")).Returns("Preb8E42ckWZZpFHh6OV2w");
-            mock.Mock<IEncryptionProviderFactory>()
-                .Setup(f => f.CreateChannelAdvisorEncryptionProvider())
-                .Returns(encryptionProvider);
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(f => f.CreateChannelAdvisorEncryptionProvider())
+                .Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4="))
+                .Returns("Preb8E42ckWZZpFHh6OV2w");
 
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetAccessToken("blah");
@@ -264,9 +262,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetAccessToken_ReturnsRefreshToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            string refreshToken = testObject.GetAccessToken("blah");
+            var refreshToken = testObject.GetAccessToken("blah");
 
-            Assert.Equal("atoken", refreshToken);
+            Assert.Equal("atoken", refreshToken.Value);
         }
 
         [Fact]
