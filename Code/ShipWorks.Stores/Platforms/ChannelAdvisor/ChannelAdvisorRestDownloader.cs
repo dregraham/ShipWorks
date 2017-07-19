@@ -55,8 +55,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             try
             {
-                string token = GetAccessToken(restClient);
-
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
@@ -65,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, token);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, refreshToken);
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
@@ -80,14 +78,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         // Get the products for the order to pass into the loader
-                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, token)).ToList();
+                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
 
                         LoadOrder(caOrder, caProducts);
                     }
-
-                    token = GetAccessToken(restClient);
-
-                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, token);
+                    
+                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -101,21 +97,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
-        }
-
-        /// <summary>
-        /// Get the access token
-        /// </summary>
-        private string GetAccessToken(IChannelAdvisorRestClient client)
-        {
-            GenericResult<string> tokenreResult = client.GetAccessToken(refreshToken);
-
-            if (tokenreResult.Failure)
-            {
-                throw new DownloadException(tokenreResult.Message);
-            }
-
-            return tokenreResult.Value;
         }
 
         /// <summary>

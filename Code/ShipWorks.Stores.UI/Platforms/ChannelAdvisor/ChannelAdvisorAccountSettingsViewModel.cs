@@ -128,8 +128,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void UpdateStoreInfo(ChannelAdvisorStoreEntity store, string refreshToken)
         {
-            string accessToken = webClient.GetAccessToken(refreshToken).Value;
-            ChannelAdvisorProfile profile = webClient.GetProfiles(accessToken)?.Profiles?.First();
+            ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.First();
 
             store.ProfileID = profile?.ProfileId ?? 0;
             store.StoreName = profile?.AccountName ?? string.Empty;

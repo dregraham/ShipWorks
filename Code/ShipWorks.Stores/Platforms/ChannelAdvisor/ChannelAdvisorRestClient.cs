@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -13,9 +14,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Web client for interacting with ChannelAdvisors REST API
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
+        private readonly LruCache<string, string> accessTokenCache;
+
         private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
@@ -41,6 +44,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
+
+            accessTokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
         }
 
         /// <summary>
@@ -68,8 +73,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the access token given a refresh token
         /// </summary>
-        public GenericResult<string> GetAccessToken(string refreshToken)
+        private string GetAccessToken(string refreshToken)
         {
+            if (accessTokenCache.Contains(refreshToken))
+            {
+                return accessTokenCache[refreshToken];
+            }
+            
             IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
 
             submitter.Variables.Add("grant_type", "refresh_token");
@@ -80,17 +90,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (string.IsNullOrWhiteSpace(response.AccessToken))
             {
-                return GenericResult.FromError<string>("Response did not contain an access token.");
+                throw new ChannelAdvisorException("Response did not contain an access token.");
             }
 
-            return GenericResult.FromSuccess(response.AccessToken);
+            accessTokenCache[refreshToken] = response.AccessToken;
+
+            return response.AccessToken;
         }
 
         /// <summary>
         /// Get profile info for the given token
         /// </summary>
-        public ChannelAdvisorProfilesResponse GetProfiles(string accessToken)
+        public ChannelAdvisorProfilesResponse GetProfiles(string refreshToken)
         {
+            string accessToken = GetAccessToken(refreshToken);
+
             IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", accessToken);
@@ -101,8 +115,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken)
+        public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
         {
+            string accessToken = GetAccessToken(refreshToken);
+
             IHttpVariableRequestSubmitter submitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", accessToken);
@@ -118,8 +134,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get detailed product information from ChannelAdvisor with the given product ID
         /// </summary>
-        public ChannelAdvisorProduct GetProduct(int productID, string accessToken)
+        public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
         {
+            string accessToken = GetAccessToken(refreshToken);
+
             IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
 
             submitter.Variables.Add("access_token", accessToken);
