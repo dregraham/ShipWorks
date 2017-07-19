@@ -316,7 +316,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
 
             // Get the order total from the xml
-            decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m);
+            decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m, true);
 
             // If this order does not have sub orders, set the order total to that which we received from 3dcart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment
