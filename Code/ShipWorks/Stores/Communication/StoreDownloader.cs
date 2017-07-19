@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -248,6 +249,9 @@ namespace ShipWorks.Stores.Communication
             return GenericResult.FromSuccess(order);
         }
 
+        /// <summary>
+        /// Create an order for the given order identifier.
+        /// </summary>
         private OrderEntity CreateOrder(OrderIdentifier orderIdentifier)
         {
             log.Debug($"{orderIdentifier} not found, creating");
@@ -268,13 +272,15 @@ namespace ShipWorks.Stores.Communication
             PersonAdapter.ApplyDefaults(order, "Bill");
             PersonAdapter.ApplyDefaults(order, "Ship");
 
-            // Rollup defaults
+            // Roll-up defaults
             order.RollupNoteCount = 0;
             order.RollupItemCount = 0;
             order.RollupItemTotalWeight = 0;
 
             order.ShipSenseHashKey = string.Empty;
             order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
+
+            order.CombineSplitStatus = CombineSplitStatusType.None;
 
             return order;
         }

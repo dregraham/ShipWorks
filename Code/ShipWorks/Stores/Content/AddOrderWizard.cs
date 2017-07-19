@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
@@ -61,6 +62,8 @@ namespace ShipWorks.Stores.Content
 
             order.BillCountryCode = "US";
             order.ShipCountryCode = "US";
+
+            order.CombineSplitStatus = CombineSplitStatusType.None;
 
             radioOrderNumberGenerate.Checked = true;
 
