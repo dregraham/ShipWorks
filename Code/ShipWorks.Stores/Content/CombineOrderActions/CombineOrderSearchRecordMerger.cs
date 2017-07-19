@@ -11,7 +11,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Content.OrderCombinerActions
+namespace ShipWorks.Stores.Content.CombineOrderActions
 {
     /// <summary>
     /// Perform the merge of the search records

@@ -6,7 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Content.OrderCombinerActions
+namespace ShipWorks.Stores.Content.CombineOrderActions
 {
     /// <summary>
     /// Perform store specific order combination

@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Stores.Content.OrderCombinerActions
+namespace ShipWorks.Stores.Content.CombineOrderActions
 {
     /// <summary>
     /// Create search records for the orders

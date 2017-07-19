@@ -11,7 +11,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content.OrderCombinerActions;
+using ShipWorks.Stores.Content.CombineOrderActions;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Content

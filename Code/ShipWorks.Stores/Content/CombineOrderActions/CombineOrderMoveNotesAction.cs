@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Stores.Content.OrderCombinerActions
+namespace ShipWorks.Stores.Content.CombineOrderActions
 {
     public class CombineOrderMoveNotesAction : ICombineOrderAction
     {

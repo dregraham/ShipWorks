@@ -6,7 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content.OrderCombinerActions;
+using ShipWorks.Stores.Content.CombineOrderActions;
 
 namespace ShipWorks.Stores.Platforms.Magento.Content
 {

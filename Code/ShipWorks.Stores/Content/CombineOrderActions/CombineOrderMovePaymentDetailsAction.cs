@@ -8,7 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Stores.Content.OrderCombinerActions
+namespace ShipWorks.Stores.Content.CombineOrderActions
 {
     /// <summary>
     /// Move payment details from a list of orders to the combined order

@@ -5,7 +5,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.OrderCombinerActions;
+using ShipWorks.Stores.Content.CombineOrderActions;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.Content
 {
