@@ -903,13 +903,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void LoadOrder_SiteOrderItemIDIsSet()
+        public void LoadOrder_MarketPlaceNameIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { SiteOrderItemID = "SO1"});
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+
+            downloadedOrder.SiteName = "site name";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal(downloadedOrder.Items[0].SiteOrderItemID,
+            Assert.Equal("site name",
                 ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems[0]).MarketplaceName);
         }
 
