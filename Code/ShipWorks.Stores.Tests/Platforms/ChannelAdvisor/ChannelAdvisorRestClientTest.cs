@@ -186,9 +186,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetOrders(DateTime.UtcNow, "token");
 
-            submitter.Verify(s => s.Variables.Add("access_token", "token"));
+            submitter.Verify(s => s.Variables.Add("access_token", "atoken"));
         }
-        
+
+        [Fact]
+        public void GetOrders_UsesCachedAccessToken()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            
+            submitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
+        }
+
         [Fact]
         public void GetProfiles_UsesProfilesEndpoint()
         {
