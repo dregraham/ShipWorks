@@ -4,8 +4,10 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using Xunit;
 using It = Moq.It;
 
@@ -195,7 +197,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetOrders(DateTime.UtcNow, "token");
             testObject.GetOrders(DateTime.UtcNow, "token");
-            
+
             submitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
         }
 
@@ -206,6 +208,38 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.GetProfiles("blah");
             submitter.VerifySet(s => s.Uri =
                 It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Profiles"));
+        }
+
+        [Fact]
+        public void UploadShipmentDetails_UsesShipmentEndpoint()
+        {
+            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
+
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+
+            testObject.UploadShipmentDetails(shipment, "refresh", "1");
+            submitter.VerifySet(s => s.Uri =
+                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Orders(1)/Ship/?access_token=atoken"));
+        }
+
+        [Fact]
+        public void UploadShipmentDetails_SetsPostContentToShipment()
+        {
+            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment()
+            {
+                DeliveryStatus = "Shipped",
+                DistributionCenterID = 0,
+                SellerFulfillmentID = "111",
+                ShippedDateUtc = new DateTime(2017, 7, 19),
+                ShippingCarrier = "UPS",
+                ShippingClass = "Ground",
+                TrackingNumber = "12345"
+            };
+
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.UploadShipmentDetails(shipment, "token", "1");
+
+            submitter.Verify(s => s.Variables.Add("Value", JsonConvert.SerializeObject(shipment)), Times.Once);
         }
 
         public void Dispose()

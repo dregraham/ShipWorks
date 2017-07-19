@@ -1,6 +1,5 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -33,6 +32,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UploadShipmentDetails(ChannelAdvisorShipment shipment, string refreshToken);
+        void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment, string refreshToken, string channelAdvisorOrderID);
     }
 }

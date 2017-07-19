@@ -7,6 +7,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 return accessTokenCache[refreshToken];
             }
-            
+
             IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
 
             submitter.Variables.Add("grant_type", "refresh_token");
@@ -144,6 +145,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
             return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct");
+        }
+
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        public void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment, string refreshToken, string channelAdvisorOrderID)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest($"{ordersEndpoint}({channelAdvisorOrderID})/Ship/?access_token={GetAccessToken(refreshToken)}", HttpVerb.Post);
+
+            string shipment;
+            try
+            {
+                shipment = JsonConvert.SerializeObject(channelAdvisorShipment);
+            }
+            catch (Newtonsoft.Json.JsonException ex)
+            {
+                throw new ChannelAdvisorException("Error creating ChannelAdvisor shipment request.", ex);
+            }
+
+            submitter.Variables.Add("Value", shipment);
+
+            ProcessRequest<ChannelAdvisorShipment>(submitter, "UploadShipmentDetails");
         }
 
         /// <summary>
