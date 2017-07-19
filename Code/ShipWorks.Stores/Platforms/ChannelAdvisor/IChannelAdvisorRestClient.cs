@@ -29,5 +29,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the product.
         /// </summary>
         ChannelAdvisorProduct GetProduct(int productID, string refreshToken);
+
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        void UploadShipmentDetails(ChannelAdvisorShipment shipment, string refreshToken);
     }
 }
