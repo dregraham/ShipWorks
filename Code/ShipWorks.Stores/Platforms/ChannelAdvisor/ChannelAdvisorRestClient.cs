@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -61,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
 
             ChannelAdvisorOAuthResponse response =
-                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetRefreshToken");
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetRefreshToken", string.Empty);
 
             if (string.IsNullOrWhiteSpace(response.RefreshToken))
             {
@@ -74,9 +75,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the access token given a refresh token
         /// </summary>
-        private string GetAccessToken(string refreshToken)
+        private string GetAccessToken(string refreshToken, bool generateNewToken = false)
         {
-            if (accessTokenCache.Contains(refreshToken))
+            if (accessTokenCache.Contains(refreshToken) && !generateNewToken)
             {
                 return accessTokenCache[refreshToken];
             }
@@ -87,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("refresh_token", refreshToken);
 
             ChannelAdvisorOAuthResponse response =
-                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetAccessToken");
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetAccessToken", refreshToken, false);
 
             if (string.IsNullOrWhiteSpace(response.AccessToken))
             {
@@ -104,13 +105,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorProfilesResponse GetProfiles(string refreshToken)
         {
-            string accessToken = GetAccessToken(refreshToken);
-
             IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
 
-            submitter.Variables.Add("access_token", accessToken);
+            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
 
-            return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles");
+            return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles", refreshToken);
         }
 
         /// <summary>
@@ -118,18 +117,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
         {
-            string accessToken = GetAccessToken(refreshToken);
-
             IHttpVariableRequestSubmitter submitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
-            submitter.Variables.Add("access_token", accessToken);
+            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
 
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
             submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
             submitter.Variables.Add("$count", "true");
             submitter.Variables.Add("$expand", "Fulfillments,Items");
 
-            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
+            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
         }
 
         /// <summary>
@@ -137,14 +134,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
         {
-            string accessToken = GetAccessToken(refreshToken);
-
             IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
 
-            submitter.Variables.Add("access_token", accessToken);
+            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
-            return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct");
+            return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
         }
 
         /// <summary>
@@ -166,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             submitter.Variables.Add("Value", shipment);
 
-            ProcessRequest<ChannelAdvisorShipment>(submitter, "UploadShipmentDetails");
+            ProcessRequest<ChannelAdvisorShipment>(submitter, "UploadShipmentDetails", refreshToken);
         }
 
         /// <summary>
@@ -187,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private T ProcessRequest<T>(IHttpRequestSubmitter request, string action)
+        private T ProcessRequest<T>(IHttpVariableRequestSubmitter request, string action, string refreshToken, bool generateNewTokenIfExpired = true)
         {
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, action);
             apiLogEntry.LogRequest(request);
@@ -204,6 +199,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 });
             }
+            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
+            {
+                apiLogEntry.LogResponse(ex);
+                return RetryRequestWithNewToken<T>(request, action, refreshToken);
+            }
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
@@ -211,6 +211,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
+        /// <summary>
+        /// Retry the request with a new access token
+        /// </summary>
+        private T RetryRequestWithNewToken<T>(IHttpVariableRequestSubmitter request, string action, string refreshToken)
+        {
+            request.Variables.Remove("access_token");
+            request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
+            
+            return ProcessRequest<T>(request, action, refreshToken, false);
+        }
+
+        
         /// <summary>
         /// Gets the authorization header value.
         /// </summary>
