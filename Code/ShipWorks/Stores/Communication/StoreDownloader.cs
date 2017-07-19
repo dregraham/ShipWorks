@@ -421,12 +421,12 @@ namespace ShipWorks.Stores.Communication
             IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
 
             QueryFactory factory = new QueryFactory();
-            DynamicQuery query = factory.Create()
+            DynamicQuery query = factory.Note
                 .Select(Functions.CountRow())
                 .From(relationPredicateBucket.Relations)
                 .Where(relationPredicateBucket.PredicateExpression)
                 .AndWhere(NoteFields.Text == noteText)
-                .AndWhere(NoteFields.Source != (int) NoteSource.Downloaded);
+                .AndWhere(NoteFields.Source == (int) NoteSource.Downloaded);
 
             int? count = await SqlAdapter.Default.FetchScalarAsync<int?>(query).ConfigureAwait(false);
             return count.GetValueOrDefault() > 0;

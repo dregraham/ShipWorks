@@ -430,13 +430,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 totalCount++;
             }
 
+            lastModifiedOrderDateProcessed = order.OnlineLastModified;
+
             //Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartSoapDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-
-            lastModifiedOrderDateProcessed = order.OnlineLastModified;
         }
-
+        
         /// <summary>
         /// Creates a 3dcart order identifier for the current order
         /// </summary>
