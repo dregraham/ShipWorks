@@ -6392,75 +6392,75 @@ ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [PK_YahooOrderSearch] PRIMAR
 GO
 PRINT N'Adding foreign keys to [dbo].[AmazonOrderSearch]'
 GO
-ALTER TABLE [dbo].[AmazonOrderSearch] ADD CONSTRAINT [FK_AmazonOrderSearch_AmazonOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[AmazonOrder] ([OrderID])
+ALTER TABLE [dbo].[AmazonOrderSearch] ADD CONSTRAINT [FK_AmazonOrderSearch_AmazonOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[AmazonOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorOrderSearch]'
 GO
-ALTER TABLE [dbo].[ChannelAdvisorOrderSearch] ADD CONSTRAINT [FK_ChannelAdvisorOrderSearch_ChannelAdvisorOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ChannelAdvisorOrder] ([OrderID])
+ALTER TABLE [dbo].[ChannelAdvisorOrderSearch] ADD CONSTRAINT [FK_ChannelAdvisorOrderSearch_ChannelAdvisorOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ChannelAdvisorOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[ClickCartProOrderSearch]'
 GO
-ALTER TABLE [dbo].[ClickCartProOrderSearch] ADD CONSTRAINT [FK_ClickCartProOrderSearch_ClickCartProOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ClickCartProOrder] ([OrderID])
+ALTER TABLE [dbo].[ClickCartProOrderSearch] ADD CONSTRAINT [FK_ClickCartProOrderSearch_ClickCartProOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ClickCartProOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[CommerceInterfaceOrderSearch]'
 GO
-ALTER TABLE [dbo].[CommerceInterfaceOrderSearch] ADD CONSTRAINT [FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[CommerceInterfaceOrder] ([OrderID])
+ALTER TABLE [dbo].[CommerceInterfaceOrderSearch] ADD CONSTRAINT [FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[CommerceInterfaceOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[EbayOrderSearch]'
 GO
-ALTER TABLE [dbo].[EbayOrderSearch] ADD CONSTRAINT [FK_EbayOrderSearch_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID])
+ALTER TABLE [dbo].[EbayOrderSearch] ADD CONSTRAINT [FK_EbayOrderSearch_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[GrouponOrderSearch]'
 GO
-ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [FK_GrouponOrderSearch_GrouponOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[GrouponOrder] ([OrderID])
+ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [FK_GrouponOrderSearch_GrouponOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[GrouponOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[LemonStandOrderSearch]'
 GO
-ALTER TABLE [dbo].[LemonStandOrderSearch] ADD CONSTRAINT [FK_LemonStandOrderSearch_LemonStandOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[LemonStandOrder] ([OrderID])
+ALTER TABLE [dbo].[LemonStandOrderSearch] ADD CONSTRAINT [FK_LemonStandOrderSearch_LemonStandOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[LemonStandOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[MagentoOrderSearch]'
 GO
-ALTER TABLE [dbo].[MagentoOrderSearch] ADD CONSTRAINT [FK_MagentoOrderSearch_MagentoOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[MagentoOrder] ([OrderID])
+ALTER TABLE [dbo].[MagentoOrderSearch] ADD CONSTRAINT [FK_MagentoOrderSearch_MagentoOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[MagentoOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorOrderSearch]'
 GO
-ALTER TABLE [dbo].[MarketplaceAdvisorOrderSearch] ADD CONSTRAINT [FK_MarketplaceAdvisorOrderSearch_MarketplaceAdvisorOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[MarketplaceAdvisorOrder] ([OrderID])
+ALTER TABLE [dbo].[MarketplaceAdvisorOrderSearch] ADD CONSTRAINT [FK_MarketplaceAdvisorOrderSearch_MarketplaceAdvisorOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[MarketplaceAdvisorOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[NetworkSolutionsOrderSearch]'
 GO
-ALTER TABLE [dbo].[NetworkSolutionsOrderSearch] ADD CONSTRAINT [FK_NetworkSolutionsOrderSearch_NetworkSolutionsOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[NetworkSolutionsOrder] ([OrderID])
+ALTER TABLE [dbo].[NetworkSolutionsOrderSearch] ADD CONSTRAINT [FK_NetworkSolutionsOrderSearch_NetworkSolutionsOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[NetworkSolutionsOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[OrderMotionOrderSearch]'
 GO
-ALTER TABLE [dbo].[OrderMotionOrderSearch] ADD CONSTRAINT [FK_OrderMotionOrderSearch_OrderMotionOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[OrderMotionOrder] ([OrderID])
+ALTER TABLE [dbo].[OrderMotionOrderSearch] ADD CONSTRAINT [FK_OrderMotionOrderSearch_OrderMotionOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[OrderMotionOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[PayPalOrderSearch]'
 GO
-ALTER TABLE [dbo].[PayPalOrderSearch] ADD CONSTRAINT [FK_PayPalOrderSearch_PayPalOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[PayPalOrder] ([OrderID])
+ALTER TABLE [dbo].[PayPalOrderSearch] ADD CONSTRAINT [FK_PayPalOrderSearch_PayPalOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[PayPalOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[ProStoresOrderSearch]'
 GO
-ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [FK_ProStoresOrderSearch_ProStoresOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ProStoresOrder] ([OrderID])
+ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [FK_ProStoresOrderSearch_ProStoresOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ProStoresOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[SearsOrderSearch]'
 GO
-ALTER TABLE [dbo].[SearsOrderSearch] ADD CONSTRAINT [FK_SearsOrderSearch_SearsOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[SearsOrder] ([OrderID])
+ALTER TABLE [dbo].[SearsOrderSearch] ADD CONSTRAINT [FK_SearsOrderSearch_SearsOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[SearsOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[ShopifyOrderSearch]'
 GO
-ALTER TABLE [dbo].[ShopifyOrderSearch] ADD CONSTRAINT [FK_ShopifyOrderSearch_ShopifyOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ShopifyOrder] ([OrderID])
+ALTER TABLE [dbo].[ShopifyOrderSearch] ADD CONSTRAINT [FK_ShopifyOrderSearch_ShopifyOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ShopifyOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[ThreeDCartOrderSearch]'
 GO
-ALTER TABLE [dbo].[ThreeDCartOrderSearch] ADD CONSTRAINT [FK_ThreeDCartOrderSearch_ThreeDCartOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ThreeDCartOrder] ([OrderID])
+ALTER TABLE [dbo].[ThreeDCartOrderSearch] ADD CONSTRAINT [FK_ThreeDCartOrderSearch_ThreeDCartOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[ThreeDCartOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[WalmartOrderSearch]'
 GO
-ALTER TABLE [dbo].[WalmartOrderSearch] ADD CONSTRAINT [FK_WalmartOrderSearch_WalmartOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[WalmartOrder] ([OrderID])
+ALTER TABLE [dbo].[WalmartOrderSearch] ADD CONSTRAINT [FK_WalmartOrderSearch_WalmartOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[WalmartOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[YahooOrderSearch]'
 GO
-ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID])
+ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Creating extended properties'
 GO

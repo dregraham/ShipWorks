@@ -3212,7 +3212,7 @@
           <FieldFieldRelationship FkField="StoreID" PkField="StoreID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="AmazonOrderSearch.AmazonOrder-AmazonOrder.AmazonOrderSearch" Start=":AmazonOrderSearch" End=":AmazonOrder" StartNavigator="AmazonOrder" EndNavigator="AmazonOrderSearch" Type="4">
+      <NormalRelationship Name="AmazonOrderSearch.AmazonOrder-AmazonOrder.AmazonOrderSearch" Start=":AmazonOrderSearch" End=":AmazonOrder" StartNavigator="AmazonOrder" EndNavigator="AmazonOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3257,17 +3257,17 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ChannelAdvisorOrderSearch.ChannelAdvisorOrder-ChannelAdvisorOrder.ChannelAdvisorOrderSearch" Start=":ChannelAdvisorOrderSearch" End=":ChannelAdvisorOrder" StartNavigator="ChannelAdvisorOrder" EndNavigator="ChannelAdvisorOrderSearch" Type="4">
+      <NormalRelationship Name="ChannelAdvisorOrderSearch.ChannelAdvisorOrder-ChannelAdvisorOrder.ChannelAdvisorOrderSearch" Start=":ChannelAdvisorOrderSearch" End=":ChannelAdvisorOrder" StartNavigator="ChannelAdvisorOrder" EndNavigator="ChannelAdvisorOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ClickCartProOrderSearch.ClickCartProOrder-ClickCartProOrder.ClickCartProOrderSearch" Start=":ClickCartProOrderSearch" End=":ClickCartProOrder" StartNavigator="ClickCartProOrder" EndNavigator="ClickCartProOrderSearch" Type="4">
+      <NormalRelationship Name="ClickCartProOrderSearch.ClickCartProOrder-ClickCartProOrder.ClickCartProOrderSearch" Start=":ClickCartProOrderSearch" End=":ClickCartProOrder" StartNavigator="ClickCartProOrder" EndNavigator="ClickCartProOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="CommerceInterfaceOrderSearch.CommerceInterfaceOrder-CommerceInterfaceOrder.CommerceInterfaceOrderSearch" Start=":CommerceInterfaceOrderSearch" End=":CommerceInterfaceOrder" StartNavigator="CommerceInterfaceOrder" EndNavigator="CommerceInterfaceOrderSearch" Type="4">
+      <NormalRelationship Name="CommerceInterfaceOrderSearch.CommerceInterfaceOrder-CommerceInterfaceOrder.CommerceInterfaceOrderSearch" Start=":CommerceInterfaceOrderSearch" End=":CommerceInterfaceOrder" StartNavigator="CommerceInterfaceOrder" EndNavigator="CommerceInterfaceOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3307,7 +3307,7 @@
           <FieldFieldRelationship FkField="LocalEbayOrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="EbayOrderSearch.EbayOrder-EbayOrder.EbayOrderSearch" Start=":EbayOrderSearch" End=":EbayOrder" StartNavigator="EbayOrder" EndNavigator="EbayOrderSearch" Type="4">
+      <NormalRelationship Name="EbayOrderSearch.EbayOrder-EbayOrder.EbayOrderSearch" Start=":EbayOrderSearch" End=":EbayOrder" StartNavigator="EbayOrder" EndNavigator="EbayOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3422,7 +3422,7 @@
           <FieldFieldRelationship FkField="GridColumnLayoutID" PkField="GridColumnLayoutID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="GrouponOrderSearch.GrouponOrder-GrouponOrder.GrouponOrderSearch" Start=":GrouponOrderSearch" End=":GrouponOrder" StartNavigator="GrouponOrder" EndNavigator="GrouponOrderSearch" Type="4">
+      <NormalRelationship Name="GrouponOrderSearch.GrouponOrder-GrouponOrder.GrouponOrderSearch" Start=":GrouponOrderSearch" End=":GrouponOrder" StartNavigator="GrouponOrder" EndNavigator="GrouponOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3452,22 +3452,22 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="LemonStandOrderSearch.LemonStandOrder-LemonStandOrder.LemonStandOrderSearch" Start=":LemonStandOrderSearch" End=":LemonStandOrder" StartNavigator="LemonStandOrder" EndNavigator="LemonStandOrderSearch" Type="4">
+      <NormalRelationship Name="LemonStandOrderSearch.LemonStandOrder-LemonStandOrder.LemonStandOrderSearch" Start=":LemonStandOrderSearch" End=":LemonStandOrder" StartNavigator="LemonStandOrder" EndNavigator="LemonStandOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="MagentoOrderSearch.MagentoOrder-MagentoOrder.MagentoOrderSearch" Start=":MagentoOrderSearch" End=":MagentoOrder" StartNavigator="MagentoOrder" EndNavigator="MagentoOrderSearch" Type="4">
+      <NormalRelationship Name="MagentoOrderSearch.MagentoOrder-MagentoOrder.MagentoOrderSearch" Start=":MagentoOrderSearch" End=":MagentoOrder" StartNavigator="MagentoOrder" EndNavigator="MagentoOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="MarketplaceAdvisorOrderSearch.MarketplaceAdvisorOrder-MarketplaceAdvisorOrder.MarketplaceAdvisorOrderSearch" Start=":MarketplaceAdvisorOrderSearch" End=":MarketplaceAdvisorOrder" StartNavigator="MarketplaceAdvisorOrder" EndNavigator="MarketplaceAdvisorOrderSearch" Type="4">
+      <NormalRelationship Name="MarketplaceAdvisorOrderSearch.MarketplaceAdvisorOrder-MarketplaceAdvisorOrder.MarketplaceAdvisorOrderSearch" Start=":MarketplaceAdvisorOrderSearch" End=":MarketplaceAdvisorOrder" StartNavigator="MarketplaceAdvisorOrder" EndNavigator="MarketplaceAdvisorOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="NetworkSolutionsOrderSearch.NetworkSolutionsOrder-NetworkSolutionsOrder.NetworkSolutionsOrderSearch" Start=":NetworkSolutionsOrderSearch" End=":NetworkSolutionsOrder" StartNavigator="NetworkSolutionsOrder" EndNavigator="NetworkSolutionsOrderSearch" Type="4">
+      <NormalRelationship Name="NetworkSolutionsOrderSearch.NetworkSolutionsOrder-NetworkSolutionsOrder.NetworkSolutionsOrderSearch" Start=":NetworkSolutionsOrderSearch" End=":NetworkSolutionsOrder" StartNavigator="NetworkSolutionsOrder" EndNavigator="NetworkSolutionsOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3517,7 +3517,7 @@
           <FieldFieldRelationship FkField="OrderItemID" PkField="OrderItemID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="OrderMotionOrderSearch.OrderMotionOrder-OrderMotionOrder.OrderMotionOrderSearch" Start=":OrderMotionOrderSearch" End=":OrderMotionOrder" StartNavigator="OrderMotionOrder" EndNavigator="OrderMotionOrderSearch" Type="4">
+      <NormalRelationship Name="OrderMotionOrderSearch.OrderMotionOrder-OrderMotionOrder.OrderMotionOrderSearch" Start=":OrderMotionOrderSearch" End=":OrderMotionOrder" StartNavigator="OrderMotionOrder" EndNavigator="OrderMotionOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3552,7 +3552,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="PayPalOrderSearch.PayPalOrder-PayPalOrder.PayPalOrderSearch" Start=":PayPalOrderSearch" End=":PayPalOrder" StartNavigator="PayPalOrder" EndNavigator="PayPalOrderSearch" Type="4">
+      <NormalRelationship Name="PayPalOrderSearch.PayPalOrder-PayPalOrder.PayPalOrderSearch" Start=":PayPalOrderSearch" End=":PayPalOrder" StartNavigator="PayPalOrder" EndNavigator="PayPalOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3577,12 +3577,12 @@
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProStoresOrderSearch.ProStoresOrder-ProStoresOrder.ProStoresOrderSearch" Start=":ProStoresOrderSearch" End=":ProStoresOrder" StartNavigator="ProStoresOrder" EndNavigator="ProStoresOrderSearch" Type="4">
+      <NormalRelationship Name="ProStoresOrderSearch.ProStoresOrder-ProStoresOrder.ProStoresOrderSearch" Start=":ProStoresOrderSearch" End=":ProStoresOrder" StartNavigator="ProStoresOrder" EndNavigator="ProStoresOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4">
+      <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3637,7 +3637,7 @@
           <FieldFieldRelationship FkField="ShippingPrintOutputID" PkField="ShippingPrintOutputID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ShopifyOrderSearch.ShopifyOrder-ShopifyOrder.ShopifyOrderSearch" Start=":ShopifyOrderSearch" End=":ShopifyOrder" StartNavigator="ShopifyOrder" EndNavigator="ShopifyOrderSearch" Type="4">
+      <NormalRelationship Name="ShopifyOrderSearch.ShopifyOrder-ShopifyOrder.ShopifyOrderSearch" Start=":ShopifyOrderSearch" End=":ShopifyOrder" StartNavigator="ShopifyOrder" EndNavigator="ShopifyOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3682,7 +3682,7 @@
           <FieldFieldRelationship FkField="TemplateID" PkField="TemplateID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ThreeDCartOrderSearch.ThreeDCartOrder-ThreeDCartOrder.ThreeDCartOrderSearch" Start=":ThreeDCartOrderSearch" End=":ThreeDCartOrder" StartNavigator="ThreeDCartOrder" EndNavigator="ThreeDCartOrderSearch" Type="4">
+      <NormalRelationship Name="ThreeDCartOrderSearch.ThreeDCartOrder-ThreeDCartOrder.ThreeDCartOrderSearch" Start=":ThreeDCartOrderSearch" End=":ThreeDCartOrder" StartNavigator="ThreeDCartOrder" EndNavigator="ThreeDCartOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3792,7 +3792,7 @@
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="WalmartOrderSearch.WalmartOrder-WalmartOrder.WalmartOrderSearch" Start=":WalmartOrderSearch" End=":WalmartOrder" StartNavigator="WalmartOrder" EndNavigator="WalmartOrderSearch" Type="4">
+      <NormalRelationship Name="WalmartOrderSearch.WalmartOrder-WalmartOrder.WalmartOrderSearch" Start=":WalmartOrderSearch" End=":WalmartOrder" StartNavigator="WalmartOrder" EndNavigator="WalmartOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3817,7 +3817,7 @@
           <FieldFieldRelationship FkField="ShipmentIdCalculated" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="YahooOrderSearch.YahooOrder-YahooOrder.YahooOrderSearch" Start=":YahooOrderSearch" End=":YahooOrder" StartNavigator="YahooOrder" EndNavigator="YahooOrderSearch" Type="4">
+      <NormalRelationship Name="YahooOrderSearch.YahooOrder-YahooOrder.YahooOrderSearch" Start=":YahooOrderSearch" End=":YahooOrder" StartNavigator="YahooOrder" EndNavigator="YahooOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -3961,7 +3961,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-14T14:56:20.9995845Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-19T20:22:54.419106Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8657,7 +8657,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:AmazonOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:AmazonOrderSearch:FK_AmazonOrderSearch_AmazonOrder">
+            <ForeignKeyConstraint Name="dbo:AmazonOrderSearch:FK_AmazonOrderSearch_AmazonOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:AmazonOrder:OrderID" FkField="dbo:AmazonOrderSearch:OrderID" />
               </FieldPairs>
@@ -8742,7 +8742,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:ChannelAdvisorOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ChannelAdvisorOrderSearch:FK_ChannelAdvisorOrderSearch_ChannelAdvisorOrder">
+            <ForeignKeyConstraint Name="dbo:ChannelAdvisorOrderSearch:FK_ChannelAdvisorOrderSearch_ChannelAdvisorOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ChannelAdvisorOrder:OrderID" FkField="dbo:ChannelAdvisorOrderSearch:OrderID" />
               </FieldPairs>
@@ -8757,7 +8757,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:ClickCartProOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ClickCartProOrderSearch:FK_ClickCartProOrderSearch_ClickCartProOrder">
+            <ForeignKeyConstraint Name="dbo:ClickCartProOrderSearch:FK_ClickCartProOrderSearch_ClickCartProOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ClickCartProOrder:OrderID" FkField="dbo:ClickCartProOrderSearch:OrderID" />
               </FieldPairs>
@@ -8767,7 +8767,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:CommerceInterfaceOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder">
+            <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:CommerceInterfaceOrder:OrderID" FkField="dbo:CommerceInterfaceOrderSearch:OrderID" />
               </FieldPairs>
@@ -8817,7 +8817,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:EbayOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:EbayOrderSearch:FK_EbayOrderSearch_EbayOrder">
+            <ForeignKeyConstraint Name="dbo:EbayOrderSearch:FK_EbayOrderSearch_EbayOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:EbayOrder:OrderID" FkField="dbo:EbayOrderSearch:OrderID" />
               </FieldPairs>
@@ -8967,7 +8967,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:GrouponOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:GrouponOrderSearch:FK_GrouponOrderSearch_GrouponOrder">
+            <ForeignKeyConstraint Name="dbo:GrouponOrderSearch:FK_GrouponOrderSearch_GrouponOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:GrouponOrder:OrderID" FkField="dbo:GrouponOrderSearch:OrderID" />
               </FieldPairs>
@@ -9022,7 +9022,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:LemonStandOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:LemonStandOrderSearch:FK_LemonStandOrderSearch_LemonStandOrder">
+            <ForeignKeyConstraint Name="dbo:LemonStandOrderSearch:FK_LemonStandOrderSearch_LemonStandOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:LemonStandOrder:OrderID" FkField="dbo:LemonStandOrderSearch:OrderID" />
               </FieldPairs>
@@ -9037,7 +9037,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:MagentoOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:MagentoOrderSearch:FK_MagentoOrderSearch_MagentoOrder">
+            <ForeignKeyConstraint Name="dbo:MagentoOrderSearch:FK_MagentoOrderSearch_MagentoOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:MagentoOrder:OrderID" FkField="dbo:MagentoOrderSearch:OrderID" />
               </FieldPairs>
@@ -9052,7 +9052,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:MarketplaceAdvisorOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:MarketplaceAdvisorOrderSearch:FK_MarketplaceAdvisorOrderSearch_MarketplaceAdvisorOrder">
+            <ForeignKeyConstraint Name="dbo:MarketplaceAdvisorOrderSearch:FK_MarketplaceAdvisorOrderSearch_MarketplaceAdvisorOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:MarketplaceAdvisorOrder:OrderID" FkField="dbo:MarketplaceAdvisorOrderSearch:OrderID" />
               </FieldPairs>
@@ -9077,7 +9077,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:NetworkSolutionsOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:NetworkSolutionsOrderSearch:FK_NetworkSolutionsOrderSearch_NetworkSolutionsOrder">
+            <ForeignKeyConstraint Name="dbo:NetworkSolutionsOrderSearch:FK_NetworkSolutionsOrderSearch_NetworkSolutionsOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:NetworkSolutionsOrder:OrderID" FkField="dbo:NetworkSolutionsOrderSearch:OrderID" />
               </FieldPairs>
@@ -9152,7 +9152,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:OrderMotionOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:OrderMotionOrderSearch:FK_OrderMotionOrderSearch_OrderMotionOrder">
+            <ForeignKeyConstraint Name="dbo:OrderMotionOrderSearch:FK_OrderMotionOrderSearch_OrderMotionOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:OrderMotionOrder:OrderID" FkField="dbo:OrderMotionOrderSearch:OrderID" />
               </FieldPairs>
@@ -9192,7 +9192,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:PayPalOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:PayPalOrderSearch:FK_PayPalOrderSearch_PayPalOrder">
+            <ForeignKeyConstraint Name="dbo:PayPalOrderSearch:FK_PayPalOrderSearch_PayPalOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:PayPalOrder:OrderID" FkField="dbo:PayPalOrderSearch:OrderID" />
               </FieldPairs>
@@ -9227,7 +9227,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:ProStoresOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProStoresOrderSearch:FK_ProStoresOrderSearch_ProStoresOrder">
+            <ForeignKeyConstraint Name="dbo:ProStoresOrderSearch:FK_ProStoresOrderSearch_ProStoresOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ProStoresOrder:OrderID" FkField="dbo:ProStoresOrderSearch:OrderID" />
               </FieldPairs>
@@ -9275,7 +9275,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:SearsOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:SearsOrderSearch:FK_SearsOrderSearch_SearsOrder">
+            <ForeignKeyConstraint Name="dbo:SearsOrderSearch:FK_SearsOrderSearch_SearsOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:SearsOrder:OrderID" FkField="dbo:SearsOrderSearch:OrderID" />
               </FieldPairs>
@@ -9345,7 +9345,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:ShopifyOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ShopifyOrderSearch:FK_ShopifyOrderSearch_ShopifyOrder">
+            <ForeignKeyConstraint Name="dbo:ShopifyOrderSearch:FK_ShopifyOrderSearch_ShopifyOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShopifyOrder:OrderID" FkField="dbo:ShopifyOrderSearch:OrderID" />
               </FieldPairs>
@@ -9415,7 +9415,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:ThreeDCartOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ThreeDCartOrderSearch:FK_ThreeDCartOrderSearch_ThreeDCartOrder">
+            <ForeignKeyConstraint Name="dbo:ThreeDCartOrderSearch:FK_ThreeDCartOrderSearch_ThreeDCartOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ThreeDCartOrder:OrderID" FkField="dbo:ThreeDCartOrderSearch:OrderID" />
               </FieldPairs>
@@ -9535,7 +9535,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:WalmartOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:WalmartOrderSearch:FK_WalmartOrderSearch_WalmartOrder">
+            <ForeignKeyConstraint Name="dbo:WalmartOrderSearch:FK_WalmartOrderSearch_WalmartOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:WalmartOrder:OrderID" FkField="dbo:WalmartOrderSearch:OrderID" />
               </FieldPairs>
@@ -9570,7 +9570,7 @@
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:YahooOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:YahooOrderSearch:FK_YahooOrderSearch_YahooOrder">
+            <ForeignKeyConstraint Name="dbo:YahooOrderSearch:FK_YahooOrderSearch_YahooOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:YahooOrder:OrderID" FkField="dbo:YahooOrderSearch:OrderID" />
               </FieldPairs>
