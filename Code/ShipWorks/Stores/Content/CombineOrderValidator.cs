@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Security;
 
@@ -49,14 +50,21 @@ namespace ShipWorks.Stores.Content
                 return Result.FromError("A maximum of 25 orders is allowed to combine orders");
             }
 
-            bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, orderIDs.First());
+            // All ids must be order ids, not customer
+            if (!orderIDs.All(orderID => EntityUtility.GetEntityType(orderID) == EntityType.OrderEntity))
+            {
+                return Result.FromError("The selected rows must all be orders");
+            }
+
+            long firstId = orderIDs.First();
+            bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, firstId);
 
             if (!hasPermission)
             {
                 return Result.FromError("The current user does not have permission to modify orders");
             }
 
-            IStoreEntity storeEntity = storeManager.GetRelatedStore(orderIDs.First());
+            IStoreEntity storeEntity = storeManager.GetRelatedStore(firstId);
             bool canCombine = gateway.CanCombine(storeEntity, orderIDs);
 
             if (canCombine == false)
