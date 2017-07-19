@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -89,9 +91,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Upload tracking number
                 try
                 {
-                    ChannelAdvisorClient client = new ChannelAdvisorClient(store);
+                    if (string.IsNullOrWhiteSpace(store.RefreshToken))
+                    {
+                        ChannelAdvisorClient client = new ChannelAdvisorClient(store);
 
-                    client.UploadShipmentDetails((int) order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
+                        client.UploadShipmentDetails((int) order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
+                    }
+                    else
+                    {
+
+                    }
+                    
                 }
                 catch (ChannelAdvisorException ex)
                 {
