@@ -106,7 +106,6 @@ namespace ShipWorks.ApplicationCore.Interaction
         {
             bool oneOrder = target == FilterTarget.Orders && selection.Count == 1;
             bool oneOrMoreOrders = target == FilterTarget.Orders && selection.Count > 0;
-            bool twoOrMoreOrders = target == FilterTarget.Orders && selection.Count > 1;
 
             bool oneCustomer = target == FilterTarget.Customers && selection.Count == 1;
             bool oneOrMoreCustomers = target == FilterTarget.Customers && selection.Count > 0;
@@ -134,10 +133,6 @@ namespace ShipWorks.ApplicationCore.Interaction
                         EnableComponent(component, oneOrMoreOrders);
                         break;
 
-                    case SelectionDependentType.TwoOrMoreOrders:
-                        EnableComponent(component, twoOrMoreOrders);
-                        break;
-
                     case SelectionDependentType.OneCustomer:
                         EnableComponent(component, oneCustomer);
                         break;
@@ -155,19 +150,27 @@ namespace ShipWorks.ApplicationCore.Interaction
                         break;
 
                     case SelectionDependentType.AppliesFunction:
-                        if (entry.Value.Applies != null)
-                        {
-                            bool result = false;
-                            if (!appliesCache.TryGetValue(entry.Value.Applies, out result))
-                            {
-                                result = entry.Value.Applies(selection.Keys);
-                                appliesCache.Add(entry.Value.Applies, result);
-                            }
-
-                            EnableComponent(component, result);
-                        }
+                        HandleApplies(selection, entry, appliesCache, component);
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Handles the AppliesFunction for UpdateCommandState
+        /// </summary>
+        private void HandleApplies(IGridSelection selection, KeyValuePair<Component, SelectionDependentEntry> entry, Dictionary<Func<IEnumerable<long>, bool>, bool> appliesCache, Component component)
+        {
+            if (entry.Value.Applies != null)
+            {
+                bool result = false;
+                if (!appliesCache.TryGetValue(entry.Value.Applies, out result))
+                {
+                    result = entry.Value.Applies(selection.Keys);
+                    appliesCache.Add(entry.Value.Applies, result);
+                }
+
+                EnableComponent(component, result);
             }
         }
 

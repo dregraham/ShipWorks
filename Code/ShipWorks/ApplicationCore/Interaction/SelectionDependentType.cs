@@ -14,7 +14,6 @@ namespace ShipWorks.ApplicationCore.Interaction
 
         OneOrder,
         OneOrMoreOrders,
-        TwoOrMoreOrders,
 
         OneCustomer,
         OneOrMoreCustomers,
