@@ -395,23 +395,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private static void LoadOrderStatuses(ChannelAdvisorOrderEntity orderToSave,
             ChannelAdvisorOrder downloadedOrder)
         {
-            ChannelAdvisorPaymentStatus paymentStatus;
             orderToSave.OnlinePaymentStatus =
-                (int) (Enum.TryParse(downloadedOrder.PaymentStatus, true, out paymentStatus) ?
-                paymentStatus :
-                ChannelAdvisorPaymentStatus.Unknown);
-
-            ChannelAdvisorCheckoutStatus checkoutStatus;
+                (int) (EnumHelper.TryParseEnum<ChannelAdvisorPaymentStatus>(downloadedOrder.PaymentStatus) ??
+                       ChannelAdvisorPaymentStatus.Unknown);
+            
             orderToSave.OnlineCheckoutStatus =
-                (int) (Enum.TryParse(downloadedOrder.CheckoutStatus, true, out checkoutStatus) ?
-                checkoutStatus :
-                ChannelAdvisorCheckoutStatus.Unknown);
-
-            ChannelAdvisorShippingStatus shippingStatus;
+                (int) (EnumHelper.TryParseEnum<ChannelAdvisorCheckoutStatus>(downloadedOrder.CheckoutStatus) ??
+                       ChannelAdvisorCheckoutStatus.Unknown);
+            
             orderToSave.OnlineShippingStatus =
-                (int) (Enum.TryParse(downloadedOrder.ShippingStatus, true, out shippingStatus) ?
-                shippingStatus :
-                ChannelAdvisorShippingStatus.Unknown);
+                (int) (EnumHelper.TryParseEnum<ChannelAdvisorShippingStatus>(downloadedOrder.ShippingStatus) ??
+                       ChannelAdvisorShippingStatus.Unknown);
         }
     }
 }
