@@ -78,6 +78,5 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             mock.Dispose();
         }
-
     }
 }
