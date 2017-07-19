@@ -44,6 +44,11 @@ namespace ShipWorks.Stores.Content
                 return Result.FromError("A minimum of two orders must be selected to combine orders");
             }
 
+            if (orderIDs.Count() > 25)
+            {
+                return Result.FromError("A maximum of 25 orders is allowed to combine orders");
+            }
+
             bool hasPermission = securityContext.HasPermission(PermissionType.OrdersModify, orderIDs.First());
 
             if (!hasPermission)
