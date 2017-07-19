@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using log4net;
@@ -24,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Thin wrapper around the ChannelAdvisor web clients
     /// </summary>
-    public class ChannelAdvisorClient
+    [Component]
+    public class ChannelAdvisorClient : IChannelAdvisorClient
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorClient));

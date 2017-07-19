@@ -1718,9 +1718,12 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>

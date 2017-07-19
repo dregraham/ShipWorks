@@ -227,9 +227,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             ChannelAdvisorShipment shipment = new ChannelAdvisorShipment()
             {
-                DeliveryStatus = "Shipped",
-                DistributionCenterID = 0,
-                SellerFulfillmentID = "111",
                 ShippedDateUtc = new DateTime(2017, 7, 19),
                 ShippingCarrier = "UPS",
                 ShippingClass = "Ground",

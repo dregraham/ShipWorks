@@ -14,15 +14,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         [JsonProperty("TrackingNumber")]
         public string TrackingNumber { get; set; }
 
-        [JsonProperty("SellerFulfillmentID")]
-        public string SellerFulfillmentID { get; set; }
-
-        [JsonProperty("DistributionCenterID")]
-        public int DistributionCenterID { get; set; }
-
-        [JsonProperty("DeliveryStatus")]
-        public string DeliveryStatus { get; set; }
-
         [JsonProperty("ShippingCarrier")]
         public string ShippingCarrier { get; set; }
 

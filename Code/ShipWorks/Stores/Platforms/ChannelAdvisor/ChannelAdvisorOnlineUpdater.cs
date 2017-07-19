@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -91,17 +92,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Upload tracking number
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(store.RefreshToken))
+                    ChannelAdvisorShipment uploadShipment = new ChannelAdvisorShipment()
                     {
-                        ChannelAdvisorClient client = new ChannelAdvisorClient(store);
+                        ShippedDateUtc = shipment.ProcessedDate.Value,
+                        ShippingCarrier = carrierCode,
+                        ShippingClass = serviceClass,
+                        TrackingNumber = trackingNumber
+                    };
 
-                        client.UploadShipmentDetails((int) order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
-                    }
-                    else
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-
+                        IChannelAdvisorUpdateClient updateClient = scope.Resolve<IChannelAdvisorUpdateClient>();
+                        updateClient.UploadShipmentDetails(store, uploadShipment, order.OrderNumber);
                     }
-                    
                 }
                 catch (ChannelAdvisorException ex)
                 {

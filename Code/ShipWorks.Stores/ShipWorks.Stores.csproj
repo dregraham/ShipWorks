@@ -151,6 +151,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillmentItem.cs" />
@@ -166,7 +167,6 @@
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductAttribute.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProfilesResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorPromotion.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestClient.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
