@@ -186,85 +186,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetOrders(DateTime.UtcNow, "token");
 
-            submitter.Verify(s => s.Variables.Add("access_token", "token"));
+            submitter.Verify(s => s.Variables.Add("access_token", "atoken"));
         }
 
         [Fact]
-        public void GetAccessToken_UsesExpectedEndpoint()
+        public void GetOrders_UsesCachedAccessToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-            submitter.VerifySet(s => s.Uri =
-                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/oauth2/token"));
-        }
-
-        [Fact]
-        public void GetAccessToken_SetsVerbToPost()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-            submitter.VerifySet(s => s.Verb = HttpVerb.Post);
-        }
-
-        [Fact]
-        public void GetAccessToken_SetsContentTypeToWwwForm()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-            submitter.VerifySet(s => s.ContentType = "application/x-www-form-urlencoded");
-        }
-
-        [Fact]
-        public void GetAccessToken_SetsCorrectAuthorization()
-        {
-            mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(f => f.CreateChannelAdvisorEncryptionProvider())
-                .Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4="))
-                .Returns("Preb8E42ckWZZpFHh6OV2w");
-
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-
-            submitter.Verify(s => s.Headers.Add("Authorization",
-                "Basic d3g3NmRnempjd2xmeTFjazNuYjhva2U3cWwydWt2MDU6UHJlYjhFNDJja1daWnBGSGg2T1Yydw=="));
-        }
-
-        [Theory]
-        [InlineData("grant_type", "refresh_token")]
-        [InlineData("refresh_token", "blah")]
-        public void GetAccessToken_VariablesSetCorrectly(string variableName, string value)
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-
-            submitter.Verify(s => s.Variables.Add(variableName, value));
-        }
-
-        [Fact]
-        public void GetAccessToken_RequestIsLogged()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-
-            logger.Verify(l => l.LogRequest(submitter.Object));
-        }
-
-        [Fact]
-        public void GetAccessToken_ResponseIsLogged()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetAccessToken("blah");
-
-            logger.Verify(l => l.LogResponse(getTokenResult, "json"));
-        }
-
-        [Fact]
-        public void GetAccessToken_ReturnsRefreshToken()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-            var refreshToken = testObject.GetAccessToken("blah");
-
-            Assert.Equal("atoken", refreshToken.Value);
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            
+            submitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
         }
 
         [Fact]

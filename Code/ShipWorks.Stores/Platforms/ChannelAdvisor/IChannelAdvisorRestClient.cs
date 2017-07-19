@@ -16,24 +16,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         GenericResult<string> GetRefreshToken(string code, string redirectUrl);
 
         /// <summary>
-        /// Get an access token from the refresh token
-        /// </summary>
-        GenericResult<string> GetAccessToken(string refreshToken);
-
-        /// <summary>
         /// GetOrders from the given start time
         /// </summary>
-        ChannelAdvisorOrderResult GetOrders(DateTime start, string accessToken);
+        ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken);
 
         /// <summary>
         /// Get the profile
         /// </summary>
-        /// <param name="accessToken"></param>
-        ChannelAdvisorProfilesResponse GetProfiles(string accessToken);
+        ChannelAdvisorProfilesResponse GetProfiles(string refreshToken);
 
         /// <summary>
         /// Gets the product.
         /// </summary>
-        ChannelAdvisorProduct GetProduct(int productID, string accessToken);
+        ChannelAdvisorProduct GetProduct(int productID, string refreshToken);
     }
 }

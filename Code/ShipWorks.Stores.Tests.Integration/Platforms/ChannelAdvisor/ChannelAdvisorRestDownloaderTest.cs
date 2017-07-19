@@ -87,7 +87,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             client = mock.Mock<IChannelAdvisorRestClient>();
             client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
-            client.Setup(c => c.GetAccessToken(It.IsAny<string>())).Returns(GenericResult.FromSuccess("token"));
 
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
@@ -104,12 +103,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             testObject = mock.Create<ChannelAdvisorRestDownloader>(TypedParameter.From<StoreEntity>(store));
         }
 
-        [Fact]
-        public void Download_GetsAccessTokenFromClient()
-        {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
-            client.Verify(c => c.GetAccessToken(It.IsAny<string>()));
-        }
+
 
         [Fact]
         public void Download_SetsProgressDetailWithOrderCount()
