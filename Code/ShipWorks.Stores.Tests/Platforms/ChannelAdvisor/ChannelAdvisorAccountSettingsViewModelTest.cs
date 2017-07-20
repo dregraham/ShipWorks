@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             Assert.Equal("encrypted", store.RefreshToken);
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetRefreshToken("accessCode", It.IsAny<string>()), Times.Once);
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php")), Times.Once);
         }
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             encryptionProvider.Verify(e=>e.Encrypt("refreshToken"), Times.Exactly(1));
         }
@@ -107,10 +107,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
@@ -127,11 +127,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
             testObject.AccessCode = "accessCode";
-            testObject.Save(store);
+            testObject.Save(store, false);
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             testObject.AccessCode = "accessCode2";
-            testObject.Save(store);
+            testObject.Save(store, false);
 
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(2));
         }

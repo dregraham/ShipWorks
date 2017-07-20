@@ -32,6 +32,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Saves the specified store.
         /// </summary>
-        bool Save(ChannelAdvisorStoreEntity store);
+        bool Save(ChannelAdvisorStoreEntity store, bool ignoreEmptyAccessCode);
     }
 }

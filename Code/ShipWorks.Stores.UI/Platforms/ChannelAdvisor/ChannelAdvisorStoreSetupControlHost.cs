@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (!viewModel.Save(GetStore<ChannelAdvisorStoreEntity>()))
+            if (!viewModel.Save(GetStore<ChannelAdvisorStoreEntity>(), false))
             {
                 e.NextPage = this;
             }

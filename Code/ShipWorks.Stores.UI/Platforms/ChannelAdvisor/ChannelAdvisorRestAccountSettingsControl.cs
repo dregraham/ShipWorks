@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         public bool SaveToEntity(StoreEntity store)
         {
-            return viewModel.Save(store as ChannelAdvisorStoreEntity);
+            return viewModel.Save(store as ChannelAdvisorStoreEntity, true);
         }
     }
 }

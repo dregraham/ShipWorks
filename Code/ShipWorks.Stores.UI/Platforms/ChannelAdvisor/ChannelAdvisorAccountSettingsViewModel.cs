@@ -89,16 +89,16 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// Saves the specified store.
         /// </summary>
         /// <returns>True if successful</returns>
-        public bool Save(ChannelAdvisorStoreEntity store)
+        public bool Save(ChannelAdvisorStoreEntity store, bool ignoreEmptyAccessCode)
         {
-            if (string.IsNullOrWhiteSpace(AccessCode))
+            if (string.IsNullOrWhiteSpace(AccessCode) && !ignoreEmptyAccessCode)
             {
                 messageHelper.ShowMessage("Access code required");
                 return false;
             }
 
             // If the access code has not changed since the last time we saved, continue.
-            if (AccessCodeChanged)
+            if (AccessCodeChanged && !string.IsNullOrWhiteSpace(AccessCode))
             {
                 try
                 {
