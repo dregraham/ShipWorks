@@ -3,9 +3,9 @@
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
-    /// Interface for ChannelAdvisorClient
+    /// Interface for ChannelAdvisorSoapSoapClient
     /// </summary>
-    public interface IChannelAdvisorClient
+    public interface IChannelAdvisorSoapClient
     {
         /// <summary>
         /// Uploads the shipment details for the specified order

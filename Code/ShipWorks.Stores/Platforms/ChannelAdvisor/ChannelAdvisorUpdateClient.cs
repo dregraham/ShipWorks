@@ -11,13 +11,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     [Component]
     public class ChannelAdvisorUpdateClient : IChannelAdvisorUpdateClient
     {
-        private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorClient> soapClientFactory;
+        private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
         private readonly IChannelAdvisorRestClient restClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorClient> soapClientFactory, IChannelAdvisorRestClient restClient)
+        public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory, IChannelAdvisorRestClient restClient)
         {
             this.soapClientFactory = soapClientFactory;
             this.restClient = restClient;
@@ -30,8 +30,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             if (string.IsNullOrWhiteSpace(store.RefreshToken))
             {
-                IChannelAdvisorClient soapClient = soapClientFactory(store);
-                soapClient.UploadShipmentDetails((int) orderNumber, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
+                IChannelAdvisorSoapClient soapSoapClient = soapClientFactory(store);
+                soapSoapClient.UploadShipmentDetails((int) orderNumber, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
             }
             else
             {

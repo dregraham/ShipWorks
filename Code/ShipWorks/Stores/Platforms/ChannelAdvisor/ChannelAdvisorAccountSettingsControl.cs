@@ -132,20 +132,20 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     string accountKey = (string)e.Argument;
 
-                    OnTestAuthorizationComplete(ChannelAdvisorClient.TestConnection(accountKey));
+                    OnTestAuthorizationComplete(ChannelAdvisorSoapSoapClient.TestConnection(accountKey));
                 }
                 else
                 {
                     int configuredProfileId = (int)e.Argument;
 
-                    loadedAccountKey = ChannelAdvisorClient.GetAccountKey(configuredProfileId);
+                    loadedAccountKey = ChannelAdvisorSoapSoapClient.GetAccountKey(configuredProfileId);
                     if (loadedAccountKey == null)
                     {
                         OnTestAuthorizationComplete(false);
                     }
                     else
                     {
-                        OnTestAuthorizationComplete(ChannelAdvisorClient.TestConnection(loadedAccountKey));
+                        OnTestAuthorizationComplete(ChannelAdvisorSoapSoapClient.TestConnection(loadedAccountKey));
                     }
                 }
             }
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             // test the account key
-            if (!ChannelAdvisorClient.TestConnection(loadedAccountKey))
+            if (!ChannelAdvisorSoapSoapClient.TestConnection(loadedAccountKey))
             {
                 // show a message
                 MessageHelper.ShowError(this, "ShipWorks was unable to communicate with ChannelAdvisor. Ensure you have granted ShipWorks access to your account.");
@@ -225,7 +225,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // initiate access request
             try
             {
-                ChannelAdvisorClient.RequestShipWorksAccess(storeProfileId);
+                ChannelAdvisorSoapSoapClient.RequestShipWorksAccess(storeProfileId);
             }
             catch (ChannelAdvisorException ex)
             {
@@ -275,7 +275,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             try
             {
-                loadedAccountKey = ChannelAdvisorClient.GetAccountKey(storeProfileId);
+                loadedAccountKey = ChannelAdvisorSoapSoapClient.GetAccountKey(storeProfileId);
                 if (loadedAccountKey != null)
                 {
                     // stop polling

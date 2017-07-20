@@ -1721,7 +1721,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
@@ -5551,7 +5551,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdater.cs" />

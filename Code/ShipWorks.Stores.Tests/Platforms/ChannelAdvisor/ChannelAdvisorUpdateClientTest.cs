@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly AutoMock mock;
         private readonly ChannelAdvisorStoreEntity store;
         private readonly ChannelAdvisorShipment shipment;
-        private readonly Mock<IChannelAdvisorClient> soapClient;
+        private readonly Mock<IChannelAdvisorSoapClient> soapClient;
 
         public ChannelAdvisorUpdateClientTest()
         {
@@ -28,9 +28,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 ShippingClass = "class",
                 TrackingNumber = "track this!"
             };
-            soapClient = mock.CreateMock<IChannelAdvisorClient>();
+            soapClient = mock.CreateMock<IChannelAdvisorSoapClient>();
 
-            mock.MockFunc<ChannelAdvisorStoreEntity, IChannelAdvisorClient>(soapClient);
+            mock.MockFunc<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient>(soapClient);
         }
 
         [Fact]
