@@ -3,6 +3,7 @@ using System.Net;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity {StoreTypeCode = StoreTypeCode.ChannelAdvisor};
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
@@ -50,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
@@ -67,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
@@ -101,7 +102,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
@@ -121,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             mock.Mock<IChannelAdvisorRestClient>()
                 .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("refreshToken");
+                .Returns(GenericResult.FromSuccess("refreshToken"));
             var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
 
             var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();

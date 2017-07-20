@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
@@ -12,15 +14,22 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Web client for interacting with ChannelAdvisors REST API
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
+        private readonly LruCache<string, string> accessTokenCache;
+
         private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
-        public const string EndpointBase = "https://api.channeladvisor.com/oauth2";
-        private readonly string tokenEndpoint = $"{EndpointBase}/token";
+
         private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
+
+        public const string EndpointBase = "https://api.channeladvisor.com";
+        private readonly string tokenEndpoint = $"{EndpointBase}/oauth2/token";
+        private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
+        private readonly string profilesEndpoint = $"{EndpointBase}/v1/Profiles";
+        private readonly string productEndpoint = $"{EndpointBase}/v1/Products";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -35,37 +44,127 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
+
+            accessTokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
         }
 
         /// <summary>
         /// Gets the refresh token.
         /// </summary>
-        public string GetRefreshToken(string code, string redirectUrl)
+        public GenericResult<string> GetRefreshToken(string code, string redirectUrl)
         {
-            IHttpVariableRequestSubmitter submitter = submitterFactory();
-            submitter.Uri = new Uri(tokenEndpoint);
-            submitter.Verb = HttpVerb.Post;
-            submitter.ContentType = "application/x-www-form-urlencoded";
-            submitter.Headers.Add("Authorization", GetAuthorizationHeaderValue());
+            IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
+
             submitter.Variables.Add("grant_type", "authorization_code");
             submitter.Variables.Add("code", code);
             submitter.Variables.Add(new HttpVariable("redirect_uri", redirectUrl, false));
 
             ChannelAdvisorOAuthResponse response =
-                JsonConvert.DeserializeObject<ChannelAdvisorOAuthResponse>(ProcessRequest(submitter, "GetRefreshToken"));
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetRefreshToken");
 
             if (string.IsNullOrWhiteSpace(response.RefreshToken))
             {
-                throw new ChannelAdvisorException("Response did not contain a refresh token.");
+                return GenericResult.FromError<string>("Response did not contain a refresh token.");
             }
 
-            return response.RefreshToken;
+            return GenericResult.FromSuccess(response.RefreshToken);
+        }
+
+        /// <summary>
+        /// Get the access token given a refresh token
+        /// </summary>
+        private string GetAccessToken(string refreshToken)
+        {
+            if (accessTokenCache.Contains(refreshToken))
+            {
+                return accessTokenCache[refreshToken];
+            }
+            
+            IHttpVariableRequestSubmitter submitter = CreateRequest(tokenEndpoint, HttpVerb.Post);
+
+            submitter.Variables.Add("grant_type", "refresh_token");
+            submitter.Variables.Add("refresh_token", refreshToken);
+
+            ChannelAdvisorOAuthResponse response =
+                ProcessRequest<ChannelAdvisorOAuthResponse>(submitter, "GetAccessToken");
+
+            if (string.IsNullOrWhiteSpace(response.AccessToken))
+            {
+                throw new ChannelAdvisorException("Response did not contain an access token.");
+            }
+
+            accessTokenCache[refreshToken] = response.AccessToken;
+
+            return response.AccessToken;
+        }
+
+        /// <summary>
+        /// Get profile info for the given token
+        /// </summary>
+        public ChannelAdvisorProfilesResponse GetProfiles(string refreshToken)
+        {
+            string accessToken = GetAccessToken(refreshToken);
+
+            IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", accessToken);
+
+            return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles");
+        }
+
+        /// <summary>
+        /// Get orders from the start date for the store
+        /// </summary>
+        public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
+        {
+            string accessToken = GetAccessToken(refreshToken);
+
+            IHttpVariableRequestSubmitter submitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", accessToken);
+
+            // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
+            submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
+            submitter.Variables.Add("$count", "true");
+            submitter.Variables.Add("$expand", "Fulfillments,Items");
+
+            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders");
+        }
+
+        /// <summary>
+        /// Get detailed product information from ChannelAdvisor with the given product ID
+        /// </summary>
+        public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
+        {
+            string accessToken = GetAccessToken(refreshToken);
+
+            IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", accessToken);
+            submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
+
+            return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct");
+        }
+
+        /// <summary>
+        /// Create a request to channel advisor
+        /// </summary>
+        private IHttpVariableRequestSubmitter CreateRequest(string endpoint, HttpVerb method)
+        {
+            IHttpVariableRequestSubmitter submitter = submitterFactory();
+            submitter.Uri = new Uri(endpoint);
+            submitter.Verb = method;
+
+            submitter.ContentType = "application/x-www-form-urlencoded";
+            AuthenticateRequest(submitter);
+
+            return submitter;
         }
 
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private string ProcessRequest(IHttpRequestSubmitter request, string action)
+        private T ProcessRequest<T>(IHttpRequestSubmitter request, string action)
         {
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, action);
             apiLogEntry.LogRequest(request);
@@ -76,7 +175,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                return result;
+                return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                });
             }
             catch (Exception ex)
             {
@@ -88,12 +191,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the authorization header value.
         /// </summary>
-        private string GetAuthorizationHeaderValue()
+        private void AuthenticateRequest(IHttpRequestSubmitter request)
         {
             try
             {
-                return
-                    $"Basic {Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ChannelAdvisorStoreType.ApplicationID}:{encryptionProvider.Decrypt(EncryptedSharedSecret)}"))}";
+                string appId = ChannelAdvisorStoreType.ApplicationID;
+                string sharedSecret = encryptionProvider.Decrypt(EncryptedSharedSecret);
+                string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{appId}:{sharedSecret}"));
+
+                request.Headers.Add("Authorization", $"Basic {auth}");
             }
             catch (EncryptionException ex)
             {

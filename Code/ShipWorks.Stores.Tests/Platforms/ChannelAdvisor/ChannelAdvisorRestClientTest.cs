@@ -71,11 +71,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void GetRefreshToken_SetsCorrectAuthorization()
         {
-            var encryptionProvider = mock.Mock<IEncryptionProvider>();
-            encryptionProvider.Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=")).Returns("Preb8E42ckWZZpFHh6OV2w");
-            mock.Mock<IEncryptionProviderFactory>()
-                .Setup(f => f.CreateChannelAdvisorEncryptionProvider())
-                .Returns(encryptionProvider);
+            mock.FromFactory<IEncryptionProviderFactory>()
+                .Mock(f => f.CreateChannelAdvisorEncryptionProvider())
+                .Setup(p => p.Decrypt("hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4="))
+                .Returns("Preb8E42ckWZZpFHh6OV2w");
 
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetRefreshToken("blah", "https%3A%2F%2Fwww.interapptive.com%2Fchanneladvisor%2Fsubscribe.php");
@@ -129,9 +128,84 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetRefreshToken_ReturnsRefreshToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            string refreshToken = testObject.GetRefreshToken("blah", "blah");
+            var refreshToken = testObject.GetRefreshToken("blah", "blah");
 
-            Assert.Equal("rtoken", refreshToken);
+            Assert.Equal("rtoken", refreshToken.Value);
+        }
+
+        [Fact]
+        public void GetOrders_SetsReqiestVerbToGet()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.VerifySet(r => r.Verb = HttpVerb.Get);
+        }
+
+        [Fact]
+        public void GetOrders_SetsUriToOrdersEndPoint()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.VerifySet(r => r.Uri = new Uri("https://api.channeladvisor.com/v1/Orders"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsFilterVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            var start = DateTime.UtcNow;
+
+            testObject.GetOrders(start, "token");
+
+            submitter.Verify(s => s.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsExpandVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("$expand", "Fulfillments,Items"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsCountVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("$count", "true"));
+        }
+
+        [Fact]
+        public void GetOrders_SetsAccesstokenVariable()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+
+            submitter.Verify(s => s.Variables.Add("access_token", "atoken"));
+        }
+
+        [Fact]
+        public void GetOrders_UsesCachedAccessToken()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders(DateTime.UtcNow, "token");
+            
+            submitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
+        }
+
+        [Fact]
+        public void GetProfiles_UsesProfilesEndpoint()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetProfiles("blah");
+            submitter.VerifySet(s => s.Uri =
+                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Profiles"));
         }
 
         public void Dispose()
