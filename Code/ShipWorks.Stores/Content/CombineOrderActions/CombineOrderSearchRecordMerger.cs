@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         public SearchRecordMerger(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             this.sqlAdapter = sqlAdapter;
-            this.orders = orders.Cast<TEntity>();
+            this.orders = orders.OfType<TEntity>();
             this.combinedOrder = combinedOrder;
         }
 
