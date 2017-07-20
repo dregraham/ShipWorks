@@ -5543,11 +5543,11 @@
     <Compile Include="Stores\Platforms\Amazon\Dime\DimeInjectionStream.cs" />
     <Compile Include="Stores\Platforms\Amazon\Dime\DimeWebRequest.cs" />
     <Compile Include="Stores\Platforms\Amazon\Dime\SellerCentralDimeService.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
@@ -9558,8 +9558,8 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.resx">
       <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>

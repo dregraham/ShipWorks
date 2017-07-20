@@ -321,7 +321,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Create the account settings control
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new ChannelAdvisorAccountSettingsControl();
+            new ChannelAdvisorSoapAccountSettingsControl();
 
         /// <summary>
         /// Create the CA store settings
