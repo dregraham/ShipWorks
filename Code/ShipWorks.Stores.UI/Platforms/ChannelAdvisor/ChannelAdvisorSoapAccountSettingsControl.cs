@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using ShipWorks.Stores.Management;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 
-namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// ChannelAdvisor account configuration control
@@ -233,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             statusPicture.Visible = true;
             statusText.Visible = true;
 
-            // start the brower
+            // start the browser
             OnCALinkClick(this, EventArgs.Empty);
 
             // start polling for Access

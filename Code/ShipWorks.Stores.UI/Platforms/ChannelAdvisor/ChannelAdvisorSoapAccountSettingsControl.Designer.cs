@@ -1,13 +1,13 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+﻿namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
     partial class ChannelAdvisorSoapAccountSettingsControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -49,34 +49,34 @@
             ((System.ComponentModel.ISupportInitialize)(this.statusPicture)).BeginInit();
             this.accessPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // labelProfileID
-            // 
+            //
             this.labelProfileID.AutoSize = true;
             this.labelProfileID.Location = new System.Drawing.Point(45, 35);
             this.labelProfileID.Name = "labelProfileID";
             this.labelProfileID.Size = new System.Drawing.Size(55, 13);
             this.labelProfileID.TabIndex = 1;
             this.labelProfileID.Text = "Profile ID:";
-            // 
+            //
             // labelSectionProfileID
-            // 
+            //
             this.labelSectionProfileID.AutoSize = true;
             this.labelSectionProfileID.Location = new System.Drawing.Point(7, 7);
             this.labelSectionProfileID.Name = "labelSectionProfileID";
             this.labelSectionProfileID.Size = new System.Drawing.Size(394, 13);
             this.labelSectionProfileID.TabIndex = 0;
             this.labelSectionProfileID.Text = "Enter your ChannelAdvisor Profile ID and your account username and password.";
-            // 
+            //
             // profileId
-            // 
+            //
             this.profileId.Location = new System.Drawing.Point(109, 32);
             this.profileId.Name = "profileId";
             this.profileId.Size = new System.Drawing.Size(102, 21);
             this.profileId.TabIndex = 2;
-            // 
+            //
             // linkHelpProfileID
-            // 
+            //
             this.linkHelpProfileID.AutoSize = true;
             this.linkHelpProfileID.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkHelpProfileID.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
@@ -87,9 +87,9 @@
             this.linkHelpProfileID.TabIndex = 3;
             this.linkHelpProfileID.Text = "Where do I find this?";
             this.linkHelpProfileID.Url = "http://support.shipworks.com/support/solutions/articles/4000026252";
-            // 
+            //
             // statusLabel
-            // 
+            //
             this.statusLabel.AutoSize = true;
             this.statusLabel.Location = new System.Drawing.Point(58, 63);
             this.statusLabel.Name = "statusLabel";
@@ -97,9 +97,9 @@
             this.statusLabel.TabIndex = 8;
             this.statusLabel.Text = "Status:";
             this.statusLabel.Visible = false;
-            // 
+            //
             // statusText
-            // 
+            //
             this.statusText.AutoSize = true;
             this.statusText.ForeColor = System.Drawing.Color.DimGray;
             this.statusText.Location = new System.Drawing.Point(132, 63);
@@ -108,9 +108,9 @@
             this.statusText.TabIndex = 18;
             this.statusText.Text = "Waiting for you to finish authorizing ShipWorks...";
             this.statusText.Visible = false;
-            // 
+            //
             // statusPicture
-            // 
+            //
             this.statusPicture.Image = ((System.Drawing.Image)(resources.GetObject("statusPicture.Image")));
             this.statusPicture.Location = new System.Drawing.Point(110, 62);
             this.statusPicture.Name = "statusPicture";
@@ -119,9 +119,9 @@
             this.statusPicture.TabIndex = 17;
             this.statusPicture.TabStop = false;
             this.statusPicture.Visible = false;
-            // 
+            //
             // accessPanel
-            // 
+            //
             this.accessPanel.Controls.Add(this.panel2);
             this.accessPanel.Controls.Add(this.caLinkControl);
             this.accessPanel.Controls.Add(this.label3);
@@ -131,16 +131,16 @@
             this.accessPanel.Name = "accessPanel";
             this.accessPanel.Size = new System.Drawing.Size(471, 120);
             this.accessPanel.TabIndex = 21;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.Location = new System.Drawing.Point(190, 81);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(278, 33);
             this.panel2.TabIndex = 4;
-            // 
+            //
             // caLinkControl
-            // 
+            //
             this.caLinkControl.AutoSize = true;
             this.caLinkControl.Cursor = System.Windows.Forms.Cursors.Hand;
             this.caLinkControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
@@ -151,9 +151,9 @@
             this.caLinkControl.TabIndex = 3;
             this.caLinkControl.Text = "Visit www.channeladvisor.com";
             this.caLinkControl.Click += new System.EventHandler(this.OnCALinkClick);
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.Location = new System.Drawing.Point(4, 32);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(464, 47);
@@ -161,18 +161,18 @@
             this.label3.Text = "Click Request Access and then login to your ChannelAdvisor account, go to My Acco" +
                 "unt -> Developer Network -> Account Authorization and Enable the ShipWorks reque" +
                 "st.";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(4, 4);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(367, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "ShipWorks needs to be authorized to access your ChannelAdvisor account.";
-            // 
+            //
             // requestAccessButton
-            // 
+            //
             this.requestAccessButton.Location = new System.Drawing.Point(45, 86);
             this.requestAccessButton.Name = "requestAccessButton";
             this.requestAccessButton.Size = new System.Drawing.Size(126, 23);
@@ -180,14 +180,14 @@
             this.requestAccessButton.Text = "Request Access...";
             this.requestAccessButton.UseVisualStyleBackColor = true;
             this.requestAccessButton.Click += new System.EventHandler(this.OnRequestAccess);
-            // 
+            //
             // timer
-            // 
+            //
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.OnTimerTick);
-            // 
+            //
             // ChannelAdvisorAccountSettingsControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.statusText);
@@ -220,7 +220,7 @@
         private System.Windows.Forms.Label statusText;
         private System.Windows.Forms.PictureBox statusPicture;
         private System.Windows.Forms.Panel accessPanel;
-        private UI.Controls.LinkControl caLinkControl;
+        private ShipWorks.UI.Controls.LinkControl caLinkControl;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button requestAccessButton;
