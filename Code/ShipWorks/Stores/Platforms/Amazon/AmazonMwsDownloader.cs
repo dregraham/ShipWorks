@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -24,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Order downloader for Amazon MWS
     /// </summary>
-    public class AmazonMwsDownloader : StoreDownloader
+    [Component]
+    public class AmazonMwsDownloader : StoreDownloader, IAmazonMwsDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
 
@@ -33,10 +35,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Gets the Amazon store entity
         /// </summary>
-        private AmazonStoreEntity AmazonStore
-        {
-            get { return (AmazonStoreEntity) Store; }
-        }
+        private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
         /// <summary>
         /// Constructor
@@ -76,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // BN: There was some customer confusion over downloads just refusing to happen - this will make it more clear.
                     /*if (client.QuotaExceeded())
                     {
-                        log.InfoFormat("Skipping download because the account has exceeded it's qouta.");
+                        log.InfoFormat("Skipping download because the account has exceeded it's quota.");
 
                         // silently return if we have no api calls remaining.  We don't want to block other downloaders right now.
                         return;
@@ -163,16 +162,16 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
             // get the order instance
-            GenericResult<OrderEntity> result = InstantiateOrder(new AmazonOrderIdentifier(amazonOrderID));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             AmazonOrderEntity order = (AmazonOrderEntity) result.Value;
@@ -182,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             if (String.Compare(orderStatus, "Canceled", StringComparison.OrdinalIgnoreCase) == 0 && order.IsNew)
             {
                 log.InfoFormat("Skipping order '{0}' due to canceled and not yet seen by ShipWorks.", amazonOrderID);
-                return Task.CompletedTask;
+                return;
             }
 
             // basic properties
@@ -256,11 +255,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonMwsDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Map the fullfillment channel string provided by Amazon to our internal representation
+        /// Map the fulfillment channel string provided by Amazon to our internal representation
         /// </summary>
         private static AmazonMwsFulfillmentChannel TranslateFulfillmentChannel(string fulfillmentChannel)
         {
@@ -419,7 +418,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private void AddToCharge(OrderEntity order, string chargeType, string name, decimal amount)
         {
-            // dont' need to create 0-value charges
+            // Don't need to create 0-value charges
             if (amount == 0)
             {
                 return;
@@ -467,7 +466,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 order.ShipCountryCode = Geography.GetCountryCode(XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:CountryCode", ""));
                 order.ShipStateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:StateOrRegion", ""), order.ShipCountryCode);
 
-                // 10/18/2011, Amazon just added BuyerName and BuyerEmail.  Use it here to ovewrite
+                // 10/18/2011, Amazon just added BuyerName and BuyerEmail.  Use it here to overwrite
                 string buyerFullName = XPathUtility.Evaluate(xpath, "amz:BuyerName", "");
                 if (!String.IsNullOrEmpty(buyerFullName))
                 {
@@ -498,7 +497,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillNameParseStatus = (int) buyerName.ParseStatus;
             order.BillUnparsedName = buyerName.UnparsedName;
 
-            // If first and last name on the buyer are the same as the shipping name, copy the rest of hte address too
+            // If first and last name on the buyer are the same as the shipping name, copy the rest of the address too
             if ((string.Equals(order.BillFirstName, order.ShipFirstName, StringComparison.OrdinalIgnoreCase)) &&
                 (string.Equals(order.BillLastName, order.ShipLastName, StringComparison.OrdinalIgnoreCase)))
             {

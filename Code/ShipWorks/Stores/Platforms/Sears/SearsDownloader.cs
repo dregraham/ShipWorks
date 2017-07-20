@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// <summary>
     /// Downloader for sears.com
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Sears)]
     public class SearsDownloader : StoreDownloader
     {
         // Logger
@@ -30,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsDownloader(SearsStoreEntity store)
+        public SearsDownloader(StoreEntity store)
             : base(store)
         {
 
@@ -45,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         {
             Progress.Detail = "Checking for orders...";
 
-            DateTime? orderDate = await GetOrderDateStartingPoint();
+            DateTime? orderDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
             if (!orderDate.HasValue)
             {
                 // If they chose to go back forever, still limit to 30 days
@@ -130,18 +132,18 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Load the given order
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // extract the order number
             long orderNumber = XPathUtility.Evaluate(xpath, "customer-order-confirmation-number", 0L);
             string poNumber = XPathUtility.Evaluate(xpath, "po-number", "");
 
             // get the order instance, creates one if necessary
-            GenericResult<OrderEntity> result = InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new SearsOrderIdentifier(orderNumber, poNumber)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             SearsOrderEntity order = (SearsOrderEntity) result.Value;
@@ -185,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "SearsDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

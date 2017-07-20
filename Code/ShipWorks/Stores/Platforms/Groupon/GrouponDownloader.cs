@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -20,9 +21,9 @@ using ShipWorks.Stores.Platforms.Groupon.DTO;
 namespace ShipWorks.Stores.Platforms.Groupon
 {
     /// <summary>
-    /// Downloader for the Groupon store
     /// </summary>
-    class GrouponDownloader : StoreDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Groupon)]
+    public class GrouponDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponDownloader));
 
@@ -107,15 +108,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// LoadORder from JToken
         /// </summary>
-        private Task LoadOrder(JToken jsonOrder)
+        private async Task LoadOrder(JToken jsonOrder)
         {
             string orderid = jsonOrder["orderid"].ToString();
 
-            GenericResult<OrderEntity> result = InstantiateOrder(new GrouponOrderIdentifier(orderid));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new GrouponOrderIdentifier(orderid)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderid, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             GrouponOrderEntity order = (GrouponOrderEntity) result.Value;
@@ -125,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             if (order.IsNew && status != "open")
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Order already exists or is new and of status open
@@ -160,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
                 foreach (JToken jsonItem in jsonItems)
                 {
-                    //Deserialized into grouponitem
+                    // Deserialized into grouponitem
                     GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
                     LoadItem(order, item, itemWeightUnit);
                 }
@@ -170,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -243,16 +244,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private static DateTime GetDate(string date)
         {
-            int TimeZonePos = date.IndexOf("UTC");
+            int TimeZonePos = date.IndexOf("UTC", StringComparison.Ordinal);
 
-            if (TimeZonePos > 0)
-            {
-                return DateTime.Parse(date.Substring(0, TimeZonePos));
-            }
-            else
-            {
-                return DateTime.Parse(date);
-            }
+            return TimeZonePos > 0 ?
+                DateTime.Parse(date.Substring(0, TimeZonePos)) :
+                DateTime.Parse(date);
         }
 
         /// <summary>

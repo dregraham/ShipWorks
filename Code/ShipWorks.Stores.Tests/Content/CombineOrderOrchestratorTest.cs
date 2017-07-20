@@ -11,6 +11,7 @@ using ShipWorks.Core.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users.Security;
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Content
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
                 .Returns(true);
 
-            mock.Mock<ICombineOrdersViewModel>()
+            mock.Mock<IOrderCombinationUserInteraction>()
                 .Setup(x => x.GetCombinationDetailsFromUser(It.IsAny<IEnumerable<IOrderEntity>>()))
                 .Returns(GenericResult.FromSuccess(Tuple.Create(6L, "6-C")));
 
@@ -140,14 +141,14 @@ namespace ShipWorks.Stores.Tests.Content
 
             await testObject.Combine(new long[] { 1, 2 });
 
-            mock.Mock<ICombineOrdersViewModel>()
+            mock.Mock<IOrderCombinationUserInteraction>()
                 .Verify(x => x.GetCombinationDetailsFromUser(orders));
         }
 
         [Fact]
         public async Task Combine_ReturnsFailure_WhenViewModelReturnsFailure()
         {
-            mock.Mock<ICombineOrdersViewModel>()
+            mock.Mock<IOrderCombinationUserInteraction>()
                 .Setup(x => x.GetCombinationDetailsFromUser(It.IsAny<IEnumerable<IOrderEntity>>()))
                 .Returns(GenericResult.FromError<Tuple<long, string>>("Foo"));
             var testObject = mock.Create<CombineOrderOrchestrator>();
@@ -199,26 +200,18 @@ namespace ShipWorks.Stores.Tests.Content
                 .Verify(x => x.Combine(6, orders, "6-C", It.IsAny<IProgressReporter>()));
         }
 
-        [Theory]
-        [InlineData("Order #1 was", 1, null, null, null)]
-        [InlineData("Orders #1 and #2 were", 1, 2, null, null)]
-        [InlineData("Orders #1, #2, and #3 were", 1, 2, 3, null)]
-        [InlineData("Orders #1, #2, #3, and #4 were", 1, 2, 3, 4)]
-        public async Task Combine_ShowsSuccessNotification_WhenCombinationSucceeds(string expected, long? id1, long? id2, long? id3, long? id4)
+        [Fact]
+        public async Task Combine_ShowsSuccessNotification_WhenCombinationSucceeds()
         {
-            orders = new[] { id1, id2, id3, id4 }
-                .Where(x => x.HasValue)
-                .Select(x => new OrderEntity { OrderNumber = x.Value });
+            orders = new[] { 1006, 2006 }
+                .Select(x => new OrderEntity { OrderNumber = x });
 
             var testObject = mock.Create<CombineOrderOrchestrator>();
 
-            await testObject.Combine(new long[] { 1, 2 });
+            await testObject.Combine(new long[] { 1006, 2006 });
 
-            mock.Mock<IMessageHelper>()
-                .Verify(x => x.ShowUserConditionalInformation(
-                    "Combine Orders",
-                    $"{expected} combined into Order #6-C",
-                    UserConditionalNotificationType.CombineOrders));
+            mock.Mock<IOrderCombinationUserInteraction>()
+                .Verify(x => x.ShowSuccessConfirmation("6-C", orders));
         }
 
         [Fact]

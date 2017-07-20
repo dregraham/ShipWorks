@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -23,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// <summary>
     /// Order downloader for Volusion stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Volusion)]
     public class VolusionDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionDownloader));
@@ -46,13 +48,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Convenience property for quick access to the specific entity
         /// </summary>
-        protected VolusionStoreEntity VolusionStoreEntity
-        {
-            get
-            {
-                return (VolusionStoreEntity) Store;
-            }
-        }
+        protected VolusionStoreEntity VolusionStoreEntity => (VolusionStoreEntity) Store;
 
         /// <summary>
         /// Download orders from the store
@@ -141,16 +137,16 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Processes a single order
         /// </summary>
-        private Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
+        private async Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
         {
             long orderNumber = XPathUtility.Evaluate(xpath, "OrderID", 0);
 
             // find an existing order in ShipWorks or create a new one
-            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             OrderEntity order = result.Value;
@@ -178,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             // do the remaining only on new orders
             if (order.IsNew)
             {
-                LoadNotes(order, xpath);
+                await LoadNotes(order, xpath).ConfigureAwait(false);
 
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("OrderDetails");
@@ -198,7 +194,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "VolusionDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -349,26 +345,26 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Loads notes on the order
         /// </summary>
-        private void LoadNotes(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderEntity order, XPathNavigator xpath)
         {
             bool isGift = XPathUtility.Evaluate(xpath, "IsAGift", "N") == "Y";
             if (isGift)
             {
-                InstantiateNote(order, "Gift: Yes", order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Gift: Yes", order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // order comments
             string orderComments = XPathUtility.Evaluate(xpath, "Order_Comments", "");
             if (orderComments.Length > 0)
             {
-                InstantiateNote(order, orderComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, orderComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // order notes (private)
             string orderNotes = XPathUtility.Evaluate(xpath, "OrderNotes", "");
             if (orderNotes.Length > 0)
             {
-                InstantiateNote(order, orderNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, orderNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 

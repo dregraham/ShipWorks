@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -24,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
     /// A Newegg implementation of the StoreDownloader class that interacts with the NeweggWebClient
     /// to download orders from Newegg and import them into ShipWorks.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NeweggMarketplace)]
     public class NeweggDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NeweggDownloader));
@@ -184,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             // Get the initial metadata of the order download to figure out how many pages and
             // the total number of orders we'll be downloading based on our starting point.
-            DateTime startingPoint = await GetDownloadStartingPoint();
+            DateTime startingPoint = await GetDownloadStartingPoint().ConfigureAwait(false);
             DownloadInfo downloadInfo = webClient.GetDownloadInfo(startingPoint, orderType);
             int pagesToDownload = downloadInfo.PageCount;
 
@@ -249,7 +251,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             }
         }
 
-
         /// <summary>
         /// Gets the download starting point.
         /// </summary>
@@ -276,14 +277,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Loads the order based on the data downloaded from Newegg.
         /// </summary>
         /// <param name="downloadedOrder">The order data downloaded from the Newegg API.</param>
-        private Task LoadOrder(Order downloadedOrder)
+        private async Task LoadOrder(Order downloadedOrder)
         {
             OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(downloadedOrder.OrderNumber);
-            GenericResult<OrderEntity> result = InstantiateOrder(orderIdentifier);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.OrderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             NeweggOrderEntity order = (NeweggOrderEntity) result.Value;
@@ -316,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NeweggDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -376,7 +377,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             order.ShipPostalCode = downloadedOrder.ShipToZipCode;
             order.ShipPhone = downloadedOrder.CustomerPhoneNumber;
         }
-
 
         /// <summary>
         /// Formats the USA country code.

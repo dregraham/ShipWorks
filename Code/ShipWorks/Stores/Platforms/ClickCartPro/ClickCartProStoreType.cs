@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -15,6 +15,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
     /// <summary>
     /// Click Cart Pro integration store type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ClickCartPro)]
+    [Component(RegistrationType.Self)]
     public class ClickCartProStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -37,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         }
 
         /// <summary>
-        /// Gets the module ersion we're requiring
+        /// Gets the module version we're requiring
         /// </summary>
         public override Version GetRequiredModuleVersion()
         {
@@ -71,14 +73,6 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         }
 
         /// <summary>
-        /// Create a downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new ClickCartProDownloader(Store);
-        }
-
-        /// <summary>
         /// ClickCartPro identifies orders by the ClickCartProID
         /// </summary>
         public override string GetOnlineOrderIdentifier(OrderEntity order)
@@ -100,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>
             {
-                // updatestatus call 
+                // updatestatus call
                 {"status", new VariableTransformer("code")},
 
                 // getorders, getcount
@@ -118,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             GenericModuleCapabilities capabilities = LegacyAdapterCapabilities.CreateOscDerivativeDefaults();
             capabilities.OnlineStatusDataType = GenericVariantDataType.Text;
 
-            // create the legacy client instead of the regular genric one
+            // create the legacy client instead of the regular generic one
             LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity) Store,
                 LegacyStyleSheets.ClickCartProStyleSheet, capabilities, transformers);
 
@@ -129,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             client.AdditionalVariables.Add("ns", "expshipworks");
             client.AdditionalVariables.Add("app", "ccp0");
 
-            // compatiblity mode requires GETs instead of POSTs
+            // compatibility mode requires GETs instead of POSTs
             client.CompatibilityVerb = HttpVerb.Get;
 
             return client;

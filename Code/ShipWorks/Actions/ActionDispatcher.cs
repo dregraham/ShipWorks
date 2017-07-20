@@ -27,7 +27,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called each time an individual order is downloaded into ShipWorks.
         /// </summary>
-        public static void DispatchOrderDownloaded(long orderID, long storeID, bool initialDownload, SqlAdapter adapter)
+        public static void DispatchOrderDownloaded(long orderID, long storeID, bool initialDownload, ISqlAdapter adapter)
         {
             List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.OrderDownloaded, storeID);
 

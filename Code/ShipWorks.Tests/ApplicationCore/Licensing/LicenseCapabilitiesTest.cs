@@ -112,6 +112,32 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
+        public void GetShipmentTypeFunctinality_ReturnsShipmentTypeFunctionality()
+        {
+            string xmlWithBestRateUpsRestrictionShipmentTypeFeature = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>	<UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSources</Name><Value>yes</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><CustomerStatus><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Feature><Type>BestRateUpsRestriction</Type><Config>True</Config></Feature><Feature><Type>RateResultCount</Type><Config>5</Config></Feature></ShipmentType></ShipmentTypeFunctionality><Valid>true</Valid></CustomerStatus></LoginActivityResponse>";
+
+            XmlDocument xmlResponse = new XmlDocument();
+            xmlResponse.LoadXml(xmlWithBestRateUpsRestrictionShipmentTypeFeature);
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+            
+            Assert.Equal("True", licenseCapabilities.GetShipmentTypeFunctionality(ShipmentTypeCode.BestRate, ShippingPolicyType.BestRateUpsRestriction));
+        }
+
+        [Fact]
+        public void GetShipmentTypeFunctinality_ReturnsEmptyString_WhenShipmentTypeFunctionalityDoesNotExist()
+        {
+            string xmlWithBestRateUpsRestrictionShipmentTypeFeature = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>	<UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSources</Name><Value>yes</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><CustomerStatus><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Feature><Type>BestRateUpsRestriction</Type><Config>True</Config></Feature><Feature><Type>RateResultCount</Type><Config>5</Config></Feature></ShipmentType></ShipmentTypeFunctionality><Valid>true</Valid></CustomerStatus></LoginActivityResponse>";
+
+            XmlDocument xmlResponse = new XmlDocument();
+            xmlResponse.LoadXml(xmlWithBestRateUpsRestrictionShipmentTypeFeature);
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.Equal(string.Empty, licenseCapabilities.GetShipmentTypeFunctionality(ShipmentTypeCode.Usps, ShippingPolicyType.BestRateUpsRestriction));
+        }
+
+        [Fact]
         public void LicenseCapabilities_AddsRateResultCountFeature_WhenResponseContainsRateResultCountFeature()
         {
             string xmlWithRateResultCountShipmentTypeFeature = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>	<UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSources</Name><Value>yes</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><CustomerStatus><Valid>true</Valid><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Feature><Type>BestRateUpsRestriction</Type><Config>True</Config></Feature><Feature><Type>RateResultCount</Type><Config>5</Config></Feature></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";

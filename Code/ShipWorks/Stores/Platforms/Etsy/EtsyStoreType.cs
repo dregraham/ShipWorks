@@ -1,32 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Etsy.Dialog;
-using ShipWorks.Stores.Platforms.Etsy.WizardPages;
-using ShipWorks.UI.Wizard;
-using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Etsy.Enums;
-using System.Linq;
-using Autofac;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Etsy.Dialog;
+using ShipWorks.Stores.Platforms.Etsy.Enums;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
     /// <summary>
     /// Etsy Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Etsy)]
+    [Component(RegistrationType.Self)]
     public class EtsyStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyStoreType));
@@ -54,13 +55,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Etsy Store entity
         /// </summary>
-        public EtsyStoreEntity EtsyStore
-        {
-            get
-            {
-                return Store as EtsyStoreEntity;
-            }
-        }
+        public EtsyStoreEntity EtsyStore => Store as EtsyStoreEntity;
 
         /// <summary>
         /// Creates a new instance of an Etsy store entity
@@ -109,14 +104,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Create a downloader for our current store instance
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new EtsyDownloader(this, (EtsyStoreEntity)Store);
-        }
-
-        /// <summary>
         /// Create the pages to be displayed in the Add Store Wizard
         /// </summary>
         /// <param name="scope"></param>
@@ -130,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Create the control used to configurd the actions for online update after shipping
+        /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
@@ -286,9 +273,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                string comment = (string)userState;
+                string comment = (string) userState;
 
-                EtsyOnlineUpdater onlineUpdater = new EtsyOnlineUpdater((EtsyStoreEntity)Store);
+                EtsyOnlineUpdater onlineUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
 
@@ -319,8 +306,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                EtsyOrderEntity order = (EtsyOrderEntity)DataProvider.GetEntity(orderID);
-                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity)Store);
+                EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
+                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
                 etsyUpdater.UpdateOnlineStatus(order, null, false);
             }
@@ -342,11 +329,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                EtsyOrderEntity order = (EtsyOrderEntity)DataProvider.GetEntity(orderID);
+                EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
 
-                bool wasPaid = (bool)userState;
+                bool wasPaid = (bool) userState;
 
-                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity)Store);
+                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
                 etsyUpdater.UpdateOnlineStatus(order, wasPaid, null);
             }
@@ -361,13 +348,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Trackings the upload callback.
+        /// Tracking the upload callback.
         /// </summary>
         private void TrackingUploadCallback(long orderID, object userstate, BackgroundIssueAdder<long> issueAdder)
         {
             try
             {
-                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity)Store);
+                EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
                 etsyUpdater.UploadShipmentDetails(orderID);
             }

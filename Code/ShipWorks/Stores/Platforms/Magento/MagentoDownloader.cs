@@ -1,7 +1,10 @@
 ﻿using System.Threading.Tasks;
 using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -12,14 +15,19 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Generic downloader customized for Magento
     /// </summary>
-    class MagentoDownloader : GenericModuleDownloader
+    [Component]
+    public class MagentoDownloader : GenericModuleDownloader, IMagentoModuleDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoDownloader(StoreEntity store)
-            : base(store)
+        public MagentoDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
+
         }
 
         /// <summary>

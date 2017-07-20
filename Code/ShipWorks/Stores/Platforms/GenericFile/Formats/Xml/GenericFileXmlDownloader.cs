@@ -1,11 +1,15 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Xml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
@@ -15,7 +19,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
     /// <summary>
     /// Downloader implementation for importing from XML files
     /// </summary>
-    public class GenericFileXmlDownloader : GenericFileDownloaderBase
+    [Component]
+    public class GenericFileXmlDownloader : GenericFileDownloaderBase, IGenericFileXmlDownloader
     {
         // Transform to use, if any
         XslCompiledTransform xslTransform = null;
@@ -26,8 +31,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericFileXmlDownloader(GenericFileStoreEntity store)
-            : base(store)
+        public GenericFileXmlDownloader(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
 
         }
@@ -73,13 +81,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
-            GenericResult<OrderEntity> result = InstantiateOrder(xpath);
+            GenericResult<OrderEntity> result = await InstantiateOrder(xpath).ConfigureAwait(false);
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order: {1}.", result.Message);
-                return Task.CompletedTask;
+                log.InfoFormat("Skipping order: {0}.", result.Message);
+                return;
             }
 
             OrderEntity order = result.Value;
@@ -88,13 +96,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileXmlDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        private GenericResult<OrderEntity> InstantiateOrder(XPathNavigator xpath)
+        private Task<GenericResult<OrderEntity>> InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);

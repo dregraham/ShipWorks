@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,7 +21,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for legacy MarketplaceAdvisor store types
     /// </summary>
-    class MarketplaceAdvisorLegacyDownloader : StoreDownloader
+    [Component]
+    public class MarketplaceAdvisorLegacyDownloader : StoreDownloader, IMarketplaceAdvisorLegacyDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorLegacyDownloader));
 
@@ -30,10 +32,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             bool totalIsEstimated;
             int totalRecords;
 
-            // Equals the page size - may not be hte last page
+            // Equals the page size - may not be the last page
             if (currentPage < totalPages)
             {
                 totalIsEstimated = true;
@@ -183,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             long orderNumber = XPathUtility.Evaluate(xpath, "Number", (long) 0);
 
             // Create a new order instance
-            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
@@ -216,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 string notes = XPathUtility.Evaluate(xpath, "Notes", "");
                 if (notes.Length > 0)
                 {
-                    InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public);
+                    await InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
                 }
 
                 // Load address info
@@ -332,7 +331,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private void LoadCharge(MarketplaceAdvisorOrderEntity order, string type, string name, double amount, bool ignoreZeroAmount)
         {
-            if (amount == 0 && ignoreZeroAmount)
+            if (amount.IsEquivalentTo(0) && ignoreZeroAmount)
             {
                 return;
             }

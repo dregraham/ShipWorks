@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
     /// <summary>
     /// Order downloader for PayPal.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PayPal)]
     public class PayPalDownloader : StoreDownloader
     {
         const int maxIntialDownload = 365;
@@ -32,10 +34,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Convenience property for quick access to the specific store entity
         /// </summary>
-        private PayPalStoreEntity PayPalStore
-        {
-            get { return (PayPalStoreEntity) Store; }
-        }
+        private PayPalStoreEntity PayPalStore => (PayPalStoreEntity) Store;
 
         /// <summary>
         /// Constructor
@@ -183,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             if (ShouldImportTransaction(transaction))
             {
-                GenericResult<OrderEntity> result = InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
+                GenericResult<OrderEntity> result = await InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID)).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     log.InfoFormat("Skipping order '{0}': {1}.", transaction.PaymentInfo.TransactionID, result.Message);
@@ -202,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 // only do the remainder for new orders
                 if (order.IsNew)
                 {
-                    await LoadNewOrder(order, transaction);
+                    await LoadNewOrder(order, transaction).ConfigureAwait(false);
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
@@ -242,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             // no customer ids
             order.OnlineCustomerID = null;
 
-            InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             LoadItems(order, transaction);
 

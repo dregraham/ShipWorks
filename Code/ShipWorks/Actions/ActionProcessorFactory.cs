@@ -30,8 +30,10 @@ namespace ShipWorks.Actions
             
             bool defaultPrint = configurationData.FetchReadOnly().UseParallelActionQueue;
 
-            // If default print is enabled, add the default print gateway.
-            if (defaultPrint)
+            // If default print is enabled, add the default print gateway. ONLY if we are in the UI
+            // We dont want the background process printing because it will print out of order with both 
+            // the UI and background process sending documents to the printer at the same time
+            if (defaultPrint && configurationData.ExecutionModeActionQueueType == ActionQueueType.UserInterface)
             {
                 actionProcessors.Add(new ActionProcessor(new ActionQueueGatewayDefaultPrint()));
             }

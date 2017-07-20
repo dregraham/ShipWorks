@@ -1,10 +1,13 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,8 +25,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Constructor
         /// </summary>
-        protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store)
-            : base(store)
+        protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
 
         }
@@ -36,13 +42,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Load the order from the reader that is positioned on the row we want to load
         /// </summary>
-        protected Task LoadOrder(GenericSpreadsheetReader reader)
+        protected async Task LoadOrder(GenericSpreadsheetReader reader)
         {
-            GenericResult<OrderEntity> result = InstantiateOrder(reader);
+            GenericResult<OrderEntity> result = await InstantiateOrder(reader).ConfigureAwait(false);
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order: {1}.", result.Message);
-                return Task.CompletedTask;
+                log.InfoFormat("Skipping order: {0}.", result.Message);
+                return;
             }
 
             OrderEntity order = result.Value;
@@ -52,13 +58,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileSpreadsheetDownloaderBase.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private GenericResult<OrderEntity> InstantiateOrder(GenericSpreadsheetReader reader)
+        private Task<GenericResult<OrderEntity>> InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
             long orderNumber = reader.ReadField("Order.Number", 0L, false);
@@ -94,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
                             // Update the status
                             Progress.Detail = $"Importing record {(QuantitySaved + 1)}... {speed:##.##} ms/order";
 
-                            await LoadOrder(reader);
+                            await LoadOrder(reader).ConfigureAwait(false);
 
                             if (Progress.IsCancelRequested)
                             {

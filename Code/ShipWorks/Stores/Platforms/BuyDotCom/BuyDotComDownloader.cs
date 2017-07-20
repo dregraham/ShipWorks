@@ -4,10 +4,12 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -23,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// Downloader for Buy.com stores.
     /// Heavily leverages GenericSpreadsheetOrderLoader to load orders.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BuyDotCom)]
     public class BuyDotComDownloader : OrderElementFactoryDownloaderBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
@@ -31,8 +34,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComDownloader(BuyDotComStoreEntity store)
-            : base(store)
+        public BuyDotComDownloader(StoreEntity store,
+            Func<StoreEntity, BuyDotComStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             string mapXml = ResourceUtility.ReadString("ShipWorks.Stores.Platforms.BuyDotCom.BuyDotComOrderImportMap.swcsvm");
 
@@ -119,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    return await reader.ReadToEndAsync();
+                    return await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -135,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 string fileContent = ftpClient.GetOrderFileContent(fileName);
 
                 // Load orders from the content
-                bool result = await LoadOrdersFromCsv(fileContent);
+                bool result = await LoadOrdersFromCsv(fileContent).ConfigureAwait(false);
 
                 // Move the file to the Archive folder if configured (default)
                 if (BuyDotComUtility.ArchiveFileAfterDownload)
@@ -164,7 +170,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
 
                     // Create and load in the order data
-                    GenericResult<OrderEntity> result = InstantiateOrder(csvReader);
+                    GenericResult<OrderEntity> result = await InstantiateOrder(csvReader).ConfigureAwait(false);
                     if (result.Failure)
                     {
                         log.InfoFormat("Skipping order: {1}.", result.Message);
@@ -192,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private GenericResult<OrderEntity> InstantiateOrder(GenericCsvReader reader)
+        private Task<GenericResult<OrderEntity>> InstantiateOrder(GenericCsvReader reader)
         {
             // pull out the order number
             long orderNumber = reader.ReadField("Order.Number", 0L, false);

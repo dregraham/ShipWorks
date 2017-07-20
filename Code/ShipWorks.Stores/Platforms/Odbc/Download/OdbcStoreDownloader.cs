@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -18,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// <summary>
     /// Downloader for an OdbcStoreDownloader
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Odbc)]
     public class OdbcStoreDownloader : StoreDownloader
     {
         private readonly IOdbcDownloadCommandFactory downloadCommandFactory;
@@ -142,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 Progress.Detail = $"Processing order {QuantitySaved + 1}";
 
-                GenericResult<OrderEntity> downloadedOrder = LoadOrder(odbcRecordsForOrder);
+                GenericResult<OrderEntity> downloadedOrder = await LoadOrder(odbcRecordsForOrder).ConfigureAwait(false);
 
                 if (downloadedOrder.Success)
                 {
@@ -164,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Downloads the order.
         /// </summary>
         /// <exception cref="DownloadException">Order number not found in map.</exception>
-        private GenericResult<OrderEntity> LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
+        private async Task<GenericResult<OrderEntity>> LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
         {
             OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
@@ -180,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             // Create an order using the order number
             long orderNumber = (long) odbcFieldMapEntry.ShipWorksField.Value;
-            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);

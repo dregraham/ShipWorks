@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Downloader for BigCommerce stores
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BigCommerce)]
     public class BigCommerceDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public BigCommerceDownloader(BigCommerceStoreEntity store,
+        public BigCommerceDownloader(StoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
             IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider)
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this.orderSearchCriteriaFactory = orderSearchCriteriaFactory;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
-            bigCommerceStore = store;
+            bigCommerceStore = (BigCommerceStoreEntity) store;
             totalCount = 0;
         }
 
@@ -272,17 +272,17 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private Task LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
+        private async Task LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
         {
             // Create a BigCommerceOrderIdentifier
             BigCommerceOrderIdentifier bigCommerceOrderIdentifier = new BigCommerceOrderIdentifier(order.id, orderNumberPostfix);
 
             // Get the order instance.
-            GenericResult<OrderEntity> result = InstantiateOrder(bigCommerceOrderIdentifier);
+            GenericResult<OrderEntity> result = await InstantiateOrder(bigCommerceOrderIdentifier).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", order.id, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             OrderEntity orderEntity = result.Value;
@@ -317,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             LoadAddressInfo(orderEntity, order, shipToAddress);
 
             // Load any order notes
-            LoadOrderNotes(orderEntity, order);
+            await LoadOrderNotes(orderEntity, order).ConfigureAwait(false);
 
             // Only update the rest for brand new orders
             if (orderEntity.IsNew)
@@ -333,7 +333,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BigCommerceDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -659,13 +659,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// If the order has any notes, save them
         /// </summary>
-        private void LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
+        private async Task LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
         {
             string orderComment = order.customer_message;
-            InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true);
+            await InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
 
             string orderInternalComment = order.staff_notes;
-            InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
         }
 
         /// <summary>

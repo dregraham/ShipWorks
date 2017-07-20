@@ -18,6 +18,16 @@ namespace ShipWorks.Stores.Content
     /// </summary>
     public class OrderManager : IOrderManager
     {
+        readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderManager(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
         /// <summary>
         /// Get a populated order from a given shipment
         /// </summary>
@@ -40,6 +50,25 @@ namespace ShipWorks.Stores.Content
         public OrderEntity FetchOrder(long orderID)
         {
             return OrderUtility.FetchOrder(orderID);
+        }
+
+        /// <summary>
+        /// Get the first order in the specified predicate
+        /// </summary>
+        public async Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<OrderEntity> query = factory.Order.Where(predicate);
+
+            foreach (IPrefetchPathElement2 path in prefetchPaths)
+            {
+                query = query.WithPath(path);
+            }
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                return await adapter.FetchFirstAsync(query).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

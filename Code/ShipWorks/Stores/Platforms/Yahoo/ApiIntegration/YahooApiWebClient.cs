@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// Class for interacting with the yahoo merchant API
     /// </summary>
+    [Component]
     public class YahooApiWebClient : IYahooApiWebClient
     {
         private readonly ILog log;
@@ -26,9 +28,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Initializes a new instance of the <see cref="YahooApiWebClient"/> class.
         /// </summary>
         /// <param name="store">The Yahoo Store Entity</param>
-        public YahooApiWebClient(YahooStoreEntity store, ILog log)
+        public YahooApiWebClient(YahooStoreEntity store, Func<Type, ILog> createLog)
         {
-            this.log = log;
+            this.log = createLog(GetType());
             yahooStoreID = store.YahooStoreID;
             token = store.AccessToken;
             yahooOrderEndpoint = $"https://{yahooStoreID}.order.store.yahooapis.com/V1";
@@ -287,7 +289,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 if (webEx?.Response?.GetResponseStream() == null)
                 {
-                    throw WebHelper.TranslateWebException(ex, typeof (YahooException));
+                    throw WebHelper.TranslateWebException(ex, typeof(YahooException));
                 }
 
                 using (StreamReader reader = new StreamReader(webEx.Response.GetResponseStream()))

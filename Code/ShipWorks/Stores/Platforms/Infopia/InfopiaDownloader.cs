@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Order downloader for retrieving Infopia orders.
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Infopia)]
     public class InfopiaDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(InfopiaDownloader));
@@ -36,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Constructor
         /// </summary>
-        public InfopiaDownloader(InfopiaStoreEntity store)
+        public InfopiaDownloader(StoreEntity store)
             : base(store)
         {
         }
@@ -120,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 int orderNumber = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ID*']", 0);
 
                 // get the order instance, creates one if necessary
-                GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+                GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 if (order.IsNew)
                 {
                     // Notes
-                    LoadNotes(order, xpath);
+                    await LoadNotes(order, xpath).ConfigureAwait(false);
 
                     CacheProducts(xpath);
 
@@ -376,13 +378,13 @@ namespace ShipWorks.Stores.Platforms.Infopia
         }
 
         // Load notes from the order
-        private void LoadNotes(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderEntity order, XPathNavigator xpath)
         {
             // Customer comments
             string customerComments = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER NOTES*']", "");
             if (customerComments.Length > 0)
             {
-                InstantiateNote(order, CleanNoteText(customerComments), order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, CleanNoteText(customerComments), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // private notes
@@ -397,12 +399,12 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 note += XPathUtility.Evaluate(xpathNote, "Cell[@Name='*ORDER NOTE LINE NOTE*']", "");
 
                 // Pointless note
-                if (note.IndexOf("Buyer's IP Number") != -1)
+                if (note.IndexOf("Buyer's IP Number", StringComparison.Ordinal) != -1)
                 {
                     continue;
                 }
 
-                InstantiateNote(order, CleanNoteText(note), order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, CleanNoteText(note), order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 

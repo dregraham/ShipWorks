@@ -1317,6 +1317,7 @@
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
+    <Compile Include="Stores\Communication\IStoreDownloader.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
     <Compile Include="Stores\Content\Controls\IOrderCombinationUserInteraction.cs" />
     <Compile Include="Stores\Content\ICombineOrderGateway.cs" />
@@ -1340,6 +1341,8 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonLegacyDownloader.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1739,6 +1742,9 @@
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Csv\IGenericFileCsvDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Excel\IGenericFileExcelDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
@@ -1765,6 +1771,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Track.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoUploadCommand.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoModuleDownloader.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />
@@ -1772,6 +1779,8 @@
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorOmsDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -1779,6 +1788,7 @@
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrder.cs" />
@@ -1787,6 +1797,7 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
@@ -1826,6 +1837,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooSelectedOptionList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
@@ -1834,6 +1846,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

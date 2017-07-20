@@ -46,8 +46,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             this.encryptionProvider = encryptionProvider;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.variableRequestSubmitterFactory = variableRequestSubmitterFactory;
-
-            ValidateApiAccessData(store);
         }
 
         /// <summary>
@@ -122,6 +120,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private XmlDocument ProcessRequest(List<KeyValuePair<string, string>> options, string action)
         {
+            ValidateApiAccessData(shopSiteStore);
+
             AccessResponse accessResponse = accessTokenWebClient.FetchAuthAccessResponse();
             string timestamp = DateTimeUtility.ToUnixTimestamp(DateTime.Now).ToString();
             string nonceString = GenerateNonce();

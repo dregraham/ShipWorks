@@ -46,49 +46,51 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labelDimensions = new System.Windows.Forms.Label();
             this.deliveryConfirmation = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelShipDate = new System.Windows.Forms.Label();
+            this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelDeliveryConf = new System.Windows.Forms.Label();
             this.labelService = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // sectionRecipient
-            //
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 277);
-            this.sectionRecipient.Size = new System.Drawing.Size(454, 24);
+            // 
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 305);
+            this.sectionRecipient.Size = new System.Drawing.Size(267, 24);
             this.sectionRecipient.TabIndex = 1;
             this.sectionRecipient.Visible = false;
-            //
+            // 
             // personControl
-            //
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.personControl.Size = new System.Drawing.Size(447, 330);
-            //
+            this.personControl.Size = new System.Drawing.Size(121, 330);
+            // 
             // sectionReturns
-            //
-            this.sectionReturns.Location = new System.Drawing.Point(3, 335);
-            this.sectionReturns.Size = new System.Drawing.Size(454, 24);
+            // 
+            this.sectionReturns.Location = new System.Drawing.Point(3, 363);
+            this.sectionReturns.Size = new System.Drawing.Size(267, 24);
             this.sectionReturns.Visible = false;
-            //
+            // 
             // sectionShipment
-            //
-            //
+            // 
+            // 
             // sectionShipment.ContentPanel
-            //
+            // 
             this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
@@ -96,57 +98,59 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelDeliveryConf);
             this.sectionShipment.ContentPanel.Controls.Add(this.deliveryConfirmation);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.Location = new System.Drawing.Point(3, 34);
-            this.sectionShipment.Size = new System.Drawing.Size(454, 238);
-            //
+            this.sectionShipment.Size = new System.Drawing.Size(454, 266);
+            // 
             // sectionLabelOptions
-            //
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 306);
+            // 
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 334);
             this.sectionLabelOptions.Size = new System.Drawing.Size(454, 24);
             this.sectionLabelOptions.Visible = false;
-            //
+            // 
             // weight
-            //
+            // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(91, 33);
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(91, 61);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
+            this.weight.ShowShortcutInfo = true;
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
-            this.weight.ShowShortcutInfo = true;
-            //
+            // 
             // labelWeight
-            //
+            // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(40, 37);
+            this.labelWeight.Location = new System.Drawing.Point(40, 65);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 6;
             this.labelWeight.Text = "Weight:";
-            //
+            // 
             // button1
-            //
+            // 
             this.button1.Location = new System.Drawing.Point(159, 125);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            //
+            // 
             // sectionFrom
-            //
-            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFrom.Collapsed = true;
-            //
+            // 
             // sectionFrom.ContentPanel
-            //
+            // 
             this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
             this.sectionFrom.ContentPanel.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.sectionFrom.ContentPanel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
@@ -158,72 +162,90 @@
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
             this.sectionFrom.Size = new System.Drawing.Size(454, 24);
             this.sectionFrom.TabIndex = 0;
-            //
+            // 
             // originControl
-            //
+            // 
             this.originControl.BackColor = System.Drawing.Color.Transparent;
             this.originControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.originControl.Location = new System.Drawing.Point(0, 5);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(450, 0);
             this.originControl.TabIndex = 1;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
-            //
+            // 
             // insuranceControl
-            //
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.insuranceControl.Location = new System.Drawing.Point(22, 160);
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(22, 187);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(430, 48);
             this.insuranceControl.TabIndex = 12;
-            //
+            // 
             // dimensionsControl
-            //
+            // 
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(88, 56);
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(88, 85);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 77);
             this.dimensionsControl.TabIndex = 8;
-            //
+            // 
             // label2
-            //
+            // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(34, 36);
+            this.label2.Location = new System.Drawing.Point(34, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Weight:";
-            //
+            // 
             // labelDimensions
-            //
+            // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.White;
-            this.labelDimensions.Location = new System.Drawing.Point(21, 63);
+            this.labelDimensions.Location = new System.Drawing.Point(21, 92);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 7;
             this.labelDimensions.Text = "Dimensions:";
-            //
+            // 
             // deliveryConfirmation
-            //
+            // 
             this.deliveryConfirmation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deliveryConfirmation.FormattingEnabled = true;
-            this.deliveryConfirmation.Location = new System.Drawing.Point(91, 133);
+            this.deliveryConfirmation.Location = new System.Drawing.Point(91, 162);
             this.deliveryConfirmation.Name = "deliveryConfirmation";
             this.deliveryConfirmation.PromptText = "(Multiple Values)";
             this.deliveryConfirmation.Size = new System.Drawing.Size(220, 21);
             this.deliveryConfirmation.TabIndex = 9;
-            //
+            // 
+            // labelShipDate
+            // 
+            this.labelShipDate.AutoSize = true;
+            this.labelShipDate.BackColor = System.Drawing.Color.Transparent;
+            this.labelShipDate.Location = new System.Drawing.Point(29, 38);
+            this.labelShipDate.Name = "labelShipDate";
+            this.labelShipDate.Size = new System.Drawing.Size(56, 13);
+            this.labelShipDate.TabIndex = 4;
+            this.labelShipDate.Text = "Ship date:";
+            // 
+            // shipDate
+            // 
+            this.shipDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.shipDate.Location = new System.Drawing.Point(91, 34);
+            this.shipDate.Name = "shipDate";
+            this.shipDate.Size = new System.Drawing.Size(124, 21);
+            this.shipDate.TabIndex = 5;
+            // 
             // service
-            //
+            // 
             this.service.DisplayMember = "Description";
             this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.service.Enabled = false;
@@ -235,29 +257,29 @@
             this.service.Size = new System.Drawing.Size(220, 21);
             this.service.TabIndex = 6;
             this.service.ValueMember = "ShippingServiceId";
-            //
+            // 
             // labelDeliveryConf
-            //
+            // 
             this.labelDeliveryConf.AutoSize = true;
             this.labelDeliveryConf.BackColor = System.Drawing.Color.White;
-            this.labelDeliveryConf.Location = new System.Drawing.Point(13, 136);
+            this.labelDeliveryConf.Location = new System.Drawing.Point(13, 166);
             this.labelDeliveryConf.Name = "labelDeliveryConf";
             this.labelDeliveryConf.Size = new System.Drawing.Size(72, 13);
             this.labelDeliveryConf.TabIndex = 7;
             this.labelDeliveryConf.Text = "Confirmation:";
-            //
+            // 
             // labelService
-            //
+            // 
             this.labelService.AutoSize = true;
             this.labelService.BackColor = System.Drawing.Color.White;
-            this.labelService.Location = new System.Drawing.Point(39, 9);
+            this.labelService.Location = new System.Drawing.Point(39, 11);
             this.labelService.Name = "labelService";
             this.labelService.Size = new System.Drawing.Size(46, 13);
             this.labelService.TabIndex = 7;
             this.labelService.Text = "Service:";
-            //
+            // 
             // AmazonServiceControl
-            //
+            // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
@@ -268,22 +290,22 @@
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -304,5 +326,7 @@
         private ShipWorks.UI.Controls.MultiValueComboBox deliveryConfirmation;
         private System.Windows.Forms.Label labelService;
         private ShipWorks.UI.Controls.MultiValueComboBox service;
+        private System.Windows.Forms.Label labelShipDate;
+        private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
     }
 }

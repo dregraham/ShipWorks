@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 AmazonOrderId = order.AmazonOrderID,
                 Insurance = null,
                 ItemList = GetItemList(order),
+                ShipDate = shipment.ShipDate,
                 PackageDimensions = new PackageDimensions
                 {
                     Height = shipment.Amazon.DimsHeight,

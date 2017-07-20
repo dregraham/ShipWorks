@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     /// <summary>
     /// Downloader for ProStores stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ProStores)]
     public class ProStoresDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
@@ -33,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProStoresDownloader(ProStoresStoreEntity store)
+        public ProStoresDownloader(StoreEntity store)
             : base(store)
         {
 
@@ -54,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
 
                 // Downloading based on the last modified time
-                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
                 totalCount = ProStoresWebClient.GetOrderCount((ProStoresStoreEntity) Store, lastModified);
 
@@ -100,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         {
             try
             {
-                DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
+                DateTime? startDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
                 XmlDocument response = ProStoresWebClient.GetNextOrderPage((ProStoresStoreEntity) Store, startDate, isProVersion);
                 XPathNavigator xpath = response.CreateNavigator();
 
@@ -183,16 +185,16 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// Extract the order from the xml
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
 
-            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             ProStoresOrderEntity order = (ProStoresOrderEntity) result.Value;
@@ -262,7 +264,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ProStoresDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -445,7 +447,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             OrderChargeEntity charge = InstantiateOrderCharge(order);
 
-            charge.Type = type.ToUpper();
+            charge.Type = type.ToUpperInvariant();
             charge.Description = name;
             charge.Amount = amount;
         }

@@ -5,11 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -23,6 +23,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     [SuppressMessage("CSharp.Analyzers",
         "CA5351: Do not use insecure cryptographic algorithm MD5",
         Justification = "This is what Network Solutions currently uses")]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.NetworkSolutions)]
+    [Component(RegistrationType.Self)]
     class NetworkSolutionsStoreType : StoreType
     {
         // Logger
@@ -40,10 +42,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Identifying type code
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.NetworkSolutions; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.NetworkSolutions;
 
         /// <summary>
         /// Creates an instance of the NetworkSolutionsStoreEntity
@@ -82,14 +81,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
 
             return new NetworkSolutionsOrderIdentifier(orderEntity.NetworkSolutionsOrderID);
-        }
-
-        /// <summary>
-        /// Create a new downloader for NetworkSolutions
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new NetworkSolutionsDownloader(Store);
         }
 
         /// <summary>

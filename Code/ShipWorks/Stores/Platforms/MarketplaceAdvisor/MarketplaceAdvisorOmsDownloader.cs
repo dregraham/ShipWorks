@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -19,7 +20,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for OMS MarketplaceAdvisor stores
     /// </summary>
-    class MarketplaceAdvisorOmsDownloader : StoreDownloader
+    [Component]
+    public class MarketplaceAdvisorOmsDownloader : StoreDownloader, IMarketplaceAdvisorOmsDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsDownloader));
 
@@ -32,10 +34,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         public MarketplaceAdvisorOmsDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }
 
         /// <summary>
@@ -177,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private async Task<bool> CreateMasterOrder(OMOrder omsOrder)
         {
             // Create a new order instance
-            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
@@ -220,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 LoadPaymentDetails(order, omsOrder);
 
                 // Notes
-                LoadNotes(order, omsOrder);
+                await LoadNotes(order, omsOrder).ConfigureAwait(false);
 
                 // Update the total
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
@@ -236,16 +235,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create an order to represent the given additional parcel of the oms order.
         /// </summary>
-        private Task CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
+        private async Task CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
         {
             // Create a new order instance with parse information
-            GenericResult<OrderEntity> result = InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
                 omsOrder.OrderUid,
-                Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1));
+                Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
@@ -265,16 +264,13 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateParcelOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Get the total value of all line items in the given parcel.
         /// </summary>
-        private double GetParcelLineItemTotal(OMOrderParcel parcel)
-        {
-            return parcel.MerchandiseTotal;
-        }
+        private double GetParcelLineItemTotal(OMOrderParcel parcel) => parcel.MerchandiseTotal;
 
         /// <summary>
         /// Load order properties common to master orders and parcel orders.
@@ -316,23 +312,23 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the notes for the order based on the OMS order.
         /// </summary>
-        private void LoadNotes(MarketplaceAdvisorOrderEntity order, OMOrder omsOrder)
+        private async Task LoadNotes(MarketplaceAdvisorOrderEntity order, OMOrder omsOrder)
         {
             if (omsOrder.InvoiceNote.Length > 0)
             {
-                InstantiateNote(order, "Buyer note: " + omsOrder.InvoiceNote, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Buyer note: " + omsOrder.InvoiceNote, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // Instructions
             if (omsOrder.SpecialBuyerInstructions.Length > 0)
             {
-                InstantiateNote(order, "Special Instructions: " + omsOrder.SpecialBuyerInstructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Special Instructions: " + omsOrder.SpecialBuyerInstructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // Private notes
             if (omsOrder.PrivateOrderNotes.Length > 0)
             {
-                InstantiateNote(order, omsOrder.PrivateOrderNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, omsOrder.PrivateOrderNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
@@ -366,7 +362,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private void LoadCharge(MarketplaceAdvisorOrderEntity order, string type, string name, double amount, bool ignoreZeroAmount)
         {
-            if (amount == 0 && ignoreZeroAmount)
+            if (amount.IsEquivalentTo(0) && ignoreZeroAmount)
             {
                 return;
             }
@@ -422,22 +418,22 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             person.StateProvCode += Geography.GetStateProvCode(ship.Province);
 
             // Special case for MW giving a name for Russia that's not in Geography
-            if (String.Compare(person.CountryCode, "Russian Federation", true) == 0)
+            if (String.Compare(person.CountryCode, "Russian Federation", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "RU";
             }
 
-            if (String.Compare(person.CountryCode, "Slovakia", true) == 0)
+            if (String.Compare(person.CountryCode, "Slovakia", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "SK";
             }
 
-            if (String.Compare(person.CountryCode, "Korea, Republic of (South Korea)", true) == 0)
+            if (String.Compare(person.CountryCode, "Korea, Republic of (South Korea)", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "KR";
             }
 
-            if (String.Compare(person.CountryCode, "Croatia, Republic of", true) == 0)
+            if (String.Compare(person.CountryCode, "Croatia, Republic of", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "HR";
             }

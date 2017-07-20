@@ -4,11 +4,14 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,7 +24,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// Downloader for Yahoo stores using the Yahoo Api
     /// </summary>
-    public class YahooApiDownloader : StoreDownloader
+    [Component]
+    public class YahooApiDownloader : StoreDownloader, IYahooApiDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooApiDownloader));
 
@@ -34,24 +38,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
         /// </summary>
-        /// <param name="store"></param>
-        public YahooApiDownloader(StoreEntity store) :
-            this(store,
-                new YahooApiWebClient((YahooStoreEntity) store, LogManager.GetLogger(typeof(YahooApiWebClient))),
-                new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
+        public YahooApiDownloader(YahooStoreEntity store,
+            Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<StoreEntity, YahooStoreType> getStoreType) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
-        public YahooApiDownloader(StoreEntity store, IYahooApiWebClient webClient, ISqlAdapterRetry sqlAdapter) : base(store, new YahooStoreType(store))
-        {
-            this.webClient = webClient;
-            this.sqlAdapter = sqlAdapter;
+            this.webClient = createWebClient(store);
+            this.sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
         }
 
         /// <summary>
@@ -152,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <exception cref="YahooException">$Failed to instantiate order {order.OrderID}</exception>
         public async Task CreateOrder(YahooOrder order)
         {
-            GenericResult<OrderEntity> result = InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString()));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new YahooOrderIdentifier(order.OrderID.ToString())).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", order.OrderID.ToString(), result.Message);
@@ -168,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (orderEntity.IsNew)
             {
-                orderEntity = LoadOrder(order, orderEntity);
+                orderEntity = await LoadOrder(order, orderEntity).ConfigureAwait(false);
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
             }
@@ -179,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="order">The order DTO.</param>
         /// <param name="orderEntity">The order entity.</param>
-        public YahooOrderEntity LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
+        public async Task<YahooOrderEntity> LoadOrder(YahooOrder order, YahooOrderEntity orderEntity)
         {
             orderEntity.OnlineStatusCode = GetOnlineStatusCode(order);
             orderEntity.OnlineStatus = GetOnlineStatus(orderEntity);
@@ -194,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             LoadOrderTotals(orderEntity, order);
             LoadOrderCharges(orderEntity, order);
             LoadOrderGiftMessages(orderEntity, order);
-            LoadOrderNotes(orderEntity, order);
+            await LoadOrderNotes(orderEntity, order).ConfigureAwait(false);
             LoadOrderPayments(orderEntity, order);
 
             return orderEntity;
@@ -309,18 +307,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="orderEntity">The order entity.</param>
         /// <param name="order">The order DTO.</param>
-        private void LoadOrderNotes(YahooOrderEntity orderEntity, YahooOrder order)
+        private async Task LoadOrderNotes(YahooOrderEntity orderEntity, YahooOrder order)
         {
             if (!order.MerchantNotes.IsNullOrWhiteSpace())
             {
-                InstantiateNote(orderEntity, order.MerchantNotes, ParseYahooDateTime(order.CreationTime),
-                    NoteVisibility.Internal);
+                await InstantiateNote(orderEntity, order.MerchantNotes, ParseYahooDateTime(order.CreationTime),
+                    NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             if (!order.BuyerComments.IsNullOrWhiteSpace())
             {
-                InstantiateNote(orderEntity, order.BuyerComments, ParseYahooDateTime(order.CreationTime),
-                    NoteVisibility.Public);
+                await InstantiateNote(orderEntity, order.BuyerComments, ParseYahooDateTime(order.CreationTime),
+                    NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 

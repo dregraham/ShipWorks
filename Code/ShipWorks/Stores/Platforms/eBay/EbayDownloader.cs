@@ -12,6 +12,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -35,10 +36,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// Downloader for eBay
     /// </summary>
     [NDependIgnoreLongTypes]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Ebay)]
     public class EbayDownloader : StoreDownloader
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
+        private readonly Func<EbayToken, EbayWebClient> webClientFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
@@ -52,10 +55,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store)
+        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory)
             : base(store)
         {
-            webClient = new EbayWebClient(EbayToken.FromStore((EbayStoreEntity) store));
+            this.webClientFactory = webClientFactory;
         }
 
         /// <summary>
@@ -65,6 +68,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            webClient = webClientFactory(EbayToken.FromStore((EbayStoreEntity) Store));
+
             try
             {
                 Progress.Detail = "Connecting to eBay...";
@@ -189,14 +194,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Process the given eBay order
         /// </summary>
-        private Task ProcessOrder(OrderType orderType)
+        private async Task ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
-            GenericResult<OrderEntity> result = InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderType.OrderID, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             EbayOrderEntity order = (EbayOrderEntity) result.Value;
@@ -205,7 +210,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
             {
                 log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
-                return Task.CompletedTask;
+                return;
             }
 
             // If its new it needs a ShipWorks order number
@@ -246,7 +251,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             List<OrderItemEntity> abandonedItems = LoadTransactions(order, orderType);
 
             // Update PayPal information
-            UpdatePayPal(order, orderType);
+            await UpdatePayPal(order, orderType).ConfigureAwait(false);
 
             // Charges
             if (!order.CombinedLocally)
@@ -255,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // Notes
-            UpdateNotes(order, orderType);
+            await UpdateNotes(order, orderType).ConfigureAwait(false);
 
             // Make sure we have the latest GSP data
             UpdateGlobalShippingProgramInfo(order, orderType.IsMultiLegShipping, orderType.MultiLegShippingDetails);
@@ -272,7 +277,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Make totals adjustments
             BalanceOrderTotal(order, orderType);
 
-            return SaveOrder(order, abandonedItems);
+            await SaveOrder(order, abandonedItems).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -731,15 +736,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the notes for the given order
         /// </summary>
-        private void UpdateNotes(EbayOrderEntity order, OrderType orderType)
-        {
+        private Task UpdateNotes(EbayOrderEntity order, OrderType orderType) =>
             InstantiateNote(order, orderType.BuyerCheckoutMessage, order.OrderDate, NoteVisibility.Public, true);
-        }
 
         /// <summary>
-        /// Update external paypal information for the order
+        /// Update external PayPal information for the order
         /// </summary>
-        private void UpdatePayPal(EbayOrderEntity order, OrderType orderType)
+        private async Task UpdatePayPal(EbayOrderEntity order, OrderType orderType)
         {
             string transactionID = "";
             PayPalAddressStatus addressStatus = PayPalAddressStatus.None;
@@ -770,7 +773,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         try
                         {
-                            addressStatus = LoadPayPalTransactionData(order, transactionID);
+                            addressStatus = await LoadPayPalTransactionData(order, transactionID).ConfigureAwait(false);
                         }
                         catch (PayPalException)
                         {
@@ -779,7 +782,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                             if (transactionID.Length > 0)
                             {
-                                addressStatus = LoadPayPalTransactionData(order, transactionID);
+                                addressStatus = await LoadPayPalTransactionData(order, transactionID).ConfigureAwait(false);
                             }
                         }
                     }
@@ -799,8 +802,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateTransaction(EbayOrderItemEntity orderItem, OrderType orderType, TransactionType transaction)
         {
-            if (string.IsNullOrWhiteSpace(orderItem.Code)) { orderItem.Code = transaction.Item.ItemID; }
-            if (string.IsNullOrWhiteSpace(orderItem.Name)) { orderItem.Name = transaction.Item.Title; }
+            if (string.IsNullOrWhiteSpace(orderItem.Code))
+            {
+                orderItem.Code = transaction.Item.ItemID;
+            }
+
+            if (string.IsNullOrWhiteSpace(orderItem.Name))
+            {
+                orderItem.Name = transaction.Item.Title;
+            }
+
             UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
 
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
@@ -1157,7 +1168,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Locate an order with an OrderIdentifier
         /// </summary>
-        protected override OrderEntity FindOrder(OrderIdentifier orderIdentifier)
+        protected override async Task<OrderEntity> FindOrder(OrderIdentifier orderIdentifier)
         {
             EbayOrderIdentifier identifier = orderIdentifier as EbayOrderIdentifier;
             if (identifier == null)
@@ -1165,13 +1176,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return FindOrder(identifier, true);
+            return await FindOrder(identifier, true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Find and load an order of the given identifier, optionally including child charges
         /// </summary>
-        private EbayOrderEntity FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private Task<EbayOrderEntity> FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
         {
             PrefetchPath2 prefetch = null;
 
@@ -1211,7 +1222,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     EbayOrderEntity ebayOrder = new EbayOrderEntity(orderID);
                     SqlAdapter.Default.FetchEntity(ebayOrder, prefetch);
 
-                    return ebayOrder;
+                    return Task.FromResult(ebayOrder);
                 }
             }
             else
@@ -1228,7 +1239,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     ebayOrder = GetCombinedOrder(identifier, includeCharges);
                 }
 
-                return ebayOrder;
+                return Task.FromResult(ebayOrder);
             }
         }
 
@@ -1296,32 +1307,33 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // item does not exist
                 return null;
             }
-            else
-            {
-                // return the item entity
-                long itemID = (long) objItemID;
 
-                EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
+            // return the item entity
+            long itemID = (long) objItemID;
 
-                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
-                prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
-                prefetch.Add(OrderItemEntity.PrefetchPathOrder);
+            EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
 
-                SqlAdapter.Default.FetchEntity(item, prefetch);
+            PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity)
+                {
+                    OrderItemEntity.PrefetchPathOrderItemAttributes,
+                    OrderItemEntity.PrefetchPathOrder
+                };
 
-                return item.Order.StoreID == Store.StoreID ? item : null;
-            }
+            SqlAdapter.Default.FetchEntity(item, prefetch);
+
+            return item.Order.StoreID == Store.StoreID ? item : null;
         }
 
         /// <summary>
-        /// Search for a paypal transaction that matches up with these payment details
+        /// Search for a PayPal transaction that matches up with these payment details
         /// </summary>
         private string FindPayPalTransactionID(DateTime start, string payerLastName, double amount)
         {
-            TransactionSearchRequestType search = new TransactionSearchRequestType();
-
-            search.StartDate = start;
-            search.PayerName = new PersonNameType { LastName = payerLastName };
+            TransactionSearchRequestType search = new TransactionSearchRequestType
+            {
+                StartDate = start,
+                PayerName = new PersonNameType { LastName = payerLastName }
+            };
 
             // Perform the search
             TransactionSearchResponseType response;
@@ -1388,9 +1400,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Updates the paypal address status, and adds any paypal-sourced notes to the order.
+        /// Updates the PayPal address status, and adds any PayPal-sourced notes to the order.
         /// </summary>
-        private PayPalAddressStatus LoadPayPalTransactionData(EbayOrderEntity order, string transactionID)
+        private async Task<PayPalAddressStatus> LoadPayPalTransactionData(EbayOrderEntity order, string transactionID)
         {
             GetTransactionDetailsRequestType request = new GetTransactionDetailsRequestType();
             request.TransactionID = transactionID;
@@ -1401,7 +1413,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 GetTransactionDetailsResponseType response = (GetTransactionDetailsResponseType) client.ExecuteRequest(request);
 
                 // TODO: need to specify which item it's for
-                InstantiateNote(order, response.PaymentTransactionDetails.PaymentItemInfo.Memo, response.PaymentTransactionDetails.PaymentInfo.PaymentDate, NoteVisibility.Public, true);
+                await InstantiateNote(order, response.PaymentTransactionDetails.PaymentItemInfo.Memo,
+                    response.PaymentTransactionDetails.PaymentInfo.PaymentDate, NoteVisibility.Public, true)
+                    .ConfigureAwait(false);
 
                 return (PayPalAddressStatus) (int) response.PaymentTransactionDetails.PayerInfo.Address.AddressStatus;
             }

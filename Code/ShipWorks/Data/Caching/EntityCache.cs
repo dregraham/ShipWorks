@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Caching;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -57,7 +58,7 @@ namespace ShipWorks.Data.Caching
         }
 
         /// <summary>
-        /// Dipose of the cache completely
+        /// Dispose of the cache completely
         /// </summary>
         public void Dispose()
         {
@@ -87,7 +88,7 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded if fetchIfMissing is true
         /// </summary>
-        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing, SqlAdapter adapter)
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing, ISqlAdapter adapter)
         {
             EntityBase2 entity = EntityUtility.CloneEntity((EntityBase2) cache[GetCacheKey(entityID)]);
 
@@ -131,10 +132,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public List<EntityBase2> GetEntities(List<long> keyList, SqlAdapter adapter)
         {
-            if (keyList == null)
-            {
-                throw new ArgumentNullException("keyList");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(keyList, nameof(keyList));
 
             List<EntityBase2> entities = new List<EntityBase2>(keyList.Count);
 

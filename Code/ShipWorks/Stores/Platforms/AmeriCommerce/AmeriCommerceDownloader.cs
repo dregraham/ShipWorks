@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -19,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     /// <summary>
     /// Downloads order information from AmeriCommerce
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.AmeriCommerce)]
     public class AmeriCommerceDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceDownloader));
@@ -55,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
                 Progress.Detail = "Checking for orders...";
 
-                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
                 // create the web client
                 AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
@@ -105,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private async Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -113,17 +115,17 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // check for cancel since FillOrderDetail is pretty time-intensive
             if (Progress.IsCancelRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // begin pulling into ShipWorks now
             int orderNumber = orderTrans.orderID.GetValue(0);
 
-            GenericResult<OrderEntity> result = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             OrderEntity order = result.Value;
@@ -148,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // do the rest only on new orders
             if (order.IsNew)
             {
-                LoadNotes(orderTrans, order);
+                await LoadNotes(orderTrans, order).ConfigureAwait(false);
 
                 LoadOrderItems(client, order, orderTrans);
 
@@ -161,36 +163,36 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmeriCommerceDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Loads the various notes from the AmeriCommerce order
         /// </summary>
-        private void LoadNotes(OrderTrans orderTrans, OrderEntity order)
+        private async Task LoadNotes(OrderTrans orderTrans, OrderEntity order)
         {
             string publicComments = orderTrans.CommentsPublic ?? "";
             if (publicComments.Length > 0)
             {
-                InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string instructions = orderTrans.CommentsInstructions ?? "";
             if (instructions.Length > 0)
             {
-                InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string comments = orderTrans.comments ?? "";
             if (comments.Length > 0)
             {
-                InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             string giftMessage = orderTrans.GiftMessage ?? "";
             if (giftMessage.Length > 0)
             {
-                InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 

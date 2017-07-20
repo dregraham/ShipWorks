@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// <summary>
     /// Order downloader for NetworkSolutions stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NetworkSolutions)]
     public class NetworkSolutionsDownloader : StoreDownloader
     {
         // Logger
@@ -104,21 +106,21 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Loads a NetworkSolutions order into ShipWorks
         /// </summary>
-        private Task LoadOrder(OrderType nsOrder)
+        private async Task LoadOrder(OrderType nsOrder)
         {
             if (string.IsNullOrWhiteSpace(nsOrder.OrderNumber))
             {
                 log.InfoFormat("Order with OrderId '{0}' did not have an order number.  Skipping it and continuing to the next order.", nsOrder.OrderId);
-                return Task.CompletedTask;
+                return;
             }
 
             long networkSolutionsOrderId = nsOrder.OrderId;
 
-            GenericResult<OrderEntity> result = InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", networkSolutionsOrderId, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity) result.Value;
@@ -129,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             order.OrderNumber = Convert.ToInt64(nsOrder.OrderNumber);
 
             // online customer id
-            order.OnlineCustomerID = nsOrder.Customer == null ? null : nsOrder.Customer.CustomerId;
+            order.OnlineCustomerID = nsOrder.Customer?.CustomerId;
 
             // requested shipping
             order.RequestedShipping = nsOrder.Shipping == null ? string.Empty : nsOrder.Shipping.Name;
@@ -147,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             // the remainder is only to be done on new orders
             if (order.IsNew)
             {
-                LoadNotes(order, nsOrder);
+                await LoadNotes(order, nsOrder).ConfigureAwait(false);
 
                 LoadOrderItems(order, nsOrder);
 
@@ -160,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NetworkSolutionsDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -415,13 +417,13 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Load order notes into ShipWorks
         /// </summary>
-        private void LoadNotes(NetworkSolutionsOrderEntity order, OrderType nsOrder)
+        private async Task LoadNotes(NetworkSolutionsOrderEntity order, OrderType nsOrder)
         {
-            InstantiateNote(order, nsOrder.Notes, order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, nsOrder.Notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             foreach (KeyValuePair<string, string> question in BuildQuestionAnswerList(nsOrder.QuestionList))
             {
-                InstantiateNote(order, question.Key + Environment.NewLine + question.Value, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, question.Key + Environment.NewLine + question.Value, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 

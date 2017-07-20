@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
@@ -21,7 +23,52 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// <summary>
     /// Provides the entrypoint into the order download processes for Generic
     /// </summary>
-    class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amosoft)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Brightpearl)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Lite)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Pro)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ChannelSale)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Choxi)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CloudConversion)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CreLoaded)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CsCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Fortune3)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.GenericModule)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.GeekSeller)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.InfiPlex)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.InstaStore)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Jigoshop)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LimeLightCRM)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LiveSite)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LoadedCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.nopCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OpenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OpenSky)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderBot)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderDesk)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderDynamics)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.osCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PowersportsSupport)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PrestaShop)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.RevolutionParts)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SearchFit)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerActive)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerCloud)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerExpress)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerVantage)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopperpress)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopp)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SolidCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.StageBloc)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SureDone)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.VirtueMart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WebShopManager)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WooCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WPeCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.XCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ZenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zenventory)]
+    public class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
@@ -35,8 +82,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericModuleDownloader(StoreEntity store)
-            : base(store)
+        public GenericModuleDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
 
         }
@@ -287,7 +334,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        protected GenericResult<OrderEntity> InstantiateOrder(XPathNavigator xpath)
+        protected Task<GenericResult<OrderEntity>> InstantiateOrder(XPathNavigator xpath)
         {
             // Construct the order identifier based on the incoming xml
             OrderIdentifier orderIdentifier = CreateOrderIdentifier(xpath);
@@ -301,7 +348,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private async Task<bool> LoadOrder(XPathNavigator xpath)
         {
-            GenericResult<OrderEntity> result = InstantiateOrder(xpath);
+            GenericResult<OrderEntity> result = await InstantiateOrder(xpath).ConfigureAwait(false);
             if (result.Failure)
             {
                 return false;
@@ -359,7 +406,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return true;
         }

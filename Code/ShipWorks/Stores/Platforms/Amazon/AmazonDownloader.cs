@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,7 +22,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Retrieves orders from Amazon.com
     /// </summary>
-    public class AmazonDownloader : StoreDownloader
+    [Component]
+    public class AmazonDownloader : StoreDownloader, IAmazonLegacyDownloader
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonDownloader));
@@ -120,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Import the Order
         /// </summary>
-        private Task LoadOrder(string orderXml)
+        private async Task LoadOrder(string orderXml)
         {
             // load the document
             XmlDocument document = new XmlDocument();
@@ -133,11 +135,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
             string amazonOrder = XPathUtility.Evaluate(xpath, "amazonOrderID", "");
 
             // get the order instance
-            GenericResult<OrderEntity> result = InstantiateOrder(new AmazonOrderIdentifier(amazonOrder));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new AmazonOrderIdentifier(amazonOrder)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrder, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             AmazonOrderEntity order = (AmazonOrderEntity) result.Value;
@@ -145,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // basic properties
@@ -182,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

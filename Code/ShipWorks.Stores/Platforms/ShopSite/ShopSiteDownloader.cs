@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     /// <summary>
     /// Downloader for ShopSiteStores
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ShopSite)]
     public class ShopSiteDownloader : StoreDownloader
     {
         private int totalCount = 0;
@@ -31,12 +31,12 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(IShopSiteStoreEntity store,
+        public ShopSiteDownloader(StoreEntity store,
             IShopSiteWebClientFactory webClientFactory,
             Func<Type, ILog> logFactory)
-            : base(store as StoreEntity)
+            : base(store)
         {
-            IShopSiteStoreEntity shopSiteStore = store;
+            IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
 
             webClient = webClientFactory.Create(shopSiteStore);
@@ -138,17 +138,17 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
 
             // Get the order instance
-            GenericResult<OrderEntity> result = InstantiateOrder(orderNumber);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             OrderEntity order = result.Value;
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             // Only update the rest for brand new orders
             if (order.IsNew)
             {
-                LoadCustomerComments(order, xpath);
+                await LoadCustomerComments(order, xpath).ConfigureAwait(false);
 
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("Shipping//Product");
@@ -193,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopSiteDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -371,13 +371,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Load any customer entered comments from the online order
         /// </summary>
-        private void LoadCustomerComments(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadCustomerComments(OrderEntity order, XPathNavigator xpath)
         {
             // Customer comments
-            InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/Comments", ""), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             // Order instructions
-            InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, XPathUtility.Evaluate(xpath, "Other/OrderInstructions", ""), order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
         }
 
         /// <summary>

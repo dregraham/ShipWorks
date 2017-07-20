@@ -13,12 +13,10 @@ namespace ShipWorks.Tests.Stores.Content.Combine
     public class OrderCombineValidatorTest : IDisposable
     {
         private AutoMock mock;
-        private CombineOrderValidator testObject;
 
         public OrderCombineValidatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<CombineOrderValidator>();
 
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
@@ -32,13 +30,15 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         [Fact]
         public void Validate_ReturnSuccess_WhenOrderCountIsGreaterThanOne()
         {
-            var result = testObject.Validate(new long[] { 1, 2 });
+            var testObject = mock.Create<CombineOrderValidator>();
+            var result = testObject.Validate(new long[] { 1006, 2006 });
             Assert.True(result.Success);
         }
 
         [Fact]
         public void Validate_ReturnSuccess_WhenOrderCountNone()
         {
+            var testObject = mock.Create<CombineOrderValidator>();
             var result = testObject.Validate(new long[] { });
             Assert.True(result.Failure);
         }
@@ -46,7 +46,8 @@ namespace ShipWorks.Tests.Stores.Content.Combine
         [Fact]
         public void Validate_ReturnFailure_WhenOrderCountIsLessThanTwo()
         {
-            var result = testObject.Validate(new long[] { 1 });
+            var testObject = mock.Create<CombineOrderValidator>();
+            var result = testObject.Validate(new long[] { 1006 });
             Assert.False(result.Success);
         }
 
@@ -58,7 +59,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
                 .Returns(false);
 
             var testObject = mock.Create<CombineOrderValidator>();
-            var result = testObject.Validate(new long[] { 1, 2 });
+            var result = testObject.Validate(new long[] { 1006, 2006 });
 
             Assert.True(result.Failure);
         }
@@ -71,7 +72,7 @@ namespace ShipWorks.Tests.Stores.Content.Combine
                 .Returns(false);
 
             var testObject = mock.Create<CombineOrderValidator>();
-            var result = testObject.Validate(new long[] { 1, 2 });
+            var result = testObject.Validate(new long[] { 1006, 2006 });
 
             Assert.False(result.Success);
         }

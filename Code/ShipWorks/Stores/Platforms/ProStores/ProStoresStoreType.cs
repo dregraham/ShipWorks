@@ -1,38 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.ProStores.WizardPages;
+using System.Windows.Forms;
 using System.Xml;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Filters;
-using ShipWorks.Templates.Processing.TemplateXml;
+using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using log4net;
-using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.Properties;
-using ShipWorks.ApplicationCore.Dashboard;
-using System.Windows.Forms;
-using Autofac;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Properties;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.ProStores.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
     /// <summary>
     /// StoreType class for ProStores
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ProStores)]
+    [Component(RegistrationType.Self)]
     public class ProStoresStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresStoreType));
@@ -49,10 +46,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// The type code of the store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.ProStores; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.ProStores;
 
         /// <summary>
         /// Create a new instance of the ProStores store entity
@@ -91,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            return new List<WizardPage> 
+            return new List<WizardPage>
             {
                 new ProStoresProbeSettingsPage(),
                 new ProStoresManualSettingsPage(),
@@ -135,21 +129,13 @@ namespace ShipWorks.Stores.Platforms.ProStores
         }
 
         /// <summary>
-        /// Create the ProStores downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new ProStoresDownloader((ProStoresStoreEntity) Store);
-        }
-
-        /// <summary>
         /// Create the account settings control
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
             ProStoresLoginMethod loginMethod = (ProStoresLoginMethod) ((ProStoresStoreEntity) Store).LoginMethod;
 
-            return (loginMethod == ProStoresLoginMethod.ApiToken) ? 
+            return (loginMethod == ProStoresLoginMethod.ApiToken) ?
                 (AccountSettingsControlBase) new ProStoresAccountSettingsTokenControl() : new ProStoresAccountSettingsLegacyControl();
         }
 
@@ -169,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             ProStoresConfirmationCondition condition = new ProStoresConfirmationCondition();
             condition.Operator = StringOperator.BeginsWith;
             condition.TargetValue = search;
-            
+
             ConditionGroup group = new ConditionGroup();
             group.Conditions.Add(condition);
 

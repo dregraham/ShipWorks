@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -15,18 +20,12 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores
@@ -54,7 +53,7 @@ namespace ShipWorks.Stores
         {
             if (store != null)
             {
-                if ((StoreTypeCode) store.TypeCode != this.TypeCode)
+                if (store.StoreTypeCode != this.TypeCode)
                 {
                     throw new InvalidOperationException("Store type mismatch.");
                 }
@@ -68,10 +67,7 @@ namespace ShipWorks.Stores
         /// </summary>
         protected virtual void InitializeStoreDefaults(StoreEntity store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             store.Enabled = true;
             store.SetupComplete = false;
@@ -139,6 +135,9 @@ namespace ShipWorks.Stores
         /// </summary>
         public abstract StoreEntity CreateStoreInstance();
 
+        /// <summary>
+        /// Create an order for this store
+        /// </summary>
         public OrderEntity CreateOrder()
         {
             OrderEntity newOrder = CreateOrderInstance();
@@ -207,11 +206,6 @@ namespace ShipWorks.Stores
 
             return null;
         }
-
-        /// <summary>
-        /// Create the downloader instance that is used to retrieve data from the store.
-        /// </summary>
-        public abstract StoreDownloader CreateDownloader();
 
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
@@ -548,10 +542,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static string NormalizeIdentifier(string identifier)
         {
-            if (identifier == null)
-            {
-                throw new ArgumentNullException("identifier");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(identifier, nameof(identifier));
 
             // All lower, no extra spaces
             identifier = identifier.ToLowerInvariant().Trim();
@@ -595,10 +586,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (shipment.Processed)
             {

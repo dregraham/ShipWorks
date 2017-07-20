@@ -14,7 +14,6 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
@@ -90,17 +89,17 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool resetSelection)
+        private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool allowEditing, bool resetSelection)
         {
             SuspendShipSenseFieldChangeEvent();
 
-            this.enableEditing = enableEditing;
+            enableEditing = allowEditing;
 
             // Enable\disable the ContentPanels... not the groups themselves, so the groups can still be open\closed
             // Don't do the commodities panel, it gets its individual controls disabled
             foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>().Where(x => x != sectionContents))
             {
-                group.ContentPanel.Enabled = enableEditing;
+                group.ContentPanel.Enabled = allowEditing;
             }
 
             // If the country hasn't been loaded yet do that now
@@ -251,16 +250,16 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the description of the bucket as it should show up in the grid
         /// </summary>
-        private void UpdateRowDescription(GridRow row, string description)
+        private void UpdateRowDescription(GridRow row, string rowDescription)
         {
             List<ShipmentCustomsItemEntity> customsItems = (List<ShipmentCustomsItemEntity>) row.Tag;
 
             if (customsItems.Count < loadedShipments.Count)
             {
-                description += string.Format(" ({0} shipment{1})", customsItems.Count, customsItems.Count > 1 ? "s" : "");
+                rowDescription += string.Format(" ({0} shipment{1})", customsItems.Count, customsItems.Count > 1 ? "s" : "");
             }
 
-            row.Cells[0].Text = description;
+            row.Cells[0].Text = rowDescription;
         }
 
         /// <summary>
@@ -494,9 +493,9 @@ namespace ShipWorks.Shipping.Editing
         /// </remarks>
         private decimal CalculateCustomsValue(IShipmentEntity shipment)
         {
-            decimal value = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
+            decimal decimalValue = shipment.CustomsItems.Sum(c => ((decimal) c.Quantity * c.UnitValue));
 
-            return Math.Min(value, SqlUtility.MoneyMaxValue);
+            return Math.Min(decimalValue, SqlUtility.MoneyMaxValue);
         }
 
         /// <summary>

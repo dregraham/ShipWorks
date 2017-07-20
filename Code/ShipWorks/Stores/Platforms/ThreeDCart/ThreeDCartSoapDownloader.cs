@@ -9,6 +9,7 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -25,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Downloader for 3dcart stores
     /// </summary>
-    public class ThreeDCartSoapDownloader : StoreDownloader
+    [Component]
+    public class ThreeDCartSoapDownloader : StoreDownloader, IThreeDCartSoapDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapDownloader));
         int totalCount;
@@ -307,10 +309,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         private async Task LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
         {
             // Create a ThreeDCartOrderIdentifier
-            ThreeDCartOrderIdentifier threeDCartOrderIdentifier = CreateOrderIdentifier(xmlOrderXPath, invoiceNumberPostFix);
+            ThreeDCartOrderIdentifier threeDCartOrderIdentifier = await CreateOrderIdentifier(xmlOrderXPath, invoiceNumberPostFix).ConfigureAwait(false);
 
             // Get the order instance.
-            GenericResult<OrderEntity> result = InstantiateOrder(threeDCartOrderIdentifier);
+            GenericResult<OrderEntity> result = await InstantiateOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", threeDCartOrderIdentifier.OrderNumber, result.Message);
@@ -378,7 +380,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             LoadAddressInfo(order, xmlOrderXPath, shipmentNode);
 
             // Load any order notes
-            LoadOrderNotes(order, xmlOrderXPath);
+            await LoadOrderNotes(order, xmlOrderXPath).ConfigureAwait(false);
 
             // Only update the rest for brand new orders
             if (order.IsNew)
@@ -437,20 +439,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 totalCount++;
             }
 
+            lastModifiedOrderDateProcessed = order.OnlineLastModified;
+
             //Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartSoapDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-
-            lastModifiedOrderDateProcessed = order.OnlineLastModified;
         }
-
+        
         /// <summary>
         /// Creates a 3dcart order identifier for the current order
         /// </summary>
         /// <param name="xpath">Order XPathNavigator</param>
         /// <param name="invoiceNumberPostFix">For multi shipment orders, add this as the order number post fix</param>
         /// <returns>3dcart order identifier for the current order</returns>
-        private ThreeDCartOrderIdentifier CreateOrderIdentifier(XPathNavigator xpath, string invoiceNumberPostFix)
+        private async Task<ThreeDCartOrderIdentifier> CreateOrderIdentifier(XPathNavigator xpath, string invoiceNumberPostFix)
         {
             // Now extract the Invoice number and ThreeDCart Order Id
             long orderId = XPathUtility.Evaluate(xpath, "./OrderID", 0L);
@@ -482,7 +484,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
             // the upgrade.  If an order is found, we will not use the prefix.  If we don't find an order, we'll use the prefix.
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, string.Empty, invoiceNumberPostFix);
-            OrderEntity order = FindOrder(threeDCartOrderIdentifier);
+            OrderEntity order = await FindOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
             if (order == null)
             {
                 threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, invoiceNumberPrefix, invoiceNumberPostFix);
@@ -887,16 +889,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// If the order has any notes, save them
         /// </summary>
-        private void LoadOrderNotes(OrderEntity order, XPathNavigator xpath)
+        private async Task LoadOrderNotes(OrderEntity order, XPathNavigator xpath)
         {
             string orderComment = XPathUtility.Evaluate(xpath, "./Comments/OrderComment", string.Empty);
-            InstantiateNote(order, orderComment, DateTime.Now, NoteVisibility.Public, true);
+            await InstantiateNote(order, orderComment, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
 
             string orderInternalComment = XPathUtility.Evaluate(xpath, "./Comments/OrderInternalComment", string.Empty);
-            InstantiateNote(order, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(order, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
 
             string orderExternalComment = XPathUtility.Evaluate(xpath, "./Comments/OrderExternalComment", string.Empty);
-            InstantiateNote(order, orderExternalComment, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(order, orderExternalComment, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
 
             //Iterate through each checkout question, and a note for each one
             XPathNodeIterator orderCheckoutQuestions = xpath.Select("./CheckoutQuestions/Question");
@@ -911,8 +913,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                         answer = string.Format(" : {0}", answer);
                     }
 
-                    InstantiateNote(order, string.Format("{0}{1}", question, answer), DateTime.Now,
-                                    NoteVisibility.Internal, true);
+                    await InstantiateNote(order, string.Format("{0}{1}", question, answer), DateTime.Now,
+                                    NoteVisibility.Internal, true).ConfigureAwait(false);
                 }
             }
         }

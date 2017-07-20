@@ -4,7 +4,6 @@ using Autofac;
 using Autofac.Core;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 using ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages;
@@ -29,9 +28,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
             builder.RegisterType<YahooApiAccountPageHost>()
                 .Keyed<WizardPage>(StoreTypeCode.Yahoo)
                 .ExternallyOwned();
-
-            builder.RegisterType<YahooApiWebClient>()
-                .AsImplementedInterfaces();
 
             builder.Register(GetAccountSettingsControlBase)
                 .Keyed<AccountSettingsControlBase>(StoreTypeCode.Yahoo)

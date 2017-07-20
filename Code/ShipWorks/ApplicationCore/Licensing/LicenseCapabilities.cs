@@ -192,6 +192,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <value><c>true</c> if this the capabilities allows best rate; otherwise, <c>false</c>.</value>
         public bool IsBestRateAllowed { get; private set; }
 
+        /// <summary>
+        /// Get the ShipmentType functionality for the given ShipmentType and ShippingPolicyType
+        /// </summary>
+        public string GetShipmentTypeFunctionality(ShipmentTypeCode shipmentType, ShippingPolicyType policy)
+        {
+            if (ShipmentTypeShippingPolicy.ContainsKey(shipmentType) &&
+                ShipmentTypeShippingPolicy[shipmentType].ContainsKey(policy))
+            {
+                return ShipmentTypeShippingPolicy[shipmentType][policy];
+            }
+
+            return string.Empty;
+        }
+
         #endregion Properties
 
         /// <summary>

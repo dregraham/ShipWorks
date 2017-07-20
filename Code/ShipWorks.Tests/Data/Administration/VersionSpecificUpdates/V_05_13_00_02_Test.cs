@@ -1,14 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.QuerySpec;
 using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.ShopSite;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

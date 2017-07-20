@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -27,7 +28,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
     /// <summary>
     /// Downloader for Yahoo! stores
     /// </summary>
-    public class YahooEmailDownloader : StoreDownloader
+    [Component]
+    public class YahooEmailDownloader : StoreDownloader, IYahooEmailDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailDownloader));
 
@@ -204,21 +206,21 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// Extract the order from the XML
         /// </summary>
         [NDependIgnoreLongMethod]
-        private Task LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             // Get the OrderID
             string yahooOrderID = xpath.GetAttribute("id", "");
 
             // Now extract the Order#
-            int lastSlash = yahooOrderID.LastIndexOf("-");
+            int lastSlash = yahooOrderID.LastIndexOf("-", StringComparison.Ordinal);
             int orderNumber = Convert.ToInt32(yahooOrderID.Substring(lastSlash + 1));
 
             // Create a new order for it
-            GenericResult<OrderEntity> result = InstantiateOrder(new YahooOrderIdentifier(yahooOrderID));
+            GenericResult<OrderEntity> result = await InstantiateOrder(new YahooOrderIdentifier(yahooOrderID)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", yahooOrderID, result.Message);
-                return Task.CompletedTask;
+                return;
             }
 
             YahooOrderEntity order = (YahooOrderEntity) result.Value;
@@ -243,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 string comments = XPathUtility.Evaluate(xpath, "Comments", "");
                 if (comments.Length > 0)
                 {
-                    InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Public);
+                    await InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
                 }
 
                 // Items
@@ -294,7 +296,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "YahooEmailDownloader.LoadOrder");
-            return retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

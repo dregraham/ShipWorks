@@ -41,6 +41,11 @@ namespace ShipWorks.Stores.Content
         /// This method bypasses the entity cache
         /// </remarks>
         Task<IEnumerable<OrderEntity>> LoadOrdersAsync(IEnumerable<long> orderIDs, ISqlAdapter sqlAdapter);
+		
+        /// <summary>
+        /// Get the first order in the specified predicate
+        /// </summary>
+        Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths);
 
         /// <summary>
         /// Load the specified order using the given prefetch path

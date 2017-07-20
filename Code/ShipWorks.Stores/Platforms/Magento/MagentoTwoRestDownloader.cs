@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -11,6 +12,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,8 +28,8 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
-    public class MagentoTwoRestDownloader : StoreDownloader
+    [Component]
+    public class MagentoTwoRestDownloader : StoreDownloader, IMagentoTwoRestDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly ILog log;
@@ -42,8 +44,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="sqlAdapterRetryFactory">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory) : base(store)
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
+        public MagentoTwoRestDownloader(StoreEntity store,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
+            Func<Type, ILog> logFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<StoreEntity, MagentoStoreType> getStoreType,
+            IConfigurationData configurationData) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             magentoStore = (MagentoStoreEntity) store;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
@@ -106,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
                         }
 
-                        GenericResult<OrderEntity> result = InstantiateOrder(orderIdentifier);
+                        GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
                         if (result.Failure)
                         {
                             log.InfoFormat("Skipping order '{0}': {1}.", orderIdentifier.OrderNumber, result.Message);
@@ -168,12 +178,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
+        public async Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
             // Check if it has been canceled
             if (progressReporter.IsCancelRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             // Update the status
@@ -189,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
-            LoadNotes(orderEntity, magentoOrder);
+            await LoadNotes(orderEntity, magentoOrder).ConfigureAwait(false);
 
             if (orderEntity.IsNew)
             {
@@ -208,13 +218,13 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadOrderPayment(orderEntity, magentoOrder);
             }
 
-            return sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity));
+            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Load the orders notes
         /// </summary>
-        private void LoadNotes(OrderEntity orderEntity, Order magentoOrder)
+        private async Task LoadNotes(OrderEntity orderEntity, Order magentoOrder)
         {
             foreach (StatusHistory history in magentoOrder.StatusHistories)
             {
@@ -224,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     noteDate = DateTime.UtcNow;
                 }
 
-                InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true);
+                await InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true).ConfigureAwait(false);
             }
         }
 

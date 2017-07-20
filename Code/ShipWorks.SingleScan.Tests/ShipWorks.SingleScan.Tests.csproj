@@ -144,6 +144,7 @@
     <Compile Include="AutoPrintConfirmationDlgFactoryTest.cs" />
     <Compile Include="AutoPrintServicePipelineTest.cs" />
     <Compile Include="AutoPrintServiceTest.cs" />
+    <Compile Include="AutoWeighServicePipelineTest.cs" />
     <Compile Include="LoggableAutoPrintServiceTest.cs" />
     <Compile Include="AutoWeighServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
