@@ -1630,11 +1630,11 @@ namespace ShipWorks.Shipping
                     }
                 }
             }
-
+            
             // Update enable state
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
-            ratesSplitContainer.Panel2Collapsed = !canGetRates;
+            ratesSplitContainer.Panel2Collapsed = tabControl.SelectedTab != tabPageService || !canGetRates;
             print.Enabled = canPrint;
             voidSelected.Enabled = canVoid;
 
