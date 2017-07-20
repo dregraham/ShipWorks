@@ -19,5 +19,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 
         [JsonProperty("ShippingClass")]
         public string ShippingClass { get; set; }
+
+        [JsonProperty("DeliveryStatus")]
+        public string DeliveryStatus => "Complete";
     }
 }

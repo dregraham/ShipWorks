@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly LruCache<string, string> accessTokenCache;
 
-        private readonly Func<IHttpVariableRequestSubmitter> submitterFactory;
+        private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="submitterFactory">The submitter factory.</param>
         /// <param name="apiLogEntryFactory">The API log entry factory.</param>
         /// <param name="encryptionProviderFactory"></param>
-        public ChannelAdvisorRestClient(Func<IHttpVariableRequestSubmitter> submitterFactory,
+        public ChannelAdvisorRestClient(IHttpRequestSubmitterFactory submitterFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
@@ -142,26 +142,62 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
         }
 
+
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment, string refreshToken, string channelAdvisorOrderID)
-        {
-            IHttpVariableRequestSubmitter submitter = CreateRequest($"{ordersEndpoint}({channelAdvisorOrderID})/Ship/?access_token={GetAccessToken(refreshToken)}", HttpVerb.Post);
+        public void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment,
+            string refreshToken,
+            string channelAdvisorOrderID) =>
+            UploadShipmentDetails(channelAdvisorShipment, refreshToken, channelAdvisorOrderID, false);
 
-            string shipment;
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        private void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment,
+            string refreshToken,
+            string channelAdvisorOrderID,
+            bool isRetry)
+        {
+            string requestBody;
             try
             {
-                shipment = JsonConvert.SerializeObject(channelAdvisorShipment);
+                string serializedShipment =
+                    JsonConvert.SerializeObject(channelAdvisorShipment,
+                        new JsonSerializerSettings {DateFormatString = "yyyy-MM-ddThh:mm:ssZ"});
+
+                requestBody = $"{{\"Value\":{serializedShipment}}}";
             }
             catch (Newtonsoft.Json.JsonException ex)
             {
                 throw new ChannelAdvisorException("Error creating ChannelAdvisor shipment request.", ex);
             }
 
-            submitter.Variables.Add("Value", shipment);
+            IHttpRequestSubmitter submitter =
+                submitterFactory.GetHttpTextPostRequestSubmitter(requestBody, "application/json");
+            submitter.Uri =
+                new Uri($"{ordersEndpoint}({channelAdvisorOrderID})/Ship?access_token={GetAccessToken(refreshToken, isRetry)}");
 
-            ProcessRequest<ChannelAdvisorShipment>(submitter, "UploadShipmentDetails", refreshToken);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, "UploadShipmentDetails");
+            apiLogEntry.LogRequest(submitter);
+
+            try
+            {
+                IHttpResponseReader httpResponseReader = submitter.GetResponse();
+                string result = httpResponseReader.ReadResult();
+                apiLogEntry.LogResponse(result, "json");
+            }
+            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
+                                          !isRetry)
+            {
+                apiLogEntry.LogResponse(ex);
+                UploadShipmentDetails(channelAdvisorShipment, refreshToken, channelAdvisorOrderID, true);
+            }
+            catch (Exception ex)
+            {
+                apiLogEntry.LogResponse(ex);
+                throw new ChannelAdvisorException("Error communicating with ChannelAdvisor REST API", ex);
+            }
         }
 
         /// <summary>
@@ -169,7 +205,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private IHttpVariableRequestSubmitter CreateRequest(string endpoint, HttpVerb method)
         {
-            IHttpVariableRequestSubmitter submitter = submitterFactory();
+            IHttpVariableRequestSubmitter submitter = submitterFactory.GetHttpVariableRequestSubmitter();
             submitter.Uri = new Uri(endpoint);
             submitter.Verb = method;
 

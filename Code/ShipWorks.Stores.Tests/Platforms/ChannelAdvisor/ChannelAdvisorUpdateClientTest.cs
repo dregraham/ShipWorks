@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
@@ -15,6 +16,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly ChannelAdvisorStoreEntity store;
         private readonly ChannelAdvisorShipment shipment;
         private readonly Mock<IChannelAdvisorSoapClient> soapClient;
+        private readonly Mock<IEncryptionProvider> encryptionProvider;
+        private readonly Mock<IEncryptionProviderFactory> encryptionProviderFactory;
 
         public ChannelAdvisorUpdateClientTest()
         {
@@ -31,6 +34,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             soapClient = mock.CreateMock<IChannelAdvisorSoapClient>();
 
             mock.MockFunc<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient>(soapClient);
+
+            encryptionProvider = mock.CreateMock<IEncryptionProvider>();
+            encryptionProvider.Setup(p => p.Decrypt(It.IsAny<string>())).Returns("EncryptedText");
+
+            encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+            encryptionProviderFactory.Setup(e => e.CreateSecureTextEncryptionProvider("ChannelAdvisor"))
+                .Returns(encryptionProvider.Object);
         }
 
         [Fact]
@@ -53,13 +63,36 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void UploadShipmentDetails_DelegatesToRestClient_WhenStoreHasRefreshToken()
+        public void UploadShipmentDetails_DecryptsRefreshToken_WhenStoreHasRefreshToken()
         {
             store.RefreshToken = "ha";
+
             var testObject = mock.Create<ChannelAdvisorUpdateClient>();
             testObject.UploadShipmentDetails(store, shipment, 1234);
 
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.UploadShipmentDetails(shipment, "ha", "1234"),
+            encryptionProvider.Verify(p=>p.Decrypt("ha"), Times.Once);
+        }
+
+        [Fact]
+        public void UploadShipmentDetails_GetsProperEncryptionProvider_WhenStoreHasRefreshToken()
+        {
+            store.RefreshToken = "ha";
+
+            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
+            testObject.UploadShipmentDetails(store, shipment, 1234);
+
+            encryptionProviderFactory.Verify(p => p.CreateSecureTextEncryptionProvider("ChannelAdvisor"), Times.Once);
+        }
+
+        [Fact]
+        public void UploadShipmentDetails_DelegatesToRestClient_WhenStoreHasRefreshToken()
+        {
+            store.RefreshToken = "ha";
+
+            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
+            testObject.UploadShipmentDetails(store, shipment, 1234);
+
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.UploadShipmentDetails(shipment, "EncryptedText", "1234"),
                 Times.Once);
         }
 
