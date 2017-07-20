@@ -238,7 +238,8 @@ namespace ShipWorks.Stores.Communication
                 return GenericResult.FromSuccess(order);
             }
 
-            if (IsCombinedOrder(orderIdentifier))
+            bool isCombinedOrder = await IsCombinedOrder(orderIdentifier).ConfigureAwait(false);
+            if (isCombinedOrder)
             {
                 log.InfoFormat("{0} was combined, skipping", orderIdentifier);
 
@@ -288,7 +289,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Is this a combined order
         /// </summary>
-        private bool IsCombinedOrder(OrderIdentifier orderIdentifier)
+        private async Task<bool> IsCombinedOrder(OrderIdentifier orderIdentifier)
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
@@ -296,7 +297,7 @@ namespace ShipWorks.Stores.Communication
                 QuerySpec combinedSearchQuery = orderIdentifier.CreateCombinedSearchQuery(factory);
                 DynamicQuery query = factory.Create().Select(combinedSearchQuery.Any());
 
-                return sqlAdapter.FetchScalar<bool?>(query) ?? false;
+                return (await sqlAdapter.FetchScalarAsync<bool?>(query).ConfigureAwait(false)) ?? false;
             }
         }
 
