@@ -2,6 +2,7 @@
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor

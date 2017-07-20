@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
@@ -14,13 +15,15 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.ChannelAdvisor)]
     public partial class ChannelAdvisorAccountSettingsControl : AccountSettingsControlBase
     {
+        private readonly IChannelAdvisorAccountSettingsViewModel restViewModel;
         private ChannelAdvisorStoreEntity channelAdvisorStore;
         private bool restUser;
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorAccountSettingsControl"/> class.
         /// </summary>
-        public ChannelAdvisorAccountSettingsControl()
+        public ChannelAdvisorAccountSettingsControl(IChannelAdvisorAccountSettingsViewModel restViewModel)
         {
+            this.restViewModel = restViewModel;
             InitializeComponent();
         }
 
@@ -80,7 +83,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             restSettingsControl.Visible = true;
             restSettingsControl.Enabled = true;
 
-            restSettingsControl.LoadStore(store);
+            restSettingsControl.LoadStore(store, restViewModel);
         }
 
         /// <summary>

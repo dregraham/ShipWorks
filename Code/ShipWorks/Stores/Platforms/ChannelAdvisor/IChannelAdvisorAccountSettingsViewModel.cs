@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// Interface for ChannelAdvisorAccountSettingsViewModel
