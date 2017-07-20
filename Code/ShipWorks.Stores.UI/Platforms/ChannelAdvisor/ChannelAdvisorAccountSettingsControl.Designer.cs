@@ -30,53 +30,53 @@
         {
             this.upgradeButton = new System.Windows.Forms.Button();
             this.soapPanel = new System.Windows.Forms.Panel();
-            this.restSettingsControl = new ShipWorks.Stores.UI.Platforms.ChannelAdvisor.ChannelAdvisorRestAccountSettingsControl();
             this.soapSettingsControl = new ShipWorks.Stores.UI.Platforms.ChannelAdvisor.ChannelAdvisorSoapAccountSettingsControl();
+            this.restSettingsControl = new ShipWorks.Stores.UI.Platforms.ChannelAdvisor.ChannelAdvisorRestAccountSettingsControl();
             this.soapPanel.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // upgradeButton
-            //
-            this.upgradeButton.Location = new System.Drawing.Point(187, 179);
+            // 
+            this.upgradeButton.Location = new System.Drawing.Point(108, 89);
             this.upgradeButton.Name = "upgradeButton";
             this.upgradeButton.Size = new System.Drawing.Size(134, 23);
             this.upgradeButton.TabIndex = 1;
             this.upgradeButton.Text = "Upgrade to REST API";
             this.upgradeButton.UseVisualStyleBackColor = true;
             this.upgradeButton.Click += new System.EventHandler(this.OnClickUpgrade);
-            //
+            // 
             // soapPanel
-            //
+            // 
             this.soapPanel.Controls.Add(this.upgradeButton);
             this.soapPanel.Controls.Add(this.soapSettingsControl);
             this.soapPanel.Location = new System.Drawing.Point(0, 0);
             this.soapPanel.Name = "soapPanel";
             this.soapPanel.Size = new System.Drawing.Size(598, 230);
             this.soapPanel.TabIndex = 0;
-            //
+            // 
+            // soapSettingsControl
+            // 
+            this.soapSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.soapSettingsControl.Location = new System.Drawing.Point(0, 0);
+            this.soapSettingsControl.Name = "soapSettingsControl";
+            this.soapSettingsControl.Size = new System.Drawing.Size(598, 224);
+            this.soapSettingsControl.TabIndex = 0;
+            // 
             // restSettingsControl
-            //
+            // 
             this.restSettingsControl.Enabled = false;
             this.restSettingsControl.Location = new System.Drawing.Point(0, 0);
             this.restSettingsControl.Name = "restSettingsControl";
             this.restSettingsControl.Size = new System.Drawing.Size(598, 173);
             this.restSettingsControl.TabIndex = 3;
             this.restSettingsControl.Visible = false;
-            //
-            // soapSettingsControl
-            //
-            this.soapSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.soapSettingsControl.Location = new System.Drawing.Point(0, 0);
-            this.soapSettingsControl.Name = "soapSettingsControl";
-            this.soapSettingsControl.Size = new System.Drawing.Size(598, 224);
-            this.soapSettingsControl.TabIndex = 0;
-            //
+            // 
             // ChannelAdvisorAccountSettingsControl
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.restSettingsControl);
             this.Controls.Add(this.soapPanel);
+            this.Controls.Add(this.restSettingsControl);
             this.Name = "ChannelAdvisorAccountSettingsControl";
             this.Size = new System.Drawing.Size(600, 233);
             this.soapPanel.ResumeLayout(false);
