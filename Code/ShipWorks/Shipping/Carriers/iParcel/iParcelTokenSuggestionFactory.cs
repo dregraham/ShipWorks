@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 
@@ -21,21 +20,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private readonly IOrderManager orderManager;
 
         private readonly TokenSuggestion defaultSkuQuantitySuggestion;
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
-        ///// </summary>
-        //public iParcelTokenSuggestionFactory()
-        //    : this(new List<ShipmentEntity>(), new OrderManager(new SqlAdapterFactory()))
-        //{ }
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
-        ///// </summary>
-        ///// <param name="shipments">The shipments.</param>
-        //public iParcelTokenSuggestionFactory(List<ShipmentEntity> shipments)
-        //    : this(shipments, new OrderManager())
-        //{ }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
@@ -66,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
                 if (shipments.Count == 1 && shipments.First() != null)
                 {
-                    // Since there is only one shipment selected, opulate the order details so the full list of order items
+                    // Since there is only one shipment selected, populate the order details so the full list of order items
                     // is available to us in order to build out a list of suggestions for each order item to let the user
                     // to quickly pick from a list in the case where they're not shipping everything in one package
                     ShipmentEntity shipment = shipments.First();
