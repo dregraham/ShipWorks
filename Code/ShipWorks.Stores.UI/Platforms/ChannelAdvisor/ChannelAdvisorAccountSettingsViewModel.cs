@@ -128,6 +128,12 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void UpdateStoreInfo(ChannelAdvisorStoreEntity store, string refreshToken)
         {
+            // if we already have a profile id dont do anything
+            if (store.ProfileID > 0)
+            {
+                return;
+            }
+
             ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.First();
 
             store.ProfileID = profile?.ProfileId ?? 0;

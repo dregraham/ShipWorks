@@ -99,6 +99,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             if (result == DialogResult.OK)
             {
                 LoadRestControl(channelAdvisorStore);
+                restUser = true;
             }
         }
     }
