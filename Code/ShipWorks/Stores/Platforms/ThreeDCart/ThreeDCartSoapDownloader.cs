@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 if (totalCount != 0)
                 {
-                    // Download any newly created orders (thier modified dates could be older than the last last modified date SW has)
+                    // Download any newly created orders (their modified dates could be older than the last last modified date SW has)
                     DownloadOrders(orderSearchCriteria);
                 }
 
@@ -316,7 +316,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
 
             // Get the order total from the xml
-            decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m);
+            decimal xmlOrderTotal = XPathUtility.Evaluate(xmlOrderXPath, "./Total", 0.0m, defaultOnFailToConvert: true);
 
             // If this order does not have sub orders, set the order total to that which we received from 3dcart
             // If it does have sub orders, we'll calculate the order total after we add items for this shipment/charges/payment

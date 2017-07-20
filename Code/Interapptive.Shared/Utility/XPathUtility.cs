@@ -35,7 +35,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Evaluates the given XPath expression and returns the result.
         /// </summary>
-        public static int Evaluate(XPathNavigator xpath, string node, int defaultValue)
+        public static int Evaluate(XPathNavigator xpath, string node, int defaultValue, bool defaultOnFailToConvert = false)
         {
             string value = GetNodeValue(xpath, node);
 
@@ -53,6 +53,11 @@ namespace Interapptive.Shared.Utility
                 string message = string.Format("Failed to convert '{0}' from path '{1}' to Int32.", value, node);
                 log.ErrorFormat(message, ex);
 
+                if (defaultOnFailToConvert)
+                {
+                    return defaultValue;
+                }
+
                 throw;
             }
         }
@@ -60,7 +65,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Evaluates the given XPath expression and returns the result.
         /// </summary>
-        public static long Evaluate(XPathNavigator xpath, string node, long defaultValue)
+        public static long Evaluate(XPathNavigator xpath, string node, long defaultValue, bool defaultOnFailToConvert = false)
         {
             string value = GetNodeValue(xpath, node);
 
@@ -78,6 +83,11 @@ namespace Interapptive.Shared.Utility
                 string message = string.Format("Failed to convert '{0}' from path '{1}' to Int32.", value, node);
                 log.ErrorFormat(message, ex);
 
+                if (defaultOnFailToConvert)
+                {
+                    return defaultValue;
+                }
+
                 throw;
             }
         }
@@ -85,7 +95,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Evaluates the given XPath expression and returns the result.
         /// </summary>
-        public static decimal Evaluate(XPathNavigator xpath, string node, decimal defaultValue)
+        public static decimal Evaluate(XPathNavigator xpath, string node, decimal defaultValue, bool defaultOnFailToConvert = false)
         {
             string value = GetNodeValue(xpath, node);
 
@@ -103,6 +113,11 @@ namespace Interapptive.Shared.Utility
                 string message = string.Format("Failed to convert '{0}' from path '{1}' to Decimal.", value, node);
                 log.ErrorFormat(message, ex);
 
+                if (defaultOnFailToConvert)
+                {
+                    return defaultValue;
+                }
+
                 throw;
             }
         }
@@ -110,7 +125,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Evaluates the given XPath expression and returns the result.
         /// </summary>
-        public static double Evaluate(XPathNavigator xpath, string node, double defaultValue)
+        public static double Evaluate(XPathNavigator xpath, string node, double defaultValue, bool defaultOnFailToConvert = false)
         {
             string value = GetNodeValue(xpath, node);
 
@@ -128,6 +143,11 @@ namespace Interapptive.Shared.Utility
                 string message = string.Format("Failed to convert '{0}' from path '{1}' to Double.", value, node);
                 log.ErrorFormat(message, ex);
 
+                if (defaultOnFailToConvert)
+                {
+                    return defaultValue;
+                }
+
                 throw;
             }
         }
@@ -135,7 +155,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Evaluates the given XPath expression and returns the result.
         /// </summary>
-        public static bool Evaluate(XPathNavigator xpath, string node, bool defaultValue)
+        public static bool Evaluate(XPathNavigator xpath, string node, bool defaultValue, bool defaultOnFailToConvert = false)
         {
             string value = GetNodeValue(xpath, node);
 
@@ -152,6 +172,11 @@ namespace Interapptive.Shared.Utility
             {
                 string message = string.Format("Failed to convert '{0}' from path '{1}' to Boolean.", value, node);
                 log.ErrorFormat(message, ex);
+
+                if (defaultOnFailToConvert)
+                {
+                    return defaultValue;
+                }
 
                 throw;
             }
