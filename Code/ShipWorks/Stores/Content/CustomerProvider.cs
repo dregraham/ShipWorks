@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Content
                 else
                 {
                     // Find the customer using its online identifier
-                    customer = await FindExistingCustomer(order, storeType, adapter);
+                    customer = await FindExistingCustomer(order, storeType, adapter).ConfigureAwait(false);
                 }
 
                 TimeSpan searchTime = sw.Elapsed;
@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Content
                         if (config.CustomerUpdateBilling || config.CustomerUpdateShipping || customer.IsDirty)
                         {
                             // Save it back
-                            await adapter.SaveEntityAsync(customer);
+                            await adapter.SaveEntityAsync(customer).ConfigureAwait(false);
                         }
                     }
                 }
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static async Task<CustomerEntity> FindExistingCustomer(OrderEntity order, StoreType storeType, ISqlAdapter adapter)
         {
-            CustomerEntity customer = await FindCustomerByOnlineIdentifier(adapter, order, storeType);
+            CustomerEntity customer = await FindCustomerByOnlineIdentifier(adapter, order, storeType).ConfigureAwait(false);
 
             if (customer != null)
             {
@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Content
 
             IConfigurationEntity config = ConfigurationData.FetchReadOnly();
 
-            return await FindExistingCustomer(order.BillPerson, config.CustomerCompareEmail, config.CustomerCompareAddress, adapter);
+            return await FindExistingCustomer(order.BillPerson, config.CustomerCompareEmail, config.CustomerCompareAddress, adapter).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -153,12 +153,12 @@ namespace ShipWorks.Stores.Content
             if (compareEmail)
             {
                 // Find a match in the order table
-                customer = await FindCustomer(adapter, GetCompareOrderEmailPredicate(billPerson));
+                customer = await FindCustomer(adapter, GetCompareOrderEmailPredicate(billPerson)).ConfigureAwait(false);
 
                 // Find a match in the customer table
                 if (customer == null)
                 {
-                    customer = await FindCustomer(adapter, GetCompareCustomerEmailPredicate(billPerson));
+                    customer = await FindCustomer(adapter, GetCompareCustomerEmailPredicate(billPerson)).ConfigureAwait(false);
                 }
             }
 
@@ -166,12 +166,12 @@ namespace ShipWorks.Stores.Content
             if (customer == null && compareMailing)
             {
                 // Find it in the order table
-                customer = await FindCustomer(adapter, GetCompareOrderAddressPredicate(billPerson));
+                customer = await FindCustomer(adapter, GetCompareOrderAddressPredicate(billPerson)).ConfigureAwait(false);
 
                 // Then look in the customer table
                 if (customer == null)
                 {
-                    customer = await FindCustomer(adapter, GetCompareCustomerAddressPredicate(billPerson));
+                    customer = await FindCustomer(adapter, GetCompareCustomerAddressPredicate(billPerson)).ConfigureAwait(false);
                 }
             }
 
@@ -203,11 +203,11 @@ namespace ShipWorks.Stores.Content
             if (instanceLookup)
             {
                 customerExpression.And(OrderFields.StoreID == order.StoreID);
-                return await FindCustomer(adapter, customerExpression);
+                return await FindCustomer(adapter, customerExpression).ConfigureAwait(false);
             }
 
             customerExpression.And(StoreFields.TypeCode == (int) storeType.TypeCode);
-            return await FindCustomer(adapter, customerExpression, OrderEntity.Relations.StoreEntityUsingStoreID);
+            return await FindCustomer(adapter, customerExpression, OrderEntity.Relations.StoreEntityUsingStoreID).ConfigureAwait(false);
         }
 
         /// <summary>
