@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+﻿namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
     partial class ChannelAdvisorRestAccountSettingsControl
     {
@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.channelAdvisorAccountSettingsControl1 = new ShipWorks.Stores.UI.Platforms.ChannelAdvisor.ChannelAdvisorAccountSettingsControl();
+            this.restAuthHost = new System.Windows.Forms.Integration.ElementHost();
+            this.channelAdvisorRestAuthorizationControl = new ShipWorks.Stores.UI.Platforms.ChannelAdvisor.ChannelAdvisorRestAuthorizationControl();
             this.SuspendLayout();
             // 
             // elementHost1
             // 
-            this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.elementHost1.Location = new System.Drawing.Point(0, 0);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(492, 140);
-            this.elementHost1.TabIndex = 0;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.channelAdvisorAccountSettingsControl1;
+            this.restAuthHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.restAuthHost.Location = new System.Drawing.Point(0, 0);
+            this.restAuthHost.Name = "elementHost1";
+            this.restAuthHost.Size = new System.Drawing.Size(492, 140);
+            this.restAuthHost.TabIndex = 0;
+            this.restAuthHost.Text = "elementHost1";
+            this.restAuthHost.Child = this.channelAdvisorRestAuthorizationControl;
             // 
             // ChannelAdvisorRestAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.elementHost1);
+            this.Controls.Add(this.restAuthHost);
             this.Name = "ChannelAdvisorRestAccountSettingsControl";
             this.Size = new System.Drawing.Size(492, 140);
             this.ResumeLayout(false);
@@ -55,7 +55,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private UI.Platforms.ChannelAdvisor.ChannelAdvisorAccountSettingsControl channelAdvisorAccountSettingsControl1;
+        private System.Windows.Forms.Integration.ElementHost restAuthHost;
+        private UI.Platforms.ChannelAdvisor.ChannelAdvisorRestAuthorizationControl channelAdvisorRestAuthorizationControl;
     }
 }
