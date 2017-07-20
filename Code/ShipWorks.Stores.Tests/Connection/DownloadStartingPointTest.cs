@@ -6,9 +6,9 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -37,24 +37,7 @@ namespace ShipWorks.Stores.Tests.Connection
 
             await testObject.OnlineLastModified(store.Object);
 
-            sqlAdapter.Verify(x => x.GetScalar(
-                MatchesField(OrderFields.OnlineLastModified),
-                null,
-                AggregateFunction.Max,
-                MatchesPredicate(OrderFields.StoreID == 123 & OrderFields.IsManual == false)));
-        }
-
-        [Theory]
-        [InlineData("DBNULL")]
-        [InlineData(null)]
-        [InlineData("123")]
-        public async Task OnlineLastModified_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
-        {
-            SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
-            var testObject = mock.Create<DownloadStartingPoint>();
-
-            var result = await testObject.OnlineLastModified(store.Object);
-            Assert.Null(result);
+            sqlAdapter.Verify(x => x.FetchScalarAsync<DateTime?>(It.IsAny<DynamicQuery>()));
         }
 
         [Fact]
@@ -113,24 +96,7 @@ namespace ShipWorks.Stores.Tests.Connection
 
             await testObject.OrderDate(store.Object);
 
-            sqlAdapter.Verify(x => x.GetScalar(
-                MatchesField(OrderFields.OrderDate),
-                null,
-                AggregateFunction.Max,
-                MatchesPredicate(OrderFields.StoreID == 123 & OrderFields.IsManual == false)));
-        }
-
-        [Theory]
-        [InlineData("DBNULL")]
-        [InlineData(null)]
-        [InlineData("123")]
-        public async Task OrderDate_ReturnsNull_WhenSqlReturnsInvalidDate(object value)
-        {
-            SetupSqlGetScalerToReturn((string) value == "DBNULL" ? DBNull.Value : value);
-            var testObject = mock.Create<DownloadStartingPoint>();
-
-            var result = await testObject.OrderDate(store.Object);
-            Assert.Null(result);
+            sqlAdapter.Verify(x => x.FetchScalarAsync<DateTime?>(It.IsAny<DynamicQuery>()));
         }
 
         [Fact]
@@ -181,16 +147,12 @@ namespace ShipWorks.Stores.Tests.Connection
         /// <summary>
         /// Setup the SqlAdapter to return a specified value when GetScalar is called
         /// </summary>
-        private void SetupSqlGetScalerToReturn(object value)
+        private void SetupSqlGetScalerToReturn(DateTime? value)
         {
             mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(x => x.Create())
-                .Setup(x => x.GetScalar(
-                    It.IsAny<IEntityField2>(),
-                    It.IsAny<IExpression>(),
-                    It.IsAny<AggregateFunction>(),
-                    It.IsAny<IPredicate>()))
-                .Returns(value);
+                .Setup(x => x.FetchScalarAsync<DateTime?>(It.IsAny<DynamicQuery>()))
+                .ReturnsAsync(value);
         }
 
         /// <summary>

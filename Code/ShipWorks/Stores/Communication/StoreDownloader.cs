@@ -15,7 +15,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;

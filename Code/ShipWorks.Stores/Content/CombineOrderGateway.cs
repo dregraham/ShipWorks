@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Content
                     .AndWhere(andWherePredicate
                         .Or(orPredicate));
 
-                long invalidOrders = sqlAdapter.FetchScalar<long>(query);
+                long invalidOrders = ((IDataAccessAdapter) sqlAdapter).FetchScalar<long>(query);
 
                 return invalidOrders == 0;
             }
