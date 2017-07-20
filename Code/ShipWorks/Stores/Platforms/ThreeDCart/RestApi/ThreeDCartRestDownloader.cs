@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
@@ -43,6 +44,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestDownloader"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public ThreeDCartRestDownloader(ThreeDCartStoreEntity store,
             Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient> restWebClientFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,

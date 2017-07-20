@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
@@ -16,7 +17,6 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -37,15 +37,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public LemonStandDownloader(StoreEntity store,
             Func<LemonStandStoreEntity, ILemonStandWebClient> webClientFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             ISqlAdapterFactory sqlAdapterFactory,
             IStoreTypeManager storeTypeManager,
             IConfigurationData configurationData)
-            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             client = webClientFactory((LemonStandStoreEntity) store);
             this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder");

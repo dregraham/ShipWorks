@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -43,6 +44,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="sqlAdapterRetryFactory">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public MagentoTwoRestDownloader(StoreEntity store,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,

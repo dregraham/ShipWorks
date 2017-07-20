@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -37,6 +38,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiDownloader"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public YahooApiDownloader(YahooStoreEntity store,
             Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,

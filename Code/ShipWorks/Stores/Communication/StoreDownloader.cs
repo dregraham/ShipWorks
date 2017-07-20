@@ -62,14 +62,6 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
-            this(store, storeTypeManager.GetType(store), configurationData.FetchReadOnly(), sqlAdapterFactory)
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
         protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
             this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory)
         {
