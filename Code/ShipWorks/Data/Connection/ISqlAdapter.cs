@@ -19,5 +19,12 @@ namespace ShipWorks.Data.Connection
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         Task<bool> SaveAndRefetchAsync(IEntity2 entity);
+
+        /// <summary>
+        /// Sets the flag to signal the SqlServer DQE to generate SET ARITHABORT ON.
+        /// </summary>
+        void SetArithAbortFlag(bool value);
+
+        void SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel compatibilityLevel);
     }
 }

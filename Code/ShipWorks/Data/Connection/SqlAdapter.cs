@@ -10,9 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
+using SD.LLBLGen.Pro.DQE.SqlServer;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -28,31 +27,31 @@ namespace ShipWorks.Data.Connection
         private const int ForeignKeyReferentialIntegrityError = 547;
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
 
         // Allows us to use a user-configured database.
-        static CatalogNameOverwriteHashtable catalogNameOverwrites = new CatalogNameOverwriteHashtable();
+        private static CatalogNameOverwriteHashtable catalogNameOverwrites = new CatalogNameOverwriteHashtable();
 
         // Indicates if we should be logging all InfoMessage events from the underlying connection
-        bool logInfoMessages = false;
+        private bool logInfoMessages = false;
 
         // Indicates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
-        bool identityInsert = false;
+        private bool identityInsert = false;
 
         // Lets us track if any entity is saved in a recursive save operation
-        bool entitySaved = false;
+        private bool entitySaved = false;
 
         // The user passes in the connection to use
-        DbConnection overrideConnection;
+        private DbConnection overrideConnection;
 
         // The active TransactionScope, of the adapter was instructed to be required to be in a transaction
-        System.Transactions.TransactionScope transactionScope;
+        private System.Transactions.TransactionScope transactionScope;
 
         // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback",
         // even though it should really wait and see what the wrapping transaction scope vote ends up doing.  This way LLBLgen sees that there is already
         // a regular transaction and doesn't do that.  Doing "StartTransaction" when InSystemTransaction is true is basically just setting the internal
         // isTransactionInProgress flag to true.
-        bool inFakePhysicalTranscation = false;
+        private bool inFakePhysicalTranscation = false;
 
         /// <summary>
         /// Raised when the transaction completes if the adapter participates in an ambient transaction.
@@ -73,8 +72,6 @@ namespace ShipWorks.Data.Connection
             catalogNameOverwrites.Add("ShipWorks", "");
             catalogNameOverwrites.Add("ShipWorksLocal", "");
 
-            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
-
             fieldIsTransactionInProgress = typeof(DataAccessAdapterCore).GetField("_isTransactionInProgress", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (fieldIsTransactionInProgress == null)
             {
@@ -93,7 +90,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlAdapter() : this(false)
         {
-
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
         }
 
         /// <summary>
@@ -102,6 +99,7 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(DbConnection connectionToUse)
             : base("", true, catalogNameOverwrites, null)
         {
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
             this.overrideConnection = connectionToUse;
 
             InitializeCommon();
@@ -113,6 +111,7 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(DbConnection connectionToUse, DbTransaction transactionToUse)
             : base("", true, catalogNameOverwrites, null)
         {
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
             overrideConnection = connectionToUse;
 
             if (transactionToUse != null)
@@ -130,7 +129,7 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(bool ensureTransacted) :
             this(ensureTransacted, System.Transactions.IsolationLevel.ReadCommitted)
         {
-
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
         }
 
         /// <summary>
@@ -139,7 +138,7 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(bool ensureTransacted, System.Transactions.IsolationLevel isolation) :
             this(StartTransactionScopeIfNeeded(ensureTransacted, isolation))
         {
-
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
         }
 
         /// <summary>
@@ -148,6 +147,7 @@ namespace ShipWorks.Data.Connection
         private SqlAdapter(System.Transactions.TransactionScope transactionScope) :
             base(SqlSession.Current.Configuration.GetConnectionString(), false, catalogNameOverwrites, null)
         {
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
             this.transactionScope = transactionScope;
 
             System.Transactions.Transaction ambient = System.Transactions.Transaction.Current;
@@ -330,7 +330,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Called when the current System.Transactions Transaction completes
         /// </summary>
-        void OnTransactionCompleted(object sender, System.Transactions.TransactionEventArgs e)
+        private void OnTransactionCompleted(object sender, System.Transactions.TransactionEventArgs e)
         {
             TransactionCompleted?.Invoke(this, e);
         }
@@ -367,7 +367,7 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-        #endregion
+        #endregion Connection \ Transaction
 
         #region InfoMessages
 
@@ -416,7 +416,7 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-        #endregion
+        #endregion InfoMessages
 
         #region Utility
 
@@ -514,6 +514,60 @@ namespace ShipWorks.Data.Connection
             entitySaved = true;
 
             base.OnSaveEntity(saveQuery, entityToSave);
+        }
+
+        /// <summary>Sets the flag to signal the SqlServer DQE to generate SET ARITHABORT ON statements prior to INSERT, DELETE and UPDATE Queries.
+        /// Keep this flag to false in normal usage, but set it to true if you need to write into a table which is part of an indexed view.
+        /// It will not affect normal inserts/updates that much, leaving it on is not harmful. See Books online for details on SET ARITHABORT ON.
+        /// After each statement the setting is turned off if it has been turned on prior to that statement.</summary>
+        /// <remarks>Setting this flag is a global change.</remarks>
+        public void SetArithAbortFlag(bool value)
+        {
+            DynamicQueryEngine.ArithAbortOn = value;
+        }
+
+        /// <summary>Sets the default compatibility level used by the DQE. Default is SqlServer2005. This is a global setting.
+        /// Compatibility level influences the query generated for paging, sequence name (@@IDENTITY/SCOPE_IDENTITY()), and usage of newsequenceid() in inserts.
+        /// It also influences the ado.net provider to use. This way you can switch between SqlServer server client 'SqlClient' and SqlServer CE Desktop.</summary>
+        /// <remarks>Setting this property will overrule a similar setting in the .config file. Don't set this property when queries are executed as
+        /// it might switch factories for ADO.NET elements which could result in undefined behavior so set this property at startup of your application</remarks>
+        public void SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel compatibilityLevel)
+        {
+            DynamicQueryEngine.DefaultCompatibilityLevel = compatibilityLevel;
+        }
+
+        /// <summary>Creates a new Dynamic Query engine object and passes in the defined catalog/schema overwrite hashtables.</summary>
+        protected override DynamicQueryEngineBase CreateDynamicQueryEngine()
+        {
+            return this.PostProcessNewDynamicQueryEngine(new DynamicQueryEngine());
+        }
+
+        /// <summary>Reads the value of the setting with the key ConnectionStringKeyName from the *.config file and stores that value as the active connection string to use for this object.</summary>
+        /// <returns>connection string read</returns>
+        private static string ReadConnectionStringFromConfig()
+        {
+            return ConfigFileHelper.ReadConnectionStringFromConfig(ConnectionStringKeyName);
+        }
+
+        /// <summary>Sets the per instance compatibility level on the dqe instance specified.</summary>
+        /// <param name="dqe">The dqe.</param>
+        protected override void SetPerInstanceCompatibilityLevel(DynamicQueryEngineBase dqe)
+        {
+            if (_compatibilityLevel.HasValue)
+            {
+                ((DynamicQueryEngine) dqe).CompatibilityLevel = _compatibilityLevel.Value;
+            }
+        }
+
+        private Nullable<SqlServerCompatibilityLevel> _compatibilityLevel = null;
+
+        /// <summary>The per-instance compatibility level used by this DQE instance. Default is the one set globally, which is by default SqlServer2005 (for 2005+).
+        /// Compatibility level influences the query generated for paging, sequence name (@@IDENTITY/SCOPE_IDENTITY()), and usage of newsequenceid() in inserts.
+        /// It also influences the ado.net provider to use. This way you can switch between SqlServer server client 'SqlClient' and SqlServer CE Desktop.</summary>
+        public Nullable<SqlServerCompatibilityLevel> CompatibilityLevel
+        {
+            get { return _compatibilityLevel; }
+            set { _compatibilityLevel = value; }
         }
 
         /// <summary>
@@ -767,7 +821,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
-        #endregion
+        #endregion Utility
 
         #region Identity Inserts
 
@@ -898,6 +952,6 @@ namespace ShipWorks.Data.Connection
             return clone;
         }
 
-        #endregion
+        #endregion Identity Inserts
     }
 }
