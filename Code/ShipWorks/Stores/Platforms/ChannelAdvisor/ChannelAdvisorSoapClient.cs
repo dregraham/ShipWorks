@@ -26,10 +26,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Thin wrapper around the ChannelAdvisor web clients
     /// </summary>
     [Component]
-    public class ChannelAdvisorSoapSoapClient : IChannelAdvisorSoapClient
+    public class ChannelAdvisorSoapClient : IChannelAdvisorSoapClient
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorSoapSoapClient));
+        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorSoapClient));
 
         // Cache of inventory items we've already looked up
         static LruCache<string, caInventoryService.InventoryItemResponse> inventoryItemCache = new LruCache<string, caInventoryService.InventoryItemResponse>(1000);
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorSoapSoapClient(ChannelAdvisorStoreEntity store)
+        public ChannelAdvisorSoapClient(ChannelAdvisorStoreEntity store)
         {
             this.store = store;
         }

@@ -5551,7 +5551,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapSoapClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdater.cs" />
