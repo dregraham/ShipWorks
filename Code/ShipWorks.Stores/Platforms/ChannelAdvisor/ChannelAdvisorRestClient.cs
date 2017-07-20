@@ -178,6 +178,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Uri =
                 new Uri($"{ordersEndpoint}({channelAdvisorOrderID})/Ship?access_token={GetAccessToken(refreshToken, isRetry)}");
 
+            // NoContent is the expected response form ChannelAdvisor for a sucessful upload
+            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
+
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, "UploadShipmentDetails");
             apiLogEntry.LogRequest(submitter);
 

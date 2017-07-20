@@ -312,6 +312,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void UploadShipmentDetails_SetsSubmitterToAllowNoContentCode()
+        {
+            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
+
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+
+            testObject.UploadShipmentDetails(shipment, "refresh", "1");
+
+            // No content is the expected response from ChannelAdvisor
+            postRequestSubmitter.Verify(s=>s.AllowHttpStatusCodes(HttpStatusCode.NoContent));
+        }
+
+        [Fact]
         public void UploadShipmentDetails_GetsNewAccessToken_OnSubsequentCall_ThatReturns401()
         {
             ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
@@ -320,7 +333,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             unauthorizedResponse.Setup(r => r.StatusCode).Returns(HttpStatusCode.Unauthorized);
 
             var webException = new WebException("401", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
-
+            
             postRequestSubmitter.Setup(s => s.GetResponse()).Throws(webException);
             var testObject = mock.Create<ChannelAdvisorRestClient>();
 
