@@ -229,7 +229,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
 
             testObject.UploadShipmentDetails(shipment, "refresh", "1");
-            
+
             postRequestSubmitter.VerifySet(s => s.Uri =
                 It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/Orders(1)/Ship?access_token=atoken"));
         }
@@ -333,7 +333,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             unauthorizedResponse.Setup(r => r.StatusCode).Returns(HttpStatusCode.Unauthorized);
 
             var webException = new WebException("401", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
-            
+
             postRequestSubmitter.Setup(s => s.GetResponse()).Throws(webException);
             var testObject = mock.Create<ChannelAdvisorRestClient>();
 
@@ -341,6 +341,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Throws<ChannelAdvisorException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void GetDistributionCenters_UsesCorrectEndpoint()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetDistributionCenters("token");
+            variableRequestSubmitter.VerifySet(s => s.Uri =
+                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/DistributionCenters"));
         }
 
         public void Dispose()
