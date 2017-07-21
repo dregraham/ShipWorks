@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
@@ -7,6 +8,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.UI.Platforms.ChannelAdvisor;
 using Xunit;
 
@@ -134,6 +136,92 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.Save(store, false);
 
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void Save_CallsGetProfile_WhenProfileIdIsZero()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(GenericResult.FromSuccess("refreshToken"));
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store, false);
+
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c=>c.GetProfiles("refreshToken"), Times.Once);
+        }
+
+        [Fact]
+        public void Save_SetsProfileId_FromWebClient_WhenProfileIdIsZero()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(GenericResult.FromSuccess("refreshToken"));
+            var store = new ChannelAdvisorStoreEntity { StoreTypeCode = StoreTypeCode.ChannelAdvisor };
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetProfiles("refreshToken"))
+                .Returns(new ChannelAdvisorProfilesResponse()
+                {
+                    Profiles = new List<ChannelAdvisorProfile>()
+                    {
+                        new ChannelAdvisorProfile() {ProfileId = 55}
+                    }
+                });
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store, false);
+
+            Assert.Equal(55, store.ProfileID);
+        }
+
+        [Fact]
+        public void Save_DoesNotCallGetProfile_WhenProfileIdNotZero()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(GenericResult.FromSuccess("refreshToken"));
+            var store = new ChannelAdvisorStoreEntity
+            {
+                StoreTypeCode = StoreTypeCode.ChannelAdvisor,
+                ProfileID = 1
+            };
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store, false);
+
+            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.GetProfiles("refreshToken"), Times.Never);
+        }
+
+        [Fact]
+        public void Save_DoesNotChangeProfileId_WhenProfileIdNotZero()
+        {
+            encryptionProvider.Setup(e => e.Encrypt(It.IsAny<string>())).Returns("encrypted");
+
+            mock.Mock<IChannelAdvisorRestClient>()
+                .Setup(c => c.GetRefreshToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(GenericResult.FromSuccess("refreshToken"));
+            var store = new ChannelAdvisorStoreEntity
+            {
+                StoreTypeCode = StoreTypeCode.ChannelAdvisor,
+                ProfileID = 1
+            };
+
+            var testObject = mock.Create<ChannelAdvisorAccountSettingsViewModel>();
+            testObject.AccessCode = "accessCode";
+            testObject.Save(store, false);
+
+            Assert.Equal(1, store.ProfileID);
         }
 
         public void Dispose()
