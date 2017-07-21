@@ -54,7 +54,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "Channel Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.ChannelAdvisor)
-                .Set(x => x.RefreshToken = "refreshToken")
+                // Encrypted "refreshToken"
+                .Set(x => x.RefreshToken = "717TxeCurhOsOo6942NICQ==")
                 .Set(x=> x.AttributesToDownload = "<Attributes></Attributes>")
                 .Save();
 
@@ -84,10 +85,21 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.Result = (int)DownloadResult.Unfinished)
                 .Save().DownloadID;
 
+            var distributionCenters = new List<ChannelAdvisorDistributionCenter>()
+            {
+                new ChannelAdvisorDistributionCenter()
+                {
+                    ID = 0,
+                    Code = "SW"
+                }
+            };
+
             client = mock.Mock<IChannelAdvisorRestClient>();
             client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
-
+            client.Setup(c => c.GetDistributionCenters(It.IsAny<string>()))
+                .Returns(new ChannelAdvisorDistributionCenterResponse() {DistributionCenters = distributionCenters});
+            
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
             order = SingleOrder();
@@ -103,8 +115,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             testObject = mock.Create<ChannelAdvisorRestDownloader>(TypedParameter.From<StoreEntity>(store));
         }
 
-
-
+        [Fact]
+        public void Download_GetDistributionCenters()
+        {
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            client.Verify(c=>c.GetDistributionCenters("refreshToken"), Times.Once);
+        }
+        
         [Fact]
         public void Download_SetsProgressDetailWithOrderCount()
         {
@@ -142,6 +159,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 Items = new List<ChannelAdvisorOrderItem>()
                 {
                     new ChannelAdvisorOrderItem()
+                    {
+                        FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                    }
                 },
                 CreatedDateUtc = utcNow.AddDays(5),
                 PublicNotes = "This is a public note"
