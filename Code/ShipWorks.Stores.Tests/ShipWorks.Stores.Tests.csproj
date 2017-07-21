@@ -108,6 +108,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
@@ -183,6 +187,10 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactoryTest.cs" />
     <Compile Include="Platforms\BigCommerce\Downloading\BigCommerceOrderSearchCriteriaFactoryTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsViewModelTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoaderTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClientTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />

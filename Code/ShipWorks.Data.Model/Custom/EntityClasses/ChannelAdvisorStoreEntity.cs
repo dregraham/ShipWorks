@@ -1,4 +1,7 @@
-﻿using ShipWorks.Stores.Platforms.Amazon;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -29,6 +32,18 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.Region
         {
             get { return AmazonApiRegion; }
+        }
+
+        /// <summary>
+        /// Returns a list of attributes user has selected to download
+        /// </summary>
+        public IEnumerable<string> ParsedAttributesToDownload
+        {
+            get
+            {
+                XDocument attributesToDownload = XDocument.Parse(AttributesToDownload);
+                return attributesToDownload.Descendants("Attribute").Select(a => a.Value);
+            }
         }
     }
 }
