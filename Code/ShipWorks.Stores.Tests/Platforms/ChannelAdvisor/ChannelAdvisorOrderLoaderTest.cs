@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
@@ -27,6 +28,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly Mock<IChannelAdvisorRestClient> channelAdvisorRestClient;
         private readonly ChannelAdvisorProduct downloadedProduct;
         private readonly List<ChannelAdvisorProduct> downloadedProducts;
+        private readonly List<ChannelAdvisorDistributionCenter> distributionCenters = new List<ChannelAdvisorDistributionCenter>()
+        {
+            new ChannelAdvisorDistributionCenter()
+            {
+                ID = 0,
+                Code = "DC0"
+            },
+            new ChannelAdvisorDistributionCenter()
+            {
+                ID = 1,
+                Code = "DC1"
+            }
+        };
 
         public ChannelAdvisorOrderLoaderTest()
         {
@@ -37,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items = new List<ChannelAdvisorOrderItem>();
             orderElementFactory = mock.Mock<IOrderElementFactory>();
             channelAdvisorRestClient = mock.Mock<IChannelAdvisorRestClient>();
-            testObject = mock.Create<ChannelAdvisorOrderLoader>();
+            testObject = mock.Create<ChannelAdvisorOrderLoader>(new TypedParameter(typeof(IEnumerable<ChannelAdvisorDistributionCenter>), distributionCenters));
 
             store = new ChannelAdvisorStoreEntity()
             {
@@ -1176,6 +1190,64 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             Assert.Equal(url, orderToSave.OrderItems.Single().Image);
             Assert.Equal(url, orderToSave.OrderItems.Single().Thumbnail);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDistributionCenterID()
+        {
+            var item = new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            downloadedOrder.Items.Add(item);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            long distributionCenterID = ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).DistributionCenterID;
+
+            Assert.Equal(1, distributionCenterID);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDistributionCenterCode()
+        {
+            var item = new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            downloadedOrder.Items.Add(item);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            string distributionCenterID = ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems.Single()).DistributionCenter;
+
+            Assert.Equal("DC1", distributionCenterID);
         }
 
         #endregion
