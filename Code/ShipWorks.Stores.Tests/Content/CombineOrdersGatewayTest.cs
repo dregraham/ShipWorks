@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Tests.Content
         [Fact]
         public async Task LoadOrders_ReturnsOrders_WhenLoadWasSuccessful()
         {
-            var order1 = new OrderEntity();
-            var order2 = new OrderEntity();
+            var order1 = new OrderEntity(1);
+            var order2 = new OrderEntity(2);
 
             mock.Mock<IOrderManager>()
                 .Setup(x => x.LoadOrdersAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ISqlAdapter>()))

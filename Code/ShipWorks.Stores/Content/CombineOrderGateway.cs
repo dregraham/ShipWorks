@@ -57,7 +57,14 @@ namespace ShipWorks.Stores.Content
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     IEnumerable<IOrderEntity> orders = await orderManager.LoadOrdersAsync(orderIDs, sqlAdapter);
-                    return GenericResult.FromSuccess(orders);
+
+                    // Force the correct sort order.
+                    IEnumerable<IOrderEntity> orderedByIDList = from i in orderIDs
+                                                                join o in orders
+                                                                  on i equals o.OrderID
+                                                                select o;
+
+                    return GenericResult.FromSuccess(orderedByIDList);
                 }
             }
             catch (ORMException ex)
