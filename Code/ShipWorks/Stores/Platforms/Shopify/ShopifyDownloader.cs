@@ -305,19 +305,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 // Only update the rest for brand new orders
                 if (order.IsNew)
                 {
-                    LoadOrderNumber(order, jsonOrder);
-
-                    // Iterate through each jsonOrder to get line items
-                    foreach (JToken lineItem in jsonOrder.SelectToken("line_items"))
-                    {
-                        LoadItem(order, lineItem);
-                    }
-
-                    // Load all the charges
-                    LoadOrderCharges(order, jsonOrder);
-
-                    // Load all payment details
-                    LoadPaymentDetails(order, jsonOrder);
+                    LoadOrderDetailsWhenNew(jsonOrder, order);
                 }
 
                 // Save the downloaded order
@@ -329,6 +317,26 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 log.Error(jsonEx);
                 throw new DownloadException("Shopify returned an invalid response while downloading orders.", jsonEx);
             }
+        }
+
+        /// <summary>
+        /// Load order details when the order is new
+        /// </summary>
+        private void LoadOrderDetailsWhenNew(JToken jsonOrder, ShopifyOrderEntity order)
+        {
+            LoadOrderNumber(order, jsonOrder);
+
+            // Iterate through each jsonOrder to get line items
+            foreach (JToken lineItem in jsonOrder.SelectToken("line_items"))
+            {
+                LoadItem(order, lineItem);
+            }
+
+            // Load all the charges
+            LoadOrderCharges(order, jsonOrder);
+
+            // Load all payment details
+            LoadPaymentDetails(order, jsonOrder);
         }
 
         /// <summary>
