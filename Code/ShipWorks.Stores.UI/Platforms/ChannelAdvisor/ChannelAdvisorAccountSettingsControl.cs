@@ -18,6 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         private readonly IChannelAdvisorAccountSettingsViewModel restViewModel;
         private ChannelAdvisorStoreEntity channelAdvisorStore;
         private bool restUser;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorAccountSettingsControl"/> class.
         /// </summary>
@@ -39,6 +40,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             {
                 throw new ArgumentException("A non ChannelAdvisor store was passed to ChannelAdvisor account settings.");
             }
+
             // REST user if refresh token exists
             restUser = !string.IsNullOrWhiteSpace(channelAdvisorStore.RefreshToken);
 
