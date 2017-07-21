@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             {
                 new ChannelAdvisorDistributionCenter()
                 {
-                    ID = 0,
+                    ID = 1,
                     Code = "SW"
                 }
             };
@@ -151,16 +151,43 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             Assert.Equal("This is a public note", note.Text);
         }
 
+        [Fact]
+        public void Download_SetsDistributionCode()
+        {
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            ChannelAdvisorOrderItemEntity item;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                item = new LinqMetaData(adapter).ChannelAdvisorOrderItem.SingleOrDefault();
+            }
+
+            Assert.Equal("SW", item.DistributionCenter);
+        }
+
         private ChannelAdvisorOrder SingleOrder()
         {
             return new ChannelAdvisorOrder()
             {
-                Fulfillments = new List<ChannelAdvisorFulfillment>(),
+                Fulfillments = new List<ChannelAdvisorFulfillment>()
+                {
+                    new ChannelAdvisorFulfillment()
+                    {
+                        ID = 123,
+                        DistributionCenterID = 1
+                    }
+                },
                 Items = new List<ChannelAdvisorOrderItem>()
                 {
                     new ChannelAdvisorOrderItem()
                     {
                         FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                        {
+                            new ChannelAdvisorFulfillmentItem()
+                            {
+                                FulfillmentID = 123
+                            }
+                        }
                     }
                 },
                 CreatedDateUtc = utcNow.AddDays(5),
