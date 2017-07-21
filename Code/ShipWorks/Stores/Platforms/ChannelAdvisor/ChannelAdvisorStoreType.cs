@@ -124,6 +124,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.DistributionCenter = "";
             entity.HarmonizedCode = "";
             entity.IsFBA = false;
+            entity.DistributionCenterID = -1;
 
             return entity;
         }
@@ -382,6 +383,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             ElementOutline outline = container.AddElement("ChannelAdvisor");
             outline.AddElement("Classification", () => item.Value.Classification);
+            outline.AddElement("DistributionCenterID", () => item.Value.DistributionCenterID);
             outline.AddElement("DistributionCenter", () => item.Value.DistributionCenter);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);

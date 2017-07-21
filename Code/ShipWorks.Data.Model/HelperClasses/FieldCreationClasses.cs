@@ -2932,6 +2932,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MPN);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.DistributionCenterID field instance</summary>
+		public static EntityField2 DistributionCenterID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenterID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ChannelAdvisorStoreEntity</summary>
