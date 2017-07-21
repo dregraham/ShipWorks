@@ -1272,6 +1272,8 @@ namespace ShipWorks.Data.Model
 		IsFBA,
 		///<summary>MPN. </summary>
 		MPN,
+		///<summary>DistributionCenterID. </summary>
+		DistributionCenterID,
 		/// <summary></summary>
 		AmountOfFields
 	}

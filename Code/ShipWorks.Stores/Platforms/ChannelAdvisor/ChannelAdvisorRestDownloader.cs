@@ -24,23 +24,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader, IOrderElementFactory
     {
         private readonly IChannelAdvisorRestClient restClient;
-        private readonly ChannelAdvisorOrderLoader orderLoader;
+        private readonly Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory;
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
-        private readonly ChannelAdvisorStoreEntity caStore;
+        private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelAdvisorRestDownloader(StoreEntity store, IChannelAdvisorRestClient restClient,
             IEncryptionProviderFactory encryptionProviderFactory,
-            ISqlAdapterRetryFactory sqlAdapterRetryFactory, ChannelAdvisorOrderLoader orderLoader) : base(store)
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory) :
+            base(store)
         {
             this.restClient = restClient;
-            this.orderLoader = orderLoader;
+            this.orderLoaderFactory = orderLoaderFactory;
 
-            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
-            caStore = Store as ChannelAdvisorStoreEntity;
+            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ChannelAdvisorRestDownloader.Download");
+            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
             refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                 .Decrypt(caStore.RefreshToken);
@@ -60,6 +62,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     return;
                 }
+
+                distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
 
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
@@ -82,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                         LoadOrder(caOrder, caProducts);
                     }
-                    
+
                     ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
                 }
             }
@@ -117,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.Store = Store;
 
                 //Order loader loads the order
-                orderLoader.LoadOrder(order, caOrder, caProducts, this);
+                orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 
                 // Save the downloaded order
                 sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));

@@ -25,6 +25,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         ChannelAdvisorProfilesResponse GetProfiles(string refreshToken);
 
         /// <summary>
+        /// Gets the distribution centers.
+        /// </summary>
+        ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string refreshToken);
+
+        /// <summary>
         /// Gets the product.
         /// </summary>
         ChannelAdvisorProduct GetProduct(int productID, string refreshToken);

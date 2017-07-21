@@ -155,11 +155,12 @@ namespace ShipWorks.Tests.Shared
         /// First, create the object you want as the result. (var blah = mock.MockRepository.Create&lt;IBlah&gt;();)
         /// Then call mock.MockFunc&lt;string, IBlah&gt;(blah);
         /// </remarks>
-        public static void MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
+        public static Mock<Func<TInput, TOutput>> MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
             mock.Provide(function.Object);
+            return function;
         }
 
         /// <summary>

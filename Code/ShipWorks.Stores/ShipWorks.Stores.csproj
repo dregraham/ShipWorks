@@ -153,6 +153,8 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenterResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillment.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillmentItem.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductDistributionCenterQuantity.cs" />

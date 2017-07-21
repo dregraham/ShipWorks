@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.Collections;
@@ -32,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
         private readonly string profilesEndpoint = $"{EndpointBase}/v1/Profiles";
         private readonly string productEndpoint = $"{EndpointBase}/v1/Products";
+        private readonly string distributionCenterEndpoint = $"{EndpointBase}/v1/DistributionCenters";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -113,6 +115,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Gets the distribution centers.
+        /// </summary>
+        public ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(distributionCenterEndpoint, HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+
+            return ProcessRequest<ChannelAdvisorDistributionCenterResponse>(submitter, "GetDistributionCenters", refreshToken);
+        }
+
+        /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
@@ -124,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
             submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
             submitter.Variables.Add("$count", "true");
-            submitter.Variables.Add("$expand", "Fulfillments,Items");
+            submitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
             return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
         }
@@ -257,11 +271,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             request.Variables.Remove("access_token");
             request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
-            
+
             return ProcessRequest<T>(request, action, refreshToken, false);
         }
 
-        
+
         /// <summary>
         /// Gets the authorization header value.
         /// </summary>

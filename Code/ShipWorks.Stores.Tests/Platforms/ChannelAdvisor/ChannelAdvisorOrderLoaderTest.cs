@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
@@ -27,6 +28,19 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         private readonly Mock<IChannelAdvisorRestClient> channelAdvisorRestClient;
         private readonly ChannelAdvisorProduct downloadedProduct;
         private readonly List<ChannelAdvisorProduct> downloadedProducts;
+        private readonly List<ChannelAdvisorDistributionCenter> distributionCenters = new List<ChannelAdvisorDistributionCenter>()
+        {
+            new ChannelAdvisorDistributionCenter()
+            {
+                ID = 0,
+                Code = "DC0"
+            },
+            new ChannelAdvisorDistributionCenter()
+            {
+                ID = 1,
+                Code = "DC1"
+            }
+        };
 
         public ChannelAdvisorOrderLoaderTest()
         {
@@ -37,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items = new List<ChannelAdvisorOrderItem>();
             orderElementFactory = mock.Mock<IOrderElementFactory>();
             channelAdvisorRestClient = mock.Mock<IChannelAdvisorRestClient>();
-            testObject = mock.Create<ChannelAdvisorOrderLoader>();
+            testObject = mock.Create<ChannelAdvisorOrderLoader>(new TypedParameter(typeof(IEnumerable<ChannelAdvisorDistributionCenter>), distributionCenters));
 
             store = new ChannelAdvisorStoreEntity()
             {
@@ -855,7 +869,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemNameIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {Title = "My Title"});
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                Title = "My Title",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -865,7 +883,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemQuantityIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Quantity = 42 });
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {
+                Quantity = 42,
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -875,7 +896,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemUnitPriceIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { UnitPrice = 10.23m });
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                UnitPrice = 10.23m,
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -885,7 +910,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemCodeIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                Sku = "sku!",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -895,7 +924,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemSkuIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!" });
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -905,7 +936,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_MarketPlaceNameIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             downloadedOrder.SiteName = "site name";
 
@@ -918,7 +952,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_BuyerUserIDIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+                {
+                    FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                });
             downloadedOrder.BuyerUserID = "Foo";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -930,7 +967,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemAttrbiuteNotCreated_WhenNoGiftNote()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -940,7 +980,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemAttributeCreated_WhenGiftNote()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftNotes = "For You!"});
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftNotes = "For You!",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -954,7 +996,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemAttributeCreated_WhenGiftMessage()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftMessage = "For you!"});
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                GiftMessage = "For you!",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -971,7 +1017,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
             {
                 GiftMessage = "For you!",
-                GiftNotes = "Some Note"
+                GiftNotes = "Some Note",
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
             });
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -982,7 +1029,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsProductWeightInPounds_WhenStoreCountryIsUS()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.Weight = 11.2m;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -994,7 +1044,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             store.CountryCode = "UK";
 
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.Weight = 11.2m;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1004,7 +1057,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsLocation()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.WarehouseLocation = "In the back";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1014,7 +1070,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsClassification()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.Classification = "First Class";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1024,7 +1083,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsUnitCost()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.Cost = 12.2m;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1034,7 +1096,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsHarmonizedCode()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.HarmonizedCode = "code";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1044,7 +1109,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsISBN()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.ISBN = "Isbn";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1054,7 +1122,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsUPC()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.UPC = "upc";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1064,7 +1135,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsMPN()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.MPN = "mpn";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1074,7 +1148,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_SetsDescription()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedProduct.Description = "In the back";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -1084,7 +1161,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_CreatesItemAttrbiute_WhenProductHasAttribute()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             var downloadedAttribute = new ChannelAdvisorProductAttribute()
             {
                 Name = "attributeName",
@@ -1104,7 +1184,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_CreatesItemTwoAttrbiutes_WhenProductHasTwoAttributes()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             var downloadedAttribute = new ChannelAdvisorProductAttribute()
             {
                 Name = "attributeName",
@@ -1123,7 +1206,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void Load_CreatesItemWithNoAttributes_WhenNoAttributesPassedIn()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             var downloadedAttribute = new ChannelAdvisorProductAttribute
             {
                 Name = "attributeName",
@@ -1141,7 +1227,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void Load_CreatesItemWithNoAttributes_WhenNoMatchingAttributesPassedIn()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             var downloadedAttribute = new ChannelAdvisorProductAttribute
             {
                 Name = "attributeName",
@@ -1161,7 +1250,10 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_ImageSaved()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem());
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
 
             string url = "http://www.shipworks.com/giffy.gif";
             downloadedProduct.Images = new[]
@@ -1176,6 +1268,64 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             Assert.Equal(url, orderToSave.OrderItems.Single().Image);
             Assert.Equal(url, orderToSave.OrderItems.Single().Thumbnail);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDistributionCenterID()
+        {
+            var item = new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            downloadedOrder.Items.Add(item);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            long distributionCenterID = ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).DistributionCenterID;
+
+            Assert.Equal(1, distributionCenterID);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDistributionCenterCode()
+        {
+            var item = new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            downloadedOrder.Items.Add(item);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            string distributionCenterID = ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems.Single()).DistributionCenter;
+
+            Assert.Equal("DC1", distributionCenterID);
         }
 
         #endregion
