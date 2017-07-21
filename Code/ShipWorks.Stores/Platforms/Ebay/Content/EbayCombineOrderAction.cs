@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -18,11 +21,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
         /// <summary>
         /// Perform the platform specific action
         /// </summary>
-        public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public async Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
+            // For some reason, EbayOrderItem has a FK to Order which also needs to be updated to point to the combined order id
+            IRelationPredicateBucket itemsBucket = new RelationPredicateBucket(EbayOrderItemFields.LocalEbayOrderID.In(orders.Select(x => x.OrderID)));
+            await sqlAdapter.UpdateEntitiesDirectlyAsync(new EbayOrderItemEntity
+            {
+                LocalEbayOrderID = combinedOrder.OrderID
+            }, itemsBucket);
+
             var recordCreator = new SearchRecordMerger<IEbayOrderEntity>(combinedOrder, orders, sqlAdapter);
 
-            return recordCreator.Perform(EbayOrderSearchFields.OrderID,
+            await recordCreator.Perform(EbayOrderSearchFields.OrderID,
                 x => new EbayOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
