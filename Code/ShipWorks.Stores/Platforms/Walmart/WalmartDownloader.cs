@@ -2,10 +2,12 @@
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -30,13 +32,18 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public WalmartDownloader(StoreEntity store,
             IWalmartWebClient walmartWebClient,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             IWalmartOrderLoader walmartOrderLoader,
             IDateTimeProvider dateTimeProvider,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IStoreTypeManager storeTypeManager,
             Func<Type, ILog> logFactory)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.walmartWebClient = walmartWebClient;
             this.walmartOrderLoader = walmartOrderLoader;
