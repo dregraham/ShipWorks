@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -153,37 +150,6 @@ namespace ShipWorks.Stores.Tests.Connection
                 .Mock(x => x.Create())
                 .Setup(x => x.FetchScalarAsync<DateTime?>(It.IsAny<DynamicQuery>()))
                 .ReturnsAsync(value);
-        }
-
-        /// <summary>
-        /// Does the called field match the specified field
-        /// </summary>
-        private IEntityField2 MatchesField(IEntityField2 onlineLastModified) =>
-            It.Is<IEntityField2>(x => x.Name == onlineLastModified.Name);
-
-        /// <summary>
-        /// Does the called predicate match the specified predicate
-        /// </summary>
-        private IPredicate MatchesPredicate(IPredicateExpression expected) =>
-            It.Is<IPredicateExpression>(p => DoPredicatesMatch(p, expected));
-
-        /// <summary>
-        /// Tests whether two predicate expressions match
-        /// </summary>
-        private bool DoPredicatesMatch(IPredicateExpression actual, IPredicateExpression expected)
-        {
-            var expectedPredicates = expected.OfType<IPredicateExpressionElement>()
-                .Select(x => x.Contents).OfType<FieldCompareValuePredicate>().ToList();
-            var actualPredicates = actual.OfType<IPredicateExpressionElement>()
-                .Select(x => x.Contents).OfType<FieldCompareValuePredicate>().ToList();
-
-            if (expectedPredicates.Count != actualPredicates.Count)
-            {
-                return false;
-            }
-
-            return expectedPredicates.Any(p =>
-                actualPredicates.None(x => x.FieldCore.Name == p.FieldCore.Name && x.Value == p.Value));
         }
 
         public void Dispose()

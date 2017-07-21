@@ -6,12 +6,12 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
-using SD.LLBLGen.Pro.DQE.SqlServer;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using SD.LLBLGen.Pro.QuerySpec.Adapter;
@@ -337,14 +337,18 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Fakes out LLBLGen to thinking a physical transaction is open.  See the docs of the field for information.
         /// </summary>
-        private void StartFakePyhsicalTransationIfNeeded()
+        private IDisposable StartFakePyhsicalTransationIfNeeded()
         {
             if (!inFakePhysicalTranscation && InSystemTransaction)
             {
                 inFakePhysicalTranscation = true;
 
                 fieldIsTransactionInProgress.SetValue(this, true);
+
+                return Disposable.Create(CloseFakePhysicalTransactionIfNeeded);
             }
+
+            return Disposable.Empty;
         }
 
         /// <summary>
@@ -466,20 +470,17 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
-                return base.SaveEntity(entityToSave, refetchAfterSave, updateRestriction, recurse);
-            }
-            catch (ORMQueryExecutionException ex)
-            {
-                TranslateException(ex);
-                throw;
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
+                try
+                {
+                    return base.SaveEntity(entityToSave, refetchAfterSave, updateRestriction, recurse);
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    TranslateException(ex);
+                    throw;
+                }
             }
         }
 
@@ -488,20 +489,17 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override async Task<bool> SaveEntityAsync(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse, CancellationToken cancellationToken)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
-                return await base.SaveEntityAsync(entityToSave, refetchAfterSave, updateRestriction, recurse, cancellationToken).ConfigureAwait(false);
-            }
-            catch (ORMQueryExecutionException ex)
-            {
-                TranslateException(ex);
-                throw;
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
+                try
+                {
+                    return await base.SaveEntityAsync(entityToSave, refetchAfterSave, updateRestriction, recurse, cancellationToken).ConfigureAwait(false);
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    TranslateException(ex);
+                    throw;
+                }
             }
         }
 
@@ -515,55 +513,15 @@ namespace ShipWorks.Data.Connection
             base.OnSaveEntity(saveQuery, entityToSave);
         }
 
-        /// <summary>Creates a new Dynamic Query engine object and passes in the defined catalog/schema overwrite hashtables.</summary>
-        protected override DynamicQueryEngineBase CreateDynamicQueryEngine()
-        {
-            return this.PostProcessNewDynamicQueryEngine(new DynamicQueryEngine());
-        }
-
-        /// <summary>Reads the value of the setting with the key ConnectionStringKeyName from the *.config file and stores that value as the active connection string to use for this object.</summary>
-        /// <returns>connection string read</returns>
-        private static string ReadConnectionStringFromConfig()
-        {
-            return ConfigFileHelper.ReadConnectionStringFromConfig(ConnectionStringKeyName);
-        }
-
-        /// <summary>Sets the per instance compatibility level on the dqe instance specified.</summary>
-        /// <param name="dqe">The dqe.</param>
-        protected override void SetPerInstanceCompatibilityLevel(DynamicQueryEngineBase dqe)
-        {
-            if (_compatibilityLevel.HasValue)
-            {
-                ((DynamicQueryEngine) dqe).CompatibilityLevel = _compatibilityLevel.Value;
-            }
-        }
-
-        private Nullable<SqlServerCompatibilityLevel> _compatibilityLevel = null;
-
-        /// <summary>The per-instance compatibility level used by this DQE instance. Default is the one set globally, which is by default SqlServer2005 (for 2005+).
-        /// Compatibility level influences the query generated for paging, sequence name (@@IDENTITY/SCOPE_IDENTITY()), and usage of newsequenceid() in inserts.
-        /// It also influences the ado.net provider to use. This way you can switch between SqlServer server client 'SqlClient' and SqlServer CE Desktop.</summary>
-        public Nullable<SqlServerCompatibilityLevel> CompatibilityLevel
-        {
-            get { return _compatibilityLevel; }
-            set { _compatibilityLevel = value; }
-        }
-
         /// <summary>
         /// Deletes all entities of the name passed in as entityName (e.g. "CustomerEntity")
         /// from the persistent storage if they match the filter supplied in filterBucket.
         /// </summary>
         public override int DeleteEntitiesDirectly(string entityName, IRelationPredicateBucket filterBucket)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntitiesDirectly(entityName, filterBucket);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -574,15 +532,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override bool DeleteEntity(IEntity2 entityToDelete, IPredicateExpression deleteRestriction)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntity(entityToDelete, deleteRestriction);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -593,15 +545,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override async Task<bool> DeleteEntityAsync(IEntity2 entityToDelete, IPredicateExpression deleteRestriction, CancellationToken cancellationToken)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return await base.DeleteEntityAsync(entityToDelete, deleteRestriction, cancellationToken).ConfigureAwait(false);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -613,15 +559,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int DeleteEntityCollection(IEntityCollection2 collectionToDelete)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntityCollection(collectionToDelete);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -634,15 +574,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int UpdateEntitiesDirectly(IEntity2 entityWithNewValues, IRelationPredicateBucket filterBucket)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.UpdateEntitiesDirectly(entityWithNewValues, filterBucket);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -652,15 +586,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int SaveEntityCollection(IEntityCollection2 collectionToSave, bool refetchSavedEntitiesAfterSave, bool recurse)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
