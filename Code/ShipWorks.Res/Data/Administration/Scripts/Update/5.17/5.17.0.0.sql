@@ -119,7 +119,7 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [OrderID] [bigint] NOT NULL,
 [EbayOrderID] [bigint] NOT NULL,
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellingManagerRecord] [int] NOT NULL
+[SellingManagerRecord] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'

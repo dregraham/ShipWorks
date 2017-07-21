@@ -497,10 +497,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The SellingManagerRecord property of the Entity EbayOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayOrderSearch"."SellingManagerRecord"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 SellingManagerRecord
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> SellingManagerRecord
 		{
-			get { return (System.Int32)GetValue((int)EbayOrderSearchFieldIndex.SellingManagerRecord, true); }
+			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderSearchFieldIndex.SellingManagerRecord, false); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.SellingManagerRecord, value); }
 		}
 

@@ -666,7 +666,7 @@
           <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="SellingManagerRecord" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="SellingManagerRecord" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EbayStore" ObjectID="2e8defc6-0c64-47b3-be80-0c2b097d304e" InheritanceType="2">
@@ -3961,7 +3961,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-19T20:22:54.419106Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T11:45:00.2583721Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4679,7 +4679,7 @@
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="EbayOrderID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="SellingManagerRecord" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">

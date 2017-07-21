@@ -838,7 +838,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)EbayOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayOrderID, 0, 0, 19);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayBuyerID, 50, 0, 0);
-			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(System.Int32), false, false, false, false,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
 		}
 		/// <summary>Inits EbayStoreEntity's FieldInfo objects</summary>
 		private void InitEbayStoreEntityInfos()
