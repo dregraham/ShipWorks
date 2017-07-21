@@ -191,17 +191,34 @@
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.xaml.cs">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.xaml</DependentUpon>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml.cs">
+      <DependentUpon>ChannelAdvisorRestAuthorizationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorRestAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorStoreSetupControlHost.Designer.cs">
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -468,6 +485,15 @@
     <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAccountSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorRestAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.resx">
       <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -604,7 +630,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.xaml">
+    <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

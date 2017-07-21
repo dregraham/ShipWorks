@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(StoreTypeCode.ChannelAdvisor,
                 TypedParameter.From(Store));
         }
-           
+
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
@@ -316,12 +316,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 FilterTarget = (int) FilterTarget.Orders
             };
         }
-
-        /// <summary>
-        /// Create the account settings control
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new ChannelAdvisorAccountSettingsControl();
 
         /// <summary>
         /// Create the CA store settings

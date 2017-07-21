@@ -2,6 +2,7 @@
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
@@ -37,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (!viewModel.Save(GetStore<ChannelAdvisorStoreEntity>()))
+            if (!viewModel.Save(GetStore<ChannelAdvisorStoreEntity>(), false))
             {
                 e.NextPage = this;
             }

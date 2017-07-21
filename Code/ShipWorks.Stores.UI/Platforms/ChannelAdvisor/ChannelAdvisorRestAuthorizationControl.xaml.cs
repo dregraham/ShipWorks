@@ -18,12 +18,12 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
     /// <summary>
     /// Interaction logic for ChannelAdvisorAccountSettingsControl.xaml
     /// </summary>
-    public partial class ChannelAdvisorAccountSettingsControl : UserControl
+    public partial class ChannelAdvisorRestAuthorizationControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorAccountSettingsControl()
+        public ChannelAdvisorRestAuthorizationControl()
         {
             InitializeComponent();
         }

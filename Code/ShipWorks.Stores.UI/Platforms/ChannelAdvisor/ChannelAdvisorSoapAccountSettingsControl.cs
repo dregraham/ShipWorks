@@ -1,32 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using ShipWorks.Stores.Management;
-using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelAdvisor;
 
-namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// ChannelAdvisor account configuration control
     /// </summary>
     [ToolboxItem(true)]
-    public partial class ChannelAdvisorAccountSettingsControl : AccountSettingsControlBase
+    public partial class ChannelAdvisorSoapAccountSettingsControl : AccountSettingsControlBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorAccountSettingsControl));
+        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorSoapAccountSettingsControl));
 
         const string notAuthorizedText = "Not Authorized";
-				
+
         // ChannelAdvisor store
         int storeProfileId = 0;
         string loadedAccountKey = null;
@@ -34,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorAccountSettingsControl()
+        public ChannelAdvisorSoapAccountSettingsControl()
         {
             InitializeComponent();
         }
@@ -155,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 OnTestAuthorizationComplete(false);
             }
         }
-        
+
         /// <summary>
         /// Save UI values to the provided store entity
         /// </summary>
@@ -207,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private void OnCALinkClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.channeladvisor.com/", this);  
+            WebHelper.OpenUrl("http://www.channeladvisor.com/", this);
         }
 
         /// <summary>
@@ -241,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             statusPicture.Visible = true;
             statusText.Visible = true;
 
-            // start the brower
+            // start the browser
             OnCALinkClick(this, EventArgs.Empty);
 
             // start polling for Access

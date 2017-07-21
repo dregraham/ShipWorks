@@ -89,16 +89,16 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// Saves the specified store.
         /// </summary>
         /// <returns>True if successful</returns>
-        public bool Save(ChannelAdvisorStoreEntity store)
+        public bool Save(ChannelAdvisorStoreEntity store, bool ignoreEmptyAccessCode)
         {
-            if (string.IsNullOrWhiteSpace(AccessCode))
+            if (string.IsNullOrWhiteSpace(AccessCode) && !ignoreEmptyAccessCode)
             {
                 messageHelper.ShowMessage("Access code required");
                 return false;
             }
 
             // If the access code has not changed since the last time we saved, continue.
-            if (AccessCodeChanged)
+            if (AccessCodeChanged && !string.IsNullOrWhiteSpace(AccessCode))
             {
                 try
                 {
@@ -128,11 +128,15 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void UpdateStoreInfo(ChannelAdvisorStoreEntity store, string refreshToken)
         {
-            ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.First();
+            // if we already have a profile id don't do anything
+            if (store.ProfileID <= 0)
+            {
+                ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.First();
 
-            store.ProfileID = profile?.ProfileId ?? 0;
-            store.StoreName = profile?.AccountName ?? string.Empty;
-            store.Company = profile?.CompanyName ?? string.Empty;
+                store.ProfileID = profile?.ProfileId ?? 0;
+                store.StoreName = profile?.AccountName ?? string.Empty;
+                store.Company = profile?.CompanyName ?? string.Empty;
+            }
         }
 
         /// <summary>

@@ -31,7 +31,7 @@
             components = new System.ComponentModel.Container();
 
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.storeSetupControl = new ChannelAdvisorAccountSettingsControl();
+            this.storeSetupControl = new ChannelAdvisorRestAuthorizationControl();
             this.SuspendLayout();
             //
             // elementHost1
@@ -58,6 +58,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private ChannelAdvisorAccountSettingsControl storeSetupControl;
+        private ChannelAdvisorRestAuthorizationControl storeSetupControl;
     }
 }

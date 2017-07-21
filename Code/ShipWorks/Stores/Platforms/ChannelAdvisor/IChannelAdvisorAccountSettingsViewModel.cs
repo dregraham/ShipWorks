@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// Interface for ChannelAdvisorAccountSettingsViewModel
@@ -32,6 +32,6 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// <summary>
         /// Saves the specified store.
         /// </summary>
-        bool Save(ChannelAdvisorStoreEntity store);
+        bool Save(ChannelAdvisorStoreEntity store, bool ignoreEmptyAccessCode);
     }
 }
