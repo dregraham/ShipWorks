@@ -20,7 +20,6 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShippingInfo = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order.ShippingInfo;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -223,29 +222,37 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // only do the remainder for new orders
             if (order.IsNew)
             {
-                order.ResellerID = caOrder.ResellerID;
-
-                // Find the unique sale sources and combine them into a comma separated list
-                IEnumerable<string> marketplaces = caOrder.ShoppingCart.LineItemSKUList.Select(item => item.ItemSaleSource).Distinct().OrderBy(source => source);
-                order.MarketplaceNames = string.Join(", ", marketplaces);
-
-                await LoadNotes(order, caOrder).ConfigureAwait(false);
-
-                // items
-                LoadItems(client, order, caOrder);
-
-                // charges
-                LoadCharges(order, caOrder);
-
-                // payments
-                LoadPayments(order, caOrder);
-
-                // Update the total
-                order.OrderTotal = OrderUtility.CalculateTotal(order);
+                await LoadOrderDetailsWhenNew(client, caOrder, order).ConfigureAwait(false);
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Load order details when the order is new
+        /// </summary>
+        private async Task LoadOrderDetailsWhenNew(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder, ChannelAdvisorOrderEntity order)
+        {
+            order.ResellerID = caOrder.ResellerID;
+
+            // Find the unique sale sources and combine them into a comma separated list
+            IEnumerable<string> marketplaces = caOrder.ShoppingCart.LineItemSKUList.Select(item => item.ItemSaleSource).Distinct().OrderBy(source => source);
+            order.MarketplaceNames = string.Join(", ", marketplaces);
+
+            await LoadNotes(order, caOrder).ConfigureAwait(false);
+
+            // items
+            LoadItems(client, order, caOrder);
+
+            // charges
+            LoadCharges(order, caOrder);
+
+            // payments
+            LoadPayments(order, caOrder);
+
+            // Update the total
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
         }
 
         /// <summary>
@@ -318,6 +325,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 string type = "";
                 string name = "";
+
                 switch (invoice.LineItemType)
                 {
                     case LineItemTypeCodes.Listing:
@@ -362,6 +370,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
             }
 
+            ExtractDiscountsAndPromotions(order, caOrder);
+        }
+
+        /// <summary>
+        /// Extract discounts and promotions
+        /// </summary>
+        private void ExtractDiscountsAndPromotions(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
+        {
             // There are two different types of promotions in v6 of the CA API - promotions at
             // the individual item level and those at the order level. The item level promotions
             // were added in v4.
@@ -420,115 +436,138 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Imports order items from the CA shopping cart
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
         private void LoadItems(ChannelAdvisorClient client, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)
             {
-                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity) InstantiateOrderItem(order);
-
-                item.Name = caItem.Title;
-                item.Quantity = caItem.Quantity;
-                item.UnitPrice = caItem.UnitPrice;
-                item.Code = caItem.SKU;
-                item.SKU = caItem.SKU;
-                item.Weight = caItem.UnitWeight.Value;
-                item.Location = caItem.WarehouseLocation;
-                item.IsFBA = caItem.IsFBA;
-
-                // Convert KG to LBS if needed
-                if (caItem.UnitWeight.UnitOfMeasure == "KG")
-                {
-                    item.Weight = item.Weight * 2.20462262;
-                }
-
-                // CA-specific
-                item.MarketplaceName = caItem.ItemSaleSource;
-                item.MarketplaceStoreName = !string.IsNullOrWhiteSpace(caItem.UserName) ? caItem.UserName : string.Empty;
-                item.MarketplaceBuyerID = caItem.BuyerUserID;
-                item.MarketplaceSalesID = caItem.SalesSourceID;
-
-                if (!String.IsNullOrEmpty(caItem.GiftWrapLevel))
-                {
-                    // add an attribute for gift wrap level
-                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                    attribute.Name = "Gift Wrap Level";
-                    attribute.Description = caItem.GiftWrapLevel;
-
-                    // gift wrap cost is already included as a Charge
-                    attribute.UnitPrice = 0M;
-                }
-
-                if (!String.IsNullOrEmpty(caItem.GiftMessage))
-                {
-                    // add an attribute for gift message
-                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                    attribute.Name = "Gift Message";
-                    attribute.Description = caItem.GiftMessage;
-                    attribute.UnitPrice = 0M;
-                }
+                LoadItemDetails(order, caItem);
             }
 
             // Some data comes from a  CA Inventory service call
             List<string> skuList = caOrder.ShoppingCart.LineItemSKUList.Select(i => i.SKU).ToList();
             InventoryItemResponse[] inventoryItems = client.GetInventoryItems(skuList);
+
             if (inventoryItems != null)
             {
                 foreach (ChannelAdvisorOrderItemEntity orderItem in order.OrderItems.Where(item => item is ChannelAdvisorOrderItemEntity))
                 {
-                    // find the response for this item's sku
-                    InventoryItemResponse matchingItem = inventoryItems.FirstOrDefault(response =>
-                                                                                       response != null &&
-                                                                                       response.Sku != null &&
-                                                                                       String.Compare(response.Sku, orderItem.SKU, StringComparison.OrdinalIgnoreCase) == 0);
-
-                    if (matchingItem != null)
-                    {
-                        if (matchingItem.ShippingInfo != null)
-                        {
-                            orderItem.DistributionCenter = matchingItem.ShippingInfo.DistributionCenterCode ?? "";
-                        }
-
-                        if (!String.IsNullOrEmpty(matchingItem.Classification))
-                        {
-                            orderItem.Classification = matchingItem.Classification;
-                        }
-
-                        // pull out the item cost
-                        if (matchingItem.PriceInfo != null && matchingItem.PriceInfo.Cost.HasValue)
-                        {
-                            orderItem.UnitCost = matchingItem.PriceInfo.Cost.Value;
-                        }
-
-                        // Harmonized Code
-                        if (!String.IsNullOrEmpty(matchingItem.HarmonizedCode))
-                        {
-                            orderItem.HarmonizedCode = matchingItem.HarmonizedCode;
-                        }
-
-                        // ISBN
-                        if (!String.IsNullOrEmpty(matchingItem.ISBN))
-                        {
-                            orderItem.ISBN = matchingItem.ISBN;
-                        }
-
-                        // UPC
-                        if (!String.IsNullOrEmpty(matchingItem.UPC))
-                        {
-                            orderItem.UPC = matchingItem.UPC;
-                        }
-
-                        // MPN
-                        if (!String.IsNullOrEmpty(matchingItem.MPN))
-                        {
-                            orderItem.MPN = matchingItem.MPN;
-                        }
-
-                        PopulateItemAttributes(client, orderItem);
-                        PopulateImages(client, orderItem);
-                    }
+                    LoadItemInventoryDetails(client, inventoryItems, orderItem);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Load item inventory details
+        /// </summary>
+        private void LoadItemInventoryDetails(ChannelAdvisorClient client, InventoryItemResponse[] inventoryItems, ChannelAdvisorOrderItemEntity orderItem)
+        {
+            // find the response for this item's sku
+            InventoryItemResponse matchingItem = inventoryItems
+                .Where(x => x?.Sku != null)
+                .FirstOrDefault(response => String.Compare(response.Sku, orderItem.SKU, StringComparison.OrdinalIgnoreCase) == 0);
+
+            if (matchingItem == null)
+            {
+                return;
+            }
+
+            PopulateItemInventoryDetails(orderItem, matchingItem);
+            PopulateItemAttributes(client, orderItem);
+            PopulateImages(client, orderItem);
+        }
+
+        /// <summary>
+        /// Populate the item inventory details
+        /// </summary>
+        private static void PopulateItemInventoryDetails(ChannelAdvisorOrderItemEntity orderItem, InventoryItemResponse matchingItem)
+        {
+            if (matchingItem.ShippingInfo != null)
+            {
+                orderItem.DistributionCenter = matchingItem.ShippingInfo.DistributionCenterCode ?? "";
+            }
+
+            if (!String.IsNullOrEmpty(matchingItem.Classification))
+            {
+                orderItem.Classification = matchingItem.Classification;
+            }
+
+            // pull out the item cost
+            if (matchingItem.PriceInfo?.Cost != null)
+            {
+                orderItem.UnitCost = matchingItem.PriceInfo.Cost.Value;
+            }
+
+            // Harmonized Code
+            if (!String.IsNullOrEmpty(matchingItem.HarmonizedCode))
+            {
+                orderItem.HarmonizedCode = matchingItem.HarmonizedCode;
+            }
+
+            // ISBN
+            if (!String.IsNullOrEmpty(matchingItem.ISBN))
+            {
+                orderItem.ISBN = matchingItem.ISBN;
+            }
+
+            // UPC
+            if (!String.IsNullOrEmpty(matchingItem.UPC))
+            {
+                orderItem.UPC = matchingItem.UPC;
+            }
+
+            // MPN
+            if (!String.IsNullOrEmpty(matchingItem.MPN))
+            {
+                orderItem.MPN = matchingItem.MPN;
+            }
+        }
+
+        /// <summary>
+        /// Load item details
+        /// </summary>
+        private void LoadItemDetails(ChannelAdvisorOrderEntity order, OrderLineItemItemResponse caItem)
+        {
+            ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity) InstantiateOrderItem(order);
+
+            item.Name = caItem.Title;
+            item.Quantity = caItem.Quantity;
+            item.UnitPrice = caItem.UnitPrice;
+            item.Code = caItem.SKU;
+            item.SKU = caItem.SKU;
+            item.Weight = caItem.UnitWeight.Value;
+            item.Location = caItem.WarehouseLocation;
+            item.IsFBA = caItem.IsFBA;
+
+            // Convert KG to LBS if needed
+            if (caItem.UnitWeight.UnitOfMeasure == "KG")
+            {
+                item.Weight = item.Weight * 2.20462262;
+            }
+
+            // CA-specific
+            item.MarketplaceName = caItem.ItemSaleSource;
+            item.MarketplaceStoreName = !string.IsNullOrWhiteSpace(caItem.UserName) ? caItem.UserName : string.Empty;
+            item.MarketplaceBuyerID = caItem.BuyerUserID;
+            item.MarketplaceSalesID = caItem.SalesSourceID;
+
+            if (!String.IsNullOrEmpty(caItem.GiftWrapLevel))
+            {
+                // add an attribute for gift wrap level
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = "Gift Wrap Level";
+                attribute.Description = caItem.GiftWrapLevel;
+
+                // gift wrap cost is already included as a Charge
+                attribute.UnitPrice = 0M;
+            }
+
+            if (!String.IsNullOrEmpty(caItem.GiftMessage))
+            {
+                // add an attribute for gift message
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = "Gift Message";
+                attribute.Description = caItem.GiftMessage;
+                attribute.UnitPrice = 0M;
             }
         }
 
@@ -629,50 +668,22 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Addresses
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void LoadAddresses(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             // shipping address
-            ShippingInfo shipping = caOrder.ShippingInfo;
-            order.ShipNameParseStatus = (int) PersonNameParseStatus.Simple;
-            order.ShipFirstName = shipping.FirstName;
-            order.ShipLastName = shipping.LastName;
-            order.ShipCompany = shipping.CompanyName;
-            order.ShipStreet1 = shipping.AddressLine1;
-            order.ShipStreet2 = shipping.AddressLine2;
-            order.ShipCity = shipping.City;
-            order.ShipStateProvCode = GetStateProvCode(shipping.Region);
-            order.ShipPostalCode = shipping.PostalCode;
-            order.ShipCountryCode = shipping.CountryCode.Trim();
-            order.ShipPhone = shipping.PhoneNumberDay;
+            PopulateOrderAddress(order.ShipPerson, caOrder.ShippingInfo);
 
             // In ChannelAdvsior if the buyer selected Use Shipping as Billing during checkout,
             // the values get copied to billing, but that data doesn't come down in Billing.  It's all blank,
             // so we have to copy the values here.
             BillingInfo billing = caOrder.BillingInfo;
-            if (billing.FirstName.Length == 0
-                && billing.LastName.Length == 0
-                && billing.AddressLine1.Length == 0
-                && billing.City.Length == 0)
+            if (IsAddressConsideredEmpty(billing))
             {
-                // copy shipping to billing
-                PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
-                PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
-                PersonAdapter.Copy(shipAdapter, billAdapter);
+                order.ShipPerson.CopyTo(order.BillPerson);
             }
             else
             {
-                order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
-                order.BillFirstName = billing.FirstName;
-                order.BillLastName = billing.LastName;
-                order.BillCompany = billing.CompanyName;
-                order.BillStreet1 = billing.AddressLine1;
-                order.BillStreet2 = billing.AddressLine2;
-                order.BillCity = billing.City;
-                order.BillStateProvCode = GetStateProvCode(billing.Region);
-                order.BillPostalCode = billing.PostalCode;
-                order.BillCountryCode = billing.CountryCode.Trim();
-                order.BillPhone = billing.PhoneNumberDay;
+                PopulateOrderAddress(order.BillPerson, billing);
             }
 
             // in some cases, we've seen CA provide invalid data here
@@ -697,6 +708,35 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 order.ShipEmail = order.BillEmail;
             }
+        }
+
+        /// <summary>
+        /// Is the address considered empty
+        /// </summary>
+        private static bool IsAddressConsideredEmpty(BillingInfo billing)
+        {
+            return billing.FirstName.Length == 0 &&
+                billing.LastName.Length == 0 &&
+                billing.AddressLine1.Length == 0 &&
+                billing.City.Length == 0;
+        }
+
+        /// <summary>
+        /// Populate the order address from the given info
+        /// </summary>
+        private static void PopulateOrderAddress(PersonAdapter person, ContactComplete address)
+        {
+            person.NameParseStatus = PersonNameParseStatus.Simple;
+            person.FirstName = address.FirstName;
+            person.LastName = address.LastName;
+            person.Company = address.CompanyName;
+            person.Street1 = address.AddressLine1;
+            person.Street2 = address.AddressLine2;
+            person.City = address.City;
+            person.StateProvCode = GetStateProvCode(address.Region);
+            person.PostalCode = address.PostalCode;
+            person.CountryCode = address.CountryCode.Trim();
+            person.Phone = address.PhoneNumberDay;
         }
     }
 }

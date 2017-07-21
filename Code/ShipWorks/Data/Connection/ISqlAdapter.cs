@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 
@@ -13,6 +14,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// A custom ShipWorks DataAccessAdapter
     /// </summary>
+    [NDependIgnoreTooManyParamsAttribute]
     public interface ISqlAdapter : IDataAccessCore, IDisposable, ITransactionController
     {
         /// <summary>

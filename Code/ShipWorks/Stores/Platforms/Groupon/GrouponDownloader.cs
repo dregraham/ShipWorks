@@ -151,27 +151,35 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order is new and its status is open
             if (order.IsNew)
             {
-                // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-                order.OrderNumber = GetNextOrderNumber();
-
-                //Unit of measurement used for weight
-                string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
-
-                //List of order items
-                IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
-                foreach (JToken jsonItem in jsonItems)
-                {
-                    // Deserialized into grouponitem
-                    GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
-                    LoadItem(order, item, itemWeightUnit);
-                }
-
-                //OrderTotal
-                order.OrderTotal = (decimal) jsonOrder["amount"]["total"];
+                LoadOrderDetailsWhenNew(jsonOrder, order);
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Load order details when the order is new
+        /// </summary>
+        private void LoadOrderDetailsWhenNew(JToken jsonOrder, GrouponOrderEntity order)
+        {
+            // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
+            order.OrderNumber = GetNextOrderNumber();
+
+            //Unit of measurement used for weight
+            string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
+
+            //List of order items
+            IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
+            foreach (JToken jsonItem in jsonItems)
+            {
+                // Deserialized into grouponitem
+                GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
+                LoadItem(order, item, itemWeightUnit);
+            }
+
+            //OrderTotal
+            order.OrderTotal = (decimal) jsonOrder["amount"]["total"];
         }
 
         /// <summary>

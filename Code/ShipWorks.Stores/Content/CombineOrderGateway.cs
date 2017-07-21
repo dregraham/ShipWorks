@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -21,6 +23,14 @@ namespace ShipWorks.Stores.Content
     [Component]
     public class CombineOrderGateway : ICombineOrderGateway
     {
+        private readonly Dictionary<StoreTypeCode, Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>> storeSpecificSearches =
+            new Dictionary<StoreTypeCode, Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>>
+            {
+                { StoreTypeCode.Amazon, GetAmazonSearch },
+                { StoreTypeCode.Ebay, GetEbaySearch },
+                { StoreTypeCode.ChannelAdvisor, GetChannelAdvisorSearch }
+            };
+
         private readonly IOrderManager orderManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
@@ -59,46 +69,91 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Can the given orders be combined
         /// </summary>
+        /// <remarks>
+        /// This cannot be async because it is called from existing UI machinery that cannot be async
+        /// </remarks>
         public bool CanCombine(IStoreEntity store, IEnumerable<long> orderIDs)
+        {
+            DynamicQuery query = CreateCanCombineQuery(store, orderIDs, new QueryFactory());
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                long invalidOrders = sqlAdapter.FetchScalar<long>(query);
+
+                return invalidOrders == 0;
+            }
+        }
+
+        /// <summary>
+        /// Create the CanCombine query
+        /// </summary>
+        private DynamicQuery CreateCanCombineQuery(IStoreEntity store, IEnumerable<long> orderIDs, QueryFactory queryFactory)
         {
             IJoinOperand shipmentsJoin = Joins.Left(OrderEntity.Relations.ShipmentEntityUsingOrderID);
             IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
             IPredicate andWherePredicate = ShipmentFields.Processed == true;
 
-            if (store.TypeCode == (int) StoreTypeCode.Amazon)
+            Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>> getStoreSpecificSearch;
+            if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
             {
-                shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("AmazonOrderEntity"));
-                orPredicate = orPredicate.Or(AmazonOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
-                    .Or(AmazonOrderFields.FulfillmentChannel.In((int) AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
-            }
-            else if (store.TypeCode == (int) StoreTypeCode.Ebay)
-            {
-                shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("EbayOrderEntity"));
-                orPredicate = orPredicate.Or(EbayOrderFields.GspEligible == true);
-            }
-            else if (store.TypeCode == (int) StoreTypeCode.ChannelAdvisor)
-            {
-                shipmentsJoin = shipmentsJoin.LeftJoin(OrderEntity.Relations.GetSubTypeRelation("ChannelAdvisorOrderEntity"))
-                    .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
-                    .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation("ChannelAdvisorOrderItemEntity"));
-                orPredicate = orPredicate.Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
-                    .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
+                Tuple<IJoinOperand, IPredicate> searchDetails = getStoreSpecificSearch(shipmentsJoin, orPredicate);
+
+                shipmentsJoin = searchDetails.Item1;
+                orPredicate = searchDetails.Item2;
             }
 
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                QueryFactory queryFactory = new QueryFactory();
-                var query = queryFactory.Create()
-                    .From(shipmentsJoin)
-                    .Select(OrderFields.OrderID.Count())
-                    .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
-                    .AndWhere(andWherePredicate
-                        .Or(orPredicate));
+            return queryFactory.Create()
+                .From(shipmentsJoin)
+                .Select(OrderFields.OrderID.Count())
+                .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
+                .AndWhere(andWherePredicate
+                    .Or(orPredicate));
+        }
 
-                long invalidOrders = ((IDataAccessAdapter) sqlAdapter).FetchScalar<long>(query);
+        /// <summary>
+        /// Get Amazon search pieces
+        /// </summary>
+        private static Tuple<IJoinOperand, IPredicate> GetAmazonSearch(IJoinOperand joins, IPredicate predicate)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.AmazonOrderEntity);
 
-                return invalidOrders == 0;
-            }
+            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
+            IPredicate newPredicate = predicate
+                .Or(AmazonOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(AmazonOrderFields.FulfillmentChannel.In((int) AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
+
+            return Tuple.Create(newJoin, newPredicate);
+        }
+
+        /// <summary>
+        /// Get Ebay search pieces
+        /// </summary>
+        private static Tuple<IJoinOperand, IPredicate> GetEbaySearch(IJoinOperand joins, IPredicate predicate)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderEntity);
+
+            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
+            IPredicate newPredicate = predicate.Or(EbayOrderFields.GspEligible == true);
+
+            return Tuple.Create(newJoin, newPredicate);
+        }
+
+        /// <summary>
+        /// Get ChannelAdvisor search pieces
+        /// </summary>
+        private static Tuple<IJoinOperand, IPredicate> GetChannelAdvisorSearch(IJoinOperand joins, IPredicate predicate)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderEntity);
+            string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderItemEntity);
+
+            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName))
+                .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
+                .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
+            IPredicate newPredicate = predicate
+                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
+
+            return Tuple.Create(newJoin, newPredicate);
         }
     }
 }

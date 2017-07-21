@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -272,10 +273,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static void SaveStore(StoreEntity store, SqlAdapter adapter)
         {
-            if (adapter == null)
-            {
-                throw new ArgumentNullException("adapter");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter));
 
             try
             {
@@ -370,10 +368,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool CheckStoreName(string name, StoreEntity ignoredStore, IWin32Window owner)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
 
             // Has to have a name
             if (name.Length == 0)

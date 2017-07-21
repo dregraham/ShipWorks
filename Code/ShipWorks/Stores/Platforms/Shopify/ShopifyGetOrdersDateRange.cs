@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
 using System.Diagnostics;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -11,18 +9,18 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// <summary>
     /// ShopifyGetOrdersDateRange is used to create a tree of date ranges and order counts contained in that date range.
     /// A child node is created based on the number of orders that fit into
-    /// a date range where the number of orders is less than or equal to ShopifyConstants.MaxResultsToReturn.  
+    /// a date range where the number of orders is less than or equal to ShopifyConstants.MaxResultsToReturn.
     /// When a child nodes are created, the left node will have a start and end date of half it's parent's date range, the right node
     /// will have the other half.
-    /// 
+    ///
     /// For example, a partent with start date of 5/1/2012 and end date of 5/30/2012, order count of 50, and max results of 10 will
     /// have a first level left child of 5/1/2012 - 5/15/2012 and right child of 5/16/2012 - 5/30/2012.  The left and right child
     /// will then make a call to shopify to find the number of orders in it's range.
-    /// 
-    /// The whole point of this isbecause Shopify does not return orders sorted in 
-    /// an ascending order.  We have to figure out what ranges we need to ask for to make sure we get them 
+    ///
+    /// The whole point of this is because Shopify does not return orders sorted in
+    /// an ascending order.  We have to figure out what ranges we need to ask for to make sure we get them
     /// ascending, otherwise if the user canceled early we'd miss any chunk that was between when they canceled and the last download.
-    /// 
+    ///
     /// </summary>
     public class ShopifyGetOrdersDateRange
     {
@@ -40,9 +38,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="rangeStartDate">Start date of the range </param>
-        /// <param name="rangeEndDate">End date of the range</param>
-        public ShopifyGetOrdersDateRange(DateTime rangeStart, DateTime rangeEnd)
+        public ShopifyGetOrdersDateRange(Range<DateTime> range) : this(range.Start, range.End)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="rangeStart">Start date of the range </param>
+        /// <param name="rangeEnd">End date of the range</param>
+        private ShopifyGetOrdersDateRange(DateTime rangeStart, DateTime rangeEnd)
         {
             startDate = rangeStart;
             endDate = rangeEnd;
@@ -51,82 +56,43 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// The number of orders within this date range
         /// </summary>
-        public int OrderCount
-        {
-            get
-            {
-                return orderCount ?? 0;
-            }
-        }
+        public int OrderCount => orderCount ?? 0;
 
         /// <summary>
-        /// PageCount will always be zero unless the range has been reduced to its smallest possible unit (one second) and still can't fit in an 
+        /// PageCount will always be zero unless the range has been reduced to its smallest possible unit (one second) and still can't fit in an
         /// entire page of orders.  When that happens, this will be set to the total number of page requests required to get all of the orders.
         /// </summary>
-        public int PageCount
-        {
-            get
-            {
-                return pageCount;
-            }
-        }
+        public int PageCount => pageCount;
 
         /// <summary>
         /// Start date of the range, always in UTC
         /// </summary>
-        public DateTime StartDate
-        {
-            get
-            {
-                return startDate;
-            }
-        }
+        public DateTime StartDate => startDate;
 
         /// <summary>
         /// End date of the range, always in UTC
         /// </summary>
-        public DateTime EndDate
-        {
-            get
-            {
-                return endDate;
-            }
-        }
+        public DateTime EndDate => endDate;
 
         /// <summary>
         /// The time span between the start date and end date.
         /// This is always a positive time span.
         /// </summary>
-        private TimeSpan Duration
-        {
-            get
-            {
-                return (EndDate - StartDate).Duration();
-            }
-        }
+        private TimeSpan Duration => (EndDate - StartDate).Duration();
 
         /// <summary>
         /// Helper property to get the start date plus 1/2 of the difference between start and end date
         /// </summary>
-        private DateTime MidpointDate
-        {
-            get
-            {
-                return StartDate.AddMilliseconds(Duration.TotalMilliseconds / 2);
-            }
-        }
+        private DateTime MidpointDate => StartDate.AddMilliseconds(Duration.TotalMilliseconds / 2);
 
         /// <summary>
         /// Generates an ordered list of date ranges that represent blocks that contain orders less than or equal to the maximum page size Shopify allows
         /// </summary>
         public IEnumerable<ShopifyGetOrdersDateRange> GenerateOrderRanges(ShopifyWebClient webClient)
         {
-            if (webClient == null)
-            {
-                throw new ArgumentNullException("webClient", "webClient is required");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webClient, nameof(webClient));
 
-            // Figure out what count this node instance we are right now represents.  
+            // Figure out what count this node instance we are right now represents.
             QueryOrderCount(webClient);
 
             // If there are no orders in this node, there's nothing to iterate
@@ -134,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 yield break;
             }
-            
+
             // If it's small enough to fit all orders in this range, then all we return is ourselves
             if (OrderCount <= ShopifyConstants.OrdersPageSize)
             {
@@ -143,11 +109,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 yield break;
             }
 
-            // If we are less than two seconds then we cant divide the range any further, since we can't query in any smaller intervals than a second.  Instead, 
+            // If we are less than two seconds then we cant divide the range any further, since we can't query in any smaller intervals than a second.  Instead,
             // we'll break up the range we have into pages.
             if (Duration < TimeSpan.FromSeconds(2))
             {
-                pageCount = (OrderCount + ShopifyConstants.OrdersPageSize - 1) / ShopifyConstants.OrdersPageSize; 
+                pageCount = (OrderCount + ShopifyConstants.OrdersPageSize - 1) / ShopifyConstants.OrdersPageSize;
 
                 yield return this;
                 yield break;
@@ -161,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 yield return range;
             }
-            
+
             // If all the orders didn't fit in the left range, we also need the right-hand child range
             if (leftChild.OrderCount < this.OrderCount)
             {
@@ -186,10 +152,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <returns>Number of orders in this date range</returns>
         private void QueryOrderCount(ShopifyWebClient webClient)
         {
-            if (webClient == null)
-            {
-                throw new ArgumentNullException("webClient", "webClient is required");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webClient, nameof(webClient));
 
             // If we already have the count, don't need to get it again
             if (orderCount == null)
@@ -202,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// ToString override
         /// </summary>
-        /// <returns>This objects children info, plus it's childrens ToString</returns>
+        /// <returns>This objects children info, plus its children's ToString</returns>
         public override string ToString()
         {
             string text = string.Format("Start: '{0}', End '{1}', Count: {2}, Left: {3}, Right: {4}",
@@ -233,15 +196,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             Debug.Write(indent);
 
-            if (last) 
+            if (last)
             {
-                Debug.Write("\\-"); 
-                indent += "  "; 
-            } 
-            else 
+                Debug.Write("\\-");
+                indent += "  ";
+            }
+            else
             {
-                Debug.Write("|-"); 
-                indent += "| "; 
+                Debug.Write("|-");
+                indent += "| ";
             }
 
             string count = OrderCount.ToString();

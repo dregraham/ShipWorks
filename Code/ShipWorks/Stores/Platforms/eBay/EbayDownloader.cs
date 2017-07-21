@@ -117,7 +117,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             //bool usePagedDownload = true;
 
             // Get the date\time to start downloading from
-            DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint()) ?? DateTime.UtcNow.AddDays(-7);
+            DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false)) ??
+                DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
 
             // Ebay only allows going back 30 days
@@ -213,39 +214,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return;
             }
 
-            // If its new it needs a ShipWorks order number
-            if (order.IsNew)
-            {
-                order.OrderNumber = GetNextOrderNumber();
-
-                // We use the oldest auction date as the order date
-                order.OrderDate = DetermineOrderDate(orderType);
-            }
-
-            // Update last modified
-            order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
-
-            // Online status
-            order.OnlineStatusCode = (int) orderType.OrderStatus;
-            order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
-
-            // SellingManager Pro
-            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
-
-            // Buyer , email, and address
-            order.EbayBuyerID = orderType.BuyerUserID;
-            order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
-            UpdateOrderAddress(order, orderType.ShippingAddress);
-
-            // Requested shipping (but only if we actually have an address)
-            if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
-            {
-                order.RequestedShipping = EbayUtility.GetShipmentMethodName(orderType.ShippingServiceSelected.ShippingService);
-            }
-            else
-            {
-                order.RequestedShipping = "";
-            }
+            PopulateOrderDetails(orderType, order);
 
             // Load all the transactions (line items) for the order
             List<OrderItemEntity> abandonedItems = LoadTransactions(order, orderType);
@@ -278,6 +247,48 @@ namespace ShipWorks.Stores.Platforms.Ebay
             BalanceOrderTotal(order, orderType);
 
             await SaveOrder(order, abandonedItems).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Populate details of the order
+        /// </summary>
+        private void PopulateOrderDetails(OrderType orderType, EbayOrderEntity order)
+        {
+            // If its new it needs a ShipWorks order number
+            if (order.IsNew)
+            {
+                order.OrderNumber = GetNextOrderNumber();
+
+                // We use the oldest auction date as the order date
+                order.OrderDate = DetermineOrderDate(orderType);
+            }
+
+            // Update last modified
+            order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
+
+            // Online status
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
+            order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
+
+            // SellingManager Pro
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ?
+                orderType.ShippingDetails.SellingManagerSalesRecordNumber :
+                (int?) null;
+
+            // Buyer , email, and address
+            order.EbayBuyerID = orderType.BuyerUserID;
+            order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
+            UpdateOrderAddress(order, orderType.ShippingAddress);
+
+            // Requested shipping (but only if we actually have an address)
+            if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
+            {
+                order.RequestedShipping = EbayUtility.GetShipmentMethodName(orderType.ShippingServiceSelected.ShippingService);
+            }
+            else
+            {
+                order.RequestedShipping = "";
+            }
         }
 
         /// <summary>
@@ -551,7 +562,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override async Task<DateTime?> GetOnlineLastModifiedStartingPoint()
         {
-            DateTime? onlineLastModifiedStartingPoint = await base.GetOnlineLastModifiedStartingPoint();
+            DateTime? onlineLastModifiedStartingPoint = await base.GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
             if (((EbayStoreEntity) Store).DownloadOlderOrders)
             {
@@ -646,8 +657,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateCharges(EbayOrderEntity order, OrderType orderType)
         {
-            #region Shipping
+            UpdateShippingCharges(order, orderType);
+            UpdateAdjustmentCharges(order, orderType);
+            UpdateInsuranceCharges(order, orderType);
+            UpdateSalesTaxCharges(order, orderType);
+        }
 
+        /// <summary>
+        /// Update the shipping charges
+        /// </summary>
+        private void UpdateShippingCharges(EbayOrderEntity order, OrderType orderType)
+        {
             // Shipping
             OrderChargeEntity shipping = GetCharge(order, "SHIPPING", "Shipping");
 
@@ -667,11 +687,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 shipping.Amount = 0;
             }
+        }
 
-            #endregion
-
-            #region Adjustment
-
+        /// <summary>
+        /// Update adjustment charges
+        /// </summary>
+        private void UpdateAdjustmentCharges(EbayOrderEntity order, OrderType orderType)
+        {
             // Only use the adjustment value if the order is considered complete.  Otherwise ebay seems to put an adjustment on non-complete orders that sets the total to zero.
             decimal adjustment = (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed) ?
                 (decimal) orderType.AdjustmentAmount.Value :
@@ -684,11 +706,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 adjust.Amount = adjustment;
             }
+        }
 
-            #endregion
-
-            #region Insurance
-
+        /// <summary>
+        /// Update insurance charges
+        /// </summary>
+        private void UpdateInsuranceCharges(EbayOrderEntity order, OrderType orderType)
+        {
             decimal insuranceTotal = 0;
 
             // Use insurance
@@ -714,11 +738,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 insurance.Amount = insuranceTotal;
             }
+        }
 
-            #endregion
-
-            #region Sales Tax
-
+        /// <summary>
+        /// Update sales tax charges
+        /// </summary>
+        private void UpdateSalesTaxCharges(EbayOrderEntity order, OrderType orderType)
+        {
             decimal salesTax = 0m;
 
             if (orderType.ShippingDetails.SalesTax != null && orderType.ShippingDetails.SalesTax.SalesTaxAmount != null)
@@ -729,8 +755,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Tax
             OrderChargeEntity tax = GetCharge(order, "TAX", "Sales Tax");
             tax.Amount = salesTax;
-
-            #endregion
         }
 
         /// <summary>
@@ -934,33 +958,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                ItemType eBayItem = webClient.GetItem(transaction.Item.ItemID);
-
-                PictureDetailsType pictureDetails = eBayItem.PictureDetails;
-
-                // The first picture in PictureURL is the default
-                if (pictureDetails != null && pictureDetails.PictureURL != null && pictureDetails.PictureURL.Length > 0)
-                {
-                    orderItem.Image = eBayItem.PictureDetails.PictureURL[0] ?? "";
-                    orderItem.Thumbnail = orderItem.Image;
-                }
-
-                // If still no image, see if there is a stock image
-                if (string.IsNullOrWhiteSpace(orderItem.Image))
-                {
-                    if (eBayItem.ProductListingDetails != null && eBayItem.ProductListingDetails.IncludeStockPhotoURL)
-                    {
-                        orderItem.Image = eBayItem.ProductListingDetails.StockPhotoURL ?? "";
-                        orderItem.Thumbnail = orderItem.Image;
-                    }
-                }
-
-                // See if there are other details we can use
-                if (eBayItem.ProductListingDetails != null)
-                {
-                    orderItem.UPC = eBayItem.ProductListingDetails.UPC ?? "";
-                    orderItem.ISBN = eBayItem.ProductListingDetails.ISBN ?? "";
-                }
+                UpdateTransactionImages(orderItem, transaction);
             }
             catch (EbayException exception)
             {
@@ -976,6 +974,40 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update transaction images
+        /// </summary>
+        private void UpdateTransactionImages(EbayOrderItemEntity orderItem, TransactionType transaction)
+        {
+            ItemType eBayItem = webClient.GetItem(transaction.Item.ItemID);
+
+            PictureDetailsType pictureDetails = eBayItem.PictureDetails;
+
+            // The first picture in PictureURL is the default
+            if (pictureDetails?.PictureURL?.Any() == true)
+            {
+                orderItem.Image = pictureDetails.PictureURL[0] ?? "";
+                orderItem.Thumbnail = orderItem.Image;
+            }
+
+            // If still no image, see if there is a stock image
+            if (string.IsNullOrWhiteSpace(orderItem.Image))
+            {
+                if (eBayItem.ProductListingDetails != null && eBayItem.ProductListingDetails.IncludeStockPhotoURL)
+                {
+                    orderItem.Image = eBayItem.ProductListingDetails.StockPhotoURL ?? "";
+                    orderItem.Thumbnail = orderItem.Image;
+                }
+            }
+
+            // See if there are other details we can use
+            if (eBayItem.ProductListingDetails != null)
+            {
+                orderItem.UPC = eBayItem.ProductListingDetails.UPC ?? "";
+                orderItem.ISBN = eBayItem.ProductListingDetails.ISBN ?? "";
             }
         }
 
@@ -1018,7 +1050,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 otherCharge.Description = "Other";
                 otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
             }
-
         }
 
         /// <summary>
@@ -1028,120 +1059,153 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="isGsp">if set to <c>true</c> [is global shipping program order].</param>
         /// <param name="gspDetails">The multi leg shipping details.</param>
         /// <exception cref="EbayException">eBay did not provide a reference ID for an order designated for the Global Shipping Program.</exception>
-        [NDependIgnoreLongMethod]
         private void UpdateGlobalShippingProgramInfo(EbayOrderEntity order, bool isGsp, MultiLegShippingDetailsType gspDetails)
         {
             order.GspEligible = isGsp;
 
             if (order.GspEligible)
             {
-                // This is part of the global shipping program, so we need to pull out the address info
-                // of the international shipping provider but first make sure there aren't any null
-                // objects in the address hierarchy
-                if (gspDetails != null &&
-                    gspDetails.SellerShipmentToLogisticsProvider != null &&
-                    gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
-                {
-                    // Pull out the name of the international shipping provider
-                    PersonName name = PersonName.Parse(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Name);
-                    order.GspFirstName = name.First;
-                    order.GspLastName = name.Last;
-
-                    // Address info
-
-                    // eBay includes "Suite 400" as part of street1 which some shipping carriers (UPS) don't recognize as a valid address.
-                    // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on
-                    // the presence of a comma in street 1
-
-                    // We're ultimately going to populate the ebayOrder.GspStreet property values based on the elements in th streetLines list
-                    List<string> streetLines = new List<string>
-                    {
-                        // Default the list to empty strings for the case where the Street1 and Street2
-                        // properties of the shipping address are null
-                        gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 ?? string.Empty,
-                        gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street2 ?? string.Empty
-                    };
-
-                    if (gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 != null)
-                    {
-                        // Try to split the Street1 property based on comma
-                        List<string> splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new[] { ',' }).ToList();
-
-                        // We'll always have at least one value in the result of the split which will be our value for street1
-                        streetLines[0] = splitStreetInfo[0];
-
-                        if (splitStreetInfo.Count > 1)
-                        {
-                            // There were multiple components to the original Street1 address provided by eBay; this second
-                            // component will be the value we use for our street 2 address instead of the value provided by eBay
-                            streetLines[1] = splitStreetInfo[1].Trim();
-                        }
-                    }
-
-                    order.GspStreet1 = streetLines[0].Trim();
-                    order.GspStreet2 = streetLines[1].Trim();
-
-                    order.GspCity = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.CityName ?? string.Empty;
-                    order.GspStateProvince = Geography.GetStateProvCode(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.StateOrProvince) ?? string.Empty;
-                    order.GspPostalCode = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.PostalCode ?? string.Empty;
-                    order.GspCountryCode = Enum.GetName(typeof(WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
-
-                    // Pull out the reference ID that will identify the order to the international shipping provider
-                    order.GspReferenceID = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.ReferenceID;
-
-                    if (order.GspPostalCode.Length >= 5)
-                    {
-                        // Only grab the first five digits of the postal code; there have been incidents in the past where eBay
-                        // sends down an invalid 9 digit postal code (e.g. 41018-319) that prevents orders from being shipped
-                        order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
-                    }
-
-                    if (order.IsNew || order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
-                    {
-                        // The seller has the choice to NOT ship GSP, so only default the shipping program to GSP for new orders
-                        // or orders if the selected shipping method has not been manually overridden
-                        order.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(order.GspReferenceID))
-                {
-                    // We can't necessarily reference an ID number here since the ShipWorks order ID may not be assigned yet,
-                    // so we'll reference the order date and the buyer that made the purchase
-                    string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
-                                        StringUtility.FormatFriendlyDateTime(order.OrderDate), order.BillUnparsedName);
-
-                    throw new EbayMissingGspReferenceException(message);
-                }
+                UpdateGspInfoWhenEligible(order, gspDetails);
             }
             else
             {
-                // This isn't a GSP order, so we're going to wipe the GSP data from the order in the event that
-                // an order was previously marked as a GSP, but is no longer for some reason
+                UpdateGspInfoWhenNotEligible(order);
+            }
+        }
 
-                order.GspFirstName = string.Empty;
-                order.GspLastName = string.Empty;
+        /// <summary>
+        /// Update the GSP information when the order is not eligible
+        /// </summary>
+        /// <param name="order"></param>
+        private static void UpdateGspInfoWhenNotEligible(EbayOrderEntity order)
+        {
+            // This isn't a GSP order, so we're going to wipe the GSP data from the order in the event that
+            // an order was previously marked as a GSP, but is no longer for some reason
+            order.GspFirstName = string.Empty;
+            order.GspLastName = string.Empty;
+
+            // Address info
+            order.GspStreet1 = string.Empty;
+            order.GspStreet2 = string.Empty;
+            order.GspCity = string.Empty;
+            order.GspStateProvince = string.Empty;
+            order.GspPostalCode = string.Empty;
+            order.GspCountryCode = string.Empty;
+
+            // Reset the reference ID and the shipping method to standard
+            order.GspReferenceID = string.Empty;
+
+            if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+            {
+                // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
+                // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
+                // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
+                // to the combined order).
+                order.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer;
+            }
+        }
+
+        /// <summary>
+        /// Update the GSP when the order is eligible
+        /// </summary>
+        private static void UpdateGspInfoWhenEligible(EbayOrderEntity order, MultiLegShippingDetailsType gspDetails)
+        {
+            // This is part of the global shipping program, so we need to pull out the address info
+            // of the international shipping provider but first make sure there aren't any null
+            // objects in the address hierarchy
+            if (gspDetails != null &&
+                gspDetails.SellerShipmentToLogisticsProvider != null &&
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
+            {
+                // Pull out the name of the international shipping provider
+                PersonName name = PersonName.Parse(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Name);
+                order.GspFirstName = name.First;
+                order.GspLastName = name.Last;
 
                 // Address info
-                order.GspStreet1 = string.Empty;
-                order.GspStreet2 = string.Empty;
-                order.GspCity = string.Empty;
-                order.GspStateProvince = string.Empty;
-                order.GspPostalCode = string.Empty;
-                order.GspCountryCode = string.Empty;
 
-                // Reset the reference ID and the shipping method to standard
-                order.GspReferenceID = string.Empty;
+                // eBay includes "Suite 400" as part of street1 which some shipping carriers (UPS) don't recognize as a valid address.
+                // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on
+                // the presence of a comma in street 1
 
-                if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+                // We're ultimately going to populate the ebayOrder.GspStreet property values based on the elements in th streetLines list
+                string[] streetLines = ParseGspStreet(gspDetails);
+
+                PopulateGspAddress(order, gspDetails, streetLines);
+            }
+
+            if (string.IsNullOrEmpty(order.GspReferenceID))
+            {
+                // We can't necessarily reference an ID number here since the ShipWorks order ID may not be assigned yet,
+                // so we'll reference the order date and the buyer that made the purchase
+                string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
+                                    StringUtility.FormatFriendlyDateTime(order.OrderDate), order.BillUnparsedName);
+
+                throw new EbayMissingGspReferenceException(message);
+            }
+        }
+
+        /// <summary>
+        /// Populate the GSP address
+        /// </summary>
+        private static void PopulateGspAddress(EbayOrderEntity order, MultiLegShippingDetailsType gspDetails, string[] streetLines)
+        {
+            order.GspStreet1 = streetLines[0].Trim();
+            order.GspStreet2 = streetLines[1].Trim();
+
+            order.GspCity = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.CityName ?? string.Empty;
+            order.GspStateProvince = Geography.GetStateProvCode(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.StateOrProvince) ?? string.Empty;
+            order.GspPostalCode = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.PostalCode ?? string.Empty;
+            order.GspCountryCode = Enum.GetName(typeof(WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
+
+            // Pull out the reference ID that will identify the order to the international shipping provider
+            order.GspReferenceID = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.ReferenceID;
+
+            if (order.GspPostalCode.Length >= 5)
+            {
+                // Only grab the first five digits of the postal code; there have been incidents in the past where eBay
+                // sends down an invalid 9 digit postal code (e.g. 41018-319) that prevents orders from being shipped
+                order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
+            }
+
+            if (order.IsNew || order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+            {
+                // The seller has the choice to NOT ship GSP, so only default the shipping program to GSP for new orders
+                // or orders if the selected shipping method has not been manually overridden
+                order.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
+            }
+        }
+
+        /// <summary>
+        /// Parse the GSP street
+        /// </summary>
+        private static string[] ParseGspStreet(MultiLegShippingDetailsType gspDetails)
+        {
+            // Default the list to empty strings for the case where the Street1 and Street2
+            // properties of the shipping address are null
+            string[] streetLines =
+            {
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 ?? string.Empty,
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street2 ?? string.Empty
+            };
+
+            if (gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 != null)
+            {
+                // Try to split the Street1 property based on comma
+                string[] splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new[] { ',' });
+
+                // We'll always have at least one value in the result of the split which will be our value for street1
+                streetLines[0] = splitStreetInfo[0];
+
+                if (splitStreetInfo.Length > 1)
                 {
-                    // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
-                    // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
-                    // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
-                    // to the combined order).
-                    order.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer;
+                    // There were multiple components to the original Street1 address provided by eBay; this second
+                    // component will be the value we use for our street 2 address instead of the value provided by eBay
+                    streetLines[1] = splitStreetInfo[1].Trim();
                 }
             }
+
+            return streetLines;
         }
 
         /// <summary>

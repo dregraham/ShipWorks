@@ -200,49 +200,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // Only load new orders
                 if (order.IsNew)
                 {
-                    order.OrderDate = GetDate(lsOrder.CreatedAt);
-                    order.OnlineLastModified = GetDate(lsOrder.UpdatedAt);
-                    order.OrderNumber = int.Parse(lsOrder.Number);
-
-                    // Need invoice id to get shipment information
-                    LemonStandInvoice invoice =
-                        JsonConvert.DeserializeObject<LemonStandInvoice>(
-                            jsonOrder.SelectToken("invoices.data").Children().First().ToString());
-
-                    LoadOrderCharges(order, lsOrder);
-
-                    // Get shipment information and set requested shipping
-                    JToken jsonShipment = client.GetShipment(invoice.ID);
-                    LemonStandShipment shipment =
-                        JsonConvert.DeserializeObject<LemonStandShipment>(
-                            jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
-
-                    order.RequestedShipping = shipment.ShippingService;
-
-                    // Get shipping address from shipment
-                    JToken jsonShippingAddress = client.GetShippingAddress(shipment.ID);
-                    LemonStandShippingAddress shippingAddress =
-                        JsonConvert.DeserializeObject<LemonStandShippingAddress>(
-                            jsonShippingAddress.SelectToken("data.shipping_address.data").ToString());
-
-                    // Get customer information and billing address
-                    LemonStandCustomer customer =
-                        JsonConvert.DeserializeObject<LemonStandCustomer>(
-                            jsonOrder.SelectToken("customer.data").ToString());
-                    JToken jsonBillingAddress = client.GetBillingAddress(customer.ID);
-                    LemonStandBillingAddress billingAddress =
-                        JsonConvert.DeserializeObject<LemonStandBillingAddress>(
-                            jsonBillingAddress.SelectToken("data.billing_addresses.data").Children().First().ToString());
-
-                    string email = customer.Email;
-
-                    // Load shipping and billing address
-                    LoadAddressInfo(order, shippingAddress, billingAddress, email);
-
-                    // Load order items
-                    LoadItems(jsonOrder, order);
-
-                    order.OrderTotal = decimal.Parse(lsOrder.Total);
+                    LoadOrderDetailsWhenNew(jsonOrder, lsOrder, order);
                 }
 
                 return GenericResult.FromSuccess(order);
@@ -251,6 +209,56 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new LemonStandException(e.Message, e);
             }
+        }
+
+        /// <summary>
+        /// Load order details when the order is new
+        /// </summary>
+        private void LoadOrderDetailsWhenNew(JToken jsonOrder, LemonStandOrder lsOrder, LemonStandOrderEntity order)
+        {
+            order.OrderDate = GetDate(lsOrder.CreatedAt);
+            order.OnlineLastModified = GetDate(lsOrder.UpdatedAt);
+            order.OrderNumber = int.Parse(lsOrder.Number);
+
+            // Need invoice id to get shipment information
+            LemonStandInvoice invoice =
+                JsonConvert.DeserializeObject<LemonStandInvoice>(
+                    jsonOrder.SelectToken("invoices.data").Children().First().ToString());
+
+            LoadOrderCharges(order, lsOrder);
+
+            // Get shipment information and set requested shipping
+            JToken jsonShipment = client.GetShipment(invoice.ID);
+            LemonStandShipment shipment =
+                JsonConvert.DeserializeObject<LemonStandShipment>(
+                    jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
+
+            order.RequestedShipping = shipment.ShippingService;
+
+            // Get shipping address from shipment
+            JToken jsonShippingAddress = client.GetShippingAddress(shipment.ID);
+            LemonStandShippingAddress shippingAddress =
+                JsonConvert.DeserializeObject<LemonStandShippingAddress>(
+                    jsonShippingAddress.SelectToken("data.shipping_address.data").ToString());
+
+            // Get customer information and billing address
+            LemonStandCustomer customer =
+                JsonConvert.DeserializeObject<LemonStandCustomer>(
+                    jsonOrder.SelectToken("customer.data").ToString());
+            JToken jsonBillingAddress = client.GetBillingAddress(customer.ID);
+            LemonStandBillingAddress billingAddress =
+                JsonConvert.DeserializeObject<LemonStandBillingAddress>(
+                    jsonBillingAddress.SelectToken("data.billing_addresses.data").Children().First().ToString());
+
+            string email = customer.Email;
+
+            // Load shipping and billing address
+            LoadAddressInfo(order, shippingAddress, billingAddress, email);
+
+            // Load order items
+            LoadItems(jsonOrder, order);
+
+            order.OrderTotal = decimal.Parse(lsOrder.Total);
         }
 
         /// <summary>
