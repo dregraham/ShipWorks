@@ -20,14 +20,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorOrderLoader
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
+        private readonly IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorOrderLoader"/> class.
         /// </summary>
         /// <param name="orderChargeCalculator">The order charge calculator.</param>
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator)
+        /// <param name="distributionCenters"></param>
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters)
         {
             this.orderChargeCalculator = orderChargeCalculator;
+            this.distributionCenters = distributionCenters;
         }
 
         /// <summary>
@@ -121,11 +124,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
             itemToSave.Code = downloadedItem.Sku;
             itemToSave.SKU = downloadedItem.Sku;
-            itemToSave.MarketplaceSalesID = downloadedItem.SiteListingID;
 
-            // CA-specific
+            // CA specific
+            itemToSave.MarketplaceSalesID = downloadedItem.SiteListingID;
             itemToSave.MarketplaceName = downloadedOrder.SiteName;
             itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserID;
+
+            LoadDistributionCenter(itemToSave, downloadedOrder, downloadedItem);
 
             if (!string.IsNullOrWhiteSpace(downloadedItem.GiftNotes))
             {
@@ -143,6 +148,34 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attribute.Name = "Gift Message";
                 attribute.Description = downloadedItem.GiftMessage;
                 attribute.UnitPrice = 0M;
+            }
+        }
+
+        /// <summary>
+        /// Loads the distribution center for the given item
+        /// </summary>
+        private void LoadDistributionCenter(ChannelAdvisorOrderItemEntity itemToSave, ChannelAdvisorOrder downloadedOrder,
+            ChannelAdvisorOrderItem downloadedItem)
+        {
+            ChannelAdvisorFulfillmentItem channelAdvisorFulfillmentItem = downloadedItem.FulfillmentItems.FirstOrDefault();
+            if (channelAdvisorFulfillmentItem != null)
+            {
+                int fulfillmentID = channelAdvisorFulfillmentItem.FulfillmentID;
+                ChannelAdvisorFulfillment channelAdvisorFulfillment =
+                    downloadedOrder.Fulfillments.FirstOrDefault(f => f.ID == fulfillmentID);
+                if (channelAdvisorFulfillment != null)
+                {
+                    long distributionCenterID = channelAdvisorFulfillment.DistributionCenterID;
+
+                    itemToSave.DistributionCenterID = distributionCenterID;
+
+                    ChannelAdvisorDistributionCenter channelAdvisorDistributionCenter = distributionCenters
+                        .SingleOrDefault(d => d.ID == distributionCenterID);
+                    if (channelAdvisorDistributionCenter != null)
+                    {
+                        itemToSave.DistributionCenter = channelAdvisorDistributionCenter.Code;
+                    }
+                }
             }
         }
 
@@ -398,11 +431,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             orderToSave.OnlinePaymentStatus =
                 (int) (EnumHelper.TryParseEnum<ChannelAdvisorPaymentStatus>(downloadedOrder.PaymentStatus) ??
                        ChannelAdvisorPaymentStatus.Unknown);
-            
+
             orderToSave.OnlineCheckoutStatus =
                 (int) (EnumHelper.TryParseEnum<ChannelAdvisorCheckoutStatus>(downloadedOrder.CheckoutStatus) ??
                        ChannelAdvisorCheckoutStatus.Unknown);
-            
+
             orderToSave.OnlineShippingStatus =
                 (int) (EnumHelper.TryParseEnum<ChannelAdvisorShippingStatus>(downloadedOrder.ShippingStatus) ??
                        ChannelAdvisorShippingStatus.Unknown);
