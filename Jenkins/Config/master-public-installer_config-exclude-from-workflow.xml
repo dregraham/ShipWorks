@@ -72,7 +72,7 @@
       <deployEvenBuildFail>false</deployEvenBuildFail>
     </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.15">
-      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com</recipients>
+      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com j.winchester@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
