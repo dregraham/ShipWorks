@@ -222,6 +222,7 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFileTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFileTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreUpgradeTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFileTest.cs" />
     <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnTest.cs" />

@@ -290,6 +290,7 @@
     <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreUpgrade.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollector.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
