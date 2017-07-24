@@ -367,6 +367,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        public void UpgradeToAlphanumericOrderNumbers_ChangesOrderNumberFieldToOrderNumberComplete()
+        {
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            IOdbcFieldMapEntry orderNumberEntry = GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Number"), GetExternalField("SomeColumnName2"));
+            testObject.AddEntry(orderNumberEntry);
+
+            testObject.UpgradeToAlphanumericOrderNumbers();
+
+            Assert.Equal("OrderNumberComplete", orderNumberEntry.ShipWorksField.Name);
+        }
+
+        [Fact]
+        public void UpgradeToAlphanumericOrderNumbers_DoesNotChangeNonOrderNumberField()
+        {
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            IOdbcFieldMapEntry entry = GetFieldMapEntry(GetShipWorksField(OrderFields.BillFirstName, "Bill First Name"), GetExternalField("SomeColumnName2"));
+            testObject.AddEntry(entry);
+
+            testObject.UpgradeToAlphanumericOrderNumbers();
+
+            Assert.Equal("BillFirstName", entry.ShipWorksField.Name);
+        }
+
+        [Fact]
         public void FindEntriesBy_ReturnsCorrectEntry_WhenMapContainsGivenField()
         {
             OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();

@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public class ShipWorksOdbcMappableField : IShipWorksOdbcMappableField
     {
         private readonly Dictionary<Type, object> typeDefaultValues;
-        private readonly IEntityField2 field;
+        private IEntityField2 field;
 
         /// <summary>
         /// Used for deserialization
@@ -77,9 +77,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksOdbcMappableField"/> class.
         /// </summary>
-        /// <param name="field">The field.</param>
-        /// <param name="displayName">The display name.</param>
-        /// <param name="isRequired">if set to <c>true</c> [is required].</param>
         public ShipWorksOdbcMappableField(IEntityField2 field, string displayName, bool isRequired, OdbcFieldValueResolutionStrategy resolutionStrategy)
         {
             this.field = field;
@@ -127,6 +124,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// The resolution strategy for the field
         /// </summary>
         public OdbcFieldValueResolutionStrategy ResolutionStrategy { get; }
+
+        /// <summary>
+        /// Changes ShipWorks backing field
+        /// </summary>
+        public void ChangeBackingField(IEntityField2 newField)
+        {
+            field = newField;
+        }
 
         /// <summary>
         /// Set the Value to the given value

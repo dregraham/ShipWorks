@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -205,7 +206,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void UpgradeToAlphanumericOrderNumbers()
         {
-            throw new System.NotImplementedException();
+            IEnumerable<IOdbcFieldMapEntry> orderNumberEntries = FindEntriesBy(OrderFields.OrderNumber);
+            foreach (IOdbcFieldMapEntry orderNumberEntry in orderNumberEntries)
+            {
+                orderNumberEntry.ShipWorksField.ChangeBackingField(OrderFields.OrderNumberComplete);
+            }
         }
     }
 }
