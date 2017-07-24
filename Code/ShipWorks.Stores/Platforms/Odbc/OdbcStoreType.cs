@@ -6,7 +6,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
@@ -15,6 +14,7 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
             // Put this here for now so that we can work on the downloader
-            return new GenericFileOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return new GenericOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
         }
 
         /// <summary>
