@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
@@ -34,6 +35,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+            "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
         public ChannelAdvisorRestDownloader(StoreEntity store,
             IChannelAdvisorRestClient restClient,
             IEncryptionProviderFactory encryptionProviderFactory,
