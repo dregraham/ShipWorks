@@ -1361,7 +1361,8 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [DistributionCenter] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
-[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DistributionCenterID] [bigint] NOT NULL 
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
@@ -1378,6 +1379,10 @@ CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_Classification] ON [dbo].[ChannelAdvisorOrderItem] ([Classification])
 GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_DistributionCenterID] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenterID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_DistributionCenter] ON [dbo].[ChannelAdvisorOrderItem] ([DistributionCenter])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorStore]
@@ -1389,7 +1394,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [ConsolidatorAsUsps] [bit] NOT NULL,
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'

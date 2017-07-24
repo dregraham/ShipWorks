@@ -21,9 +21,20 @@ namespace ShipWorks.Data.Import
         OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item);
 
         /// <summary>
+        /// Creates and populates a new OrderItemAttribute based on the given OrderItemEntity, name, description, unitPrice, and isManual flag
+        /// </summary>
+        OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item, string name, string description,
+            decimal unitPrice, bool isManual);
+
+        /// <summary>
         /// Create a new charge attached to the order
         /// </summary>
         OrderChargeEntity CreateCharge(OrderEntity order);
+
+        /// <summary>
+        /// Create a new charge attached to the order
+        /// </summary>
+        OrderChargeEntity CreateCharge(OrderEntity order, string type, string description, decimal amount);
 
         /// <summary>
         /// Create a new note and attach it to the order.
@@ -34,5 +45,10 @@ namespace ShipWorks.Data.Import
         /// Create a new payment detail attached to the order
         /// </summary>
         OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order);
+
+        /// <summary>
+        /// Creates the payment detail.
+        /// </summary>
+        OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order, string label, string value);
     }
 }

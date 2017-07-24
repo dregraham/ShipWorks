@@ -88,7 +88,6 @@ namespace ShipWorks.Shipping.Editing
         /// Load the given shipments customs information into the control
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool allowEditing, bool resetSelection)
         {
             SuspendShipSenseFieldChangeEvent();

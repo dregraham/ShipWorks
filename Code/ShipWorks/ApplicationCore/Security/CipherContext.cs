@@ -22,6 +22,9 @@ namespace ShipWorks.ApplicationCore.Security
         Odbc,
 
         [Description("Walmart Context")]
-        Walmart
+        Walmart,
+
+        [Description("ChannelAdvisor Context")]
+        ChannelAdvisor
     }
 }

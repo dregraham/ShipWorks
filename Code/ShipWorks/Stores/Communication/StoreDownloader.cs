@@ -357,6 +357,21 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Creates and populates a new OrderItemAttribute based on the given OrderItemEntity, name, description, unitPrice, and isManual flag
+        /// </summary>
+        protected OrderItemAttributeEntity InstantiateOrderItemAttribute(OrderItemEntity item, string name, string description, decimal unitPrice, bool isManual)
+        {
+            OrderItemAttributeEntity attribute = StoreType.CreateOrderItemAttributeInstance();
+            attribute.OrderItem = item;
+            attribute.Name = name;
+            attribute.Description = description;
+            attribute.UnitPrice = unitPrice;
+            attribute.IsManual = isManual;
+
+            return attribute;
+        }
+
+        /// <summary>
         /// Create a new order charge based on the given order
         /// </summary>
         protected OrderChargeEntity InstantiateOrderCharge(OrderEntity order) =>
@@ -379,6 +394,16 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected OrderPaymentDetailEntity InstantiateOrderPaymentDetail(OrderEntity order) =>
             new OrderPaymentDetailEntity { Order = order };
+
+        /// <summary>
+        /// Create a new payment detail based on the given order, label, and value
+        /// </summary>
+        protected OrderPaymentDetailEntity InstantiateOrderPaymentDetail(OrderEntity order, string label, string value) => new OrderPaymentDetailEntity
+        {
+            Order = order,
+            Label = label,
+            Value = value
+        };
 
         /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.

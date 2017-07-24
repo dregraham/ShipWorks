@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceDownloader) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceDownloader) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComDownloader) },
-            { StoreTypeCode.ChannelAdvisor, typeof(ChannelAdvisorDownloader) },
+            { StoreTypeCode.ChannelAdvisor, typeof(ChannelAdvisorDownloaderFactory) },
             { StoreTypeCode.ClickCartPro, typeof(ClickCartProDownloader) },
             { StoreTypeCode.CommerceInterface, typeof(CommerceInterfaceDownloader) },
             { StoreTypeCode.Ebay, typeof(EbayDownloader) },
