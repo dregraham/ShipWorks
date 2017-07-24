@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Metrics;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -164,17 +165,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             fieldMap.ApplyValues(firstRecord);
 
             // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
 
             if (odbcFieldMapEntry == null)
             {
                 throw new DownloadException("Order number not found in map.");
             }
 
+            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
+
             // Create an order using the order number
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long)odbcFieldMapEntry.ShipWorksField.Value));
+            OrderEntity orderEntity = InstantiateOrder(new GenericOrderIdentifier(orderNumber));
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
+            
+            orderEntity.SetOrderNumber(orderNumber);
 
             return orderEntity;
         }

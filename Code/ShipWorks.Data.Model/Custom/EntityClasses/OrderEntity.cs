@@ -19,6 +19,15 @@ namespace ShipWorks.Data.Model.EntityClasses
         static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
         /// <summary>
+        /// stub so that I could do the next task until the actual version of this method is pushed
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        public void SetOrderNumber(string orderNumber)
+        {
+            // TODO: DELETE ME!
+        }
+
+        /// <summary>
         /// Set the Prefix for the order number
         /// </summary>
         public void ApplyOrderNumberPrefix(string prefix)

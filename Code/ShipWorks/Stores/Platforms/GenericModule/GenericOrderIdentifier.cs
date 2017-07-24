@@ -42,6 +42,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             this.orderNumberComplete = orderNumberComplete;
         }
 
+        public GenericOrderIdentifier(string orderNumbercomplete)
+            : base(int.MinValue)
+        {
+            this.orderNumberComplete = orderNumbercomplete;
+        }
+
         /// <summary>
         /// Apply the order number and postfix value to the supplied order.
         /// </summary>
@@ -56,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
             else
             {
-                order.OrderNumberComplete = orderNumberComplete;
+                order.SetOrderNumber(orderNumberComplete);
             }
         }
 
