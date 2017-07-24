@@ -8477,6 +8477,7 @@
     <Compile Include="Users\Audit\AuditControl.Designer.cs">
       <DependentUpon>AuditControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Audit\AuditUtilityWrapper.cs" />
     <Compile Include="Users\Audit\CoreExtensions\Grid\AuditDetailDisplayType.cs" />
     <Compile Include="Users\Audit\AuditDetailDlg.cs">
       <SubType>Form</SubType>
@@ -8491,6 +8492,7 @@
       <DependentUpon>AuditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
+    <Compile Include="Users\Audit\IAuditUtility.cs" />
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />
