@@ -39,6 +39,22 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// Sets the order number.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        public void SetOrderNumber(string orderNumber)
+        {
+            settingOrderNumberComplete = true;
+
+            OrderNumberComplete = orderNumber;
+
+            settingOrderNumberComplete = false;
+
+            long numericOrderNumber;
+            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : long.MinValue;
+        }
+
+        /// <summary>
         /// Trying to set a value of a field
         /// </summary>
         protected override void OnSetValue(int fieldIndex, object valueToSet, out bool cancel)
@@ -71,16 +87,16 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         private void UpdateOrderNumberComplete()
         {
-            settingOrderNumberComplete = true;
+            if (OrderNumber != long.MinValue)
+            {
+                settingOrderNumberComplete = true;
 
-            OrderNumberComplete =
-                string.Format("{0}{1}{2}",
-                prefix,
-                OrderNumber,
-                postfix);
+                OrderNumberComplete = $"{prefix}{OrderNumber}{postfix}";
 
-            settingOrderNumberComplete = false;
+                settingOrderNumberComplete = false;
+            }
         }
+
         /// <summary>
         /// Special processing to ensure change tracking for entity hierarchy
         /// </summary>

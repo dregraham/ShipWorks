@@ -41,5 +41,31 @@ namespace ShipWorks.Data.Modal.Tests
             Assert.Equal("Doe", personAdapter.LastName);
             Assert.Equal(PersonNameParseStatus.Simple, personAdapter.NameParseStatus);
         }
+
+        [Fact]
+        public void SetOrderNumber_SetsOrderNumberComplete()
+        {
+            OrderEntity order = new OrderEntity();
+            order.SetOrderNumber("1A2B3C");
+            Assert.Equal("1A2B3C", order.OrderNumberComplete);
+        }
+
+        [Fact]
+        public void SetOrderNumber_SetsOrderNumber_WhenGivenNumericValue()
+        {
+            OrderEntity order = new OrderEntity();
+            order.SetOrderNumber("12345");
+
+            Assert.Equal(12345, order.OrderNumber);
+        }
+
+        [Fact]
+        public void SetOrderNumber_SetsOrderNumberToMinLong_WhenGivenNonNumericValue()
+        {
+            OrderEntity order = new OrderEntity();
+            order.SetOrderNumber("1A2B3C");
+
+            Assert.Equal(long.MinValue, order.OrderNumber);
+        }
     }
 }
