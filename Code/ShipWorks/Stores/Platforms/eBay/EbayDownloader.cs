@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Logging;
-using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -16,11 +15,14 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -42,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
         private readonly Func<EbayToken, EbayWebClient> webClientFactory;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
@@ -55,10 +58,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory)
-            : base(store)
+        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory,
+            IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.webClientFactory = webClientFactory;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -568,7 +573,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 // We need to calculate the starting point for the initial starting point of
                 // a download cycle
-                return CalculateStartingPoint(onlineLastModifiedStartingPoint);
+                return await CalculateStartingPoint(onlineLastModifiedStartingPoint).ConfigureAwait(false);
             }
 
             // Use the default behavior - the store is not configured to check for older orders
@@ -581,11 +586,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="onlineLastModifiedStartingPoint">The DateTime of the most recent online last modified date that ShipWorks is aware of. This is used
         /// in the event that the last four download cycles are more recent (i.e. this is to ensure overlap).</param>
         /// <returns>The DateTime to use as the starting point of a download.</returns>
-        private DateTime? CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
+        private async Task<DateTime?> CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
         {
             // Need to check previous download history for this store to calculate the starting point.
             const int previousNumberOfDownloads = 4;
-            List<DateTime> startDates = GetPreviousDownloadStartTimes(previousNumberOfDownloads);
+            List<DateTime> startDates = await GetPreviousDownloadStartTimes(previousNumberOfDownloads).ConfigureAwait(false);
 
             if (startDates.None())
             {
@@ -623,33 +628,21 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         /// <param name="previousDownloadCount">The number of previous downloads to use when getting starting point(s).</param>
         /// <returns>A List of DateTime instance representing the time the previous downloads started.</returns>
-        private List<DateTime> GetPreviousDownloadStartTimes(int previousDownloadCount)
+        private async Task<List<DateTime>> GetPreviousDownloadStartTimes(int previousDownloadCount)
         {
-            // Only interested in successful downloads that contained orders
-            RelationPredicateBucket bucket = new RelationPredicateBucket
-            (
-                DownloadFields.StoreID == Store.StoreID &
-                DownloadFields.Result == (int) DownloadResult.Success &
-                DownloadFields.QuantityTotal > 0
-            );
+            QueryFactory factory = new QueryFactory();
+            DynamicQuery<DateTime> query = factory.Create()
+                .Select(() => DownloadFields.Started.ToValue<DateTime>())
+                .Where(DownloadFields.StoreID == Store.StoreID)
+                .AndWhere(DownloadFields.Result == (int) DownloadResult.Success)
+                .AndWhere(DownloadFields.QuantityTotal > 0)
+                .OrderBy(DownloadFields.DownloadID.Descending())
+                .Limit(previousDownloadCount);
 
-            // We just want the start date of the download
-            ResultsetFields resultFields = new ResultsetFields(1);
-            resultFields.DefineField(DownloadFields.Started, 0, "Started", string.Empty);
-
-            // Sort so we only get the latest download records
-            ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
-
-            List<DateTime> startDates = new DateTimeList();
-            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                while (reader.Read())
-                {
-                    startDates.Add(reader.GetDateTime(0));
-                }
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             }
-
-            return startDates;
         }
 
         /// <summary>
@@ -1240,115 +1233,83 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return await FindOrder(identifier, true).ConfigureAwait(false);
+            return await FindOrder(identifier).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Find and load an order of the given identifier, optionally including child charges
         /// </summary>
-        private Task<EbayOrderEntity> FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private async Task<EbayOrderEntity> FindOrder(EbayOrderIdentifier identifier)
         {
-            PrefetchPath2 prefetch = null;
+            QueryFactory factory = new QueryFactory();
 
-            // When we do load the order, see if we should include charges
-            if (includeCharges)
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                prefetch = new PrefetchPath2(EntityType.OrderEntity);
-                prefetch.Add(OrderEntity.PrefetchPathOrderCharges);
+                return identifier.EbayOrderID == 0 ?
+                    await FindOrderWitoutEbayID(identifier, factory, sqlAdapter).ConfigureAwait(false) :
+                    await FindOrderWithEbayID(identifier, factory, sqlAdapter).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Find an ebay order without an ebay id
+        /// </summary>
+        private async Task<EbayOrderEntity> FindOrderWitoutEbayID(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderItemEntity);
+
+            DynamicQuery query = factory.Create()
+                .Select(EbayOrderItemFields.OrderID)
+                .From(Joins.Left(OrderEntity.Relations.OrderItemEntityUsingOrderID)
+                    .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(entityName)))
+                .Where(EbayOrderItemFields.EbayItemID == identifier.EbayItemID)
+                .AndWhere(EbayOrderItemFields.EbayTransactionID == identifier.TransactionID)
+                .AndWhere(OrderFields.StoreID == Store.StoreID)
+                .AndWhere(OrderFields.IsManual == false);
+
+            long? orderId = await sqlAdapter.FetchScalarAsync<long?>(query).ConfigureAwait(false);
+
+            if (!orderId.HasValue)
+            {
+                // order does not exist
+                return null;
             }
 
-            // A single-auction will have an OrderID of zero
-            if (identifier.EbayOrderID == 0)
-            {
-                // doing a few joins, give LLBLgen the information
-                RelationCollection relations = new RelationCollection(OrderEntity.Relations.OrderItemEntityUsingOrderID);
-                relations.Add(OrderItemEntity.Relations.GetSubTypeRelation("EbayOrderItemEntity"));
+            EntityQuery<EbayOrderEntity> orderQuery = factory.EbayOrder
+                .Where(OrderFields.OrderID == orderId.Value)
+                .WithPath(OrderEntity.PrefetchPathOrderCharges);
 
-                // Look for any existing EbayOrderItem with matching ebayItemID and TransactionID
-                // it's parent order will be the order we're looking for
-                object objOrderID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderID,
-                    null, AggregateFunction.None,
-                    EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID &
-                        OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false,
-                    null,
-                    relations);
+            return await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false);
+        }
 
-                if (objOrderID == null)
-                {
-                    // order does not exist
-                    return null;
-                }
-                else
-                {
-                    // return the order entity
-                    long orderID = (long) objOrderID;
+        /// <summary>
+        /// Find an order with an ebay id
+        /// </summary>
+        private async Task<EbayOrderEntity> FindOrderWithEbayID(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
+        {
+            EntityQuery<EbayOrderEntity> orderQuery = factory.EbayOrder
+                .Where(EbayOrderFields.EbayOrderID == identifier.EbayOrderID)
+                .AndWhere(EbayOrderFields.StoreID == Store.StoreID)
+                .WithPath(OrderEntity.PrefetchPathOrderCharges);
 
-                    EbayOrderEntity ebayOrder = new EbayOrderEntity(orderID);
-                    SqlAdapter.Default.FetchEntity(ebayOrder, prefetch);
-
-                    return Task.FromResult(ebayOrder);
-                }
-            }
-            else
-            {
-                RelationPredicateBucket bucket = new RelationPredicateBucket(
-                EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
-
-                EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
-                SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
-                EbayOrderEntity ebayOrder = collection.FirstOrDefault();
-
-                if (ebayOrder == null)
-                {
-                    ebayOrder = GetCombinedOrder(identifier, includeCharges);
-                }
-
-                return Task.FromResult(ebayOrder);
-            }
+            return await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false) ??
+                await GetCombinedOrder(identifier, factory, sqlAdapter).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Gets the locally combined order if it exists.
         /// </summary>
-        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private async Task<EbayOrderEntity> GetCombinedOrder(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
         {
-            EbayOrderEntity ebayOrder = null;
+            EntityQuery<EbayCombinedOrderRelationEntity> orderQuery = factory.EbayCombinedOrderRelation
+                .Where(EbayCombinedOrderRelationFields.EbayOrderID == identifier.EbayOrderID)
+                .AndWhere(EbayCombinedOrderRelationFields.StoreID == Store.StoreID)
+                .WithPath(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder
+                    .WithSubPath(OrderEntity.PrefetchPathOrderCharges));
 
-            if (identifier.EbayOrderID != 0)
-            {
-                IPredicateExpression relationFilter = new PredicateExpression();
-                relationFilter.Add(EbayCombinedOrderRelationFields.EbayOrderID == identifier.EbayOrderID);
-                relationFilter.AddWithAnd(EbayCombinedOrderRelationFields.StoreID == Store.StoreID);
-
-                RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
-                relationPredicateBucket.PredicateExpression.Add(relationFilter);
-
-                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.EbayCombinedOrderRelationEntity);
-                if (includeCharges)
-                {
-                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder).SubPath.Add(OrderEntity.PrefetchPathOrderCharges);
-                }
-                else
-                {
-                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder);
-                }
-
-                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity;
-                using (EntityCollection<EbayCombinedOrderRelationEntity> relationCollection = new EntityCollection<EbayCombinedOrderRelationEntity>())
-                {
-                    SqlAdapter.Default.FetchEntityCollection(relationCollection, relationPredicateBucket, prefetch);
-                    ebayCombinedOrderRelationEntity = relationCollection.FirstOrDefault();
-                }
-
-                if (ebayCombinedOrderRelationEntity != null)
-                {
-                    ebayOrder = ebayCombinedOrderRelationEntity.EbayOrder;
-                }
-            }
-
-            return ebayOrder;
+            EbayCombinedOrderRelationEntity relationEntity = await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false);
+            return relationEntity?.EbayOrder;
         }
-
 
         /// <summary>
         /// Locate an item with the given identifier

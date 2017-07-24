@@ -5,7 +5,6 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

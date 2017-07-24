@@ -345,5 +345,12 @@ namespace Interapptive.Shared.Collections
         /// </summary>
         public static IEnumerable<T> DefaultIfEmptyOrNull<T>(this IEnumerable<T> source, T defaultValue) =>
             (source ?? Enumerable.Empty<T>()).DefaultIfEmpty(defaultValue);
+
+        /// <summary>
+        /// Perform a left join on an enumerable
+        /// </summary>
+        public static IEnumerable<Tuple<TLeft, TRight>> LeftJoin<TLeft, TRight, TKey>(this IEnumerable<TLeft> left,
+            IEnumerable<TRight> right, Func<TLeft, TKey> getLeftKey, Func<TRight, TKey> getRightKey) =>
+            left.GroupJoin(right, getLeftKey, getRightKey, (x, y) => Tuple.Create(x, y.FirstOrDefault()));
     }
 }

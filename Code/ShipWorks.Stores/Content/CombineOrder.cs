@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
@@ -71,8 +72,19 @@ namespace ShipWorks.Stores.Content
         private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders,
             ProgressUpdater progress, ISqlAdapter sqlAdapter)
         {
-            OrderEntity combinedOrder = await CreateCombinedOrder(survivingOrderID, orderNumberComplete, orders, sqlAdapter);
+            GenericResult<long> existingOrdersResult = await EnsureOrdersHaveNotChanged(orders, sqlAdapter).ConfigureAwait(false);
+            if (existingOrdersResult.Failure)
+            {
+                return existingOrdersResult;
+            }
 
+            GenericResult<OrderEntity> combinedOrderResult = await CreateCombinedOrder(survivingOrderID, orderNumberComplete, orders, sqlAdapter).ConfigureAwait(false);
+            if (combinedOrderResult.Failure)
+            {
+                return GenericResult.FromError<long>(combinedOrderResult.Message);
+            }
+
+            OrderEntity combinedOrder = combinedOrderResult.Value;
             bool saveResult = await sqlAdapter.SaveEntityAsync(combinedOrder, true).ConfigureAwait(false);
 
             if (!saveResult)
@@ -100,11 +112,39 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
+        /// Ensure that the orders to be combined have not changed
+        /// </summary>
+        private async Task<GenericResult<long>> EnsureOrdersHaveNotChanged(IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        {
+            IEnumerable<OrderEntity> updatedOrders = await orderManager.LoadOrdersAsync(orders.Select(x => x.OrderID), sqlAdapter).ConfigureAwait(false);
+            var mergedOrders = orders.LeftJoin(updatedOrders, x => x.OrderID, x => x.OrderID);
+
+            var deletedOrders = mergedOrders.Where(x => x.Item2 == null);
+            if (deletedOrders.Any())
+            {
+                return GenericResult.FromError<long>("Some orders were deleted");
+            }
+
+            var changedOrders = mergedOrders.Where(x => x.Item1.RowVersion.Except(x.Item2.RowVersion).Any());
+            if (changedOrders.Any())
+            {
+                return GenericResult.FromError<long>("Some orders were changed");
+            }
+
+            return GenericResult.FromSuccess(0L);
+        }
+
+        /// <summary>
         /// Create the combined order from the surviving order id
         /// </summary>
-        private async Task<OrderEntity> CreateCombinedOrder(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        private async Task<GenericResult<OrderEntity>> CreateCombinedOrder(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             OrderEntity combinedOrder = await orderManager.LoadOrderAsync(survivingOrderID, sqlAdapter).ConfigureAwait(false);
+
+            if (combinedOrder == null)
+            {
+                return GenericResult.FromError<OrderEntity>("Could not find surviving order");
+            }
 
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
@@ -120,7 +160,7 @@ namespace ShipWorks.Stores.Content
                 field.IsChanged = true;
             }
 
-            return combinedOrder;
+            return GenericResult.FromSuccess(combinedOrder);
         }
 
         /// <summary>
