@@ -122,6 +122,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     importOrderItemStrategy = importSettingsFile.OdbcImportItemStrategy;
 
                     fieldMap = importSettingsFile.OdbcFieldMap;
+                    fieldMap.UpgradeToAlphanumericOrderNumbers();
                 }
             }
         }

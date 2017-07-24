@@ -115,6 +115,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                     MapName = uploadSettingsFile.OdbcFieldMap.Name;
 
                     fieldMap = uploadSettingsFile.OdbcFieldMap;
+                    fieldMap.UpgradeToAlphanumericOrderNumbers();
                 }
             }
         }
