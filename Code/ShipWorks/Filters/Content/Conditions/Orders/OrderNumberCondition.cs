@@ -16,7 +16,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         {
             if (IsNumeric)
             {
-                return GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context);
+                return $"{GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context)} AND OrderNumber != {int.MinValue}";
             }
             else
             {
