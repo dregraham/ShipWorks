@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericFile;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = new OdbcStoreType(store, null, null);
             var order = new OrderEntity() {OrderNumber = 42};
             OrderIdentifier orderIdentifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<GenericFileOrderIdentifier>(orderIdentifier);
+            Assert.IsType<GenericOrderIdentifier>(orderIdentifier);
         }
 
         [Fact]
