@@ -89,7 +89,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             {
                 using (GenericSpreadsheetReader reader = CreateReader(file))
                 {
-                    double speed = 0;
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
 
@@ -98,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
                         while (reader.NextRecord())
                         {
                             // Update the status
-                            Progress.Detail = $"Importing record {(QuantitySaved + 1)}... {speed:##.##} ms/order";
+                            Progress.Detail = $"Importing record {(QuantitySaved + 1)}...";
 
                             await LoadOrder(reader).ConfigureAwait(false);
 
@@ -106,8 +105,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
                             {
                                 return false;
                             }
-
-                            speed = sw.ElapsedMilliseconds * 1.0 / QuantitySaved * 1.0;
                         }
                     }
                 }
