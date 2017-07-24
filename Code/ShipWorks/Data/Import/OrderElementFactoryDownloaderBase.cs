@@ -39,11 +39,28 @@ namespace ShipWorks.Data.Import
         }
 
         /// <summary>
+        /// Creates and populates a new OrderItemAttribute based on the given OrderItemEntity, name, description, unitPrice, and isManual flag
+        /// </summary>
+        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item, string name, string description,
+            decimal unitPrice, bool isManual)
+        {
+            return InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
+        }
+
+        /// <summary>
         /// Create a new charge attached to the order
         /// </summary>
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order)
         {
             return InstantiateOrderCharge(order);
+        }
+
+        /// <summary>
+        /// Create a new charge attached to the order
+        /// </summary>
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description, decimal amount)
+        {
+            return InstantiateOrderCharge(order, type, description, amount);
         }
 
         /// <summary>
@@ -58,6 +75,14 @@ namespace ShipWorks.Data.Import
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order)
         {
             return InstantiateOrderPaymentDetail(order);
+        }
+
+        /// <summary>
+        /// Create a new payment detail attached to the order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
+        {
+            return InstantiateOrderPaymentDetail(order, label, value);
         }
     }
 }

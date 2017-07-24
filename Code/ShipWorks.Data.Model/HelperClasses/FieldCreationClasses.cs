@@ -2962,6 +2962,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MPN);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.DistributionCenterID field instance</summary>
+		public static EntityField2 DistributionCenterID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenterID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ChannelAdvisorOrderSearchEntity</summary>
@@ -3176,6 +3181,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonApiRegion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AmazonApiRegion);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.RefreshToken field instance</summary>
+		public static EntityField2 RefreshToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.RefreshToken);}
 		}
 	}
 

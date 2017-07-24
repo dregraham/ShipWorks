@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
+using System.Net;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -21,9 +21,7 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters.Orders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -36,6 +34,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
+        public readonly string RedirectUrl = WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php");
+        public const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
 
         /// <summary>
         /// Store Type
@@ -51,6 +51,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
 
         }
+
+        /// <summary>
+        /// Gets the Authorization URL parameters
+        /// </summary>
+        public string AuthorizeUrlParameters =>
+            $"?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri={RedirectUrl}";
 
         /// <summary>
         /// String uniquely identifying a store instance
@@ -90,19 +96,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            ChannelAdvisorOrderEntity entity = new ChannelAdvisorOrderEntity();
-
-            entity.CustomOrderIdentifier = "";
-            entity.ResellerID = "";
-            entity.OnlinePaymentStatus = (int) ChannelAdvisorPaymentStatus.NoChange;
-            entity.OnlineCheckoutStatus = (int) ChannelAdvisorCheckoutStatus.NoChange;
-            entity.OnlineShippingStatus = (int) ChannelAdvisorShippingStatus.NoChange;
-            entity.FlagStyle = "";
-            entity.FlagDescription = "";
-            entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
-            entity.MarketplaceNames = "";
-
-            return entity;
+            return new ChannelAdvisorOrderEntity()
+            {
+                CustomOrderIdentifier = "",
+                ResellerID = "",
+                OnlinePaymentStatus = (int) ChannelAdvisorPaymentStatus.NoChange,
+                OnlineCheckoutStatus = (int) ChannelAdvisorCheckoutStatus.NoChange,
+                OnlineShippingStatus = (int) ChannelAdvisorShippingStatus.NoChange,
+                FlagStyle = "",
+                FlagDescription = "",
+                FlagType = (int) ChannelAdvisorFlagType.NoFlag,
+                MarketplaceNames = ""
+            };
         }
 
         /// <summary>
@@ -110,18 +115,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            ChannelAdvisorOrderItemEntity entity = new ChannelAdvisorOrderItemEntity();
-
-            entity.MarketplaceName = "";
-            entity.MarketplaceStoreName = "";
-            entity.MarketplaceBuyerID = "";
-            entity.MarketplaceSalesID = "";
-            entity.Classification = "";
-            entity.DistributionCenter = "";
-            entity.HarmonizedCode = "";
-            entity.IsFBA = false;
-
-            return entity;
+            return new ChannelAdvisorOrderItemEntity()
+            {
+                MarketplaceName = "",
+                MarketplaceStoreName = "",
+                MarketplaceBuyerID = "",
+                MarketplaceSalesID = "",
+                Classification = "",
+                DistributionCenter = "",
+                HarmonizedCode = "",
+                IsFBA = false,
+                DistributionCenterID = -1
+            };
         }
 
         /// <summary>
@@ -129,16 +134,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
-
-        /// <summary>
-        /// Create the wizard pages used to set the store up
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope) =>
-            new List<WizardPage>
-            {
-                new ChannelAdvisorAccountPage()
-            };
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
@@ -289,7 +284,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             notFba.Value = false;
             everyItem.Container.FirstGroup.Conditions.Add(notFba);
 
-
             ChannelAdvisorPaymentStatusCondition channelAdvisorPaymentStatus = new ChannelAdvisorPaymentStatusCondition();
             channelAdvisorPaymentStatus.Operator = EqualityOperator.Equals;
             channelAdvisorPaymentStatus.Value = ChannelAdvisorPaymentStatus.Cleared;
@@ -305,12 +299,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 FilterTarget = (int) FilterTarget.Orders
             };
         }
-
-        /// <summary>
-        /// Create the account settings control
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new ChannelAdvisorAccountSettingsControl();
 
         /// <summary>
         /// Create the CA store settings
@@ -377,6 +365,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             ElementOutline outline = container.AddElement("ChannelAdvisor");
             outline.AddElement("Classification", () => item.Value.Classification);
+            outline.AddElement("DistributionCenterID", () => item.Value.DistributionCenterID);
             outline.AddElement("DistributionCenter", () => item.Value.DistributionCenter);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);

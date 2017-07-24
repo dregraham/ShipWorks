@@ -1288,6 +1288,8 @@ namespace ShipWorks.Data.Model
 		IsFBA,
 		///<summary>MPN. </summary>
 		MPN,
+		///<summary>DistributionCenterID. </summary>
+		DistributionCenterID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1382,6 +1384,8 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. </summary>
 		AmazonApiRegion,
+		///<summary>RefreshToken. </summary>
+		RefreshToken,
 		/// <summary></summary>
 		AmountOfFields
 	}
