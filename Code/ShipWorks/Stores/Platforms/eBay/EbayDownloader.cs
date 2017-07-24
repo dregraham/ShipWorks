@@ -1205,7 +1205,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (objOrderID == null)
                 {
                     // order does not exist
-                    return null;
+                    return Task.FromResult<EbayOrderEntity>(null);
                 }
                 else
                 {
