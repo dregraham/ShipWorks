@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         readonly OdbcFieldMapFactory testObject;
         private readonly OdbcFieldMap fieldMap;
 
-        public OdbcFieldMapFactoryTest() 
+        public OdbcFieldMapFactoryTest()
         {
             AutoMock mock = AutoMock.GetLoose();
             testObject = mock.Create<OdbcFieldMapFactory>();
@@ -31,18 +31,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CreateOrderMap_ReturnsOrderMapWithOrderNumberExternalFieldPopulated_WhenStoreFieldMapContainsEntry()
+        public void CreateOrderMap_ReturnsOrderMapWithOrderNumberCompleteExternalFieldPopulated_WhenStoreFieldMapContainsEntry()
         {
-            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
+            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumberComplete\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
 
             IOdbcFieldMap newFieldMap = testObject.CreateOrderFieldMap(fieldMap);
-            Assert.Equal(fieldMap.Entries.First().ExternalField, newFieldMap.Entries.Single(e=>e.ShipWorksField.Name == "OrderNumber").ExternalField);
+            Assert.Equal(fieldMap.Entries.First().ExternalField, newFieldMap.Entries.Single(e=>e.ShipWorksField.Name == "OrderNumberComplete").ExternalField);
         }
 
         [Fact]
         public void CreateOrderMap_ReturnsOrderMapWithExternalFieldReturnsOrderMapWithLocalStatusNotPopulated_WhenStoreFieldMapDoesNotContainLocalStatus()
         {
-            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumber\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
+            fieldMap.Load("{\"Entries\":[{\"Index\":0,\"ShipWorksField\":{\"ContainingObjectName\":\"OrderEntity\",\"Name\":\"OrderNumberComplete\",\"DisplayName\":\"Order Number\",\"ResolutionStrategy\":0},\"ExternalField\":{\"Column\":{\"Name\":\"OrderID\"}}}],\"RecordIdentifierSource\":\"OrderID\"}");
 
             IOdbcFieldMap newFieldMap = testObject.CreateOrderFieldMap(fieldMap);
             Assert.Null(newFieldMap.Entries.Single(e => e.ShipWorksField.Name == "LocalStatus").ExternalField.Column);
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CreateFieldMapFrom_ReturnsMapContainingAllEntriesThatAreMappedOfProvidedMap()
         {
             IOdbcFieldMap orderMap = testObject.CreateOrderFieldMap(null);
-            ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
+            ShipWorksOdbcMappableField shipworksOrderMap = new ShipWorksOdbcMappableField(OrderFields.OrderNumberComplete, "Order Number", OdbcFieldValueResolutionStrategy.Default);
             ExternalOdbcMappableField externalOrderMap = new ExternalOdbcMappableField(new OdbcColumn("Column"));
             orderMap.AddEntry(new OdbcFieldMapEntry(shipworksOrderMap, externalOrderMap));
 
