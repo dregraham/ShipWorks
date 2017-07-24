@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
@@ -28,21 +30,25 @@ namespace ShipWorks.Stores.Content
         private readonly IConfigurationData configurationData;
         private readonly IEnumerable<ICombineOrderAction> combinationActions;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IAuditUtility auditUtility;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public CombineOrder(IOrderManager orderManager,
             IDeletionService deletionService,
             IConfigurationData configurationData,
             IEnumerable<ICombineOrderAction> combinationActions,
-            ISqlAdapterFactory sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IAuditUtility auditUtility)
         {
             this.combinationActions = combinationActions;
             this.configurationData = configurationData;
             this.deletionService = deletionService;
             this.orderManager = orderManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.auditUtility = auditUtility;
         }
 
         /// <summary>
@@ -54,6 +60,7 @@ namespace ShipWorks.Stores.Content
         public async Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
             string newOrderNumber, IProgressReporter progressReporter)
         {
+            GenericResult<long> result;
             int totalCount = combinationActions.Count() + orders.Count() + 2;
             ProgressUpdater progress = new ProgressUpdater(progressReporter, totalCount);
 
@@ -61,9 +68,21 @@ namespace ShipWorks.Stores.Content
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    return await PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter);
+                    result = await PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter).ConfigureAwait(false);
                 }
             }
+
+            if (result.Success)
+            {
+                string reason = $"Combined from orders : {string.Join(", ", orders.Select(o => o.OrderNumberComplete))}";
+                reason = reason.Substring(0, Math.Min(reason.Length, 100));
+                AuditReason auditReason = new AuditReason(AuditReasonType.CombineOrder, reason);
+
+                await auditUtility.AuditAsync(result.Value, AuditActionType.CombineOrder, auditReason, sqlAdapterFactory.Create())
+                                  .ConfigureAwait(false);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -106,6 +125,7 @@ namespace ShipWorks.Stores.Content
             await sqlAdapter.SaveEntityAsync(combinedOrder).ConfigureAwait(false);
 
             sqlAdapter.Commit();
+
             progress.Update();
 
             return GenericResult.FromSuccess(combinedOrder.OrderID);

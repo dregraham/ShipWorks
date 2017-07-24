@@ -15,6 +15,7 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Users.Audit;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Content
@@ -208,6 +209,29 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
                     var count = await sqlAdapter.FetchScalarAsync<int>(query);
                     Assert.Equal(0, count);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task Combine_CreatesCombinedOrderAudit_WhenSuccess()
+        {
+            var testObject = context.Mock.Create<CombineOrder>();
+
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
+                {
+                    var queryFactory = new QueryFactory();
+                    var query = queryFactory.Audit
+                        .Select(AuditFields.AuditID.Count())
+                        .Where(AuditFields.EntityID == result.Value)
+                        .AndWhere(AuditFields.Action == (int) AuditActionType.CombineOrder);
+
+                    var count = await sqlAdapter.FetchScalarAsync<int>(query);
+                    Assert.Equal(1, count);
                 }
             }
         }
