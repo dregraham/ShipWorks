@@ -199,5 +199,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             IOdbcFieldMapSerializer serializer = ioFactory.CreateWriter(this);
             return serializer.Serialize();
         }
+
+        /// <summary>
+        /// Upgrades a map so that the order number mapping becomes a OrderNumberComplete mapping
+        /// </summary>
+        public void UpgradeToAlphanumericOrderNumbers()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
