@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
-    /// Replaces ODBC Mappings to OrderNumber to OrderNumberComplete
+    /// Replaces ODBC Mappings to OrderNumberComplete from OrderNumber
     /// </summary>
     [Component]
     public class OdbcStoreUpgrade : IStoreUpgrade

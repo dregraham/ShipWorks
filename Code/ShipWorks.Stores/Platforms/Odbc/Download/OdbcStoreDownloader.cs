@@ -174,14 +174,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             if (odbcFieldMapEntry.ShipWorksField.Value == null)
             {
-                throw new DownloadException("Order number is empty in your ODBC source.");
+                throw new DownloadException("Order number is empty in your ODBC data source.");
             }
 
             string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
 
             // Create an order using the order number
             OrderEntity orderEntity = InstantiateOrder(new GenericOrderIdentifier(orderNumber));
-
+            
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
             
             orderEntity.ChangeOrderNumber(orderNumber);
