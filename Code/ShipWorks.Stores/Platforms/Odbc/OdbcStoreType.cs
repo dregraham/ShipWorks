@@ -76,6 +76,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber)
+        {
+            return new GenericOrderIdentifier(orderNumber);
+        }
+
+        /// <summary>
         /// Returns an empty OdbcStoreType
         /// </summary>
         /// <returns></returns>

@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
+        private OdbcStoreType odbcStoreType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
@@ -37,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
+            odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
         }
@@ -180,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
 
             // Create an order using the order number
-            OrderEntity orderEntity = InstantiateOrder(new GenericOrderIdentifier(orderNumber));
+            OrderEntity orderEntity = InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber));
             
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
             
