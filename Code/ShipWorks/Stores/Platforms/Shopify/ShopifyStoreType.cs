@@ -203,14 +203,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Create menu commands for upload shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(uploadCommand);
-
-            return commands;
+            return new[]
+            {
+                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+            };
         }
 
         /// <summary>

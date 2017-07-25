@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
@@ -30,7 +29,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        /// <param name="downloaderFactory"></param>
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
         public WalmartStoreType(StoreEntity store,
             Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
@@ -94,8 +92,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Create the online update instance commands for Walmart
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() =>
-            onlineUpdateInstanceCommandsFactory(walmartStore).Create().ToList();
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            onlineUpdateInstanceCommandsFactory(walmartStore).Create();
 
         /// <summary>
         /// Generate the walmart node for the order template
@@ -128,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <returns></returns>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            List<FilterEntity> filters = new List<FilterEntity>
+            return new List<FilterEntity>
             {
                 CreateItemStatusFilter("Ready To Ship", "Acknowledged"),
                 CreateItemStatusFilter("Shipped", "Shipped"),
@@ -137,8 +135,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 CreatePartialItemStatusFilter("Partially Shipped", "Shipped"),
                 CreatePartialItemStatusFilter("Partially Cancelled", "Cancelled")
             };
-
-            return filters;
         }
 
         /// <summary>

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
 using System.IO;
-using System.Xml;
-using ShipWorks.Shipping;
-using ShipWorks.ApplicationCore.Logging;
-using System.Text.RegularExpressions;
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Miva
 {
@@ -45,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         {
             // Don't validate our miva custom stuff that's not in the schema
             if (action == "getstores" ||
-                action == "getnextorderid" )
+                action == "getnextorderid")
             {
                 return;
             }
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Miva
             if (action == "getstatuscodes")
             {
                 // add online status strategy
-                request.Variables.Add("statusSource", GetOnlineStatusSource((MivaOnlineUpdateStrategy)store.OnlineUpdateStrategy));
+                request.Variables.Add("statusSource", GetOnlineStatusSource((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy));
             }
 
             // If the request contains the "start" parameter that's a date
@@ -135,10 +136,10 @@ namespace ShipWorks.Stores.Platforms.Miva
             foreach (XPathNavigator node in response.XPath.Select("//Store"))
             {
                 MivaStoreHeader header = new MivaStoreHeader
-                    {
-                        Code = XPathUtility.Evaluate(node, "Code", ""),
-                        Name = XPathUtility.Evaluate(node, "Name", "")
-                    };
+                {
+                    Code = XPathUtility.Evaluate(node, "Code", ""),
+                    Name = XPathUtility.Evaluate(node, "Name", "")
+                };
 
                 stores.Add(header);
             }
@@ -170,12 +171,12 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Send the order status update
         /// </summary>
-        public override void UpdateOrderStatus(OrderEntity order, object code, string comment)
+        public override Task UpdateOrderStatus(OrderEntity order, object code, string comment)
         {
             if (order.IsManual)
             {
                 log.InfoFormat("Not updating order {0} online since its manual.", order.OrderID);
-                return;
+                return Task.CompletedTask;
             }
 
             switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
@@ -192,6 +193,8 @@ namespace ShipWorks.Stores.Platforms.Miva
                         break;
                     }
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -228,11 +231,11 @@ namespace ShipWorks.Stores.Platforms.Miva
                 case MivaOnlineUpdateStrategy.MivaNative:
                     {
                         HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                        GenericModuleStoreType type = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+                        GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(store);
 
                         request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
                         request.Variables.Add("tracking", shipment.TrackingNumber);
-                        request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType));
+                        request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
                         request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
 
                         GenericModuleResponse response = ProcessRequest(request, "updateshipment");
@@ -243,7 +246,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                         // set status to what was returned
                         order.OnlineStatusCode = newStatus;
 
-                        GenericModuleStoreType genericStoreType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+                        GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
                         order.OnlineStatus = genericStoreType.CreateStatusCodeProvider().GetCodeName(newStatus);
 
                         // save the order

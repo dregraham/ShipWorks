@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Interaction;
-using System.Collections.ObjectModel;
-using ShipWorks.Data.Utility;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 using Interapptive.Shared;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Grid.Paging;
+using Interapptive.Shared.Collections;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.UI;
-using ShipWorks.Data;
 
 namespace ShipWorks.Stores
 {
@@ -29,8 +24,8 @@ namespace ShipWorks.Stores
         {
             public StoreTypeCode StoreTypeCode;
 
-            public List<MenuCommand> CommonCommands;
-            public Dictionary<StoreType, List<MenuCommand>> InstanceCommands;
+            public IEnumerable<IMenuCommand> CommonCommands;
+            public Dictionary<StoreType, IEnumerable<IMenuCommand>> InstanceCommands;
         }
 
         #endregion
@@ -39,7 +34,7 @@ namespace ShipWorks.Stores
         Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands = new Dictionary<StoreTypeCode, OnlineUpdateCommandSet>();
 
         // This is the actual list of commands that was generated in the order and structure that they are displayed in the ui
-        List<MenuCommand> commands = new List<MenuCommand>();
+        List<IMenuCommand> commands = new List<IMenuCommand>();
 
         /// <summary>
         /// Constructor
@@ -53,12 +48,12 @@ namespace ShipWorks.Stores
         /// Creates a new set of Online Update commands based on the current stores.  The new set is saved and tracked for update state operations.
         /// Any previously created set is discarded.
         /// </summary>
-        public List<MenuCommand> CreateOnlineUpdateCommands(IEnumerable<long> selected)
+        public List<IMenuCommand> CreateOnlineUpdateCommands(IEnumerable<long> selected)
         {
             storeTypeCommands = CreateCommandsByStoreType(selected);
             commands = BuildCommandLayout(storeTypeCommands);
 
-            if (commands.Count == 0)
+            if (commands.None())
             {
                 commands.Add(new MenuCommand("The selected orders cannot be updated online.") { Enabled = false });
             }
@@ -71,7 +66,7 @@ namespace ShipWorks.Stores
         /// match the store type supported by the command.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public void ExecuteCommandAsync(MenuCommand command, Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
+        public async Task ExecuteCommandAsync(IMenuCommand command, Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
             OnlineUpdateCommandSet commandSet = FindCommandSet(command);
 
@@ -108,7 +103,7 @@ namespace ShipWorks.Stores
             bool permissionWarning = false;
 
             // If it's per type, then two stores of the same type could be selected and still have relevant keys - but one of them may not have permissions.
-            // We have to futher filter out by permission.
+            // We have to further filter out by permission.
             if (commandSet.CommonCommands.Contains(command))
             {
                 int countBefore = relevantKeys.Count;
@@ -120,7 +115,7 @@ namespace ShipWorks.Stores
             }
 
             // Kick off the processing
-            command.ExecuteAsync(owner, relevantKeys, (sender, e) =>
+            await command.ExecuteAsync(owner, relevantKeys, (sender, e) =>
                 {
                     MenuCommandCompleteEventArgs finalArgs = e;
 
@@ -139,17 +134,17 @@ namespace ShipWorks.Stores
                     }
 
                     callback(sender, finalArgs);
-                });
+                }).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Find the command set that holds the given command.  Throws an exception if not found.
         /// </summary>
-        private OnlineUpdateCommandSet FindCommandSet(MenuCommand command)
+        private OnlineUpdateCommandSet FindCommandSet(IMenuCommand command)
         {
             foreach (OnlineUpdateCommandSet commandSet in storeTypeCommands.Values)
             {
-                foreach (MenuCommand potential in commandSet.CommonCommands)
+                foreach (IMenuCommand potential in commandSet.CommonCommands)
                 {
                     if (potential == command)
                     {
@@ -158,10 +153,10 @@ namespace ShipWorks.Stores
                 }
 
                 // Check the instance commands
-                foreach (KeyValuePair<StoreType, List<MenuCommand>> storeCommands in commandSet.InstanceCommands)
+                foreach (var storeCommands in commandSet.InstanceCommands)
                 {
                     // Enable \ disable the commands depending on an instance of this store is in the selection
-                    foreach (MenuCommand potential in storeCommands.Value)
+                    foreach (IMenuCommand potential in storeCommands.Value)
                     {
                         if (potential == command)
                         {
@@ -177,7 +172,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create command sets broken up by store type
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
+        [NDependIgnoreLongMethod]
         private static Dictionary<StoreTypeCode, OnlineUpdateCommandSet> CreateCommandsByStoreType(IEnumerable<long> selected)
         {
             Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands = new Dictionary<StoreTypeCode, OnlineUpdateCommandSet>();
@@ -204,14 +199,14 @@ namespace ShipWorks.Stores
                 commands.CommonCommands = storeType.CreateOnlineUpdateCommonCommands();
 
                 // Map store names to their instance commands
-                Dictionary<StoreType, List<MenuCommand>> instanceCommands = new Dictionary<StoreType, List<MenuCommand>>();
+                Dictionary<StoreType, IEnumerable<IMenuCommand>> instanceCommands = new Dictionary<StoreType, IEnumerable<IMenuCommand>>();
 
                 // Create all the instance commands
                 foreach (StoreType storeInstance in instances)
                 {
-                    List<MenuCommand> storeCommands = storeInstance.CreateOnlineUpdateInstanceCommands();
+                    IEnumerable<IMenuCommand> storeCommands = storeInstance.CreateOnlineUpdateInstanceCommands();
 
-                    if (storeCommands.Count > 0)
+                    if (storeCommands.Any())
                     {
                         instanceCommands[storeInstance] = storeCommands;
                     }
@@ -221,7 +216,7 @@ namespace ShipWorks.Stores
                 commands.InstanceCommands = instanceCommands;
 
                 // Add to the map if there are any
-                if (commands.CommonCommands.Count > 0 || instanceCommands.Count > 0)
+                if (commands.CommonCommands.Any() || instanceCommands.Any())
                 {
                     storeTypeCommands[storeType.TypeCode] = commands;
                 }
@@ -233,22 +228,22 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Generate the command layout from the list of available commands provided by the store types
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
-        private List<MenuCommand> BuildCommandLayout(Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands)
+        [NDependIgnoreLongMethod]
+        private List<IMenuCommand> BuildCommandLayout(Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeSpecificCommands)
         {
-            // This doesnt actually get displayed or returned.  Its just used as a top-level container while building the commands.
+            // This doesn't actually get displayed or returned.  Its just used as a top-level container while building the commands.
             MenuCommand root = new MenuCommand("Root");
 
-            // Indiciates if the commands from each storetype should be put under a sub-menu of that type code.
+            // Indicates if the commands from each storetype should be put under a sub-menu of that type code.
             // First of all, there has to be more than one store type that has commands.
             // Secondly, there has to be at least one set of "Common" commands.  If they are all instance commands,
             // then they'll just all be listed under their store instance name.
-            bool useStoreTypeRoot = storeTypeCommands.Count > 1 && storeTypeCommands.Values.Sum(c => c.CommonCommands.Count) > 0;
+            bool useStoreTypeRoot = storeSpecificCommands.Count > 1 && storeSpecificCommands.Values.SelectMany(c => c.CommonCommands).Any();
 
             // Add in all the commands
-            foreach (KeyValuePair<StoreTypeCode, OnlineUpdateCommandSet> entry in storeTypeCommands)
+            foreach (KeyValuePair<StoreTypeCode, OnlineUpdateCommandSet> entry in storeSpecificCommands)
             {
-                OnlineUpdateCommandSet commands = entry.Value;
+                OnlineUpdateCommandSet currentCommands = entry.Value;
 
                 // Determine the parent of the commands
                 MenuCommand parent;
@@ -264,28 +259,28 @@ namespace ShipWorks.Stores
                 }
 
                 // Add the common commands
-                if (commands.CommonCommands.Count > 0)
+                if (currentCommands.CommonCommands.Any())
                 {
-                    parent.ChildCommands.AddRange(commands.CommonCommands);
+                    parent.ChildCommands.AddRange(currentCommands.CommonCommands);
                     parent.ChildCommands[parent.ChildCommands.Count - 1].BreakAfter = true;
                 }
 
                 bool instanceInSubMenu = false;
 
                 // If there is more than one store instance, the instance commands go in there own submenu
-                if (commands.InstanceCommands.Count > 1)
+                if (currentCommands.InstanceCommands.Count > 1)
                 {
                     instanceInSubMenu = true;
                 }
 
-                // If not divided into store type, then we have to look at the total number of instance commands acccross storetypes
-                if (!useStoreTypeRoot && storeTypeCommands.Values.Count(c => c.InstanceCommands.Count > 0) > 1)
+                // If not divided into store type, then we have to look at the total number of instance commands across storetypes
+                if (!useStoreTypeRoot && storeSpecificCommands.Values.Count(c => c.InstanceCommands.Count > 0) > 1)
                 {
                     instanceInSubMenu = true;
                 }
 
                 // Add the instance commands
-                foreach (KeyValuePair<StoreType, List<MenuCommand>> instanceEntry in commands.InstanceCommands)
+                foreach (var instanceEntry in currentCommands.InstanceCommands)
                 {
                     MenuCommand instanceRoot;
 

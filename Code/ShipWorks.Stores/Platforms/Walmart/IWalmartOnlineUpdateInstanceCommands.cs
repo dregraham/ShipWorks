@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates the online update instance commands.
         /// </summary>
-        IEnumerable<MenuCommand> Create();
+        IEnumerable<IMenuCommand> Create();
     }
 }

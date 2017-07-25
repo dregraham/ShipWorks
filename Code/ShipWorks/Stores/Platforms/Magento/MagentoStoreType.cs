@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Create the menu commands for updating status
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 "ShipWorks is executing an action on the order.",
                 "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             MagentoUploadCommand action;
             string comments = "";
             if ((MagentoUploadCommand) command.Tag == MagentoUploadCommand.Comments)

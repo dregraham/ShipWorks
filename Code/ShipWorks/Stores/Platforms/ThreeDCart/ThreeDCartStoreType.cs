@@ -241,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
             bool isOne = false;
@@ -346,13 +346,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                "ShipWorks is setting the online status.",
                "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
             };
+
             executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
         }
 

@@ -190,7 +190,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Create the menu commands for updating order status
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -271,7 +271,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         {
             NetworkSolutionsStatusCodeProvider codeProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity) Store);
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             long statusCode = (long) command.Tag;
             string comments = "";
 

@@ -265,7 +265,9 @@
     <Compile Include="System.ComponentModel.DataAnnotations\DateCompareType.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\EmailAddressAttribute.cs" />
     <Compile Include="Threading\AsyncSemaphore.cs" />
+    <Compile Include="Threading\DetailProgressUpdater.cs" />
     <Compile Include="Threading\IProgressReporter.cs" />
+    <Compile Include="Threading\IProgressUpdater.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Net\ApiLogEncryption.cs" />
     <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Threading\ISingleItemProgressDialog.cs" />
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="Threading\ProgressUpdater.cs" />
     <Compile Include="UI\FileDialogFactory.cs" />
     <Compile Include="UI\IFileDialogFactory.cs" />
     <Compile Include="UI\IForm.cs" />

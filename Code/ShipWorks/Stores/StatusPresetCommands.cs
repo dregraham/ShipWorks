@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.UI;
-using System.Windows.Forms;
 using ShipWorks.Common.Threading;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.ComponentModel;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Grid;
 
 namespace ShipWorks.Stores
 {
@@ -236,7 +226,7 @@ namespace ShipWorks.Stores
                 return;
             }
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             StatusPresetEntity preset = (StatusPresetEntity) command.Tag;
 
             OrderEntity prototype = new OrderEntity(orderID) { IsNew = false };
@@ -262,7 +252,7 @@ namespace ShipWorks.Stores
                 return;
             }
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             StatusPresetEntity preset = (StatusPresetEntity) command.Tag;
 
             OrderItemEntity prototype = new OrderItemEntity(orderItemID) { IsNew = false };

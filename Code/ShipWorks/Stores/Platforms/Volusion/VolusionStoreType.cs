@@ -166,9 +166,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Create online update commands
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
-            return new List<MenuCommand>
+            return new List<IMenuCommand>
             {
                 new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails))
             };

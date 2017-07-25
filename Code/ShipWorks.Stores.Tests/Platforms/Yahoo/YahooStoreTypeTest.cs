@@ -132,9 +132,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser()
         {
-            List<MenuCommand> commands = emailTestObject.CreateOnlineUpdateInstanceCommands();
+            IEnumerable<IMenuCommand> commands = emailTestObject.CreateOnlineUpdateInstanceCommands();
 
-            Assert.Equal(1, commands.Count);
+            Assert.Equal(1, commands.Count());
 
             Assert.Equal("Upload Shipment Details", commands.FirstOrDefault()?.Text);
         }

@@ -157,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Create the menu commands for updating order status
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -239,13 +239,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                "ShipWorks is setting the online status.",
                "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
             };
+
             executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
         }
 

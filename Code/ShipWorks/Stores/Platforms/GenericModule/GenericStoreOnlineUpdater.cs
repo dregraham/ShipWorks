@@ -1,9 +1,11 @@
-﻿using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Data.Connection;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.Enums;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -13,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// </summary>
     public class GenericStoreOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreOnlineUpdater));
 
         // the status codes the store supports
@@ -27,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Status Codes for the store
         /// </summary>
-        protected GenericStoreStatusCodeProvider StatusCodes => 
+        protected GenericStoreStatusCodeProvider StatusCodes =>
             statusCodeProvider ?? (statusCodeProvider = GenericStoreType.CreateStatusCodeProvider());
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             this.Store = store;
 
             // get the implementing storetype
-            GenericStoreType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+            GenericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
         }
 
         /// <summary>
@@ -89,14 +91,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Update the online status of the order with id orderID.
         /// </summary>
-        public void UpdateOrderStatus(long orderID, object code, string comment)
+        public async Task UpdateOrderStatus(long orderID, object code, string comment)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, code, comment, unitOfWork);
+            await UpdateOrderStatus(orderID, code, comment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                unitOfWork.Commit(adapter);
+                await unitOfWork.CommitAsync(adapter).ConfigureAwait(false);
                 adapter.Commit();
             }
         }
@@ -104,35 +106,33 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Update the online status of the order with id orderID.
         /// </summary>
-        public void UpdateOrderStatus(long orderID, object code, string comment, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, object code, string comment, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
-            if (order != null)
-            {
-                if (!order.IsManual)
-                {
-                    string processedComment = (comment == null) ? "" : TemplateTokenProcessor.ProcessTokens(comment, orderID);
-
-                    GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
-                    webClient.UpdateOrderStatus(order, code, processedComment);
-
-                    // Update the database to match, status code display
-                    OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
-                    basePrototype.OnlineStatusCode = code;
-                    basePrototype.OnlineStatus = StatusCodes.GetCodeName(code);
-
-                    unitOfWork.AddForSave(basePrototype);
-                }
-                else
-                {
-                    log.InfoFormat("Not uploading order status since order {0} is manual.", order.OrderID);
-                }
-            }
-            else
+            if (order == null)
             {
                 // log it and continue
                 log.WarnFormat("Unable to update online status for order {0}: cannot find online identifier.", orderID);
+                return;
             }
+
+            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            {
+                log.InfoFormat("Not uploading order status since order {0} is manual.", order.OrderID);
+                return;
+            }
+
+            string processedComment = (comment == null) ? "" : TemplateTokenProcessor.ProcessTokens(comment, orderID);
+
+            GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
+            await webClient.UpdateOrderStatus(order, code, processedComment).ConfigureAwait(false);
+
+            // Update the database to match, status code display
+            OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
+            basePrototype.OnlineStatusCode = code;
+            basePrototype.OnlineStatus = StatusCodes.GetCodeName(code);
+
+            unitOfWork.AddForSave(basePrototype);
         }
     }
 }

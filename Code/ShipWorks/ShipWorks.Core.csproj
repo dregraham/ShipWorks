@@ -723,6 +723,8 @@
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
+    <Compile Include="ApplicationCore\Interaction\AsyncMenuCommand.cs" />
+    <Compile Include="ApplicationCore\Interaction\IMenuCommand.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
@@ -958,7 +960,6 @@
     <Compile Include="Common\IValidator.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\CancellationTokenProgressProvider.cs" />
-    <Compile Include="Common\Threading\ProgressUpdater.cs" />
     <Compile Include="Common\Threading\SingleItemProgressDialog.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />

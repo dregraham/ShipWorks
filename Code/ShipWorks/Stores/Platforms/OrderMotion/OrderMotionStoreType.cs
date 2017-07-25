@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Create online update commands
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
             return new List<MenuCommand>
             {

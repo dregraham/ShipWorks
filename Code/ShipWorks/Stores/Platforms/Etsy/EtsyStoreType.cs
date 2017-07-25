@@ -74,10 +74,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order", "orders required");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             return new OrderNumberIdentifier(order.OrderNumber);
         }
@@ -146,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Create menu commands for upload shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 

@@ -183,14 +183,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
         /// <returns></returns>
-        public override List<ApplicationCore.Interaction.MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand uploadShipmentCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
-            commands.Add(uploadShipmentCommand);
-
-            return commands;
+            return new[]
+            {
+                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails))
+            };
         }
 
         /// <summary>

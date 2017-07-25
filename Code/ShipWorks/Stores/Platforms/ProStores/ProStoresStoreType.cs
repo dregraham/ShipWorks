@@ -242,14 +242,12 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create menu commands for upload shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
+            return new[]
+            {
+                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+            };
         }
 
         /// <summary>

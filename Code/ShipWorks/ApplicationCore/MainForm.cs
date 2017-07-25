@@ -1358,7 +1358,7 @@ namespace ShipWorks
         /// <summary>
         /// Apply the given set of MenuCommands to the given menuitem and ribbon popup
         /// </summary>
-        private void ApplyMenuCommands(List<MenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
+        private void ApplyMenuCommands(IEnumerable<IMenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
         {
             menuItem.DropDownItems.Clear();
             ribbonPopup.Items.Clear();
@@ -1509,25 +1509,26 @@ namespace ShipWorks
         /// <summary>
         /// Execute an invoked menu command
         /// </summary>
-        void OnExecuteMenuCommand(object sender, EventArgs e)
+        private async void OnExecuteMenuCommand(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            command.ExecuteAsync(this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted);
+            await command.ExecuteAsync(this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Execute an invoked update online command
         /// </summary>
-        void OnExecuteUpdateOnlineCommand(object sender, EventArgs e)
+        private async void OnExecuteUpdateOnlineCommand(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            onlineUpdateCommandProvider.ExecuteCommandAsync(command, this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted);
+            await onlineUpdateCommandProvider.ExecuteCommandAsync(command, this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1577,7 +1578,7 @@ namespace ShipWorks
         private void UpdateOnlineUpdateCommands()
         {
             // Update the update online options
-            List<MenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys);
+            IEnumerable<IMenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys);
 
             // Update the ui to display the commands
             ApplyMenuCommands(updateOnlineCommands, contextOrderOnlineUpdate, popupUpdateOnline, OnExecuteUpdateOnlineCommand);
@@ -1842,7 +1843,7 @@ namespace ShipWorks
                 // Open the database configuration window
                 configurationComplete = OpenDatabaseConfiguration();
 
-                // Now regardless of if that was succesful, see if it altered the database.  Some things can't be rolled back even if the user canceled.
+                // Now regardless of if that was successful, see if it altered the database.  Some things can't be rolled back even if the user canceled.
                 databaseChanged = scope.DatabaseChanged;
 
                 // If the configuration is complete, or the database changed in any way...
@@ -2602,7 +2603,7 @@ namespace ShipWorks
         {
             if (InvokeRequired)
             {
-                // This does need to be Invoke and not BeginInvoke.  So that the downloader doesnt think we are done early, and we're messing
+                // This does need to be Invoke and not BeginInvoke.  So that the downloader doesn't think we are done early, and we're messing
                 // with the post-download UI, and another download starts.
                 Invoke(new DownloadCompleteEventHandler(OnDownloadComplete), sender, e);
                 return;
@@ -3792,7 +3793,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The pring preview window is now visible
+        /// The print preview window is now visible
         /// </summary>
         private void OnPrintPreviewShown(object sender, PrintPreviewShownEventArgs e)
         {
@@ -3802,7 +3803,7 @@ namespace ShipWorks
                 return;
             }
 
-            // Once we are on the UI thread, close the progres window
+            // Once we are on the UI thread, close the progress window
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) e.UserState;
             delayer.NotifyComplete();
 
@@ -4043,7 +4044,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Initiates the save writer indiciating if the files should be opened after they are saved.
+        /// Initiates the save writer indicating if the files should be opened after they are saved.
         /// </summary>
         private void StartSaveWriter(TemplateEntity template, bool openAfterSave)
         {
@@ -4192,7 +4193,7 @@ namespace ShipWorks
                     {
                         Process.Start(file);
 
-                        // This waiting is b\c with certain apps - noteably IE - if you open stuff to fast it misses it.
+                        // This waiting is b\c with certain apps - notably IE - if you open stuff too fast it misses it.
                         Thread.Sleep(500);
                     }
 
@@ -4271,7 +4272,7 @@ namespace ShipWorks
         #region Context Menu Handlers
 
         /// <summary>
-        /// Quck Print menu is being opened
+        /// Quick Print menu is being opened
         /// </summary>
         private void OnQuickPrintMenuOpening(object sender, EventArgs e)
         {

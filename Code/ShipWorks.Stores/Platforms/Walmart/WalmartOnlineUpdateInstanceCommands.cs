@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates the online update instance commands.
         /// </summary>
-        public IEnumerable<MenuCommand> Create()
+        public IEnumerable<IMenuCommand> Create()
         {
             if (store == null)
             {

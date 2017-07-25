@@ -174,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Online Update commands for Infopia
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -253,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 "ShipWorks is setting the online status.",
                 "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             string status = command.Tag as string;
 
             executor.ExecuteCompleted += (o, e) =>
@@ -261,6 +261,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 context.Complete(e.Issues, MenuCommandResult.Error);
 
             };
+
             executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, status);
         }
 

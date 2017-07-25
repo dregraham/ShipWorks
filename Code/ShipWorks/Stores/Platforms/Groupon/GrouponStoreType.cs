@@ -71,14 +71,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Create menu commands for upload shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
+            return new[]
+            {
+                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+            };
         }
 
         /// <summary>

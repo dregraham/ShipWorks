@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using ComponentFactory.Krypton.Toolkit;
@@ -204,6 +206,8 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Retry selected actions
         /// </summary>
+        [SuppressMessage("Interapptive", "SW0001: Threads should be wrapped in an ExceptionMonitor",
+            Justification = "We are calling WrapThread, but using the Async version")]
         private void OnRetry(object sender, EventArgs e)
         {
             ProgressProvider progressProvider = new ProgressProvider();
@@ -215,7 +219,7 @@ namespace ShipWorks.Actions
 
             ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
 
-            Thread thread = new Thread(ExceptionMonitor.WrapThread(BackgroundRetryActions, "retrying actions"));
+            Thread thread = new Thread(ExceptionMonitor.WrapAsyncThread(BackgroundRetryActions, "retrying actions"));
             thread.Name = "Preview Processor";
             thread.Start(new object[] { delayer, progressProvider, entityGrid.Selection.OrderedKeys });
 
@@ -226,7 +230,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Background thread for retrying actions
         /// </summary>
-        private void BackgroundRetryActions(object state)
+        private async Task BackgroundRetryActions(object state)
         {
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) ((object[]) state)[0];
             ProgressProvider progressProvider = (ProgressProvider) ((object[]) state)[1];
@@ -285,7 +289,7 @@ namespace ShipWorks.Actions
                     };
 
                 // Start processing
-                processor.ProcessQueues();
+                await processor.ProcessQueues().ConfigureAwait(false);
             }
 
             // Progress complete

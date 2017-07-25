@@ -609,10 +609,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the menu commands for updating the ebay order online
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
-
-            List<MenuCommand> commands = new List<MenuCommand>()
+            return new List<IMenuCommand>()
             {
                 new MenuCommand("Send Message...", OnSendMessage),
                 new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
@@ -629,8 +628,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
                 new MenuCommand("Ship to Buyer", OnShipToBuyer)
             };
-
-            return commands;
         }
 
         /// <summary>
@@ -691,7 +688,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             catch (EbayException ex)
             {
-                log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId, ex.Message);
+                log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId);
                 issueAdder.Add(orderId, ex);
             }
         }
@@ -754,7 +751,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             catch (EbayException ex)
             {
-                log.ErrorFormat("Error designating order {0} to be shipped to buyer: ", orderId, ex.Message);
+                log.ErrorFormat("Error designating order {0} to be shipped to buyer: ", orderId);
                 issueAdder.Add(orderId, ex);
             }
         }

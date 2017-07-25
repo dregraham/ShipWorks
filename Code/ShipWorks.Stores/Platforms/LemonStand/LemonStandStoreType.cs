@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                "ShipWorks is setting the online status.",
                "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>

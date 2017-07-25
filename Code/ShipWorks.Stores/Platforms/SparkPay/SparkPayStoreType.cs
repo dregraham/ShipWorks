@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Create menu commands for uploading shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             if (sparkPayStore == null)
             {

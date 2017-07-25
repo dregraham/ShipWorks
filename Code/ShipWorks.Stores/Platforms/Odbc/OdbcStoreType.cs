@@ -125,17 +125,17 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates the menu commands for the store
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
             if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
-                return new List<MenuCommand>();
+                return Enumerable.Empty<MenuCommand>();
             }
 
-            return new List<MenuCommand>(new[] { uploadMenuCommandFactory(odbcStore) });
+            return new[] { uploadMenuCommandFactory(odbcStore) };
         }
 
         /// <summary>

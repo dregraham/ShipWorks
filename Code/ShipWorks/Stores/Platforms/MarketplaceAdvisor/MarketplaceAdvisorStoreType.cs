@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// a little easier to do them as instance commands, and since there will likely only be one MW account per ShipWorks user,
         /// this is fine.
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> menuCommands = new List<MenuCommand>();
 

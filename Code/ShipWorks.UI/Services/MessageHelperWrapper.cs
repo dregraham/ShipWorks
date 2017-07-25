@@ -96,7 +96,7 @@ namespace ShipWorks.UI.Services
             };
 
             return schedulerProvider.WindowsFormsEventLoop
-                .Schedule(progressDialog, timeSpan, OpenProgressDialog);
+                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
         }
 
         /// <summary>
@@ -162,9 +162,10 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Close the given progress dialog
         /// </summary>
-        private IDisposable OpenProgressDialog(IScheduler scheduler, ProgressDlg dialog)
+        private IDisposable OpenProgressDialog(IScheduler scheduler, Tuple<ProgressDlg, Control> state)
         {
-            Control owner = ownerFactory();
+            ProgressDlg dialog = state.Item1;
+            Control owner = state.Item2;
 
             dialog.Show(owner);
 

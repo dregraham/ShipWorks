@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -89,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 if (currentSchemaVersion.Complete() >= new Version("1.1.0.0").Complete())
                 {
                     //Grab the end of the URL, everything after the last "/"
-                    string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/") + 1);
+                    string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
                     //Check to see if the end of the module url has a "."
                     if (moduleUrlEnd.Contains("."))
@@ -260,7 +266,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                         throw new GenericStoreException("The online module has been updated in an unsupported way: the online status dataType cannot be changed.");
                     }
                 }
-                // If it no longer supports it, clear out the old status valuds
+                // If it no longer supports it, clear out the old status values
                 else
                 {
                     store.ModuleStatusCodes = "<Root />";
@@ -288,10 +294,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         protected virtual GenericModuleCapabilities ReadModuleCapabilities(GenericModuleResponse webResponse)
         {
-            if (webResponse == null)
-            {
-                throw new ArgumentNullException("webResponse");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webResponse, nameof(webResponse));
 
             GenericModuleCapabilities caps = new GenericModuleCapabilities();
             caps.ReadModuleResponse(webResponse.XPath);
@@ -304,10 +307,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         protected virtual GenericModuleCommunications ReadModuleCommunications(GenericModuleResponse webResponse)
         {
-            if (webResponse == null)
-            {
-                throw new ArgumentNullException("webResponse");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webResponse, nameof(webResponse));
 
             GenericModuleCommunications communications = new GenericModuleCommunications();
             communications.ReadModuleResponse(webResponse.XPath);
@@ -355,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Create the control used to configurd the actions for online update after shipping
+        /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
@@ -411,7 +411,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            // if this isn't pointed to a field, online status isn't suported
+            // if this isn't pointed to a field, online status isn't supported
             if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.None)
             {
                 return base.GetOnlineStatusChoices();
@@ -475,11 +475,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Create commands specific to this store instance
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport) ((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport;
 
-            List<MenuCommand> commands = new List<MenuCommand>();
+            List<IMenuCommand> commands = new List<IMenuCommand>();
 
             // See if status is supported at all
             if (statusSupport != GenericOnlineStatusSupport.None &&
@@ -490,7 +490,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 // Add each status option
                 foreach (object code in statusCodeProvider.CodeValues)
                 {
-                    MenuCommand command = new MenuCommand(statusCodeProvider.GetCodeName(code), new MenuCommandExecutor(OnSetOnlineStatus));
+                    IMenuCommand command = new AsyncMenuCommand(statusCodeProvider.GetCodeName(code), OnSetOnlineStatus);
                     command.Tag = code;
 
                     commands.Add(command);
@@ -503,7 +503,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     // Can only do custom if there are any in the first place
                     if (statusCodeProvider.CodeValues.Count > 0)
                     {
-                        MenuCommand withComment = new MenuCommand("Set with comment...", new MenuCommandExecutor(OnSetOnlineStatus));
+                        IMenuCommand withComment = new AsyncMenuCommand("Set with comment...", OnSetOnlineStatus);
                         withComment.Tag = null;
                         withComment.BreakBefore = true;
 
@@ -521,7 +521,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                 uploadCommand.BreakBefore = true;
             }
-
 
             return commands;
         }
@@ -576,14 +575,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Set the online status for the selected orders
         /// </summary>
-        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
+        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context)
         {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Set Status",
-                "ShipWorks is setting the online status.",
-                "Updating order {0} of {1}...");
-
-            MenuCommand command = context.MenuCommand;
+            IMenuCommand command = context.MenuCommand;
             object code = null;
             string comment = "";
             if (command.Tag == null)
@@ -608,38 +602,49 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 code = command.Tag;
             }
 
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
+            var results = new List<GenericResult<long>>();
 
-            executor.ExecuteAsync(
-                SetOnlineStatusCallback,
-                context.SelectedKeys,
-                new object[] { code, comment });
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                using (var progress = messageHelper.ShowProgressDialog("Set Status", "ShipWorks is setting the online status."))
+                {
+                    var updater = progress.ToUpdater(context.SelectedKeys, "Updating order {0} of {1}...");
+
+                    foreach (var key in context.SelectedKeys)
+                    {
+                        if (progress.ProgressItem.IsCancelRequested)
+                        {
+                            context.Complete();
+                            return;
+                        }
+
+                        var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
+                        results.Add(result);
+                        updater.Update();
+                    }
+                }
+            }
+
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
         }
 
         /// <summary>
         /// The worker thread function that does the actual status setting
         /// </summary>
-        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async Task<GenericResult<long>> SetOnlineStatusCallback(long orderID, object code, string comment)
         {
-            object[] state = (object[]) userState;
-            object code = state[0];
-            string comment = (string) state[1];
-
             try
             {
                 GenericStoreOnlineUpdater updater = CreateOnlineUpdater();
-                updater.UpdateOrderStatus(orderID, code, comment);
+                await updater.UpdateOrderStatus(orderID, code, comment).ConfigureAwait(false);
+                return GenericResult.FromSuccess(orderID);
             }
             catch (GenericStoreException ex)
             {
-                // log it
                 log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
+                return GenericResult.FromError(ex, orderID);
             }
         }
 
@@ -659,9 +664,25 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        public virtual string GetOnlineOrderIdentifier(OrderEntity order)
+        public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete.ToString();
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        public virtual async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(OrderEntity order)
         {
-            return order.OrderNumberComplete.ToString();
+            QueryFactory factory = new QueryFactory();
+            var query = factory.OrderSearch
+                .Select(() => OrderSearchFields.OrderNumberComplete.ToValue<string>())
+                .Where(OrderSearchFields.OrderID == order.OrderID);
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
+                {
+                    return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                }
+            }
         }
 
         /// <summary>

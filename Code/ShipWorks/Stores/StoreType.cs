@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -26,7 +27,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores
 {
@@ -370,18 +370,14 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create any MenuCommand's that are applied to the whole StoreType - regardless of how many specific store instances there are.
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the

@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using ShipWorks.Filters;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.ApplicationCore.Interaction;
 using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Templates.Tokens;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -175,16 +168,16 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Execute an invoked menu command
         /// </summary>
-        void OnSetLocalStatus(object sender, EventArgs e)
+        private async void OnSetLocalStatus(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             if (dataMode == PanelDataMode.LiveDatabase)
             {
                 Cursor.Current = Cursors.WaitCursor;
 
                 // Execute the command
-                command.ExecuteAsync(this, entityGrid.Selection.OrderedKeys, OnAsyncSetStatusCompleted);
+                await command.ExecuteAsync(this, entityGrid.Selection.OrderedKeys, OnAsyncSetStatusCompleted).ConfigureAwait(true);
             }
             else
             {
@@ -195,7 +188,7 @@ namespace ShipWorks.Stores.Content.Panels
                     orderItem.LocalStatus = preset.StatusText;
                 }
 
-                ReloadContent();
+                await ReloadContent().ConfigureAwait(true);
 
                 if (TemplateTokenProcessor.HasTokens(preset.StatusText))
                 {
@@ -331,7 +324,7 @@ namespace ShipWorks.Stores.Content.Panels
                     localItems.Add(item);
                 }
 
-                // OK and Abort both could mean data has changed - reload as long as not cancled
+                // OK and Abort both could mean data has changed - reload as long as not canceled
                 if (result != DialogResult.Cancel)
                 {
                     ReloadContent();

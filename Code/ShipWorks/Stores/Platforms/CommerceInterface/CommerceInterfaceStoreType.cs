@@ -178,9 +178,9 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Create online update commands
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            return new List<MenuCommand>
+            return new List<IMenuCommand>
             {
                 new MenuCommand("Upload Shipment Details...", new MenuCommandExecutor(OnUploadShipmentDetails))
             };

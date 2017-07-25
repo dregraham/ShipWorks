@@ -390,15 +390,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create menu commands for uploading shipment details
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            // shipment details
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
+            return new[]
+            {
+                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+            };
         }
 
         /// <summary>

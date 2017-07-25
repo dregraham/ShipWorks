@@ -1,9 +1,9 @@
-﻿using ShipWorks.ApplicationCore.Interaction;
+﻿using System;
+using System.Collections.Generic;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// Create a list of menu commands for SparkPay
         /// </summary>
         /// <returns></returns>
-        public List<MenuCommand> Create()
+        public IEnumerable<IMenuCommand> Create()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -108,8 +108,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
                "ShipWorks is setting the online status.",
                "Updating order {0} of {1}...");
 
-            MenuCommand command = context.MenuCommand;
-            int statusCode = (int)command.Tag;
+            IMenuCommand command = context.MenuCommand;
+            int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         {
             try
             {
-                onlineUpdater.UpdateOrderStatus(orderID, (int)userState);
+                onlineUpdater.UpdateOrderStatus(orderID, (int) userState);
             }
             catch (SparkPayException ex)
             {

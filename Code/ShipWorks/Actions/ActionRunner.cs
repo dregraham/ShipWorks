@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
@@ -30,16 +32,13 @@ namespace ShipWorks.Actions
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ActionRunner));
 
-        // The queue we are gonig to run
-        ActionQueueEntity queue;
-
-        // The result of runnning.  We may know this up front depending on how LoadQueue does
+        // The result of running.  We may know this up front depending on how LoadQueue does
         ActionRunnerResult result;
 
         // The app resource lock taken during the duration of processing
         SqlEntityLock entityLock;
 
-        // The context that holds state accross multiple runners
+        // The context that holds state across multiple runners
         ActionProcessingContext context;
 
         /// <summary>
@@ -52,17 +51,14 @@ namespace ShipWorks.Actions
         /// </summary>
         public ActionRunner(long queueID, ActionProcessingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(context, nameof(context));
 
             try
             {
                 this.entityLock = new SqlEntityLock(queueID, "Run ActionQueue");
                 this.context = context;
 
-                queue = LoadQueue(queueID);
+                ActionQueue = LoadQueue(queueID);
             }
             catch (SqlAppResourceLockException)
             {
@@ -76,15 +72,8 @@ namespace ShipWorks.Actions
         /// </summary>
         public ActionRunner(ActionQueueEntity queue, ActionProcessingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            if (queue == null)
-            {
-                throw new ArgumentNullException("queue");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(context, nameof(context));
+            MethodConditions.EnsureArgumentIsNotNull(queue, nameof(queue));
 
             if (!context.FlushingPostponed)
             {
@@ -102,7 +91,7 @@ namespace ShipWorks.Actions
                 this.entityLock = new SqlEntityLock(queue.ActionQueueID, "Run ActionQueue");
                 this.context = context;
 
-                this.queue = queue;
+                ActionQueue = queue;
             }
             catch (SqlAppResourceLockException)
             {
@@ -126,10 +115,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// The queue that the runner is going to run.  Will be null if the constructor could not load it for any reason.
         /// </summary>
-        public ActionQueueEntity ActionQueue
-        {
-            get { return queue; }
-        }
+        public ActionQueueEntity ActionQueue { get; }
 
         /// <summary>
         /// Load the ActionQueue of the given ID.  If there is a problem for any reason, returns null.
@@ -230,7 +216,7 @@ namespace ShipWorks.Actions
             }
             else
             {
-                log.InfoFormat("Action queue item {0} was not ran because action {0} appears to have gone away.", queue.ActionQueueID, queue.ActionName);
+                log.InfoFormat("Action queue item {0} was not ran because action {1} appears to have gone away.", queue.ActionQueueID, queue.ActionName);
 
                 result = ActionRunnerResult.Missing;
                 return false;
@@ -301,8 +287,10 @@ namespace ShipWorks.Actions
         /// Run the steps for the configured queue
         /// </summary>
         [NDependIgnoreLongMethod]
-        public ActionRunnerResult RunQueue()
+        public async Task<ActionRunnerResult> RunQueue()
         {
+            ActionQueueEntity queue = ActionQueue;
+
             // If we couldn't load the queue there was nothing to do
             if (queue == null)
             {
@@ -324,7 +312,7 @@ namespace ShipWorks.Actions
             }
             else if (queue.ContextLock != context.ContextLockName)
             {
-                // Locked by another context, we can't do anyting with it
+                // Locked by another context, we can't do anything with it
                 queue = null;
                 return ActionRunnerResult.Locked;
             }
@@ -348,14 +336,14 @@ namespace ShipWorks.Actions
                 // If it's now incomplete (and thus ready to keep going), then run it
                 if (queue.Status == (int) ActionQueueStatus.Incomplete)
                 {
-                    RunStepsLoop();
+                    await RunStepsLoop().ConfigureAwait(false);
                 }
             }
 
             // Standard flow
             else if (queue.Status == (int) ActionQueueStatus.Incomplete)
             {
-                RunStepsLoop();
+                await RunStepsLoop().ConfigureAwait(false);
             }
 
             // If it was in error, prepare it to be reran
@@ -371,7 +359,7 @@ namespace ShipWorks.Actions
 
                 // Run the steps
                 queue.Status = (int) ActionQueueStatus.Incomplete;
-                RunStepsLoop();
+                await RunStepsLoop().ConfigureAwait(false);
 
                 // If we moved on from a suspended error, and the loop was reconfigured to flow through the unsuspending errors, run the loop again to try them.  It won't retry
                 // the one we did in the last loop, since the only way one of the nonFlowStopErrors will be active is if the previous one succeeded
@@ -379,7 +367,7 @@ namespace ShipWorks.Actions
                 {
                     // Run the steps
                     queue.Status = (int) ActionQueueStatus.Incomplete;
-                    RunStepsLoop();
+                    await RunStepsLoop().ConfigureAwait(false);
                 }
             }
 
@@ -394,8 +382,10 @@ namespace ShipWorks.Actions
         /// <summary>
         /// The primary loop for running steps out of the given queue.
         /// </summary>
-        private void RunStepsLoop()
+        private async Task RunStepsLoop()
         {
+            ActionQueueEntity queue = ActionQueue;
+
             // Keep executing steps until we are done or postponed
             while (queue.Status == (int) ActionQueueStatus.Incomplete)
             {
@@ -403,17 +393,13 @@ namespace ShipWorks.Actions
 
                 try
                 {
-                    RunStep(stepContext);
+                    await RunStep(stepContext).ConfigureAwait(false);
 
                     // If successful raise the event
                     if (stepContext.Step.StepStatus == (int) ActionQueueStepStatus.Success)
                     {
                         // Raise the event for anyone interested in knowing an action just ran
-                        EventHandler handler = ActionStepRan;
-                        if (handler != null)
-                        {
-                            handler(this, EventArgs.Empty);
-                        }
+                        ActionStepRan?.Invoke(this, EventArgs.Empty);
                     }
 
                     // If any previously postponed stuff was consumed by this last step, and the queues of the previously postponed steps were suspended, we need to stop processing this queue.
@@ -437,8 +423,10 @@ namespace ShipWorks.Actions
         /// Run the step referred to be the given context.  The input keys will be determined using the task settings and the specified objectid
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void RunStep(ActionStepContext stepContext)
+        private async Task RunStep(ActionStepContext stepContext)
         {
+            ActionQueueEntity queue = ActionQueue;
+
             ActionQueueStepEntity step = stepContext.Step;
             log.InfoFormat("ActionStep - Start ({0}) {1} - {2}", step.StepIndex, queue.ActionName, step.StepName);
 
@@ -510,10 +498,17 @@ namespace ShipWorks.Actions
                             }
                             else
                             {
-                                // First we "Run" the task outside of a transaction.  The task should not do anytihng to save to the database here, but it can feel free to
+                                // First we "Run" the task outside of a transaction.  The task should not do anything to save to the database here, but it can feel free to
                                 // do anything it needs with external resources.
                                 log.InfoFormat("ActionStep - Start - Phase1 (Run)");
-                                actionTask.Run(inputKeys, stepContext);
+                                if (actionTask.IsAsync)
+                                {
+                                    await actionTask.RunAsync(inputKeys, stepContext).ConfigureAwait(false);
+                                }
+                                else
+                                {
+                                    actionTask.Run(inputKeys, stepContext);
+                                }
                                 log.InfoFormat("ActionStep - Finished - Phase1 (Run)");
 
                                 // Start Transaction - AFTER the 'Run' phase
@@ -521,7 +516,7 @@ namespace ShipWorks.Actions
 
                                 // Here the task commits anything it needs saved.  If its a short task, then it could do its actual "Run" here too.
                                 log.InfoFormat("ActionStep - Start - Phase2 (Commit)");
-                                actionTask.Commit(inputKeys, stepContext);
+                                await actionTask.Commit(inputKeys, stepContext).ConfigureAwait(false);
                                 log.InfoFormat("ActionStep - Finished  - Phase2 (Commit)");
                             }
 
@@ -601,6 +596,8 @@ namespace ShipWorks.Actions
         [NDependIgnoreLongMethodAttribute]
         private void AdvanceQueueToNextStep()
         {
+            ActionQueueEntity queue = ActionQueue;
+
             // Get the step we are on right now
             ActionQueueStepEntity step = queue.Steps[queue.NextStep];
 
@@ -634,7 +631,7 @@ namespace ShipWorks.Actions
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                // If sucess, we don't need the queue anymore at all.
+                // If success, we don't need the queue anymore at all.
                 if (queue.Status == (int) ActionQueueStatus.Success)
                 {
                     // Done this way so the entity can still be used.
@@ -789,7 +786,7 @@ namespace ShipWorks.Actions
 
         /// <summary>
         /// Determine the input keys that should be used for the given task and instance of that task.  Returns null if and only if there was
-        /// an error determing the input and the instance has been marked and saved as in error.
+        /// an error determining the input and the instance has been marked and saved as in error.
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethod]
@@ -935,7 +932,7 @@ namespace ShipWorks.Actions
         {
             return new AuditReason(
                 AuditReasonType.Action,
-                string.Format("Action '{0}' - Step {1}: {2}", queue.ActionName, step.StepIndex + 1, step.StepName));
+                string.Format("Action '{0}' - Step {1}: {2}", ActionQueue.ActionName, step.StepIndex + 1, step.StepName));
         }
     }
 }
