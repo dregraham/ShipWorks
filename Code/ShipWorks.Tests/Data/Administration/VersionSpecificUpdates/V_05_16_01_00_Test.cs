@@ -13,11 +13,11 @@ using Xunit;
 
 namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
 {
-    public class V_05_16_00_00_Test : IDisposable
+    public class V_05_16_01_00_Test : IDisposable
     {
         readonly AutoMock mock;
 
-        public V_05_16_00_00_Test()
+        public V_05_16_01_00_Test()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -25,15 +25,15 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
         [Fact]
         public void AppliesTo_ReturnsCorrectVersion()
         {
-            var testObject = mock.Create<V_05_16_00_00>();
+            var testObject = mock.Create<V_05_16_01_00>();
             var result = testObject.AppliesTo;
-            Assert.Equal(new Version(5, 16, 0, 0), result);
+            Assert.Equal(new Version(5, 16, 1, 0), result);
         }
 
         [Fact]
         public void AlwaysRuns_ReturnsTrue()
         {
-            var testObject = mock.Create<V_05_16_00_00>();
+            var testObject = mock.Create<V_05_16_01_00>();
             var result = testObject.AlwaysRun;
             Assert.True(result);
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create());
             sqlAdapter.Setup(x => x.FetchQueryAsync(It.IsAny<EntityQuery<OdbcStoreEntity>>()))
                 .ReturnsAsync(mock.CreateMock<IEntityCollection2>().Object);
-            var testObject = mock.Create<V_05_16_00_00>();
+            var testObject = mock.Create<V_05_16_01_00>();
 
             testObject.Update();
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create())
                 .Setup(x => x.FetchQueryAsync<OdbcStoreEntity>(It.IsAny<EntityQuery<OdbcStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_16_00_00>();
+            var testObject = mock.Create<V_05_16_01_00>();
 
             testObject.Update();
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Data.Administration.VersionSpecificUpdates
                 .Mock(x => x.Create());
             sqlAdapter.Setup(x => x.FetchQueryAsync(It.IsAny<EntityQuery<OdbcStoreEntity>>()))
                 .ReturnsAsync(collection);
-            var testObject = mock.Create<V_05_16_00_00>();
+            var testObject = mock.Create<V_05_16_01_00>();
 
             testObject.Update();
 

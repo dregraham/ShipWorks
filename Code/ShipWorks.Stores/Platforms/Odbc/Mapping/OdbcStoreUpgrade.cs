@@ -29,9 +29,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             {
                 IOdbcFieldMap importMap = fieldMapFactory.CreateFieldMapFrom(odbcStore.ImportMap);
                 importMap.UpgradeToAlphanumericOrderNumbers();
+                odbcStore.ImportMap = importMap.Serialize();
 
                 IOdbcFieldMap uploadMap = fieldMapFactory.CreateFieldMapFrom(odbcStore.UploadMap);
                 uploadMap.UpgradeToAlphanumericOrderNumbers();
+                odbcStore.UploadMap = uploadMap.Serialize();
             }
         }
     }

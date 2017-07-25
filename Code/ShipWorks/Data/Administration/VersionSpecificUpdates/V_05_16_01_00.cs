@@ -17,7 +17,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     /// Updates ODBC store maps - Points order number to order number complete
     /// </summary>
     /// <seealso cref="ShipWorks.Data.Administration.VersionSpecificUpdates.IVersionSpecificUpdate" />
-    public class V_05_16_00_00 : IVersionSpecificUpdate
+    public class V_05_16_01_00 : IVersionSpecificUpdate
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IStoreUpgrade storeUpgrade;
@@ -25,7 +25,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// <summary>
         /// Constructor
         /// </summary>
-        public V_05_16_00_00(ISqlAdapterFactory sqlAdapterFactory, IStoreUpgrade storeUpgrade)
+        public V_05_16_01_00(ISqlAdapterFactory sqlAdapterFactory, IStoreUpgrade storeUpgrade)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.storeUpgrade = storeUpgrade;
@@ -34,7 +34,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// <summary>
         /// To which version does this update apply
         /// </summary>
-        public Version AppliesTo => new Version(5, 16, 0, 0);
+        public Version AppliesTo => new Version(5, 16, 1, 0);
 
         /// <summary>
         /// Always run just in case it has never been run before.
