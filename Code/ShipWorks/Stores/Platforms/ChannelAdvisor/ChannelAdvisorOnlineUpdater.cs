@@ -420,7 +420,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
 
                 // ebay orders need to upload as Global Mail
-                if (caOrder.MarketplaceNames.ToLower().Contains("ebay"))
+                if (caOrder.MarketplaceNames.IndexOf("ebay", StringComparison.OrdinalIgnoreCase) != -1)
                 {
                     return "Global Mail";
                 }
