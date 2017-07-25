@@ -72,17 +72,25 @@ namespace ShipWorks.Stores.Content
                 }
             }
 
+            await AuditResult(orders, result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Audit the result of combining the order
+        /// </summary>
+        private async Task AuditResult(IEnumerable<IOrderEntity> orders, GenericResult<long> result)
+        {
             if (result.Success)
             {
                 string reason = $"Combined from orders : {string.Join(", ", orders.Select(o => o.OrderNumberComplete))}";
-                reason = reason.Substring(0, Math.Min(reason.Length, 100));
+                reason = reason.Truncate(100);
                 AuditReason auditReason = new AuditReason(AuditReasonType.CombineOrder, reason);
 
                 await auditUtility.AuditAsync(result.Value, AuditActionType.CombineOrder, auditReason, sqlAdapterFactory.Create())
-                                  .ConfigureAwait(false);
+                    .ConfigureAwait(false);
             }
-
-            return result;
         }
 
         /// <summary>

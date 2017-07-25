@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users.Audit
 {
@@ -40,12 +44,38 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Audit the given event for the current user on the current computer.
         /// </summary>
-        public async Task AuditAsync(long entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter) =>
-                    await AuditUtility.AuditAsync(entityID, action, auditReason, sqlAdapter, userSession);
+        public async Task AuditAsync(long entityID, AuditActionType action, AuditReason auditReason, ISqlAdapter sqlAdapter)
+        {
+            AuditEntity audit = new AuditEntity
+            {
+                TransactionID = await GetTransactionID(sqlAdapter),
+                UserID = userSession.User.UserID,
+                Computer = userSession.Computer,
+                Reason = (int) auditReason.ReasonType,
+                ReasonDetail = auditReason.ReasonDetail,
+                Date = DateTime.UtcNow,
+                Action = (int) action,
+                EntityID = entityID,
+                HasEvents = false
+            };
+
+            await sqlAdapter.SaveEntityAsync(audit).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Show the detail for the given audit record
         /// </summary>
         public void ShowAuditDetail(IWin32Window owner, long auditID) => AuditUtility.ShowAuditDetail(owner, auditID);
+
+        /// <summary>
+        /// Get the latest and greatest transaction ID value
+        /// </summary>
+        private static async Task<long> GetTransactionID(ISqlAdapter sqlAdapter)
+        {
+            ParameterValue transactionIdParam = new ParameterValue(ParameterDirection.InputOutput, dbType: DbType.Int64);
+            await sqlAdapter.ExecuteSQLAsync(@"SELECT @id=dbo.GetTransactionID();", new { id = transactionIdParam, name = "NameValue" })
+                .ConfigureAwait(false);
+            return Convert.ToInt64(transactionIdParam.Value);
+        }
     }
 }
