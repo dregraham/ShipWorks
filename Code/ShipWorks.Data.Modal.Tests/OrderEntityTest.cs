@@ -42,28 +42,36 @@ namespace ShipWorks.Data.Modal.Tests
             Assert.Equal(PersonNameParseStatus.Simple, personAdapter.NameParseStatus);
         }
 
-        [Fact]
-        public void SetOrderNumber_SetsOrderNumberComplete()
+        [Theory]
+        [InlineData("1A2B3C")]
+        [InlineData("-1")]
+        [InlineData("1A-2B3C")]
+        [InlineData("Has some spaces!")]
+        public void ChangeOrderNumber_SetsOrderNumberComplete(string orderNumber)
         {
             OrderEntity order = new OrderEntity();
-            order.ChangeOrderNumber("1A2B3C");
-            Assert.Equal("1A2B3C", order.OrderNumberComplete);
+            order.ChangeOrderNumber(orderNumber);
+            Assert.Equal(orderNumber, order.OrderNumberComplete);
         }
 
-        [Fact]
-        public void SetOrderNumber_SetsOrderNumber_WhenGivenNumericValue()
+        [Theory]
+        [InlineData("12345", 12345)]
+        [InlineData("-1", -1)]
+        public void ChangeOrderNumber_SetsOrderNumber_WhenGivenNumericValue(string orderNumberToSet, long expectedOrderNumber)
         {
             OrderEntity order = new OrderEntity();
-            order.ChangeOrderNumber("12345");
+            order.ChangeOrderNumber(orderNumberToSet);
 
-            Assert.Equal(12345, order.OrderNumber);
+            Assert.Equal(expectedOrderNumber, order.OrderNumber);
         }
 
-        [Fact]
-        public void SetOrderNumber_SetsOrderNumberToMinLong_WhenGivenNonNumericValue()
+        [Theory]
+        [InlineData("1A2B3C")]
+        [InlineData("1.5")]
+        public void ChangeOrderNumber_SetsOrderNumberToMinLong_WhenGivenNonNumericValue(string orderNumber)
         {
             OrderEntity order = new OrderEntity();
-            order.ChangeOrderNumber("1A2B3C");
+            order.ChangeOrderNumber(orderNumber);
 
             Assert.Equal(long.MinValue, order.OrderNumber);
         }
