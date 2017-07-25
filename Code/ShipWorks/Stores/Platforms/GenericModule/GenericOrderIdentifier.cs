@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         public GenericOrderIdentifier(string orderNumbercomplete)
-            : base(int.MinValue)
+            : base(long.MinValue)
         {
             this.orderNumberComplete = orderNumbercomplete;
         }
