@@ -41,9 +41,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Sets the order number.
+        /// Changes the order number.
         /// </summary>
-        /// <param name="orderNumber">The order number.</param>
         public void ChangeOrderNumber(string orderNumber)
         {
             settingOrderNumberComplete = true;
