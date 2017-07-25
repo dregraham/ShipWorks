@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                 orderSql = scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderFields.SellingManagerRecord), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderSearchFields.SellingManagerRecord), context));
             }

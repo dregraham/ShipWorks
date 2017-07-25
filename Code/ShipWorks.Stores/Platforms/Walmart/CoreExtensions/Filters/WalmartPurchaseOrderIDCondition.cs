@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(WalmartOrderFields.PurchaseOrderID), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, WalmartOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, WalmartOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(WalmartOrderSearchFields.PurchaseOrderID), context));
             }

@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(SearsOrderFields.PoNumber), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, SearsOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, SearsOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(SearsOrderSearchFields.PoNumber), context));
             }

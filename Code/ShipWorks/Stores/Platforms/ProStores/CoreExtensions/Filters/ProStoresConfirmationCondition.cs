@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(ProStoresOrderFields.ConfirmationNumber), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, ProStoresOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, ProStoresOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(ProStoresOrderSearchFields.ConfirmationNumber), context));
             }

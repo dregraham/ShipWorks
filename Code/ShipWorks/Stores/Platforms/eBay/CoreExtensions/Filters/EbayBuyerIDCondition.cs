@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
             }
 
             // First we have to get from Order -> EbayOrder
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(EbayOrderSearchFields.EbayBuyerID), context));
             }
