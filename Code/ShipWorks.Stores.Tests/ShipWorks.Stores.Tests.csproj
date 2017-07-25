@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
+    <Compile Include="Content\CombineOrderAuditTest.cs" />
     <Compile Include="Content\CombineOrdersGatewayTest.cs" />
     <Compile Include="Content\CombineOrdersViewModelTest.cs" />
     <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
