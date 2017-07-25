@@ -413,6 +413,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (ShipmentTypeManager.IsDhl(postalServiceType))
             {
+                ChannelAdvisorOrderEntity caOrder = shipment.Order as ChannelAdvisorOrderEntity;
+                if (caOrder == null)
+                {
+                    throw new ChannelAdvisorException(0, "Non ChannelAdvisor order passed to ChannelAdvisor Uploader.");
+                }
+
+                // ebay orders need to upload as Global Mail
+                if (caOrder.MarketplaceNames.ToLower().Contains("ebay"))
+                {
+                    return "Global Mail";
+                }
+
                 return "DHL";
             }
 
