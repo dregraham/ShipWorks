@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
             else
             {
-                order.SetOrderNumber(orderNumberComplete);
+                order.ChangeOrderNumber(orderNumberComplete);
             }
         }
 

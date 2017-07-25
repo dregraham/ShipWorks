@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
             
-            orderEntity.SetOrderNumber(orderNumber);
+            orderEntity.ChangeOrderNumber(orderNumber);
 
             return orderEntity;
         }

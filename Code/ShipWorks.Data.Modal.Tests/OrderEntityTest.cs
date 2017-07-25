@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Modal.Tests
         public void SetOrderNumber_SetsOrderNumberComplete()
         {
             OrderEntity order = new OrderEntity();
-            order.SetOrderNumber("1A2B3C");
+            order.ChangeOrderNumber("1A2B3C");
             Assert.Equal("1A2B3C", order.OrderNumberComplete);
         }
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Data.Modal.Tests
         public void SetOrderNumber_SetsOrderNumber_WhenGivenNumericValue()
         {
             OrderEntity order = new OrderEntity();
-            order.SetOrderNumber("12345");
+            order.ChangeOrderNumber("12345");
 
             Assert.Equal(12345, order.OrderNumber);
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Data.Modal.Tests
         public void SetOrderNumber_SetsOrderNumberToMinLong_WhenGivenNonNumericValue()
         {
             OrderEntity order = new OrderEntity();
-            order.SetOrderNumber("1A2B3C");
+            order.ChangeOrderNumber("1A2B3C");
 
             Assert.Equal(long.MinValue, order.OrderNumber);
         }

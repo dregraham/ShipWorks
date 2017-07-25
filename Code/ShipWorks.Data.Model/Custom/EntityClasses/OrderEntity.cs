@@ -15,6 +15,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
         bool settingOrderNumberComplete = false;
 
+        private const long AlphaNumericOrderNumberIdentifier = long.MinValue;
+
         // We cache this so we only have to look it up once
         static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
@@ -42,7 +44,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Sets the order number.
         /// </summary>
         /// <param name="orderNumber">The order number.</param>
-        public void SetOrderNumber(string orderNumber)
+        public void ChangeOrderNumber(string orderNumber)
         {
             settingOrderNumberComplete = true;
 
@@ -51,7 +53,7 @@ namespace ShipWorks.Data.Model.EntityClasses
             settingOrderNumberComplete = false;
 
             long numericOrderNumber;
-            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : long.MinValue;
+            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : AlphaNumericOrderNumberIdentifier;
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         private void UpdateOrderNumberComplete()
         {
-            if (OrderNumber != long.MinValue)
+            if (OrderNumber != AlphaNumericOrderNumberIdentifier)
             {
                 settingOrderNumberComplete = true;
 
