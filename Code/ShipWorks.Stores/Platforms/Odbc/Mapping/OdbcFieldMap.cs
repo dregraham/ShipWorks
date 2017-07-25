@@ -81,6 +81,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             Entries
                 .Where(e => e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName)
                 .Where(e => e.Index == index)
+                .Where(e=>e.ShipWorksField.QualifiedName != "OrderEntity.OrderNumberComplete")
                 .ToList()
                 .ForEach(entry => entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value));
         }

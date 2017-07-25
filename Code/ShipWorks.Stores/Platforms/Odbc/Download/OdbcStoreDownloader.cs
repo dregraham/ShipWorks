@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             fieldMap.ApplyValues(firstRecord);
 
             // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, false).FirstOrDefault();
 
             if (odbcFieldMapEntry == null)
             {
