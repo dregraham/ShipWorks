@@ -165,11 +165,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             fieldMap.ApplyValues(firstRecord);
 
             // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, false).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
 
             if (odbcFieldMapEntry == null)
             {
                 throw new DownloadException("Order number not found in map.");
+            }
+
+            if (odbcFieldMapEntry.ShipWorksField.Value == null)
+            {
+                throw new DownloadException("Order number is empty in your ODBC source.");
             }
 
             string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();

@@ -271,6 +271,32 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Assert.Equal("joe", order.BillFirstName);
         }
 
+
+        [Fact]
+        public void CopyToEntity_DoesNotCopyToEntity_WhenFieldIsOrderNumberComplete()
+        {
+            var testObject = mock.Create<OdbcFieldMap>();
+
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns("joe");
+            shipworksField.Setup(e => e.Name).Returns("OrderNumberComplete");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+            shipworksField.Setup(e => e.QualifiedName).Returns("OrderEntity.OrderNumberComplete");
+
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+
+            testObject.AddEntry(entry.Object);
+
+            OrderEntity order = new OrderEntity { OrderNumber = 55 };
+            
+            // sanity check
+            Assert.Equal("55", order.OrderNumberComplete);
+
+            testObject.CopyToEntity(order);
+
+            Assert.Equal("55", order.OrderNumberComplete);
+        }
         [Fact]
         public void ApplyValues_DelegatesToLoadExternalField()
         {
