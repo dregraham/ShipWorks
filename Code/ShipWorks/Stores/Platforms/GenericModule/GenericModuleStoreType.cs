@@ -9,6 +9,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -602,6 +603,31 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 code = command.Tag;
             }
 
+            var results = await SetOnlineStatus(context, code, comment).ConfigureAwait(true);
+
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
+        }
+
+        /// <summary>
+        /// Set the online status of all the requested orders
+        /// </summary>
+        private async Task<IEnumerable<GenericResult<long>>> SetOnlineStatus(MenuCommandExecutionContext context, object code, string comment)
+        {
+            return await PerformOperation(context, async (key, updater) =>
+            {
+                var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
+                updater.Update();
+                return result;
+            }).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Set the online status of all the requested orders
+        /// </summary>
+        private async Task<IEnumerable<GenericResult<long>>> PerformOperation(MenuCommandExecutionContext context,
+            Func<long, IProgressUpdater, Task<GenericResult<long>>> processItem)
+        {
             var results = new List<GenericResult<long>>();
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -611,23 +637,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 {
                     var updater = progress.ToUpdater(context.SelectedKeys, "Updating order {0} of {1}...");
 
-                    foreach (var key in context.SelectedKeys)
+                    foreach (var key in context.SelectedKeys.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
                     {
-                        if (progress.ProgressItem.IsCancelRequested)
-                        {
-                            context.Complete();
-                            return;
-                        }
-
-                        var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
-                        results.Add(result);
-                        updater.Update();
+                        results.Add(await processItem(key, updater).ConfigureAwait(false));
                     }
                 }
             }
 
-            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
-            context.Complete(exceptions, MenuCommandResult.Error);
+            return results;
         }
 
         /// <summary>

@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
-using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
@@ -244,8 +243,40 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Submits a request to the online store and returns the response
         /// </summary>
-        [NDependIgnoreLongMethod]
         protected virtual GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
+        {
+            ApiLogEntry logger = PrepareRequest(request, action);
+
+            GenericModuleResponse webResponse;
+
+            // execute the request
+            try
+            {
+                using (IHttpResponseReader postResponse = request.GetResponse())
+                {
+                    string resultXml = postResponse.ReadResult(ResponseEncoding);
+
+                    webResponse = ProcessResponse(action, logger, ref resultXml);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+            }
+
+            // check for errors
+            if (webResponse.HasError)
+            {
+                throw new GenericStoreException(webResponse.ErrorDescription);
+            }
+
+            return webResponse;
+        }
+
+        /// <summary>
+        /// Prepare a web request for execution
+        /// </summary>
+        private ApiLogEntry PrepareRequest(HttpVariableRequestSubmitter request, string action)
         {
             GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
@@ -296,58 +327,44 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // log the request
             ApiLogEntry logger = new ApiLogEntry(genericStoreType.LogSource, action);
             logger.LogRequest(request);
+            return logger;
+        }
 
+        /// <summary>
+        /// Process the response of a web request
+        /// </summary>
+        private GenericModuleResponse ProcessResponse(string action, ApiLogEntry logger, ref string resultXml)
+        {
             GenericModuleResponse webResponse;
-
-            // execute the request
-            try
+            // This was added for Miva but is fine in the general case.  An XML Document cannot start with whitespace
+            if (!resultXml.StartsWith("<", StringComparison.Ordinal))
             {
-                using (IHttpResponseReader postResponse = request.GetResponse())
-                {
-                    string resultXml = postResponse.ReadResult(ResponseEncoding);
-
-                    // This was added for Miva but is fine in the general case.  An XML Document cannot start with whitespace
-                    if (!resultXml.StartsWith("<", StringComparison.Ordinal))
-                    {
-                        resultXml = resultXml.Trim();
-                    }
-
-                    // log the response
-                    logger.LogResponse(resultXml);
-
-                    // Strip invalid input characters.  Defensive against bad modules
-                    resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
-
-                    string transformedXml = TransformResponse(resultXml, action);
-
-                    // if the response was changed, log it
-                    if (!resultXml.Equals((object) transformedXml))
-                    {
-                        logger.LogResponseSupplement(transformedXml, "Transformed");
-                    }
-
-                    // Load the response from the xml
-                    webResponse = new GenericModuleResponse(transformedXml);
-
-                    // Valid the module version and schema version
-                    ValidateModuleVersion(webResponse.ModuleVersion);
-                    ValidateSchemaVersion(webResponse.SchemaVersion);
-
-                    // validate the response against the schema
-                    ValidateSchema(transformedXml, action);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+                resultXml = resultXml.Trim();
             }
 
-            // check for errors
-            if (webResponse.HasError)
+            // log the response
+            logger.LogResponse(resultXml);
+
+            // Strip invalid input characters.  Defensive against bad modules
+            resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
+
+            string transformedXml = TransformResponse(resultXml, action);
+
+            // if the response was changed, log it
+            if (!resultXml.Equals((object) transformedXml))
             {
-                throw new GenericStoreException(webResponse.ErrorDescription);
+                logger.LogResponseSupplement(transformedXml, "Transformed");
             }
 
+            // Load the response from the xml
+            webResponse = new GenericModuleResponse(transformedXml);
+
+            // Valid the module version and schema version
+            ValidateModuleVersion(webResponse.ModuleVersion);
+            ValidateSchemaVersion(webResponse.SchemaVersion);
+
+            // validate the response against the schema
+            ValidateSchema(transformedXml, action);
             return webResponse;
         }
 
