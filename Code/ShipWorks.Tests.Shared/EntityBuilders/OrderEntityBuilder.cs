@@ -38,6 +38,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public OrderEntityBuilder<TOrder> WithOrderNumber(long orderNumber)
         {
             Set(x => x.OrderNumber, orderNumber);
+            Set(x => x.OrderNumberComplete, orderNumber.ToString());
 
             return this;
         }

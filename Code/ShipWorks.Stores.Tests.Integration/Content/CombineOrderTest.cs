@@ -33,10 +33,12 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
             Modify.Order(context.Order)
+                .WithOrderNumber(1)
                 .WithShipAddress("Foo", string.Empty, "St. Louis", "MO", "63123", "US")
                 .Save();
 
             secondOrder = Create.Order(context.Store, context.Customer)
+                .WithOrderNumber(2)
                 .WithShipAddress("Bar", string.Empty, "Chicago", "IL", "12345", "US")
                 .Save();
 
@@ -130,8 +132,10 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             Assert.Equal(2, newOrder.Notes.Count());
             Assert.Equal(2, newOrder.RollupNoteCount);
 
-            Assert.Contains("Foo", newOrder.Notes.Select(x => x.Text));
-            Assert.Contains("Bar", newOrder.Notes.Select(x => x.Text));
+            Assert.Contains("From Order 1: Foo", newOrder.Notes.Select(x => x.Text));
+            Assert.Contains("From Order 2: Bar", newOrder.Notes.Select(x => x.Text));
+
+            Assert.True(newOrder.Notes.All(n => n.Source == (int) NoteSource.CombinedOrder));
         }
 
         [Fact]
