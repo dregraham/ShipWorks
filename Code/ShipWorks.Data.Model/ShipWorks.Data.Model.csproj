@@ -150,6 +150,8 @@
     <Compile Include="Custom\EntityClasses\AmazonOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />

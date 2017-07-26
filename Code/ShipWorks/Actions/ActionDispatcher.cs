@@ -29,10 +29,10 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchOrderDownloaded(long orderID, long storeID, bool initialDownload, ISqlAdapter adapter)
         {
-            List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.OrderDownloaded, storeID);
+            List<IActionEntity> actions = GetEligibleActions(ActionTriggerType.OrderDownloaded, storeID);
 
             // Now we have to check the trigger-specific properties to see if they match...
-            foreach (ActionEntity action in actions)
+            foreach (IActionEntity action in actions)
             {
                 OrderDownloadedTrigger trigger = new OrderDownloadedTrigger(action.TriggerSettings);
 
@@ -58,10 +58,10 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchDownloadFinished(long storeID, DownloadResult result, int? quantityNew)
         {
-            List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.DownloadFinished, storeID);
+            List<IActionEntity> actions = GetEligibleActions(ActionTriggerType.DownloadFinished, storeID);
 
             // Now we have to check the trigger-specific properties to see if they match...
-            foreach (ActionEntity action in actions)
+            foreach (IActionEntity action in actions)
             {
                 DownloadFinishedTrigger trigger = new DownloadFinishedTrigger(action.TriggerSettings);
 
@@ -90,10 +90,10 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchShipmentProcessed(IShipmentEntity shipment, ISqlAdapter adapter)
         {
-            List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentProcessed, shipment.Order.StoreID);
+            List<IActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentProcessed, shipment.Order.StoreID);
 
             // Now we have to check the trigger-specific properties to see if they match...
-            foreach (ActionEntity action in actions)
+            foreach (IActionEntity action in actions)
             {
                 ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger(action.TriggerSettings);
 
@@ -121,7 +121,8 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchProcessingBatchFinished(ISqlAdapter adapter, string extraTelemetryData)
         {
-            ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0).FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
+            IActionEntity action = GetEligibleActions(ActionTriggerType.None, 0)
+                .FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
 
             if (action != null)
             {
@@ -137,10 +138,10 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchShipmentVoided(ShipmentEntity shipment, SqlAdapter adapter)
         {
-            List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentVoided, shipment.Order.StoreID);
+            List<IActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentVoided, shipment.Order.StoreID);
 
             // Now we have to check the trigger-specific properties to see if they match...
-            foreach (ActionEntity action in actions)
+            foreach (IActionEntity action in actions)
             {
                 ShipmentVoidedTrigger trigger = new ShipmentVoidedTrigger(action.TriggerSettings);
 
@@ -261,13 +262,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter) =>
+        private static long DispatchAction(IActionEntity action, long? objectID, ISqlAdapter adapter) =>
             DispatchAction(action, objectID, adapter, null);
 
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter, string extraData)
+        private static long DispatchAction(IActionEntity action, long? objectID, ISqlAdapter adapter, string extraData)
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 
@@ -304,7 +305,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Determines the action queue type based on the action.
         /// </summary>
-        public static ActionQueueType DetermineActionQueueType(ActionEntity action)
+        public static ActionQueueType DetermineActionQueueType(IActionEntity action)
         {
             string internalOwner = action.InternalOwner;
 
@@ -326,42 +327,22 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Get all the actions that match have the given trigger, are enabled, and can be used by the specified store.
         /// </summary>
-        private static List<ActionEntity> GetEligibleActions(ActionTriggerType trigger, long storeID)
+        private static List<IActionEntity> GetEligibleActions(ActionTriggerType trigger, long storeID)
         {
-            List<ActionEntity> results = new List<ActionEntity>();
-
-            foreach (ActionEntity action in ActionManager.Actions)
-            {
-                // Has to be enabled
-                if (!action.Enabled)
-                {
-                    continue;
-                }
-
-                // Has to match the trigger
-                if (action.TriggerType != (int) trigger)
-                {
-                    continue;
-                }
-
-                // Has to be OK for the given store
-                if (action.StoreLimited && !action.StoreLimitedList.Contains(storeID))
-                {
-                    continue;
-                }
-
-                results.Add(action);
-            }
+            IEnumerable<IActionEntity> results = ActionManager.ActionsReadOnly
+                .Where(x => x.Enabled)
+                .Where(x => x.TriggerType == (int) trigger)
+                .Where(x => !x.StoreLimited || x.StoreLimitedList.Contains(storeID));
 
             // Order them such that any with an "InternalOwner" go first.  So any that are builtin to ShipWorks and not user created get priority
             // to run first, such as our builtin shipping printing rules, which is why this was created.
             var prioritizedResults = results
                 .Where(a => !string.IsNullOrWhiteSpace(a.InternalOwner))
-                .Concat(
-                results.Where(a => string.IsNullOrWhiteSpace(a.InternalOwner))).ToList();
+                .Concat(results.Where(a => string.IsNullOrWhiteSpace(a.InternalOwner)))
+                .ToList();
 
             // Ensure we didn't drop\duplicate any
-            if (prioritizedResults.Count != results.Count && prioritizedResults.Intersect(results).Count() != results.Count)
+            if (prioritizedResults.Count() != results.Count() && prioritizedResults.Intersect(results).Count() != results.Count())
             {
                 throw new InvalidOperationException("Somehow we changed the list while prioritizing.");
             }

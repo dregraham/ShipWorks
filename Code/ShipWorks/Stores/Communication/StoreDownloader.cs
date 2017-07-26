@@ -488,6 +488,14 @@ namespace ShipWorks.Stores.Communication
             using (DbTransaction transaction = connection.BeginTransaction())
             {
                 await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
+
+            }
+
+            // Updating order/order item statuses have to be done outside of a transaction,
+            // so do that now.
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection))
+            {
+                await UpdateOrderStatusesAfterSave(order, adapter);
             }
         }
 
@@ -633,13 +641,6 @@ namespace ShipWorks.Stores.Communication
             AdjustNoteCount(order, customer);
 
             await PerformInitialOrderSave(order, customer, adapter).ConfigureAwait(false);
-
-            bool orderChanged = UpdateOrderStatusesAfterSave(order);
-
-            if (orderChanged)
-            {
-                await adapter.SaveEntityAsync(order).ConfigureAwait(false);
-            }
         }
 
         /// <summary>
@@ -683,31 +684,38 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Update order statuses after saving to handle tokenized statuses
         /// </summary>
-        private bool UpdateOrderStatusesAfterSave(OrderEntity order)
+        protected async Task UpdateOrderStatusesAfterSave(OrderEntity order, ISqlAdapter sqlAdapter)
         {
             bool orderChanged = false;
             string tmpLocalStatus = string.Empty;
 
             // Apply default order status, if it contained tokens it has to be after the save.  Don't overwrite what the downloader set.
-            if (orderStatusHasTokens && string.IsNullOrEmpty(order.LocalStatus))
+            if (orderStatusHasTokens)
             {
-                tmpLocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
-                if (!order.LocalStatus.Equals(tmpLocalStatus, StringComparison.InvariantCultureIgnoreCase))
+                order = DataProvider.GetEntity(order.OrderID, sqlAdapter, true) as OrderEntity;
+                if (string.IsNullOrEmpty(order.LocalStatus))
                 {
-                    order.LocalStatus = tmpLocalStatus;
-                    orderChanged = true;
+                    tmpLocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
+                    if (!order.LocalStatus.Equals(tmpLocalStatus, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        order.LocalStatus = tmpLocalStatus;
+                        orderChanged = true;
+                    }
                 }
             }
 
             // Apply default item status, if it contained token it has to be after the save and out of the transaction.
             if (itemStatusHasTokens)
             {
+                OrderUtility.PopulateOrderDetails(order, sqlAdapter);
+
                 foreach (OrderItemEntity item in order.OrderItems)
                 {
                     // Don't overwrite what the downloader set
                     if (string.IsNullOrEmpty(item.LocalStatus))
                     {
                         tmpLocalStatus = TemplateTokenProcessor.ProcessTokens(itemStatusText, item.OrderItemID);
+
                         if (!item.LocalStatus.Equals(tmpLocalStatus, StringComparison.InvariantCultureIgnoreCase))
                         {
                             item.LocalStatus = tmpLocalStatus;
@@ -717,7 +725,10 @@ namespace ShipWorks.Stores.Communication
                 }
             }
 
-            return orderChanged;
+            if (orderChanged)
+            {
+                await sqlAdapter.SaveEntityAsync(order).ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -854,7 +865,7 @@ namespace ShipWorks.Stores.Communication
             {
                 order.RollupNoteCount = noteCount;
             }
-            else
+            else if (noteCount != 0)
             {
                 order.Fields[(int) OrderFieldIndex.RollupNoteCount].ExpressionToApply = OrderFields.RollupNoteCount + noteCount;
                 order.IsDirty = true;
@@ -864,7 +875,7 @@ namespace ShipWorks.Stores.Communication
             {
                 customer.RollupNoteCount = noteCount;
             }
-            else
+            else if (noteCount != 0)
             {
                 customer.Fields[(int) CustomerFieldIndex.RollupNoteCount].ExpressionToApply = CustomerFields.RollupNoteCount + noteCount;
                 customer.IsDirty = true;
