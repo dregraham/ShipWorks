@@ -49,10 +49,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             OrderNumberComplete = orderNumber;
 
-            settingOrderNumberComplete = false;
-
             long numericOrderNumber;
             OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : AlphaNumericOrderNumberIdentifier;
+
+            settingOrderNumberComplete = false;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         private void UpdateOrderNumberComplete()
         {
-            if (OrderNumber != AlphaNumericOrderNumberIdentifier)
+            if (OrderNumber != AlphaNumericOrderNumberIdentifier && !settingOrderNumberComplete)
             {
                 settingOrderNumberComplete = true;
 
