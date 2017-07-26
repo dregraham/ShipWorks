@@ -3,7 +3,6 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -78,12 +77,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void CopyToEntity(IEntity2 entity, int index)
         {
-            Entries
+            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries = Entries
                 .Where(e => e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName)
                 .Where(e => e.Index == index)
-                .Where(e => e.ShipWorksField.Name != OrderFields.OrderNumberComplete.Name)
-                .ToList()
-                .ForEach(entry => entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value));
+                .Where(e => e.ShipWorksField.Name != OrderFields.OrderNumberComplete.Name);
+
+            foreach (var entry in odbcFieldMapEntries)
+            {
+                entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value);
+            }
         }
 
         /// <summary>
