@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 .Where(e => e.Index == index)
                 .Where(e => e.ShipWorksField.Name != OrderFields.OrderNumberComplete.Name);
 
-            foreach (var entry in odbcFieldMapEntries)
+            foreach (IOdbcFieldMapEntry entry in odbcFieldMapEntries)
             {
                 entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value);
             }
