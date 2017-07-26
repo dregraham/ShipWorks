@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
         private readonly Func<EbayToken, EbayWebClient> webClientFactory;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
@@ -55,10 +56,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory)
+        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory, ISqlAdapterFactory sqlAdapterFactory)
             : base(store)
         {
             this.webClientFactory = webClientFactory;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -343,6 +345,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         ConsolidateOrderResources(order, affectedOrders, adapter);
                     }
                 }
+
+                await UpdateOrderStatusesAfterSave(order, sqlAdapterFactory.Create(connection));
             });
         }
 
