@@ -857,7 +857,7 @@ namespace ShipWorks.Stores.Communication
             {
                 order.RollupNoteCount = noteCount;
             }
-            else
+            else if (noteCount != 0)
             {
                 order.Fields[(int) OrderFieldIndex.RollupNoteCount].ExpressionToApply = OrderFields.RollupNoteCount + noteCount;
                 order.IsDirty = true;
@@ -867,7 +867,7 @@ namespace ShipWorks.Stores.Communication
             {
                 customer.RollupNoteCount = noteCount;
             }
-            else
+            else if (noteCount != 0)
             {
                 customer.Fields[(int) CustomerFieldIndex.RollupNoteCount].ExpressionToApply = CustomerFields.RollupNoteCount + noteCount;
                 customer.IsDirty = true;
