@@ -477,7 +477,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             item.Name = transaction.GetValue("title", "");
             item.Code = transaction.GetValue("transaction_id", "");
-            item.SKU = transaction.GetValue("listing_id", "");
+            item.SKU = transaction.GetValue("sku", "");
+            item.UPC = transaction.GetValue("listing_id", "");
             item.Quantity = transaction.GetValue("quantity", 0);
             item.UnitPrice = transaction.GetValue("price", 0m);
 
