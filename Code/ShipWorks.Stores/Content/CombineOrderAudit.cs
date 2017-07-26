@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +15,7 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Class for auditing combined orders
     /// </summary>
+    [Component]
     public class CombineOrderAudit : ICombineOrderAudit
     {
         private readonly IAuditUtility auditUtility;
