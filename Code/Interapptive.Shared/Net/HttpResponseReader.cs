@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
 using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Net
@@ -22,15 +21,8 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public HttpResponseReader(HttpWebRequest webRequest, HttpWebResponse webResponse)
         {
-            if (webRequest == null)
-            {
-                throw new ArgumentNullException("webRequest");
-            }
-            
-            if (webResponse == null)
-            {
-                throw new ArgumentNullException("webResponse");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webRequest, nameof(webRequest));
+            MethodConditions.EnsureArgumentIsNotNull(webResponse, nameof(webResponse));
 
             this.webRequest = webRequest;
             this.webResponse = webResponse;
@@ -56,6 +48,30 @@ namespace Interapptive.Shared.Net
                     using (StreamReader reader = new StreamReader(stream, encoding, true))
                     {
                         result = reader.ReadToEnd();
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get the result string of the post
+        /// </summary>
+        public Task<string> ReadResultAsync() => ReadResultAsync(Encoding.UTF8);
+
+        /// <summary>
+        /// Get the result string of the post
+        /// </summary>
+        public async Task<string> ReadResultAsync(Encoding encoding)
+        {
+            if (result == null)
+            {
+                using (Stream stream = webResponse.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream, encoding, true))
+                    {
+                        result = await reader.ReadToEndAsync().ConfigureAwait(false);
                     }
                 }
             }

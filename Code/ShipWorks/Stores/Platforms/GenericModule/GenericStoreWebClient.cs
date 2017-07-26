@@ -144,26 +144,20 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
         {
-            if (order.CombineSplitStatus == CombineSplitStatusType.Combined)
-            {
-                IEnumerable<string> identifiers = await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false);
+            IEnumerable<string> identifiers = order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
+                new[] { StoreType.GetOnlineOrderIdentifier(order) };
 
-                foreach (var chunk in identifiers.SplitIntoChunksOf(4))
-                {
-                    await Task.WhenAll(chunk.Select(x => Task.Run(() => PerformOrderStatusUpdate(x, code, comment)))).ConfigureAwait(false);
-                }
-            }
-            else
+            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
-                string identifier = StoreType.GetOnlineOrderIdentifier(order);
-                PerformOrderStatusUpdate(identifier, code, comment);
+                await Task.WhenAll(chunk.Select(x => PerformOrderStatusUpdate(x, code, comment))).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Perform the order status update
         /// </summary>
-        private void PerformOrderStatusUpdate(string identifier, object code, string comment)
+        private async Task PerformOrderStatusUpdate(string identifier, object code, string comment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
@@ -171,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             request.Variables.Add("status", code.ToString());
             request.Variables.Add("comments", comment);
 
-            ProcessRequest(request, "updatestatus");
+            await ProcessRequestAsync(request, "updatestatus").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -255,6 +249,39 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 using (IHttpResponseReader postResponse = request.GetResponse())
                 {
                     string resultXml = postResponse.ReadResult(ResponseEncoding);
+
+                    webResponse = ProcessResponse(action, logger, ref resultXml);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+            }
+
+            // check for errors
+            if (webResponse.HasError)
+            {
+                throw new GenericStoreException(webResponse.ErrorDescription);
+            }
+
+            return webResponse;
+        }
+
+        /// <summary>
+        /// Submits a request to the online store and returns the response
+        /// </summary>
+        protected virtual async Task<GenericModuleResponse> ProcessRequestAsync(HttpVariableRequestSubmitter request, string action)
+        {
+            ApiLogEntry logger = PrepareRequest(request, action);
+
+            GenericModuleResponse webResponse;
+
+            // execute the request
+            try
+            {
+                using (IHttpResponseReader postResponse = await request.GetResponseAsync().ConfigureAwait(false))
+                {
+                    string resultXml = await postResponse.ReadResultAsync(ResponseEncoding).ConfigureAwait(false);
 
                     webResponse = ProcessResponse(action, logger, ref resultXml);
                 }

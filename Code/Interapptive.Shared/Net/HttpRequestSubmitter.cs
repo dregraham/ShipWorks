@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Interapptive.Shared.Net
@@ -92,7 +93,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         protected HttpRequestSubmitter()
             : this(HttpVerb.Post)
-        {}
+        { }
 
         /// <summary>
         /// Constructor for specifying the request verb
@@ -117,6 +118,120 @@ namespace Interapptive.Shared.Net
         [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
+            HttpWebRequest webRequest = PrepareRequest();
+
+            // Raise the posting event
+            RequestSubmitting?.Invoke(this, new HttpRequestSubmittingEventArgs(webRequest));
+
+            // If not Get, then send the post data
+            if (Verb != HttpVerb.Get)
+            {
+                // Setup the content
+                byte[] content = GetPostContent();
+
+                // Set the content data in the request
+                webRequest.ContentLength = content.Length;
+
+                // Submit the request to the server
+                using (Stream postStream = webRequest.GetRequestStream())
+                {
+                    postStream.Write(content, 0, content.Length);
+                }
+            }
+
+            // Get the response
+            HttpWebResponse webResponse;
+
+            try
+            {
+                webResponse = (HttpWebResponse) webRequest.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                // if we are allowing certain status codes to not throw exceptions, intercept here
+                if (ex.Response != null &&
+                    ex.Response is HttpWebResponse &&
+                    allowableStatusCodes.Contains(((HttpWebResponse) ex.Response).StatusCode))
+                {
+                    webResponse = (HttpWebResponse) ex.Response;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return ProcessResponse(webRequest, webResponse);
+        }
+
+        /// <summary>
+        /// Execute the request
+        /// </summary>
+        public virtual async Task<IHttpResponseReader> GetResponseAsync()
+        {
+            HttpWebRequest webRequest = PrepareRequest();
+
+            // Raise the posting event
+            RequestSubmitting?.Invoke(this, new HttpRequestSubmittingEventArgs(webRequest));
+
+            // If not Get, then send the post data
+            if (Verb != HttpVerb.Get)
+            {
+                // Setup the content
+                byte[] content = GetPostContent();
+
+                // Set the content data in the request
+                webRequest.ContentLength = content.Length;
+
+                // Submit the request to the server
+                using (Stream postStream = await webRequest.GetRequestStreamAsync().ConfigureAwait(false))
+                {
+                    await postStream.WriteAsync(content, 0, content.Length).ConfigureAwait(false);
+                }
+            }
+
+            // Get the response
+            HttpWebResponse webResponse;
+
+            try
+            {
+                webResponse = (HttpWebResponse) await webRequest.GetResponseAsync().ConfigureAwait(false);
+            }
+            catch (WebException ex)
+            {
+                // if we are allowing certain status codes to not throw exceptions, intercept here
+                if (ex.Response != null &&
+                    ex.Response is HttpWebResponse &&
+                    allowableStatusCodes.Contains(((HttpWebResponse) ex.Response).StatusCode))
+                {
+                    webResponse = (HttpWebResponse) ex.Response;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return ProcessResponse(webRequest, webResponse);
+        }
+
+        private IHttpResponseReader ProcessResponse(HttpWebRequest webRequest, HttpWebResponse webResponse)
+        {
+            // Check for OK
+            if (webResponse.StatusCode != HttpStatusCode.OK &&
+                !allowableStatusCodes.Contains(webResponse.StatusCode))
+            {
+                string statusDescription = webResponse.StatusDescription;
+                webResponse.Close();
+
+                throw new WebException(statusDescription);
+            }
+
+            return new HttpResponseReader(webRequest, webResponse);
+        }
+
+        private HttpWebRequest PrepareRequest()
+        {
             // Get the request Uri
             Uri requestUri = GetPreparedRequestUri();
 
@@ -136,7 +251,7 @@ namespace Interapptive.Shared.Net
 
             // Set credentials and timeout
             webRequest.Credentials = credentials;
-            webRequest.Timeout = (int)Timeout.TotalMilliseconds;
+            webRequest.Timeout = (int) Timeout.TotalMilliseconds;
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
             webRequest.UserAgent = DefaultUserAgent;
@@ -197,69 +312,14 @@ namespace Interapptive.Shared.Net
 
             // Configure request method
             SetRequestMethod(webRequest);
-
-            // Raise the posting event
-            if (RequestSubmitting != null)
-            {
-                RequestSubmitting(this, new HttpRequestSubmittingEventArgs(webRequest));
-            }
-
-            // If not Get, then send the post data
-            if (Verb != HttpVerb.Get)
-            {
-                // Setup the content
-                byte[] content = GetPostContent();
-
-                // Set the content data in the request
-                webRequest.ContentLength = content.Length;
-
-                // Submit the request to the server
-                using (Stream postStream = webRequest.GetRequestStream())
-                {
-                    postStream.Write(content, 0, content.Length);
-                }
-            }
-
-            // Get the response
-            HttpWebResponse webResponse;
-
-            try
-            {
-                webResponse = (HttpWebResponse)webRequest.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                // if we are allowing certain status codes to not throw exceptions, intercept here
-                if (ex.Response != null &&
-                    ex.Response is HttpWebResponse &&
-                    allowableStatusCodes.Contains(((HttpWebResponse)ex.Response).StatusCode))
-                {
-                    webResponse = (HttpWebResponse)ex.Response;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            // Check for OK
-            if (webResponse.StatusCode != HttpStatusCode.OK &&
-                !allowableStatusCodes.Contains(webResponse.StatusCode))
-            {
-                string statusDescription = webResponse.StatusDescription;
-                webResponse.Close();
-
-                throw new WebException(statusDescription);
-            }
-
-            return new HttpResponseReader(webRequest, webResponse);
+            return webRequest;
         }
 
         /// <summary>
         /// Sets the allow automatic redirect
         /// </summary>
         /// <remarks>
-        /// This is old logic and I'm not sure why the verb matters, but in order to 
+        /// This is old logic and I'm not sure why the verb matters, but in order to
         /// mitigate risk, I'm putting this in a virtual class so that this behavior can be
         /// overridden. This logic has been here since Vault...
         /// </remarks>
