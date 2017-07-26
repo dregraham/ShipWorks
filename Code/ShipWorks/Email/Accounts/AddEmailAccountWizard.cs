@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
-using ShipWorks.Common.Threading;
 using Interapptive.Shared.Security;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Email.Accounts
 {
@@ -40,7 +40,7 @@ namespace ShipWorks.Email.Accounts
         }
 
         /// <summary>
-        /// The EmailAccount that was creatd.  Only valid if the DialogResult is OK.
+        /// The EmailAccount that was created.  Only valid if the DialogResult is OK.
         /// </summary>
         public EmailAccountEntity EmailAccount
         {
@@ -133,7 +133,7 @@ namespace ShipWorks.Email.Accounts
         }
 
         /// <summary>
-        /// Stepping into the page for enabling accoung access (GMail)
+        /// Stepping into the page for enabling account access (GMail)
         /// </summary>
         private void OnEnableAccessSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
@@ -162,7 +162,7 @@ namespace ShipWorks.Email.Accounts
         /// </summary>
         private void OnEnableAccessStepNext(object sender, WizardStepEventArgs e)
         {
-            // Will be non-null after a succesull search.  And gets reset to null on re-entering the page later from a Back
+            // Will be non-null after a successful search.  And gets reset to null on re-entering the page later from a Back
             if (settingsSearchResult != null)
             {
                 return;
@@ -274,7 +274,7 @@ namespace ShipWorks.Email.Accounts
             }
 
             // Load the settings
-            emailAccountSettings.LoadSettings(emailAccount, (forceIncomingServerType == null) );
+            emailAccountSettings.LoadSettings(emailAccount, (forceIncomingServerType == null));
         }
 
         /// <summary>

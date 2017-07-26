@@ -6703,12 +6703,6 @@
     <Compile Include="Common\Net\FileDownloader.cs" />
     <Compile Include="Common\Net\FileDownloadEvent.cs" />
     <Compile Include="Common\Net\FileDownloadStatus.cs" />
-    <Compile Include="ApplicationCore\MessageBoxes\WelcomeDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\MessageBoxes\WelcomeDlg.Designer.cs">
-      <DependentUpon>WelcomeDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Data\Administration\SqlServerSetup\WindowsFirewallDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7643,10 +7637,6 @@
     <EmbeddedResource Include="ApplicationCore\Options\ShipWorksOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ShipWorksOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\MessageBoxes\WelcomeDlg.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WelcomeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DetailedDatabaseSetupWizard.resx">
       <SubType>Designer</SubType>

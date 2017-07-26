@@ -35,42 +35,41 @@
             this.topPanel.SuspendLayout();
             this.wizardPageWelcome.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // next
-            // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
+            //
             this.next.Location = new System.Drawing.Point(419, 377);
             this.next.Text = "Finish";
-            // 
+            //
             // cancel
-            // 
+            //
             this.cancel.Location = new System.Drawing.Point(500, 377);
-            // 
+            //
             // back
-            // 
+            //
             this.back.Location = new System.Drawing.Point(338, 377);
-            // 
+            //
             // mainPanel
-            // 
+            //
             this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(587, 305);
-            // 
+            //
             // etchBottom
-            // 
+            //
             this.etchBottom.Location = new System.Drawing.Point(0, 367);
             this.etchBottom.Size = new System.Drawing.Size(591, 2);
-            // 
+            //
             // pictureBox
-            // 
+            //
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.box_closed;
             this.pictureBox.Location = new System.Drawing.Point(534, 3);
-            // 
+            //
             // topPanel
-            // 
+            //
             this.topPanel.Size = new System.Drawing.Size(587, 56);
-            // 
+            //
             // wizardPageWelcome
-            // 
+            //
             this.wizardPageWelcome.Controls.Add(this.labelInfo1);
             this.wizardPageWelcome.Description = "Setup shipping for other carriers.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -80,9 +79,9 @@
             this.wizardPageWelcome.Size = new System.Drawing.Size(587, 305);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Wizard";
-            // 
+            //
             // labelInfo1
-            // 
+            //
             this.labelInfo1.Location = new System.Drawing.Point(22, 8);
             this.labelInfo1.Name = "labelInfo1";
             this.labelInfo1.Size = new System.Drawing.Size(454, 47);
@@ -90,9 +89,9 @@
             this.labelInfo1.Text = "This wizard will assist you in configuring ShipWorks to work with other carriers " +
                 "not supported by ShipWorks.  This enables you to manually enter shipment carrier" +
                 ", service, and tracking information.";
-            // 
+            //
             // OtherSetupWizard
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(587, 412);

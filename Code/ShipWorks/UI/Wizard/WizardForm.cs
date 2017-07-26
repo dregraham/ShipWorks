@@ -1,14 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
-using System.Diagnostics;
-using System.Drawing.Design;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.UI.Wizard.Design;
 
@@ -44,7 +47,7 @@ namespace ShipWorks.UI.Wizard
             }
 
             /// <summary>
-            /// Add a WizardPage to the the WizardForm control
+            /// Add a WizardPage to the WizardForm control
             /// </summary>
             public int Add(WizardPage page)
             {
@@ -134,7 +137,7 @@ namespace ShipWorks.UI.Wizard
             }
 
             /// <summary>
-            /// Clear all the pages from the contorl
+            /// Clear all the pages from the control
             /// </summary>
             public void Clear()
             {
@@ -322,12 +325,8 @@ namespace ShipWorks.UI.Wizard
         // If we are in WinForms initialization
         bool loaded;
 
-        // If we can currently be closed\cancelled
+        // If we can currently be closed\canceled
         bool canCancel = true;
-
-        // Determines if the last page is just a Finish page, or it it can be cancelled still
-        // at that point.
-        bool lastPageCancelable = false;
 
         // Internal collection actually holding the pages
         List<WizardPage> pages = new List<WizardPage>();
@@ -344,36 +343,36 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Constructor
         /// </summary>
-		public WizardForm()
-		{
-			InitializeComponent();
+        public WizardForm()
+        {
+            InitializeComponent();
 
             FinishCancels = false;
 
             // Create our page collection
             pageCollection = new WizardPageCollection(this);
-		}
+        }
 
         /// <summary>
         /// Initialization
         /// </summary>
-        protected override void  OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             loaded = true;
 
             if (pages.Count > 0)
             {
                 mainPanel.Controls.Clear();
-                ShowPage(0, WizardStepReason.StepForward);
+                await MoveToPage(0, WizardStepReason.StepForward);
             }
 
             // Raise the event after we show the initial page, in case someone's Load handler changes the first page
- 	        base.OnLoad(e);
+            base.OnLoad(e);
 
             // Maybe the removed the first page?
             if (CurrentIndex == -1 && Pages.Count > 0)
             {
-                ShowPage(0, WizardStepReason.StepForward);
+                await MoveToPage(0, WizardStepReason.StepForward);
             }
         }
 
@@ -476,18 +475,8 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Find the first page of the given System.Type
         /// </summary>
-        public WizardPage FindPage(Type pageType)
-        {
-            foreach (WizardPage page in pages)
-            {
-                if (page.GetType() == pageType)
-                {
-                    return page;
-                }
-            }
-
-            return null;
-        }
+        public WizardPage FindPage(Type pageType) =>
+            pages.FirstOrDefault(x => x.GetType() == pageType);
 
         #endregion
 
@@ -497,13 +486,7 @@ namespace ShipWorks.UI.Wizard
         [EditorAttribute(typeof(CollectionEditor), typeof(UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Category("Behavior")]
-        public WizardPageCollection Pages
-        {
-            get
-            {
-                return pageCollection;
-            }
-        }
+        public WizardPageCollection Pages => pageCollection;
 
         /// <summary>
         /// Determine's of the last page is just a Finish button, or if its cancelable and can be
@@ -511,17 +494,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         [Category("Behavior")]
         [DefaultValue(false)]
-        public bool LastPageCancelable
-        {
-            get
-            {
-                return lastPageCancelable;
-            }
-            set
-            {
-                lastPageCancelable = value;
-            }
-        }
+        public bool LastPageCancelable { get; set; }
 
         /// <summary>
         /// Returns the page currently being displayed by the wizard
@@ -599,7 +572,7 @@ namespace ShipWorks.UI.Wizard
         }
 
         /// <summary>
-        /// Indicates if the wizard can currently be cancelled
+        /// Indicates if the wizard can currently be canceled
         /// </summary>
         public bool CanCancel
         {
@@ -623,20 +596,10 @@ namespace ShipWorks.UI.Wizard
         /// </value>
         public bool FinishCancels { get; set; }
 
-
         /// <summary>
         /// Show the page at the given index
         /// </summary>
         private WizardPage ShowPage(int index)
-        {
-            return ShowPage(index, WizardStepReason.None);
-        }
-
-        /// <summary>
-        /// Show the page at the given index
-        /// </summary>
-        [NDependIgnoreLongMethod]
-        private WizardPage ShowPage(int index, WizardStepReason reason)
         {
             // Make sure the new index is valid
             if (index < 0)
@@ -660,88 +623,128 @@ namespace ShipWorks.UI.Wizard
             back.Enabled = true;
             canCancel = true;
 
-            if (!DesignMode)
+            return SetCurrentPage(page);
+        }
+
+        /// <summary>
+        /// Show the page at the given index
+        /// </summary>
+        private async Task<WizardPage> MoveToPage(int index, WizardStepReason reason)
+        {
+            // Make sure the new index is valid
+            if (index < 0)
             {
-                // If we are moving as a result of the user clicking next or back, we tell
-                // the page they are going to that they are being gone to.  The page is given
-                // the chance to skip itself.
-                if (reason != WizardStepReason.None)
+                Debug.Fail("Invalid wizard page.");
+                return null;
+            }
+
+            WizardPage page = (WizardPage) pages[index];
+
+            // Already shown
+            if (mainPanel.Controls.Contains(page))
+            {
+                // Just refresh it
+                page.Invalidate();
+                return page;
+            }
+
+            // Reset the enable state of next right-before entering the page.
+            next.Enabled = true;
+            back.Enabled = true;
+            canCancel = true;
+
+            WizardPage skipToPage = GetPageToSkipTo(index, reason, page);
+
+            bool firstTime = !firstTimeStepInto.Contains(page);
+
+            // Create the event args for the step
+            WizardSteppingIntoEventArgs args = new WizardSteppingIntoEventArgs(page, reason, firstTime, skipToPage);
+
+            // Mark this page as seen so we get the "firstTime" flag correct
+            if (firstTime)
+            {
+                firstTimeStepInto.Add(page);
+            }
+
+            // Tell the current page we are about to step into it
+            page.RaiseSteppingInto(args);
+
+            // See if they changed the page we are supposed to go to
+            return args.Skip ?
+                await SkipToPage(reason, page, args) :
+                SetCurrentPage(page);
+        }
+
+        /// <summary>
+        /// Get the page that we should skip to.
+        /// </summary>
+        private WizardPage GetPageToSkipTo(int index, WizardStepReason reason, WizardPage page)
+        {
+            if (reason == WizardStepReason.StepBack)
+            {
+                return GetPreviousPage(page);
+            }
+
+            if (index + 1 != pageCollection.Count)
+            {
+                return pageCollection[index + 1];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Skip to a specific page
+        /// </summary>
+        private async Task<WizardPage> SkipToPage(WizardStepReason reason, WizardPage page, WizardSteppingIntoEventArgs args)
+        {
+            // See if we still have to raise the step event
+            if (args.RaiseStepEventWhenSkipping)
+            {
+                WizardStepEventArgs stepArgs = new WizardStepEventArgs(args.SkipToPage, true);
+
+                // Raise the step event
+                if (reason == WizardStepReason.StepForward)
                 {
-                    WizardPage skipToPage = null;
+                    await page.RaiseSteppingNext(stepArgs).ConfigureAwait(true);
+                }
+                else
+                {
+                    page.RaiseSteppingBack(stepArgs);
+                }
 
-                    if (reason == WizardStepReason.StepForward)
-                    {
-                        if (index + 1 != pageCollection.Count)
-                        {
-                            skipToPage = pageCollection[index + 1];
-                        }
-                    }
-                    else
-                    {
-                        skipToPage = GetPreviousPage(page);
-                    }
+                if (stepArgs.NextPage == null)
+                {
+                    throw new InvalidOperationException("NextPage cannot be null.");
+                }
 
-                    bool firstTime = !firstTimeStepInto.Contains(page);
+                // Update the page to skip to
+                args.SkipToPage = stepArgs.NextPage;
 
-                    // Create the event args for the step
-                    WizardSteppingIntoEventArgs args = new WizardSteppingIntoEventArgs(page, reason, firstTime, skipToPage);
-
-                    // Mark this page as seen so we get the "firstTime" flag correct
-                    if (firstTime)
-                    {
-                        firstTimeStepInto.Add(page);
-                    }
-
-                    // Tell the current page we are about to step into it
-                    page.RaiseSteppingInto(args);
-
-                    // See if they changed the page we are supposed to go to
-                    if (args.Skip)
-                    {
-                        // See if we still have to raise the step event
-                        if (args.RaiseStepEventWhenSkipping)
-                        {
-                            WizardStepEventArgs stepArgs = new WizardStepEventArgs(args.SkipToPage, true);
-
-                            // Raise the step event
-                            if (reason == WizardStepReason.StepForward)
-                            {
-                                page.RaiseSteppingNext(stepArgs);
-                            }
-                            else
-                            {
-                                page.RaiseSteppingBack(stepArgs);
-                            }
-
-                            if (stepArgs.NextPage == null)
-                            {
-                                throw new InvalidOperationException("NextPage cannot be null.");
-                            }
-
-                            // Update the page to skip to
-                            args.SkipToPage = stepArgs.NextPage;
-
-                            // If the SkipToPage is the same page being skipped, then their stuck on the page
-                            // that was supposed to be skipped.  Just go back to the page before this, which will
-                            // look to the user like no page change, which is probably what is desired.
-                            if (args.SkipToPage == page)
-                            {
-                                args.SkipToPage = CurrentPage;
-                            }
-                        }
-
-                        if (args.SkipToPage == null)
-                        {
-                            throw new InvalidOperationException("Cannot Skip when SkipToPage is null.");
-                        }
-
-                        int newIndex = pages.IndexOf(args.SkipToPage);
-
-                        return ShowPage(newIndex, reason);
-                    }
+                // If the SkipToPage is the same page being skipped, then their stuck on the page
+                // that was supposed to be skipped.  Just go back to the page before this, which will
+                // look to the user like no page change, which is probably what is desired.
+                if (args.SkipToPage == page)
+                {
+                    args.SkipToPage = CurrentPage;
                 }
             }
 
+            if (args.SkipToPage == null)
+            {
+                throw new InvalidOperationException("Cannot Skip when SkipToPage is null.");
+            }
+
+            int newIndex = pages.IndexOf(args.SkipToPage);
+
+            return await MoveToPage(newIndex, reason).ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Set the current page of the wizard
+        /// </summary>
+        private WizardPage SetCurrentPage(WizardPage page)
+        {
             // Add the page to the main panel for display
             mainPanel.SuspendLayout();
             mainPanel.Controls.Clear();
@@ -791,12 +794,13 @@ namespace ShipWorks.UI.Wizard
             back.Visible = (index > 0);
 
             next.ShowShield = CurrentPage != null && CurrentPage.NextRequiresElevation;
+            next.DialogResult = DialogResult.None;
 
             // Last page
             if (index == pages.Count - 1)
             {
                 // Added the check for count > 1 to prevent flashing before OnLoad was complete and not all pages were present yet.
-                if (!lastPageCancelable && pages.Count > 1)
+                if (!LastPageCancelable && pages.Count > 1)
                 {
                     ControlBox = false;
                     cancel.Visible = false;
@@ -804,22 +808,26 @@ namespace ShipWorks.UI.Wizard
                 }
 
                 next.Text = "Finish";
-                next.DialogResult = FinishCancels ? DialogResult.Cancel : DialogResult.OK;
+
+                // We're using Tag here because using DialogResult would close the dialog before any async handlers could complete
+                next.Tag = FinishCancels ? DialogResult.Cancel : DialogResult.OK;
             }
             else
             {
                 next.Text = "Next >";
-                next.DialogResult = DialogResult.None;
+                next.Tag = null;
             }
         }
 
         /// <summary>
         /// The Back button was pressed
         /// </summary>
-        private void OnBack(object sender, System.EventArgs e)
+        private async void OnBack(object sender, System.EventArgs e)
         {
             if (CurrentPage == null)
+            {
                 return;
+            }
 
             WizardPage backPage = GetPreviousPage(CurrentPage);
 
@@ -843,7 +851,7 @@ namespace ShipWorks.UI.Wizard
             // Update the new index
             int newIndex = pages.IndexOf(args.NextPage);
 
-            ShowPage(newIndex, WizardStepReason.StepBack);
+            await MoveToPage(newIndex, WizardStepReason.StepBack).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -874,33 +882,26 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         private async void OnNext(object sender, System.EventArgs e)
         {
+            Button button = sender as Button;
+            DialogResult result = button?.Tag is DialogResult ?
+                (DialogResult) button?.Tag : DialogResult.None;
+
             if (CurrentPage == null)
+            {
+                DialogResult = result;
                 return;
+            }
 
             int newIndex = pages.IndexOf(CurrentPage) + 1;
 
-            WizardStepEventArgs args;
-
-            // If its the last page, then we pass in null for NextPage
-            if (newIndex >= pages.Count)
-            {
-                args = new WizardStepEventArgs(null);
-            }
-
-            else
-            {
-                // Create the event args for the step
-                args = new WizardStepEventArgs(pageCollection[newIndex]);
-            }
+            WizardStepEventArgs args = newIndex >= pages.Count ?
+                new WizardStepEventArgs(null) :
+                new WizardStepEventArgs(pageCollection[newIndex]);
 
             if (!DesignMode)
             {
                 // See if the current page is ok with going next
-                CurrentPage.RaiseSteppingNext(args);
-                if (args.AwaitTask != null)
-                {
-                    await args.AwaitTask;
-                }
+                await CurrentPage.RaiseSteppingNext(args).ConfigureAwait(true);
             }
 
             // If its the last page, then if NextPage is still null
@@ -909,6 +910,8 @@ namespace ShipWorks.UI.Wizard
             {
                 if (args.NextPage == null)
                 {
+                    DialogResult = result;
+
                     // If a different result was explicitly set, leave it
                     if (DialogResult == DialogResult.None)
                     {
@@ -927,7 +930,7 @@ namespace ShipWorks.UI.Wizard
             newIndex = pages.IndexOf(args.NextPage);
 
             WizardPage fromPage = CurrentPage;
-            WizardPage shownPage = ShowPage(newIndex, WizardStepReason.StepForward);
+            WizardPage shownPage = await MoveToPage(newIndex, WizardStepReason.StepForward).ConfigureAwait(true);
 
             if (shownPage != fromPage)
             {
@@ -939,15 +942,14 @@ namespace ShipWorks.UI.Wizard
                     backNavigation[shownPage] = fromPage;
                 }
             }
+
+            DialogResult = result;
         }
 
         /// <summary>
         /// The cancel button was pressed
         /// </summary>
-        private void OnCancel(object sender, System.EventArgs e)
-        {
-            Close();
-        }
+        private void OnCancel(object sender, System.EventArgs e) => Close();
 
         /// <summary>
         /// The wizard is trying to be closed.
@@ -955,7 +957,9 @@ namespace ShipWorks.UI.Wizard
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
             if (CurrentPage == null)
+            {
                 return;
+            }
 
             if (!DesignMode)
             {
@@ -976,25 +980,16 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Used by the designer to move to the next page
         /// </summary>
-        public void MoveNext()
-        {
-            OnNext(next, EventArgs.Empty);
-        }
+        public void MoveNext() => OnNext(next, EventArgs.Empty);
 
         /// <summary>
         /// Used by the designer to move back a page
         /// </summary>
-        public void MoveBack()
-        {
-            OnBack(back, EventArgs.Empty);
-        }
+        public void MoveBack() => OnBack(back, EventArgs.Empty);
 
         /// <summary>
         /// Used by the designer to set the current page
         /// </summary>
-        internal void SetCurrent(int index)
-        {
-            ShowPage(index);
-        }
+        internal void SetCurrent(int index) => ShowPage(index);
     }
 }
