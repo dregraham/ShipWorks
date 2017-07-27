@@ -73,8 +73,9 @@ namespace ShipWorks.Users.Audit
         private static async Task<long> GetTransactionID(ISqlAdapter sqlAdapter)
         {
             ParameterValue transactionIdParam = new ParameterValue(ParameterDirection.InputOutput, dbType: DbType.Int64);
-            await sqlAdapter.ExecuteSQLAsync(@"SELECT @id=dbo.GetTransactionID();", new { id = transactionIdParam, name = "NameValue" })
-                .ConfigureAwait(false);
+            await sqlAdapter.ExecuteSQLAsync(@"SELECT @Id=dbo.GetTransactionID();", new { Id = transactionIdParam })
+                            .ConfigureAwait(false);
+            
             return Convert.ToInt64(transactionIdParam.Value);
         }
     }
