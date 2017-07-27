@@ -181,10 +181,12 @@ namespace ShipWorks
         /// <summary>
         /// Disable the SetEnabledWhen for components that need actions to determine enabled state
         /// </summary>
-        private void DisableCustomEnablerComponents()
+        private IDisposable DisableCustomEnablerComponents()
         {
             selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.Ignore);
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder, SelectionDependentType.Ignore);
+
+            return Disposable.Create(InitializeCustomEnablerComponents);
         }
 
         /// <summary>
@@ -1331,7 +1333,7 @@ namespace ShipWorks
             // Update the download button
             UpdateDownloadButtonForStores();
 
-            // Update the dashboard for new\removed trials
+            // Update the dashboard for new/removed trials
             DashboardManager.UpdateStoreDependentItems();
 
             // Update edition-based UI from stores
@@ -1842,7 +1844,7 @@ namespace ShipWorks
                 // Open the database configuration window
                 configurationComplete = OpenDatabaseConfiguration();
 
-                // Now regardless of if that was succesful, see if it altered the database.  Some things can't be rolled back even if the user canceled.
+                // Now regardless of if that was successful, see if it altered the database.  Some things can't be rolled back even if the user canceled.
                 databaseChanged = scope.DatabaseChanged;
 
                 // If the configuration is complete, or the database changed in any way...
@@ -2602,7 +2604,7 @@ namespace ShipWorks
         {
             if (InvokeRequired)
             {
-                // This does need to be Invoke and not BeginInvoke.  So that the downloader doesnt think we are done early, and we're messing
+                // This does need to be Invoke and not BeginInvoke.  So that the downloader doesn't think we are done early, and we're messing
                 // with the post-download UI, and another download starts.
                 Invoke(new DownloadCompleteEventHandler(OnDownloadComplete), sender, e);
                 return;
@@ -2899,19 +2901,35 @@ namespace ShipWorks
         /// </summary>
         private async void OnCombineOrders(object sender, EventArgs e)
         {
+            if (!ShouldCombineOrderBeEnabled(gridControl.Selection.OrderedKeys))
+            {
+                UpdateCommandState();
+                return;
+            }
+
+            GenericResult<long> result = await CombineOrders().ConfigureAwait(true);
+
+            if (result.Success)
+            {
+                LookupOrder(result.Value);
+            }
+            else
+            {
+                UpdateCommandState();
+            }
+        }
+
+        /// <summary>
+        /// Combine the currently selected orders
+        /// </summary>
+        private async Task<GenericResult<long>> CombineOrders()
+        {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (Disposable.Create(() => InitializeCustomEnablerComponents()))
+                using (DisableCustomEnablerComponents())
                 {
-                    DisableCustomEnablerComponents();
-
                     ICombineOrderOrchestrator orchestrator = lifetimeScope.Resolve<ICombineOrderOrchestrator>();
-                    GenericResult<long> result = await orchestrator.Combine(gridControl.Selection.OrderedKeys);
-
-                    if (result.Success)
-                    {
-                        LookupOrder(result.Value);
-                    }
+                    return await orchestrator.Combine(gridControl.Selection.OrderedKeys).ConfigureAwait(false);
                 }
             }
         }
@@ -3792,7 +3810,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The pring preview window is now visible
+        /// The print preview window is now visible
         /// </summary>
         private void OnPrintPreviewShown(object sender, PrintPreviewShownEventArgs e)
         {
@@ -3802,7 +3820,7 @@ namespace ShipWorks
                 return;
             }
 
-            // Once we are on the UI thread, close the progres window
+            // Once we are on the UI thread, close the progress window
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) e.UserState;
             delayer.NotifyComplete();
 
@@ -4043,7 +4061,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Initiates the save writer indiciating if the files should be opened after they are saved.
+        /// Initiates the save writer indicating if the files should be opened after they are saved.
         /// </summary>
         private void StartSaveWriter(TemplateEntity template, bool openAfterSave)
         {
@@ -4271,7 +4289,7 @@ namespace ShipWorks
         #region Context Menu Handlers
 
         /// <summary>
-        /// Quck Print menu is being opened
+        /// Quick Print menu is being opened
         /// </summary>
         private void OnQuickPrintMenuOpening(object sender, EventArgs e)
         {
