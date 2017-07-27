@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -53,6 +54,8 @@ namespace ShipWorks.Stores.Content
         public AddOrderWizard(long? initialCustomerID, long? initialStoreID)
         {
             InitializeComponent();
+
+            this.wizardPageDetails.StepNextAsync = OnFinish;
 
             this.customerID = initialCustomerID;
             this.initialStoreID = initialStoreID;
@@ -360,7 +363,7 @@ namespace ShipWorks.Stores.Content
         /// Stepping next on the last page
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async void OnFinish(object sender, WizardStepEventArgs e)
+        private async Task OnFinish(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 

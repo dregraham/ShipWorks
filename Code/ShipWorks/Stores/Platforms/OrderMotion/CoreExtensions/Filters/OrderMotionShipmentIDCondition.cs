@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderFields.OrderMotionShipmentID), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, OrderMotionOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, OrderMotionOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(OrderMotionOrderSearchFields.OrderMotionShipmentID), context));
             }

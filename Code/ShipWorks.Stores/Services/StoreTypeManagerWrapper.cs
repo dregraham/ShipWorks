@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Services
 {
@@ -30,6 +31,15 @@ namespace ShipWorks.Stores.Services
         /// Get the StoreType instance of the specified StoreEntity
         /// </summary>
         public StoreType GetType(StoreEntity store) => StoreTypeManager.GetType(store.StoreTypeCode, store, lifetimeScope);
+
+        /// <summary>
+        /// Get the StoreType instance of the specified StoreID
+        /// </summary>
+        public StoreType GetType(long storeID)
+        {
+            StoreEntity store = storeManager.GetStore(storeID);
+            return StoreTypeManager.GetType(store.StoreTypeCode, store, lifetimeScope);
+        }
 
         /// <summary>
         /// The indexer of the class based on store type

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using log4net;
-using System.Diagnostics;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
     /// <summary>
-    /// Utility class for 
+    /// Utility class for
     /// </summary>
     public class LoggedStopwatch : IDisposable
     {
@@ -22,7 +22,11 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             this.log = log;
             this.name = name;
-            log.Debug($"Stopwatch {name} starting...");
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug($"Stopwatch {name} starting...");
+            }
 
             stopwatch = Stopwatch.StartNew();
         }
@@ -35,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Logging
             Stop();
         }
 
-         /// <summary>
+        /// <summary>
         /// Stop the stopwatch
         /// </summary>
         private void Stop()
@@ -50,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         public void LogElapsedTime(string description)
         {
-            if (log == null)
+            if (log?.IsDebugEnabled != true)
             {
                 return;
             }

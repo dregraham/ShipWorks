@@ -21,5 +21,10 @@ namespace ShipWorks.Data.Connection
         /// Create a SqlAdatper that uses an existing connection and transaction
         /// </summary>
         ISqlAdapter Create(DbConnection connection, DbTransaction transaction);
+
+        /// <summary>
+        /// Create a SqlAdatper that uses an existing connection
+        /// </summary>
+        ISqlAdapter Create(DbConnection connection);
     }
 }

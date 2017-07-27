@@ -366,6 +366,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         ConsolidateOrderResources(order, affectedOrders, adapter);
                     }
                 }
+
+                await UpdateOrderStatusesAfterSave(order, sqlAdapterFactory.Create(connection));
             });
         }
 

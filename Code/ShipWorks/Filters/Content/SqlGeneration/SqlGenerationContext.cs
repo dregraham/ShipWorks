@@ -261,8 +261,8 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             }
 
             EntityRelation relation = new EntityRelation(primaryField, foreignField, RelationType.OneToMany);
-            relation.SetPKFieldPersistenceInfo(0, SqlAdapter.GetPersistenceInfo(primaryField));
-            relation.SetFKFieldPersistenceInfo(0, SqlAdapter.GetPersistenceInfo(foreignField));
+            relation.SetPKFieldPersistenceInfo(0, DataAccessAdapter.GetPersistenceInfo(primaryField));
+            relation.SetFKFieldPersistenceInfo(0, DataAccessAdapter.GetPersistenceInfo(foreignField));
 
             return PushScope(relation, scopeType, childQuantityAdorner);
         }
@@ -420,7 +420,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // We also have to register the parent PK.  This is to track direct additions\deletions of parents without any changes to children
             ColumnsUsed.Add((EntityField2) relation.GetPKEntityFieldCore(0));
 
-            // Have to make sure we register that we are joining down to this child ragble
+            // Have to make sure we register that we are joining down to this child table
             RegisterJoin(parentScope.EntityType, EntityTypeProvider.GetEntityType(fieldToAggregate.ContainingObjectName));
 
             string childPredicate = string.Format("{0}.{1} = {2}.{3}",

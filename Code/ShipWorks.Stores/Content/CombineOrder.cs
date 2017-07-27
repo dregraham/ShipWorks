@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Content
         private readonly IConfigurationData configurationData;
         private readonly IEnumerable<ICombineOrderAction> combinationActions;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly IAuditUtility auditUtility;
+        private readonly ICombineOrderAudit combinedOrderAuditor;
 
         /// <summary>
         /// Constructor
@@ -41,14 +41,14 @@ namespace ShipWorks.Stores.Content
             IConfigurationData configurationData,
             IEnumerable<ICombineOrderAction> combinationActions,
             ISqlAdapterFactory sqlAdapterFactory,
-            IAuditUtility auditUtility)
+            ICombineOrderAudit combinedOrderAuditor)
         {
             this.combinationActions = combinationActions;
             this.configurationData = configurationData;
             this.deletionService = deletionService;
             this.orderManager = orderManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.auditUtility = auditUtility;
+            this.combinedOrderAuditor = combinedOrderAuditor;
         }
 
         /// <summary>
@@ -72,25 +72,12 @@ namespace ShipWorks.Stores.Content
                 }
             }
 
-            await AuditResult(orders, result);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Audit the result of combining the order
-        /// </summary>
-        private async Task AuditResult(IEnumerable<IOrderEntity> orders, GenericResult<long> result)
-        {
             if (result.Success)
             {
-                string reason = $"Combined from orders : {string.Join(", ", orders.Select(o => o.OrderNumberComplete))}";
-                reason = reason.Truncate(100);
-                AuditReason auditReason = new AuditReason(AuditReasonType.CombineOrder, reason);
-
-                await auditUtility.AuditAsync(result.Value, AuditActionType.CombineOrder, auditReason, sqlAdapterFactory.Create())
-                    .ConfigureAwait(false);
+                await combinedOrderAuditor.Audit(result.Value, orders);
             }
+
+            return result;
         }
 
         /// <summary>
@@ -182,6 +169,7 @@ namespace ShipWorks.Stores.Content
             combinedOrder.RollupItemCount = 0;
             combinedOrder.RollupItemTotalWeight = 0;
             combinedOrder.RollupNoteCount = 0;
+            combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {

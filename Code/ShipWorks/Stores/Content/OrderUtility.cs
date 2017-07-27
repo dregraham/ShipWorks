@@ -390,7 +390,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         /// <param name="order">The order.</param>
         /// <param name="adapter">The adapter.</param>
-        public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
+        public static void PopulateOrderDetails(OrderEntity order, ISqlAdapter adapter)
         {
             if (order.Store == null)
             {

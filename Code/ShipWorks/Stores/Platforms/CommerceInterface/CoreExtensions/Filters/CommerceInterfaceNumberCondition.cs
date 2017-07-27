@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Filters
             }
 
             // Combined order search
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, CommerceInterfaceOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, CommerceInterfaceOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(CommerceInterfaceOrderSearchFields.CommerceInterfaceOrderNumber), context));
             }

@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(LemonStandOrderFields.LemonStandOrderID), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, LemonStandOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, LemonStandOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(LemonStandOrderSearchFields.LemonStandOrderID), context));
             }

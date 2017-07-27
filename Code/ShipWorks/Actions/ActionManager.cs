@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Transactions;
+using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
@@ -12,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 
@@ -25,6 +28,7 @@ namespace ShipWorks.Actions
         static readonly ILog log = LogManager.GetLogger(typeof(ActionManager));
 
         static TableSynchronizer<ActionEntity> tableSynchronizer;
+        private static ReadOnlyCollection<IActionEntity> readOnlyCollection;
         static bool needCheckForChanges = false;
 
         /// <summary>
@@ -61,6 +65,8 @@ namespace ShipWorks.Actions
                     if (tableSynchronizer.Synchronize())
                     {
                         tableSynchronizer.EntityCollection.Sort((int) ActionFieldIndex.Name, ListSortDirection.Ascending);
+                        readOnlyCollection = tableSynchronizer.EntityCollection
+                            .Select(x => x.AsReadOnly()).ToReadOnly();
                     }
                 }
 
@@ -86,6 +92,11 @@ namespace ShipWorks.Actions
                 }
             }
         }
+
+        /// <summary>
+        /// Get the current list of actions
+        /// </summary>
+        public static IEnumerable<IActionEntity> ActionsReadOnly => readOnlyCollection;
 
         /// <summary>
         /// Get the action with the given ID, or null of no such action exists.

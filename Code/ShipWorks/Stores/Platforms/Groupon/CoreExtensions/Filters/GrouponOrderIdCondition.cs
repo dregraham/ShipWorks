@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Filters
                 orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(GrouponOrderFields.GrouponOrderID), context));
             }
 
-            using (SqlGenerationScope scope = context.PushScope(OrderSearchFields.OrderID, GrouponOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, GrouponOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(GrouponOrderSearchFields.GrouponOrderID), context));
             }
