@@ -1019,6 +1019,7 @@
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProvider.cs" />

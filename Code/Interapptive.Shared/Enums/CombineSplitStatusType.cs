@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace Interapptive.Shared.Enums
 {
@@ -13,9 +13,6 @@ namespace Interapptive.Shared.Enums
         None = 0,
 
         [Description("Combined")]
-        Combined = 1,
-
-        [Description("Split")]
-        Split = 2
+        Combined = 1
     }
 }
