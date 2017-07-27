@@ -9352,6 +9352,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.GrouponOrderID);}
 		}
+		/// <summary>Creates a new GrouponOrderEntity.ParentOrderID field instance</summary>
+		public static EntityField2 ParentOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.ParentOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity GrouponOrderItemEntity</summary>
@@ -9496,6 +9501,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 GrouponOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.GrouponOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.ParentOrderID field instance</summary>
+		public static EntityField2 ParentOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.ParentOrderID);}
 		}
 	}
 

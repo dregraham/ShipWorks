@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     public class GrouponOrderIdentifier : OrderIdentifier
     {
         // GrouponStore's Order ID
-        private readonly string grouponStoreOrderId = "";
+        private readonly string grouponStoreOrderId;
 
         /// <summary>
         /// Constructor

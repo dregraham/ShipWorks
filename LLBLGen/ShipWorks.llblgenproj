@@ -1323,6 +1323,7 @@
       <EntityDefinition Name="GrouponOrder" ObjectID="21daa939-f188-4f96-9cb0-9e829e1aea97" InheritanceType="2">
         <Fields>
           <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="ParentOrderID" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponOrderItem" ObjectID="2710600a-6ab9-46fb-8833-ecfc7a7351aa" InheritanceType="2">
@@ -1339,6 +1340,7 @@
           <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="GrouponOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="ParentOrderID" Type="string" MaxLength="50" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponStore" ObjectID="76e408ac-3288-492e-af17-dbfca6e5aee7" InheritanceType="2">
@@ -3963,7 +3965,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T18:43:37.535759Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T11:45:00.2583721Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6018,6 +6020,7 @@
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderItem">
@@ -6037,6 +6040,7 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -10797,6 +10801,7 @@
           <FieldMappings>
             <FieldMapping FieldName="GrouponOrderID" TargetFieldName="GrouponOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="ParentOrderID" TargetFieldName="ParentOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponOrderItem" TargetName="ShipWorksLocal:dbo:GrouponOrderItem">
@@ -10814,6 +10819,7 @@
             <FieldMapping FieldName="GrouponOrderID" TargetFieldName="GrouponOrderID" />
             <FieldMapping FieldName="GrouponOrderSearchID" TargetFieldName="GrouponOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="ParentOrderID" TargetFieldName="ParentOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponStore" TargetName="ShipWorksLocal:dbo:GrouponStore">

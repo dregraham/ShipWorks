@@ -12,10 +12,12 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Groupon
@@ -25,15 +27,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Groupon)]
     public class GrouponDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponDownloader));
+        private readonly ILog log;
+        private readonly ICombineOrder orderCombiner;
+        private readonly IDataProvider dataProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponDownloader(StoreEntity store)
+        public GrouponDownloader(StoreEntity store, ICombineOrder orderCombiner,
+            IDataProvider dataProvider, Func<Type, ILog> createLogger)
             : base(store)
         {
-
+            this.dataProvider = dataProvider;
+            this.orderCombiner = orderCombiner;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -124,11 +131,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
-            if (order.IsNew && status != "open")
-            {
-                return;
-            }
-
             // Order already exists or is new and of status open
             order.OnlineStatus = GetOrderStatusName(status);
             order.OnlineStatusCode = GetOrderStatusName(status);
@@ -141,11 +143,13 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.OrderDate = orderDate;
             order.OnlineLastModified = orderDate;
 
+            order.ParentOrderID = jsonOrder["parent_order_id"]?.ToString();
+
             //Order Address
             GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
             LoadAddressInfo(order, customer);
 
-            //Order requestedshipping
+            //Order requested shipping
             order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
             //Order is new and its status is open
@@ -156,6 +160,32 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+            await CombineWithParent(order.OrderID).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Combine the child order with a parent order if one exists.
+        /// </summary>
+        private async Task<GenericResult<long>> CombineWithParent(long childOrderID)
+        {
+            GrouponOrderEntity childOrder = dataProvider.GetEntity(childOrderID) as GrouponOrderEntity;
+            if (childOrder.ParentOrderID.IsNullOrWhiteSpace())
+            {
+                return GenericResult.FromError<long>("No parent order found.");
+            }
+
+            GenericResult<OrderEntity> result = await InstantiateOrder(new GrouponOrderIdentifier(childOrder.ParentOrderID)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                string errorMsg = $"Skipping order '{childOrder.ParentOrderID}': {result.Message}.";
+                log.InfoFormat(errorMsg);
+                return GenericResult.FromError<long>(errorMsg);
+            }
+
+            OrderEntity parentOrder = result.Value;
+
+            return await orderCombiner.Combine(parentOrder.OrderID, new[] { childOrder, parentOrder }, parentOrder.OrderNumberComplete).ConfigureAwait(false);
         }
 
         /// <summary>

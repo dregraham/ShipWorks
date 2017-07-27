@@ -352,6 +352,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GrouponOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ParentOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -478,6 +480,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)GrouponOrderSearchFieldIndex.GrouponOrderID, true); }
 			set	{ SetValue((int)GrouponOrderSearchFieldIndex.GrouponOrderID, value); }
+		}
+
+		/// <summary> The ParentOrderID property of the Entity GrouponOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderSearch"."ParentOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ParentOrderID
+		{
+			get { return (System.String)GetValue((int)GrouponOrderSearchFieldIndex.ParentOrderID, true); }
+			set	{ SetValue((int)GrouponOrderSearchFieldIndex.ParentOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'GrouponOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

@@ -1597,9 +1597,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderEntity's mappings</summary>
 		private void InitGrouponOrderEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderEntity", @"ShipWorksLocal", @"dbo", "GrouponOrder", 2, 0);
+			this.AddElementMapping("GrouponOrderEntity", @"ShipWorksLocal", @"dbo", "GrouponOrder", 3, 0);
 			this.AddElementFieldMapping("GrouponOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderEntity", "GrouponOrderID", "GrouponOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("GrouponOrderEntity", "ParentOrderID", "ParentOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits GrouponOrderItemEntity's mappings</summary>
@@ -1617,10 +1618,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderSearchEntity's mappings</summary>
 		private void InitGrouponOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderSearchEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderSearch", 3, 0);
+			this.AddElementMapping("GrouponOrderSearchEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderSearch", 4, 0);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "GrouponOrderSearchID", "GrouponOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "GrouponOrderID", "GrouponOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("GrouponOrderSearchEntity", "ParentOrderID", "ParentOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits GrouponStoreEntity's mappings</summary>

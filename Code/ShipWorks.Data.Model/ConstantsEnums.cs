@@ -4036,6 +4036,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4102,6 +4104,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
