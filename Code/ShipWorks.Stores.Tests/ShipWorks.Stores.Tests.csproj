@@ -192,6 +192,7 @@
     <Compile Include="Platforms\Magento\MagentoProductCacheTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtilityTest.cs" />
     <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
