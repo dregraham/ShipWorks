@@ -5,7 +5,6 @@ using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats
 {
@@ -20,7 +19,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store)
             : base(store)
         {
-
         }
 
         /// <summary>
@@ -49,14 +47,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         private OrderEntity InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
-            string orderNumber = reader.ReadField("Order.Number", "0");
-
-            // pull in pre/postfix options
-            string prefix = "";
-            string postfix = "";
+            string orderNumber = reader.ReadField("Order.Number", "").TrimStart('0');
 
             // create the identifier
-            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
+            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, string.Empty, string.Empty);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);
@@ -77,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
                     while (reader.NextRecord())
                     {
                         // Update the status
-                        Progress.Detail = string.Format("Importing record {0}...", (QuantitySaved + 1));
+                        Progress.Detail = $"Importing record {QuantitySaved + 1}...";
 
                         LoadOrder(reader);
 

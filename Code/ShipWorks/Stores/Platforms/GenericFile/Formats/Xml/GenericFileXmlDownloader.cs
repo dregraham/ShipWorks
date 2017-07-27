@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Data.Connection;
 using log4net;
 using System.Xml;
 using System.Xml.Xsl;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import.Xml;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -62,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             while (orderNodes.MoveNext())
             {
                 // Update the status
-                Progress.Detail = string.Format("Importing order {0}...", (QuantitySaved + 1));
+                Progress.Detail = $"Importing order {QuantitySaved + 1}...";
 
                 XPathNavigator order = orderNodes.Current.Clone();
                 LoadOrder(order);
@@ -96,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         private OrderEntity InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
-            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty);
+            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty).TrimStart('0');
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(xpath, "OrderNumberPrefix", "");
