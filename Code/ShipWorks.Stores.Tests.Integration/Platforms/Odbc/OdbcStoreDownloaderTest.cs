@@ -150,6 +150,23 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
+        public void Download_DownloadDetailsStringDataSetToOrderNumberComplete()
+        {
+            odbcRecord = GetOdbcRecord("001", "Kevin");
+
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            List<DownloadDetailEntity> downloadDetailEntities;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                downloadDetailEntities = new LinqMetaData(adapter).DownloadDetail.ToList();
+            }
+
+            Assert.Equal("001", downloadDetailEntities.Single().ExtraStringData1);
+        }
+
+        [Fact]
         public void Download_RunTwice_UpdatesExistingOrder()
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
