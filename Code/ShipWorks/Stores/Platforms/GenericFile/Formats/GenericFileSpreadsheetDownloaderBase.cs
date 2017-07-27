@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+﻿using System.Data.SqlClient;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats
 {
@@ -51,14 +48,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         private OrderEntity InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
-            long orderNumber = reader.ReadField("Order.Number", 0L, false);
+            string orderNumber = reader.ReadField("Order.Number", "0");
 
             // pull in pre/postfix options
             string prefix = "";
             string postfix = "";
 
             // create the identifier
-            GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
+            GenericOrderIdentifier orderIdentifier = new GenericOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);
