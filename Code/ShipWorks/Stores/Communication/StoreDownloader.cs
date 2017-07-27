@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
@@ -312,16 +313,38 @@ namespace ShipWorks.Stores.Communication
             QueryFactory factory = new QueryFactory();
             EntityQuery<OrderEntity> query = factory.Order
                 .Where(OrderFields.IsManual == false)
-                .AndWhere(predicate)
-                .WithPath(OrderEntity.PrefetchPathOrderCharges)
-                .WithPath(OrderEntity.PrefetchPathStore)
-                .WithPath(OrderEntity.PrefetchPathOrderItems.WithSubPath(OrderItemEntity.PrefetchPathOrderItemAttributes));
+                .AndWhere(predicate);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 OrderEntity order = await adapter.FetchFirstAsync(query).ConfigureAwait(false);
 
-                return order?.IsNew == false ? order : null;
+                if (order?.IsNew == false)
+                {
+                    order.Store = StoreManager.GetStore(order.StoreID);
+
+                    CancellationTokenSource token = new CancellationTokenSource();
+
+                    await adapter.FetchEntityCollectionAsync(new QueryParameters
+                    {
+                        CollectionToFetch = order.OrderCharges,
+                        FilterToUse = OrderChargeFields.OrderID == order.OrderID
+                    }, token.Token);
+
+                    PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
+                    prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+
+                    await adapter.FetchEntityCollectionAsync(new QueryParameters
+                    {
+                        CollectionToFetch = order.OrderItems,
+                        FilterToUse = OrderItemFields.OrderID == order.OrderID,
+                        PrefetchPathToUse = prefetch
+                    }, token.Token);
+
+                    return order;
+                }
+
+                return null;
             }
         }
 
