@@ -75,5 +75,26 @@ namespace ShipWorks.Data.Modal.Tests
 
             Assert.Equal(long.MinValue, order.OrderNumber);
         }
+
+        [Theory]
+        [InlineData("", "1", "", "1", 1)]
+        [InlineData("abc", "1", "", "abc1", 1)]
+        [InlineData("", "1", "def", "1def", 1)]
+        [InlineData("", "abc", "", "abc", -9223372036854775808)]
+        [InlineData("abc", "def", "ghi", "abcdefghi", -9223372036854775808)]
+        [InlineData("abc", "", "", "abc", -9223372036854775808)]
+        [InlineData("", "", "def", "def", -9223372036854775808)]
+        [InlineData("", "", "", "", -9223372036854775808)]
+        [InlineData("", "a12d34", "", "a12d34", -9223372036854775808)]
+        public void ChangeOrderNumber_SetsOrderNumberCompleteWithPrefixPostfix(string prefix, string orderNumber,
+            string postfix, string expectedOrderNumberComplete, long expectedOrderNumber)
+        {
+            
+            OrderEntity order = new OrderEntity();
+            order.ChangeOrderNumber(orderNumber, prefix, postfix);
+
+            Assert.Equal(expectedOrderNumber, order.OrderNumber);
+            Assert.Equal(expectedOrderNumberComplete, order.OrderNumberComplete);
+        }
     }
 }
