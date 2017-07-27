@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Changes the order number.
         /// </summary>
-        public void ChangeOrderNumber(string orderNumber, string prefix = "", string postfix = "")
+        public void ChangeOrderNumber(string orderNumber, string prefix, string postfix)
         {
             settingOrderNumberComplete = true;
 
@@ -54,6 +54,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             settingOrderNumberComplete = false;
         }
+
+        /// <summary>
+        /// Changes the order number.
+        /// </summary>
+        public void ChangeOrderNumber(string orderNumber) => ChangeOrderNumber(orderNumber, string.Empty, string.Empty);
 
         /// <summary>
         /// Trying to set a value of a field
