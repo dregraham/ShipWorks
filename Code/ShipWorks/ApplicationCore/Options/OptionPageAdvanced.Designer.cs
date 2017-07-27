@@ -305,8 +305,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelShipSenseInfo.Name = "labelShipSenseInfo";
             this.labelShipSenseInfo.Size = new System.Drawing.Size(423, 40);
             this.labelShipSenseInfo.TabIndex = 36;
-            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remember what you do, and then automatically se" +
-    "t the weights, dimensions, and customs information of future shipments.";
+            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remembers what you do, and then automatically se" +
+    "ts the weights, dimensions, and customs information of future shipments.";
             // 
             // editShipSenseSettings
             // 
@@ -339,7 +339,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.label2.Size = new System.Drawing.Size(352, 32);
             this.label2.TabIndex = 40;
             this.label2.Text = "ShipWorks learns by comparing similar orders.  You can control what order informa" +
-    "tion ShipSense uses to consider to orders as similar.";
+    "tion ShipSense uses to consider two orders as similar.";
             // 
             // label3
             // 
