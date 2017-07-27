@@ -23,13 +23,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         // the complete order number, including pre- and post- fix
         readonly string orderNumberString = "";
 
-
         /// <summary>
         /// Constructor
         /// </summary>
         public GenericOrderIdentifier(long orderNumber, string prefix, string postfix)
             : base(orderNumber)
         {
+            orderNumberString = orderNumber.ToString();
             orderPrefix = prefix;
             orderPostfix = postfix;
         }
