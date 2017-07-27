@@ -39,13 +39,15 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         // Status code container 
         GenericStoreStatusCodeProvider statusCodeProvider;
 
+        private readonly GenericModuleStoreType storeType;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public GenericModuleDownloader(StoreEntity store)
             : base(store)
         {
-
+            storeType = StoreType as GenericModuleStoreType;
         }
 
         /// <summary>
@@ -70,8 +72,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             try
             {
                 bool supportMode = InterapptiveOnly.MagicKeysDown;
-
-                GenericModuleStoreType storeType = (GenericModuleStoreType)StoreTypeManager.GetType(Store);
 
                 if (!supportMode)
                 {
@@ -276,14 +276,24 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
+            string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "").TrimStart('0');
+
+            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
+            {
+                long parsedOrderNumber;
+                if (!long.TryParse(orderNumber, out parsedOrderNumber))
+                {
+                    throw new DownloadException("When downloading by order number, all order numbers must be a number.\r\n\r\n" +
+                                                $"Nonnumeric order number found: {orderNumber}");
+                }
+            }
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
 
             // create the identifier
-            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            return storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>

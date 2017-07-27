@@ -335,6 +335,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
+        {
+            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+        }
+
+        /// <summary>
         /// Returns the fields that identify the customer for an order
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)
