@@ -3,6 +3,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -55,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             string postfix = "";
 
             // create the identifier
-            GenericOrderIdentifier orderIdentifier = new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);

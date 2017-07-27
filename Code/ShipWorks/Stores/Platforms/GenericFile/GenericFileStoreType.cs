@@ -154,6 +154,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         }
 
         /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
+        {
+            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+        }
+
+        /// <summary>
         /// Create the wizard pages for adding a new store
         /// </summary>
         /// <param name="scope"></param>

@@ -101,9 +101,9 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(xpath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(xpath, "OrderNumberPostfix", "");
-            
+
             // create the identifier
-            GenericOrderIdentifier orderIdentifier = new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);
