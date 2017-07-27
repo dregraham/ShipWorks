@@ -15,6 +15,7 @@ using System.Xml.Xsl;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import.Xml;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -95,14 +96,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         private OrderEntity InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
-            int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
+            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty);
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(xpath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(xpath, "OrderNumberPostfix", "");
-
+            
             // create the identifier
-            GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
+            GenericOrderIdentifier orderIdentifier = new GenericOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);
