@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
             // Put this here for now so that we can work on the downloader
-            return new GenericOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return new GenericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>

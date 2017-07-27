@@ -3763,7 +3763,6 @@
     <Compile Include="Stores\Platforms\GenericFile\GenericFileDownloaderBase.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileFormatException.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileLoadException.cs" />
-    <Compile Include="Stores\Platforms\GenericFile\GenericFileOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileStoreException.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileStoreType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileFormat.cs" />

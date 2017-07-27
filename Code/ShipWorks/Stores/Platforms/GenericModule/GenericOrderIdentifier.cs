@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+﻿using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -41,15 +37,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             : this(long.MinValue, prefix, postfix)
         {
             orderNumberString = orderNumber;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public GenericOrderIdentifier(long orderNumber, string orderNumberComplete)
-            : base(orderNumber)
-        {
-            orderNumberString = orderNumberComplete;
         }
 
         /// <summary>

@@ -331,7 +331,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GenericOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return new GenericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>
