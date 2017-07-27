@@ -140,11 +140,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
             {
-                orders = new LinqMetaData(adapter).Order.Where(o => o.OrderNumberComplete == "001").ToList();
+                orders = new LinqMetaData(adapter).Order.Where(o => o.OrderNumber != 12345).ToList();
             }
 
             Assert.Equal(1, orders.Count);
-            Assert.Equal("001", orders.Single().OrderNumberComplete);
+            Assert.Equal("1", orders.Single().OrderNumberComplete);
             Assert.Equal("Kevin", orders.Single().ShipFirstName);
             Assert.Equal(1, orders.Single().OrderNumber);
         }
@@ -163,7 +163,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
                 downloadDetailEntities = new LinqMetaData(adapter).DownloadDetail.ToList();
             }
 
-            Assert.Equal("001", downloadDetailEntities.Single().ExtraStringData1);
+            Assert.Equal("1", downloadDetailEntities.Single().ExtraStringData1);
         }
 
         [Fact]
@@ -180,11 +180,33 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
             {
-                orders = new LinqMetaData(adapter).Order.Where(o => o.OrderNumberComplete == "001").ToList();
+                orders = new LinqMetaData(adapter).Order.Where(o => o.OrderNumber != 12345).ToList();
             }
 
             Assert.Equal(1, orders.Count);
-            Assert.Equal("001", orders.Single().OrderNumberComplete);
+            Assert.Equal("1", orders.Single().OrderNumberComplete);
+            Assert.Equal("Alex", orders.Single().ShipFirstName);
+        }
+
+        [Fact]
+        public void Download_RunTwice_WithOrdersWithDifferentAmountOfLeadingZeros_TreatsOrdersAsTheSame()
+        {
+            odbcRecord = GetOdbcRecord("55", "Kevin");
+            var testObject1 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            odbcRecord = GetOdbcRecord("0055", "Alex");
+            var testObject2 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+
+            List<OrderEntity> orders;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                orders = new LinqMetaData(adapter).Order.Where(o => o.OrderNumber != 12345).ToList();
+            }
+
+            Assert.Equal(1, orders.Count);
+            Assert.Equal("55", orders.Single().OrderNumberComplete);
             Assert.Equal("Alex", orders.Single().ShipFirstName);
         }
 
