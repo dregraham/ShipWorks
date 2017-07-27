@@ -169,6 +169,7 @@ namespace ShipWorks.Stores.Content
             combinedOrder.RollupItemCount = 0;
             combinedOrder.RollupItemTotalWeight = 0;
             combinedOrder.RollupNoteCount = 0;
+            combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {
