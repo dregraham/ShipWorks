@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
@@ -279,7 +280,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "").TrimStart('0');
+            string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "");
+
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
             if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
             {

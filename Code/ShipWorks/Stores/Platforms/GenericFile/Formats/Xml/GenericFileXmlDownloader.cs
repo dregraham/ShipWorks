@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         private OrderEntity InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
-            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty).TrimStart('0');
+            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty);
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(xpath, "OrderNumberPrefix", "");
