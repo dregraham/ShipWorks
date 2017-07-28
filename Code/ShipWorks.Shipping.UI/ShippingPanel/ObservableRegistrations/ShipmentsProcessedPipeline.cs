@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void HandleShipmentsProcessed(ShippingPanelViewModel viewModel, ProcessShipmentResult processResults)
         {
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(processResults.Shipment);
+            viewModel.UnloadShipment();
             viewModel.LoadShipment(shipmentAdapter);
 
             viewModel.AllowEditing = !processResults.Shipment?.Processed ?? true;
