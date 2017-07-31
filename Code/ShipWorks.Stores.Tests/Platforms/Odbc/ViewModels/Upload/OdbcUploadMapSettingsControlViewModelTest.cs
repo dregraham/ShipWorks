@@ -364,6 +364,35 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
         }
 
         [Fact]
+        public void OpenMapSettingsFile_CallsUpgradetoAlphanumericOrderNumbers()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockOpenFileDialog(DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSource).Returns("my query");
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                fieldMapMock.Verify(f=>f.UpgradeToAlphanumericOrderNumbers(), Times.Once);
+            }
+        }
+
+        [Fact]
         public void OpenMapSettingsFileCommand_FieldMapNameIsSetFromDisk()
         {
             using (var stream = new MemoryStream())

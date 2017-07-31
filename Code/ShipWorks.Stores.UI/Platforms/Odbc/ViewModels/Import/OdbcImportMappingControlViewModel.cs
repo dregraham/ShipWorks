@@ -281,7 +281,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
 
             IOdbcFieldMapEntry orderNumberEntry =
-                storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
+                storeFieldMap.FindEntriesBy(OrderFields.OrderNumberComplete, true).SingleOrDefault();
 
             // First set IsSingleLineOrder based on store value
             IsSingleLineOrder = store.ImportOrderItemStrategy == (int) OdbcImportOrderItemStrategy.SingleLine;
@@ -472,7 +472,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             }
             else
             {
-                IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
+                IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumberComplete);
                 map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
             }
 

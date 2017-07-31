@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Data.Connection;
 using log4net;
 using System.Xml;
 using System.Xml.Xsl;
@@ -61,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             while (orderNodes.MoveNext())
             {
                 // Update the status
-                Progress.Detail = string.Format("Importing order {0}...", (QuantitySaved + 1));
+                Progress.Detail = $"Importing order {QuantitySaved + 1}...";
 
                 XPathNavigator order = orderNodes.Current.Clone();
                 LoadOrder(order);
@@ -95,14 +90,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         private OrderEntity InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
-            int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
+            string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty);
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(xpath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(xpath, "OrderNumberPostfix", "");
 
             // create the identifier
-            GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
+            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             OrderEntity order = InstantiateOrder(orderIdentifier);

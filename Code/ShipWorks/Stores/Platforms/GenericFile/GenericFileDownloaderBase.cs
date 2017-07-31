@@ -21,6 +21,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileDownloaderBase));
 
+        protected readonly GenericFileStoreType storeType;
+
         int fileCount = 0;
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         protected GenericFileDownloaderBase(GenericFileStoreEntity store)
             : base(store)
         {
-
+            storeType = StoreType as GenericFileStoreType;
         }
 
         /// <summary>

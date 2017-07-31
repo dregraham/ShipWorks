@@ -15,6 +15,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
         bool settingOrderNumberComplete = false;
 
+        private const long AlphaNumericOrderNumberIdentifier = long.MinValue;
+
         // We cache this so we only have to look it up once
         static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
@@ -37,6 +39,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             UpdateOrderNumberComplete();
         }
+
+        /// <summary>
+        /// Changes the order number.
+        /// </summary>
+        public void ChangeOrderNumber(string orderNumber, string prefix, string postfix)
+        {
+            settingOrderNumberComplete = true;
+
+            OrderNumberComplete = $"{prefix}{orderNumber}{postfix}";
+
+            long numericOrderNumber;
+            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : AlphaNumericOrderNumberIdentifier;
+
+            settingOrderNumberComplete = false;
+        }
+
+        /// <summary>
+        /// Changes the order number.
+        /// </summary>
+        public void ChangeOrderNumber(string orderNumber) => ChangeOrderNumber(orderNumber, string.Empty, string.Empty);
 
         /// <summary>
         /// Trying to set a value of a field
@@ -71,16 +93,16 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         private void UpdateOrderNumberComplete()
         {
-            settingOrderNumberComplete = true;
+            if (OrderNumber != AlphaNumericOrderNumberIdentifier && !settingOrderNumberComplete)
+            {
+                settingOrderNumberComplete = true;
 
-            OrderNumberComplete =
-                string.Format("{0}{1}{2}",
-                prefix,
-                OrderNumber,
-                postfix);
+                OrderNumberComplete = $"{prefix}{OrderNumber}{postfix}";
 
-            settingOrderNumberComplete = false;
+                settingOrderNumberComplete = false;
+            }
         }
+
         /// <summary>
         /// Special processing to ensure change tracking for entity hierarchy
         /// </summary>

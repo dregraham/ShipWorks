@@ -19,6 +19,7 @@ using ShipWorks.FileTransfer;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Formats.Excel;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {
@@ -149,7 +150,15 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GenericFileOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return new GenericOrderIdentifier(order.OrderNumberComplete);
+        }
+
+        /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
+        {
+            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>

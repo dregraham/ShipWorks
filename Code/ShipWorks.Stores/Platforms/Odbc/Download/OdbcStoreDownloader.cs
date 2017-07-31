@@ -3,7 +3,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -23,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
+        private readonly OdbcStoreType odbcStoreType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
@@ -36,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
+            odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
         }
@@ -164,17 +165,29 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             fieldMap.ApplyValues(firstRecord);
 
             // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
 
             if (odbcFieldMapEntry == null)
             {
                 throw new DownloadException("Order number not found in map.");
             }
 
-            // Create an order using the order number
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier((long)odbcFieldMapEntry.ShipWorksField.Value));
+            if (odbcFieldMapEntry.ShipWorksField.Value == null)
+            {
+                throw new DownloadException("Order number is empty in your ODBC data source.");
+            }
 
+            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
+
+            // Create an order using the order number
+            OrderEntity orderEntity = InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber));
+            
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
+            
+            orderEntity.ChangeOrderNumber(orderNumber);
 
             return orderEntity;
         }
