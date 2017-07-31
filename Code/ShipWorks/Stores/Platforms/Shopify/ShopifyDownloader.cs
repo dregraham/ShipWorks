@@ -72,6 +72,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 try
                 {
+                    Tuple<DateTime, int> previousDownloadInfo = new Tuple<DateTime, int>(DateTime.MinValue, -1);
                     Tuple<DateTime, DateTime> dateRange = GetNextDownloadDateRange();
 
                     // Get count of orders
@@ -82,6 +83,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                         Progress.PercentComplete = 100;
                         return;
                     }
+
+                    previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Item1, totalCount);
 
                     // Keep going until there are no more to download
                     while (true)
@@ -103,6 +106,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                         // Get how many have come in since we started
                         int nextCount = WebClient.GetOrderCount(dateRange.Item1, dateRange.Item2);
+
+                        // Detect if we are in an infinite loop where we keep asking for the same last modified time
+                        // and keep getting back the same order count.  Return if this happens.
+                        if (previousDownloadInfo.Item1 == dateRange.Item1 && previousDownloadInfo.Item2 == nextCount)
+                        {
+                            return;
+                        }
+
+                        // Update our previous download date and order count.
+                        previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Item1, nextCount);
 
                         if (nextCount > 0)
                         {
