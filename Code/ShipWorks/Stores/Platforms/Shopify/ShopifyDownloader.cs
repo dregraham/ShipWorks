@@ -72,7 +72,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 try
                 {
-                    Tuple<DateTime, int> previousDownloadInfo = new Tuple<DateTime, int>(DateTime.MinValue, -1);
                     Tuple<DateTime, DateTime> dateRange = GetNextDownloadDateRange();
 
                     // Get count of orders
@@ -84,19 +83,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                         return;
                     }
 
-                    previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Item1, totalCount);
+                    Tuple<DateTime, int> previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Item1, totalCount);
 
                     // Keep going until there are no more to download
                     while (true)
                     {
                         bool shouldContinue = await DownloadOrderRange(dateRange.Item1, dateRange.Item2).ConfigureAwait(false);
-                        if (!shouldContinue)
-                        {
-                            return;
-                        }
 
-                        // Check for cancel
-                        if (Progress.IsCancelRequested)
+                        if (!shouldContinue || Progress.IsCancelRequested)
                         {
                             return;
                         }
