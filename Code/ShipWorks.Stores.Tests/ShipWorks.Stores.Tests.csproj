@@ -192,6 +192,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClientTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
+    <Compile Include="Platforms\Jet\JetStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
@@ -394,6 +395,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Platforms\ShopSite\Responses\TestConnection.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

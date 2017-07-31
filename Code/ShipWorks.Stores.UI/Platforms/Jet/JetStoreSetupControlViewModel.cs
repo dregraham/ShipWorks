@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
         /// </summary>
         public void Load(JetStoreEntity store)
         {
-            apiUser = store.ApiUser;
+            ApiUser = store.ApiUser;
             Secret = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser).Decrypt(store.Secret);
         }
 
