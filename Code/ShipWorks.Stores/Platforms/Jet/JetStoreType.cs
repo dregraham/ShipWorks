@@ -6,6 +6,9 @@ using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
+    /// <summary>
+    /// Store type for Jet
+    /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Jet, ExternallyOwned = true)]
     public class JetStoreType : StoreType
     {
