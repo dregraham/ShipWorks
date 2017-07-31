@@ -19,7 +19,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void TypeCode_IsJet()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity());
+            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
+            {
+                StoreTypeCode = StoreTypeCode.Jet
+            });
 
             var typeCode = testObject.TypeCode;
 
@@ -29,7 +32,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void CreateStoreInstance_ReturnsJetStoreEntity()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity());
+            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
+            {
+                StoreTypeCode = StoreTypeCode.Jet
+            });
 
             StoreEntity store = testObject.CreateStoreInstance();
 
@@ -39,7 +45,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void CreateStoreInstance_InitializesStoreValues()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity());
+            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
+            {
+                StoreTypeCode = StoreTypeCode.Jet
+            });
 
             JetStoreEntity store = testObject.CreateStoreInstance() as JetStoreEntity;
 
