@@ -20,8 +20,8 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
-        private const string endpointBase = "https://merchant-api.jet.com/api/";
-        private readonly string tokenEndpoint = $"{endpointBase}/token";
+        private const string EndpointBase = "https://merchant-api.jet.com/api/";
+        private readonly string tokenEndpoint = $"{EndpointBase}/token";
 
         /// <summary>
         /// Constructor
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                var token = JsonConvert.DeserializeObject<TokenResponse>(result, new JsonSerializerSettings
+                TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(result, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore
