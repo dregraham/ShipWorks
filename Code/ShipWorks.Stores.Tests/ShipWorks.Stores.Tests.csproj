@@ -194,6 +194,7 @@
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreTypeTest.cs" />
+    <Compile Include="Platforms\Jet\JetWebClientTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
