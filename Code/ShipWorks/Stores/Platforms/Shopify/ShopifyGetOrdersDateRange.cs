@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (leftChild.OrderCount < this.OrderCount)
             {
                 // Create the right child
-                rightChild = new ShopifyGetOrdersDateRange(leftChild.EndDate.AddSeconds(1), EndDate);
+                rightChild = new ShopifyGetOrdersDateRange(leftChild.EndDate, EndDate);
 
                 // Yield all our descendants on the right side (if any)
                 foreach (var range in rightChild.GenerateOrderRanges(webClient))

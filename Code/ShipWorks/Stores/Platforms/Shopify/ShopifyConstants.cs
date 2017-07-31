@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
         // 250 is the max that Shopify allows
         [Range(1, 250, ErrorMessage = "Value for OrdersPageSize must be between 1 and 250.")]
-        public const int OrdersPageSize = 100;
+        public const int OrdersPageSize = 250;
 
         // This is the error code that is returned in the request if the last api call exceeds the allowed amount.
         public const int OverApiLimitStatusCode = 429;

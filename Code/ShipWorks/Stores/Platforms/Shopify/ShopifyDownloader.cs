@@ -146,9 +146,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(180));
             }
 
-            // Add a second to the start date so we don't redownload the previous order over and over
-            startDate = startDate.Value.AddSeconds(1);
-
             // Use the web servers ending time, backed off by a little so we don't have to worry about race conditions
             DateTime endDate = WebClient.GetServerCurrentDateTime().Subtract(TimeSpan.FromMinutes(2));
 
