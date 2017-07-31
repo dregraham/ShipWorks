@@ -220,6 +220,9 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
+      <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -631,6 +634,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Jet\JetStoreSetupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
