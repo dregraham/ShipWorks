@@ -36,6 +36,8 @@ namespace ShipWorks.Startup
 
             ContainerInitializer.Initialize();
 
+            WindowsFormsApp1.StackTraceHelper.FlowReservoir.Enroll();
+
             ShipWorks.Program.Main();
         }
     }

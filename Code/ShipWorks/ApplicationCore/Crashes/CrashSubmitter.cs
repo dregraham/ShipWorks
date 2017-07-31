@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -23,10 +22,10 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
+using WindowsFormsApp1.StackTraceHelper;
 
 namespace ShipWorks.ApplicationCore.Crashes
 {
@@ -410,7 +409,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 sb.AppendFormat("{0}{1}Invoking Callstack:", tab, indent);
                 sb.AppendLine();
 
-                AppendStackTrace(backgroundEx.InvokingThreadTrace.ToString(), sb, tab, indent);
+                AppendStackTrace(backgroundEx.InvokingThreadTrace.ToString(), sb, tab, indent, backgroundEx.CausalityChain);
             }
             else
             {
@@ -434,7 +433,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 sb.AppendFormat("{0}{1}Callstack:", tab, indent);
                 sb.AppendLine();
 
-                AppendStackTrace(ex.StackTrace, sb, tab, indent);
+                AppendStackTrace(ex.StackTrace, sb, tab, indent, FlowReservoir.ExtendedStack);
 
                 if (ex.InnerException != null)
                 {
@@ -449,7 +448,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Append a formatted version of the given stack trace
         /// </summary>
-        private static void AppendStackTrace(string stackTrace, StringBuilder sb, string tab, string indent)
+        private static void AppendStackTrace(string stackTrace, StringBuilder sb, string tab, string indent, string causalityChain)
         {
             if (string.IsNullOrEmpty(stackTrace))
             {
@@ -465,6 +464,18 @@ namespace ShipWorks.ApplicationCore.Crashes
                         sb.AppendFormat("{0}{1}{1}{2}", tab, indent, line.Trim());
                         sb.AppendLine();
                     }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(causalityChain))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{tab}{indent}CAUSALITY CHAIN:");
+
+                foreach (string line in causalityChain.Split('\n', '\r').Where(x => !x.IsNullOrWhiteSpace()))
+                {
+                    sb.AppendFormat("{0}{1}{1}{2}", tab, indent, line.Trim());
+                    sb.AppendLine();
                 }
             }
         }

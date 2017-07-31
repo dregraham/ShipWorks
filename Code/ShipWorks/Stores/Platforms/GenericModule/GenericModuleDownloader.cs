@@ -17,6 +17,7 @@ using ShipWorks.Data.Import.Xml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using WindowsFormsApp1.StackTraceHelper;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -324,6 +325,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                 // update the status
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
+
+                if (QuantitySaved == 100)
+                {
+                    throw new InvalidOperationException(FlowReservoir.ExtendedStack);
+                }
             }
 
             return anyProcessed;
