@@ -5938,6 +5938,23 @@ PRINT N'Adding foreign keys to [dbo].[WalmartStore]'
 GO
 ALTER TABLE [dbo].[WalmartStore] ADD CONSTRAINT [FK_WalmartStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Creating [dbo].[JetStore]'
+GO
+CREATE TABLE [dbo].[JetStore]
+(
+[StoreID] [bigint] NOT NULL,
+[ApiUser] [nvarchar](100) NOT NULL,
+[Secret] [nvarchar](100) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetStore] on [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [PK_JetStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [FK_JetStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Creating [dbo].[UpsRateTable]'
 GO
 CREATE TABLE [dbo].[UpsRateTable](

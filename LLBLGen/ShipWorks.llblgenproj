@@ -1407,6 +1407,12 @@
           <Field Name="TrackBySMS" Type="bool" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="JetStore" ObjectID="4b2260ee-edf2-4771-876b-3f7bf14cc64f" InheritanceType="2">
+        <Fields>
+          <Field Name="ApiUser" Type="string" MaxLength="100" FieldIndex="0" />
+          <Field Name="Secret" Type="string" MaxLength="100" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="LabelSheet" ObjectID="56e1997e-27f4-4322-b3af-2747c4eebd37">
         <Fields>
           <Field Name="Columns" Type="int" FieldIndex="12" />
@@ -3645,6 +3651,7 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":GrouponStore" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":InfopiaOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":InfopiaStore" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":JetStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":LemonStandOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":LemonStandOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":LemonStandStore" />
@@ -3721,7 +3728,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T18:43:37.535759Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-31T16:16:07.7931898Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5880,6 +5887,14 @@
                     </Field>
                     <Field Name="IsDeliveryDutyPaid" Ordinal="7" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="8" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="JetStore">
+                  <PkConstraintName Name="PK_JetStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ApiUser" Ordinal="2" DbType="12" Length="100" />
+                    <Field Name="Secret" Ordinal="3" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="LabelSheet">
@@ -8584,6 +8599,11 @@
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:iParcelShipment:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetStore:FK_JetStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:JetStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:LemonStandOrder:FK_LemonStandOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:LemonStandOrder:OrderID" />
@@ -10382,6 +10402,13 @@
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="TrackByEmail" TargetFieldName="TrackByEmail" />
             <FieldMapping FieldName="TrackBySMS" TargetFieldName="TrackBySMS" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetStore" TargetName="ShipWorksLocal:dbo:JetStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ApiUser" TargetFieldName="ApiUser" />
+            <FieldMapping FieldName="Secret" TargetFieldName="Secret" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":LabelSheet" TargetName="ShipWorksLocal:dbo:LabelSheet">

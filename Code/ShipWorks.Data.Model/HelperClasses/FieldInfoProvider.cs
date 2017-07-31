@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (186 + 0));
+			this.InitClass( (187 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -128,6 +128,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelProfileEntityInfos();
 			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
+			InitJetStoreEntityInfos();
 			InitLabelSheetEntityInfos();
 			InitLemonStandOrderEntityInfos();
 			InitLemonStandOrderItemEntityInfos();
@@ -1606,6 +1607,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelShipmentEntity", "TrackBySMS", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.TrackBySMS, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "IsDeliveryDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)IParcelShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+		}
+		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
+		private void InitJetStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetStoreFieldIndex), "JetStoreEntity");
+			this.AddElementFieldInfo("JetStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)JetStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("JetStoreEntity", "ApiUser", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.ApiUser, 100, 0, 0);
+			this.AddElementFieldInfo("JetStoreEntity", "Secret", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.Secret, 100, 0, 0);
 		}
 		/// <summary>Inits LabelSheetEntity's FieldInfo objects</summary>
 		private void InitLabelSheetEntityInfos()

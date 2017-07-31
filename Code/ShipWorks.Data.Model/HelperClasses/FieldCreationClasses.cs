@@ -10159,6 +10159,176 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity JetStoreEntity</summary>
+	public partial class JetStoreFields
+	{
+		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new JetStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new JetStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new JetStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new JetStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new JetStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new JetStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ApiUser field instance</summary>
+		public static EntityField2 ApiUser
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ApiUser);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Secret field instance</summary>
+		public static EntityField2 Secret
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Secret);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity LabelSheetEntity</summary>
 	public partial class LabelSheetFields
 	{

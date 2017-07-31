@@ -4381,6 +4381,78 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetStore.</summary>
+	public enum JetStoreFieldIndex
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. Inherited from Store</summary>
+		RowVersion,
+		///<summary>License. Inherited from Store</summary>
+		License,
+		///<summary>Edition. Inherited from Store</summary>
+		Edition,
+		///<summary>TypeCode. Inherited from Store</summary>
+		TypeCode,
+		///<summary>Enabled. Inherited from Store</summary>
+		Enabled,
+		///<summary>SetupComplete. Inherited from Store</summary>
+		SetupComplete,
+		///<summary>StoreName. Inherited from Store</summary>
+		StoreName,
+		///<summary>Company. Inherited from Store</summary>
+		Company,
+		///<summary>Street1. Inherited from Store</summary>
+		Street1,
+		///<summary>Street2. Inherited from Store</summary>
+		Street2,
+		///<summary>Street3. Inherited from Store</summary>
+		Street3,
+		///<summary>City. Inherited from Store</summary>
+		City,
+		///<summary>StateProvCode. Inherited from Store</summary>
+		StateProvCode,
+		///<summary>PostalCode. Inherited from Store</summary>
+		PostalCode,
+		///<summary>CountryCode. Inherited from Store</summary>
+		CountryCode,
+		///<summary>Phone. Inherited from Store</summary>
+		Phone,
+		///<summary>Fax. Inherited from Store</summary>
+		Fax,
+		///<summary>Email. Inherited from Store</summary>
+		Email,
+		///<summary>Website. Inherited from Store</summary>
+		Website,
+		///<summary>AutoDownload. Inherited from Store</summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>ApiUser. </summary>
+		ApiUser,
+		///<summary>Secret. </summary>
+		Secret,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LabelSheet.</summary>
 	public enum LabelSheetFieldIndex
 	{
@@ -10999,6 +11071,8 @@ namespace ShipWorks.Data.Model
 		IParcelProfilePackageEntity,
 		///<summary>IParcelShipment</summary>
 		IParcelShipmentEntity,
+		///<summary>JetStore</summary>
+		JetStoreEntity,
 		///<summary>LabelSheet</summary>
 		LabelSheetEntity,
 		///<summary>LemonStandOrder</summary>

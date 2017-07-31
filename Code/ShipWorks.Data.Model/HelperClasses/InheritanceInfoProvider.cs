@@ -79,6 +79,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("GrouponStoreEntity", "StoreEntity", new GrouponStoreRelations(), new GrouponStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("InfopiaOrderItemEntity", "OrderItemEntity", new InfopiaOrderItemRelations(), new InfopiaOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("InfopiaStoreEntity", "StoreEntity", new InfopiaStoreRelations(), new InfopiaStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("JetStoreEntity", "StoreEntity", new JetStoreRelations(), new JetStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("LemonStandOrderEntity", "OrderEntity", new LemonStandOrderRelations(), new LemonStandOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("LemonStandOrderItemEntity", "OrderItemEntity", new LemonStandOrderItemRelations(), new LemonStandOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("LemonStandStoreEntity", "StoreEntity", new LemonStandStoreRelations(), new LemonStandStoreEntityFactory(), 1-1);
