@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Stores.Platforms
+namespace ShipWorks.Stores.Platforms.Jet
 {
     /// <summary>
     /// Interface for JetWebClient

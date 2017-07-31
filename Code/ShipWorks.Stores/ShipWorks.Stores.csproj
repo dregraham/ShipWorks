@@ -245,9 +245,11 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
-    <Compile Include="Platforms\IJetWebClient.cs" />
+    <Compile Include="Platforms\Jet\DTO\TokenResponse.cs" />
+    <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
+    <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -494,6 +496,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
