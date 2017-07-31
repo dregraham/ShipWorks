@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -12,6 +13,7 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
     /// <summary>
     /// ViewModel for setting up a Jet store
     /// </summary>
+    [Component]
     public class JetStoreSetupControlViewModel : IJetStoreSetupControlViewModel, INotifyPropertyChanged
     {
         private readonly IJetWebClient webClient;
