@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -222,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// Performs the order combining on those selected contained orders
         /// </summary>
         [NDependIgnoreLongMethod]
-        public bool Combine()
+        public async Task<bool> Combine()
         {
             List<EbayCombinedOrderComponent> toCombine = components.Where(c => c.Included).ToList();
 
@@ -282,13 +283,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             bool result = false;
             try
             {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) =>
-                {
-                    result = CombineLocalOrders(adapter, toCombine, ebayOrderID);
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = 
+                    new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
+                await sqlDeadlockRetry.ExecuteWithRetryAsync((SqlAdapter adapter) =>
+                {
+                    return CombineLocalOrders(adapter, toCombine, ebayOrderID);
                     // Don't commit because sqlDeadlockRetry will do the commit
-                });
+                }).ConfigureAwait(false);
             }
             catch (ORMQueryExecutionException ex)
             {
@@ -324,7 +326,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
         [NDependIgnoreLongMethod]
-        private bool CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
+        private async Task<bool> CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
             // Do nothing
             if (toCombine.Count == 0)
@@ -353,7 +355,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             newOrder.RollupItemTotalWeight = 0;
 
             // Generate a new order number
-            newOrder.OrderNumber = OrderUtility.GetNextOrderNumber(store.StoreID);
+            newOrder.OrderNumber = await new OrderUtilityWrapper(new SqlAdapterFactory()).GetNextOrderNumberAsync(store.StoreID)
+                .ConfigureAwait(false);
 
             if (!locallyCombinedOnly)
             {

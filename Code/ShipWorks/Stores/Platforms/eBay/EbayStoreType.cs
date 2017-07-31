@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
@@ -834,11 +835,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Worker method for combining eBay orders
         /// </summary>
-        private void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
+        private async void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
         {
             try
             {
-                toCombine.Combine();
+                await toCombine.Combine().ConfigureAwait(false);
             }
             catch (EbayException ex)
             {

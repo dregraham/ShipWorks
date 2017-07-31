@@ -252,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             // assign an order number
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
         }
 
         /// <summary>

@@ -1325,8 +1325,10 @@
     <Compile Include="Stores\Content\ICombineOrderOrchestrator.cs" />
     <Compile Include="Stores\Content\ICombineOrder.cs" />
     <Compile Include="Stores\Content\IOrderCombineValidator.cs" />
+    <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\IStoreSpecificCombineOrder.cs" />
     <Compile Include="Stores\Content\CombineOrderValidator.cs" />
+    <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />

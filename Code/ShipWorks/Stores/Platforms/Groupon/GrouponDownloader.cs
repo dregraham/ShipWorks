@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order is new and its status is open
             if (order.IsNew)
             {
-                LoadOrderDetailsWhenNew(jsonOrder, order);
+                await LoadOrderDetailsWhenNew(jsonOrder, order).ConfigureAwait(false);
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
@@ -161,10 +161,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Load order details when the order is new
         /// </summary>
-        private void LoadOrderDetailsWhenNew(JToken jsonOrder, GrouponOrderEntity order)
+        private async Task LoadOrderDetailsWhenNew(JToken jsonOrder, GrouponOrderEntity order)
         {
             // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
             //Unit of measurement used for weight
             string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";

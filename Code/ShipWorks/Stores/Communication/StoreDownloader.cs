@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Communication
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
         private readonly IConfigurationEntity config;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IOrderUtility orderUtility;
         private long downloadLogID;
         protected DbConnection connection;
         private string orderStatusText = string.Empty;
@@ -62,15 +63,25 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
+        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory) :
+            this(store, storeType, configuration, sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
-            this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory)
+        this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory)
+        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, 
+                                ISqlAdapterFactory sqlAdapterFactory, IOrderUtility orderUtility)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
@@ -78,6 +89,7 @@ namespace ShipWorks.Stores.Communication
             StoreType = storeType;
             config = configuration;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.orderUtility = orderUtility;
         }
 
         /// <summary>
@@ -120,6 +132,13 @@ namespace ShipWorks.Stores.Communication
         /// The number of orders that have been saved, that are the first time they have been downloaded.
         /// </summary>
         public int QuantityNew { get; private set; }
+
+        /// <summary>
+        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
+        /// order numbers for ShipWorks, such as Amazon and eBay.
+        /// </summary>
+        protected async Task<long> GetNextOrderNumberAsync() => await orderUtility.GetNextOrderNumberAsync(Store.StoreID)
+                                                                             .ConfigureAwait(false);
 
         /// <summary>
         /// Download data from the configured store.
@@ -197,12 +216,6 @@ namespace ShipWorks.Stores.Communication
                 return await startingPoint.OrderNumber(Store).ConfigureAwait(false);
             }
         }
-
-        /// <summary>
-        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
-        /// order numbers for ShipWorks, such as Amazon and eBay.
-        /// </summary>
-        protected long GetNextOrderNumber() => OrderUtility.GetNextOrderNumber(Store.StoreID);
 
         /// <summary>
         /// Instantiates the order identified by the given identifier.  If no order exists in the database,

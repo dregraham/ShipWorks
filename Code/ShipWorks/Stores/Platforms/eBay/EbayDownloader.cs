@@ -219,7 +219,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return;
             }
 
-            PopulateOrderDetails(orderType, order);
+            await PopulateOrderDetails(orderType, order).ConfigureAwait(false);
 
             // Load all the transactions (line items) for the order
             List<OrderItemEntity> abandonedItems = LoadTransactions(order, orderType);
@@ -257,12 +257,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Populate details of the order
         /// </summary>
-        private void PopulateOrderDetails(OrderType orderType, EbayOrderEntity order)
+        private async Task PopulateOrderDetails(OrderType orderType, EbayOrderEntity order)
         {
             // If its new it needs a ShipWorks order number
             if (order.IsNew)
             {
-                order.OrderNumber = GetNextOrderNumber();
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
                 // We use the oldest auction date as the order date
                 order.OrderDate = DetermineOrderDate(orderType);

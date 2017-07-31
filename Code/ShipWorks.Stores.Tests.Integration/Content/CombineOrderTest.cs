@@ -71,9 +71,13 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         {
             var store = Create.Store<MagentoStoreEntity>(StoreTypeCode.Magento).Save();
             var order1 = Create.Order<MagentoOrderEntity>(store, context.Customer)
+                .Set(x => x.OrderNumber, 1)
+                .Set(x => x.OrderNumberComplete, "1")
                 .Set(x => x.MagentoOrderID, 123)
                 .Save();
             var order2 = Create.Order<MagentoOrderEntity>(store, context.Customer)
+                .Set(x => x.OrderNumber, 2)
+                .Set(x => x.OrderNumberComplete, "2M")
                 .Set(x => x.MagentoOrderID, 456)
                 .Save();
 

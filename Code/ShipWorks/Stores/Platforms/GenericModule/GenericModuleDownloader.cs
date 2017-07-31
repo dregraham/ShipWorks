@@ -325,10 +325,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Assigns an order number to the order
         /// </summary>
-        protected virtual void AssignOrderNumber(OrderEntity order)
+        protected virtual Task AssignOrderNumber(OrderEntity order)
         {
             // this is an extension point for derived class.  The GenericStoreDownloader
             // implementation uses the OrderNumberIdentifier which has already applied an order number
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -355,7 +356,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             OrderEntity order = result.Value;
-            AssignOrderNumber(order);
+            await AssignOrderNumber(order).ConfigureAwait(false);
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
