@@ -223,6 +223,7 @@
     <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
       <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Jet\JetStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

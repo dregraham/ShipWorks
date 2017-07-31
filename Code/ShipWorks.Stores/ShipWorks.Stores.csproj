@@ -246,7 +246,6 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
     <Compile Include="Platforms\Jet\DTO\TokenResponse.cs" />
-    <Compile Include="Platforms\Jet\IJetStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
