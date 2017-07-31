@@ -6,13 +6,13 @@ using Rebex.Mail;
 namespace Interapptive.Shared.Net
 {
     /// <summary>
-    /// Interface for logging request\response from the various API's that ShipWorks
+    /// Interface for logging request/response from the various API's that ShipWorks
     /// works with.
     /// </summary>
     public interface IApiLogEntry
     {
         /// <summary>
-        /// Contols how the log output will be encrypted
+        /// Controls how the log output will be encrypted
         /// </summary>
         ApiLogEncryption Encryption { get; set; }
 
@@ -30,11 +30,6 @@ namespace Interapptive.Shared.Net
         /// Log the text content request
         /// </summary>
         void LogRequest(string text, string fileExtension);
-
-        /// <summary>
-        /// Log the contents of the given HttpRequestSubmitter
-        /// </summary>
-        void LogRequest(HttpRequestSubmitter request);
 
         /// <summary>
         /// Log the contents of the given HttpRequestSubmitter
@@ -67,12 +62,12 @@ namespace Interapptive.Shared.Net
         void LogResponse(Exception ex);
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         void LogRequestSupplement(string xml, string supplementName);
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         void LogRequestSupplement(FileInfo fileInfo, string supplementName);
 
@@ -82,7 +77,7 @@ namespace Interapptive.Shared.Net
         void LogRequestSupplement(byte[] supplementData, string supplementName, string extension);
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         void LogResponseSupplement(string xml, string supplementName);
     }
