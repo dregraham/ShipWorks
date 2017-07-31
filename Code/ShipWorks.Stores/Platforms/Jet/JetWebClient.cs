@@ -23,12 +23,18 @@ namespace ShipWorks.Stores.Platforms.Jet
         private const string endpointBase = "https://merchant-api.jet.com/api/";
         private readonly string tokenEndpoint = $"{endpointBase}/token";
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JetWebClient(IHttpRequestSubmitterFactory submitterFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
         }
 
+        /// <summary>
+        /// Get Token
+        /// </summary>
         public GenericResult<string> GetToken(string username, string password)
         {
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(

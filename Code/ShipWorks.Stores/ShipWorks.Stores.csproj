@@ -249,6 +249,7 @@
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
+    <Compile Include="Platforms\Jet\JetStoreType.cs" />
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
