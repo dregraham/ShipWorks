@@ -86,8 +86,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
                     if (!isAccurate)
                     {
                         telemetryEvent.AddProperty("Rate.Local.Amount",
-                            discrepancyForShipment.LocalRate.Amount.ToString(CultureInfo.InvariantCulture));
-                        telemetryEvent.AddProperty("Rate.Local.Zone", discrepancyForShipment.LocalRate.Zone);
+                            discrepancyForShipment.LocalRate?.Amount.ToString(CultureInfo.InvariantCulture) ?? "Not found");
+                        telemetryEvent.AddProperty("Rate.Local.Zone", discrepancyForShipment.LocalRate?.Zone ?? "Not found");
                         telemetryEvent.AddProperty("Rate.Actual.Amount",
                             shipment.ShipmentCost.ToString(CultureInfo.InvariantCulture));
                         telemetryEvent.AddProperty("Shipment.ServiceType",
