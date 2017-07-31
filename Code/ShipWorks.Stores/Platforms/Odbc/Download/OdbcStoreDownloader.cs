@@ -177,7 +177,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new DownloadException("Order number is empty in your ODBC data source.");
             }
 
-            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString().TrimStart('0');
+            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
             // Create an order using the order number
             OrderEntity orderEntity = InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber));
