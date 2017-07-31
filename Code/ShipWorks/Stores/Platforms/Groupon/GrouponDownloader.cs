@@ -131,6 +131,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
+            if (order.IsNew && status != "open")
+            {
+                return;
+            }
+
             // Order already exists or is new and of status open
             order.OnlineStatus = GetOrderStatusName(status);
             order.OnlineStatusCode = GetOrderStatusName(status);
