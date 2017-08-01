@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
@@ -163,7 +162,7 @@ namespace ShipWorks.Stores.Content
 
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
-            combinedOrder.OrderNumberComplete = orderNumberComplete;
+            combinedOrder.ChangeOrderNumber(orderNumberComplete);
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
             combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
             combinedOrder.RollupItemCount = 0;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -11,6 +13,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats
@@ -31,7 +34,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             ISqlAdapterFactory sqlAdapterFactory)
             : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
-
         }
 
         /// <summary>
@@ -67,14 +69,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         private Task<GenericResult<OrderEntity>> InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
-            long orderNumber = reader.ReadField("Order.Number", 0L, false);
+            string orderNumber = reader.ReadField("Order.Number", "");
 
-            // pull in pre/postfix options
-            string prefix = "";
-            string postfix = "";
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
             // create the identifier
-            GenericFileOrderIdentifier orderIdentifier = new GenericFileOrderIdentifier(orderNumber, prefix, postfix);
+            OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, string.Empty, string.Empty);
 
             // get the order instance; Change this to our derived class once it's needed and exists
             return InstantiateOrder(orderIdentifier);

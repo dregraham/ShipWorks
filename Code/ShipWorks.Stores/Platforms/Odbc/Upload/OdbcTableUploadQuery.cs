@@ -45,8 +45,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
                 throw new ShipWorksOdbcException("Unable to Generate SQL for non table upload column source.");
             }
 
-            IOdbcFieldMapEntry orderNumberField = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
-            if (orderNumberField == null)
+            IOdbcFieldMapEntry orderNumberCompleteField = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+            if (orderNumberCompleteField == null)
             {
                 throw new ShipWorksOdbcException("The Order Number field must be mapped to upload shipment data.");
             }
@@ -62,11 +62,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
                 string tableToUpdate = cmdBuilder.QuoteIdentifier(store.UploadColumnSource);
                 builder.Append($"UPDATE {tableToUpdate} SET ");
 
-                IOdbcFieldMapEntry lastEntry = fieldMap.Entries.Except(new[] { orderNumberField }).LastOrDefault();
+                IOdbcFieldMapEntry lastEntry = fieldMap.Entries.Except(new[] { orderNumberCompleteField }).LastOrDefault();
 
                 // Build the update statement for every mapped field except the order number because we are not
                 // the order number is used as the predicate for the sql statement
-                foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new [] {orderNumberField}))
+                foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new [] {orderNumberCompleteField}))
                 {
                     string columnNameInQuotes = cmdBuilder.QuoteIdentifier(entry.ExternalField.Column.Name);
 
@@ -81,8 +81,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
                     builder.Append(entry != lastEntry ? ", " : " ");
                 }
 
-                string orderNumberColumnInQuotes = cmdBuilder.QuoteIdentifier(orderNumberField.ExternalField.Column.Name);
-                builder.Append($"WHERE {orderNumberColumnInQuotes} = ?");
+                string orderNumberCompleteColumnInQuotes = cmdBuilder.QuoteIdentifier(orderNumberCompleteField.ExternalField.Column.Name);
+                builder.Append($"WHERE {orderNumberCompleteColumnInQuotes} = ?");
             }
 
             return builder.ToString();
@@ -96,21 +96,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             command.ChangeCommandText(GenerateSql());
 
-            IOdbcFieldMapEntry orderNumberField = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
-            if (orderNumberField == null)
+            IOdbcFieldMapEntry orderNumberCompleteField = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+            if (orderNumberCompleteField == null)
             {
                 throw new ShipWorksOdbcException("The Order Number field must be mapped to upload shipment data.");
             }
 
             // we have to add all of the parameters in the order that they were generated
             // this means that we have to add all but the order number first
-            foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new[] { orderNumberField }))
+            foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new[] { orderNumberCompleteField }))
             {
                 command.AddParameter(entry.ExternalField.Column.Name, entry.ShipWorksField.Value);
             }
 
             // now finally add the order number
-            command.AddParameter(orderNumberField.ExternalField.Column.Name, orderNumberField.ShipWorksField.Value.ToString());
+            command.AddParameter(orderNumberCompleteField.ExternalField.Column.Name, orderNumberCompleteField.ShipWorksField.Value.ToString());
         }
     }
 }

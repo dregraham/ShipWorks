@@ -3,7 +3,7 @@
 		"Index": 0,
 		"ShipWorksField": {
 			"ContainingObjectName": "OrderEntity",
-			"Name": "OrderNumber",
+			"Name": "OrderNumberComplete",
 			"DisplayName": "Order Number",
 			"ResolutionStrategy": 0
 		},
