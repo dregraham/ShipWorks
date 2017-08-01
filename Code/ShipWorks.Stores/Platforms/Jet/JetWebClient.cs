@@ -60,10 +60,15 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 return GenericResult.FromSuccess(token.Token);
             }
+            catch (WebException ex) when ((ex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                apiLogEntry.LogResponse(ex);
+                return GenericResult.FromError<string>("Invalid API User or Secret.");
+            }
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
-                return GenericResult.FromError<string>("Error communicating with Jet");
+                return GenericResult.FromError<string>("Error communicating with Jet.");
             }
         }
     }
