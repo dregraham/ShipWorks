@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -6,6 +7,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -70,6 +72,21 @@ namespace ShipWorks.Stores.Platforms.Jet
                 apiLogEntry.LogResponse(ex);
                 return GenericResult.FromError<string>("Error communicating with Jet.");
             }
+        }
+
+        public GenericResult<IEnumerable<JetOrderDetail>> GetOrders()
+        {
+            throw new NotImplementedException();
+        }
+
+        public GenericResult<JetProduct> GetProduct(JetOrderItem item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Acknowledge(OrderEntity order)
+        {
+            throw new NotImplementedException();
         }
     }
 }

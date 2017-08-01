@@ -192,6 +192,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClientTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
+    <Compile Include="Platforms\Jet\JetProductRepoTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreTypeTest.cs" />
     <Compile Include="Platforms\Jet\JetWebClientTest.cs" />

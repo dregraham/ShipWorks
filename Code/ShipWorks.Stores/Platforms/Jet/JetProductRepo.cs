@@ -51,6 +51,5 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             productCache[sku] = product;
         }
-
     }
 }
