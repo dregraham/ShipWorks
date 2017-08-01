@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Interface to load order data from jet
     /// </summary>
-    public interface IOrderLoader
+    public interface IJetOrderLoader
     {
         /// <summary>
         /// Load the OrderEntity with the JetOrderDetails

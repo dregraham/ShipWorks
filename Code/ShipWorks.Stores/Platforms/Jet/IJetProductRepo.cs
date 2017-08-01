@@ -5,7 +5,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Represents a Jet product repository
     /// </summary>
-    public interface IProductRepo
+    public interface IJetProductRepo
     {
         /// <summary>
         /// Get the JetProduct matching he JetOrderItem
