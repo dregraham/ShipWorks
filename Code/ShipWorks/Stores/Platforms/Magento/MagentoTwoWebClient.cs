@@ -23,8 +23,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     class MagentoTwoWebClient : MagentoWebClient
     {
         private readonly MagentoStoreEntity store;
-
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -71,6 +70,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
+        /// <summary>
+        /// Process update order
+        /// </summary>
         private GenericModuleResponse ProcessUpdateOrder(HttpVariableRequestSubmitter request)
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
