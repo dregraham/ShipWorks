@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public JetProduct GetProduct(JetOrderItem item)
         {
-            if (!productCache.Contains(item.MerchantSku))
+            if (productCache.Contains(item.MerchantSku))
             {
                 return productCache[item.MerchantSku];
             }
