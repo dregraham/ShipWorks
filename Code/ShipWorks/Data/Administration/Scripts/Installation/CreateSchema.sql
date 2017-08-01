@@ -1367,7 +1367,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
 [MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DistributionCenterID] [bigint] NOT NULL 
+[DistributionCenterID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
@@ -4250,7 +4250,8 @@ CREATE TABLE [dbo].[Configuration]
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL,
 [CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
+[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

@@ -1778,6 +1778,8 @@ namespace ShipWorks.Data.Model
 		CustomerKey,
 		///<summary>UseParallelActionQueue. </summary>
 		UseParallelActionQueue,
+		///<summary>AllowEbayCombineLocally. </summary>
+		AllowEbayCombineLocally,
 		/// <summary></summary>
 		AmountOfFields
 	}
