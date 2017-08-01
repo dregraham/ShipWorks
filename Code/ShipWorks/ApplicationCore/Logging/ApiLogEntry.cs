@@ -1,22 +1,22 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.IO;
 using System.Xml;
-using System.Xml.XPath;
-using log4net;
-using Interapptive.Shared.Net;
-using Rebex.Mail;
 using System.Xml.Linq;
-using ShipWorks.ApplicationCore.Crashes;
-using System.Security.Cryptography;
+using System.Xml.XPath;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using log4net;
+using Rebex.Mail;
+using ShipWorks.ApplicationCore.Crashes;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
     /// <summary>
-    /// Class for logging request\response from the various API's that ShipWorks
+    /// Class for logging request/response from the various API's that ShipWorks
     /// works with.
     /// </summary>
     public class ApiLogEntry : IApiLogEntry
@@ -88,7 +88,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Log the contents of the given HttpRequestSubmitter
         /// </summary>
-        public void LogRequest(HttpRequestSubmitter request)
+        public void LogRequest(IHttpRequestSubmitter request)
         {
             // Look for specific derived instance
             HttpVariableRequestSubmitter variable = request as HttpVariableRequestSubmitter;
@@ -109,17 +109,9 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Log the contents of the given HttpRequestSubmitter
-        /// </summary>
-        public void LogRequest(IHttpRequestSubmitter request)
-        {
-            LogRequest(request as HttpRequestSubmitter);
-        }
-
-        /// <summary>
         /// Log the specified Binary Post request
         /// </summary>
-        private void LogHttpPostRequest(HttpRequestSubmitter request)
+        private void LogHttpPostRequest(IHttpRequestSubmitter request)
         {
             if (request.Verb == HttpVerb.Get)
             {
@@ -205,7 +197,7 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             WriteLog(xml, ApiLogCategory.Response);
         }
-        
+
         /// <summary>
         /// Logs the response.
         /// </summary>
@@ -237,7 +229,7 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             StringBuilder result = new StringBuilder();
 
-            using (XmlWriter writer = XmlWriter.Create(result, new XmlWriterSettings { CheckCharacters = false } ))
+            using (XmlWriter writer = XmlWriter.Create(result, new XmlWriterSettings { CheckCharacters = false }))
             {
                 var xRoot = new XElement("Exception", new XCData(CrashSubmitter.GetExceptionDetail(ex)));
 
@@ -260,7 +252,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         public void LogRequestSupplement(string xml, string supplementName)
         {
@@ -268,7 +260,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         public void LogRequestSupplement(FileInfo fileInfo, string supplementName)
         {
@@ -284,7 +276,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Log supplemental request request data
+        /// Log supplemental request data
         /// </summary>
         public void LogResponseSupplement(string xml, string supplementName)
         {
@@ -382,7 +374,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         private string GetNextLogFile(ApiLogCategory category, string supplementName, string extension)
         {
-            Debug.Assert(!extension.StartsWith("."), "extension should not begin with '.'");
+            Debug.Assert(!extension.StartsWith(".", StringComparison.Ordinal), "extension should not begin with '.'");
 
             EnsureLogNumber();
 
