@@ -98,7 +98,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        [NDependIgnoreLongMethod]
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
@@ -120,40 +119,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 // Create the web client to download with
                 GenericStoreWebClient webClient = storeType.CreateWebClient();
 
-                // If status codes are supported download them
-                if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
-                {
-                    // Update the status codes
-                    Progress.Detail = "Updating status codes...";
-
-                    statusCodeProvider = storeType.CreateStatusCodeProvider();
-
-                    if (!supportMode)
-                    {
-                        statusCodeProvider.UpdateFromOnlineStore();
-                    }
-                }
+                GetOnlineStatusCodes(storeType, supportMode);
 
                 Progress.Detail = "Checking for orders...";
 
                 if (!supportMode)
                 {
-                    // Get the largest last modified time.  We start downloading there.
-                    if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
-                    {
-                        // Downloading based on the last modified time
-                        DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
-
-                        totalCount = webClient.GetOrderCount(lastModified);
-                    }
-                    else
-                    {
-                        // Downloading based on the last order number we've downloaded
-                        long lastOrderNumber = GetOrderNumberStartingPoint();
-
-                        // Get the number of orders that need downloading
-                        totalCount = webClient.GetOrderCount(lastOrderNumber);
-                    }
+                    GetOrderCount(webClient);
 
                     if (totalCount == 0)
                     {
@@ -165,43 +137,94 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                 Progress.Detail = string.Format("Downloading {0} orders...", totalCount);
 
-                // keep going until none are left
-                while (true)
-                {
-                    // support mode bypasses regular download mechanisms to load a response from disk
-                    if (supportMode)
-                    {
-                        await DownloadOrdersFromFile(webClient).ConfigureAwait(false);
-
-                        return;
-                    }
-
-                    // Check if it has been canceled
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    bool morePages = await DownloadNextOrdersPage(webClient).ConfigureAwait(false);
-                    if (!morePages)
-                    {
-                        return;
-                    }
-                }
+                await DownloadOrders(supportMode, webClient).ConfigureAwait(false);
             }
             catch (GenericModuleConfigurationException ex)
             {
-                string message = String.Format("The ShipWorks module returned invalid configuration information.  Please contact the module developer with the following information.\n\n{0}", ex.Message);
+                string message =
+                    "The ShipWorks module returned invalid configuration information. " +
+                    $"Please contact the module developer with the following information.\n\n{ex.Message}";
 
                 throw new DownloadException(message, ex);
             }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is GenericStoreException || ex is SqlForeignKeyException)
             {
                 throw new DownloadException(ex.Message, ex);
             }
-            catch (SqlForeignKeyException ex)
+        }
+
+        /// <summary>
+        /// Downloads the orders.
+        /// </summary>
+        private async Task DownloadOrders(bool supportMode, GenericStoreWebClient webClient)
+        {
+            // keep going until none are left
+            while (true)
             {
-                throw new DownloadException(ex.Message, ex);
+                // support mode bypasses regular download mechanisms to load a response from disk
+                if (supportMode)
+                {
+                    await DownloadOrdersFromFile(webClient).ConfigureAwait(false);
+
+                    return;
+                }
+
+                // Check if it has been canceled
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                bool morePages = await DownloadNextOrdersPage(webClient).ConfigureAwait(false);
+                if (!morePages)
+                {
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the online status codes.
+        /// </summary>
+        /// <param name="storeType">Type of the store.</param>
+        /// <param name="supportMode">if set to <c>true</c> [support mode].</param>
+        private void GetOnlineStatusCodes(GenericModuleStoreType storeType, bool supportMode)
+        {
+            // If status codes are supported download them
+            if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
+            {
+                // Update the status codes
+                Progress.Detail = "Updating status codes...";
+
+                statusCodeProvider = storeType.CreateStatusCodeProvider();
+
+                if (!supportMode)
+                {
+                    statusCodeProvider.UpdateFromOnlineStore();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the order count.
+        /// </summary>
+        private void GetOrderCount(GenericStoreWebClient webClient)
+        {
+            // Get the largest last modified time.  We start downloading there.
+            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
+            {
+                // Downloading based on the last modified time
+                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+
+                totalCount = webClient.GetOrderCount(lastModified);
+            }
+            else
+            {
+                // Downloading based on the last order number we've downloaded
+                long lastOrderNumber = GetOrderNumberStartingPoint();
+
+                // Get the number of orders that need downloading
+                totalCount = webClient.GetOrderCount(lastOrderNumber);
             }
         }
 
