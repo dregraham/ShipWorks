@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Groupon.Content
                 x => new GrouponOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    GrouponOrderID = x.GrouponOrderID
+                    GrouponOrderID = x.GrouponOrderID,
+                    ParentOrderID = x.ParentOrderID
                 });
         }
     }

@@ -14,6 +14,11 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Combine the list of orders into a single order
         /// </summary>
+        Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders, string newOrderNumber);
+
+        /// <summary>
+        /// Combine the list of orders into a single order
+        /// </summary>
         Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
             string newOrderNumber, IProgressReporter progressReporter);
     }

@@ -383,6 +383,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GrouponOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ParentOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -451,6 +453,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)GrouponOrderFieldIndex.GrouponOrderID, true); }
 			set	{ SetValue((int)GrouponOrderFieldIndex.GrouponOrderID, value); }
+		}
+
+		/// <summary> The ParentOrderID property of the Entity GrouponOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GrouponOrder"."ParentOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ParentOrderID
+		{
+			get { return (System.String)GetValue((int)GrouponOrderFieldIndex.ParentOrderID, true); }
+			set	{ SetValue((int)GrouponOrderFieldIndex.ParentOrderID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'GrouponOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

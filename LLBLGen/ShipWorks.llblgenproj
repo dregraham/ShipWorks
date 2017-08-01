@@ -512,6 +512,7 @@
       <EntityDefinition Name="Configuration" ObjectID="bc5673c3-1f75-4aee-91e9-1b92750cccd6">
         <Fields>
           <Field Name="AddressCasing" Type="bool" FieldIndex="3" />
+          <Field Name="AllowEbayCombineLocally" Type="bool" FieldIndex="14" />
           <Field Name="AuditDeletedOrders" Type="bool" FieldIndex="11" />
           <Field Name="AuditNewOrders" Type="bool" FieldIndex="10" />
           <Field Name="ConfigurationID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -1323,6 +1324,7 @@
       <EntityDefinition Name="GrouponOrder" ObjectID="21daa939-f188-4f96-9cb0-9e829e1aea97" InheritanceType="2">
         <Fields>
           <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="ParentOrderID" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponOrderItem" ObjectID="2710600a-6ab9-46fb-8833-ecfc7a7351aa" InheritanceType="2">
@@ -1339,6 +1341,7 @@
           <Field Name="GrouponOrderID" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="GrouponOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="ParentOrderID" Type="string" MaxLength="50" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GrouponStore" ObjectID="76e408ac-3288-492e-af17-dbfca6e5aee7" InheritanceType="2">
@@ -3963,7 +3966,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T18:43:37.535759Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-01T16:59:25.5466624Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4459,6 +4462,7 @@
                     <Field Name="AuditDeletedOrders" Ordinal="12" DbType="2" />
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
                     <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -6018,6 +6022,7 @@
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderItem">
@@ -6037,6 +6042,7 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -9978,6 +9984,7 @@
         <EntityMapping EntityName=":Configuration" TargetName="ShipWorksLocal:dbo:Configuration">
           <FieldMappings>
             <FieldMapping FieldName="AddressCasing" TargetFieldName="AddressCasing" />
+            <FieldMapping FieldName="AllowEbayCombineLocally" TargetFieldName="AllowEbayCombineLocally" />
             <FieldMapping FieldName="AuditDeletedOrders" TargetFieldName="AuditDeletedOrders" />
             <FieldMapping FieldName="AuditNewOrders" TargetFieldName="AuditNewOrders" />
             <FieldMapping FieldName="ConfigurationID" TargetFieldName="ConfigurationID" />
@@ -10797,6 +10804,7 @@
           <FieldMappings>
             <FieldMapping FieldName="GrouponOrderID" TargetFieldName="GrouponOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="ParentOrderID" TargetFieldName="ParentOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponOrderItem" TargetName="ShipWorksLocal:dbo:GrouponOrderItem">
@@ -10814,6 +10822,7 @@
             <FieldMapping FieldName="GrouponOrderID" TargetFieldName="GrouponOrderID" />
             <FieldMapping FieldName="GrouponOrderSearchID" TargetFieldName="GrouponOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="ParentOrderID" TargetFieldName="ParentOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GrouponStore" TargetName="ShipWorksLocal:dbo:GrouponStore">

@@ -6,11 +6,17 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// Update progress
     /// </summary>
-    public class ProgressUpdater
+    public class ProgressUpdater : IProgressUpdater
     {
+        private static Lazy<IProgressUpdater> empty = new Lazy<IProgressUpdater>(() => new EmptyProgressUpdater());
         readonly IProgressReporter progressReporter;
         readonly int totalItems;
         int count = 0;
+
+        /// <summary>
+        /// Get an empty progress updater
+        /// </summary>
+        public static IProgressUpdater Empty => empty.Value;
 
         /// <summary>
         /// Constructor

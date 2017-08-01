@@ -687,6 +687,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "AuditDeletedOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditDeletedOrders, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "UseParallelActionQueue", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.UseParallelActionQueue, 0, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "AllowEbayCombineLocally", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AllowEbayCombineLocally, 0, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -1533,6 +1534,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(GrouponOrderFieldIndex), "GrouponOrderEntity");
 			this.AddElementFieldInfo("GrouponOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)GrouponOrderFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("GrouponOrderEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderFieldIndex.GrouponOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderEntity", "ParentOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderFieldIndex.ParentOrderID, 50, 0, 0);
 		}
 		/// <summary>Inits GrouponOrderItemEntity's FieldInfo objects</summary>
 		private void InitGrouponOrderItemEntityInfos()
@@ -1552,6 +1554,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "GrouponOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)GrouponOrderSearchFieldIndex.GrouponOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)GrouponOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderSearchFieldIndex.GrouponOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderSearchEntity", "ParentOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderSearchFieldIndex.ParentOrderID, 50, 0, 0);
 		}
 		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
 		private void InitGrouponStoreEntityInfos()

@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             GrouponOrderSearchID = source.GrouponOrderSearchID;
             OrderID = source.OrderID;
             GrouponOrderID = source.GrouponOrderID;
+            ParentOrderID = source.ParentOrderID;
             
             
             GrouponOrder = source.GrouponOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String GrouponOrderID { get; }
+        /// <summary> The ParentOrderID property of the Entity GrouponOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GrouponOrderSearch"."ParentOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ParentOrderID { get; }
         
         
         public IGrouponOrderEntity GrouponOrder { get; }

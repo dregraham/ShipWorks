@@ -53,7 +53,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
-            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 2;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 3;
@@ -62,7 +62,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 5;
-            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 3;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrderSearch] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.MagentoOrderSearch] = 3;

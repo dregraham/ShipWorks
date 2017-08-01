@@ -77,12 +77,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e));
         }
 
+        private readonly IConfigurationData configuration;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreType(StoreEntity store)
+        public EbayStoreType(StoreEntity store, IConfigurationData configuration)
             : base(store)
         {
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -612,26 +615,38 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
         {
+            List<MenuCommand> commands = new List<MenuCommand>();
 
-            List<MenuCommand> commands = new List<MenuCommand>()
-            {
-                new MenuCommand("Send Message...", OnSendMessage),
-                new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
+            commands.Add(new MenuCommand("Send Message...", OnSendMessage));
+            commands.Add(new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true });
 
-                new MenuCommand("Mark as Paid", OnUpdateShipment){ Tag = EbayOnlineAction.Paid },
-                new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped },
+            commands.Add(new MenuCommand("Mark as Paid", OnUpdateShipment) { Tag = EbayOnlineAction.Paid });
+            commands.Add(new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped });
 
-                new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true },
-                new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped },
+            commands.Add(new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true });
+            commands.Add(new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped });
 
-                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = EbayCombinedOrderType.Local },
-                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = EbayCombinedOrderType.Ebay },
+            commands.AddRange(CreateCombineCommands());
 
-                new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
-                new MenuCommand("Ship to Buyer", OnShipToBuyer)
-            };
+            commands.Add(new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true });
+            commands.Add(new MenuCommand("Ship to Buyer", OnShipToBuyer));
 
             return commands;
+        }
+
+        /// <summary>
+        /// Create the combine commands
+        /// </summary>
+        private IEnumerable<MenuCommand> CreateCombineCommands()
+        {
+            bool allowCombineLocally = configuration.FetchReadOnly().AllowEbayCombineLocally;
+
+            MenuCommand combineRemote = new MenuCommand("Combine orders on eBay...", OnCombineOrders) { BreakBefore = !allowCombineLocally, Tag = EbayCombinedOrderType.Ebay };
+
+            return allowCombineLocally ?
+                new[] { new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = allowCombineLocally, Tag = EbayCombinedOrderType.Local },
+                    combineRemote } :
+                new[] { combineRemote };
         }
 
         /// <summary>
@@ -692,7 +707,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             catch (EbayException ex)
             {
-                log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId, ex.Message);
+                log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId);
                 issueAdder.Add(orderId, ex);
             }
         }
@@ -755,7 +770,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             catch (EbayException ex)
             {
-                log.ErrorFormat("Error designating order {0} to be shipped to buyer: ", orderId, ex.Message);
+                log.ErrorFormat("Error designating order {0} to be shipped to buyer: ", orderId);
                 issueAdder.Add(orderId, ex);
             }
         }

@@ -1367,7 +1367,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
 [MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DistributionCenterID] [bigint] NOT NULL 
+[DistributionCenterID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
@@ -4250,7 +4250,8 @@ CREATE TABLE [dbo].[Configuration]
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL,
 [CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1))
+[UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
+[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -5703,7 +5704,8 @@ GO
 CREATE TABLE [dbo].[GrouponOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+ [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
@@ -5713,6 +5715,10 @@ GO
 PRINT N'Creating index [IX_Auto_GrouponOrderID] on [dbo].[GrouponOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_GrouponOrderID] ON [dbo].[GrouponOrder] ([GrouponOrderID])
+GO
+PRINT N'Creating index [IX_GrouponOrder_ParentOrderID] on [dbo].[GrouponOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_GrouponOrder_ParentOrderID] ON [dbo].[GrouponOrder] ([ParentOrderID])
 GO
 PRINT N'Creating [dbo].[GrouponOrderItem]'
 GO
@@ -6216,7 +6222,8 @@ CREATE TABLE [dbo].[GrouponOrderSearch]
 (
 [GrouponOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+ [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearch]'
@@ -6226,6 +6233,10 @@ GO
 PRINT N'Creating index [IX_GrouponOrderSearch_GrouponOrderID] on [dbo].[GrouponOrderSearch]'
 GO
 CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_GrouponOrderID] ON [dbo].[GrouponOrderSearch] ([GrouponOrderID]) INCLUDE ([OrderID])
+GO
+PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID] on [dbo].[GrouponOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[LemonStandOrderSearch]'
 GO
