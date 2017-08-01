@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Jet.DTO
 {
-    public class OrderDetailsResult
+    public class JetOrderDetailsResult
     {
         [JsonProperty("merchant_order_id")]
         public string MerchantOrderId { get; set; }

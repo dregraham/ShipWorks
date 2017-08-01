@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(result, new JsonSerializerSettings
+                JetTokenResponse token = JsonConvert.DeserializeObject<JetTokenResponse>(result, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore

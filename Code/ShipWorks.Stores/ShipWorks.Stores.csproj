@@ -256,8 +256,9 @@
     <Compile Include="Platforms\Jet\DTO\JetProduct.cs" />
     <Compile Include="Platforms\Jet\DTO\JetRecipient.cs" />
     <Compile Include="Platforms\Jet\DTO\JetShippingTo.cs" />
-    <Compile Include="Platforms\Jet\DTO\OrderDetailsResult.cs" />
-    <Compile Include="Platforms\Jet\DTO\TokenResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderDetailsResult.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetTokenResponse.cs" />
+    <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
