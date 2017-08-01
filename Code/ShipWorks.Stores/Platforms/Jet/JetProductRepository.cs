@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// Repository for jet products
     /// </summary>
     [Component(SingleInstance = true)]
-    public class JetProductRepo : IJetProductRepo
+    public class JetProductRepository : IJetProductRepository
     {
         private readonly IJetWebClient webClient;
         private readonly LruCache<string, JetProduct> productCache;
@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Constructor
         /// </summary>
         /// <param name="webClient"></param>
-        public JetProductRepo(IJetWebClient webClient)
+        public JetProductRepository(IJetWebClient webClient)
         {
             this.webClient = webClient;
             productCache = new LruCache<string, JetProduct>(1000);

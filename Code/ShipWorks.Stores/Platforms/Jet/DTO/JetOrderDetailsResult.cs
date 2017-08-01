@@ -12,6 +12,9 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO
         [JsonProperty("reference_order_id")]
         public string ReferenceOrderId { get; set; }
 
+        [JsonProperty("fulfillment_node")]
+        public string FulfillmentNode { get; set; }
+
         [JsonProperty("order_placed_date")]
         public DateTime OrderPlacedDate { get; set; }
 
