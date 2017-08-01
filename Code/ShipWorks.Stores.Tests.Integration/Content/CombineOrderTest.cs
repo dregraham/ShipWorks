@@ -244,6 +244,73 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             }
         }
 
+        [Fact]
+        public async Task Combine_MovesValidatedAddressesToNewOrder_ForSurvivingOrder()
+        {
+            Modify.Order(context.Order)
+                .WithItem(i => i.Set(x => x.Name, "Foo"))
+                .Save();
+
+            Modify.Order(secondOrder)
+                .WithItem(i => i.Set(x => x.Name, "Bar"))
+                .Save();
+
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Foo")
+                .Set(x => x.ConsumerID, context.Order.OrderID)
+                .Set(x => x.AddressPrefix, "Ship1")
+                .Save();
+
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Bar")
+                .Set(x => x.ConsumerID, context.Order.OrderID)
+                .Set(x => x.AddressPrefix, "Bill")
+                .Save();
+
+            var testObject = context.Mock.Create<CombineOrder>();
+
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
+
+            var newOrder = await GetOrder(result.Value, OrderEntity.PrefetchPathValidatedAddress);
+
+            Assert.Equal(2, newOrder.ValidatedAddress.Count());
+
+            Assert.Contains("Foo", newOrder.ValidatedAddress.Select(x => x.City));
+            Assert.Contains("Bar", newOrder.ValidatedAddress.Select(x => x.City));
+        }
+
+        [Fact]
+        public async Task Combine_DoesNotMoveValidatedAddressesToNewOrder_ForNonSurvivingOrder()
+        {
+            Modify.Order(context.Order)
+                .WithItem(i => i.Set(x => x.Name, "Foo"))
+                .Save();
+
+            Modify.Order(secondOrder)
+                .WithItem(i => i.Set(x => x.Name, "Bar"))
+                .Save();
+
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Foo")
+                .Set(x => x.ConsumerID, secondOrder.OrderID)
+                .Set(x => x.AddressPrefix, "Ship1")
+                .Save();
+
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Bar")
+                .Set(x => x.ConsumerID, secondOrder.OrderID)
+                .Set(x => x.AddressPrefix, "Bill")
+                .Save();
+
+            var testObject = context.Mock.Create<CombineOrder>();
+
+            var result = await testObject.Combine(context.Order.OrderID, new IOrderEntity[] { secondOrder, context.Order }, "1234-C", progress);
+
+            var newOrder = await GetOrder(result.Value, OrderEntity.PrefetchPathValidatedAddress);
+
+            Assert.Equal(0, newOrder.ValidatedAddress.Count());
+        }
+
         /// <summary>
         /// Get a fully loaded order with all its children
         /// </summary>

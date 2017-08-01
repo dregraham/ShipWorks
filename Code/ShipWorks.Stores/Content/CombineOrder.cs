@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Content
 
             foreach (ICombineOrderAction action in combinationActions)
             {
-                await action.Perform(combinedOrder, orders, sqlAdapter).ConfigureAwait(false);
+                await action.Perform(combinedOrder, survivingOrderID, orders, sqlAdapter).ConfigureAwait(false);
                 progress.Update();
             }
 

@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderMergeChargesAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMoveValidatedAddressesAction.cs" />
     <Compile Include="Content\CombineOrderAudit.cs" />
     <Compile Include="Content\CombineOrderGateway.cs" />
     <Compile Include="Content\CombineOrderViewModel.cs" />

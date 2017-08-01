@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform moving the notes
         /// </summary>
-        public async Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public async Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             IRelationPredicateBucket notesBucket = new RelationPredicateBucket(NoteFields.EntityID.In(orders.Select(x => x.OrderID)));
             notesBucket.Relations.Add(NoteEntity.Relations.OrderEntityUsingEntityID);

@@ -16,6 +16,6 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform the action
         /// </summary>
-        Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter);
+        Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter);
     }
 }

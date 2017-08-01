@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform the merge of order charges
         /// </summary>
-        public async Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public async Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             EntityQuery<OrderChargeEntity> query = new QueryFactory().OrderCharge
                 .Where(OrderChargeFields.OrderID.In(orders.Select(x => x.OrderID)));
