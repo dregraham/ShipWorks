@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     {
                         MagentoOrderIdentifier orderIdentifier;
                         // The orders order number and orderid are not the same
-                        if (magentoOrder.EntityId != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
+                        if (magentoOrder.EntityId.ToString() != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
                         {
                             // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
                             // we have downloaded this order before used its entity id as the order number so use it again
@@ -112,7 +112,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                         else
                         {
                             // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
-                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
+                            long orderNumber =
+                                MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
+                            string orderNumberPostfix =
+                                MagentoTwoRestOrderNumberUtility.GetOrderNumberPostfix(magentoOrder.IncrementId);
+
+                            orderIdentifier = new MagentoOrderIdentifier(orderNumber, "", orderNumberPostfix);
                         }
 
                         MagentoOrderEntity orderEntity = await InstantiateOrder(orderIdentifier).ConfigureAwait(false) as MagentoOrderEntity;
@@ -203,7 +208,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     orderEntity.OrderDate =
                         DateTime.SpecifyKind(createdDate, DateTimeKind.Utc);
                 }
-                orderEntity.OrderNumber = magentoOrder.IncrementId;
+
+                orderEntity.OrderNumber = MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
                 orderEntity.MagentoOrderID = magentoOrder.EntityId;
                 orderEntity.OnlineCustomerID = magentoOrder.CustomerId;

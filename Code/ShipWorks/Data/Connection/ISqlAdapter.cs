@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 
 namespace ShipWorks.Data.Connection
 {
@@ -19,5 +20,12 @@ namespace ShipWorks.Data.Connection
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         Task<bool> SaveAndRefetchAsync(IEntity2 entity);
+
+        /// <summary>
+        /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        /// Fetches the query specified on the adapter specified. Uses the TEntity type to
+        /// produce an EntityCollection(Of TEntity) for the results to return
+        /// </summary>
+        Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.XPath;
@@ -9,6 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using Interapptive.Shared;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -71,13 +73,15 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     public class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
 
         // total download count
-        int totalCount = 0;
+        private int totalCount;
 
         // Status code container
-        GenericStoreStatusCodeProvider statusCodeProvider;
+        private GenericStoreStatusCodeProvider statusCodeProvider;
+
+        private readonly GenericModuleStoreType storeType;
 
         /// <summary>
         /// Constructor
@@ -85,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public GenericModuleDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-
+            storeType = StoreType as GenericModuleStoreType;
         }
 
         /// <summary>
@@ -102,11 +106,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             try
             {
-                bool supportMode = InterapptiveOnly.MagicKeysDown;
+                bool supportModeActive = InterapptiveOnly.MagicKeysDown;
 
-                GenericModuleStoreType storeType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
-
-                if (!supportMode)
+                if (!supportModeActive)
                 {
                     // If the platform\developer or capabilities changed we need to update the store
                     storeType.UpdateOnlineModuleInfo();
@@ -119,11 +121,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 // Create the web client to download with
                 GenericStoreWebClient webClient = storeType.CreateWebClient();
 
-                GetOnlineStatusCodes(storeType, supportMode);
+                GetOnlineStatusCodes(storeType, supportModeActive);
 
                 Progress.Detail = "Checking for orders...";
 
-                if (!supportMode)
+                if (!supportModeActive)
                 {
                     GetOrderCount(webClient);
 
@@ -135,9 +137,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     }
                 }
 
-                Progress.Detail = string.Format("Downloading {0} orders...", totalCount);
+                Progress.Detail = $"Downloading {totalCount} orders...";
 
-                await DownloadOrders(supportMode, webClient).ConfigureAwait(false);
+                await DownloadOrders(supportModeActive, webClient).ConfigureAwait(false);
             }
             catch (GenericModuleConfigurationException ex)
             {
@@ -334,14 +336,28 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
+            string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "");
+
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
+
+            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
+            {
+                long parsedOrderNumber;
+                if (!long.TryParse(orderNumber, out parsedOrderNumber))
+                {
+                    throw new DownloadException("When downloading by order number, all order numbers must be a number.\r\n\r\n" +
+                                                $"Non-numeric order number found: {orderNumber}");
+                }
+            }
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
 
             // create the identifier
-            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            return storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>

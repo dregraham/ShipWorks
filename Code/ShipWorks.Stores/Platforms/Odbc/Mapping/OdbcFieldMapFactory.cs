@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
-	            new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
+	            new ShipWorksOdbcMappableField(OrderFields.OrderNumberComplete, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, OdbcOrderFieldDescription.DateAndTime, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.OnlineLastModified, OdbcOrderFieldDescription.LastModifiedDateAndTime, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
@@ -203,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             return new List<ShipWorksOdbcMappableField>
             {
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.OrderNumberComplete, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.TrackingNumber, OdbcShipmentFieldDescription.TrackingNumber, true, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(ShipmentFields.ShipDate, OdbcShipmentFieldDescription.ShipDate, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),

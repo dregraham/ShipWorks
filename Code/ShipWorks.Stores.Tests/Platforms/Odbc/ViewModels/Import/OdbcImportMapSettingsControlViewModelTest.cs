@@ -521,7 +521,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Assert.Equal("a table", testObject.SelectedTable.Name);
             }
         }
-        
+
         [Fact]
         public void OpenMapSettingsFileCommand_SetsCustomQuery()
         {
@@ -548,6 +548,35 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
                 Assert.Equal("my query", testObject.CustomQuery);
+            }
+        }
+
+        [Fact]
+        public void OpenMapSettingsFileCommand_CallsUpgradeToAlphanumericOrderNumbers()
+        {
+            using (var stream = new MemoryStream())
+            {
+                MockOpenFileDialog(DialogResult.OK, stream);
+                var fieldMapMock = MockFieldMap();
+
+                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
+                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSource).Returns("my query");
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
+
+                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
+                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
+                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                columnSource.Setup(c => c.Name).Returns("Orders");
+                OdbcStoreEntity store = new OdbcStoreEntity();
+
+                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
+                testObject.Load(dataSource.Object, schema.Object, "source", store);
+
+                testObject.OpenMapSettingsFileCommand.Execute(null);
+
+                fieldMapMock.Verify(f => f.UpgradeToAlphanumericOrderNumbers(), Times.Once);
             }
         }
 

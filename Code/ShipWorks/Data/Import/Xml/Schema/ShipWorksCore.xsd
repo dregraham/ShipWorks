@@ -8,7 +8,7 @@
       <xs:documentation>A single order to be imported into ShipWorks.</xs:documentation>
     </xs:annotation>
     <xs:all>
-      <xs:element name="OrderNumber" type="xs:long">
+      <xs:element name="OrderNumber" type="xs:string">
         <xs:annotation>
           <xs:documentation>The numeric, unique order number identifying this order to ShipWorks.</xs:documentation>
         </xs:annotation>
