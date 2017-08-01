@@ -245,6 +245,17 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetAddress.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetBuyer.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetFeeAdjustment.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderItemPrice.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderDetail.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderTotals.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetRecipient.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetShippingTo.cs" />
+    <Compile Include="Platforms\Jet\DTO\OrderDetailsResult.cs" />
     <Compile Include="Platforms\Jet\DTO\TokenResponse.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
