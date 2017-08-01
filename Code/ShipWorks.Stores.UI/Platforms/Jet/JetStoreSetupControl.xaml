@@ -4,8 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Jet"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d" 
+             
+             FontFamily="Tahoma"
+             FontSize="8.25 pt"
+             FontStyle="Normal"
+             FontStretch="Normal"
+             FontWeight="Normal"
+             
              d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+            <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Default}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,7 +58,7 @@
                    TextWrapping="WrapWithOverflow">
             For help finding your API User or Secret, 
             <Hyperlink
-                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106557-adding-jet-com-to-shipworks">
+                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106557-adding-jet-com-to-shipworks" ui:Link.OpenInBrowser="true">
                 click here.
             </Hyperlink>
         </TextBlock>
