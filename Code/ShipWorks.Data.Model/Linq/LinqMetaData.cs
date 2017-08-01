@@ -296,6 +296,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.IParcelShipmentEntity:
 					toReturn = this.IParcelShipment;
 					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderEntity:
+					toReturn = this.JetOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderItemEntity:
+					toReturn = this.JetOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.JetStoreEntity:
 					toReturn = this.JetStore;
 					break;
@@ -1105,6 +1111,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<IParcelShipmentEntity> IParcelShipment
 		{
 			get { return new DataSource2<IParcelShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetOrderEntity instances in the database.</summary>
+		public DataSource2<JetOrderEntity> JetOrder
+		{
+			get { return new DataSource2<JetOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetOrderItemEntity instances in the database.</summary>
+		public DataSource2<JetOrderItemEntity> JetOrderItem
+		{
+			get { return new DataSource2<JetOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting JetStoreEntity instances in the database.</summary>

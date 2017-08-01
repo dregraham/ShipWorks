@@ -25,16 +25,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'JetStore'.<br/><br/></summary>
+	
+	/// <summary>Entity class which represents the entity 'JetOrderItem'.<br/><br/></summary>
 	[Serializable]
-	public partial class JetStoreEntity : StoreEntity
+	public partial class JetOrderItemEntity : OrderItemEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END	
+		// __LLBLGENPRO_USER_CODE_REGION_END
+			
 	{
 		#region Class Member Declarations
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Statics
@@ -44,65 +47,69 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
+			/// <summary>Member name Order</summary>
+			public static readonly string Order = "Order";
+			/// <summary>Member name OrderItemAttributes</summary>
+			public static readonly string OrderItemAttributes = "OrderItemAttributes";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static JetStoreEntity()
+		static JetOrderItemEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public JetStoreEntity()
+		public JetOrderItemEntity()
 		{
 			InitClassEmpty();
-			SetName("JetStoreEntity");
+			SetName("JetOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public JetStoreEntity(IEntityFields2 fields):base(fields)
+		public JetOrderItemEntity(IEntityFields2 fields):base(fields)
 		{
 			InitClassEmpty();
-			SetName("JetStoreEntity");
+			SetName("JetOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this JetStoreEntity</param>
-		public JetStoreEntity(IValidator validator):base(validator)
+		/// <param name="validator">The custom validator object for this JetOrderItemEntity</param>
+		public JetOrderItemEntity(IValidator validator):base(validator)
 		{
 			InitClassEmpty();
-			SetName("JetStoreEntity");
+			SetName("JetOrderItemEntity");
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="storeID">PK value for JetStore which data should be fetched into this JetStore object</param>
+		/// <param name="orderItemID">PK value for JetOrderItem which data should be fetched into this JetOrderItem object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public JetStoreEntity(System.Int64 storeID):base(storeID)
+		public JetOrderItemEntity(System.Int64 orderItemID):base(orderItemID)
 		{
 			InitClassEmpty();
 
-			SetName("JetStoreEntity");
+			SetName("JetOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="storeID">PK value for JetStore which data should be fetched into this JetStore object</param>
-		/// <param name="validator">The custom validator object for this JetStoreEntity</param>
+		/// <param name="orderItemID">PK value for JetOrderItem which data should be fetched into this JetOrderItem object</param>
+		/// <param name="validator">The custom validator object for this JetOrderItemEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public JetStoreEntity(System.Int64 storeID, IValidator validator):base(storeID, validator)
+		public JetOrderItemEntity(System.Int64 orderItemID, IValidator validator):base(orderItemID, validator)
 		{
 			InitClassEmpty();
 
-			SetName("JetStoreEntity");
+			SetName("JetOrderItemEntity");
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected JetStoreEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected JetOrderItemEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -110,6 +117,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -144,7 +152,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				default:
-					toReturn = StoreEntity.GetRelationsForField(fieldName);
+					toReturn = OrderItemEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -225,7 +233,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter()
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("JetStoreEntity", false);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("JetOrderItemEntity", false);
 		}
 		
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
@@ -234,7 +242,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("JetStoreEntity", negate);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("JetOrderItemEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -248,6 +256,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			base.GetObjectData(info, context);
 		}
 
@@ -257,21 +266,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
 		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("JetStoreEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("JetOrderItemEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
 		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new JetStoreRelations().GetAllRelations();
+			return new JetOrderItemRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(JetStoreEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(JetOrderItemEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -319,6 +328,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -330,29 +340,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ApiUser", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Secret", fieldHashtable);
+			_fieldsCustomProperties.Add("MerchantSku", fieldHashtable);
 		}
 		#endregion
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this JetStoreEntity</param>
+		/// <param name="validator">The validator object for this JetOrderItemEntity</param>
 		private void InitClassEmpty()
 		{
 			InitClassMembers();
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 
 
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public new static JetStoreRelations Relations
+		public new static JetOrderItemRelations Relations
 		{
-			get	{ return new JetStoreRelations(); }
+			get	{ return new JetOrderItemRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -386,24 +395,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ApiUser property of the Entity JetStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JetStore"."ApiUser"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// <summary> The MerchantSku property of the Entity JetOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JetOrderItem"."MerchantSku"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ApiUser
+		public virtual System.String MerchantSku
 		{
-			get { return (System.String)GetValue((int)JetStoreFieldIndex.ApiUser, true); }
-			set	{ SetValue((int)JetStoreFieldIndex.ApiUser, value); }
-		}
-
-		/// <summary> The Secret property of the Entity JetStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JetStore"."Secret"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Secret
-		{
-			get { return (System.String)GetValue((int)JetStoreFieldIndex.Secret, true); }
-			set	{ SetValue((int)JetStoreFieldIndex.Secret, value); }
+			get { return (System.String)GetValue((int)JetOrderItemFieldIndex.MerchantSku, true); }
+			set	{ SetValue((int)JetOrderItemFieldIndex.MerchantSku, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -422,7 +421,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.JetStoreEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.JetOrderItemEntity; }
 		}
 
 		#endregion
@@ -432,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Included code

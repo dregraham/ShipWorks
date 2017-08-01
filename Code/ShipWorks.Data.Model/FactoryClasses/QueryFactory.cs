@@ -574,6 +574,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<IParcelShipmentEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the JetOrder entity</summary>
+		public EntityQuery<JetOrderEntity> JetOrder
+		{
+			get { return Create<JetOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the JetOrderItem entity</summary>
+		public EntityQuery<JetOrderItemEntity> JetOrderItem
+		{
+			get { return Create<JetOrderItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the JetStore entity</summary>
 		public EntityQuery<JetStoreEntity> JetStore
 		{

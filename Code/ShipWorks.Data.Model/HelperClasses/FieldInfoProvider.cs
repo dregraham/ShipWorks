@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (187 + 0));
+			this.InitClass( (189 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -128,6 +128,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelProfileEntityInfos();
 			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
+			InitJetOrderEntityInfos();
+			InitJetOrderItemEntityInfos();
 			InitJetStoreEntityInfos();
 			InitLabelSheetEntityInfos();
 			InitLemonStandOrderEntityInfos();
@@ -1607,6 +1609,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelShipmentEntity", "TrackBySMS", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.TrackBySMS, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "IsDeliveryDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)IParcelShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+		}
+		/// <summary>Inits JetOrderEntity's FieldInfo objects</summary>
+		private void InitJetOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderFieldIndex), "JetOrderEntity");
+			this.AddElementFieldInfo("JetOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)JetOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderEntity", "MerchantOrderId", typeof(System.String), false, false, false, false,  (int)JetOrderFieldIndex.MerchantOrderId, 50, 0, 0);
+		}
+		/// <summary>Inits JetOrderItemEntity's FieldInfo objects</summary>
+		private void InitJetOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderItemFieldIndex), "JetOrderItemEntity");
+			this.AddElementFieldInfo("JetOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)JetOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderItemEntity", "MerchantSku", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.MerchantSku, 50, 0, 0);
 		}
 		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
 		private void InitJetStoreEntityInfos()
