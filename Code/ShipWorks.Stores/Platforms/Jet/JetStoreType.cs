@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -12,6 +13,8 @@ namespace ShipWorks.Stores.Platforms.Jet
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Jet, ExternallyOwned = true)]
     public class JetStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+
         /// <summary>
         /// The walmart store
         /// </summary>
@@ -20,9 +23,11 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Initializes a new instance of the <see cref="JetStoreType"/> class.
         /// </summary>
-        public JetStoreType(StoreEntity store)
+        public JetStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
             : base(store)
         {
+            this.downloaderFactory = downloaderFactory;
             jetStore = (JetStoreEntity) store;
         }
 
@@ -58,13 +63,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Create the downloader instance that is used to retrieve data from the store.
         /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            throw new NotImplementedException();
-        }
+        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
 
         /// <summary>
-        /// This is a string that uniquely identifies the store. 
+        /// This is a string that uniquely identifies the store.
         /// </summary>
         protected override string InternalLicenseIdentifier => jetStore.ApiUser;
     }

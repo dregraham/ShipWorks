@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Jet downloader
     /// </summary>
+    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Jet, ExternallyOwned = true)]
     public class JetDownloader : StoreDownloader
     {
         private readonly IJetOrderLoader orderLoader;
@@ -28,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             orderLoader = orderLoaderFactory(this);
             this.webClient = webClient;
         }
-        
+
         /// <summary>
         /// Download orders from jet
         /// </summary>
@@ -79,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 throw new DownloadException(ex.Message, ex);
             }
-            
+
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
