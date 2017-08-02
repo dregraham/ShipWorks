@@ -1,5 +1,4 @@
 using System.Threading;
-using Interapptive.Shared.Enums;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -112,7 +111,8 @@ namespace ShipWorks.Data
 
                 CustomerKey = string.Empty,
 
-                UseParallelActionQueue = true
+                UseParallelActionQueue = true,
+                AllowEbayCombineLocally = false
             };
 
             adapter.SaveEntity(newConfig);
