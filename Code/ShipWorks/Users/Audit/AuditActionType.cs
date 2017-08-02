@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
 using System.ComponentModel;
+using System.Reflection;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Users.Audit
@@ -87,7 +84,7 @@ namespace ShipWorks.Users.Audit
         /// Orders were combined.
         /// </summary>
         [Description("Combine Order")]
-        [ImageResource("arrows_green_static")]
+        [ImageResource("merge_icon_16x16")]
         CombineOrder = 10
     }
 }
