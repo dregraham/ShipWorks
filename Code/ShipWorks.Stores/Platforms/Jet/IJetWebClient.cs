@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Get a jet product for the given item
         /// </summary>
         GenericResult<JetProduct> GetProduct(JetOrderItem item);
-        
+
         /// <summary>
         /// Acknowledge the given order
         /// </summary>

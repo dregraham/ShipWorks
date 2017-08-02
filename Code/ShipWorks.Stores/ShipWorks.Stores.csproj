@@ -259,6 +259,8 @@
     <Compile Include="Platforms\Jet\DTO\JetShippingTo.cs" />
     <Compile Include="Platforms\Jet\DTO\JetOrderDetailsResult.cs" />
     <Compile Include="Platforms\Jet\DTO\JetTokenResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementRequest.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementOrderItem.cs" />
     <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
