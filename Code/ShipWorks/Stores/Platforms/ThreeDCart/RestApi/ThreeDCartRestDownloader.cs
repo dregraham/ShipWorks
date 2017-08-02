@@ -202,8 +202,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
                 // Don't download abandoned orders
-                if (threeDCartOrder.InvoiceNumber == 0 &&
-                    threeDCartOrder.OrderStatusID == (int) Enums.ThreeDCartOrderStatus.NotCompleted)
+                if (threeDCartOrder.OrderStatusID == (int) Enums.ThreeDCartOrderStatus.NotCompleted)
                 {
                     continue;
                 }
