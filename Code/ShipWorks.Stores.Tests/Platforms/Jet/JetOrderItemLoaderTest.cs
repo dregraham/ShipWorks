@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             productFromRepo = new JetProduct
             {
-                StandardProductCodes = new JetProductCodes()
+                StandardProductCodes = new JetProductCode()
             };
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();

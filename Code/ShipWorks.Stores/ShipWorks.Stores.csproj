@@ -254,7 +254,7 @@
     <Compile Include="Platforms\Jet\DTO\JetOrderResponse.cs" />
     <Compile Include="Platforms\Jet\DTO\JetOrderTotals.cs" />
     <Compile Include="Platforms\Jet\DTO\JetProduct.cs" />
-    <Compile Include="Platforms\Jet\DTO\JetProductCodes.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetProductCode.cs" />
     <Compile Include="Platforms\Jet\DTO\JetRecipient.cs" />
     <Compile Include="Platforms\Jet\DTO\JetShippingTo.cs" />
     <Compile Include="Platforms\Jet\DTO\JetOrderDetailsResult.cs" />

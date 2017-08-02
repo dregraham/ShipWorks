@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Jet.DTO
 {
@@ -18,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO
         public double ShippingWeightPounds { get; set; }
 
         [JsonProperty("standard_product_codes")]
-        public JetProductCodes StandardProductCodes { get; set; }
+        public IEnumerable<JetProductCode> StandardProductCodes { get; set; }
 
         [JsonProperty("product_description")]
         public string ProductDescription { get; set; }

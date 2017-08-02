@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         public void LoadOrder(JetOrderEntity order, JetOrderDetailsResult jetOrder, JetStoreEntity store)
         {
             order.ChangeOrderNumber(jetOrder.ReferenceOrderId.ToString());
+            order.MerchantOrderId = jetOrder.MerchantOrderId;
             order.OrderDate = jetOrder.OrderPlacedDate;
             order.OnlineStatus = "Acknowledged";
 
@@ -46,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             // charges
             LoadCharges(order, jetOrder);
-            
+
             // Update the total
             order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
 
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         }
 
         /// <summary>
-        /// Load the buyer info 
+        /// Load the buyer info
         /// </summary>
         private static void LoadBuyer(OrderEntity order, JetBuyer buyer)
         {

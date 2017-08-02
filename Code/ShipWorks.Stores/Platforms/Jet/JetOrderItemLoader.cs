@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
@@ -48,14 +49,13 @@ namespace ShipWorks.Stores.Platforms.Jet
                 JetProduct jetProduct = productRepository.GetProduct(orderItemDto, store);
 
                 orderItemEntity.Description = jetProduct.ProductDescription;
-                if (jetProduct.StandardProductCodes?.StandardProductCodeType == "UPC")
-                {
-                    orderItemEntity.UPC = jetProduct.StandardProductCodes.StandardProductCode;
-                }
-                else if(jetProduct.StandardProductCodes?.StandardProductCodeType?.StartsWith("ISBN") ?? false)
-                {
-                    orderItemEntity.ISBN = jetProduct.StandardProductCodes.StandardProductCode;
-                }
+
+                orderItemEntity.UPC = jetProduct.StandardProductCodes?.FirstOrDefault(
+                    c => c.StandardProductCodeType == "UPC")?.StandardProductCode ?? string.Empty;
+
+                orderItemEntity.ISBN = jetProduct.StandardProductCodes?.FirstOrDefault(
+                    c => c.StandardProductCodeType.StartsWith("ISBN"))?.StandardProductCode ?? string.Empty;
+
                 orderItemEntity.Image = jetProduct.MainImageUrl;
                 orderItemEntity.Thumbnail = jetProduct.SwatchImageUrl;
                 orderItemEntity.Weight = jetProduct.ShippingWeightPounds;

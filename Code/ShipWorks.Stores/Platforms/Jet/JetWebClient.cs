@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 return GenericResult.FromSuccess(tokenCache[username]);
             }
-            
+
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
                 $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
                 "application/json");
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 {
                     throw new JetException($"Failed to get token: {token.Message}");
                 }
-                
+
                 request.Headers.Add("Authorization", $"bearer {token.Value}");
             }
             catch (EncryptionException ex)
@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             JetAcknowledgementRequest acknowledgementRequest = new JetAcknowledgementRequest
             {
                 OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
-                    .Select(i => new JetAcknowledgementOrderItem {OrderItemId = i.MerchantSku}).ToList()
+                    .Select(i => new JetAcknowledgementOrderItem {OrderItemId = i.JetOrderItemID}).ToList()
             };
 
             IHttpRequestSubmitter submitter =
@@ -199,10 +199,10 @@ namespace ShipWorks.Stores.Platforms.Jet
             string acknowledgeEndpoint = $"{orderEndpoint}/{order.MerchantOrderId}/acknowledge";
             submitter.Uri = new Uri(acknowledgeEndpoint);
             submitter.Verb = HttpVerb.Put;
-            
+
             ProcessRequest("AcknowledgeOrder", store, submitter);
         }
-        
+
         /// <summary>
         /// Gets the order details for the given order url
         /// </summary>

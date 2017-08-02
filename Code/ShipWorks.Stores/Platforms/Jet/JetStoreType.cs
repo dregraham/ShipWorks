@@ -61,6 +61,28 @@ namespace ShipWorks.Stores.Platforms.Jet
         }
 
         /// <summary>
+        /// Create the CA order entity
+        /// </summary>
+        protected override OrderEntity CreateOrderInstance()
+        {
+            JetOrderEntity entity = new JetOrderEntity {MerchantOrderId = ""};
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Creates a custom order item entity
+        /// </summary>
+        public override OrderItemEntity CreateOrderItemInstance()
+        {
+            JetOrderItemEntity entity = new JetOrderItemEntity();
+            entity.MerchantSku = "";
+            entity.JetOrderItemID = "";
+
+            return entity;
+        }
+
+        /// <summary>
         /// Create the downloader instance that is used to retrieve data from the store.
         /// </summary>
         public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);

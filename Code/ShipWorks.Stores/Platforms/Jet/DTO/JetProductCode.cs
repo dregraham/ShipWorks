@@ -2,11 +2,11 @@
 
 namespace ShipWorks.Stores.Platforms.Jet.DTO
 {
-    public class JetProductCodes
+    public class JetProductCode
     {
         [JsonProperty("standard_product_code_type")]
         public string StandardProductCodeType { get; set; }
-        
+
         [JsonProperty("standard_product_code")]
         public string StandardProductCode { get; set; }
     }
