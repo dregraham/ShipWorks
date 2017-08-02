@@ -12,12 +12,18 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly IOrderElementFactory orderElementFactory;
         private readonly IJetProductRepository productRepository;
 
+        /// <summary>
+        /// Creates and loads item entities into the JetOrderEntity based on the JetOrderDetailsResult
+        /// </summary>
         public JetOrderItemLoader(IOrderElementFactory orderElementFactory, IJetProductRepository productRepository)
         {
             this.orderElementFactory = orderElementFactory;
             this.productRepository = productRepository;
         }
 
+        /// <summary>
+        /// Creates and loads item entities into the JetOrderEntity based on the JetOrderDetailsResult
+        /// </summary>
         public void LoadItems(JetOrderEntity orderEntity, JetOrderDetailsResult orderDto)
         {
             foreach (JetOrderItem orderItemDto in orderDto.OrderItems)
@@ -28,20 +34,28 @@ namespace ShipWorks.Stores.Platforms.Jet
                 orderItemEntity.Name = orderItemDto.ProductTitle;
                 orderItemEntity.Code = orderItemDto.ItemTaxCode;
                 orderItemEntity.SKU = orderItemDto.MerchantSku;
+                orderItemEntity.MerchantSku = orderItemDto.MerchantSku;
+
                 orderItemEntity.UnitPrice = orderItemDto.ItemPrice.BasePrice;
                 orderItemEntity.Quantity = orderItemDto.RequestOrderQuantity;
-                orderItemEntity.MerchantSku = orderItemDto.MerchantSku;
 
                 // Load info from Fulfillment Node
                 orderItemEntity.Location = orderDto.FulfillmentNode;
 
-                // Get from product repo
-                // Description
-                // ISBN or UPC
-                // Image
-                // Thumbnail
-                // Weight
+                JetProduct jetProduct = productRepository.GetProduct(orderItemDto);
 
+                orderItemEntity.Description = jetProduct.ProductDescription;
+                if (jetProduct.StandardProductCodes?.StandardProductCodeType == "UPC")
+                {
+                    orderItemEntity.UPC = jetProduct.StandardProductCodes.StandardProductCode;
+                }
+                else if(jetProduct.StandardProductCodes?.StandardProductCodeType?.StartsWith("ISBN") ?? false)
+                {
+                    orderItemEntity.ISBN = jetProduct.StandardProductCodes.StandardProductCode;
+                }
+                orderItemEntity.Image = jetProduct.MainImageUrl;
+                orderItemEntity.Thumbnail = jetProduct.SwatchImageUrl;
+                orderItemEntity.Weight = jetProduct.ShippingWeightPounds;
             }
         }
     }

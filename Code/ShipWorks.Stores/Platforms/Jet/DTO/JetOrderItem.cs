@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO
         public string MerchantSku { get; set; }
 
         [JsonProperty("request_order_quantity")]
-        public int RequestOrderQuantity { get; set; }
+        public double RequestOrderQuantity { get; set; }
 
         [JsonProperty("item_tax_code")]
         public string ItemTaxCode { get; set; }

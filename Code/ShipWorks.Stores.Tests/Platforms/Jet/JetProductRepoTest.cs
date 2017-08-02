@@ -8,11 +8,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet
 {
-    public class JetProductRepoTest
+    public class JetProductRepositoryTest
     {
         private readonly AutoMock mock;
 
-        public JetProductRepoTest()
+        public JetProductRepositoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var webClient = mock.Mock<IJetWebClient>();
             webClient.Setup(w => w.GetProduct(jetItem)).Returns(GenericResult.FromSuccess(jetProduct));
 
-            JetProductRepo testObject = mock.Create<JetProductRepo>();
+            JetProductRepository testObject = mock.Create<JetProductRepository>();
             
             JetProduct result = testObject.GetProduct(jetItem);
 
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetProduct_ReturnsProductFromCache_WhenProductIsInCache()
         {
-            JetProductRepo testObject = mock.Create<JetProductRepo>();
+            JetProductRepository testObject = mock.Create<JetProductRepository>();
             JetProduct jetProduct = new JetProduct();
             JetOrderItem jetItem = new JetOrderItem() { MerchantSku = "testSku" };
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var webClient = mock.Mock<IJetWebClient>();
             webClient.Setup(w => w.GetProduct(jetItem)).Returns(GenericResult.FromError<JetProduct>("Something went wrong oh no!!"));
 
-            JetProductRepo testObject = mock.Create<JetProductRepo>();
+            JetProductRepository testObject = mock.Create<JetProductRepository>();
 
             JetException ex = Assert.Throws<JetException>(() => testObject.GetProduct(jetItem));
             Assert.Equal("Error retrieving product information for testSku, Something went wrong oh no!!.", ex.Message);
