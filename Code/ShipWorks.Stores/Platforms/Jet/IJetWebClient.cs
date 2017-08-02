@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get orders jet
         /// </summary>
-        GenericResult<IEnumerable<JetOrderDetail>> GetOrders();
+        GenericResult<IEnumerable<JetOrderDetailsResult>> GetOrders();
 
         /// <summary>
         /// Get a jet product for the given item
@@ -26,6 +26,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Acknowledge the given order
         /// </summary>
-        void Acknowledge(OrderEntity order);
+        void Acknowledge(JetOrderEntity order);
     }
 }

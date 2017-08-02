@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             }
         }
 
-        public GenericResult<IEnumerable<JetOrderDetail>> GetOrders()
+        public GenericResult<IEnumerable<JetOrderDetailsResult>> GetOrders()
         {
             throw new NotImplementedException();
         }
