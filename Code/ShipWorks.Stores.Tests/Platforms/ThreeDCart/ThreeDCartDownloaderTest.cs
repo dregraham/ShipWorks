@@ -82,6 +82,12 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
+        public void LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
+        {
+            Assert.False(orderEntity.OnlineStatus.Equals("Not Complete"));
+        }
+
+        [Fact]
         public void LoadOrder_LoadsLastModifiedDate()
         {
             Assert.Equal(new DateTime(2016, 3, 16, 22, 16, 9, DateTimeKind.Utc), orderEntity.OnlineLastModified);
