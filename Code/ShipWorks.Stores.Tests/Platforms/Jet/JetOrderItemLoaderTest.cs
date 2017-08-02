@@ -18,12 +18,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         private readonly JetOrderEntity jetOrderEntity;
         private readonly List<JetOrderItemEntity> createdOrderItems = new List<JetOrderItemEntity>();
         private readonly JetOrderItemLoader testObject;
+        private readonly JetStoreEntity store;
 
         public JetOrderItemLoaderTest()
         {
+            store = new JetStoreEntity();
+
             productFromRepo = new JetProduct
             {
-                StandardProductCodes = new JetProductCode()
+                StandardProductCodes = new List<JetProductCode>()
             };
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -37,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 });
 
             mock.Mock<IJetProductRepository>()
-                .Setup(r => r.GetProduct(It.IsAny<JetOrderItem>()))
+                .Setup(r => r.GetProduct(It.IsAny<JetOrderItem>(), It.IsAny<JetStoreEntity>()))
                 .Returns(productFromRepo);
 
             jetOrderEntity = new JetOrderEntity();
@@ -53,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(numberOfItemsReturned);
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal(numberOfItemsReturned, createdOrderItems.Count);
         }
@@ -120,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             jetOrderDetailsResult.FulfillmentNode = "fnode";
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal("fnode", createdOrderItems[0].Location);
         }
@@ -131,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             productFromRepo.ProductDescription = "desc";
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal("desc", createdOrderItems[0].Description);
         }
@@ -144,10 +147,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void LoadItems_SetUPC_AndISBN(string productCodeType, string productCode, string expectedUpc, string expectedIsbn)
         {
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
-            productFromRepo.StandardProductCodes.StandardProductCodeType = productCodeType;
-            productFromRepo.StandardProductCodes.StandardProductCode = productCode;
+            productFromRepo.StandardProductCodes = new[]
+            {
+                new JetProductCode()
+                {
+                    StandardProductCodeType = productCodeType,
+                    StandardProductCode = productCode
+                }
+            };
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal(expectedUpc, createdOrderItems[0].UPC);
             Assert.Equal(expectedIsbn, createdOrderItems[0].ISBN);
@@ -159,7 +168,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             productFromRepo.StandardProductCodes = null;
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Empty(createdOrderItems[0].UPC);
             Assert.Empty(createdOrderItems[0].ISBN);
@@ -171,7 +180,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             productFromRepo.MainImageUrl = "main image";
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal("main image", createdOrderItems[0].Image);
         }
@@ -182,7 +191,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             productFromRepo.SwatchImageUrl = "swatch image";
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal("swatch image", createdOrderItems[0].Thumbnail);
         }
@@ -193,7 +202,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             productFromRepo.ShippingWeightPounds = 42.42;
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
 
             Assert.Equal(42.42, createdOrderItems[0].Weight);
         }
@@ -203,7 +212,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var jetOrderDetailsResult = CreateJetOrderDetailsResult(1);
             action(jetOrderDetailsResult.OrderItems[0]);
 
-            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult);
+            testObject.LoadItems(jetOrderEntity, jetOrderDetailsResult, store);
         }
 
 
