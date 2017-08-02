@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 orderItemEntity.Code = orderItemDto.ItemTaxCode;
                 orderItemEntity.SKU = orderItemDto.MerchantSku;
                 orderItemEntity.MerchantSku = orderItemDto.MerchantSku;
+                orderItemEntity.JetOrderItemID = orderItemDto.OrderItemId;
 
                 orderItemEntity.UnitPrice = orderItemDto.ItemPrice.BasePrice;
                 orderItemEntity.Quantity = orderItemDto.RequestOrderQuantity;

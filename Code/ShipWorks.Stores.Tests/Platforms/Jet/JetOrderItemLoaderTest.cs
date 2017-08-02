@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
         public JetOrderItemLoaderTest()
         {
-            productFromRepo = new JetProduct()
+            productFromRepo = new JetProduct
             {
                 StandardProductCodes = new JetProductCodes()
             };
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Setup(f => f.CreateItem(It.IsAny<OrderEntity>()))
                 .Returns(() =>
                 {
-                    var newItem = new JetOrderItemEntity() {UPC = string.Empty, ISBN = string.Empty};
+                    var newItem = new JetOrderItemEntity {UPC = string.Empty, ISBN = string.Empty};
                     createdOrderItems.Add(newItem);
                     return newItem;
                 });
@@ -80,6 +80,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             SetupOrderItemTest(item => item.MerchantSku = "sku");
 
             Assert.Equal("sku", createdOrderItems[0].SKU);
+        }
+
+        [Fact]
+        public void LoadItems_SetsJetOrderItemId()
+        {
+            SetupOrderItemTest(item => item.OrderItemId = "jet id");
+
+            Assert.Equal("jet id", createdOrderItems[0].JetOrderItemID);
         }
 
         [Fact]
