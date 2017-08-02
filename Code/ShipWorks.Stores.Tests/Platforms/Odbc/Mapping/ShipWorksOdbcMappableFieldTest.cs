@@ -74,6 +74,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        public void ChangeBackingField_ChangesBackingField()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
+
+            testObject.ChangeBackingField(OrderFields.OrderNumberComplete);
+
+            Assert.Equal("OrderNumberComplete", testObject.Name);
+        }
+
+        [Fact]
         public void LoadValue_ConvertsStringToLong()
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);

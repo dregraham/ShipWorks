@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
         public ChannelAdvisorOnlineUpdaterTest()
         {
-            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456};
+            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456, MarketplaceNames = string.Empty};
             storeEntity = new ChannelAdvisorStoreEntity();
             storeEntity.ConsolidatorAsUsps = false;
             fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
@@ -265,6 +265,22 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
             Assert.Equal("DHL", code);
+        }
+
+        [Fact]
+        public void GetShipmentClassCode_ReturnsGlobalMail_WhenUspsAndDhlServiceUsedAndEbayOrder()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+
+            var caOrder = shipmentEntity.Order as ChannelAdvisorOrderEntity;
+            caOrder.MarketplaceNames = "ebay";
+
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("Global Mail", code);
         }
 
         [Theory]
