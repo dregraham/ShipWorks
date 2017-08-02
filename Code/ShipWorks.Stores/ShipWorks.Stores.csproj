@@ -272,6 +272,7 @@
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\JetProductRepository.cs" />
     <Compile Include="Platforms\Jet\JetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\JetRequest.cs" />
     <Compile Include="Platforms\Jet\JetStoreType.cs" />
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
