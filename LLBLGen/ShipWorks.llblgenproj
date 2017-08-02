@@ -1414,6 +1414,7 @@
       </EntityDefinition>
       <EntityDefinition Name="JetOrderItem" ObjectID="231f3a68-fd08-413e-834c-407652949ed9" InheritanceType="2">
         <Fields>
+          <Field Name="JetOrderItemID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="MerchantSku" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3740,7 +3741,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-01T19:39:09.9310016Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-02T15:55:52.1212101Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5913,6 +5914,7 @@
                   <Fields>
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="MerchantSku" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="JetOrderItemID" Ordinal="3" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="JetStore">
@@ -10448,6 +10450,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":JetOrderItem" TargetName="ShipWorksLocal:dbo:JetOrderItem">
           <FieldMappings>
+            <FieldMapping FieldName="JetOrderItemID" TargetFieldName="JetOrderItemID" />
             <FieldMapping FieldName="MerchantSku" TargetFieldName="MerchantSku" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
           </FieldMappings>

@@ -37,6 +37,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             MerchantSku = source.MerchantSku;
+            JetOrderItemID = source.JetOrderItemID;
             
             
             
@@ -51,6 +52,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String MerchantSku { get; }
+        /// <summary> The JetOrderItemID property of the Entity JetOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "JetOrderItem"."JetOrderItemID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String JetOrderItemID { get; }
         
         
         

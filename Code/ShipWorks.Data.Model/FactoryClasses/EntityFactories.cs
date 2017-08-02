@@ -1672,7 +1672,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new JetOrderEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewJetOrderUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -1693,7 +1692,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new JetOrderItemEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewJetOrderItemUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code

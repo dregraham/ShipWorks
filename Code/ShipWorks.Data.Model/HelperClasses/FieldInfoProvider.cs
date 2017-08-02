@@ -1623,6 +1623,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(JetOrderItemFieldIndex), "JetOrderItemEntity");
 			this.AddElementFieldInfo("JetOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)JetOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("JetOrderItemEntity", "MerchantSku", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.MerchantSku, 50, 0, 0);
+			this.AddElementFieldInfo("JetOrderItemEntity", "JetOrderItemID", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.JetOrderItemID, 50, 0, 0);
 		}
 		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
 		private void InitJetStoreEntityInfos()

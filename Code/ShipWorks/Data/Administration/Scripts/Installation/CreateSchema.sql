@@ -5974,7 +5974,8 @@ GO
 CREATE TABLE [dbo].[JetOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[MerchantSku] [nvarchar](50) NOT NULL
+[MerchantSku] [nvarchar](50) NOT NULL,
+[JetOrderItemID] [nvarchar](50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_JetOrderItem] on [dbo].[JetOrderItem]'

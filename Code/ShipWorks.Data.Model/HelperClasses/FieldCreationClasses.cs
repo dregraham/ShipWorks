@@ -10647,6 +10647,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.MerchantSku);}
 		}
+		/// <summary>Creates a new JetOrderItemEntity.JetOrderItemID field instance</summary>
+		public static EntityField2 JetOrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.JetOrderItemID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity JetStoreEntity</summary>

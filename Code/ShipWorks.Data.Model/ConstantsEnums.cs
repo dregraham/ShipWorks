@@ -4582,6 +4582,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
 		MerchantSku,
+		///<summary>JetOrderItemID. </summary>
+		JetOrderItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -1694,9 +1694,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits JetOrderItemEntity's mappings</summary>
 		private void InitJetOrderItemEntityMappings()
 		{
-			this.AddElementMapping("JetOrderItemEntity", @"ShipWorksLocal", @"dbo", "JetOrderItem", 2, 0);
+			this.AddElementMapping("JetOrderItemEntity", @"ShipWorksLocal", @"dbo", "JetOrderItem", 3, 0);
 			this.AddElementFieldMapping("JetOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("JetOrderItemEntity", "MerchantSku", "MerchantSku", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("JetOrderItemEntity", "JetOrderItemID", "JetOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits JetStoreEntity's mappings</summary>
