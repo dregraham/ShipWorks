@@ -19,13 +19,15 @@ using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using System.Text;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
     /// <summary>
     /// Interface to connecting to Shopify
     /// </summary>
-    public class ShopifyWebClient
+    [Component]
+    public class ShopifyWebClient : IShopifyWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
@@ -462,7 +464,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
-                if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
                 {
                     return "DHL eCommerce";
                 }

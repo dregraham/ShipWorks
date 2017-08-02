@@ -15,11 +15,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// When a child nodes are created, the left node will have a start and end date of half it's parent's date range, the right node
     /// will have the other half.
     /// 
-    /// For example, a partent with start date of 5/1/2012 and end date of 5/30/2012, order count of 50, and max results of 10 will
+    /// For example, a parent with start date of 5/1/2012 and end date of 5/30/2012, order count of 50, and max results of 10 will
     /// have a first level left child of 5/1/2012 - 5/15/2012 and right child of 5/16/2012 - 5/30/2012.  The left and right child
     /// will then make a call to shopify to find the number of orders in it's range.
     /// 
-    /// The whole point of this isbecause Shopify does not return orders sorted in 
+    /// The whole point of this is because Shopify does not return orders sorted in 
     /// an ascending order.  We have to figure out what ranges we need to ask for to make sure we get them 
     /// ascending, otherwise if the user canceled early we'd miss any chunk that was between when they canceled and the last download.
     /// 
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Generates an ordered list of date ranges that represent blocks that contain orders less than or equal to the maximum page size Shopify allows
         /// </summary>
-        public IEnumerable<ShopifyGetOrdersDateRange> GenerateOrderRanges(ShopifyWebClient webClient)
+        public IEnumerable<ShopifyGetOrdersDateRange> GenerateOrderRanges(IShopifyWebClient webClient, int ordersPerPage)
         {
             if (webClient == null)
             {
@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             
             // If it's small enough to fit all orders in this range, then all we return is ourselves
-            if (OrderCount <= ShopifyConstants.ShopifyOrdersPerPage)
+            if (OrderCount <= ordersPerPage)
             {
                 // All the orders fit in this node!
                 yield return this;
@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // we'll break up the range we have into pages.
             if (Duration < TimeSpan.FromSeconds(2))
             {
-                pageCount = (OrderCount + ShopifyConstants.ShopifyOrdersPerPage - 1) / ShopifyConstants.ShopifyOrdersPerPage; 
+                pageCount = (OrderCount + ordersPerPage - 1) / ordersPerPage; 
 
                 yield return this;
                 yield break;
@@ -157,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             leftChild = new ShopifyGetOrdersDateRange(StartDate, MidpointDate);
 
             // Yield all our descendants on the left side (if any)
-            foreach (var range in leftChild.GenerateOrderRanges(webClient))
+            foreach (var range in leftChild.GenerateOrderRanges(webClient, ordersPerPage))
             {
                 yield return range;
             }
@@ -169,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 rightChild = new ShopifyGetOrdersDateRange(leftChild.EndDate, EndDate);
 
                 // Yield all our descendants on the right side (if any)
-                foreach (var range in rightChild.GenerateOrderRanges(webClient))
+                foreach (var range in rightChild.GenerateOrderRanges(webClient, ordersPerPage))
                 {
                     yield return range;
                 }
@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         /// <param name="webClient">Shopify web client on which to make API calls</param>
         /// <returns>Number of orders in this date range</returns>
-        private void QueryOrderCount(ShopifyWebClient webClient)
+        private void QueryOrderCount(IShopifyWebClient webClient)
         {
             if (webClient == null)
             {
