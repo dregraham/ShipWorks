@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Creates and loads item entities into the JetOrderEntity based on the JetOrderDetailsResult
         /// </summary>
-        public void LoadItems(JetOrderEntity orderEntity, JetOrderDetailsResult orderDto)
+        public void LoadItems(JetOrderEntity orderEntity, JetOrderDetailsResult orderDto, JetStoreEntity store)
         {
             foreach (JetOrderItem orderItemDto in orderDto.OrderItems)
             {
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 // Load info from Fulfillment Node
                 orderItemEntity.Location = orderDto.FulfillmentNode;
 
-                JetProduct jetProduct = productRepository.GetProduct(orderItemDto);
+                JetProduct jetProduct = productRepository.GetProduct(orderItemDto, store);
 
                 orderItemEntity.Description = jetProduct.ProductDescription;
                 if (jetProduct.StandardProductCodes?.StandardProductCodeType == "UPC")

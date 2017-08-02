@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO
         public string MerchantOrderId { get; set; }
 
         [JsonProperty("reference_order_id")]
-        public string ReferenceOrderId { get; set; }
+        public long ReferenceOrderId { get; set; }
 
         [JsonProperty("fulfillment_node")]
         public string FulfillmentNode { get; set; }

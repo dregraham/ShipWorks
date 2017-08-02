@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
@@ -23,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     {
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         private const string EndpointBase = "https://merchant-api.jet.com/api";
         private readonly string tokenEndpoint = $"{EndpointBase}/token";
@@ -35,13 +38,18 @@ namespace ShipWorks.Stores.Platforms.Jet
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
 
+        private readonly LruCache<string, string> tokenCache;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetWebClient(IHttpRequestSubmitterFactory submitterFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        public JetWebClient(IHttpRequestSubmitterFactory submitterFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            this.encryptionProviderFactory = encryptionProviderFactory;
+
+            tokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
         }
 
         /// <summary>
@@ -49,6 +57,11 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public GenericResult<string> GetToken(string username, string password)
         {
+            if (tokenCache.Contains(username))
+            {
+                return GenericResult.FromSuccess(tokenCache[username]);
+            }
+            
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
                 $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
                 "application/json");
@@ -65,6 +78,8 @@ namespace ShipWorks.Stores.Platforms.Jet
                 apiLogEntry.LogResponse(result, "json");
 
                 JetTokenResponse token = JsonConvert.DeserializeObject<JetTokenResponse>(result, jsonSerializerSettings);
+
+                tokenCache[username] = token.Token;
 
                 return GenericResult.FromSuccess(token.Token);
             }
@@ -83,67 +98,93 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get jet orders, with order details, that have a status of "ready"
         /// </summary>
-        public GenericResult<IEnumerable<JetOrderDetailsResult>> GetOrders()
+        public GenericResult<JetOrderResponse> GetOrders(JetStoreEntity store)
         {
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpVariableRequestSubmitter();
-            string getOrdersEndpoints = $"{orderEndpoint}/ready";
-            submitter.Uri = new Uri(getOrdersEndpoints);
-
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Jet, "GetOrders");
-            apiLogEntry.LogRequest(submitter);
-
-            try
-            {
-                IHttpResponseReader httpResponseReader = submitter.GetResponse();
-                string result = httpResponseReader.ReadResult();
-                apiLogEntry.LogResponse(result, "json");
-
-                JetOrderResponse orders = JsonConvert.DeserializeObject<JetOrderResponse>(result, jsonSerializerSettings);
-
-                IEnumerable<JetOrderDetailsResult> ordersWithDetails = orders.OrderUrls.Select(GetOrderDetails);
-
-                return GenericResult.FromSuccess(ordersWithDetails);
-            }
-            catch (Exception ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                return GenericResult.FromError<IEnumerable<JetOrderDetailsResult>>("Error communicating with Jet. Failed to get orders.");
-            }
+            return ProcessRequest<JetOrderResponse>("GetOrders", new Uri($"{orderEndpoint}/ready"), HttpVerb.Get,
+                store);
         }
 
         /// <summary>
         /// Gets jet product details for the given item
         /// </summary>
-        public GenericResult<JetProduct> GetProduct(JetOrderItem item)
+        public GenericResult<JetProduct> GetProduct(JetOrderItem item, JetStoreEntity store)
         {
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpVariableRequestSubmitter();
+            return ProcessRequest<JetProduct>("GetProduct", new Uri($"{productEndpoint}/{item.MerchantSku}"), HttpVerb.Get, store);
+        }
 
-            submitter.Uri = new Uri($"{productEndpoint}/{item.MerchantSku}");
+        /// <summary>
+        /// Processes the request.
+        /// </summary>
+        private GenericResult<T> ProcessRequest<T>(string action, Uri uri, HttpVerb method,JetStoreEntity store)
+        {
+            IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
+            request.Uri = uri;
+            request.Verb = method;
 
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Jet, "GetProduct");
-            apiLogEntry.LogRequest(submitter);
+            var result =  ProcessRequest(action, store, request);
 
+            if (result.Failure)
+            {
+                return GenericResult.FromError<T>(result.Message);
+            }
+
+            return GenericResult.FromSuccess(JsonConvert.DeserializeObject<T>(result.Value, jsonSerializerSettings));
+        }
+
+        /// <summary>
+        /// Process the request
+        /// </summary>
+        private GenericResult<string> ProcessRequest(string action, JetStoreEntity store, IHttpRequestSubmitter request)
+        {
+            AuthenticateRequest(store, request);
+
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Jet, action);
+            apiLogEntry.LogRequest(request);
             try
             {
-                IHttpResponseReader httpResponseReader = submitter.GetResponse();
+                IHttpResponseReader httpResponseReader = request.GetResponse();
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
 
-                JetProduct product = JsonConvert.DeserializeObject<JetProduct>(result, jsonSerializerSettings);
-
-                return GenericResult.FromSuccess(product);
+                return GenericResult.FromSuccess(result);
             }
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
-                return GenericResult.FromError<JetProduct>("Error communicating with Jet. Failed to get product.");
+                return GenericResult.FromError<string>(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Authenticate the request using the stores token
+        /// </summary>
+        private void AuthenticateRequest(JetStoreEntity store, IHttpRequestSubmitter request)
+        {
+            try
+            {
+                string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
+                    .Decrypt(store.Secret);
+
+                GenericResult<string> token = GetToken(store.ApiUser, password);
+
+                if (token.Failure)
+                {
+                    throw new JetException($"Failed to get token: {token.Message}");
+                }
+                
+                request.Headers.Add("Authorization", $"bearer {token.Value}");
+            }
+            catch (EncryptionException ex)
+            {
+                throw new JetException("Failed to decrypt the shared secret", ex);
             }
         }
 
         /// <summary>
         /// Acknowledges the order will be fulfilled by the seller
         /// </summary>
-        public void Acknowledge(JetOrderEntity order)
+        public void Acknowledge(JetOrderEntity order, JetStoreEntity store)
         {
             JetAcknowledgementRequest acknowledgementRequest = new JetAcknowledgementRequest
             {
@@ -157,49 +198,17 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             string acknowledgeEndpoint = $"{orderEndpoint}/{order.MerchantOrderId}/acknowledge";
             submitter.Uri = new Uri(acknowledgeEndpoint);
-
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Jet, "Acknowledge");
-            apiLogEntry.LogRequest(submitter);
-
-            try
-            {
-                IHttpResponseReader httpResponseReader = submitter.GetResponse();
-                string result = httpResponseReader.ReadResult();
-                apiLogEntry.LogResponse(result, "json");
-            }
-            catch (Exception ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                throw new JetException(
-                    $"Error communicating with Jet. Failed to acknowledge order {order.MerchantOrderId}");
-            }
+            submitter.Verb = HttpVerb.Put;
+            
+            ProcessRequest("AcknowledgeOrder", store, submitter);
         }
-
+        
         /// <summary>
         /// Gets the order details for the given order url
         /// </summary>
-        private JetOrderDetailsResult GetOrderDetails(string orderUrl)
+        public GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store)
         {
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpVariableRequestSubmitter();
-
-            submitter.Uri = new Uri($"{EndpointBase}{orderUrl}");
-
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Jet, "GetOrderDetails");
-            apiLogEntry.LogRequest(submitter);
-
-            try
-            {
-                IHttpResponseReader httpResponseReader = submitter.GetResponse();
-                string result = httpResponseReader.ReadResult();
-                apiLogEntry.LogResponse(result, "json");
-
-                return JsonConvert.DeserializeObject<JetOrderDetailsResult>(result, jsonSerializerSettings);
-            }
-            catch (Exception ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                throw new JetException($"Error communicating with Jet. Failed to get order details at url {orderUrl}.");
-            }
+            return ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", new Uri($"{EndpointBase}{orderUrl}"), HttpVerb.Get, store);
         }
     }
 }

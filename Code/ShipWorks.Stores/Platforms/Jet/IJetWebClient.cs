@@ -16,16 +16,21 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get orders jet
         /// </summary>
-        GenericResult<IEnumerable<JetOrderDetailsResult>> GetOrders();
+        GenericResult<JetOrderResponse> GetOrders(JetStoreEntity store);
 
         /// <summary>
         /// Get a jet product for the given item
         /// </summary>
-        GenericResult<JetProduct> GetProduct(JetOrderItem item);
+        GenericResult<JetProduct> GetProduct(JetOrderItem item, JetStoreEntity store);
 
         /// <summary>
         /// Acknowledge the given order
         /// </summary>
-        void Acknowledge(JetOrderEntity order);
+        void Acknowledge(JetOrderEntity order, JetStoreEntity store);
+
+        /// <summary>
+        /// Get order details for the given order
+        /// </summary>
+        GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store);
     }
 }

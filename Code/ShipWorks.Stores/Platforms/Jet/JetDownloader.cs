@@ -8,6 +8,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
@@ -40,7 +41,9 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             try
             {
-                IEnumerable<JetOrderDetailsResult> orders = GetOrders();
+                GenericResult<JetOrderResponse> ordersResult = webClient.GetOrders(Store as JetStoreEntity);
+
+                
 
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
@@ -48,29 +51,23 @@ namespace ShipWorks.Stores.Platforms.Jet
                     return;
                 }
 
-                while (orders.Any())
+                while (ordersResult.Success && ordersResult.Value.OrderUrls.Any())
                 {
-                    foreach (JetOrderDetailsResult jetOrder in orders)
+                    // Check if it has been canceled
+                    if (Progress.IsCancelRequested)
                     {
-                        // Check if it has been canceled
-                        if (Progress.IsCancelRequested)
-                        {
-                            return;
-                        }
+                        return;
+                    }
 
+                    foreach (string orderUrl in ordersResult.Value.OrderUrls)
+                    {
                         // Update the status
                         Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
-                        LoadAndAcknowledgeOrder(jetOrder);
-
-                        // Check if it has been canceled
-                        if (Progress.IsCancelRequested)
-                        {
-                            return;
-                        }
+                        LoadAndAcknowledgeOrder(orderUrl);
                     }
 
-                    orders = GetOrders();
+                    ordersResult = webClient.GetOrders(Store as JetStoreEntity);
                 }
             }
             catch (JetException ex)
@@ -86,34 +83,28 @@ namespace ShipWorks.Stores.Platforms.Jet
             Progress.Detail = "Done";
         }
 
-        /// <summary>
-        /// Get orders from the web client, if something goes wrong throw a download exception
-        /// </summary>
-        private List<JetOrderDetailsResult> GetOrders()
-        {
-            GenericResult<IEnumerable<JetOrderDetailsResult>> ordersResult = webClient.GetOrders();
-
-            if (ordersResult.Failure)
-            {
-                throw new DownloadException($"An error occured while downloading from Jet.com: {ordersResult.Message}");
-            }
-
-            return ordersResult.Value.ToList();
-        }
 
         /// <summary>
         /// Load and acknowledge the order
         /// </summary>
-        /// <param name="jetOrder"></param>
-        private void LoadAndAcknowledgeOrder(JetOrderDetailsResult jetOrder)
+        private void LoadAndAcknowledgeOrder(string orderUrl)
         {
-            JetOrderEntity order =
-                InstantiateOrder(new GenericOrderIdentifier(jetOrder.ReferenceOrderId)) as JetOrderEntity;
+            GenericResult<JetOrderDetailsResult> orderDetails = webClient.GetOrderDetails(orderUrl, Store as JetStoreEntity);
 
-            orderLoader.LoadOrder(order, jetOrder);
+            if (orderDetails.Failure)
+            {
+                throw new DownloadException(orderDetails.Message);
+            }
+
+            var jetOrder = orderDetails.Value;
+
+            JetOrderEntity order =
+                (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
+
+            orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
 
             SaveDownloadedOrder(order);
-            webClient.Acknowledge(order);
+            webClient.Acknowledge(order, Store as JetStoreEntity);
         }
     }
 }

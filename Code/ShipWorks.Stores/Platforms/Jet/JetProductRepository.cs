@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -27,14 +28,14 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get a product for the given item
         /// </summary>
-        public JetProduct GetProduct(JetOrderItem item)
+        public JetProduct GetProduct(JetOrderItem item, JetStoreEntity store)
         {
             if (productCache.Contains(item.MerchantSku))
             {
                 return productCache[item.MerchantSku];
             }
 
-            GenericResult<JetProduct> result = webClient.GetProduct(item);
+            GenericResult<JetProduct> result = webClient.GetProduct(item, store);
             if (result.Success)
             {
                 AddProduct(item.MerchantSku, result.Value);

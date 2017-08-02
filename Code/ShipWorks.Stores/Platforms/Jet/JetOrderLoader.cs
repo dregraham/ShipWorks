@@ -30,9 +30,9 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Load the jetOrder into the order entity
         /// </summary>
-        public void LoadOrder(JetOrderEntity order, JetOrderDetailsResult jetOrder)
+        public void LoadOrder(JetOrderEntity order, JetOrderDetailsResult jetOrder, JetStoreEntity store)
         {
-            order.ChangeOrderNumber(jetOrder.ReferenceOrderId);
+            order.ChangeOrderNumber(jetOrder.ReferenceOrderId.ToString());
             order.OrderDate = jetOrder.OrderPlacedDate;
             order.OnlineStatus = "Acknowledged";
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             LoadShipping(order, jetOrder.ShippingTo);
 
             // items
-            orderItemLoader.LoadItems(order, jetOrder);
+            orderItemLoader.LoadItems(order, jetOrder, store);
 
             // charges
             LoadCharges(order, jetOrder);

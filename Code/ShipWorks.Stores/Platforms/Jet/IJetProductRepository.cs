@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Platforms.Jet.DTO;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the JetProduct matching he JetOrderItem
         /// </summary>
-        JetProduct GetProduct(JetOrderItem item);
+        JetProduct GetProduct(JetOrderItem item, JetStoreEntity store);
     }
 }

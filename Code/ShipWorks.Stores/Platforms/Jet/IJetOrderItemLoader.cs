@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Load the Jet order items into the order entity
         /// </summary>
-        void LoadItems(JetOrderEntity orderEntity, JetOrderDetailsResult orderDto);
+        void LoadItems(JetOrderEntity orderEntity, JetOrderDetailsResult orderDto, JetStoreEntity store);
     }
 }
