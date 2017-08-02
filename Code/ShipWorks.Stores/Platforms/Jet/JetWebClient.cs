@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             throw new NotImplementedException();
         }
 
-        public void Acknowledge(OrderEntity order)
+        public void Acknowledge(JetOrderEntity order)
         {
             throw new NotImplementedException();
         }
