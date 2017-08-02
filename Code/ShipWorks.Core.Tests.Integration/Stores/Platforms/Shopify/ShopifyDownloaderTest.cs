@@ -164,7 +164,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
                 {
