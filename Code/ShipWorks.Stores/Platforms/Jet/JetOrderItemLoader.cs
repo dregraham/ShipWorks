@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Import;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Creates and loads item entities into the JetOrderEntity based on the JetOrderDetailsResult
     /// </summary>
+    [Component]
     public class JetOrderItemLoader : IJetOrderItemLoader
     {
         private readonly IOrderElementFactory orderElementFactory;

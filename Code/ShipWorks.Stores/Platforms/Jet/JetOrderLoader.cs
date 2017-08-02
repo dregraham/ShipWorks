@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
@@ -8,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Load jet order data into OrderEntities
     /// </summary>
+    [Component]
     public class JetOrderLoader : IJetOrderLoader
     {
         private readonly IOrderElementFactory orderElementFactory;
@@ -17,10 +20,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetOrderLoader(IOrderElementFactory orderElementFactory, IJetOrderItemLoader orderItemLoader, IOrderChargeCalculator orderChargeCalculator)
+        public JetOrderLoader(IOrderElementFactory orderElementFactory, Func<IOrderElementFactory, IJetOrderItemLoader> orderItemLoaderFactory, IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderElementFactory = orderElementFactory;
-            this.orderItemLoader = orderItemLoader;
+            orderItemLoader = orderItemLoaderFactory(orderElementFactory);
             this.orderChargeCalculator = orderChargeCalculator;
         }
 
