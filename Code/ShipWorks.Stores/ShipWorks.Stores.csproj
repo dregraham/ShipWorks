@@ -265,6 +265,7 @@
     <Compile Include="Platforms\Jet\IJetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\IJetProductRepo.cs" />
     <Compile Include="Platforms\Jet\JetException.cs" />
+    <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\JetProductRepo.cs" />
     <Compile Include="Platforms\Jet\JetStoreType.cs" />
     <Compile Include="Platforms\Jet\JetWebClient.cs" />

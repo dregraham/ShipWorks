@@ -5,15 +5,15 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO
     public class JetOrderItemPrice
     {
         [JsonProperty("base_price")]
-        public int BasePrice { get; set; }
+        public decimal BasePrice { get; set; }
 
         [JsonProperty("item_tax")]
-        public double ItemTax { get; set; }
+        public decimal ItemTax { get; set; }
 
         [JsonProperty("item_shipping_cost")]
-        public int ItemShippingCost { get; set; }
+        public decimal ItemShippingCost { get; set; }
 
         [JsonProperty("item_shipping_tax")]
-        public double ItemShippingTax { get; set; }
+        public decimal ItemShippingTax { get; set; }
     }
 }
