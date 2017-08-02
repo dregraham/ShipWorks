@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.encryptionProviderFactory = encryptionProviderFactory;
 
-            tokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
+            tokenCache = new LruCache<string, string>(50, TimeSpan.FromHours(9));
         }
 
         /// <summary>
