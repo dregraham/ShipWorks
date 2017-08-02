@@ -28,24 +28,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void LoadOrder_DelegatesToOrderEntityChangeOrderNumber_WhenOrderIsANumber()
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
-            orderDto.ReferenceOrderId = "1234567890";
+            orderDto.ReferenceOrderId = 1234567890;
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("1234567890", order.OrderNumberComplete);
             Assert.Equal(1234567890, order.OrderNumber);
-        }
-
-        [Fact]
-        public void LoadOrder_DelegatesToOrderEntityChangeOrderNumber_WhenOrderNotANumber()
-        {
-            JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
-            orderDto.ReferenceOrderId = "abcd1234567890";
-
-            testObject.LoadOrder(order, orderDto);
-
-            Assert.Equal("abcd1234567890", order.OrderNumberComplete);
-            Assert.Equal(long.MinValue, order.OrderNumber);
         }
 
         [Fact]
@@ -54,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
             orderDto.OrderPlacedDate = new DateTime(1999, 12, 2);
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal(new DateTime(1999, 12, 2), order.OrderDate);
         }
@@ -64,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("Acknowledged", order.OnlineStatus);
         }
@@ -76,7 +64,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             orderDto.OrderDetail.RequestShippingCarrier = "UPS";
             orderDto.OrderDetail.RequestShippingMethod = "Ground";
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("UPS Ground", order.RequestedShipping);
         }
@@ -93,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             orderDto.ShippingTo.Address.State = "Mo";
             orderDto.ShippingTo.Address.ZipCode = "63040";
             
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("Mirza Mulaosmanovic", order.ShipUnparsedName);
             Assert.Equal("16204 Bay Harbour Ct", order.ShipStreet1);
@@ -112,7 +100,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             orderDto.Buyer.Name = "Mirza Mulaosmanovic";
             orderDto.Buyer.PhoneNumber = "8009527784";
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("Mirza Mulaosmanovic", order.BillUnparsedName);
             Assert.Equal("8009527784", order.BillPhone);
@@ -122,10 +110,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void LoadOrder_DelegatesToItemLoader()
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
+            JetStoreEntity store = new JetStoreEntity();
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, store);
 
-            mock.Mock<IJetOrderItemLoader>().Verify(l => l.LoadItems(order, orderDto));
+            mock.Mock<IJetOrderItemLoader>().Verify(l => l.LoadItems(order, orderDto, store));
         }
 
         [Fact]
@@ -133,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             mock.Mock<IOrderChargeCalculator>().Verify(l => l.CalculateTotal(order));
         }
@@ -145,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             orderDto.OrderTotals.ItemPrice.ItemShippingTax = 12.23M;
             orderDto.OrderTotals.ItemPrice.ItemShippingTax = 22.56M;
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
             
             mock.Mock<IOrderElementFactory>().Setup(f => f.CreateCharge(order, "TAX", "Tax", 34.79M));
         }
@@ -156,7 +145,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
             orderDto.OrderTotals.ItemPrice.ItemShippingCost = 12.23M;
 
-            testObject.LoadOrder(order, orderDto);
+            testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             mock.Mock<IOrderElementFactory>().Setup(f => f.CreateCharge(order, "SHIPPING", "Shipping", 12.23M));
         }

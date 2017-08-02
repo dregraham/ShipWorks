@@ -1,6 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 using ShipWorks.Tests.Shared;
@@ -22,16 +23,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             JetProduct jetProduct = new JetProduct();
             JetOrderItem jetItem = new JetOrderItem() { MerchantSku = "testSku" };
-
+            JetStoreEntity store = new JetStoreEntity();
+            
             var webClient = mock.Mock<IJetWebClient>();
-            webClient.Setup(w => w.GetProduct(jetItem)).Returns(GenericResult.FromSuccess(jetProduct));
+            webClient.Setup(w => w.GetProduct(jetItem, store)).Returns(GenericResult.FromSuccess(jetProduct));
 
             JetProductRepository testObject = mock.Create<JetProductRepository>();
             
-            JetProduct result = testObject.GetProduct(jetItem);
+            JetProduct result = testObject.GetProduct(jetItem, store);
 
             Assert.Equal(jetProduct, result);
-            mock.Mock<IJetWebClient>().Verify(w => w.GetProduct(jetItem), Times.Once);
+            mock.Mock<IJetWebClient>().Verify(w => w.GetProduct(jetItem, store), Times.Once);
         }
 
         [Fact]
@@ -44,23 +46,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             testObject.AddProduct("testSku", jetProduct);
 
 
-            JetProduct result = testObject.GetProduct(jetItem);
+            JetProduct result = testObject.GetProduct(jetItem, new JetStoreEntity());
 
             Assert.Equal(jetProduct, result);
-            mock.Mock<IJetWebClient>().Verify(w => w.GetProduct(jetItem), Times.Never);
+            mock.Mock<IJetWebClient>().Verify(w => w.GetProduct(jetItem, new JetStoreEntity()), Times.Never);
         }
 
         [Fact]
         public void GetProduct_ThrowsJetException_WhenWebClientFails()
         {
             JetOrderItem jetItem = new JetOrderItem() { MerchantSku = "testSku" };
+            JetStoreEntity store = new JetStoreEntity();
 
             var webClient = mock.Mock<IJetWebClient>();
-            webClient.Setup(w => w.GetProduct(jetItem)).Returns(GenericResult.FromError<JetProduct>("Something went wrong oh no!!"));
+            webClient.Setup(w => w.GetProduct(jetItem, store)).Returns(GenericResult.FromError<JetProduct>("Something went wrong oh no!!"));
 
             JetProductRepository testObject = mock.Create<JetProductRepository>();
 
-            JetException ex = Assert.Throws<JetException>(() => testObject.GetProduct(jetItem));
+            JetException ex = Assert.Throws<JetException>(() => testObject.GetProduct(jetItem, store));
             Assert.Equal("Error retrieving product information for testSku, Something went wrong oh no!!.", ex.Message);
         }
     }
