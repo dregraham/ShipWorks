@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             request.Variables.Add("fulfillment_status", "any");
 
             // Set max results and page if provided
-            request.Variables.Add("limit", ShopifyConstants.OrdersPageSize.ToString());
+            request.Variables.Add("limit", ShopifyConstants.ShopifyOrdersPerPage.ToString());
 
             // Set page if specified
             if (page > 1)

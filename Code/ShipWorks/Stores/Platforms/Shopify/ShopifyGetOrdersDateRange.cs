@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             
             // If it's small enough to fit all orders in this range, then all we return is ourselves
-            if (OrderCount <= ShopifyConstants.OrdersPageSize)
+            if (OrderCount <= ShopifyConstants.ShopifyOrdersPerPage)
             {
                 // All the orders fit in this node!
                 yield return this;
@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // we'll break up the range we have into pages.
             if (Duration < TimeSpan.FromSeconds(2))
             {
-                pageCount = (OrderCount + ShopifyConstants.OrdersPageSize - 1) / ShopifyConstants.OrdersPageSize; 
+                pageCount = (OrderCount + ShopifyConstants.ShopifyOrdersPerPage - 1) / ShopifyConstants.ShopifyOrdersPerPage; 
 
                 yield return this;
                 yield break;
