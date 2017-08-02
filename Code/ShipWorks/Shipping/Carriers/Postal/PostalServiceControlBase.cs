@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -239,6 +240,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 confirmationTypes.AddRange(availableConfirmations.Select(type => new KeyValuePair<string, PostalConfirmationType>(EnumHelper.GetDescription(type), type)));
             }
 
+            var existingConfirmationTypes = confirmation.DataSource as List<KeyValuePair<string, PostalConfirmationType>>;
+            if (existingConfirmationTypes != null && confirmationTypes.SequenceEqual(existingConfirmationTypes))
+            {
+                return;
+            }
+
             confirmation.DataSource = confirmationTypes;
 
             // Set back the previous value
@@ -348,8 +355,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
-            UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
+            UpdateConfirmationTypes(serviceType);
+            //PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
+            //UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
 
             // Only show express options for express
             sectionExpress.Visible = (serviceType == PostalServiceType.ExpressMail);
@@ -373,6 +381,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (!service.MultiValued && !confirmation.MultiValued)
             {
                 // Update the selected rate in the rate control to coincide with the service change
+                PostalShipmentType shipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
+                var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
+
                 PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
                 RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
                 {
@@ -389,7 +400,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         return false;
                     }
 
-                    return current.ConfirmationType == rateSelection.ConfirmationType && current.ServiceType == rateSelection.ServiceType;
+                    var foo = current.ConfirmationType == rateSelection.ConfirmationType && current.ServiceType == rateSelection.ServiceType;
+                    var bar = shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
+                        selectedPackagingType, personControl.CountryCode);
+
+                    return bar;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -412,12 +427,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 PostalServiceType serviceType = (PostalServiceType) service.SelectedValue;
 
-                // Update the available confirmation types based on the shipping provider
-                PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
-                UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType) packagingType.SelectedValue));
+                UpdateConfirmationTypes(serviceType);
 
                 UpdateAvailableShipmentOptions((PostalPackagingType) packagingType.SelectedValue);
             }
+        }
+
+        private void UpdateConfirmationTypes(PostalServiceType serviceType)
+        {
+            // Update the available confirmation types based on the shipping provider
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
+            UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode,
+                serviceType, (PostalPackagingType) packagingType.SelectedValue));
         }
 
         /// <summary>
@@ -479,12 +500,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalRateSelection rate = e.Rate.OriginalTag as PostalRateSelection;
 
             service.SelectedValue = rate.ServiceType;
+            UpdateConfirmationTypes(rate.ServiceType);
 
-            confirmation.SelectedValue = rate.ConfirmationType;
+            PostalConfirmationType rateConfirmationType = GetConfirmationTypeFromRateSelection(rate);
+
+            confirmation.SelectedValue = rateConfirmationType;
             if (confirmation.SelectedIndex == -1)
             {
                 confirmation.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Get the confirmation type from the selected rate
+        /// </summary>
+        private PostalConfirmationType GetConfirmationTypeFromRateSelection(PostalRateSelection rate)
+        {
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
+            var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
+
+            return rate.ConfirmationType == PostalConfirmationType.None &&
+                    postalShipmentType.IsFreeInternationalDeliveryConfirmation(personControl.CountryCode, rate.ServiceType, selectedPackagingType) ?
+                PostalConfirmationType.Delivery :
+                rate.ConfirmationType;
         }
 
         /// <summary>
