@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -379,27 +378,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (!service.MultiValued && !confirmation.MultiValued)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                PostalShipmentType shipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
+                PostalShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
                 var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
 
-                RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
-                {
-                    if (r.Tag == null)
-                    {
-                        // The rates in the rates grid hasn't caught up or something else wacky is going on
-                        return false;
-                    }
-
-                    PostalRateSelection current = r.OriginalTag as PostalRateSelection;
-                    if (current == null)
-                    {
-                        // This isn't an actual rate - just a row in the grid for the section header
-                        return false;
-                    }
-
-                    return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
-                        selectedPackagingType, personControl.CountryCode);
-                });
+                RateResult matchingRate = RateControl.RateGroup.Rates
+                    .Where(x => x.Selectable)
+                    .FirstOrDefault(r => RateMatchesShipmentService(r, serviceType, confirmationType, shipmentType, selectedPackagingType));
 
                 RateControl.SelectRate(matchingRate);
             }
@@ -407,6 +391,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 RateControl.ClearSelection();
             }
+        }
+
+        /// <summary>
+        /// Does the rate match the shipment service
+        /// </summary>
+        private bool RateMatchesShipmentService(RateResult r, PostalServiceType serviceType, PostalConfirmationType confirmationType,
+            PostalShipmentType shipmentType, PostalPackagingType? selectedPackagingType)
+        {
+            if (r.Tag == null)
+            {
+                // The rates in the rates grid hasn't caught up or something else wacky is going on
+                return false;
+            }
+
+            PostalRateSelection current = r.OriginalTag as PostalRateSelection;
+            if (current == null)
+            {
+                // This isn't an actual rate - just a row in the grid for the section header
+                return false;
+            }
+
+            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
+                selectedPackagingType, personControl.CountryCode);
         }
 
         /// <summary>
