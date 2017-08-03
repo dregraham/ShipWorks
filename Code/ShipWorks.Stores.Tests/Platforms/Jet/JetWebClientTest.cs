@@ -137,6 +137,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.True(result.Success);
         }
 
+        [Fact]
+        public void Acknowledge_UsesCorrectEndpoint()
+        {
+            var request = mock.Mock<IJetRequest>();
+            var order = new JetOrderEntity() {MerchantOrderId = "1"};
+            var store = new JetStoreEntity();
+            var testObject = mock.Create<JetWebClient>();
+
+            testObject.Acknowledge(order, store);
+
+            request.Verify(r => r.Acknowledge(order, store, "/orders/1/acknowledge"));
+        }
+
         public void Dispose()
         {
             mock.Dispose();

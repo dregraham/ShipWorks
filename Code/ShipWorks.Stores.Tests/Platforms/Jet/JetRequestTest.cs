@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             MockSuccessfulTokenRequest(store);
             Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
             JetRequest testObject = mock.Create<JetRequest>();
-            
+
             testObject.ProcessRequest("test", store, httpSubmitter.Object);
 
             httpSubmitter.Verify(r => r.Headers.Add("Authorization", $"bearer { token}"));
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetRequest testObject = mock.Create<JetRequest>();
 
             testObject.ProcessRequest("test", store, httpSubmitter.Object);
-            
+
             mock.Mock<IApiLogEntry>().Verify(l => l.LogRequest(httpSubmitter.Object));
         }
 
@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void ProcessRequest_ReturnsGenericResultError_WhenRequestThrowsException()
         {
             JetStoreEntity store = new JetStoreEntity { ApiUser = "username", Secret = "encrypted" };
-            
+
             MockSuccessfulTokenRequest(store);
 
             Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
@@ -191,11 +191,73 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Throws(new Exception("something went wrong"));
 
             JetRequest testObject = mock.Create<JetRequest>();
-            
+
             var result = testObject.ProcessRequest("test", store, httpSubmitter.Object);
 
             Assert.True(result.Failure);
             Assert.Equal("something went wrong", result.Message);
+        }
+
+		[Fact]
+        public void Acknowledge_CreatesCorrectSubmitter()
+        {
+            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
+            JetOrderEntity order = new JetOrderEntity()
+            {
+                MerchantOrderId = "1",
+                OrderItems =
+                {
+                    new JetOrderItemEntity()
+                    {
+                        JetOrderItemID = "2"
+                    }
+                }
+            };
+
+            var store = new JetStoreEntity() {ApiUser = "blah", Secret = "bleh"};
+            MockSuccessfulTokenRequest(store);
+
+            string expectedRequest =
+                "{\"acknowledgement_status\":\"accepted\",\"order_items\":[{\"order_item_acknowledgement_status\":\"fulfillable\",\"order_item_id\":\"2\"}]}";
+
+            JetRequest testObject = mock.Create<JetRequest>();
+
+            testObject.Acknowledge(order, store, "path");
+
+            submitterFactory.Verify(s => s.GetHttpTextPostRequestSubmitter(expectedRequest, "application/json"));
+        }
+
+        [Fact]
+        public void Acknowledge_CreatesCorrectSubmitter_WhenOrderContainsMultipleItems()
+        {
+            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
+            JetOrderEntity order = new JetOrderEntity()
+            {
+                MerchantOrderId = "1",
+                OrderItems =
+                {
+                    new JetOrderItemEntity()
+                    {
+                        JetOrderItemID = "2"
+                    },
+                    new JetOrderItemEntity()
+                    {
+                        JetOrderItemID = "3"
+                    }
+                }
+            };
+
+            var store = new JetStoreEntity() { ApiUser = "blah", Secret = "bleh" };
+            MockSuccessfulTokenRequest(store);
+
+            string expectedRequest =
+                "{\"acknowledgement_status\":\"accepted\",\"order_items\":[{\"order_item_acknowledgement_status\":\"fulfillable\",\"order_item_id\":\"2\"},{\"order_item_acknowledgement_status\":\"fulfillable\",\"order_item_id\":\"3\"}]}";
+
+            JetRequest testObject = mock.Create<JetRequest>();
+
+            testObject.Acknowledge(order, store, "path");
+
+            submitterFactory.Verify(s => s.GetHttpTextPostRequestSubmitter(expectedRequest, "application/json"));
         }
 
         private void MockSuccessfulTokenRequest(JetStoreEntity store)
@@ -206,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Mock<IEncryptionProviderFactory> encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
             encryptionProviderFactory.Setup(e => e.CreateSecureTextEncryptionProvider(store.ApiUser))
                 .Returns(encryptionProvider);
-            
+
             tokenResponseReader = mock.Mock<IHttpResponseReader>();
             tokenResponseReader.Setup(r => r.ReadResult()).Returns(successfulTokenResponse);
 
@@ -218,7 +280,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 $"{{\"user\": \"{store.ApiUser}\",\"pass\":\"decrypted\"}}",
                 "application/json")).Returns(submitter);
         }
-        
+
         private Mock<IApiLogEntry> CreateLogger()
         {
             var logEntry = mock.CreateMock<IApiLogEntry>();

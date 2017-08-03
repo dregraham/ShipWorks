@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -9,11 +10,12 @@ using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
+using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
     /// <summary>
-    /// An implementation of the IJetRequest interface for submitting requests to the Jet.com API. This 
+    /// An implementation of the IJetRequest interface for submitting requests to the Jet.com API. This
     /// implementation will handle/manage any authentication that may be required for submitting requests
     /// to the API.
     /// </summary>
@@ -86,6 +88,26 @@ namespace ShipWorks.Stores.Platforms.Jet
                 apiLogEntry.LogResponse(ex);
                 return GenericResult.FromError<string>("Error communicating with Jet.");
             }
+        }
+
+        /// <summary>
+        /// Acknowledges the order
+        /// </summary>
+        public void Acknowledge(JetOrderEntity order, JetStoreEntity store, string path)
+        {
+            JetAcknowledgementRequest jetAcknowledgement = new JetAcknowledgementRequest
+            {
+                OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
+                    .Select(i => new JetAcknowledgementOrderItem { OrderItemId = i.JetOrderItemID }).ToList()
+            };
+
+            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgement, jsonSerializerSettings),
+                "application/json");
+
+            submitter.Uri = new Uri(EndpointBase + path);
+            submitter.Verb = HttpVerb.Put;
+
+            ProcessRequest("AcknowledgeOrder", store, submitter);
         }
 
         /// <summary>

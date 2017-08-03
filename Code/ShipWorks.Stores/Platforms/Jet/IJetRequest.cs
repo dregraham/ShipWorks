@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Jet
         GenericResult<string> GetToken(string username, string password);
 
         /// <summary>
+        /// Acknowledges the order
+        /// </summary>
+        void Acknowledge(JetOrderEntity order, JetStoreEntity store, string path);
+
+        /// <summary>
         /// Processes the request.
         /// </summary>
         GenericResult<T> ProcessRequest<T>(string action, string path, HttpVerb method, JetStoreEntity store);

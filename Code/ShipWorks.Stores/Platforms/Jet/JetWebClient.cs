@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <seealso cref="IJetWebClient" />
     [Component]
     public class JetWebClient : IJetWebClient
-    {        
+    {
         private readonly string orderEndpointPath = "/orders";
         private readonly string productEndpointPath = "/merchant-skus";
 
@@ -63,20 +63,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public void Acknowledge(JetOrderEntity order, JetStoreEntity store)
         {
-            JetAcknowledgementRequest jetAcknowledgement = new JetAcknowledgementRequest
-            {
-                OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
-                    .Select(i => new JetAcknowledgementOrderItem {OrderItemId = i.JetOrderItemID}).ToList()
-            };
-
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgement),
-                    "application/json");
-
-            string acknowledgeEndpoint = $"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge";
-            submitter.Uri = new Uri(acknowledgeEndpoint);
-            submitter.Verb = HttpVerb.Put;
-
-            jetRequest.ProcessRequest("AcknowledgeOrder", store, submitter);
+            jetRequest.Acknowledge(order, store, $"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
         }
 
         /// <summary>
