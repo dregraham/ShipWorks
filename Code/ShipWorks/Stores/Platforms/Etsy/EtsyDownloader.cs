@@ -477,8 +477,18 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             item.Name = transaction.GetValue("title", "");
             item.Code = transaction.GetValue("transaction_id", "");
-            item.SKU = transaction.GetValue("sku", "");
-            item.UPC = transaction.GetValue("listing_id", "");
+            item.SKU = transaction.GetValue("product_id", "");
+
+            var productId = transaction["product_data"].GetValue("product_id", string.Empty);
+            var transactionId = transaction.GetValue("listing_id", string.Empty);
+
+            if (!string.IsNullOrEmpty(productId) && !string.IsNullOrEmpty(transactionId))
+            {
+                var product = webClient.GetProduct(transactionId, productId);
+                item.SKU = product.GetValue("sku", string.Empty);
+            }
+
+            item.UPC = transactionId;
             item.Quantity = transaction.GetValue("quantity", 0);
             item.UnitPrice = transaction.GetValue("price", 0m);
 

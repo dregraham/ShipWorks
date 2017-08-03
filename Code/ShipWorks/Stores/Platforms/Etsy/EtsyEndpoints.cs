@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -60,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetFindAllShopReceiptsUrl(long shopID)
         {
-            return new Uri(string.Format("{0}shops/{1}/receipts", etsyURL, shopID));
+            return new Uri($"{etsyURL}shops/{shopID}/receipts");
         }
 
         /// <summary>
@@ -68,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetTransactionsForReceipt(long receiptID)
         {
-            return new Uri(string.Format("{0}receipts/{1}/transactions", etsyURL, receiptID));
+            return new Uri($"{etsyURL}receipts/{receiptID}/transactions");
         }
 
         /// <summary>
@@ -76,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetMarkAsShippedUrl(string receipts)
         {
-            return new Uri(string.Format("{0}private/receipts/{1}", etsyURL, receipts));
+            return new Uri($"{etsyURL}private/receipts/{receipts}");
         }
 
         /// <summary>
@@ -84,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetReceiptUrl(string receipts)
         {
-            return new Uri(string.Format("{0}receipts/{1}", etsyURL, receipts));
+            return new Uri($"{etsyURL}receipts/{receipts}");
         }
 
         /// <summary>
@@ -92,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetItemUrl(string transactionID)
         {
-            return new Uri(string.Format("https://www.etsy.com/transaction/{0}", transactionID));
+            return new Uri("https://www.etsy.com/transaction/" + transactionID);
         }
 
         /// <summary>
@@ -100,7 +97,17 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetSubmitTrackingUrl(long etsyShopID, long orderID)
         {
-            return new Uri(string.Format("{0}shops/{1}/receipts/{2}/tracking", etsyURL, etsyShopID, orderID));
+            return new Uri($"{etsyURL}shops/{etsyShopID}/receipts/{orderID}/tracking");
+        }
+
+        /// <summary>
+        /// Given a listing and product id, return the Product URL 
+        /// </summary>
+        public static Uri GetProductUrl(string listingID, string productID)
+        {
+            //return new Uri($"{etsyURL}listings/{listingID}/products/{productID}");
+
+            return new Uri("https://openapi.etsy.com/v2/oauth/scopes");
         }
     }
 }

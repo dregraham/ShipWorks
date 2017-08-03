@@ -247,6 +247,15 @@ namespace ShipWorks.Stores.Platforms.Etsy
             return JObject.Parse(response);
         }
 
+        public JToken GetProduct(string listingId, string productId)
+        {
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetProductUrl(listingId, productId));
+
+            string response = ProcessRequest(oAuth, "GetProduct");
+            return JObject.Parse(response);
+
+        }
+
         /// <summary>
         /// Uploads payment, shipment and comments to Etsy.
         /// </summary>
