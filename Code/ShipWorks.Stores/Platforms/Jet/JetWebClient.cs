@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
-using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -19,16 +15,14 @@ namespace ShipWorks.Stores.Platforms.Jet
     {
         private readonly string orderEndpointPath = "/orders";
         private readonly string productEndpointPath = "/merchant-skus";
-
-        private readonly IHttpRequestSubmitterFactory submitterFactory;
+        
         private readonly IJetRequest jetRequest;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetWebClient(IHttpRequestSubmitterFactory submitterFactory, IJetRequest jetRequest)
+        public JetWebClient(IJetRequest jetRequest)
         {
-            this.submitterFactory = submitterFactory;
             this.jetRequest = jetRequest;
         }
 

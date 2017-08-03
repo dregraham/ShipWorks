@@ -76,10 +76,15 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         private static void LoadShipping(OrderEntity order, JetShippingTo shipping)
         {
+            PersonName person = PersonName.Parse(shipping.Recipient.Name);
+
             new PersonAdapter(order, "Ship")
             {
-                NameParseStatus = PersonNameParseStatus.Unparsed,
-                UnparsedName = shipping.Recipient.Name,
+                NameParseStatus = PersonNameParseStatus.Simple,
+                FirstName = person.First,
+                MiddleName = person.Middle,
+                LastName = person.LastWithSuffix,
+                Company = "",
                 Phone = shipping.Recipient.PhoneNumber,
                 Street1 = shipping.Address.Address1,
                 Street2 = shipping.Address.Address2,
@@ -95,10 +100,15 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         private static void LoadBuyer(OrderEntity order, JetBuyer buyer)
         {
+            PersonName person = PersonName.Parse(buyer.Name);
+
             new PersonAdapter(order, "Bill")
             {
-                NameParseStatus = PersonNameParseStatus.Unparsed,
-                UnparsedName = buyer.Name,
+                NameParseStatus = PersonNameParseStatus.Simple,
+                FirstName = person.First,
+                MiddleName = person.Middle,
+                LastName = person.LastWithSuffix,
+                Company = "",
                 Phone = buyer.PhoneNumber,
                 CountryCode = "US"
             };

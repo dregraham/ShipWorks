@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
@@ -9,7 +8,6 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -42,9 +40,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             try
             {
                 GenericResult<JetOrderResponse> ordersResult = webClient.GetOrders(Store as JetStoreEntity);
-
                 
-
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
@@ -96,14 +92,17 @@ namespace ShipWorks.Stores.Platforms.Jet
                 throw new DownloadException(orderDetails.Message);
             }
 
-            var jetOrder = orderDetails.Value;
+            JetOrderDetailsResult jetOrder = orderDetails.Value;
 
             JetOrderEntity order =
                 (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
 
-            orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
+            if (order.IsNew)
+            {
+                orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
+                SaveDownloadedOrder(order);
+            }
 
-            SaveDownloadedOrder(order);
             webClient.Acknowledge(order, Store as JetStoreEntity);
         }
     }
