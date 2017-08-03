@@ -1760,6 +1760,9 @@
     <Compile Include="Stores\Platforms\GenericFile\Formats\Excel\IGenericFileExcelDownloader.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
+    <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
+    <Compile Include="Stores\Platforms\Groupon\IGrouponWebClientConfiguration.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />

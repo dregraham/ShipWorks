@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Autofac;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
-using log4net;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
@@ -36,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             List<GrouponTracking> trackingList = new List<GrouponTracking>();
-            foreach(long orderKey in orderKeys)
+            foreach (long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
 
@@ -50,12 +53,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 trackingList.AddRange(GetGrouponTracking(shipment));
             }
 
-            if(trackingList.Count > 0)
-            {
-                GrouponWebClient client = new GrouponWebClient(store);
-
-                client.UploadShipmentDetails(trackingList);
-            }
+            PerformUpload(trackingList);
         }
 
         /// <summary>
@@ -65,12 +63,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             List<GrouponTracking> trackingList = GetGrouponTracking(shipment);
 
-            if(trackingList.Count > 0)
-            {
-                GrouponWebClient client = new GrouponWebClient(store);
-
-                client.UploadShipmentDetails(trackingList);
-            }
+            PerformUpload(trackingList);
         }
 
         /// <summary>
@@ -86,17 +79,18 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 return new List<GrouponTracking>();
             }
 
-            List<GrouponTracking> tracking = new List<GrouponTracking>();
             // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
             }
 
+            List<GrouponTracking> tracking = new List<GrouponTracking>();
+
             foreach (GrouponOrderItemEntity item in order.OrderItems)
             {
                 //Need to have a CI_LineItemID to upload tracking
-                if(!string.IsNullOrEmpty(item.GrouponLineItemID))
+                if (!string.IsNullOrEmpty(item.GrouponLineItemID))
                 {
                     string trackingNumber = shipment.TrackingNumber;
                     string carrier = GrouponCarrier.GetCarrierCode(shipment);
@@ -107,7 +101,23 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     tracking.Add(gTracking);
                 }
             }
+
             return tracking;
+        }
+
+        /// <summary>
+        /// Perform the upload
+        /// </summary>
+        private void PerformUpload(List<GrouponTracking> trackingList)
+        {
+            if (trackingList.Any())
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var client = lifetimeScope.Resolve<IGrouponWebClient>();
+                    client.UploadShipmentDetails(store, trackingList);
+                }
+            }
         }
     }
 }

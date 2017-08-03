@@ -1,46 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    public class GrouponWebClient
+    /// <summary>
+    /// Web client for Groupon
+    /// </summary>
+    [Component]
+    public class GrouponWebClient : IGrouponWebClient
     {
-
-        //Groupon API Endpoint
-        private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
-        //private static string GrouponEndpoint = "http://10.1.10.132/json";
-
-
-        // the store instance
-        private readonly GrouponStoreEntity store;
+        private readonly IGrouponWebClientConfiguration configuration;
+        private readonly ILogEntryFactory logEntryFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponWebClient(GrouponStoreEntity store)
+        public GrouponWebClient(ILogEntryFactory logEntryFactory, IGrouponWebClientConfiguration configuration)
         {
-            this.store = store;
+            this.logEntryFactory = logEntryFactory;
+            this.configuration = configuration;
         }
 
         /// <summary>
         /// Download orders from Groupon
         /// </summary>
-        public JToken GetOrders(DateTime start, int page)
+        public JToken GetOrders(IGrouponStoreEntity store, DateTime start, int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
-            //Groupon requires the start and end date to be within 24 hours of  
-            //eachother adding 6 hours to keep page count from getting too high 
+            // Groupon requires the start and end date to be within 24 hours of
+            // each other adding 6 hours to keep page count from getting too high
             DateTime end = start.AddHours(23);
 
-            ConfigureGetRequest(submitter, start, end, "get_orders", page);
+            ConfigureGetRequest(submitter, store, start.To(end), "get_orders", page);
 
             return ProcessRequest(submitter, "GetOrders");
         }
@@ -48,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Uploads a batch of shipments to Groupon
         /// </summary>
-        public void UploadShipmentDetails(List<GrouponTracking> trackingItems)
+        public void UploadShipmentDetails(IGrouponStoreEntity store, List<GrouponTracking> trackingItems)
         {
             string trackingParameter = JsonConvert.SerializeObject(trackingItems);
 
@@ -64,33 +65,32 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             ProcessRequest(submitter, "UploadShipmentDetails");
         }
-           
 
         /// <summary>
-        /// Setup a get request 
+        /// Setup a get request
         /// </summary>
-        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, DateTime start, DateTime end, string operationName, int page)
+        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, IGrouponStoreEntity store, Range<DateTime> dateRange, string operationName, int page)
         {
             submitter.Verb = HttpVerb.Get;
 
-            submitter.Uri = new Uri(GrouponEndpoint + "/" + operationName);
+            submitter.Uri = new Uri(configuration.Endpoint + "/" + operationName);
             submitter.Variables.Add("supplier_id", store.SupplierID);
             submitter.Variables.Add("token", store.Token);
-            submitter.Variables.Add("start_datetime", start.ToString("MM/dd/yyyy HH:MM"));
-            submitter.Variables.Add("end_datetime", end.ToString("MM/dd/yyyy HH:MM"));
+            submitter.Variables.Add("start_datetime", dateRange.Start.ToString("MM/dd/yyyy HH:MM"));
+            submitter.Variables.Add("end_datetime", dateRange.End.ToString("MM/dd/yyyy HH:MM"));
             submitter.Variables.Add("page", page.ToString());
         }
 
         /// <summary>
-        /// Setup a post request 
+        /// Setup a post request
         /// </summary>
-        private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
+        private void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
         {
             submitter.Verb = HttpVerb.Post;
 
-            submitter.Uri = new Uri(GrouponEndpoint + "/" + operationName);
+            submitter.Uri = new Uri(configuration.Endpoint + "/" + operationName);
 
-            foreach(KeyValuePair<string, string> parameter in parameters)
+            foreach (KeyValuePair<string, string> parameter in parameters)
             {
                 submitter.Variables.Add(parameter.Key, parameter.Value);
             }
@@ -99,11 +99,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Executes a request
         /// </summary>
-        private static JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Groupon, action);
+                IApiLogEntry logEntry = logEntryFactory.GetLogEntry(ApiLogSource.Groupon, action, LogActionType.Other);
                 logEntry.LogRequest(submitter);
 
                 using (IHttpResponseReader reader = submitter.GetResponse())

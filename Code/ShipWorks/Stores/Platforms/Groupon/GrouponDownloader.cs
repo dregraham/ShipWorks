@@ -30,14 +30,19 @@ namespace ShipWorks.Stores.Platforms.Groupon
         private readonly ILog log;
         private readonly ICombineOrder orderCombiner;
         private readonly IDataProvider dataProvider;
+        private readonly IGrouponWebClient webClient;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponDownloader(StoreEntity store, ICombineOrder orderCombiner,
-            IDataProvider dataProvider, Func<Type, ILog> createLogger)
+        public GrouponDownloader(StoreEntity store, IGrouponWebClient webClient,
+            ICombineOrder orderCombiner, IDataProvider dataProvider,
+            IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger)
             : base(store)
         {
+            this.dateTimeProvider = dateTimeProvider;
+            this.webClient = webClient;
             this.dataProvider = dataProvider;
             this.orderCombiner = orderCombiner;
             log = createLogger(GetType());
@@ -52,9 +57,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             Progress.Detail = "Downloading New Orders...";
 
-            GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity) Store);
-
-            DateTime start = DateTime.UtcNow.AddDays(-7);
+            DateTime start = dateTimeProvider.UtcNow.AddDays(-7);
 
             try
             {
@@ -68,10 +71,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     int currentPage = 1;
                     int numberOfPages = 1;
+
                     do
                     {
                         //Grab orders
-                        JToken result = client.GetOrders(start, currentPage);
+                        JToken result = webClient.GetOrders((GrouponStoreEntity) Store, start, currentPage);
 
                         //Update numberOfPages
                         numberOfPages = (int) result["meta"]["no_of_pages"];
@@ -97,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     start = start.AddHours(23);
 
-                } while (start <= DateTime.UtcNow);
+                } while (start <= dateTimeProvider.UtcNow);
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
