@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -91,5 +92,11 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// This is a string that uniquely identifies the store.
         /// </summary>
         protected override string InternalLicenseIdentifier => jetStore.ApiUser;
+
+        /// <summary>
+        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
+        /// Online Status filter.
+        /// </summary>
+        public override ICollection<string> GetOnlineStatusChoices() => new[] {"Acknowledged", "Complete" };
     }
 }
