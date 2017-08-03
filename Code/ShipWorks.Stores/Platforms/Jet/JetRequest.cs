@@ -167,14 +167,14 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 if (token.Failure)
                 {
-                    throw new JetException($"Failed to get token: {token.Message}");
+                    throw new JetException($"Error logging on to Jet.com:{Environment.NewLine}{Environment.NewLine}{token.Message}");
                 }
 
                 request.Headers.Add("Authorization", $"bearer {token.Value}");
             }
             catch (EncryptionException ex)
             {
-                throw new JetException("Failed to decrypt the shared secret", ex);
+                throw new JetException($"Error logging on to Jet.com:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
             }
         }
     }
