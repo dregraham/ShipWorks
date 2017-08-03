@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new OrderNumberIdentifier(order.OrderNumber);
+            return new JetOrderIdentifier(((JetOrderEntity) order).MerchantOrderId);
         }
 
         /// <summary>

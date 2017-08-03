@@ -270,6 +270,7 @@
     <Compile Include="Platforms\Jet\IJetProductRepository.cs" />
     <Compile Include="Platforms\Jet\JetDownloader.cs" />
     <Compile Include="Platforms\Jet\JetException.cs" />
+    <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\JetProductRepository.cs" />
     <Compile Include="Platforms\Jet\JetOrderItemLoader.cs" />

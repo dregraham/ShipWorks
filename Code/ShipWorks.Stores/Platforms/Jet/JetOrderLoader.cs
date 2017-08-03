@@ -81,6 +81,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             new PersonAdapter(order, "Ship")
             {
                 NameParseStatus = PersonNameParseStatus.Simple,
+                UnparsedName = person.UnparsedName,
                 FirstName = person.First,
                 MiddleName = person.Middle,
                 LastName = person.LastWithSuffix,
@@ -105,6 +106,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             new PersonAdapter(order, "Bill")
             {
                 NameParseStatus = PersonNameParseStatus.Simple,
+                UnparsedName = person.UnparsedName,
                 FirstName = person.First,
                 MiddleName = person.Middle,
                 LastName = person.LastWithSuffix,

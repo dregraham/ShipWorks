@@ -4,6 +4,7 @@ using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
 using Xunit;
 
@@ -51,6 +52,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.Empty(store.ApiUser);
             Assert.Empty(store.Secret);
             Assert.Equal("My Jet Store", store.StoreName);
+        }
+
+        [Fact]
+        public void CreateOrderIdentifier_ReturnsJetOrderIdentifier()
+        {
+            JetStoreType testObject = mock.Create<JetStoreType>(new TypedParameter(typeof(StoreEntity),
+                new JetStoreEntity() { StoreTypeCode = StoreTypeCode.Jet }));
+
+            var order = new JetOrderEntity();
+
+            var orderIdentifier = testObject.CreateOrderIdentifier(order);
+
+            Assert.IsType<JetOrderIdentifier>(orderIdentifier);
         }
 
         public void Dispose()
