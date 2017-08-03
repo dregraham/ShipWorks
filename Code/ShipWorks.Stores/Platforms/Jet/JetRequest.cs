@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -11,14 +12,22 @@ using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
-    public class JetRequest
+    /// <summary>
+    /// An implementation of the IJetRequest interface for submitting requests to the Jet.com API. This 
+    /// implementation will handle/manage any authentication that may be required for submitting requests
+    /// to the API.
+    /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Platforms.Jet.IJetRequest" />
+    [Component]
+    public class JetRequest : IJetRequest
     {
+        public const string EndpointBase = "https://merchant-api.jet.com/api";
+
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
-
-        public const string EndpointBase = "https://merchant-api.jet.com/api";
         private readonly string tokenEndpoint = $"{EndpointBase}/token";
+        private readonly LruCache<string, string> tokenCache;
 
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
@@ -26,14 +35,15 @@ namespace ShipWorks.Stores.Platforms.Jet
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
 
-        private readonly LruCache<string, string> tokenCache;
-
-        public JetRequest(IHttpRequestSubmitterFactory submitterFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, IEncryptionProviderFactory encryptionProviderFactory, LruCache<string, string> tokenCache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JetRequest"/> class.
+        /// </summary>
+        public JetRequest(IHttpRequestSubmitterFactory submitterFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.encryptionProviderFactory = encryptionProviderFactory;
-            this.tokenCache = tokenCache;
+            tokenCache = new LruCache<string, string>(50, TimeSpan.FromHours(9));
         }
 
         /// <summary>
@@ -62,7 +72,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 apiLogEntry.LogResponse(result, "json");
 
                 JetTokenResponse token = JsonConvert.DeserializeObject<JetTokenResponse>(result, jsonSerializerSettings);
-
                 tokenCache[username] = token.Token;
 
                 return GenericResult.FromSuccess(token.Token);
@@ -101,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request
         /// </summary>
-        private GenericResult<string> ProcessRequest(string action, JetStoreEntity store, IHttpRequestSubmitter request)
+        public GenericResult<string> ProcessRequest(string action, JetStoreEntity store, IHttpRequestSubmitter request)
         {
             AuthenticateRequest(store, request);
 
