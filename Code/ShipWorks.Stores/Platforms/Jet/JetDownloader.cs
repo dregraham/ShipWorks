@@ -24,7 +24,8 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetDownloader(StoreEntity store, Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory, IJetWebClient webClient) : base(store)
+        public JetDownloader(StoreEntity store, Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory, IJetWebClient webClient)
+            : base(store)
         {
             orderLoader = orderLoaderFactory(this);
             this.webClient = webClient;
@@ -40,7 +41,6 @@ namespace ShipWorks.Stores.Platforms.Jet
             try
             {
                 GenericResult<JetOrderResponse> ordersResult = webClient.GetOrders(Store as JetStoreEntity);
-                
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
@@ -87,23 +87,25 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             GenericResult<JetOrderDetailsResult> orderDetails = webClient.GetOrderDetails(orderUrl, Store as JetStoreEntity);
 
-            if (orderDetails.Failure)
+            if (orderDetails.Success)
+            {
+                JetOrderDetailsResult jetOrder = orderDetails.Value;
+
+                JetOrderEntity order =
+                    (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
+
+                if (order.IsNew)
+                {
+                    orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
+                    SaveDownloadedOrder(order);
+                }
+
+                webClient.Acknowledge(order, Store as JetStoreEntity);
+            }
+            else
             {
                 throw new DownloadException(orderDetails.Message);
             }
-
-            JetOrderDetailsResult jetOrder = orderDetails.Value;
-
-            JetOrderEntity order =
-                (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
-
-            if (order.IsNew)
-            {
-                orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
-                SaveDownloadedOrder(order);
-            }
-
-            webClient.Acknowledge(order, Store as JetStoreEntity);
         }
     }
 }

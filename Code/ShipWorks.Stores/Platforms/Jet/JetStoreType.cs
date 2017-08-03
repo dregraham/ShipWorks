@@ -24,8 +24,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Initializes a new instance of the <see cref="JetStoreType"/> class.
         /// </summary>
-        public JetStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
+        public JetStoreType(StoreEntity store, IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
