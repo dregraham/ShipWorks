@@ -256,6 +256,9 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("{0} was combined, skipping", orderIdentifier);
 
+                // Increment the quantity saved so we show the user we are moving to the next order.
+                QuantitySaved++;
+
                 return GenericResult.FromError<OrderEntity>("Combined");
             }
 
