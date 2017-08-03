@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             MockSuccessfulTokenRequest(store);
 
-            Exception ex = new Exception("something went wrong");
+            WebException ex = new WebException("something went wrong");
 
             Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
             httpSubmitter.SetupSequence(h => h.GetResponse()).Returns(tokenResponseReader.Object)
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
             httpSubmitter.SetupSequence(h => h.GetResponse()).Returns(tokenResponseReader.Object)
-                .Throws(new Exception("something went wrong"));
+                .Throws(new WebException("something went wrong"));
 
             JetRequest testObject = mock.Create<JetRequest>();
 

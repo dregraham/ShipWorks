@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void GetToken_Fails_WhenCredentialsAreIncorrect()
         {
             mock.Mock<IJetRequest>().Setup(r => r.GetToken(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(GenericResult.FromError<string>(new Exception("Whammy!")));
+                .Returns(GenericResult.FromError<string>(new WebException()));
 
             var testObject = mock.Create<JetWebClient>();
             var result = testObject.GetToken("simulatedIncorrectUsername", "wrong password");
