@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 
             IOdbcFieldMap map = fieldMapFactory.CreateFieldMapFrom(mapEntries);
 
-            IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumber);
+            IEnumerable<IOdbcFieldMapEntry> entries = map.FindEntriesBy(OrderFields.OrderNumberComplete);
             map.RecordIdentifierSource = entries.FirstOrDefault()?.ExternalField.Column.Name;
             map.Name = loadedMapName;
 

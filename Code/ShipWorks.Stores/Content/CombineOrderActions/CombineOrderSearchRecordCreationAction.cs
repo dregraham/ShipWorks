@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform the action
         /// </summary>
-        public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             var recordCreator = new SearchRecordMerger<IOrderEntity>(combinedOrder, orders, sqlAdapter);
 

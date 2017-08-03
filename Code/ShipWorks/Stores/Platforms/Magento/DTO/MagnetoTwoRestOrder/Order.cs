@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public int EntityId { get; set; }
 
         [JsonProperty("increment_id")]
-        public int IncrementId { get; set; }
+        public string IncrementId { get; set; }
         
         [JsonProperty("grand_total")]
         public double GrandTotal { get; set; }
@@ -55,5 +55,13 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("extension_attributes")]
         public ExtensionAttributes ExtensionAttributes { get; set; }
+
+        /// <summary>
+        /// Creates a copy of this object.  Mainly used for tests.
+        /// </summary>
+        public Order ShallowCopy()
+        {
+            return (Order) this.MemberwiseClone();
+        }
     }
 }

@@ -770,7 +770,7 @@ namespace ShipWorks
             // buttonCombine
             //
             this.buttonCombine.Guid = new System.Guid("A8BF47AA-A2E2-4B59-B871-E5FF993623E6");
-            this.buttonCombine.Image = global::ShipWorks.Properties.Resources.data_disk16;
+            this.buttonCombine.Image = global::ShipWorks.Properties.Resources.merge_icon_16x16;
             this.ribbonSecurityProvider.SetPermission(this.buttonCombine, ShipWorks.Users.Security.PermissionType.OrdersModify);
             this.buttonCombine.QuickAccessKey = "OC";
             this.buttonCombine.Text = "Combine";
@@ -1327,7 +1327,7 @@ namespace ShipWorks
             //
             // contextOrderCombineOrder
             //
-            this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.data_disk16;
+            this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.merge_icon_16x16;
             this.contextOrderCombineOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCombineOrder, new System.Guid("E537A928-2B0C-4453-8F7D-1C1F1FD7D0FD"));
             this.contextOrderCombineOrder.Name = "contextOrderCombineOrder";

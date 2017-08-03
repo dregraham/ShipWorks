@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
@@ -57,12 +56,34 @@ namespace ShipWorks.Stores.Content
         /// <remarks>
         /// I've purposely left the excessive spacing in this method to help extract each section into its own class
         /// </remarks>
-        public async Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
+        public Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders, string newOrderNumber) =>
+            Combine(survivingOrderID, orders, newOrderNumber, ProgressUpdater.Empty);
+
+        /// <summary>
+        /// Perform the actual combination
+        /// </summary>
+        /// <remarks>
+        /// I've purposely left the excessive spacing in this method to help extract each section into its own class
+        /// </remarks>
+        public Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
             string newOrderNumber, IProgressReporter progressReporter)
         {
-            GenericResult<long> result;
             int totalCount = combinationActions.Count() + orders.Count() + 2;
             ProgressUpdater progress = new ProgressUpdater(progressReporter, totalCount);
+
+            return Combine(survivingOrderID, orders, newOrderNumber, progress);
+        }
+
+        /// <summary>
+        /// Perform the actual combination
+        /// </summary>
+        /// <remarks>
+        /// I've purposely left the excessive spacing in this method to help extract each section into its own class
+        /// </remarks>
+        private async Task<GenericResult<long>> Combine(long survivingOrderID, IEnumerable<IOrderEntity> orders,
+            string newOrderNumber, IProgressUpdater progress)
+        {
+            GenericResult<long> result;
 
             using (new AuditBehaviorScope(configurationData.FetchReadOnly().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
@@ -84,7 +105,7 @@ namespace ShipWorks.Stores.Content
         /// Perform the actual combination
         /// </summary>
         private async Task<GenericResult<long>> PerformCombination(long survivingOrderID, string orderNumberComplete, IEnumerable<IOrderEntity> orders,
-            ProgressUpdater progress, ISqlAdapter sqlAdapter)
+            IProgressUpdater progress, ISqlAdapter sqlAdapter)
         {
             GenericResult<long> existingOrdersResult = await EnsureOrdersHaveNotChanged(orders, sqlAdapter).ConfigureAwait(false);
             if (existingOrdersResult.Failure)
@@ -111,7 +132,7 @@ namespace ShipWorks.Stores.Content
 
             foreach (ICombineOrderAction action in combinationActions)
             {
-                await action.Perform(combinedOrder, orders, sqlAdapter).ConfigureAwait(false);
+                await action.Perform(combinedOrder, survivingOrderID, orders, sqlAdapter).ConfigureAwait(false);
                 progress.Update();
             }
 
@@ -163,7 +184,7 @@ namespace ShipWorks.Stores.Content
 
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
-            combinedOrder.OrderNumberComplete = orderNumberComplete;
+            combinedOrder.ChangeOrderNumber(orderNumberComplete);
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
             combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
             combinedOrder.RollupItemCount = 0;
@@ -182,7 +203,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Delete the original orders
         /// </summary>
-        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders, ProgressUpdater progress)
+        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders, IProgressUpdater progress)
         {
             foreach (IOrderEntity order in orders)
             {

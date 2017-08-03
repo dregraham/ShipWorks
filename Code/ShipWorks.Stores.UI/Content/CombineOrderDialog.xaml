@@ -63,7 +63,7 @@
                 but other order details will be copied from the selected order below:
                 <Hyperlink ui:Link.OpenInBrowser="True"
                            FontStyle="Italic"
-                           NavigateUri="http://www.google.com">more info...</Hyperlink>
+                           NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106629-combining-orders-in-shipworks">more info...</Hyperlink>
             </TextBlock>
         </StackPanel>
 
@@ -73,36 +73,52 @@
                   ui:ListSelection.AllowEmptySelection="False"
                   ItemsSource="{Binding Orders}"
                   SelectedItem="{Binding SurvivingOrder}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0"
-                                   Text="{Binding OrderNumberComplete}" />
-                        <TextBlock Grid.Column="1"
-                                   FontWeight="Bold"
-                                   Visibility="{Binding IsSelected,
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OrderNumberComplete}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold"
+                                               Padding="4, 0, 0, 0"
+                                               Visibility="{Binding IsSelected,
                                         RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}},
                                         Converter={StaticResource ShowWhenTrue}}">
-                            The Combined order is based on this order
-                        </TextBlock>
-                        <TextBlock Grid.Column="1"
-                                   Visibility="{Binding IsSelected,
+                                        The Combined order is based on this order
+                                    </TextBlock>
+                                    <TextBlock Padding="4, 0, 0, 0"
+                                               Visibility="{Binding IsSelected,
                                         RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}},
                                         Converter={StaticResource HideWhenTrue}}">
-                            <Run FontWeight="Bold"
-                                 Text="{Binding RollupItemCount}" />
-                            <Run FontWeight="Bold"
-                                 Text="{Binding RollupItemCount, Converter={StaticResource PluralizingValue}, ConverterParameter=Item}" />
-                            <Run>will be added to the combined order</Run>
-                        </TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                                        <Run FontWeight="Bold"
+                                             Text="{Binding RollupItemCount}" />
+                                        <Run FontWeight="Bold"
+                                             Text="{Binding RollupItemCount, Converter={StaticResource PluralizingValue}, ConverterParameter=Item}" />
+                                        <Run>will be added to the combined order</Run>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
         </ListView>
 
         <ui:NotificationBorder Grid.Row="2"

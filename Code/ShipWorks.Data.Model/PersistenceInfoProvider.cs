@@ -699,7 +699,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 14, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 15, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -714,6 +714,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditDeletedOrders", "AuditDeletedOrders", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
 			this.AddElementFieldMapping("ConfigurationEntity", "CustomerKey", "CustomerKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("ConfigurationEntity", "UseParallelActionQueue", "UseParallelActionQueue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
+			this.AddElementFieldMapping("ConfigurationEntity", "AllowEbayCombineLocally", "AllowEbayCombineLocally", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -1597,9 +1598,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderEntity's mappings</summary>
 		private void InitGrouponOrderEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderEntity", @"ShipWorksLocal", @"dbo", "GrouponOrder", 2, 0);
+			this.AddElementMapping("GrouponOrderEntity", @"ShipWorksLocal", @"dbo", "GrouponOrder", 3, 0);
 			this.AddElementFieldMapping("GrouponOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderEntity", "GrouponOrderID", "GrouponOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("GrouponOrderEntity", "ParentOrderID", "ParentOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits GrouponOrderItemEntity's mappings</summary>
@@ -1617,10 +1619,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits GrouponOrderSearchEntity's mappings</summary>
 		private void InitGrouponOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("GrouponOrderSearchEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderSearch", 3, 0);
+			this.AddElementMapping("GrouponOrderSearchEntity", @"ShipWorksLocal", @"dbo", "GrouponOrderSearch", 4, 0);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "GrouponOrderSearchID", "GrouponOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("GrouponOrderSearchEntity", "GrouponOrderID", "GrouponOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("GrouponOrderSearchEntity", "ParentOrderID", "ParentOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits GrouponStoreEntity's mappings</summary>

@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;

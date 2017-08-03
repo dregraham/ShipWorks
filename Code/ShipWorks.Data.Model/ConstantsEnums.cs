@@ -1778,6 +1778,8 @@ namespace ShipWorks.Data.Model
 		CustomerKey,
 		///<summary>UseParallelActionQueue. </summary>
 		UseParallelActionQueue,
+		///<summary>AllowEbayCombineLocally. </summary>
+		AllowEbayCombineLocally,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4036,6 +4038,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4102,6 +4106,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

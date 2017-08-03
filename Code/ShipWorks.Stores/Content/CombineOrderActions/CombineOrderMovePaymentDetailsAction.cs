@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform the combination of payment details
         /// </summary>
-        public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             IRelationPredicateBucket paymentDetailsBucket = new RelationPredicateBucket(OrderPaymentDetailFields.OrderID.In(orders.Select(x => x.OrderID)));
             return sqlAdapter.UpdateEntitiesDirectlyAsync(new OrderPaymentDetailEntity { OrderID = combinedOrder.OrderID }, paymentDetailsBucket);

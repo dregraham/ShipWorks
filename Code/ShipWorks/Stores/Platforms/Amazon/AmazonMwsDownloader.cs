@@ -229,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // only load order items on new orders
             if (order.IsNew)
             {
-                order.OrderNumber = GetNextOrderNumber();
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
                 LoadOrderItems(client, order);
 

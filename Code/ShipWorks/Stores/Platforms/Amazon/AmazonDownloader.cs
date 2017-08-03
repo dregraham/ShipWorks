@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             // basic properties
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "orderDate", "")).ToUniversalTime();
 
             // Online customerid

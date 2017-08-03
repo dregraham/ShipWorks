@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using HarSharp;
 using Microsoft.Owin;
@@ -28,6 +27,11 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
             this.harFileBase = harFileBase;
             this.uri = $"http://localhost:{rand.Next(10000, 64000)}/";
         }
+
+        /// <summary>
+        /// Status code to use when verification of a request fails
+        /// </summary>
+        public int ErrorStatusCode { get; set; } = 505;
 
         /// <summary>
         /// Start the server
@@ -162,9 +166,9 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         /// <summary>
         /// Populate the error response
         /// </summary>
-        private static void PopulateErrorResponse(IOwinResponse response, string errorMessage)
+        private void PopulateErrorResponse(IOwinResponse response, string errorMessage)
         {
-            response.StatusCode = 505;
+            response.StatusCode = ErrorStatusCode;
             response.Write($"[{{\"message\": \"{errorMessage}\"}}]");
         }
     }

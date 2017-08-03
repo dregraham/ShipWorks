@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
+        private readonly OdbcStoreType odbcStoreType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
@@ -42,6 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
             log = logFactory(GetType());
+            odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
         }
@@ -173,16 +175,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             fieldMap.ApplyValues(firstRecord);
 
             // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumber).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
 
             if (odbcFieldMapEntry == null)
             {
                 throw new DownloadException("Order number not found in map.");
             }
 
-            // Create an order using the order number
-            long orderNumber = (long) odbcFieldMapEntry.ShipWorksField.Value;
-            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
+            if (odbcFieldMapEntry.ShipWorksField.Value == null)
+            {
+                throw new DownloadException("Order number is empty in your ODBC data source.");
+            }
+
+            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
+
+            GenericResult<OrderEntity> result = await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
@@ -192,6 +202,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             OrderEntity orderEntity = result.Value;
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
+
+            orderEntity.ChangeOrderNumber(orderNumber);
 
             return GenericResult.FromSuccess(orderEntity);
         }

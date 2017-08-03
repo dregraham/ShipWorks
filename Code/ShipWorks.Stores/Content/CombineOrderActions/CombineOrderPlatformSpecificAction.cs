@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Perform the Action
         /// </summary>
-        public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
             IStoreEntity store = storeManager.GetStore(combinedOrder.StoreID);
 

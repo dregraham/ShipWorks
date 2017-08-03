@@ -12,10 +12,12 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Groupon
@@ -25,15 +27,25 @@ namespace ShipWorks.Stores.Platforms.Groupon
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Groupon)]
     public class GrouponDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponDownloader));
+        private readonly ILog log;
+        private readonly ICombineOrder orderCombiner;
+        private readonly IDataProvider dataProvider;
+        private readonly IGrouponWebClient webClient;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponDownloader(StoreEntity store)
+        public GrouponDownloader(StoreEntity store, IGrouponWebClient webClient,
+            ICombineOrder orderCombiner, IDataProvider dataProvider,
+            IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger)
             : base(store)
         {
-
+            this.dateTimeProvider = dateTimeProvider;
+            this.webClient = webClient;
+            this.dataProvider = dataProvider;
+            this.orderCombiner = orderCombiner;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -45,9 +57,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             Progress.Detail = "Downloading New Orders...";
 
-            GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity) Store);
-
-            DateTime start = DateTime.UtcNow.AddDays(-7);
+            DateTime start = dateTimeProvider.UtcNow.AddDays(-7);
 
             try
             {
@@ -61,10 +71,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     int currentPage = 1;
                     int numberOfPages = 1;
+
                     do
                     {
                         //Grab orders
-                        JToken result = client.GetOrders(start, currentPage);
+                        JToken result = webClient.GetOrders((GrouponStoreEntity) Store, start, currentPage);
 
                         //Update numberOfPages
                         numberOfPages = (int) result["meta"]["no_of_pages"];
@@ -90,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     start = start.AddHours(23);
 
-                } while (start <= DateTime.UtcNow);
+                } while (start <= dateTimeProvider.UtcNow);
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
@@ -141,30 +152,58 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.OrderDate = orderDate;
             order.OnlineLastModified = orderDate;
 
+            order.ParentOrderID = jsonOrder["parent_order_id"]?.ToString();
+
             //Order Address
             GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
             LoadAddressInfo(order, customer);
 
-            //Order requestedshipping
+            //Order requested shipping
             order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
             //Order is new and its status is open
             if (order.IsNew)
             {
-                LoadOrderDetailsWhenNew(jsonOrder, order);
+                await LoadOrderDetailsWhenNew(jsonOrder, order).ConfigureAwait(false);
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+            await CombineWithParent(order.OrderID).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Combine the child order with a parent order if one exists.
+        /// </summary>
+        private async Task<GenericResult<long>> CombineWithParent(long childOrderID)
+        {
+            GrouponOrderEntity childOrder = dataProvider.GetEntity(childOrderID) as GrouponOrderEntity;
+            if (childOrder.ParentOrderID.IsNullOrWhiteSpace())
+            {
+                return GenericResult.FromError<long>("No parent order found.");
+            }
+
+            GenericResult<OrderEntity> result = await InstantiateOrder(new GrouponOrderIdentifier(childOrder.ParentOrderID)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                string errorMsg = $"Skipping order '{childOrder.ParentOrderID}': {result.Message}.";
+                log.InfoFormat(errorMsg);
+                return GenericResult.FromError<long>(errorMsg);
+            }
+
+            OrderEntity parentOrder = result.Value;
+
+            return await orderCombiner.Combine(parentOrder.OrderID, new[] { childOrder, parentOrder }, parentOrder.OrderNumberComplete).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Load order details when the order is new
         /// </summary>
-        private void LoadOrderDetailsWhenNew(JToken jsonOrder, GrouponOrderEntity order)
+        private async Task LoadOrderDetailsWhenNew(JToken jsonOrder, GrouponOrderEntity order)
         {
             // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
             //Unit of measurement used for weight
             string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
@@ -76,12 +77,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e));
         }
 
+        private readonly IConfigurationData configuration;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreType(StoreEntity store)
+        public EbayStoreType(StoreEntity store, IConfigurationData configuration)
             : base(store)
         {
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -611,23 +615,38 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
-            return new List<IMenuCommand>()
-            {
-                new MenuCommand("Send Message...", OnSendMessage),
-                new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
+            List<IMenuCommand> commands = new List<IMenuCommand>();
 
-                new MenuCommand("Mark as Paid", OnUpdateShipment){ Tag = EbayOnlineAction.Paid },
-                new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped },
+            commands.Add(new MenuCommand("Send Message...", OnSendMessage));
+            commands.Add(new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true });
 
-                new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true },
-                new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped },
+            commands.Add(new MenuCommand("Mark as Paid", OnUpdateShipment) { Tag = EbayOnlineAction.Paid });
+            commands.Add(new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped });
 
-                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = EbayCombinedOrderType.Local },
-                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = EbayCombinedOrderType.Ebay },
+            commands.Add(new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true });
+            commands.Add(new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped });
 
-                new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
-                new MenuCommand("Ship to Buyer", OnShipToBuyer)
-            };
+            commands.AddRange(CreateCombineCommands());
+
+            commands.Add(new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true });
+            commands.Add(new MenuCommand("Ship to Buyer", OnShipToBuyer));
+
+            return commands;
+        }
+
+        /// <summary>
+        /// Create the combine commands
+        /// </summary>
+        private IEnumerable<MenuCommand> CreateCombineCommands()
+        {
+            bool allowCombineLocally = configuration.FetchReadOnly().AllowEbayCombineLocally;
+
+            MenuCommand combineRemote = new MenuCommand("Combine orders on eBay...", OnCombineOrders) { BreakBefore = !allowCombineLocally, Tag = EbayCombinedOrderType.Ebay };
+
+            return allowCombineLocally ?
+                new[] { new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = allowCombineLocally, Tag = EbayCombinedOrderType.Local },
+                    combineRemote } :
+                new[] { combineRemote };
         }
 
         /// <summary>
@@ -831,11 +850,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Worker method for combining eBay orders
         /// </summary>
-        private void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
+        private async void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
         {
             try
             {
-                toCombine.Combine();
+                await toCombine.Combine().ConfigureAwait(false);
             }
             catch (EbayException ex)
             {

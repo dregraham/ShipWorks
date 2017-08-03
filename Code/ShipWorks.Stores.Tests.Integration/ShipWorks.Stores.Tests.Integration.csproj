@@ -166,8 +166,11 @@
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
@@ -228,6 +231,8 @@
     <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\BigCommerce_UpdateStoreToPending.har" />
     <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\Download_CreatesOrder.har" />
     <EmbeddedResource Include="Platforms\BigCommerce\HttpRequests\Download_PopulatesStatusCodes.har" />
+    <EmbeddedResource Include="Platforms\Groupon\HttpRequests\Download_CreatesOrder.har" />
+    <EmbeddedResource Include="Platforms\Groupon\HttpRequests\Download_CombinesOrder.har" />
     <None Include="ShipWorks.Stores.Tests.Integration.ruleset" />
   </ItemGroup>
   <ItemGroup>

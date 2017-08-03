@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Stores.Platforms.BigCommerce;
-using ShipWorks.Actions.Tasks;
 using Autofac;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce.CoreExtensions.Actions
@@ -56,13 +48,14 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.CoreExtensions.Actions
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    BigCommerceStatusCodeProvider statusCodeProvider =
-                        lifetimeScope.Resolve<BigCommerceStatusCodeProvider>(TypedParameter.From(store));
+                    IBigCommerceStatusCodeProvider statusCodeProvider =
+                        lifetimeScope.Resolve<IBigCommerceStatusCodeProvider>(TypedParameter.From(store));
 
                     comboBoxStatus.DisplayMember = "Key";
                     comboBoxStatus.ValueMember = "Value";
 
-                    comboBoxStatus.DataSource = statusCodeProvider.CodeValues.Select(codeValue => new KeyValuePair<string, int>(statusCodeProvider.GetCodeName(codeValue), codeValue)).ToList();
+                    comboBoxStatus.DataSource = statusCodeProvider.CodeValues
+                        .Select(codeValue => new KeyValuePair<string, int>(statusCodeProvider.GetCodeName(codeValue), codeValue)).ToList();
                 }
 
                 int code = task.StatusCode;
@@ -91,7 +84,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.CoreExtensions.Actions
             }
             else
             {
-                task.StatusCode = (int)comboBoxStatus.SelectedValue;
+                task.StatusCode = (int) comboBoxStatus.SelectedValue;
             }
         }
     }
