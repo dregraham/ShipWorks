@@ -17,8 +17,8 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetWebClient : IJetWebClient
     {        
-        private readonly string orderEndpointPath = $"/orders";
-        private readonly string productEndpointPath = $"/merchant-skus";
+        private readonly string orderEndpointPath = "/orders";
+        private readonly string productEndpointPath = "/merchant-skus";
 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IJetRequest jetRequest;

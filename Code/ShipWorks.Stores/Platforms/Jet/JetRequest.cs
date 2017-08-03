@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetRequest : IJetRequest
     {
-        public const string EndpointBase = "https://merchant-api.jet.com/api";
+        private const string EndpointBase = "https://merchant-api.jet.com/api";
 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri(EndpointBase + path);
             request.Verb = method;
 
-            var result =  ProcessRequest(action, store, request);
+            GenericResult<string> result =  ProcessRequest(action, store, request);
 
             if (result.Failure)
             {
