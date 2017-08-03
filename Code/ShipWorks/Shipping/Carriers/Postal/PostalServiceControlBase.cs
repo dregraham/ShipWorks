@@ -356,8 +356,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // Update the available confirmation types based on the shipping provider
             UpdateConfirmationTypes(serviceType);
-            //PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
-            //UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
 
             // Only show express options for express
             sectionExpress.Visible = (serviceType == PostalServiceType.ExpressMail);
@@ -384,7 +382,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 PostalShipmentType shipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
                 var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
 
-                PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
                 RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
                 {
                     if (r.Tag == null)
@@ -400,11 +397,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         return false;
                     }
 
-                    var foo = current.ConfirmationType == rateSelection.ConfirmationType && current.ServiceType == rateSelection.ServiceType;
-                    var bar = shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
+                    return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
                         selectedPackagingType, personControl.CountryCode);
-
-                    return bar;
                 });
 
                 RateControl.SelectRate(matchingRate);
