@@ -195,6 +195,7 @@
     <Compile Include="Platforms\Jet\JetOrderLoaderTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderItemLoaderTest.cs" />
     <Compile Include="Platforms\Jet\JetProductRepoTest.cs" />
+    <Compile Include="Platforms\Jet\JetRequestTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Jet\JetStoreTypeTest.cs" />
     <Compile Include="Platforms\Jet\JetWebClientTest.cs" />
