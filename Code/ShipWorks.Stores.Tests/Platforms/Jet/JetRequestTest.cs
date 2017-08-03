@@ -22,6 +22,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
               ""token_type"": ""Bearer"",
               ""expires_on"": ""2017-08-01T05:35:29Z""
             }";
+
+        private Mock<IHttpResponseReader> tokenResponseReader;
+
         private readonly AutoMock mock;
 
         public JetRequestTest()
@@ -155,7 +158,46 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             responseReader.Verify(r => r.ReadResult());
         }
-        
+
+        [Fact]
+        public void ProcessRequest_LogsResponse()
+        {
+            JetStoreEntity store = new JetStoreEntity { ApiUser = "username", Secret = "encrypted" };
+
+            MockSuccessfulTokenRequest(store);
+
+            Exception ex = new Exception("something went wrong");
+
+            Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
+            httpSubmitter.SetupSequence(h => h.GetResponse()).Returns(tokenResponseReader.Object)
+                .Throws(ex);
+
+            JetRequest testObject = mock.Create<JetRequest>();
+
+            testObject.ProcessRequest("test", store, httpSubmitter.Object);
+
+            mock.Mock<IApiLogEntry>().Verify(l => l.LogResponse(ex));
+        }
+
+        [Fact]
+        public void ProcessRequest_ReturnsGenericResultError_WhenRequestThrowsException()
+        {
+            JetStoreEntity store = new JetStoreEntity { ApiUser = "username", Secret = "encrypted" };
+            
+            MockSuccessfulTokenRequest(store);
+
+            Mock<IHttpRequestSubmitter> httpSubmitter = mock.Mock<IHttpRequestSubmitter>();
+            httpSubmitter.SetupSequence(h => h.GetResponse()).Returns(tokenResponseReader.Object)
+                .Throws(new Exception("something went wrong"));
+
+            JetRequest testObject = mock.Create<JetRequest>();
+            
+            var result = testObject.ProcessRequest("test", store, httpSubmitter.Object);
+
+            Assert.True(result.Failure);
+            Assert.Equal("something went wrong", result.Message);
+        }
+
         private void MockSuccessfulTokenRequest(JetStoreEntity store)
         {
             Mock<IEncryptionProvider> encryptionProvider = mock.Mock<IEncryptionProvider>();
@@ -165,11 +207,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             encryptionProviderFactory.Setup(e => e.CreateSecureTextEncryptionProvider(store.ApiUser))
                 .Returns(encryptionProvider);
             
-            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
-            responseReader.Setup(r => r.ReadResult()).Returns(successfulTokenResponse);
+            tokenResponseReader = mock.Mock<IHttpResponseReader>();
+            tokenResponseReader.Setup(r => r.ReadResult()).Returns(successfulTokenResponse);
 
             Mock<IHttpRequestSubmitter> submitter = mock.Mock<IHttpRequestSubmitter>();
-            submitter.Setup(s => s.GetResponse()).Returns(responseReader);
+            submitter.Setup(s => s.GetResponse()).Returns(tokenResponseReader);
 
             Mock<IHttpRequestSubmitterFactory> submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
             submitterFactory.Setup(s => s.GetHttpTextPostRequestSubmitter(
