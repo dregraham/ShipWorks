@@ -137,11 +137,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         {
             ModifyOrderToHaveCustoms();
 
-            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
-            {
-                CustomsManager.LoadCustomsItems(shipment, false, transactedAdapter);
-                transactedAdapter.Commit();
-            }
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             Assert.Equal(true, shipment.CustomsGenerated);
 
@@ -171,13 +167,11 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         {
             ModifyOrderToHaveCustoms();
 
-            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
+            CustomsManager.GenerateCustomsItems(shipment);
+
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
-                CustomsManager.GenerateCustomsItems(shipment);
-
-                transactedAdapter.SaveAndRefetch(shipment);
-
-                transactedAdapter.Commit();
+                adapter.SaveAndRefetch(shipment);
             }
 
             Assert.Equal(true, shipment.CustomsGenerated);

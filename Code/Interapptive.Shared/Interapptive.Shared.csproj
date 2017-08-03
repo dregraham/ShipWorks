@@ -266,6 +266,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\EmailAddressAttribute.cs" />
     <Compile Include="Threading\AsyncSemaphore.cs" />
     <Compile Include="Threading\DetailProgressUpdater.cs" />
+    <Compile Include="Threading\EmptyProgressUpdater.cs" />
     <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\IProgressUpdater.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />

@@ -8,8 +8,8 @@ using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -622,38 +622,48 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private async Task<IEnumerable<GenericResult<long>>> SetOnlineStatus(MenuCommandExecutionContext context, object code, string comment)
         {
-            return await PerformOperation(context, async (key, updater) =>
-            {
-                var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
-                updater.Update();
-                return result;
-            }).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Set the online status of all the requested orders
-        /// </summary>
-        private async Task<IEnumerable<GenericResult<long>>> PerformOperation(MenuCommandExecutionContext context,
-            Func<long, IProgressUpdater, Task<GenericResult<long>>> processItem)
-        {
-            var results = new List<GenericResult<long>>();
-
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-                using (var progress = messageHelper.ShowProgressDialog("Set Status", "ShipWorks is setting the online status."))
-                {
-                    var updater = progress.ToUpdater(context.SelectedKeys, "Updating order {0} of {1}...");
 
-                    foreach (var key in context.SelectedKeys.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
-                    {
-                        results.Add(await processItem(key, updater).ConfigureAwait(false));
-                    }
-                }
+                return await context.SelectedKeys
+                    .SelectWithProgress(messageHelper, "Set Status", "ShipWorks is setting the online status.", "Updating order {0} of {1}...",
+                        key => SetOnlineStatusCallback(key, code, comment))
+                    .ConfigureAwait(false);
             }
 
-            return results;
+            //return await PerformOperation(context, async (key, updater) =>
+            //{
+            //    var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
+            //    updater.Update();
+            //    return result;
+            //}).ConfigureAwait(false);
         }
+
+        ///// <summary>
+        ///// Set the online status of all the requested orders
+        ///// </summary>
+        //private async Task<IEnumerable<GenericResult<long>>> PerformOperation(MenuCommandExecutionContext context,
+        //    Func<long, IProgressUpdater, Task<GenericResult<long>>> processItem)
+        //{
+        //    var results = new List<GenericResult<long>>();
+
+        //    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+        //    {
+        //        IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+        //        using (var progress = messageHelper.ShowProgressDialog("Set Status", "ShipWorks is setting the online status."))
+        //        {
+        //            var updater = progress.ToUpdater(context.SelectedKeys, "Updating order {0} of {1}...");
+
+        //            foreach (var key in context.SelectedKeys.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
+        //            {
+        //                results.Add(await processItem(key, updater).ConfigureAwait(false));
+        //            }
+        //        }
+        //    }
+
+        //    return results;
+        //}
 
         /// <summary>
         /// The worker thread function that does the actual status setting

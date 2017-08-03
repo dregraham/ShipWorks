@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -11,7 +12,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -64,6 +64,18 @@ namespace ShipWorks.Shipping.Services
             ShippingManager.EnsureShipmentLoaded(shipment);
             return shipment;
         }
+
+        /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        /// <remarks>
+        /// Normally, an async method should not just wrap a sync method in a Task.Run,
+        /// but in this case, we know that the majority of the blocking time will be in the database.
+        /// As time goes on, we can replace the original EnsureShipmentLoaded with an
+        /// async-first method and then we can remove the Task.Run.
+        /// </remarks>
+        public Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment) =>
+            Task.Run(() => EnsureShipmentLoaded(shipment));
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
@@ -276,7 +288,7 @@ namespace ShipWorks.Shipping.Services
         /// <param name="sortExpression">The sort expression</param>
         /// <param name="maxNumberOfShipmentsToReturn">The max number of shipments to return</param>
         /// <returns></returns>
-        /// <exception cref="UpsLocalRatingException"></exception>
+        /// <exception cref="ShippingException"></exception>
         public IEnumerable<ShipmentEntity> GetShipments(RelationPredicateBucket bucket, ISortExpression sortExpression, int maxNumberOfShipmentsToReturn)
         {
             ShipmentCollection shipmentCollection = new ShipmentCollection();

@@ -1,7 +1,6 @@
-﻿using ShipWorks.Shipping;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Diagnostics;
-using Interapptive.Shared.Utility;
+﻿using System.Diagnostics;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -16,10 +15,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns></returns>
-        public static string GetCarrierCode(ShipmentEntity shipmentEntity)
+        public static string GetCarrierCode(IShipmentEntity shipmentEntity)
         {
             string carrierCode = string.Empty;
-            switch (((ShipmentTypeCode)shipmentEntity.ShipmentType))
+            switch (((ShipmentTypeCode) shipmentEntity.ShipmentType))
             {
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
@@ -36,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     //The shipment is a UPS shipment, check to see if it is UPS-MI
-                    carrierCode = UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service) ? "upsmi" : "ups";
+                    carrierCode = UpsUtility.IsUpsMiService((UpsServiceType) shipmentEntity.Ups.Service) ? "upsmi" : "ups";
                     break;
 
                 case ShipmentTypeCode.OnTrac:
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Gets the fedex carrier code.
         /// </summary>
-        private static string GetFedexCarrierCode(ShipmentEntity shipmentEntity)
+        private static string GetFedexCarrierCode(IShipmentEntity shipmentEntity)
         {
             string carrierCode = string.Empty;
 
@@ -93,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Gets the carrier code for Usps shipments
         /// </summary>
-        private static string GetPostalCarrierCode(ShipmentEntity shipmentEntity)
+        private static string GetPostalCarrierCode(IShipmentEntity shipmentEntity)
         {
             string carrierCode;
 

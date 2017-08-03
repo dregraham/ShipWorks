@@ -17,6 +17,11 @@ namespace Interapptive.Shared.Threading
         }
 
         /// <summary>
+        /// Get an empty progress updater
+        /// </summary>
+        public static IProgressUpdater Empty { get; } = new EmptyProgressUpdater();
+
+        /// <summary>
         /// Progress item that is displayed
         /// </summary>
         protected IProgressReporter ProgressReporter { get; }

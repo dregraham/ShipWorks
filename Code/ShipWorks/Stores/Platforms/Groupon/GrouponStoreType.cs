@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,14 +37,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
     class GrouponStoreType : StoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
+        private readonly ILog log;
+        private readonly IMessageHelper messageHelper;
+        private readonly IGrouponOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreType(StoreEntity store)
+        public GrouponStoreType(StoreEntity store, IGrouponOnlineUpdater onlineUpdater,
+            IMessageHelper messageHelper, Func<Type, ILog> createLogger)
             : base(store)
         {
+            this.onlineUpdater = onlineUpdater;
+            this.messageHelper = messageHelper;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -69,39 +77,44 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             return new[]
             {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+                new AsyncMenuCommand("Upload Shipment Details", OnUploadDetails)
             };
         }
 
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
+        private async Task OnUploadDetails(MenuCommandExecutionContext context)
         {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
+            var results = await UploadDetails(context).ConfigureAwait(true);
 
-            executor.ExecuteCompleted += (o, e) =>
+            var exceptions = results.Success ? Enumerable.Empty<Exception>() : new[] { results.Exception };
+            context.Complete(exceptions, MenuCommandResult.Error);
+        }
+
+        /// <summary>
+        /// Upload the shipping details
+        /// </summary>
+        private async Task<GenericResult<IEnumerable<long>>> UploadDetails(MenuCommandExecutionContext context)
+        {
+            using (var progress = messageHelper.ShowProgressDialog("Upload Shipment Details", "ShipWorks is uploading shipment information."))
             {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
+                progress.ToUpdater(context.SelectedKeys, "Updating {0} orders...");
 
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
+                return await ShipmentUploadCallback(context.SelectedKeys).ConfigureAwait(false);
+            }
         }
 
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
+        private async Task<GenericResult<IEnumerable<long>>> ShipmentUploadCallback(IEnumerable<long> headers)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                GrouponOnlineUpdater shipmentUpdater = new GrouponOnlineUpdater((GrouponStoreEntity) Store);
-                shipmentUpdater.UpdateShipmentDetails(headers);
+                await onlineUpdater.UpdateShipmentDetails(Store as GrouponStoreEntity, headers).ConfigureAwait(false);
+                return GenericResult.FromSuccess(headers);
             }
             catch (GrouponException ex)
             {
@@ -109,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 
                 // add the error to issues for the user
-                issueAdder.Add(headers, ex);
+                return GenericResult.FromError(ex, headers);
             }
         }
 
@@ -124,7 +137,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl() =>
             new GrouponAccountSettingsControl();
-
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.

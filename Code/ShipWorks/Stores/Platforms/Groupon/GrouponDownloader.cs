@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     do
                     {
                         //Grab orders
-                        JToken result = webClient.GetOrders((GrouponStoreEntity) Store, start, currentPage);
+                        JToken result = await webClient.GetOrders((GrouponStoreEntity) Store, start, currentPage).ConfigureAwait(false);
 
                         //Update numberOfPages
                         numberOfPages = (int) result["meta"]["no_of_pages"];

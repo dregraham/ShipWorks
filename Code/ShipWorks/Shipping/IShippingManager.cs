@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -37,6 +38,11 @@ namespace ShipWorks.Shipping
         /// Ensure the specified shipment is fully loaded
         /// </summary>
         ShipmentEntity EnsureShipmentLoaded(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the overridden store shipment.

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -17,106 +19,131 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// <summary>
     /// Uploads shipment details to Groupon
     /// </summary>
-    public class GrouponOnlineUpdater
+    [Component]
+    public class GrouponOnlineUpdater : IGrouponOnlineUpdater
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponOnlineUpdater));
-
-        // the store this instance for
-        private readonly GrouponStoreEntity store;
+        private readonly ILog log;
+        private readonly IGrouponWebClient webClient;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IOrderManager orderManager;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponOnlineUpdater(GrouponStoreEntity store)
+        public GrouponOnlineUpdater(IGrouponWebClient webClient, IOrderManager orderManager,
+            IShippingManager shippingManager, ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> createLogger)
         {
-            this.store = store;
+            this.shippingManager = shippingManager;
+            this.orderManager = orderManager;
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.webClient = webClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public async Task UpdateShipmentDetails(IGrouponStoreEntity store, IEnumerable<long> orderKeys)
         {
             List<GrouponTracking> trackingList = new List<GrouponTracking>();
-            foreach (long orderKey in orderKeys)
+
+            var orders = await LoadOrders(orderKeys).ConfigureAwait(false);
+
+            foreach (IOrderEntity order in orders)
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
+                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID).ConfigureAwait(false);
 
                 // Check to see if shipment exists
                 if (shipment == null)
                 {
-                    log.InfoFormat("Not uploading orderid {0} has no items.", orderKey);
+                    log.InfoFormat("Not uploading orderid {0} has no items.", order.OrderID);
                     continue;
                 }
 
-                trackingList.AddRange(GetGrouponTracking(shipment));
+                trackingList.AddRange(await GetGrouponTracking(order, shipment).ConfigureAwait(false));
             }
 
-            PerformUpload(trackingList);
+            await PerformUpload(store, trackingList).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        public async Task UpdateShipmentDetails(IGrouponStoreEntity store, IOrderEntity order, ShipmentEntity shipment)
         {
-            List<GrouponTracking> trackingList = GetGrouponTracking(shipment);
+            List<GrouponTracking> trackingList = await GetGrouponTracking(order, shipment).ConfigureAwait(false);
 
-            PerformUpload(trackingList);
+            await PerformUpload(store, trackingList).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Load the given orders
+        /// </summary>
+        private async Task<IEnumerable<IOrderEntity>> LoadOrders(IEnumerable<long> orderKeys)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                return await orderManager.LoadOrdersAsync(orderKeys, adapter).ConfigureAwait(false);
+            }
         }
 
         /// <summary>
         /// Gets the tracking info to send to groupon
         /// </summary>
-        private static List<GrouponTracking> GetGrouponTracking(ShipmentEntity shipment)
+        private async Task<List<GrouponTracking>> GetGrouponTracking(IOrderEntity order, ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
-            OrderEntity order = shipment.Order;
-
             if (order.IsManual)
             {
                 return new List<GrouponTracking>();
             }
 
+            var loadedShipment = await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+            var orderItems = await FetchOrderItems(order.OrderID).ConfigureAwait(false);
+
+            return orderItems.Where(x => !string.IsNullOrEmpty(x.GrouponLineItemID))
+                .Select(x => CreateGrouponTracking(x, shipment))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Create a groupon tracking object
+        /// </summary>
+        private GrouponTracking CreateGrouponTracking(GrouponOrderItemEntity item, IShipmentEntity shipment)
+        {
+            string trackingNumber = shipment.TrackingNumber;
+            string carrier = GrouponCarrier.GetCarrierCode(shipment);
+            Int64 CILineItemID = Convert.ToInt64(item.GrouponLineItemID);
+
+            return new GrouponTracking(carrier, CILineItemID, trackingNumber);
+        }
+
+        /// <summary>
+        /// Fetch the order items for the given order
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<GrouponOrderItemEntity>> FetchOrderItems(long orderID)
+        {
+            var query = new QueryFactory().GrouponOrderItem
+                .Where(OrderItemFields.OrderID == orderID);
+
             // Fetch the order items
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                return await adapter.FetchQueryAsync(query).ConfigureAwait(false) as IEnumerable<GrouponOrderItemEntity>;
             }
-
-            List<GrouponTracking> tracking = new List<GrouponTracking>();
-
-            foreach (GrouponOrderItemEntity item in order.OrderItems)
-            {
-                //Need to have a CI_LineItemID to upload tracking
-                if (!string.IsNullOrEmpty(item.GrouponLineItemID))
-                {
-                    string trackingNumber = shipment.TrackingNumber;
-                    string carrier = GrouponCarrier.GetCarrierCode(shipment);
-                    Int64 CILineItemID = Convert.ToInt64(item.GrouponLineItemID);
-
-                    GrouponTracking gTracking = new GrouponTracking(carrier, CILineItemID, trackingNumber);
-
-                    tracking.Add(gTracking);
-                }
-            }
-
-            return tracking;
         }
 
         /// <summary>
         /// Perform the upload
         /// </summary>
-        private void PerformUpload(List<GrouponTracking> trackingList)
+        private async Task PerformUpload(IGrouponStoreEntity store, List<GrouponTracking> trackingList)
         {
             if (trackingList.Any())
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var client = lifetimeScope.Resolve<IGrouponWebClient>();
-                    client.UploadShipmentDetails(store, trackingList);
-                }
+                await webClient.UploadShipmentDetails(store, trackingList).ConfigureAwait(false);
             }
         }
     }

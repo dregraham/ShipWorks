@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -103,7 +102,7 @@ namespace ShipWorks.Stores.Content
         public async Task<IEnumerable<OrderEntity>> LoadOrdersAsync(IEnumerable<long> orderIDs, ISqlAdapter sqlAdapter)
         {
             EntityQuery<OrderEntity> query = new QueryFactory().Order.Where(OrderFields.OrderID.In(orderIDs));
-            IEntityCollection2 entities = await sqlAdapter.FetchQueryAsync(query);
+            IEntityCollection2 entities = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             return entities.OfType<OrderEntity>();
         }
 
@@ -145,5 +144,22 @@ namespace ShipWorks.Stores.Content
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
         public ShipmentEntity GetLatestActiveShipment(long orderID) => OrderUtility.GetLatestActiveShipment(orderID);
+
+        /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        public async Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID)
+        {
+            var query = new QueryFactory().Shipment
+                .Where(ShipmentFields.OrderID == orderID)
+                .AndWhere(ShipmentFields.Processed == true)
+                .AndWhere(ShipmentFields.Voided == false)
+                .OrderBy(ShipmentFields.ProcessedDate.Descending());
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
+            }
+        }
     }
 }
