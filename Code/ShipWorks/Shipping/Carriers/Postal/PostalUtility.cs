@@ -398,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Indicates if the packaging type represents an envelope or flat
         /// </summary>
-        public static bool IsEnvelopeOrFlat(PostalPackagingType packagingType)
+        public static bool IsEnvelopeOrFlat(PostalPackagingType? packagingType)
         {
             switch (packagingType)
             {
