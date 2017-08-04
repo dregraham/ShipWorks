@@ -362,14 +362,6 @@ namespace Interapptive.Shared.Collections
             IMessageHelper messageHelper, string title, string description, string detailFormat,
             Func<T, Task<TResult>> processItem)
         {
-
-
-            ///// <summary>
-            ///// Set the online status of all the requested orders
-            ///// </summary>
-            //private async Task<IEnumerable<GenericResult<long>>> PerformOperation(MenuCommandExecutionContext context,
-            //    Func<long, IProgressUpdater, Task<GenericResult<long>>> processItem)
-            //{
             var results = new List<TResult>();
 
             using (var progress = messageHelper.ShowProgressDialog(title, description))
@@ -378,13 +370,12 @@ namespace Interapptive.Shared.Collections
 
                 foreach (var key in source.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
                 {
-                    results.Add(await processItem(key).ConfigureAwait(false));
                     updater.Update();
+                    results.Add(await processItem(key).ConfigureAwait(false));
                 }
             }
 
             return results;
-            //}
         }
     }
 }

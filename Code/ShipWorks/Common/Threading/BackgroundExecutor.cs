@@ -106,18 +106,14 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Execute the operation asynchronously using the given entity key collection
         /// </summary>
-        public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker) =>
             ExecuteAsync(initializer, worker, null);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection
         /// </summary>
-        public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, object userState)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, object userState) =>
             ExecuteAsync(initializer, worker, null, userState);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection

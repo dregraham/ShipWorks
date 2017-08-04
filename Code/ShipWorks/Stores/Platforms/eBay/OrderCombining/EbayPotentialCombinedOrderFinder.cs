@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
@@ -24,42 +25,24 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <summary>
         /// Only allowing to attempt to combine 1000 at a time
         /// </summary>
-        public static int MaxAllowedOrders
-        {
-            get { return 1000; }
-        }
-
-        /// <summary>
-        /// Event raised when the discovery is complete
-        /// </summary>
-        public event EbayPotentialCombinedOrdersFoundEventHandler SearchComplete;
+        public static int MaxAllowedOrders => 1000;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public EbayPotentialCombinedOrderFinder(Control owner)
         {
-            if (owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
 
             this.owner = owner;
         }
 
         /// <summary>
-        /// Asyncronously search for orders that can be combined with the provided orders.
+        /// Asynchronously search for orders that can be combined with the provided orders.
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
-        public void SearchAsync(ICollection<long> orderKeys, object userState, EbayCombinedOrderType combineType)
+        public async Task<EbayPotentialCombinedOrdersFoundEventArgs> SearchAsync(ICollection<long> orderKeys, object userState, EbayCombinedOrderType combineType)
         {
-            #region validation
-
-            if (orderKeys == null)
-            {
-                throw new ArgumentNullException("orderKeys");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(orderKeys, nameof(orderKeys));
 
             // ensure we were given EbayOrderEntities
             if (orderKeys.Count > 0)
@@ -70,14 +53,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 }
             }
 
-            #endregion
-
             if (orderKeys.Count > MaxAllowedOrders)
             {
                 throw new EbayException(string.Format("You can only select up to {0} orders for ShipWorks to try to combine at a time.", MaxAllowedOrders));
             }
 
-            // configure object that will be the asyncronous state throughout the operation
+            // configure object that will be the asynchronous state throughout the operation
             Dictionary<string, object> asyncState = new Dictionary<string, object>();
             asyncState.Add("UserState", userState);
             asyncState.Add("CombinedOrderCollection", new List<EbayCombinedOrderCandidate>());
@@ -92,114 +73,135 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             // we are going to handle the exception in OnSearchComplete
             executor.PropagateException = true;
 
-            // What to do when its all done
-            executor.ExecuteCompleted += new BackgroundExecutorCompletedEventHandler<EbayCombinedOrderCandidate>(OnSearchComplete);
-
             // execute the order search, making use of the initializer
-            executor.ExecuteAsync(
+            var results = await executor.ExecuteAsync(
+                (IProgressReporter progress) => InitializeSearch(orderKeys, combineType, progress),
+                PerformSearch,
+                asyncState).ConfigureAwait(false);
 
-                // Initialization gets all of the EbayOrderEntities from their keys and prepares for executing the actual search
-                (IProgressReporter progress) =>
+            return BuildPotentialCandidates(results);
+        }
+
+        /// <summary>
+        /// Initialize search
+        /// </summary>
+        /// <remarks>
+        /// Initialization gets all of the EbayOrderEntities from their keys and prepares for executing the actual search
+        /// </remarks>
+        private static List<EbayCombinedOrderCandidate> InitializeSearch(ICollection<long> orderKeys, EbayCombinedOrderType combineType, IProgressReporter progress)
+        {
+            IEnumerable<EbayOrderEntity> orders = LoadOrders(orderKeys, combineType, progress);
+
+            // check for cancel
+            if (progress.IsCancelRequested)
+            {
+                return null;
+            }
+
+            return GroupOrdersIntoCombinationCandidates(combineType, orders);
+        }
+
+        /// <summary>
+        /// Group a list of orders into combination candidates
+        /// </summary>
+        private static List<EbayCombinedOrderCandidate> GroupOrdersIntoCombinationCandidates(EbayCombinedOrderType combineType, IEnumerable<EbayOrderEntity> orders)
+        {
+            List<EbayCombinedOrderCandidate> combinedPayments = new List<EbayCombinedOrderCandidate>();
+
+            var ordersByStoreID = from o in orders
+                                  group o by o.StoreID into byStore
+                                  select new { StoreID = byStore.Key, Orders = byStore };
+            foreach (var store in ordersByStoreID)
+            {
+                // group each of these orders by the buyer
+                var byBuyer = from o in store.Orders
+                              group o by o.EbayBuyerID into g
+                              select new { EbayBuyerID = g.Key, Orders = g };
+
+                foreach (var buyer in byBuyer)
                 {
-                    List<EbayOrderEntity> orders = new List<EbayOrderEntity>();
+                    EbayCombinedOrderCandidate combinedPayment = new EbayCombinedOrderCandidate(store.StoreID, combineType, buyer.EbayBuyerID, buyer.Orders.ToList());
+                    combinedPayments.Add(combinedPayment);
+                }
+            }
 
-                    #region Turn selected order keys to order entities
+            // return one item so the worker gets called
+            return combinedPayments;
+        }
 
-                    // first get the orders
-                    int count = 0;
-                    foreach (long order in orderKeys)
-                    {
-                        // progress
-                        progress.Detail = String.Format("Loading order {0} of {1}...", ++count, orderKeys.Count);
+        /// <summary>
+        /// Load orders from the given keys
+        /// </summary>
+        private static IEnumerable<EbayOrderEntity> LoadOrders(ICollection<long> orderKeys, EbayCombinedOrderType combineType, IProgressReporter progress)
+        {
+            List<EbayOrderEntity> orders = new List<EbayOrderEntity>();
 
-                        EbayOrderEntity ebayOrder = DataProvider.GetEntity(order) as EbayOrderEntity;
-                        if (ebayOrder != null)
-                        {
-                            // load the order items for this order entity if needed
-                            if (ebayOrder.OrderItems.Count == 0)
-                            {
-                                ebayOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(ebayOrder.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
-                            }
-
-                            // Get the list of eBay items from all of the items
-                            List<EbayOrderItemEntity> eBayItems = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
-
-                            // If this order actually has eBay items...
-                            if (eBayItems.Count >= 1)
-                            {
-                                // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
-                                if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Paid)) ||
-                                    (combineType == EbayCombinedOrderType.Ebay && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete)))
-                                {
-                                    orders.Add(ebayOrder);
-                                }
-                            }
-                        }
-
-                        // progress
-                        progress.PercentComplete = (100 * count) / orderKeys.Count;
-                    }
-
-                    // check for cancel
-                    if (progress.IsCancelRequested)
-                    {
-                        return null;
-                    }
-
-                    #endregion
-
-                    #region Group entities by Store and Buyer
-
-                    // now group the orders by store and buyer
-                    var ordersByStoreID = from o in orders
-                                          group o by o.StoreID into byStore
-                                          select new { StoreID = byStore.Key, Orders = byStore };
-
-                    List<EbayCombinedOrderCandidate> combinedPayments = new List<EbayCombinedOrderCandidate>();
-                    foreach (var store in ordersByStoreID)
-                    {
-                        // group each of these orders by the buyer
-                        var byBuyer = from o in store.Orders
-                                      group o by o.EbayBuyerID into g
-                                      select new { EbayBuyerID = g.Key, Orders = g };
-
-                        foreach (var buyer in byBuyer)
-                        {
-                            EbayCombinedOrderCandidate combinedPayment = new EbayCombinedOrderCandidate(store.StoreID, combineType, buyer.EbayBuyerID, buyer.Orders.ToList());
-                            combinedPayments.Add(combinedPayment);
-                        }
-                    }
-
-                    #endregion
-
-                    // return one item so the worker gets called
-                    return combinedPayments;
-                },
-
-                // Worker
-                (EbayCombinedOrderCandidate combinedOrder, object state, BackgroundIssueAdder<EbayCombinedOrderCandidate> issueAdder) =>
+            // first get the orders
+            int count = 0;
+            foreach (long order in orderKeys)
+            {
+                if (progress.IsCancelRequested)
                 {
-                    List<EbayCombinedOrderCandidate> combinedOrders = (List<EbayCombinedOrderCandidate>) asyncState["CombinedOrderCollection"];
+                    return Enumerable.Empty<EbayOrderEntity>();
+                }
 
-                    // search for related orders
-                    combinedOrder.DiscoverRelatedOrders();
+                // progress
+                progress.Detail = String.Format("Loading order {0} of {1}...", ++count, orderKeys.Count);
 
-                    // add this item to the main collection, but only if there's more than one order
-                    // since you can't combine an order with itself
-                    if (combinedOrder.Components.Count > 1)
+                EbayOrderEntity ebayOrder = DataProvider.GetEntity(order) as EbayOrderEntity;
+                if (ebayOrder != null)
+                {
+                    // load the order items for this order entity if needed
+                    if (ebayOrder.OrderItems.Count == 0)
                     {
-                        combinedOrders.Add(combinedOrder);
+                        ebayOrder.OrderItems.AddRange(DataProvider.GetRelatedEntities(ebayOrder.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
                     }
-                },
 
-                // collection for collating results
-                (object) asyncState);
+                    // Get the list of eBay items from all of the items
+                    List<EbayOrderItemEntity> eBayItems = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().ToList();
+
+                    // If this order actually has eBay items...
+                    if (eBayItems.Count >= 1)
+                    {
+                        // Local Combining can only be done on Paid orders.  Combined Payments can only be done on unpaid orders
+                        if ((combineType == EbayCombinedOrderType.Local && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Paid)) ||
+                            (combineType == EbayCombinedOrderType.Ebay && eBayItems.All(i => EbayUtility.GetEffectivePaymentStatus(i) == EbayEffectivePaymentStatus.Incomplete)))
+                        {
+                            orders.Add(ebayOrder);
+                        }
+                    }
+                }
+
+                // progress
+                progress.PercentComplete = (100 * count) / orderKeys.Count;
+            }
+
+            return orders;
+        }
+
+        /// <summary>
+        /// Perform the search
+        /// </summary>
+        private void PerformSearch(EbayCombinedOrderCandidate combinedOrder, object state, BackgroundIssueAdder<EbayCombinedOrderCandidate> issueAdder)
+        {
+            var asyncState = (Dictionary<string, object>) state;
+            List<EbayCombinedOrderCandidate> combinedOrders = (List<EbayCombinedOrderCandidate>) asyncState["CombinedOrderCollection"];
+
+            // search for related orders
+            combinedOrder.DiscoverRelatedOrders();
+
+            // add this item to the main collection, but only if there's more than one order
+            // since you can't combine an order with itself
+            if (combinedOrder.Components.Count > 1)
+            {
+                combinedOrders.Add(combinedOrder);
+            }
         }
 
         /// <summary>
         /// Searching for related orders is complete
         /// </summary>
-        private void OnSearchComplete(object sender, BackgroundExecutorCompletedEventArgs<EbayCombinedOrderCandidate> e)
+        private EbayPotentialCombinedOrdersFoundEventArgs BuildPotentialCandidates(BackgroundExecutorCompletedEventArgs<EbayCombinedOrderCandidate> e)
         {
             Dictionary<string, object> state = (Dictionary<string, object>) e.UserState;
 
@@ -209,24 +211,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 candidates.Clear();
             }
 
-            // fire the SearchCompleted event handler
-            RaiseSearchComplete(e.ErrorException, e.Canceled, state, candidates);
-        }
-
-        /// <summary>
-        /// The searchhing operation is complete, raises the event.
-        /// </summary>
-        private void RaiseSearchComplete(Exception error, bool canceled, Dictionary<string, object> state, List<EbayCombinedOrderCandidate> candidates)
-        {
             object userState = state["UserState"];
             EbayCombinedOrderType combineType = (EbayCombinedOrderType) state["CombineType"];
 
-            EbayPotentialCombinedOrdersFoundEventHandler handler = SearchComplete;
-            if (handler != null)
-            {
-                EbayPotentialCombinedOrdersFoundEventArgs args = new EbayPotentialCombinedOrdersFoundEventArgs(owner, error, canceled, userState, combineType, candidates);
-                handler(this, args);
-            }
+            return new EbayPotentialCombinedOrdersFoundEventArgs(owner, e.ErrorException, e.Canceled, userState, combineType, candidates);
         }
     }
 }

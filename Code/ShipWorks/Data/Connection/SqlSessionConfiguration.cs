@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Security;
@@ -9,7 +10,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Users;
 
 namespace ShipWorks.Data.Connection
@@ -25,8 +25,7 @@ namespace ShipWorks.Data.Connection
         static readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(10);
 
         // Used to track change to the connection string for logging purposes
-        [ThreadStatic]
-        static string lastConnectionString;
+        static AsyncLocal<string> lastConnectionString = new AsyncLocal<string>();
 
         // File from which to save and restore settings
         static string filename;
@@ -50,7 +49,7 @@ namespace ShipWorks.Data.Connection
         bool frozen = false;
 
         /// <summary>
-        /// Raised when the the cnofiguration changes
+        /// Raised when the configuration changes
         /// </summary>
         public event EventHandler ConnectionChanged;
 
@@ -75,10 +74,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public void CopyFrom(SqlSessionConfiguration copy)
         {
-            if (null == copy)
-            {
-                throw new ArgumentNullException("copy");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(copy, nameof(copy));
 
             if (frozen)
             {
@@ -301,7 +297,7 @@ namespace ShipWorks.Data.Connection
             string connectionString = csb.ConnectionString;
 
             // If it's different than the last time log it
-            if (connectionString != lastConnectionString)
+            if (connectionString != lastConnectionString.Value)
             {
                 var logCsb = new SqlConnectionStringBuilder(connectionString);
 
@@ -313,7 +309,7 @@ namespace ShipWorks.Data.Connection
 
                 Log(string.Format("ConnectionString: {0}", logCsb));
 
-                lastConnectionString = connectionString;
+                lastConnectionString.Value = connectionString;
             }
 
             return connectionString;

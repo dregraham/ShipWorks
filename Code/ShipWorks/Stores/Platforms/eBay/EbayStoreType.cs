@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -48,7 +50,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.Platforms.Ebay
 {
     /// <summary>
-    /// Entrypoint for the eBay integration.
+    /// Entry point for the eBay integration.
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Ebay)]
     [Component(RegistrationType.Self)]
@@ -78,13 +80,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         private readonly IConfigurationData configuration;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreType(StoreEntity store, IConfigurationData configuration)
+        public EbayStoreType(StoreEntity store, IConfigurationData configuration, IMessageHelper messageHelper)
             : base(store)
         {
+            this.messageHelper = messageHelper;
             this.configuration = configuration;
         }
 
@@ -143,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 pages.Add(new FreemiumStoreWizardValidateAccountPage());
             }
 
-            // People end up thinking they have to download paypal details and images, when really it just takes forever.  Don't show these options by default
+            // People end up thinking they have to download PayPal details and images, when really it just takes forever.  Don't show these options by default
             // pages.Add(new EBayPayPalPage());
             // pages.Add(new EBayOptionsPage());
 
@@ -602,7 +606,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectivePaymentStatus) item.Value.EffectiveCheckoutStatus));
             outline.AddElement("CheckoutComplete", () => EbayUtility.IsCheckoutStatusComplete(item.Value) ? "true" : "false");
 
-            // only write out paypal stuff if we know the paypal transaction id
+            // only write out PayPal stuff if we know the PayPal transaction id
             ElementOutline paypalElement = outline.AddElement("PayPal", ElementOutline.If(() => item.Value.PayPalTransactionID.Length > 0));
             paypalElement.AddElement("TransactionID", () => item.Value.PayPalTransactionID);
             paypalElement.AddElement("AddressStatus", () => EbayUtility.GetAddressStatusName((AddressStatusCodeType) item.Value.PayPalAddressStatus));
@@ -637,14 +641,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the combine commands
         /// </summary>
-        private IEnumerable<MenuCommand> CreateCombineCommands()
+        private IEnumerable<IMenuCommand> CreateCombineCommands()
         {
             bool allowCombineLocally = configuration.FetchReadOnly().AllowEbayCombineLocally;
 
-            MenuCommand combineRemote = new MenuCommand("Combine orders on eBay...", OnCombineOrders) { BreakBefore = !allowCombineLocally, Tag = EbayCombinedOrderType.Ebay };
+            IMenuCommand combineRemote = new AsyncMenuCommand("Combine orders on eBay...", OnCombineOrders) { BreakBefore = !allowCombineLocally, Tag = EbayCombinedOrderType.Ebay };
 
             return allowCombineLocally ?
-                new[] { new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = allowCombineLocally, Tag = EbayCombinedOrderType.Local },
+                new[] { new AsyncMenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = allowCombineLocally, Tag = EbayCombinedOrderType.Local },
                     combineRemote } :
                 new[] { combineRemote };
         }
@@ -778,16 +782,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// MenuCommand handler for allowing the user to combine eBay orders
         /// </summary>
-        private void OnCombineOrders(MenuCommandExecutionContext context)
+        private async Task OnCombineOrders(MenuCommandExecutionContext context)
         {
             EbayPotentialCombinedOrderFinder finder = new EbayPotentialCombinedOrderFinder(context.Owner);
-            finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
-
             List<long> orderIDs = context.SelectedKeys.ToList();
 
             try
             {
-                finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
+                var candidates = await finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag).ConfigureAwait(true);
+                await OnPotentialCombinedOrdersFound(candidates).ConfigureAwait(true);
             }
             catch (EbayException ex)
             {
@@ -798,7 +801,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Loading of possible combined payments is complete
         /// </summary>
-        void OnPotentialCombinedOrdersFound(object sender, EbayPotentialCombinedOrdersFoundEventArgs e)
+        private async Task OnPotentialCombinedOrdersFound(EbayPotentialCombinedOrdersFoundEventArgs e)
         {
             // unpack the user state
             MenuCommandExecutionContext context = (MenuCommandExecutionContext) e.UserState;
@@ -809,12 +812,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 context.Complete(MenuCommandResult.Error, e.Error.Message);
                 return;
             }
-            else if (e.Cancelled)
+
+            if (e.Cancelled)
             {
                 context.Complete();
                 return;
             }
-            else if (e.Candidates.Count == 0)
+
+            if (e.Candidates.Count == 0)
             {
                 context.Complete(MenuCommandResult.Warning, string.Format("None of the selected orders are able to be combined {0}.", e.CombinedOrderType == EbayCombinedOrderType.Local ? "locally" : "on eBay"));
                 return;
@@ -829,40 +834,41 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     return;
                 }
 
-                List<OrderCombining.EbayCombinedOrderCandidate> selectedOrders = dlg.SelectedOrders;
+                List<EbayCombinedOrderCandidate> selectedOrders = dlg.SelectedOrders;
 
-                // create another background worker for combining
-                BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate> executor = new BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate>(e.Owner,
+                // We should not usually be wrapping an action in a Task.Run if we can avoid it, but in this case
+                // we don't have all the database and/or web calls converted to their async counterparts
+                var results = await Task.Run(async () => await selectedOrders.SelectWithProgress(messageHelper,
                     "Combining eBay Orders",
                     "ShipWorks is combining eBay Orders.",
-                    "Combining Order {0} of {1}...");
+                    "Combining Order {0} of {1}...",
+                    CombineOrdersCallback)
+                    .ConfigureAwait(false)).ConfigureAwait(true);
 
-                executor.ExecuteCompleted += (o, ea) =>
-                {
-                    context.Complete(ea.Issues, MenuCommandResult.Error);
-                };
+                var exceptions = results.Where(x => x.Failure)
+                    .Select(x => x.Exception)
+                    .Where(x => x != null);
 
-                // perform the order combining
-                executor.ExecuteAsync(CombineOrdersCallback, selectedOrders);
+                context.Complete(exceptions, MenuCommandResult.Error);
             }
         }
 
         /// <summary>
         /// Worker method for combining eBay orders
         /// </summary>
-        private async void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
+        private async Task<GenericResult<EbayCombinedOrderCandidate>> CombineOrdersCallback(EbayCombinedOrderCandidate toCombine)
         {
             try
             {
                 await toCombine.Combine().ConfigureAwait(false);
+                return GenericResult.FromSuccess(toCombine);
             }
             catch (EbayException ex)
             {
                 // log it
                 log.ErrorFormat("Error creating combined order: {0}", ex.Message);
 
-                // add the error to the issues so we can react later
-                issueAdder.Add(toCombine, ex);
+                return GenericResult.FromError(ex, toCombine);
             }
         }
 
