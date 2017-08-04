@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Collections;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -10,7 +12,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// List of StoreID's that the action is limited to acting on
         /// </summary>
-        public long[] StoreLimitedList
+        public IEnumerable<long> StoreLimitedList
         {
             get
             {
@@ -18,14 +20,14 @@ namespace ShipWorks.Data.Model.EntityClasses
             }
             set
             {
-                InternalStoreLimitedList = ArrayUtility.FormatCommaSeparatedList(value);
+                InternalStoreLimitedList = ArrayUtility.FormatCommaSeparatedList(value.ToArray());
             }
         }
 
         /// <summary>
         /// List of ComputerID's that the action is limited to acting on.
         /// </summary>
-        public long[] ComputerLimitedList
+        public IEnumerable<long> ComputerLimitedList
         {
             get
             {
@@ -36,7 +38,7 @@ namespace ShipWorks.Data.Model.EntityClasses
                 InternalComputerLimitedList = "";
                 if (value != null)
                 {
-                    InternalComputerLimitedList = ArrayUtility.FormatCommaSeparatedList(value);
+                    InternalComputerLimitedList = ArrayUtility.FormatCommaSeparatedList(value.ToArray());
                 }
             }
         }
@@ -49,9 +51,9 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get
             {
-                if (StoreLimited && StoreLimitedList.Length == 1)
+                if (StoreLimited && StoreLimitedList.Count() == 1)
                 {
-                    return StoreLimitedList[0];
+                    return StoreLimitedList.First();
                 }
 
                 return null;

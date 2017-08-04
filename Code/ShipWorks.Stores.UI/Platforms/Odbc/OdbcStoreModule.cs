@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -22,7 +23,6 @@ using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import;
 using ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload;
-using System.Reflection;
 using Module = Autofac.Module;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc
@@ -78,8 +78,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces();
 
             builder.RegisterType<OdbcDownloadCommand>();
-
-            builder.RegisterType<OdbcStoreDownloader>();
 
             builder.RegisterType<OdbcSampleDataCommand>()
                 .AsImplementedInterfaces();

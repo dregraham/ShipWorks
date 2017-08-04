@@ -1,13 +1,15 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.XCart
 {
     /// <summary>
     /// X-Cart integration point
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.XCart)]
+    [Component(RegistrationType.Self)]
     class XCartStoreType : GenericModuleStoreType
     {
         /// <summary>

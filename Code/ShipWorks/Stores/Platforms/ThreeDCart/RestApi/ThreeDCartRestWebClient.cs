@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -16,6 +17,10 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
+    /// <summary>
+    /// ThreeDCart REST downloader
+    /// </summary>
+    [Component]
     public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
         private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI";

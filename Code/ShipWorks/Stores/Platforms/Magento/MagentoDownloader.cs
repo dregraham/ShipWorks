@@ -1,9 +1,13 @@
-﻿using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
+﻿using System.Threading.Tasks;
 using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -11,14 +15,19 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Generic downloader customized for Magento
     /// </summary>
-    class MagentoDownloader : GenericModuleDownloader
+    [Component]
+    public class MagentoDownloader : GenericModuleDownloader, IMagentoModuleDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoDownloader(StoreEntity store)
-            : base(store)
+        public MagentoDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
+
         }
 
         /// <summary>
@@ -26,12 +35,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity) Store;
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
 
-            base.Download(trackedDurationEvent);
+            return base.Download(trackedDurationEvent);
         }
 
         /// <summary>

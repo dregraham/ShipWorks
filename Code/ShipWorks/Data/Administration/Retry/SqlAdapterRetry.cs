@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -12,6 +14,7 @@ namespace ShipWorks.Data.Administration.Retry
     /// TException will be compared to any exception and inner exception that is thrown.
     /// If either the exception or inner exception match TException, the command will be retried.
     /// </summary>
+    [Component]
     public class SqlAdapterRetry<TException> : ISqlAdapterRetry where TException : Exception
     {
         // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
@@ -149,6 +152,53 @@ namespace ShipWorks.Data.Administration.Retry
                             {
                                 throw;
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public async Task ExecuteWithRetryAsync(Func<Task> method)
+        {
+            int retryCounter = retries;
+
+            using (new LoggedStopwatch(log, string.Format("ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
+            {
+                while (retryCounter >= 0)
+                {
+                    try
+                    {
+                        await method();
+
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is TException || (ex.InnerException is TException))
+                        {
+                            log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
+
+                            if (retryCounter == 0)
+                            {
+                                log.ErrorFormat("Could not execute due to maximum retry failures reached.");
+                                throw;
+                            }
+
+                            // Wait before trying again, give the other guy some time to resolve itself
+                            Thread.Sleep(1000);
+
+                            // Try again
+                            retryCounter--;
+                        }
+                        else
+                        {
+                            throw;
                         }
                     }
                 }

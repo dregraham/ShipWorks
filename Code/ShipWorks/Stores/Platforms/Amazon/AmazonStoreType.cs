@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -18,8 +19,6 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions;
@@ -34,6 +33,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Amazon Store Integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Amazon)]
+    [Component(RegistrationType.Self)]
     public class AmazonStoreType : StoreType
     {
         // Logger
@@ -51,10 +52,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Store Type
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.Amazon; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Amazon;
 
         /// <summary>
         /// Get the unique, store identifier
@@ -121,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             // show the old signup for as long as possible, 10/10/2011
-            // if after 10/10/2011, someone needs to signup that has used the old api in the month bofore, allow it via magickeys
+            // if after 10/10/2011, someone needs to signup that has used the old api in the month before, allow it via magic keys
             bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10, 10) && !InterapptiveOnly.MagicKeysDown) ||
                                 (InterapptiveOnly.MagicKeysDown && DateTime.UtcNow >= new DateTime(2011, 10, 10));
 
@@ -205,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Name = "Amazon Prime",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -317,29 +315,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Due to Amazon
         /// </summary>
-        public override int AutoDownloadMinimumMinutes
-        {
-            get
-            {
-                return 10;
-            }
-        }
-
-        /// <summary>
-        /// Create the Amazon downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
-            {
-                return new AmazonMwsDownloader(Store);
-            }
-            else
-            {
-                return new AmazonDownloader(Store);
-            }
-        }
+        public override int AutoDownloadMinimumMinutes => 10;
 
         /// <summary>
         /// Create the custom Amazon entity
@@ -453,7 +429,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Get the initial download polciy of amazon
+        /// Get the initial download policy of amazon
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy
         {
@@ -593,7 +569,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                             else
                             {
                                 // There are some cases where the seller account is associated with a marketplace (US, CA, UK...), but that
-                                // marketplace is not returned in the above GetMarketplaces call. If that happens, instead of defualting to amazon.com,
+                                // marketplace is not returned in the above GetMarketplaces call. If that happens, instead of defaulting to amazon.com,
                                 // use the endpoint associated with the country entered when the store was setup.
                                 if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
                                 {

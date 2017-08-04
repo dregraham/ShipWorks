@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.StoreTypeCode = StoreTypeCode.ChannelAdvisor)
                 // Encrypted "refreshToken"
                 .Set(x => x.RefreshToken = "717TxeCurhOsOo6942NICQ==")
-                .Set(x=> x.AttributesToDownload = "<Attributes></Attributes>")
+                .Set(x => x.AttributesToDownload = "<Attributes></Attributes>")
                 .Save();
 
             Create.Entity<StatusPresetEntity>()
@@ -79,10 +79,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
-                .Set(x => x.InitiatedBy = (int)DownloadInitiatedBy.User)
+                .Set(x => x.InitiatedBy = (int) DownloadInitiatedBy.User)
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
-                .Set(x => x.Result = (int)DownloadResult.Unfinished)
+                .Set(x => x.Result = (int) DownloadResult.Unfinished)
                 .Save().DownloadID;
 
             var distributionCenters = new List<ChannelAdvisorDistributionCenter>()
@@ -98,8 +98,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
                 .Returns(() => firstBatch);
             client.Setup(c => c.GetDistributionCenters(It.IsAny<string>()))
-                .Returns(new ChannelAdvisorDistributionCenterResponse() {DistributionCenters = distributionCenters});
-            
+                .Returns(new ChannelAdvisorDistributionCenterResponse() { DistributionCenters = distributionCenters });
+
             client.Setup(c => c.GetProduct(It.IsAny<int>(), It.IsAny<string>())).Returns(SingleItem());
 
             order = SingleOrder();
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 OdataContext = "",
                 OdataNextLink = "",
                 ResultCount = 1,
-                Orders = new List<ChannelAdvisorOrder>() {order}
+                Orders = new List<ChannelAdvisorOrder>() { order }
             };
 
             dbConnection = SqlSession.Current.OpenConnection();
@@ -116,31 +116,31 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void Download_GetDistributionCenters()
+        public async Task Download_GetDistributionCenters()
         {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
-            client.Verify(c=>c.GetDistributionCenters("refreshToken"), Times.Once);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            client.Verify(c => c.GetDistributionCenters("refreshToken"), Times.Once);
         }
-        
+
         [Fact]
-        public void Download_SetsProgressDetailWithOrderCount()
+        public async Task Download_SetsProgressDetailWithOrderCount()
         {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
             mockProgressReporter.VerifySet(r => r.Detail = $"Downloading {firstBatch.ResultCount} orders...");
         }
 
         [Fact]
-        public void Download_GetsOrdersFromClientUsingCreatedDateFromPreviousGetOrdersResponse()
+        public async Task Download_GetsOrdersFromClientUsingCreatedDateFromPreviousGetOrdersResponse()
         {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             client.Verify(c => c.GetOrders(order.CreatedDateUtc, It.IsAny<string>()));
         }
 
         [Fact]
-        public void Download_SetsOrderNotes_WhenOrderContainsNotes()
+        public async Task Download_SetsOrderNotes_WhenOrderContainsNotes()
         {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             NoteEntity note;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -152,9 +152,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void Download_SetsDistributionCode()
+        public async Task Download_SetsDistributionCode()
         {
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             ChannelAdvisorOrderItemEntity item;
             using (SqlAdapter adapter = SqlAdapter.Default)

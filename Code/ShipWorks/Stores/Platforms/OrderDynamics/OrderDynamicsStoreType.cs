@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.UI.Wizard;
 using System.Net;
 using Autofac;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.OrderDynamics
 {
     /// <summary>
-    /// OrderDynamics integration.  
-    /// 
+    /// OrderDynamics integration.
+    ///
     /// OrderDynamics hits a local web server running on the user's desktop.  An
-    /// OrderDynamics licence identifier is verified and used in our licensing scheme.
+    /// OrderDynamics license identifier is verified and used in our licensing scheme.
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.OrderDynamics)]
+    [Component(RegistrationType.Self)]
     public class OrderDynamicsStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -44,10 +46,13 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// </summary>
         protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity) Store).ModuleOnlineStoreCode;
 
+        /// <summary>
+        /// Account settings help url
+        /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065047";
 
         /// <summary>
-        /// Required module version 
+        /// Required module version
         /// </summary>
         public override Version GetRequiredModuleVersion()
         {
@@ -104,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
                 {"password", new RemoveVariableTransformer()},
                 {"storecode", new RemoveVariableTransformer()},
 
-                // updatestatus call 
+                // updatestatus call
                 {"status", new VariableTransformer("code")},
 
                 // getorders, getcount
@@ -114,8 +119,8 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
             // behaves exactly like OSC, no mods needed
             GenericModuleCapabilities capabilities = LegacyAdapterCapabilities.CreateOscDerivativeDefaults();
 
-            // Buld the legacy web client, based on Osc behavior
-            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity)Store, LegacyStyleSheets.OscStyleSheet, capabilities, transformers);
+            // Build the legacy web client, based on Osc behavior
+            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity) Store, LegacyStyleSheets.OscStyleSheet, capabilities, transformers);
 
             // some legacy stores blow up if they don't have querystring values when needed. Look for http 500.
             client.VersionProbeCompatibilityIndicator = HttpStatusCode.InternalServerError;

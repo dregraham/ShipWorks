@@ -12,7 +12,7 @@ namespace ShipWorks.AddressValidation
     public interface IAddressValidationDataAccess
     {
         /// <summary>
-        /// Get validated addresses for the given consuemer and prefix
+        /// Get validated addresses for the given consumer and prefix
         /// </summary>
         IEnumerable<ValidatedAddressEntity> GetValidatedAddressesByConsumerAndPrefix(long consumerId, string prefix);
 

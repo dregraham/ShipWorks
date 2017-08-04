@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -13,6 +13,8 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelSale)]
+    [Component(RegistrationType.Self)]
     public class ChannelSaleStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -64,8 +66,8 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         protected override string InternalLicenseIdentifier
         {
             get
-            {   
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+            {
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
                 return genericStore.ModuleUsername;
             }
         }

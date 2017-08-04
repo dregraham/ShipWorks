@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -23,6 +24,11 @@ namespace ShipWorks.Stores.Content
         /// Get a populated order from a order ID
         /// </summary>
         OrderEntity FetchOrder(long orderID);
+
+        /// <summary>
+        /// Get the first order in the specified predicate
+        /// </summary>
+        Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths);
 
         /// <summary>
         /// Load the specified order using the given prefetch path

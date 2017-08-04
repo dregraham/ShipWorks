@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
     /// <summary>
     /// Downloads order information from AmeriCommerce
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.AmeriCommerce)]
     public class AmeriCommerceDownloader : StoreDownloader
     {
         // total number of orders to be downloaded
@@ -38,16 +39,16 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Download orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Updating status codes...";
 
                 // refresh the status codes from AmeriCommerce
-                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity)Store);
+                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
@@ -55,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
                 // create the web client
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity)Store);
+                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
 
                 // get orders
                 List<OrderTrans> orders = client.GetOrders(lastModified);
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
                     Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
 
-                    LoadOrder(client, order);
+                    await LoadOrder(client, order).ConfigureAwait(false);
 
                     Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
                 }
@@ -102,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private void LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private async Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -116,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // begin pulling into ShipWorks now
             int orderNumber = orderTrans.orderID.GetValue(0);
 
-            OrderEntity order = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             // populate the few properties that are allowed to change between downloads
             order.OrderDate = orderTrans.orderDate.GetValue(DateTime.UtcNow);
@@ -134,11 +135,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // address information
             LoadAddressInfo(client, order, orderTrans);
-            
+
             // do the rest only on new orders
             if (order.IsNew)
             {
-                LoadNotes(orderTrans, order);
+                await LoadNotes(orderTrans, order).ConfigureAwait(false);
 
                 LoadOrderItems(client, order, orderTrans);
 
@@ -151,36 +152,36 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             // save it
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmeriCommerceDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Loads the various notes from the AmeriCommerce order 
+        /// Loads the various notes from the AmeriCommerce order
         /// </summary>
-        private void LoadNotes(OrderTrans orderTrans, OrderEntity order)
+        private async Task LoadNotes(OrderTrans orderTrans, OrderEntity order)
         {
             string publicComments = orderTrans.CommentsPublic ?? "";
             if (publicComments.Length > 0)
             {
-                InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, publicComments, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string instructions = orderTrans.CommentsInstructions ?? "";
             if (instructions.Length > 0)
             {
-                InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, instructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             string comments = orderTrans.comments ?? "";
             if (comments.Length > 0)
             {
-                InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, comments, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             string giftMessage = orderTrans.GiftMessage ?? "";
             if (giftMessage.Length > 0)
             {
-                InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Gift Message: " + giftMessage, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 
@@ -309,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 item.UnitCost = orderItemTrans.cost.GetValue(0M);
 
                 // URLs come down as relative, so we need to prefix them with the store URL
-                item.Thumbnail = orderItemTrans.ItemThumb == null ? string.Empty : ((AmeriCommerceStoreEntity)Store).StoreUrl + orderItemTrans.ItemThumb;
+                item.Thumbnail = orderItemTrans.ItemThumb == null ? string.Empty : ((AmeriCommerceStoreEntity) Store).StoreUrl + orderItemTrans.ItemThumb;
                 item.Image = item.Thumbnail;
 
                 item.Weight = client.GetWeightInPounds(orderItemTrans.Weight.GetValue(0M), orderItemTrans.WeightUnitID.GetValue(0));
@@ -391,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             CustomerTrans customer = client.GetCustomer(orderTrans.customerID.GetValue(0));
             billAdapter.Email = customer.email;
 
-            // AC only provides the customer level email.  Through correspondance with them they want us always using the customer email as the shipping email.
+            // AC only provides the customer level email.  Through correspondence with them they want us always using the customer email as the shipping email.
             shipAdapter.Email = customer.email;
 
             // fix bad/missing shipping information, take from the customer record
@@ -430,7 +431,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             person.City = address.City ?? "";
             person.PostalCode = address.ZipCode ?? "";
             person.Phone = address.Phone;
-            person.Fax = address.Fax; 
+            person.Fax = address.Fax;
 
             person.StateProvCode = client.GetStateCode(address.StateID.GetValue(0));
             person.CountryCode = client.GetCountryCode(address.CountryID.GetValue(0));

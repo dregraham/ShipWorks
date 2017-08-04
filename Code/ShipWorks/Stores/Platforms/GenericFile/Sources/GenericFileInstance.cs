@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources
@@ -39,6 +40,25 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
                 using (StreamReader reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks))
                 {
                     return reader.ReadToEnd();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the entire contents of the file as text.  Defaults to UTF-8 encoding
+        /// </summary>
+        public Task<string> ReadAllTextAsync() => ReadAllTextAsync(Encoding.UTF8, true);
+
+        /// <summary>
+        /// Reads the entire contents of the file as text
+        /// </summary>
+        public async Task<string> ReadAllTextAsync(Encoding encoding, bool detectEncodingFromByteOrderMarks)
+        {
+            using (Stream stream = OpenStream())
+            {
+                using (StreamReader reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks))
+                {
+                    return await reader.ReadToEndAsync();
                 }
             }
         }

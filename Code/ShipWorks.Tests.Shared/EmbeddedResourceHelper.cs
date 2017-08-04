@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -25,6 +26,26 @@ namespace ShipWorks.Tests.Shared
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a string from the resource at the path relative to the assembly namespace
+        /// </summary>
+        public static async Task<string> GetEmbeddedResourceStringAsync(this Assembly assembly, string path)
+        {
+            string resourcePath = assembly.GetName().Name + "." + path;
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            {
+                if (stream == null)
+                {
+                    throw new InvalidOperationException($"Error getting resource {resourcePath}");
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
             }
         }

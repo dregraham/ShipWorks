@@ -1,12 +1,10 @@
 ﻿using System;
 using Autofac;
-using Autofac.Core;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
@@ -31,19 +29,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void Constructor_ReturnsException_WhenStoreIsBasicAuth()
         {
-            ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
-            store.StoreName = "Test store";
-            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Basic;
+            IShopSiteStoreEntity store = new ShopSiteStoreEntity(1)
+            {
+                StoreName = "Test store",
+                ShopSiteAuthentication = ShopSiteAuthenticationType.Basic
+            };
 
-            ShopSiteException ex = Assert.Throws<ShopSiteException>(() =>
-                new ShopSiteOauthWebClient(store,
-                    mock.Create<IDatabaseSpecificEncryptionProvider>(),
-                    (s) => mock.Create<IShopSiteOauthAccessTokenWebClient>(TypedParameter.From(s)),
-                    () => new HttpVariableRequestSubmitter(),
-                    mock.Create<ILogEntryFactory>()));
+            var testObject = mock.Create<ShopSiteOauthWebClient>(TypedParameter.From(store));
+
+            ShopSiteException ex = Assert.Throws<ShopSiteException>(() => testObject.TestConnection());
 
             Assert.Contains("configured to use Basic authentication but the OAuth", ex.Message);
-
         }
 
         [Theory]
@@ -51,19 +47,21 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [InlineData("www.com", "", "secretKey", "authCode", "Client ID")]
         [InlineData("www.com", "clientID", "", "authCode", "Secret Key")]
         [InlineData("www.com", "clientID", "secretKey", "", "Authorization Code")]
-        public void Constructor_ReturnsException_WhenOauthAuthAndMissingInfo(string url, string clientID, string secretKey, string authCode, string expectedValue)
+        public void TestConnection_ReturnsException_WhenOauthAuthAndMissingInfo(string url, string clientID, string secretKey, string authCode, string expectedValue)
         {
-            ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
-            store.StoreName = "Test store";
-            store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
-            store.ApiUrl = url;
-            store.OauthClientID = clientID;
-            store.OauthSecretKey = secretKey;
-            store.OauthAuthorizationCode = authCode;
+            IShopSiteStoreEntity store = new ShopSiteStoreEntity(1)
+            {
+                StoreName = "Test store",
+                ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth,
+                ApiUrl = url,
+                OauthClientID = clientID,
+                OauthSecretKey = secretKey,
+                OauthAuthorizationCode = authCode
+            };
 
-            DependencyResolutionException exOuter = Assert.Throws<DependencyResolutionException>(() =>
-                mock.Create<ShopSiteOauthWebClient>(TypedParameter.From<IShopSiteStoreEntity>(store)));
-            ShopSiteException ex = exOuter.GetBaseException() as ShopSiteException;
+            var testObject = mock.Create<ShopSiteOauthWebClient>(TypedParameter.From(store));
+            ShopSiteException ex = Assert.Throws<ShopSiteException>(() => testObject.TestConnection());
+
             Assert.Contains($"{expectedValue} is missing or invalid", ex.Message);
         }
 

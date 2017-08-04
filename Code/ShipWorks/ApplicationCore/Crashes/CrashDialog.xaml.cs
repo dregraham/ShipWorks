@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,8 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Constructor
         /// </summary>
+        [SuppressMessage("Recommendations", "RECS0022: Empty general catch clause suppresses any error",
+            Justification = "We've already crashed, so we can't handle another exception.")]
         public CrashDialog(Exception ex, bool guiThread, string userEmail, int recoveryCount)
         {
             if (IsApplicationCrashed)
@@ -169,6 +172,8 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Send the report to interapptive
         /// </summary>
+        [SuppressMessage("Recommendations", "RECS0022: Empty general catch clause suppresses any error",
+            Justification = "We've already crashed, so we can't handle another exception.")]
         private void SendReport(string email, string logName)
         {
             try

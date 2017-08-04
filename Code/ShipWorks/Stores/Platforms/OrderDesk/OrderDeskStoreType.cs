@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -8,6 +8,8 @@ namespace ShipWorks.Stores.Platforms.OrderDesk
     /// <summary>
     /// OrderDeskCart Store Type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.OrderDesk)]
+    [Component(RegistrationType.Self)]
     public class OrderDeskStoreType : GenericModuleStoreType
     {
         /// <summary>

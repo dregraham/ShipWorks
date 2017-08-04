@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.BuyDotCom.WizardPages;
-using ShipWorks.FileTransfer;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using log4net;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.BuyDotCom.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
     /// <summary>
     /// StoreType instance for Buy.com
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.BuyDotCom)]
+    [Component(RegistrationType.Self)]
     public class BuyDotComStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComStoreType));
 
         BuyDotComStoreEntity buyDotComStore;
@@ -32,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComStoreType(StoreEntity store) 
+        public BuyDotComStoreType(StoreEntity store)
             : base(store)
         {
             buyDotComStore = store as BuyDotComStoreEntity;
@@ -45,13 +44,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Returns Buy.com TypeCode
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.BuyDotCom;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.BuyDotCom;
 
         /// <summary>
         /// Creates a new buy.com store
@@ -59,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         public override StoreEntity CreateStoreInstance()
         {
             BuyDotComStoreEntity newStore = new BuyDotComStoreEntity();
-            
+
             InitializeStoreDefaults(newStore);
 
             newStore.StoreName = "Buy.com Store";
@@ -81,14 +74,6 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
             return new OrderNumberIdentifier(order.OrderNumber);
-        }
-
-        /// <summary>
-        /// Return buy.com downloader.
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new BuyDotComDownloader(buyDotComStore);
         }
 
         /// <summary>

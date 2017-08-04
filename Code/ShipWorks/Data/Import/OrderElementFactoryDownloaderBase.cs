@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Communication;
+using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Data.Import
 {
     /// <summary>
-    /// A store downloader that implements IOrderElementFactory, to be derived from for convenience of implmentation of the interface
+    /// A store downloader that implements IOrderElementFactory, to be derived from for convenience of implementation of the interface
     /// </summary>
     public abstract class OrderElementFactoryDownloaderBase : StoreDownloader, IOrderElementFactory
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        protected OrderElementFactoryDownloaderBase(StoreEntity store)
-            : base(store)
+        protected OrderElementFactoryDownloaderBase(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeType, configurationData, sqlAdapterFactory)
         {
 
         }
@@ -66,10 +66,8 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
-        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
-        {
-            return InstantiateNote(order, noteText, noteDate, noteVisibility, true);
-        }
+        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility) =>
+            InstantiateNote(order, noteText, noteDate, noteVisibility, true);
 
         /// <summary>
         /// Create a new payment detail attached to the order

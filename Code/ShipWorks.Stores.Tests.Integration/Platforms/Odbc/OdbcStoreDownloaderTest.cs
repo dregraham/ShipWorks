@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
@@ -130,12 +131,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
-        public void Download_OrderNumberAndOrderNumberCompleteAreSet_WhenSingleOrderDownloaded()
+        public async Task Download_OrderNumberAndOrderNumberCompleteAreSet_WhenSingleOrderDownloaded()
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
 
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -150,12 +151,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
-        public void Download_DownloadDetailsStringDataSetToOrderNumberComplete()
+        public async Task Download_DownloadDetailsStringDataSetToOrderNumberComplete()
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
 
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             List<DownloadDetailEntity> downloadDetailEntities;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -167,15 +168,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
-        public void Download_RunTwice_UpdatesExistingOrder()
+        public async Task Download_RunTwice_UpdatesExistingOrder()
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
             var testObject1 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             odbcRecord = GetOdbcRecord("001", "Alex");
             var testObject2 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -189,15 +190,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
-        public void Download_RunTwice_WithOrdersWithDifferentAmountOfLeadingZeros_TreatsOrdersAsTheSame()
+        public async Task Download_RunTwice_WithOrdersWithDifferentAmountOfLeadingZeros_TreatsOrdersAsTheSame()
         {
             odbcRecord = GetOdbcRecord("55", "Kevin");
             var testObject1 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             odbcRecord = GetOdbcRecord("0055", "Alex");
             var testObject2 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)

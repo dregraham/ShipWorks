@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Common.Threading;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Data.Grid;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
     /// <summary>
     /// Implementation of the AmeriCommerce store integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.AmeriCommerce)]
+    [Component(RegistrationType.Self)]
     public class AmeriCommerceStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStoreType));
-						  
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -56,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             get
             {
-                AmeriCommerceStoreEntity amcStore = (AmeriCommerceStoreEntity)Store;
+                AmeriCommerceStoreEntity amcStore = (AmeriCommerceStoreEntity) Store;
 
                 // combination of the store url and chosen store code
                 return String.Format("{0}?{1}", amcStore.StoreUrl, amcStore.StoreCode);
@@ -107,17 +105,17 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Returns the colleciton of possible online status codes
+        /// Returns the collection of possible online status codes
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            AmeriCommerceStatusCodeProvider provider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity)Store);
+            AmeriCommerceStatusCodeProvider provider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
 
             return provider.CodeNames;
         }
 
         /// <summary>
-        /// Create the setup wizard pages needed to configure the store 
+        /// Create the setup wizard pages needed to configure the store
         /// </summary>
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
@@ -147,14 +145,6 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Create the store downloader which pulls orders from AmeriCommerce
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new AmeriCommerceDownloader(Store);
-        }
-
-        /// <summary>
         /// Create the control for editing account information
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
@@ -172,9 +162,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // get possible status codes from the provider
-            AmeriCommerceStatusCodeProvider codeProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity)Store);
+            AmeriCommerceStatusCodeProvider codeProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
 
-            // create a menu item for each status 
+            // create a menu item for each status
             bool isOne = false;
             foreach (int codeValue in codeProvider.CodeValues)
             {
@@ -225,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 try
                 {
                     // upload
-                    AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity)Store);
+                    AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
                     updater.UploadShipmentDetails(shipment);
                 }
                 catch (AmeriCommerceException ex)
@@ -250,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            int statusCode = (int)command.Tag;
+            int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
@@ -266,10 +256,10 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             log.Debug(Store.StoreName);
 
-            int statusCode = (int)userState;
+            int statusCode = (int) userState;
             try
             {
-                AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity)Store);
+                AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
                 updater.UpdateOrderStatus(orderID, statusCode);
             }
             catch (AmeriCommerceException ex)
@@ -282,6 +272,6 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             }
         }
 
-        #endregion 
+        #endregion
     }
 }

@@ -12,8 +12,7 @@ namespace ShipWorks.Data.Administration.Retry
         /// <summary>
         /// Creates the SqlAdapterRetry
         /// </summary>
-        public ISqlAdapterRetry Create<TException>(int retries, int deadlockPriority, string commandDescription)
-            where TException : Exception
-            => new SqlAdapterRetry<TException>(retries, deadlockPriority, commandDescription);
+        public ISqlAdapterRetry Create<TException>(int retries, int deadlockPriority, string commandDescription) where TException : Exception =>
+            new SqlAdapterRetry<TException>(retries, deadlockPriority, commandDescription);
     }
 }

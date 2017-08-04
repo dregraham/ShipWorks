@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -15,6 +16,7 @@ using ShipWorks.Data.Controls;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Communication;
@@ -51,6 +53,8 @@ namespace ShipWorks.Stores.Content
         public AddOrderWizard(long? initialCustomerID, long? initialStoreID)
         {
             InitializeComponent();
+
+            this.wizardPageDetails.StepNextAsync = OnFinish;
 
             this.customerID = initialCustomerID;
             this.initialStoreID = initialStoreID;
@@ -356,7 +360,7 @@ namespace ShipWorks.Stores.Content
         /// Stepping next on the last page
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void OnFinish(object sender, WizardStepEventArgs e)
+        private async Task OnFinish(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -445,11 +449,12 @@ namespace ShipWorks.Stores.Content
                     {
                         try
                         {
-                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                            ICustomerEntity customer = await CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                            order.CustomerID = customer.CustomerID;
                         }
                         catch (CustomerAcquisitionLockException)
                         {
-                            MessageHelper.ShowError(this, string.Format("ShipWorks was unable to find the customer in the time allotted.  Please try saving again."));
+                            MessageHelper.ShowError(this, "ShipWorks was unable to find the customer in the time allotted.  Please try saving again.");
                             e.NextPage = wizardPageDetails;
                             return;
                         }

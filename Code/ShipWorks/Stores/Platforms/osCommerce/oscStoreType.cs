@@ -1,29 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Wizard;
-using System.Text.RegularExpressions;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI;
-using ShipWorks.Stores.Content;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using System.Windows.Forms;
-using Interapptive.Shared.Net;
-using ShipWorks.Common.Threading;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Stores.Platforms.GenericModule;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.osCommerce
 {
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
-    class oscStoreType : GenericModuleStoreType
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.osCommerce)]
+    [Component(RegistrationType.Self)]
+    public class oscStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Constructor

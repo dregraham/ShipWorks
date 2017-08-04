@@ -1,9 +1,17 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
@@ -17,8 +25,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Constructor
         /// </summary>
-        protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store)
-            : base(store)
+        protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
         }
 
@@ -30,22 +41,22 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Load the order from the reader that is positioned on the row we want to load
         /// </summary>
-        protected void LoadOrder(GenericSpreadsheetReader reader)
+        protected async Task LoadOrder(GenericSpreadsheetReader reader)
         {
-            OrderEntity order = InstantiateOrder(reader);
+            OrderEntity order = await InstantiateOrder(reader).ConfigureAwait(false);
 
             GenericSpreadsheetOrderLoader loader = new GenericSpreadsheetOrderLoader();
             loader.Load(order, reader, this);
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileSpreadsheetDownloaderBase.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private OrderEntity InstantiateOrder(GenericSpreadsheetReader reader)
+        private Task<OrderEntity> InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
             string orderNumber = reader.ReadField("Order.Number", "");
@@ -58,31 +69,35 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             OrderIdentifier orderIdentifier = storeType.CreateOrderIdentifier(orderNumber, string.Empty, string.Empty);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
 
 
         /// <summary>
         /// Load the orders from the given GenericFileInstance
         /// </summary>
-        protected override bool ImportFile(GenericFileInstance file)
+        protected override async Task<bool> ImportFile(GenericFileInstance file)
         {
             try
             {
                 using (GenericSpreadsheetReader reader = CreateReader(file))
                 {
-                    while (reader.NextRecord())
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    using (new LoggedStopwatch(LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase)), "GenFile Importing orders time to run."))
                     {
-                        // Update the status
-                        Progress.Detail = $"Importing record {QuantitySaved + 1}...";
-
-                        LoadOrder(reader);
-
-                        if (Progress.IsCancelRequested)
+                        while (reader.NextRecord())
                         {
-                            return false;
+                            // Update the status
+                            Progress.Detail = $"Importing record {(QuantitySaved + 1)}...";
+
+                            await LoadOrder(reader).ConfigureAwait(false);
+
+                            if (Progress.IsCancelRequested)
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
