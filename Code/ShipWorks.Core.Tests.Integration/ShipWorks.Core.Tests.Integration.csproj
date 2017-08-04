@@ -82,6 +82,9 @@
       <HintPath>..\..\packages\Moq.4.7.0\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -163,6 +166,7 @@
     <Compile Include="SingleScan\ScannerConfigurationRepositoryTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
     <Compile Include="Stores\Content\OrderUtilityTest.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyDownloaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -230,7 +234,18 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetOrdersPage1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetOrdersPage2.txt" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetOrdersPage3.txt" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetOrdersPage4.txt" />
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetProduct.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\Resources\GetOrdersPage_Crash.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

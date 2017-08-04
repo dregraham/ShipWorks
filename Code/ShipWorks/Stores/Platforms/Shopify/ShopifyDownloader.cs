@@ -8,6 +8,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -29,34 +30,22 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
-
-        ShopifyWebClient webClient = null;
+        private readonly IShopifyWebClient webClient = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopifyDownloader(StoreEntity store)
+        public ShopifyDownloader(StoreEntity store,
+            Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> webClientFactory)
             : base(store)
         {
             requestedShippingField = (ShopifyRequestedShippingField) ((ShopifyStoreEntity) store).ShopifyRequestedShippingOption;
+            OrdersPerPage = ShopifyConstants.ShopifyOrdersPerPage;
+            webClient = webClientFactory(store as ShopifyStoreEntity, Progress);
         }
 
-        /// <summary>
-        /// The web client used to download
-        /// </summary>
-        private ShopifyWebClient WebClient
-        {
-            get
-            {
-                if (webClient == null)
-                {
-                    //Create the web client used for downloading
-                    webClient = new ShopifyWebClient((ShopifyStoreEntity) Store, Progress);
-                }
 
-                return webClient;
-            }
-        }
+        public int OrdersPerPage { get; set; }
 
         /// <summary>
         /// Download data for the Shopify store
@@ -98,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             Range<DateTime> dateRange = await GetNextDownloadDateRange().ConfigureAwait(false);
 
             // Get count of orders
-            int totalCount = WebClient.GetOrderCount(dateRange.Start, dateRange.End);
+            int totalCount = webClient.GetOrderCount(dateRange.Start, dateRange.End);
             if (totalCount == 0)
             {
                 Progress.Detail = "No orders to download.";
@@ -106,26 +95,34 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
+            Tuple<DateTime, int> previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Start, totalCount);
+
             // Keep going until there are no more to download
             while (true)
             {
                 bool shouldContinue = await DownloadOrderRange(dateRange, totalCount).ConfigureAwait(false);
-                if (!shouldContinue)
+		
+                if (!shouldContinue || Progress.IsCancelRequested)
                 {
                     return;
                 }
 
-                // Check for cancel
-                if (Progress.IsCancelRequested)
-                {
-                    return;
-                }
 
                 // Update our date range to see if we can grab any orders that have come in while we've been downloading
                 dateRange = await GetNextDownloadDateRange().ConfigureAwait(false);
 
                 // Get how many have come in since we started
-                int nextCount = WebClient.GetOrderCount(dateRange.Start, dateRange.End);
+                int nextCount = webClient.GetOrderCount(dateRange.Start, dateRange.End);
+
+                // Detect if we are in an infinite loop where we keep asking for the same last modified time
+                // and keep getting back the same order count.  Return if this happens.
+                if (previousDownloadInfo.Item1 == dateRange.Start && previousDownloadInfo.Item2 == nextCount)
+                {
+                    return;
+                }
+
+                // Update our previous download date and order count.
+                previousDownloadInfo = new Tuple<DateTime, int>(dateRange.Start, nextCount);
 
                 if (nextCount > 0)
                 {
@@ -153,11 +150,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(180));
             }
 
-            // Add a second to the start date so we don't redownload the previous order over and over
-            startDate = startDate.Value.AddSeconds(1);
-
             // Use the web servers ending time, backed off by a little so we don't have to worry about race conditions
-            DateTime endDate = WebClient.GetServerCurrentDateTime().Subtract(TimeSpan.FromMinutes(2));
+            DateTime endDate = webClient.GetServerCurrentDateTime().Subtract(TimeSpan.FromMinutes(2));
 
             return startDate.Value.To(endDate);
         }
@@ -185,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 ShopifyGetOrdersDateRange orderRange = new ShopifyGetOrdersDateRange(dateRange);
 
                 // Iterate through each date range
-                foreach (ShopifyGetOrdersDateRange subRange in orderRange.GenerateOrderRanges(webClient))
+                foreach (ShopifyGetOrdersDateRange subRange in orderRange.GenerateOrderRanges(webClient, OrdersPerPage))
                 {
                     // Check for cancel
                     if (Progress.IsCancelRequested)
@@ -198,7 +192,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     // Go through each page determined by the date range to be necessary to get all of the orders
                     for (int page = 1; page <= subRange.PageCount; page++)
                     {
-                        orders.AddRange(WebClient.GetOrders(subRange.StartDate, subRange.EndDate, page));
+                        List<JToken> pageOfOrders = webClient.GetOrders(subRange.StartDate, subRange.EndDate, page);
+                        orders.AddRange(pageOfOrders);
                     }
 
                     // We have to import them in ascending order in case the user cancels, so our LastModified dates stay in order
@@ -540,7 +535,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             long productId = lineItem.GetValue<long>("product_id");
             item.ShopifyProductID = productId;
 
-            JToken shopifyProduct = WebClient.GetProduct(productId);
+            JToken shopifyProduct = webClient.GetProduct(productId);
 
             // Product may not exist
             if (shopifyProduct == null)
