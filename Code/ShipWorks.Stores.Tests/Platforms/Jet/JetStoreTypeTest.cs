@@ -1,7 +1,10 @@
 ﻿using System;
+using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
 using Xunit;
 
@@ -19,10 +22,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void TypeCode_IsJet()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
-            {
-                StoreTypeCode = StoreTypeCode.Jet
-            });
+            JetStoreType testObject = mock.Create<JetStoreType>(new TypedParameter(typeof(StoreEntity),
+                new JetStoreEntity() { StoreTypeCode = StoreTypeCode.Jet }));
 
             var typeCode = testObject.TypeCode;
 
@@ -32,10 +33,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void CreateStoreInstance_ReturnsJetStoreEntity()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
-            {
-                StoreTypeCode = StoreTypeCode.Jet
-            });
+            JetStoreType testObject = mock.Create<JetStoreType>(new TypedParameter(typeof(StoreEntity),
+                new JetStoreEntity() { StoreTypeCode = StoreTypeCode.Jet }));
 
             StoreEntity store = testObject.CreateStoreInstance();
 
@@ -45,10 +44,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void CreateStoreInstance_InitializesStoreValues()
         {
-            JetStoreType testObject = new JetStoreType(new JetStoreEntity()
-            {
-                StoreTypeCode = StoreTypeCode.Jet
-            });
+            JetStoreType testObject = mock.Create<JetStoreType>(new TypedParameter(typeof(StoreEntity),
+                new JetStoreEntity() { StoreTypeCode = StoreTypeCode.Jet }));
 
             JetStoreEntity store = testObject.CreateStoreInstance() as JetStoreEntity;
 
@@ -57,10 +54,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.Equal("My Jet Store", store.StoreName);
         }
 
+        [Fact]
+        public void CreateOrderIdentifier_ReturnsJetOrderIdentifier()
+        {
+            JetStoreType testObject = mock.Create<JetStoreType>(new TypedParameter(typeof(StoreEntity),
+                new JetStoreEntity() { StoreTypeCode = StoreTypeCode.Jet }));
+
+            var order = new JetOrderEntity();
+
+            var orderIdentifier = testObject.CreateOrderIdentifier(order);
+
+            Assert.IsType<JetOrderIdentifier>(orderIdentifier);
+        }
+
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }

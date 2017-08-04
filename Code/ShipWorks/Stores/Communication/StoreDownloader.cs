@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Import;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Base that all store types must implement to provide downloading store data
     /// </summary>
-    public abstract class StoreDownloader
+    public abstract class StoreDownloader : IOrderElementFactory
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
@@ -977,5 +978,58 @@ namespace ShipWorks.Stores.Communication
 
             adapter.SaveEntity(history);
         }
+
+        #region Order Element Factory
+        // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without 
+        // exposing the whole downloader to the dependency
+
+        /// <summary>
+        /// Create an item for the given order
+        /// </summary>
+        OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
+
+        /// <summary>
+        /// Create an item attribute for the given item
+        /// </summary>
+        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
+            InstantiateOrderItemAttribute(item);
+        
+        /// <summary>
+        /// Create an item attribute for the given item
+        /// </summary>
+        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item, string name,
+            string description, decimal unitPrice,
+            bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
+        
+        /// <summary>
+        /// Create an order charge for the given order
+        /// </summary>
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
+        
+        /// <summary>
+        /// Create an order charge for the given order
+        /// </summary>
+        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order, string type, string description,
+            decimal amount) => InstantiateOrderCharge(order, type, description, amount);
+
+        /// <summary>
+        /// Create a note for the given order
+        /// </summary>
+        NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility);
+
+        /// <summary>
+        /// Crate a payment for the given order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) =>
+            InstantiateOrderPaymentDetail(order);
+
+        /// <summary>
+        /// Create a payment for the given order
+        /// </summary>
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
+            => InstantiateOrderPaymentDetail(order, label, value);
+
+        #endregion
     }
 }
