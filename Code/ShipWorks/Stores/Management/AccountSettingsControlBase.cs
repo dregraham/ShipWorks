@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -34,9 +29,6 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Save the data into the StoreEntity.  Nothing is saved to the database.
         /// </summary>
-        public virtual bool SaveToEntity(StoreEntity store)
-        {
-            return true;
-        }
+        protected virtual bool SaveToEntity(StoreEntity store) => true;
     }
 }

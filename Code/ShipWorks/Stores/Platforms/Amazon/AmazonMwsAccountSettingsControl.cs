@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon
@@ -98,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             amazonStore = store as AmazonStoreEntity;
             if (amazonStore == null)
             {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store"); 
+                throw new ArgumentException("AmazonStoreEntity expected.", "store");
             }
 
             merchantID.Text = amazonStore.MerchantID;
@@ -119,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             AmazonStoreEntity saveStore = store as AmazonStoreEntity;
             if (saveStore == null)
             {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store"); 
+                throw new ArgumentException("AmazonStoreEntity expected.", "store");
             }
 
             if (merchantID.Text.Trim().Length == 0)
@@ -147,11 +148,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             try
             {
-                saveStore.DomainName = GetStoreDomainName(saveStore.MarketplaceID);
-                
+                saveStore.DomainName = await GetStoreDomainName(saveStore.MarketplaceID).ConfigureAwait(false);
+
                 using (AmazonMwsClient client = new AmazonMwsClient(saveStore))
                 {
-                    client.TestCredentials();
+                    await client.TestCredentials().ConfigureAwait(false);
                 }
 
                 return true;
@@ -167,14 +168,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Get the domain name of the marketplace
         /// </summary>
-        private string GetStoreDomainName(string marketplaceId)
+        private async Task<string> GetStoreDomainName(string marketplaceId)
         {
             // Find the domain name of the marketplace provided to account for Amazon Canada store; default to an empty string - another
             // attempt will be made to populate it when a link is clicked (primarily so existing customers don't have to take explicit
             // action to have the domain name populated
             string storeDomainName = string.Empty;
 
-            List<AmazonMwsMarketplace> marketplaces = GetMarketplaces();
+            List<AmazonMwsMarketplace> marketplaces = await GetMarketplaces().ConfigureAwait(false);
 
             if (marketplaces != null)
             {
@@ -195,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Clicking the find marketplaces link
         /// </summary>
-        private void OnClickFindMarketplaces(object sender, EventArgs e)
+        private async void OnClickFindMarketplaces(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(merchantID.Text))
             {
@@ -210,10 +211,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             List<AmazonMwsMarketplace> marketplaces;
-            
+
             try
             {
-                marketplaces = GetMarketplaces();
+                buttonChooseMarketplace.Enabled = false;
+                marketplaces = await GetMarketplaces().ConfigureAwait(false);
+                buttonChooseMarketplace.Enabled = true;
             }
             catch (AmazonException ex)
             {
@@ -240,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Return the list of marketplaces for the amazon merchant
         /// </summary>
-        private List<AmazonMwsMarketplace> GetMarketplaces()
+        private async Task<List<AmazonMwsMarketplace>> GetMarketplaces()
         {
             amazonStore.MerchantID = merchantID.Text;
             amazonStore.AuthToken = authToken.Text;
@@ -252,10 +255,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            
+
             using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
             {
-                marketplaces = client.GetMarketplaces();
+                marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
             }
 
             marketplaceCache[GetCacheKey()] = marketplaces;

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -107,6 +109,38 @@ namespace ShipWorks.Data.Caching
                 log.DebugFormat("*** EntityCache.GetEntity (Fetch), {0}", sw.Elapsed.TotalSeconds);
 
                 if (entity.Fields.State == EntityState.Fetched)
+                {
+                    SetCache(entityID, entity);
+                }
+                else
+                {
+                    entity = null;
+                }
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded if fetchIfMissing is true
+        /// </summary>
+        public async Task<T> GetEntityAsync<T>(long entityID, bool fetchIfMissing, ISqlAdapter adapter) where T : EntityBase2
+        {
+            T entity = EntityUtility.CloneEntity((T) cache[GetCacheKey(entityID)]);
+
+            if (entity == null && fetchIfMissing)
+            {
+                EntityType entityType = EntityUtility.GetEntityType(entityID);
+                EntityField2 pkField = EntityUtility.GetPrimaryKeyField(entityType);
+
+                Stopwatch sw = Stopwatch.StartNew();
+
+                var query = new QueryFactory().Create<T>().Where(pkField == entityID);
+                entity = await adapter.FetchFirstAsync(query).ConfigureAwait(false);
+
+                log.DebugFormat("*** EntityCache.GetEntity (Fetch), {0}", sw.Elapsed.TotalSeconds);
+
+                if (entity?.Fields?.State == EntityState.Fetched)
                 {
                     SetCache(entityID, entity);
                 }

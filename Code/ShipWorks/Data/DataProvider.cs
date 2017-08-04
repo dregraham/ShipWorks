@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -214,6 +215,12 @@ namespace ShipWorks.Data
         /// </summary>
         public static EntityBase2 GetEntity(long entityID, ISqlAdapter adapter, bool fetchIfMissing) =>
             entityCache.GetEntity(entityID, fetchIfMissing, adapter);
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// </summary>
+        public static Task<T> GetEntityAsync<T>(long entityID, ISqlAdapter adapter, bool fetchIfMissing) where T : EntityBase2 =>
+            entityCache.GetEntityAsync<T>(entityID, fetchIfMissing, adapter);
 
         /// <summary>
         /// Gets all the entities represented by the give keys.  Each key must be of the same EntityType

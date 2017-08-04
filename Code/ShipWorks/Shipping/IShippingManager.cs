@@ -55,6 +55,11 @@ namespace ShipWorks.Shipping
         ICarrierShipmentAdapter GetShipment(long shipmentID);
 
         /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID);
+
+        /// <summary>
         /// Gets the shipment adapter, order will be attached.
         /// </summary>
         ICarrierShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment);

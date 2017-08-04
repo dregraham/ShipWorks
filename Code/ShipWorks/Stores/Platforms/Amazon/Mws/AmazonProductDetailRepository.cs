@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
-using System.Globalization;
-using Interapptive.Shared;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
-    /// A repository to obtain product details (weight, images, etc.) for order items. 
+    /// A repository to obtain product details (weight, images, etc.) for order items.
     /// </summary>
     public class AmazonProductDetailRepository
     {
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
         // List of storeID's that don't support the products API (due to being a Webstore)
         static HashSet<long> unsupportedStores = new HashSet<long>();
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonProductDetailRepository"/> class.
         /// </summary>
@@ -42,12 +42,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         /// <param name="items">The items.</param>
         /// <returns>XPathNamspaceNavigator objects containing the product details.</returns>
-        public IEnumerable<XPathNamespaceNavigator> GetProductDetails(List<AmazonOrderItemEntity> items)
+        public async Task<IEnumerable<XPathNamespaceNavigator>> GetProductDetails(List<AmazonOrderItemEntity> items)
         {
             List<XPathNamespaceNavigator> products = new List<XPathNamespaceNavigator>();
 
             // Extract the unique items from the item list; these will be used to compare against our cache
-            // and any not found in the cache will be used to pare down the list of product data we retreive
+            // and any not found in the cache will be used to pare down the list of product data we retrieve
             // from Amazon
             List<AmazonOrderItemEntity> distinctItems = items.Distinct(new AmazonOrderItemASINComparer()).ToList();
             List<AmazonOrderItemEntity> itemsFoundInCache = new List<AmazonOrderItemEntity>();
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 {
                     if (productDetailCache.Contains(item.ASIN))
                     {
-                        // Fetch the product info from the cache and note that the info for the 
+                        // Fetch the product info from the cache and note that the info for the
                         // current item was found in the cache
                         products.Add(productDetailCache[item.ASIN]);
                         itemsFoundInCache.Add(item);
@@ -67,10 +67,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
             }
 
-            // Remove those items that we found in the cache so that we are left only with those items 
+            // Remove those items that we found in the cache so that we are left only with those items
             // whose data needs to be fetched from Amazon
             distinctItems = distinctItems.Except(itemsFoundInCache, new AmazonOrderItemASINComparer()).ToList();
-            products.AddRange(FetchProductDetailsFromAmazon(distinctItems));
+            products.AddRange(await FetchProductDetailsFromAmazon(distinctItems).ConfigureAwait(false));
 
             return products;
         }
@@ -81,14 +81,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <param name="items">The items we need to get product details for.</param>
         /// <returns>XPathNamspaceNavigator objects containing the product details.</returns>
         [NDependIgnoreLongMethod]
-        private IEnumerable<XPathNamespaceNavigator> FetchProductDetailsFromAmazon(List<AmazonOrderItemEntity> items)
+        private async Task<IEnumerable<XPathNamespaceNavigator>> FetchProductDetailsFromAmazon(List<AmazonOrderItemEntity> items)
         {
             // We are going to get the product details for the list of items provided, but we are restricted
-            // on the number of items we can get in one request. Each item in the request to Amazon must also 
-            // be unique. We're going to get a list of the unique order items in the list provided, and get 
-            // the details for each of those taken X number at a time based on our maximum allowed batch size. 
-            // We're then going to add this product data to our local cache to cut down on the number of calls 
-            // to Amazon by batching items together and by updating the items in the local cache we are not 
+            // on the number of items we can get in one request. Each item in the request to Amazon must also
+            // be unique. We're going to get a list of the unique order items in the list provided, and get
+            // the details for each of those taken X number at a time based on our maximum allowed batch size.
+            // We're then going to add this product data to our local cache to cut down on the number of calls
+            // to Amazon by batching items together and by updating the items in the local cache we are not
             // making calls to get data we've previously downloaded.
 
             List<XPathNamespaceNavigator> products = new List<XPathNamespaceNavigator>();
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     // Don't try to get product details if we already know it won't work
                     if (!unsupportedStores.Contains(webClient.Store.StoreID))
                     {
-                        XPathNamespaceNavigator navigator = webClient.GetProductDetails(batchOfItems);
+                        XPathNamespaceNavigator navigator = await webClient.GetProductDetails(batchOfItems).ConfigureAwait(false);
                         XPathNodeIterator productIterator = navigator.Select("//amz:Product");
 
                         lock (productDetailCache)
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     }
                 }
 
-                // We are finished with this group of items, so remove it from our distinct items list 
+                // We are finished with this group of items, so remove it from our distinct items list
                 // in preparation for the next iteration
                 distinctItems.RemoveRange(0, batchOfItems.Count);
             }

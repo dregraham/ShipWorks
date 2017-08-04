@@ -1350,6 +1350,7 @@
     <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonLegacyDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonMwsDownloader.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />

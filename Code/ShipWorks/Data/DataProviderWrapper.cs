@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -15,6 +17,16 @@ namespace ShipWorks.Data
     [Component]
     public class DataProviderWrapper : IDataProvider, IInitializeForCurrentDatabase, IDisposable
     {
+        readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public DataProviderWrapper(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
         /// <summary>
         /// Get all entities of the given type that are related to the specified entityID
         /// </summary>
@@ -24,8 +36,8 @@ namespace ShipWorks.Data
         /// <summary>
         /// Gets the entity with the given entity ID
         /// </summary>
-        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
-            => DataProvider.GetEntity(entityID, fetchIfMissing);
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true) =>
+            DataProvider.GetEntity(entityID, fetchIfMissing);
 
         /// <summary>
         /// Initialize service for the current database
@@ -38,6 +50,23 @@ namespace ShipWorks.Data
         /// </summary>
         public EntityBase2 GetEntity(long entityID) =>
             DataProvider.GetEntity(entityID);
+
+        /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        public Task<T> GetEntityAsync<T>(long entityID) where T : EntityBase2 =>
+            GetEntityAsync<T>(entityID, true);
+
+        /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        public async Task<T> GetEntityAsync<T>(long entityID, bool fetchIfMissing) where T : EntityBase2
+        {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await DataProvider.GetEntityAsync<T>(entityID, sqlAdapter, fetchIfMissing).ConfigureAwait(false);
+            }
+        }
 
         /// <summary>
         /// Gets the order number complete relating to the given orderID. Returns empty string if order not found.

@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -84,12 +85,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Makes an api call to make sure the MWS system is not RED (down)
         /// </summary>
-        public void TestServiceStatus()
+        public async Task TestServiceStatus()
         {
             log.Info("Calling GetServiceStatus to see if the Order api is available.");
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-            IHttpResponseReader responseReader = ExecuteRequest(request, AmazonMwsApiCall.GetServiceStatus);
+            IHttpResponseReader responseReader = await ExecuteRequest(request, AmazonMwsApiCall.GetServiceStatus).ConfigureAwait(false);
 
             // check the response for fatal errors
             AmazonMwsResponseHandler.RaiseErrors(AmazonMwsApiCall.GetServiceStatus, responseReader, mwsSettings);
@@ -115,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Makes an api call to see if we can connect with the credentials
         /// </summary>
-        public void TestCredentials()
+        public async Task TestCredentials()
         {
             string dummyNumber = "SHIPWORKS_CONNECT_ATTEMPT";
 
@@ -124,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 request.Variables.Add("AmazonOrderId", dummyNumber);
 
-                IHttpResponseReader reader = ExecuteRequest(request, AmazonMwsApiCall.ListOrderItems);
+                IHttpResponseReader reader = await ExecuteRequest(request, AmazonMwsApiCall.ListOrderItems).ConfigureAwait(false);
                 reader.ReadResult();
             }
             catch (AmazonException ex)
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Get the list of marketplaces associated with the given merchantID
         /// </summary>
-        public List<AmazonMwsMarketplace> GetMarketplaces()
+        public async Task<List<AmazonMwsMarketplace>> GetMarketplaces()
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             request.Variables.Add("SellerId", store.MerchantID);
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             AmazonMwsApiCall apiCall = AmazonMwsApiCall.ListMarketplaceParticipations;
 
-            IHttpResponseReader response = ExecuteRequest(request, apiCall);
+            IHttpResponseReader response = await ExecuteRequest(request, apiCall).ConfigureAwait(false);
 
             string responseXml = response.ReadResult();
             XDocument xDocument = XDocument.Parse(responseXml);
@@ -176,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Executes a request for more orders
         /// </summary>
-        public IEnumerable<XPathNamespaceNavigator> GetOrders(DateTime? startDate)
+        public async Task GetOrders(DateTime? startDate, Func<XPathNamespaceNavigator, Task<bool>> loadOrder)
         {
             string nextToken = null;
 
@@ -224,14 +225,19 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 request.Variables.Add("OrderStatus.Status.5", "Unfulfillable");
 
                 // make the call
-                IHttpResponseReader response = ExecuteRequest(request, apiCall);
+                IHttpResponseReader response = await ExecuteRequest(request, apiCall).ConfigureAwait(false);
                 var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, apiCall, mwsSettings);
 
                 // find the token for the next request
                 nextToken = ReadNextToken(xpath);
 
                 // done
-                yield return xpath;
+                bool shouldContinue = await loadOrder(xpath).ConfigureAwait(false);
+
+                if (!shouldContinue)
+                {
+                    return;
+                }
             }
             while (nextToken != null && nextToken.Length > 0);
         }
@@ -247,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Retrieves an order's items
         /// </summary>
-        public IEnumerable<XPathNavigator> GetOrderItems(string amazonOrderID)
+        public async Task GetOrderItems(string amazonOrderID, Action<XPathNamespaceNavigator> loadOrderItem)
         {
             string nextToken = null;
 
@@ -272,15 +278,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
 
                 // execute the request
-                IHttpResponseReader response = ExecuteRequest(request, apiCall);
+                IHttpResponseReader response = await ExecuteRequest(request, apiCall).ConfigureAwait(false);
                 var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, apiCall, mwsSettings);
 
                 // find the token for the next request
                 nextToken = ReadNextToken(xpath);
 
                 // done
-                yield return xpath;
-
+                loadOrderItem(xpath);
             }
             while (nextToken != null && nextToken.Length > 0);
         }
@@ -291,7 +296,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         /// <param name="items">The items.</param>
         /// <returns>An XPathNamespaceNavigator object.</returns>
-        public XPathNamespaceNavigator GetProductDetails(List<AmazonOrderItemEntity> items)
+        public async Task<XPathNamespaceNavigator> GetProductDetails(List<AmazonOrderItemEntity> items)
         {
 
             if (items.Count > MaxItemsPerProductDetailsRequest)
@@ -312,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             // execute the request
-            IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetMatchingProductForId);
+            IHttpResponseReader response = await ExecuteRequest(request, AmazonMwsApiCall.GetMatchingProductForId).ConfigureAwait(false);
             var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, AmazonMwsApiCall.GetMatchingProductForId, mwsSettings);
 
             // Add the additional namespace so weight, image URL, and other data about the
@@ -328,20 +333,20 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Upload shipments
         /// </summary>
-        public void UploadShipmentDetails(List<ShipmentEntity> shipments)
+        public Task UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
             if (shipments == null || shipments.Count == 0)
             {
-                return;
+                return Task.CompletedTask;
             }
 
-            SubmitFulfillmentFeed(CreateFulfillmentFeed(shipments));
+            return SubmitFulfillmentFeed(CreateFulfillmentFeed(shipments));
         }
 
         /// <summary>
         /// Submits the fulfillment feed XML
         /// </summary>
-        private void SubmitFulfillmentFeed(string feedXml)
+        private async Task SubmitFulfillmentFeed(string feedXml)
         {
             AmazonMwsFeedRequestSubmitter request = new AmazonMwsFeedRequestSubmitter();
 
@@ -358,7 +363,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             request.FeedContent = feedXml;
 
             // execute the request
-            IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.SubmitFeed);
+            IHttpResponseReader response = await ExecuteRequest(request, AmazonMwsApiCall.SubmitFeed).ConfigureAwait(false);
 
             // extract the feed submission ID for logging
             string responseText = response.ReadResult();
@@ -615,7 +620,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Executes a request
         /// </summary>
         [NDependIgnoreLongMethod]
-        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
+        private async Task<IHttpResponseReader> ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
         {
             try
             {
@@ -637,7 +642,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken && amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
                 {
-                    AddMwsAuthToken(request);
+                    await AddMwsAuthToken(request).ConfigureAwait(false);
                 }
 
                 request.Variables.Add("SignatureMethod", "HmacSHA256");
@@ -680,8 +685,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, progress);
 
-                IHttpResponseReader response =
-                    throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest);
+                IHttpResponseReader response = await throttler
+                    .ExecuteRequestAsync<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest)
+                    .ConfigureAwait(false);
 
                 // log the response
                 logger.LogResponse(response.ReadResult());
@@ -701,11 +707,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Adds the MWS authentication token - throws if no value.
         /// </summary>
         /// <exception cref="AmazonException">No MWS Auth Token. Go to store settings to enter Token Value.</exception>
-        private void AddMwsAuthToken(HttpVariableRequestSubmitter request)
+        private async Task AddMwsAuthToken(HttpVariableRequestSubmitter request)
         {
             if (string.IsNullOrWhiteSpace(store.AuthToken))
             {
-                GetAuthToken();
+                await GetAuthToken().ConfigureAwait(false);
             }
 
             request.Variables.Add("MWSAuthToken", store.AuthToken);
@@ -715,14 +721,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Gets the MWS authentication token. - Will only work before 3/13/2015
         /// </summary>
         /// <returns></returns>
-        private void GetAuthToken()
+        private async Task GetAuthToken()
         {
             // create request
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
             try
             {
-                IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetAuthToken);
+                IHttpResponseReader response = await ExecuteRequest(request, AmazonMwsApiCall.GetAuthToken).ConfigureAwait(false);
 
                 XPathNamespaceNavigator responseNavigator = AmazonMwsResponseHandler.GetXPathNavigator(response, AmazonMwsApiCall.GetAuthToken, mwsSettings);
                 XPathNavigator selectSingleNode = responseNavigator.SelectSingleNode("//amz:MWSAuthToken");
@@ -751,19 +757,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <typeparam name="THttpResponseReader">Needed by the throttler.  The type of the response that will be received by the api via throttler.</typeparam>
         /// <param name="request">The actual request to make.</param>
         /// <returns>HttpResponseReader received from the call</returns>
-        private IHttpResponseReader MakeRequest<THttpRequestSubmitter>(THttpRequestSubmitter request)
+        private async Task<IHttpResponseReader> MakeRequest<THttpRequestSubmitter>(THttpRequestSubmitter request)
             where THttpRequestSubmitter : HttpRequestSubmitter
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
             try
             {
-                IHttpResponseReader responseReader = request.GetResponse();
-
-                return responseReader;
+                return await request.GetResponseAsync().ConfigureAwait(false);
             }
             catch (WebException ex)
             {
@@ -779,9 +780,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
         }
 
-
         /// <summary>
-        /// Reads the status of the Amazon MWS api out of a GetServiceStatus repsonse
+        /// Reads the status of the Amazon MWS api out of a GetServiceStatus response
         /// </summary>
         private AmazonMwsServiceStatus ReadServiceStatus(AmazonMwsApiCall api, IHttpResponseReader reader)
         {
@@ -801,7 +801,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                                     {
                                         Text = (string) e.Element(ns + "Text"),
                                     }).FirstOrDefault();
-
 
                 // get the message text
                 if (firstMessage != null)
@@ -859,7 +858,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             return SecureText.Decrypt(encrypted, "Interapptive");
         }
-
 
         /// <summary>
         /// Dispose

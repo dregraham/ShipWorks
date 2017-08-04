@@ -87,6 +87,30 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        public async Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID)
+        {
+            ShipmentEntity shipment = await dataProvider.GetEntityAsync<ShipmentEntity>(shipmentID);
+            if (shipment == null)
+            {
+                log.InfoFormat("Shipment {0} seems to be now deleted.", shipmentID);
+                return null;
+            }
+
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            if (order == null)
+            {
+                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+                return null;
+            }
+
+            shipment.Order = order;
+
+            return shipment;
+        }
+
+        /// <summary>
         /// Gets the shipment adapter, order will be attached.
         /// </summary>
         public ICarrierShipmentAdapter GetShipmentAdapter(ShipmentEntity shipment)

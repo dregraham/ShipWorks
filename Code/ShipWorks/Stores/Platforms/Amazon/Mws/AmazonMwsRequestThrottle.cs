@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.Stores.Communication.Throttling;
 
@@ -53,18 +54,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <param name="requestThrottleParams">Throttling request parameters</param>
         /// <param name="webClientMethod">Method that will be executed to </param>
         /// <returns></returns>
-        public override TWebClientReturnType ExecuteRequest<TWebClientRequestType, TWebClientReturnType>(
+        public override Task<TWebClientReturnType> ExecuteRequestAsync<TWebClientRequestType, TWebClientReturnType>(
             RequestThrottleParameters requestThrottleParams,
-            Func<TWebClientRequestType, TWebClientReturnType> webClientMethod)
+            Func<TWebClientRequestType, Task<TWebClientReturnType>> webClientMethod)
         {
             // Find the quota for the api call, and update the request throttle params
             RequestThrottleQuotaDefinition<AmazonMwsApiCall> definition = quotas.First(q => q.ApiCalls.Contains((AmazonMwsApiCall) requestThrottleParams.ApiCall));
             requestThrottleParams.RetryInterval = definition.RetryInterval;
 
             // Ask the base throttler to start making the call
-            TWebClientReturnType restResponse = base.ExecuteRequest(requestThrottleParams, webClientMethod);
-
-            return restResponse;
+            return base.ExecuteRequestAsync(requestThrottleParams, webClientMethod);
         }
     }
 }

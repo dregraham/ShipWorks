@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 
@@ -18,6 +19,16 @@ namespace ShipWorks.Data
         /// Gets the entity with the given entity ID
         /// </summary>
         EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true);
+
+        /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        Task<T> GetEntityAsync<T>(long entityID) where T : EntityBase2;
+
+        /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        Task<T> GetEntityAsync<T>(long entityID, bool fetchIfMissing) where T : EntityBase2;
 
         /// <summary>
         /// Gets the order number complete relating to the given orderID. Returns empty string if order not found.

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -38,15 +39,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
     public class AmazonStoreType : StoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonStoreType));
+        private readonly ILog log;
+        private readonly IAmazonOnlineUpdater shipmentUpdater;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonStoreType(StoreEntity store)
+        public AmazonStoreType(StoreEntity store, IAmazonOnlineUpdater shipmentUpdater,
+            IMessageHelper messageHelper, Func<Type, ILog> createLogger)
             : base(store)
         {
-
+            this.messageHelper = messageHelper;
+            this.shipmentUpdater = shipmentUpdater;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -484,47 +490,47 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             return new[]
             {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
+                new AsyncMenuCommand("Upload Shipment Details", OnUploadDetails)
             };
         }
 
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
+        private async Task OnUploadDetails(MenuCommandExecutionContext context)
         {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
+            var results = await ShipmentUploadCallback(context.SelectedKeys).ConfigureAwait(false);
+            var exceptions = results.Failure ? new[] { results.Exception } : Enumerable.Empty<Exception>();
 
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
+            context.Complete(exceptions, MenuCommandResult.Error);
         }
 
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
+        private async Task<IResult> ShipmentUploadCallback(IEnumerable<long> orderKeys)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity) Store);
-                shipmentUpdater.UploadOrderShipmentDetails(headers);
+                using (var progressDialog = messageHelper.ShowProgressDialog(
+                    "Upload Shipment Details",
+                    "ShipWorks is uploading shipment information."))
+                {
+                    progressDialog.ToUpdater($"Updating {orderKeys} orders...");
+
+                    //AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity) Store);
+                    await shipmentUpdater.UploadOrderShipmentDetails((AmazonStoreEntity) Store, orderKeys).ConfigureAwait(false);
+
+                    return Result.FromSuccess();
+                }
             }
             catch (AmazonException ex)
             {
                 // log it
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 
-                // add the error to issues for the user
-                issueAdder.Add(headers, ex);
+                return Result.FromError(ex);
             }
         }
 
@@ -534,7 +540,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <returns>The domain name for the store (e.g. amazon.com, amazon.ca, etc.)</returns>
         /// <exception cref="AmazonException">Thrown when an error occurs when the domain name needs to be looked
         /// up via Amazon MWS</exception>
-        public string GetDomainName()
+        public async Task<string> GetDomainName()
         {
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
@@ -546,7 +552,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // this functionality was added), so we need to try to look it up
                     using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
                     {
-                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces();
+                        List<AmazonMwsMarketplace> marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name
