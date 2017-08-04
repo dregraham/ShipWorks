@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Loading
         /// Start the task to load shipments
         /// </summary>
         Task<bool> StartTask(IProgressProvider progressProvider, List<long> orderIDs,
-            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments);
+            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, 
+            bool createIfNoShipments, int ensureFiltersUpToDateTimeout);
     }
 }

@@ -2231,6 +2231,7 @@
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
+          <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ShipSenseEnabled" Type="bool" FieldIndex="43" />
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
@@ -3719,7 +3720,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-04T16:51:04.8200685Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3933,7 +3934,6 @@
                     <Field Name="MarketplaceID" Ordinal="16" DbType="12" Length="50" />
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
-                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z'" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -4135,7 +4135,6 @@
                     <Field Name="AmazonMerchantID" Ordinal="6" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
-                    <Field Name="AmazonShippingToken" Ordinal="9" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -7141,6 +7140,7 @@
                     <Field Name="FedExFimsUsername" Ordinal="50" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
+                    <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -11224,6 +11224,7 @@
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
+            <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />
             <FieldMapping FieldName="ShipSenseEnabled" TargetFieldName="ShipSenseEnabled" />
             <FieldMapping FieldName="ShipSenseEndShipmentID" TargetFieldName="ShipSenseEndShipmentID" />
