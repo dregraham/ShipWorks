@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgement, jsonSerializerSettings),
                 "application/json");
 
-            submitter.Uri = new Uri(EndpointBase + $"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
+            submitter.Uri = new Uri($"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
             submitter.Verb = HttpVerb.Put;
 
             jetAuthenticatedRequest.ProcessRequest<string>("AcknowledgeOrder", submitter, store);
