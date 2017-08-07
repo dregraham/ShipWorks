@@ -50,11 +50,13 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 orderItemEntity.Description = jetProduct.ProductDescription;
 
-                orderItemEntity.UPC = jetProduct.StandardProductCodes?.FirstOrDefault(
-                    c => c.StandardProductCodeType == "UPC")?.StandardProductCode ?? string.Empty;
+                orderItemEntity.UPC = jetProduct.StandardProductCodes?
+                                          .FirstOrDefault(c => c.StandardProductCodeType == "UPC")?
+                                          .StandardProductCode ?? string.Empty;
 
-                orderItemEntity.ISBN = jetProduct.StandardProductCodes?.FirstOrDefault(
-                    c => c.StandardProductCodeType.StartsWith("ISBN"))?.StandardProductCode ?? string.Empty;
+                orderItemEntity.ISBN = jetProduct.StandardProductCodes?
+                                           .FirstOrDefault(c => c.StandardProductCodeType.StartsWith("ISBN"))?
+                                           .StandardProductCode ?? string.Empty;
 
                 orderItemEntity.Image = jetProduct.MainImageUrl;
                 orderItemEntity.Thumbnail = jetProduct.SwatchImageUrl;

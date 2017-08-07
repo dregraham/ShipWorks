@@ -46,7 +46,6 @@ namespace ShipWorks.Stores.Platforms.Jet
             try
             {
                 GenericResult<JetOrderResponse> ordersResult = webClient.GetOrders(Store as JetStoreEntity);
-                
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
@@ -93,27 +92,29 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             GenericResult<JetOrderDetailsResult> orderDetails = webClient.GetOrderDetails(orderUrl, Store as JetStoreEntity);
 
-            if (orderDetails.Failure)
+            if (orderDetails.Success)
             {
-                throw new DownloadException(orderDetails.Message);
-            }
+                JetOrderDetailsResult jetOrder = orderDetails.Value;
 
-            JetOrderDetailsResult jetOrder = orderDetails.Value;
+                JetOrderEntity order =
+                    (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
 
-            JetOrderEntity order =
-                (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
-
-            if (order.IsNew)
-            {
-                orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
-                SaveDownloadedOrder(order);
-            }
+                if (order.IsNew)
+                {
+                    orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
+                    SaveDownloadedOrder(order);
+                }
             else
             {
                 orderRepository.PopulateOrderDetails(order);
             }
 
-            webClient.Acknowledge(order, Store as JetStoreEntity);
+                webClient.Acknowledge(order, Store as JetStoreEntity);
+            }
+            else
+            {
+                throw new DownloadException(orderDetails.Message);
+            }
         }
     }
 }
