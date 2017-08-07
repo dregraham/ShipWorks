@@ -83,7 +83,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             
             testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
-            Assert.Equal("Mirza Mulaosmanovic", order.ShipUnparsedName);
+            Assert.Equal("Mirza", order.ShipFirstName);
+            Assert.Equal("Mulaosmanovic", order.ShipLastName);
             Assert.Equal("16204 Bay Harbour Ct", order.ShipStreet1);
             Assert.Equal("suite 2000", order.ShipStreet2);
             Assert.Equal("Wildwood", order.ShipCity);
@@ -102,7 +103,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
-            Assert.Equal("Mirza Mulaosmanovic", order.BillUnparsedName);
+            Assert.Equal("Mirza", order.BillFirstName);
+            Assert.Equal("Mulaosmanovic", order.BillLastName);
             Assert.Equal("8009527784", order.BillPhone);
         }
 

@@ -1,7 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet;
@@ -67,22 +66,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void Save_DelegatesToWebClientForToken()
+        public void Save_DelegatesToTokenRepoForToken()
         {
-            var webClient = mock.Mock<IJetWebClient>();
+            var tokenRepo = mock.Mock<IJetTokenRepository>();
+            tokenRepo.Setup(r => r.GetToken("test User", "TestSecret")).Returns(new JetToken("valid token"));
+
             testObject.ApiUser = "test User";
             testObject.Secret = "TestSecret";
 
             testObject.Save(jetStore);
 
-            webClient.Verify(w => w.GetToken("test User", "TestSecret"));
+            tokenRepo.Verify(w => w.GetToken("test User", "TestSecret"));
         }
 
         [Fact]
         public void Save_ReturnsTrue_WhenGetTokenSucceeds()
         {
-            mock.Mock<IJetWebClient>().Setup(w => w.GetToken("test User", "TestSecret"))
-                .Returns(GenericResult.FromSuccess(""));
+            mock.Mock<IJetTokenRepository>().Setup(w => w.GetToken("test User", "TestSecret"))
+                .Returns(new JetToken("valid token"));
 
             testObject.ApiUser = "test User";
             testObject.Secret = "TestSecret";
@@ -93,22 +94,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Save_DelegatesToMessageHelperWithError_WhenGetTokenFails()
         {
-            var webClient = mock.Mock<IJetWebClient>();
-            webClient.Setup(w => w.GetToken("test User", "TestSecret")).Returns(GenericResult.FromError<string>("Something went wrong"));
+            var tokenRepo = mock.Mock<IJetTokenRepository>();
+            tokenRepo.Setup(w => w.GetToken("test User", "TestSecret")).Returns(JetToken.InvalidToken);
 
             testObject.ApiUser = "test User";
             testObject.Secret = "TestSecret";
 
             testObject.Save(jetStore);
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowError("Something went wrong"));
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowError("Unable to authenticate credentials."));
         }
 
         [Fact]
         public void Save_ReturnsFalse_WhenGetTokenFails()
         {
-            var webClient = mock.Mock<IJetWebClient>();
-            webClient.Setup(w => w.GetToken("test User", "TestSecret")).Returns(GenericResult.FromError<string>("Something went wrong"));
+            var tokenRepo = mock.Mock<IJetTokenRepository>();
+            tokenRepo.Setup(w => w.GetToken("test User", "TestSecret")).Returns(JetToken.InvalidToken);
 
             testObject.ApiUser = "test User";
             testObject.Secret = "TestSecret";
@@ -119,8 +120,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Save_SetsApiUser()
         {
-            mock.Mock<IJetWebClient>().Setup(w => w.GetToken("test User", "DecryptedSecret"))
-                .Returns(GenericResult.FromSuccess(""));
+            mock.Mock<IJetTokenRepository>().Setup(w => w.GetToken("test User", "DecryptedSecret"))
+                .Returns(new JetToken("valid token"));
 
             testObject.ApiUser = "test User";
             testObject.Secret = "DecryptedSecret";
