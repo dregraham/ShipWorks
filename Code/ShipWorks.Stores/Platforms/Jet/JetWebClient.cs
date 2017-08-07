@@ -30,31 +30,16 @@ namespace ShipWorks.Stores.Platforms.Jet
         
         private readonly IJsonRequest jsonRequest;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
-        private readonly IJetTokenManager tokenManager;
+        private readonly IJetTokenRepository tokenRepo;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetWebClient(IJsonRequest request, IHttpRequestSubmitterFactory submitterFactory, IJetTokenManager tokenManager)
+        public JetWebClient(IJsonRequest request, IHttpRequestSubmitterFactory submitterFactory, IJetTokenRepository tokenRepo)
         {
-            this.jsonRequest = request;
+            jsonRequest = request;
             this.submitterFactory = submitterFactory;
-            this.tokenManager = tokenManager;
-        }
-
-        /// <summary>
-        /// Get Token
-        /// </summary>
-        public GenericResult<string> GetToken(string username, string password)
-        {
-            try
-            {
-                return GenericResult.FromSuccess(tokenManager.GetToken(username, password));
-            }
-            catch (Exception ex)
-            {
-                return GenericResult.FromError<string>(ex.Message);
-            }
+            this.tokenRepo = tokenRepo;
         }
 
         /// <summary>
@@ -120,7 +105,14 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             try
             {
-                tokenManager.AddTokenToRequest(request, store);
+                JetToken token = tokenRepo.GetToken(store);
+
+                if (!token.IsValid)
+                {
+                    throw new JetException("Unable to obtain a valid token to authenticate request.");   
+                }
+
+                token.AttachTo(request);
 
                 return GenericResult.FromSuccess(jsonRequest.ProcessRequest<T>(action, ApiLogSource.Jet, request));
             }

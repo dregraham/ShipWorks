@@ -7,6 +7,9 @@ using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
+    /// <summary>
+    /// Json request
+    /// </summary>
     [Component]
     public class JsonRequest : IJsonRequest
     {
@@ -17,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.Jet
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JsonRequest(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;

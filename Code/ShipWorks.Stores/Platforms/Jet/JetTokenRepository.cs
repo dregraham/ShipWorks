@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -10,45 +11,40 @@ using ShipWorks.Stores.Platforms.Jet.DTO;
 namespace ShipWorks.Stores.Platforms.Jet
 {
     [Component]
-    public class JetTokenManager : IJetTokenManager
+    public class JetTokenRepository : IJetTokenRepository
     {
         private readonly IJsonRequest jsonRequest;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
-        private readonly LruCache<string, string> tokenCache;
+        private readonly LruCache<string, JetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
 
-        public JetTokenManager(IJsonRequest jsonRequest, IHttpRequestSubmitterFactory submitterFactory, IEncryptionProviderFactory encryptionProviderFactory)
+        public JetTokenRepository(IJsonRequest jsonRequest, IHttpRequestSubmitterFactory submitterFactory, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.jsonRequest = jsonRequest;
             this.submitterFactory = submitterFactory;
             this.encryptionProviderFactory = encryptionProviderFactory;
 
-            tokenCache = new LruCache<string, string>(50, TimeSpan.FromHours(9));
+            tokenCache = new LruCache<string, JetToken>(50, TimeSpan.FromHours(9));
         }
         
         /// <summary>
-        /// Get Token
+        /// Get the token for the store
         /// </summary>
-        public void AddTokenToRequest(IHttpRequestSubmitter request, JetStoreEntity store)
+        /// <param name="store"></param>
+        /// <returns></returns>
+        public JetToken GetToken(JetStoreEntity store)
         {
-            if (tokenCache.Contains(store.ApiUser))
-            {
-                request.Headers.Add("Authorization", $"bearer {tokenCache[store.ApiUser]}");
-            }
-            
             string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
                 .Decrypt(store.Secret);
 
-            string token = GetToken(store.ApiUser, password);
-
-            request.Headers.Add("Authorization", $"bearer {token}");
+            return GetToken(store.ApiUser, password);
         }
 
         /// <summary>
-        /// 
+        /// Get the token for the given username/password
         /// </summary>
-        public string GetToken(string username, string password)
+        public JetToken GetToken(string username, string password)
         {
             if (tokenCache.Contains(username))
             {
@@ -61,12 +57,18 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             submitter.Uri = new Uri(tokenEndpoint);
 
-            JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
-            
-            tokenCache[username] = tokenResponse.Token;
+            try
+            {
+                JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
 
-            return tokenResponse.Token;
+                tokenCache[username] = new JetToken(tokenResponse.Token);
+
+                return tokenCache[username];
+            }
+            catch (WebException)
+            {
+                return JetToken.InvalidToken;
+            }
         }
-
     }
 }
