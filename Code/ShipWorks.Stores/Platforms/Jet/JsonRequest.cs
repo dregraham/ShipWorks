@@ -35,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             IApiLogEntry apiLogEntry = apiLogEntryFactory(logSource, action);
             apiLogEntry.LogRequest(request);
-
             try
             {
                 IHttpResponseReader httpResponseReader = request.GetResponse();
@@ -44,8 +43,9 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 return JsonConvert.DeserializeObject<T>(result, jsonSerializerSettings);
             }
-            catch (Exception ex) when (ex.GetType() != typeof(WebException))
+            catch (Exception ex)
             {
+                apiLogEntry.LogResponse(ex);
                 throw new WebException(ex.Message);
             }
         }
