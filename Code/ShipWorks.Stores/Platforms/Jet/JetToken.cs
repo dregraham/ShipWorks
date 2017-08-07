@@ -1,10 +1,12 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
     /// <summary>
     /// Jet Token for authenticating jet requests
     /// </summary>
+    [Component]
     public class JetToken : IJetToken
     {
         private readonly string token;

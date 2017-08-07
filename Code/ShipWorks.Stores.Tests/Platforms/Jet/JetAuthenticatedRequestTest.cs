@@ -245,6 +245,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.True(processRequest.Success);
             Assert.Equal("success", processRequest.Value);
         }
+
         public void Dispose()
         {
             mock.Dispose();

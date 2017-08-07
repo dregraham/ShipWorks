@@ -16,21 +16,26 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly IJsonRequest jsonRequest;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
-        private readonly LruCache<string, JetToken> tokenCache;
+        private readonly Func<string, IJetToken> tokenFactory;
+        private readonly LruCache<string, IJetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetTokenRepository(IJsonRequest jsonRequest, IHttpRequestSubmitterFactory submitterFactory, IEncryptionProviderFactory encryptionProviderFactory)
+        public JetTokenRepository(IJsonRequest jsonRequest,
+            IHttpRequestSubmitterFactory submitterFactory,
+            IEncryptionProviderFactory encryptionProviderFactory,
+            Func<string, IJetToken> tokenFactory)
         {
             this.jsonRequest = jsonRequest;
             this.submitterFactory = submitterFactory;
             this.encryptionProviderFactory = encryptionProviderFactory;
+            this.tokenFactory = tokenFactory;
 
-            tokenCache = new LruCache<string, JetToken>(50, TimeSpan.FromHours(9));
+            tokenCache = new LruCache<string, IJetToken>(50, TimeSpan.FromHours(9));
         }
-        
+
         /// <summary>
         /// Get the token for the store
         /// </summary>
@@ -40,17 +45,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 .Decrypt(store.Secret);
 
             return GetToken(store.ApiUser, password);
-        }
-
-        /// <summary>
-        /// Removes the token from the Cache
-        /// </summary>
-        public void RemoveToken(JetStoreEntity store)
-        {
-            if (tokenCache.Contains(store.ApiUser))
-            {
-                tokenCache.Remove(store.ApiUser);
-            }
         }
 
         /// <summary>
@@ -73,13 +67,24 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
 
-                tokenCache[username] = new JetToken(tokenResponse.Token);
+                tokenCache[username] = tokenFactory(tokenResponse.Token);
 
                 return tokenCache[username];
             }
             catch (WebException)
             {
                 return JetToken.InvalidToken;
+            }
+        }
+
+        /// <summary>
+        /// Removes the token from the Cache
+        /// </summary>
+        public void RemoveToken(JetStoreEntity store)
+        {
+            if (tokenCache.Contains(store.ApiUser))
+            {
+                tokenCache.Remove(store.ApiUser);
             }
         }
     }
