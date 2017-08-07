@@ -261,8 +261,10 @@
     <Compile Include="Platforms\Jet\DTO\JetTokenResponse.cs" />
     <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementRequest.cs" />
     <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementOrderItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipmentRequest.cs" />
     <Compile Include="Platforms\Jet\IJetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\IJetShipmentRequestFactory.cs" />
     <Compile Include="Platforms\Jet\IJetToken.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\JetProductRepository.cs" />
     <Compile Include="Platforms\Jet\JetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\JetShipmentRequestFactory.cs" />
     <Compile Include="Platforms\Jet\JetStoreType.cs" />
     <Compile Include="Platforms\Jet\JetToken.cs" />
     <Compile Include="Platforms\Jet\JetTokenRepository.cs" />
