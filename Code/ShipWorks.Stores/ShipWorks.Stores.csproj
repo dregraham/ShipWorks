@@ -245,6 +245,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
     <Compile Include="Platforms\Jet\DTO\JetAddress.cs" />
     <Compile Include="Platforms\Jet\DTO\JetBuyer.cs" />
     <Compile Include="Platforms\Jet\DTO\JetFeeAdjustment.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Platforms\Jet\JetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\JetDownloader.cs" />
     <Compile Include="Platforms\Jet\JetException.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdater.cs" />
     <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
