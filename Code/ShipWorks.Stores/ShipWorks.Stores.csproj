@@ -276,6 +276,7 @@
     <Compile Include="Platforms\Jet\JetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\JetDownloader.cs" />
     <Compile Include="Platforms\Jet\JetException.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdater.cs" />
     <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\JetProductRepository.cs" />

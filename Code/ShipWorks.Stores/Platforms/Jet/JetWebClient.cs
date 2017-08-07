@@ -95,5 +95,10 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             return jetAuthenticatedRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
         }
+
+        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

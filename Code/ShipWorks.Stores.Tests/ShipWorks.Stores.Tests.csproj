@@ -196,6 +196,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\Jet\JetAuthenticatedRequestTest.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoaderTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderItemLoaderTest.cs" />
