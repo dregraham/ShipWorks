@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -21,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Returns an invalid token
         /// </summary>
-        public static JetToken InvalidToken => new JetToken(string.Empty);
+        public static IJetToken InvalidToken => new JetToken(string.Empty);
 
         /// <summary>
         /// Check to see if the token is valid
