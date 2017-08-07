@@ -16,7 +16,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Communication.Throttling;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
@@ -51,15 +50,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             this.store = store;
-
-            if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
-            {
-                throw new ShopifyException("ShopifyShopUrlName is missing.");
-            }
-
-            // Create the Endpoints object for getting api urls
-            endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
-
             this.progress = progress;
         }
 
@@ -70,6 +60,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             get
             {
+                if (endpoints == null)
+                {
+                    if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
+                    {
+                        throw new ShopifyException("ShopifyShopUrlName is missing.");
+                    }
+
+                    // Create the Endpoints object for getting api urls
+                    endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
+                }
+
                 return endpoints;
             }
         }
