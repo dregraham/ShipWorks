@@ -62,7 +62,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetOrderDetails_ReturnsResultFromJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             GenericResult<JetOrderDetailsResult> expectedResult = new GenericResult<JetOrderDetailsResult>();
             mock.Mock<IJetAuthenticatedRequest>()
                 .Setup(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", requestSubmitter.Object, store))
