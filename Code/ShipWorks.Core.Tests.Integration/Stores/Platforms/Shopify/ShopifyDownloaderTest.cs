@@ -117,6 +117,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
         public async Task ShopifyTwoRestDownloader_Download_WithSameOnlineLastModified_DownloadsOrders()
         {
             var testObject = context.Mock.Create<ShopifyDownloader>();
+            testObject.OrdersPerPage = 2;
 
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {
@@ -153,6 +154,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
                 .Returns(new List<JToken> { orders[6] });
 
             var testObject = context.Mock.Create<ShopifyDownloader>();
+            testObject.OrdersPerPage = 2;
 
             try
             {
@@ -185,6 +187,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
                 .Returns(new List<JToken> { orders[6] });
 
             testObject = context.Mock.Create<ShopifyDownloader>();
+            testObject.OrdersPerPage = 2;
 
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {
