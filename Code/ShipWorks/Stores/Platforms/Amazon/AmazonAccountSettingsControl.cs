@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using ShipWorks.Stores.Management;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -33,6 +34,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
 
         /// <summary>
         /// Whether or not the certificate button is displayed
@@ -98,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Save selections to the entity
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
             // validate that we have an amazon entity
             AmazonStoreEntity amazonStore = store as AmazonStoreEntity;
@@ -150,10 +156,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
             else
             {
                 // Upgraded to MWS
-                amazonStore.AmazonApi = (int)AmazonApi.MarketplaceWebService;
+                amazonStore.AmazonApi = (int) AmazonApi.MarketplaceWebService;
 
                 // save the MWS settings
-                return mwsAccountSettingsControl.SaveToEntity(store);
+                return await mwsAccountSettingsControl.SaveToEntityAsync(store).ConfigureAwait(false);
             }
         }
 

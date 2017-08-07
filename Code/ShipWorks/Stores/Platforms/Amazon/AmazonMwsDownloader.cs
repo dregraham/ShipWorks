@@ -82,10 +82,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     }*/
 
                     // try to detect if the system is up
-                    client.TestServiceStatus();
+                    await client.TestServiceStatus().ConfigureAwait(false);
 
                     // determine where to start downloading from
-                    DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
+                    DateTime? startDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
                     // Amazon's APIs are LastUpdateTime-inclusive, so skip over the order we already have
                     if (startDate.HasValue)

@@ -13,6 +13,9 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
+    /// <summary>
+    /// Settings control for an Amazon MWS account
+    /// </summary>
     [ToolboxItem(true)]
     public partial class AmazonMwsAccountSettingsControl : AccountSettingsControlBase
     {
@@ -27,6 +30,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
 
         /// <summary>
         /// Developer account number for access to Amazon API
@@ -115,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Save user-entered values back to the entity
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
             AmazonStoreEntity saveStore = store as AmazonStoreEntity;
             if (saveStore == null)
@@ -148,11 +156,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             try
             {
-                saveStore.DomainName = await GetStoreDomainName(saveStore.MarketplaceID).ConfigureAwait(false);
+                saveStore.DomainName = await GetStoreDomainName(saveStore.MarketplaceID).ConfigureAwait(true);
 
                 using (AmazonMwsClient client = new AmazonMwsClient(saveStore))
                 {
-                    await client.TestCredentials().ConfigureAwait(false);
+                    await client.TestCredentials().ConfigureAwait(true);
                 }
 
                 return true;
@@ -215,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             try
             {
                 buttonChooseMarketplace.Enabled = false;
-                marketplaces = await GetMarketplaces().ConfigureAwait(false);
+                marketplaces = await GetMarketplaces().ConfigureAwait(true);
                 buttonChooseMarketplace.Enabled = true;
             }
             catch (AmazonException ex)
@@ -267,7 +275,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Gets the cache key 
+        /// Gets the cache key
         /// </summary>
         private string GetCacheKey()
         {

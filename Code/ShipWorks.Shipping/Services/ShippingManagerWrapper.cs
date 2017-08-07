@@ -91,14 +91,14 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public async Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID)
         {
-            ShipmentEntity shipment = await dataProvider.GetEntityAsync<ShipmentEntity>(shipmentID);
+            ShipmentEntity shipment = await dataProvider.GetEntityAsync<ShipmentEntity>(shipmentID).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("Shipment {0} seems to be now deleted.", shipmentID);
                 return null;
             }
 
-            OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            OrderEntity order = await dataProvider.GetEntityAsync<OrderEntity>(shipment.OrderID).ConfigureAwait(false);
             if (order == null)
             {
                 log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Services
 
             shipment.Order = order;
 
-            return shipment;
+            return shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>

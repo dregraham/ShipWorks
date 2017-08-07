@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.ComponentModel;
-using ShipWorks.UI.Controls.Design;
-using System.Drawing.Design;
 using System.Collections;
-using System.Drawing;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls
 {
@@ -52,7 +52,7 @@ namespace ShipWorks.UI.Controls
                 // Otherwise has to be an OptionPage
                 if (optionPage == null)
                 {
-                    throw new ArgumentException(string.Format("Can only add OptionPage to OptionControl.  Not {0}.",  value.GetType().Name));
+                    throw new ArgumentException(string.Format("Can only add OptionPage to OptionControl.  Not {0}.", value.GetType().Name));
                 }
 
                 if (!owner.insertingItem)
@@ -248,7 +248,7 @@ namespace ShipWorks.UI.Controls
                 {
                     owner.insertingItem = false;
                 }
-                
+
                 owner.Controls.SetChildIndex(tabPage, index);
             }
 
@@ -295,7 +295,7 @@ namespace ShipWorks.UI.Controls
             }
 
             /// <summary>
-            /// Add 
+            /// Add
             /// </summary>
             int IList.Add(object value)
             {
@@ -494,6 +494,11 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Handle a Deselecting async event
+        /// </summary>
+        public Func<OptionPage, int, Task<bool>> DeselectingAsync;
+
+        /// <summary>
         /// The collection of pages contained in the tab
         /// </summary>
         [Category("Behavior")]
@@ -588,7 +593,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Selection is changing
         /// </summary>
-        private bool DoSelectionChanging()
+        private async Task<bool> DoSelectionChanging()
         {
             if (lastSelectedPage == null)
             {
@@ -601,20 +606,15 @@ namespace ShipWorks.UI.Controls
                 container.ActiveControl = this;
             }
 
-            OptionControlCancelEventArgs e = new OptionControlCancelEventArgs(
-                lastSelectedPage, 
-                optionPages.IndexOf(lastSelectedPage), 
-                false, 
-                TabControlAction.Deselecting);
+            var wasCanceled = await OnDeselecting(lastSelectedPage, optionPages.IndexOf(lastSelectedPage))
+                .ConfigureAwait(true);
 
-            OnDeselecting(e);
-
-            if (!e.Cancel)
+            if (!wasCanceled)
             {
                 OnDeselected(new OptionControlEventArgs(lastSelectedPage, optionPages.IndexOf(lastSelectedPage), TabControlAction.Deselected));
             }
 
-            return !e.Cancel;
+            return !wasCanceled;
         }
 
         /// <summary>
@@ -641,10 +641,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual void OnSelecting(OptionControlCancelEventArgs e)
         {
-            if (Selecting != null)
-            {
-                Selecting(this, e);
-            }
+            Selecting?.Invoke(this, e);
         }
 
         /// <summary>
@@ -652,10 +649,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual void OnSelected(OptionControlEventArgs e)
         {
-            if (Selected != null)
-            {
-                Selected(this, e);
-            }
+            Selected?.Invoke(this, e);
 
             if (SelectedPage != null)
             {
@@ -670,21 +664,30 @@ namespace ShipWorks.UI.Controls
         {
             UpdatePageSelection(false);
 
-            if (SelectedIndexChanged != null)
-            {
-                SelectedIndexChanged(this, e);
-            }
+            SelectedIndexChanged?.Invoke(this, e);
         }
 
         /// <summary>
         /// Raise the Deselecting event
         /// </summary>
-        protected virtual void OnDeselecting(OptionControlCancelEventArgs e)
+        protected virtual async Task<bool> OnDeselecting(OptionPage lastSelectedPage, int optionPageIndex)
         {
-            if (Deselecting != null)
+            bool wasCanceled = false;
+
+            if (DeselectingAsync != null)
             {
-                Deselecting(this, e);
+                wasCanceled = await DeselectingAsync(lastSelectedPage, optionPageIndex).ConfigureAwait(false);
             }
+
+            OptionControlCancelEventArgs e = new OptionControlCancelEventArgs(
+                lastSelectedPage,
+                optionPageIndex,
+                wasCanceled,
+                TabControlAction.Deselecting);
+
+            Deselecting?.Invoke(this, e);
+
+            return e.Cancel;
         }
 
         /// <summary>
@@ -692,10 +695,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual void OnDeselected(OptionControlEventArgs e)
         {
-            if (Deselected != null)
-            {
-                Deselected(this, e);
-            }
+            Deselected?.Invoke(this, e);
 
             if (SelectedPage != null)
             {
@@ -717,7 +717,7 @@ namespace ShipWorks.UI.Controls
             menuList.Height = Height;
             Resize += (o, e) => { menuList.Height = Height; };
 
-            menuList.SelectedIndexChanged += new EventHandler(OnMenuListSelectedIndexChanged);
+            menuList.SelectedIndexChanged += OnMenuListSelectedIndexChanged;
             lastSelectedPage = SelectedPage;
 
             Controls.Add(menuList);
@@ -747,28 +747,39 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// The selected index of the menu list has changed
         /// </summary>
-        void OnMenuListSelectedIndexChanged(object sender, EventArgs e)
+        private async void OnMenuListSelectedIndexChanged(object sender, EventArgs e)
         {
             bool canceled = true;
 
-            if (DoSelectionChanging())
+            try
             {
-                if (DoSelectionChanged())
+                Cursor = Cursors.WaitCursor;
+                menuList.Enabled = false;
+
+                if (await DoSelectionChanging().ConfigureAwait(true))
                 {
-                    canceled = false;
+                    if (DoSelectionChanged())
+                    {
+                        canceled = false;
+                    }
                 }
-            }
 
-            if (canceled)
+                if (canceled)
+                {
+                    menuList.SelectedIndexChanged -= OnMenuListSelectedIndexChanged;
+                    menuList.SelectedIndex = optionPages.IndexOf(lastSelectedPage);
+                    menuList.SelectedIndexChanged += OnMenuListSelectedIndexChanged;
+                }
+
+                UpdatePageSelection(canceled);
+            }
+            finally
             {
-                menuList.SelectedIndexChanged -= new EventHandler(OnMenuListSelectedIndexChanged);
-                menuList.SelectedIndex = optionPages.IndexOf(lastSelectedPage);
-                menuList.SelectedIndexChanged += new EventHandler(OnMenuListSelectedIndexChanged);
+                Cursor = Cursors.Default;
+                menuList.Enabled = true;
             }
-
-            UpdatePageSelection(canceled);
         }
- 
+
         /// <summary>
         /// Updates the specified page from its properties. Not intended to be called by consumer code.
         /// </summary>
@@ -961,7 +972,7 @@ namespace ShipWorks.UI.Controls
         private void ResizePages()
         {
             Rectangle displayRectangle = this.DisplayRectangle;
-            
+
             foreach (OptionPage page in optionPages)
             {
                 page.Bounds = displayRectangle;

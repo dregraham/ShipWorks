@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
+using Autofac;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
 {
@@ -23,28 +20,37 @@ namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
         public AmazonCredentialsPage()
         {
             InitializeComponent();
+
+            StepNextAsync = OnStepNextAsync;
         }
 
         /// <summary>
         /// User is navigating to the next wizard page
         /// </summary>
-        private void OnStepNext(object sender, WizardStepEventArgs e)
+        private async Task OnStepNextAsync(object sender, WizardStepEventArgs e)
         {
             AmazonStoreEntity store = GetStore<AmazonStoreEntity>();
 
-            Cursor.Current = Cursors.WaitCursor;
-            if (!accountSettings.SaveToEntity(store))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // there was an error, stay on this page
-                e.NextPage = this;
-                return;
+                IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+
+                using (messageHelper.SetCursor(Cursors.WaitCursor))
+                {
+                    if (!await accountSettings.SaveToEntityAsync(store).ConfigureAwait(true))
+                    {
+                        // there was an error, stay on this page
+                        e.NextPage = this;
+                        return;
+                    }
+
+                    // set the store name here
+                    store.StoreName = store.MerchantName;
+
+                    // this store is using the old APIs
+                    store.AmazonApi = (int) AmazonApi.LegacySoap;
+                }
             }
-
-            // set the store name here
-            store.StoreName = store.MerchantName;
-
-            // this store is using the old APIs
-            store.AmazonApi = (int)AmazonApi.LegacySoap;
         }
     }
 }
