@@ -1,8 +1,12 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
+using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -13,25 +17,27 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetWebClient : IJetWebClient
     {
-        private readonly string orderEndpointPath = "/orders";
-        private readonly string productEndpointPath = "/merchant-skus";
+        private const string EndpointBase = "https://merchant-api.jet.com/api";
+        private readonly string orderEndpointPath = $"{EndpointBase}/orders";
+        private readonly string productEndpointPath = $"{EndpointBase}/merchant-skus";
+
+        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore
+        };
         
-        private readonly IJetRequest jetRequest;
+        private readonly IHttpRequestSubmitterFactory submitterFactory;
+        private readonly IJetAuthenticatedRequest jetAuthenticatedRequest;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetWebClient(IJetRequest jetRequest)
+        public JetWebClient(IHttpRequestSubmitterFactory submitterFactory,
+            IJetAuthenticatedRequest jetAuthenticatedRequest)
         {
-            this.jetRequest = jetRequest;
-        }
-
-        /// <summary>
-        /// Get Token
-        /// </summary>
-        public GenericResult<string> GetToken(string username, string password)
-        {
-            return jetRequest.GetToken(username, password);
+            this.submitterFactory = submitterFactory;
+            this.jetAuthenticatedRequest = jetAuthenticatedRequest;
         }
 
         /// <summary>
@@ -39,25 +45,43 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public GenericResult<JetOrderResponse> GetOrders(JetStoreEntity store)
         {
-            return jetRequest.ProcessRequest<JetOrderResponse>("GetOrders", $"{orderEndpointPath}/ready", HttpVerb.Get,
-                store);
-        }
+            IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
+            request.Uri = new Uri($"{orderEndpointPath}/ready");
+            request.Verb = HttpVerb.Get;
 
+            return jetAuthenticatedRequest.ProcessRequest<JetOrderResponse>("GetOrders", request, store);
+        }
+        
         /// <summary>
         /// Gets jet product details for the given item
         /// </summary>
         public GenericResult<JetProduct> GetProduct(JetOrderItem item, JetStoreEntity store)
         {
-            return jetRequest.ProcessRequest<JetProduct>("GetProduct", $"{productEndpointPath}/{item.MerchantSku}", HttpVerb.Get, store);
+            IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
+            request.Uri = new Uri($"{productEndpointPath}/{item.MerchantSku}");
+            request.Verb = HttpVerb.Get;
+
+            return jetAuthenticatedRequest.ProcessRequest<JetProduct>("GetProduct", request, store);
         }
-
-
+        
         /// <summary>
         /// Acknowledges the order will be fulfilled by the seller
         /// </summary>
         public void Acknowledge(JetOrderEntity order, JetStoreEntity store)
         {
-            jetRequest.Acknowledge(order, store, $"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
+            JetAcknowledgementRequest jetAcknowledgement = new JetAcknowledgementRequest
+            {
+                OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
+                    .Select(i => new JetAcknowledgementOrderItem { OrderItemId = i.JetOrderItemID }).ToList()
+            };
+
+            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgement, jsonSerializerSettings),
+                "application/json");
+
+            submitter.Uri = new Uri($"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
+            submitter.Verb = HttpVerb.Put;
+
+            jetAuthenticatedRequest.ProcessRequest<string>("AcknowledgeOrder", submitter, store);
         }
 
         /// <summary>
@@ -65,7 +89,11 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store)
         {
-            return jetRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", orderUrl, HttpVerb.Get, store);
+            IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
+            request.Uri = new Uri(EndpointBase + orderUrl);
+            request.Verb = HttpVerb.Get;
+
+            return jetAuthenticatedRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
         }
     }
 }

@@ -20,15 +20,20 @@ namespace ShipWorks.Stores.Platforms.Jet
     {
         private readonly IJetOrderLoader orderLoader;
         private readonly IJetWebClient webClient;
+        private readonly IOrderRepository orderRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetDownloader(StoreEntity store, Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory, IJetWebClient webClient)
+        public JetDownloader(StoreEntity store,
+            Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory,
+            IJetWebClient webClient,
+            IOrderRepository orderRepository) 
             : base(store)
         {
             orderLoader = orderLoaderFactory(this);
             this.webClient = webClient;
+            this.orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -99,6 +104,10 @@ namespace ShipWorks.Stores.Platforms.Jet
                     orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
                     SaveDownloadedOrder(order);
                 }
+            else
+            {
+                orderRepository.PopulateOrderDetails(order);
+            }
 
                 webClient.Acknowledge(order, Store as JetStoreEntity);
             }

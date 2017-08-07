@@ -3,7 +3,6 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet;
@@ -16,7 +15,7 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
     [Component]
     public class JetStoreSetupControlViewModel : IJetStoreSetupControlViewModel, INotifyPropertyChanged
     {
-        private readonly IJetWebClient webClient;
+        private readonly IJetTokenRepository tokenRepo;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IMessageHelper messageHelper;
         private string apiUser;
@@ -27,9 +26,9 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetStoreSetupControlViewModel(IJetWebClient webClient, IEncryptionProviderFactory encryptionProviderFactory, IMessageHelper messageHelper)
+        public JetStoreSetupControlViewModel(IJetTokenRepository tokenRepo, IEncryptionProviderFactory encryptionProviderFactory, IMessageHelper messageHelper)
         {
-            this.webClient = webClient;
+            this.tokenRepo = tokenRepo;
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.messageHelper = messageHelper;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -69,11 +68,11 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
         /// </summary>
         public bool Save(JetStoreEntity store)
         {
-            GenericResult<string> result = webClient.GetToken(ApiUser, Secret);
+            IJetToken result = tokenRepo.GetToken(ApiUser, Secret);
 
-            if (result.Failure)
+            if (!result.IsValid)
             {
-                messageHelper.ShowError(result.Message);
+                messageHelper.ShowError("Unable to authenticate credentials.");
                 return false;
             }
             
