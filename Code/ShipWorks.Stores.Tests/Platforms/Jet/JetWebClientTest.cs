@@ -16,26 +16,47 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         private readonly AutoMock mock;
         private readonly Mock<IHttpVariableRequestSubmitter> variableRequestSubmitter;
         private readonly Mock<IHttpRequestSubmitter> requestSubmitter;
+        private readonly Mock<IHttpRequestSubmitterFactory> requestSubmitterFactory;
+        private readonly JetStoreEntity store;
 
         public JetWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
+            store = new JetStoreEntity();
+
             variableRequestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
             requestSubmitter = mock.Mock<IHttpRequestSubmitter>();
 
-            mock.Mock<IHttpRequestSubmitterFactory>().Setup(h => h.GetHttpVariableRequestSubmitter()).Returns(variableRequestSubmitter);
-            mock.Mock<IHttpRequestSubmitterFactory>().Setup(h => h.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json")).Returns(requestSubmitter);
+            requestSubmitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
+
+            requestSubmitterFactory.Setup(h => h.GetHttpVariableRequestSubmitter()).Returns(variableRequestSubmitter);
+            requestSubmitterFactory.Setup(h => h.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json")).Returns(requestSubmitter);
         }
 
         [Fact]
         public void GetOrderDetails_DelegatesToJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             mock.Create<JetWebClient>().GetOrderDetails("url", store);
             
             mock.Mock<IJetAuthenticatedRequest>()
                 .Verify(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", variableRequestSubmitter.Object, store));
+        }
+
+        [Fact]
+        public void GetOrderDetails_GetsHttpRequestSubmitterFromFactory()
+        {
+            mock.Create<JetWebClient>().GetOrderDetails("/url", store);
+
+            requestSubmitterFactory.Verify(f => f.GetHttpVariableRequestSubmitter());
+        }
+
+        [Fact]
+        public void GetOrderDetails_UsesOrderDetailsUri()
+        {
+            mock.Create<JetWebClient>().GetOrderDetails("/url", store);
+
+            variableRequestSubmitter.VerifySet(r => r.Uri = new Uri("https://merchant-api.jet.com/api/url"));
         }
 
         [Fact]
@@ -54,7 +75,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetOrders_DelegatesToJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             mock.Create<JetWebClient>().GetOrders(store);
             
             mock.Mock<IJetAuthenticatedRequest>()
@@ -62,9 +82,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
+        public void GetOrders_UsesOrdersUri()
+        {
+            mock.Create<JetWebClient>().GetOrders(store);
+
+            variableRequestSubmitter.VerifySet(r => r.Uri = new Uri("https://merchant-api.jet.com/api/orders/ready"));
+        }
+
+        [Fact]
         public void GetOrders_ReturnsResultsFromJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             GenericResult<JetOrderResponse> expectedResult = new GenericResult<JetOrderResponse>();
             mock.Mock<IJetAuthenticatedRequest>()
                 .Setup(r => r.ProcessRequest<JetOrderResponse>("GetOrders", requestSubmitter.Object, store))
@@ -77,7 +104,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetProduct_DelegatesToJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             JetOrderItem jetOrderItem = new JetOrderItem
             {
                 MerchantSku = "123"
@@ -89,9 +115,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
+        public void GetProducts_UsesProductsUri()
+        {
+            JetOrderItem jetOrderItem = new JetOrderItem
+            {
+                MerchantSku = "123"
+            };
+
+            mock.Create<JetWebClient>().GetProduct(jetOrderItem, store);
+
+            variableRequestSubmitter.VerifySet(r => r.Uri = new Uri("https://merchant-api.jet.com/api/merchant-skus/123"));
+        }
+
+        [Fact]
         public void GetProduct_ReturnsResultsFromJetRequest()
         {
-            JetStoreEntity store = new JetStoreEntity();
             JetOrderItem jetOrderItem = new JetOrderItem
             {
                 MerchantSku = "123"
@@ -109,7 +147,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         public void Acknowledge_UsesCorrectEndpoint()
         {
             JetOrderEntity order = new JetOrderEntity {MerchantOrderId = "1"};
-            JetStoreEntity store = new JetStoreEntity();
             
             mock.Create<JetWebClient>().Acknowledge(order, store);
             

@@ -27,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.Jet
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
         
- 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IJetAuthenticatedRequest jetAuthenticatedRequest;
 

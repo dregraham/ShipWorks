@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.Stores.Platforms.Jet;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet
 {
-    public class JetTokenTest
+    public class JetTokenTest : IDisposable
     {
         private readonly AutoMock mock;
 
@@ -41,6 +42,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             new JetToken("valid token").AttachTo(request.Object);
 
             request.Verify(r => r.Headers.Set("Authorization", "bearer valid token"));
+        }
+
+        public void Dispose()
+        {
+            mock?.Dispose();
         }
     }
 }
