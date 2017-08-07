@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.UI.Platforms.Jet
         /// </summary>
         public bool Save(JetStoreEntity store)
         {
-            JetToken result = tokenRepo.GetToken(ApiUser, Secret);
+            IJetToken result = tokenRepo.GetToken(ApiUser, Secret);
 
             if (!result.IsValid)
             {

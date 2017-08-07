@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Stores.Platforms.Jet
 {
     /// <summary>
-    /// Adds authentication info to a Jet request. 
+    /// When processing request, adds authentication info
     /// </summary>
     [Component]
     public class JetAuthenticatedRequest : IJetAuthenticatedRequest
@@ -18,6 +18,9 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly IJsonRequest jsonRequest;
         private readonly IJetTokenRepository tokenRepo;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JetAuthenticatedRequest(IJsonRequest jsonRequest, IJetTokenRepository tokenRepo)
         {
             this.jsonRequest = jsonRequest;
@@ -27,11 +30,19 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request. If an error is thrown, refresh the token and try again.
         /// </summary>
-        public GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store, bool generateNewTokenIfExpired = true)
+        public GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store)
+        {
+            return ProcessRequest<T>(action, request, store, true);
+        }
+
+        /// <summary>
+        /// Process the request. If an error is thrown, refresh the token and try again.
+        /// </summary>
+        private GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store, bool generateNewTokenIfExpired)
         {
             try
             {
-                JetToken token = tokenRepo.GetToken(store);
+                IJetToken token = tokenRepo.GetToken(store);
 
                 if (!token.IsValid)
                 {

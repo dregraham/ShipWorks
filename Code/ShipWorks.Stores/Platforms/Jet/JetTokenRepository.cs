@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the token for the store
         /// </summary>
-        public JetToken GetToken(JetStoreEntity store)
+        public IJetToken GetToken(JetStoreEntity store)
         {
             string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
                 .Decrypt(store.Secret);
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the token for the given username/password
         /// </summary>
-        public JetToken GetToken(string username, string password)
+        public IJetToken GetToken(string username, string password)
         {
             if (tokenCache.Contains(username))
             {

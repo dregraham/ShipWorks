@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// <summary>
     /// Jet Token for authenticating jet requests
     /// </summary>
-    public class JetToken
+    public class JetToken : IJetToken
     {
         private readonly string token;
 
@@ -31,7 +31,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Attach the token to the request
         /// </summary>
-        /// <param name="requestSubmitter"></param>
         public void AttachTo(IHttpRequestSubmitter requestSubmitter) => 
             requestSubmitter.Headers.Set("Authorization", $"bearer {token}");
     }

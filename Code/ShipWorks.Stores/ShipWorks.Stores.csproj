@@ -263,6 +263,7 @@
     <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementOrderItem.cs" />
     <Compile Include="Platforms\Jet\IJetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\IJetToken.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
