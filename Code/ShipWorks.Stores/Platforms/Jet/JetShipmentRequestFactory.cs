@@ -30,16 +30,14 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             this.orderManager = orderManager;
         }
-
-
+        
         /// <summary>
         /// Create a jet shipment request from a shipment
         /// </summary>
         public JetShipmentRequest Create(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
-
-            JetShipmentRequest request = new JetShipmentRequest();
+            JetShipmentRequest request = new JetShipmentRequest {Shipments = new List<Shipment>()};
             request.Shipments.Add(new Shipment
             {
                 ShipmentTrackingNumber = shipment.TrackingNumber,
@@ -210,8 +208,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case FedExServiceType.OneRateExpressSaver:
                 case FedExServiceType.FedExExpressSaver:
                     return "FedexExpressSaver";
-                case FedExServiceType.FedExGround:
-                    return "FedExGround";
                 case FedExServiceType.GroundHomeDelivery:
                     return "FedExHome";
                 case FedExServiceType.SmartPost:
@@ -224,6 +220,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case FedExServiceType.FedExNextDayFreight:
                 case FedExServiceType.FirstFreight:
                     return "FedExFreight";
+                case FedExServiceType.FedExGround:
                 default:
                     return "FedExGround";
             }
@@ -240,10 +237,6 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 case PostalServiceType.PriorityMail:
                     return "USPSPriorityMail";
-                case PostalServiceType.FirstClass:
-                case PostalServiceType.ParcelSelect:
-                case PostalServiceType.StandardPost:
-                    return "USPSFirstClassMail";
                 case PostalServiceType.ExpressMail:
                 case PostalServiceType.ExpressMailPremium:
                     return "USPSPriorityMailExpress";
@@ -251,6 +244,9 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case PostalServiceType.LibraryMail:
                 case PostalServiceType.BoundPrintedMatter:
                     return "USPSMediaMail";
+                case PostalServiceType.FirstClass:
+                case PostalServiceType.ParcelSelect:
+                case PostalServiceType.StandardPost:
                 default:
                     return "USPSFirstClassMail";
             }
@@ -264,9 +260,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         private string GetUpsShipmentMethod(UpsShipmentEntity shipmentUps)
         {
             switch ((UpsServiceType) shipmentUps.Service)
-            {
-                case UpsServiceType.UpsGround:
-                    return "UPSGround";
+            {  
                 case UpsServiceType.Ups3DaySelect:
                     return "UPS3DaySelect";
                 case UpsServiceType.Ups2DayAir:
@@ -296,6 +290,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case UpsServiceType.UpsExpressEarlyAm:
                 case UpsServiceType.UpsExpressSaver:
                     return "UPSExpressCritical";
+                case UpsServiceType.UpsGround:
                 default:
                     return "UPSGround";
             }
