@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Posts the tracking number for the identified shipment to the store
         /// </summary>
-        public void UploadTrackingNumber(long shipmentID)
+        public async Task UploadTrackingNumber(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -60,13 +60,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 return;
             }
 
-            UploadTrackingNumber(shipment);
+            await UploadTrackingNumber(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Posts the tracking number for the identified shipment to the store
         /// </summary>
-        public void UploadTrackingNumber(ShipmentEntity shipment)
+        public async Task UploadTrackingNumber(ShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Voided)
             {
@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 // Upload tracking number
                 GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
-                webClient.UploadShipmentDetails(order, shipment);
+                await webClient.UploadShipmentDetails(order, shipment).ConfigureAwait(false);
             }
             else
             {

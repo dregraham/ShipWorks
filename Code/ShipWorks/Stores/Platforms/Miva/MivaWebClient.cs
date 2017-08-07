@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Send shipment details up to miva
         /// </summary>
-        public override void UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
+        public override async Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
         {
             if (order.IsManual)
             {

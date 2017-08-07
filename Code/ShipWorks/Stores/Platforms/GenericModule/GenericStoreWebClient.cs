@@ -144,14 +144,23 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
         {
-            IEnumerable<string> identifiers = order.CombineSplitStatus == CombineSplitStatusType.Combined ?
-                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
-                new[] { StoreType.GetOnlineOrderIdentifier(order) };
+            IEnumerable<string> identifiers = await GetOrderIdentifiers(order);
 
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
                 await Task.WhenAll(chunk.Select(x => PerformOrderStatusUpdate(x, code, comment))).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Get the order identifier(s) for the given order.  Multiple will be returned in the case of
+        /// combined orders.
+        /// </summary>
+        private async Task<IEnumerable<string>> GetOrderIdentifiers(OrderEntity order)
+        {
+            return order.CombineSplitStatus == CombineSplitStatusType.Combined ? 
+                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) : 
+                new[] {StoreType.GetOnlineOrderIdentifier(order)};
         }
 
         /// <summary>
@@ -169,14 +178,27 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Update the online status of the specified order
+        /// </summary>
+        public virtual async Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
+        {
+            IEnumerable<string> identifiers = await GetOrderIdentifiers(order);
+
+            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+            {
+                await Task.WhenAll(chunk.Select(x => PerformUploadShipmentDetails(x, shipment))).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Posts the tracking number for an order back to Generic
         /// </summary>
-        public virtual void UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
+        private async Task PerformUploadShipmentDetails(string identifier, ShipmentEntity shipment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
-            request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
+            request.Variables.Add("order", identifier);
             request.Variables.Add("tracking", shipment.TrackingNumber);
             request.Variables.Add("carrier", type.GetOnlineCarrierName(shipment));
             request.Variables.Add("shippingcost", shipment.ShipmentCost.ToString());
@@ -186,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             ProcessRequest(request, "updateshipment");
         }
-
+        
         /// <summary>
         /// Appends the extended shipment details to the request's Variables collection if the store's module
         /// version >= 3.10.0.
