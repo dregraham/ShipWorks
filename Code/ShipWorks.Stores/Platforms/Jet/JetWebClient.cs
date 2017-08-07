@@ -4,7 +4,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
@@ -28,18 +27,18 @@ namespace ShipWorks.Stores.Platforms.Jet
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
         
-        private readonly IJsonRequest jsonRequest;
+ 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
-        private readonly IJetTokenRepository tokenRepo;
+        private readonly IJetAuthenticatedRequest jetAuthenticatedRequest;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetWebClient(IJsonRequest request, IHttpRequestSubmitterFactory submitterFactory, IJetTokenRepository tokenRepo)
+        public JetWebClient(IHttpRequestSubmitterFactory submitterFactory,
+            IJetAuthenticatedRequest jetAuthenticatedRequest)
         {
-            jsonRequest = request;
             this.submitterFactory = submitterFactory;
-            this.tokenRepo = tokenRepo;
+            this.jetAuthenticatedRequest = jetAuthenticatedRequest;
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri($"{orderEndpointPath}/ready");
             request.Verb = HttpVerb.Get;
 
-            return ProcessRequest<JetOrderResponse>("GetOrders", request, store);
+            return jetAuthenticatedRequest.ProcessRequest<JetOrderResponse>("GetOrders", request, store);
         }
         
         /// <summary>
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri($"{productEndpointPath}/{item.MerchantSku}");
             request.Verb = HttpVerb.Get;
 
-            return ProcessRequest<JetProduct>("GetProduct", request, store);
+            return jetAuthenticatedRequest.ProcessRequest<JetProduct>("GetProduct", request, store);
         }
         
         /// <summary>
@@ -83,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Uri = new Uri(EndpointBase + $"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
             submitter.Verb = HttpVerb.Put;
 
-            ProcessRequest<string>("AcknowledgeOrder", submitter, store);
+            jetAuthenticatedRequest.ProcessRequest<string>("AcknowledgeOrder", submitter, store);
         }
 
         /// <summary>
@@ -95,32 +94,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri(EndpointBase + orderUrl);
             request.Verb = HttpVerb.Get;
 
-            return ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
+            return jetAuthenticatedRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
         }
-        
-        /// <summary>
-        /// Process the request
-        /// </summary>
-        private GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store)
-        {
-            try
-            {
-                JetToken token = tokenRepo.GetToken(store);
-
-                if (!token.IsValid)
-                {
-                    throw new JetException("Unable to obtain a valid token to authenticate request.");   
-                }
-
-                token.AttachTo(request);
-
-                return GenericResult.FromSuccess(jsonRequest.ProcessRequest<T>(action, ApiLogSource.Jet, request));
-            }
-            catch (Exception e)
-            {
-                return GenericResult.FromError<T>(e.Message);
-            }
-        }
-
     }
 }

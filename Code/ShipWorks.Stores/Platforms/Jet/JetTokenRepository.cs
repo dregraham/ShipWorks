@@ -10,7 +10,7 @@ using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
-    [Component]
+    [Component(SingleInstance = true)]
     public class JetTokenRepository : IJetTokenRepository
     {
         private readonly IJsonRequest jsonRequest;
@@ -19,6 +19,9 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly LruCache<string, JetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JetTokenRepository(IJsonRequest jsonRequest, IHttpRequestSubmitterFactory submitterFactory, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.jsonRequest = jsonRequest;
@@ -31,14 +34,23 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the token for the store
         /// </summary>
-        /// <param name="store"></param>
-        /// <returns></returns>
         public JetToken GetToken(JetStoreEntity store)
         {
             string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
                 .Decrypt(store.Secret);
 
             return GetToken(store.ApiUser, password);
+        }
+
+        /// <summary>
+        /// Removes the token from the Cache
+        /// </summary>
+        public void RemoveToken(JetStoreEntity store)
+        {
+            if (tokenCache.Contains(store.ApiUser))
+            {
+                tokenCache.Remove(store.ApiUser);
+            }
         }
 
         /// <summary>

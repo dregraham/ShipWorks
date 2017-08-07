@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Net;
+﻿using System.Linq;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -31,9 +32,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Attach the token to the request
         /// </summary>
         /// <param name="requestSubmitter"></param>
-        public void AttachTo(IHttpRequestSubmitter requestSubmitter)
-        {
-            requestSubmitter.Headers.Add("Authorization", $"bearer {token}");
-        }
+        public void AttachTo(IHttpRequestSubmitter requestSubmitter) => 
+            requestSubmitter.Headers.Set("Authorization", $"bearer {token}");
     }
 }

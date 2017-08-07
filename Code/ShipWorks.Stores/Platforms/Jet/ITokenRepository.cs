@@ -16,5 +16,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Get a token for the given username and password
         /// </summary>
         JetToken GetToken(string username, string password);
+
+        /// <summary>
+        /// Removes the token from the Cache
+        /// </summary>
+        void RemoveToken(JetStoreEntity store);
     }
 }
