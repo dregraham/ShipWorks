@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetOrderDetails("url", store);
             
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", variableRequestSubmitter.Object, store, true));
+                .Verify(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetStoreEntity store = new JetStoreEntity();
             GenericResult<JetOrderDetailsResult> expectedResult = new GenericResult<JetOrderDetailsResult>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", requestSubmitter.Object, store, true))
+                .Setup(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             GenericResult<JetOrderDetailsResult> actualResult = mock.Create<JetWebClient>().GetOrderDetails("url", store);
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetOrders(store);
             
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetOrderResponse>("GetOrders", variableRequestSubmitter.Object, store, true));
+                .Verify(r => r.ProcessRequest<JetOrderResponse>("GetOrders", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetStoreEntity store = new JetStoreEntity();
             GenericResult<JetOrderResponse> expectedResult = new GenericResult<JetOrderResponse>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetOrderResponse>("GetOrders", requestSubmitter.Object, store, true))
+                .Setup(r => r.ProcessRequest<JetOrderResponse>("GetOrders", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             GenericResult<JetOrderResponse> actualResult = mock.Create<JetWebClient>().GetOrders(store);
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetProduct(jetOrderItem, store);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetProduct>("GetProduct", variableRequestSubmitter.Object, store, true));
+                .Verify(r => r.ProcessRequest<JetProduct>("GetProduct", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
             GenericResult<JetProduct> expectedResult = new GenericResult<JetProduct>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetProduct>("GetProduct", requestSubmitter.Object, store, false))
+                .Setup(r => r.ProcessRequest<JetProduct>("GetProduct", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             var actualResult = mock.Create<JetWebClient>().GetProduct(jetOrderItem, store);
@@ -108,12 +108,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Acknowledge_UsesCorrectEndpoint()
         {
-            JetOrderEntity order = new JetOrderEntity() { MerchantOrderId = "1" };
+            JetOrderEntity order = new JetOrderEntity {MerchantOrderId = "1"};
             JetStoreEntity store = new JetStoreEntity();
-
-            
-
-
             
             mock.Create<JetWebClient>().Acknowledge(order, store);
             
