@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
@@ -137,7 +141,24 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Order identifier/locator
+        /// Gets the online store's order identifier
+        /// </summary>
+        public new int GetOnlineOrderIdentifier(OrderEntity order) => (int) order.OrderNumber;
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        /// <param name="order">The order for which to find combined order identifiers</param>
+        public new async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        {
+            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, 
+                "OrderSearch", 
+                OrderSearchFields.OrderID == order.OrderID, 
+                () => OrderSearchFields.OrderNumber.ToValue<int>()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Order identifier/locater
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {

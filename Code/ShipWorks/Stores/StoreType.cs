@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
@@ -15,6 +18,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -204,6 +208,35 @@ namespace ShipWorks.Stores
             instanceLookup = false;
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        /// <typeparam name="TResult">Return type of the selectExpression</typeparam>
+        /// <param name="order">The order for which to find combined order identifiers</param>
+        /// <param name="searchTableName">Name of the table, i.e. "OrderSearch"</param>
+        /// <param name="predicate">Where clause predicate, i.e. OrderSearchFields.OrderID == order.OrderID</param>
+        /// <param name="selectExpression">What to return, i.e. , () => OrderSearchFields.OrderNumber.ToValue<long>()</param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TResult>> GetCombinedOnlineOrderIdentifiers<TResult>(
+                                                            OrderEntity order,
+                                                            string searchTableName,
+                                                            IPredicate predicate,
+                                                            Expression<Func<TResult>> selectExpression)
+        {
+            QueryFactory factory = new QueryFactory();
+            var query = factory.Create(searchTableName)
+                .Select(selectExpression)
+                .Where(predicate);
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
+                {
+                    return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                }
+            }
         }
 
         /// <summary>

@@ -8,6 +8,9 @@ using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
 using log4net;
 using System.Globalization;
+using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using ShipWorks.Shipping;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -33,12 +36,15 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         // the store
         AmeriCommerceStoreEntity store;
 
+        private AmeriCommerceStoreType storeType;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public AmeriCommerceWebClient(AmeriCommerceStoreEntity store)
         {
             this.store = store;
+            storeType = new AmeriCommerceStoreType(store);
         }
 
         /// <summary>
@@ -370,9 +376,33 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
+        /// Get the order identifier(s) for the given order.  Multiple will be returned in the case of
+        /// combined orders.
+        /// </summary>
+        public async Task<IEnumerable<int>> GetOrderIdentifiers(OrderEntity order)
+        {
+            return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+                await storeType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
+                new[] { storeType.GetOnlineOrderIdentifier(order) };
+        }
+
+        /// <summary>
+        /// Update the online status of the specified order
+        /// </summary>
+        public async Task UpdateOrderStatus(OrderEntity order, int statusCode)
+        {
+            IEnumerable<int> identifiers = await GetOrderIdentifiers(order).ConfigureAwait(false);
+
+            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+            {
+                await Task.WhenAll(chunk.Select(orderIdentifier => PerformOrderStatusUpdate(orderIdentifier, statusCode))).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        public void UpdateOrderStatus(int orderNumber, int statusCode)
+        private async Task PerformOrderStatusUpdate(int orderNumber, int statusCode)
         {
             try
             {
@@ -406,31 +436,42 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Uploads the tracking number for shipments related to order OrderNumber
+        /// Update the online status of the specified order
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public async Task UploadShipmentDetails(ShipmentEntity shipment)
         {
-            OrderEntity order = shipment.Order;
+            IEnumerable<int> identifiers = await GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
-            if (order.IsManual)
+            if (identifiers.Count() == 1 && shipment.Order.IsManual)
             {
-                log.WarnFormat("Not uploading shipment details since order {0} is manual.", order.OrderID);
+                log.WarnFormat("Not uploading shipment details since order {0} is manual.", shipment.Order.OrderID);
                 return;
             }
 
+            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+            {
+                await Task.WhenAll(chunk.Select(orderIdentifier => PerformUploadShipmentDetails(orderIdentifier, shipment))).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Uploads the tracking number for shipments related to order OrderNumber
+        /// </summary>
+        private async Task PerformUploadShipmentDetails(int orderNumber, ShipmentEntity shipment)
+        {
             try
             {
                 using (AmeriCommerceDatabaseIO service = CreateWebService("UploadShipmentDetails"))
                 {
                     // retrieve the order
-                    OrderTrans orderTrans = service.Order_GetByKey(Convert.ToInt32(order.OrderNumber));
+                    OrderTrans orderTrans = service.Order_GetByKey(orderNumber);
                     orderTrans = service.Order_FillOrderShippingCollection(orderTrans);
 
                     // get the existing shipment records
                     List<OrderShippingTrans> shipmentRecords = orderTrans.OrderShippingColTrans.ToList();
 
                     // create and populate the OrderShipping record
-                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans(order, shipment);
+                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans(orderNumber, shipment);
                     shipmentRecords.Add(shippingTrans);
                     orderTrans.OrderShippingColTrans = shipmentRecords.ToArray();
 
@@ -441,13 +482,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     string result = service.Order_Validate(orderTrans);
                     if (string.Compare(result, "ok", true, CultureInfo.InvariantCulture) != 0)
                     {
-                        throw new AmeriCommerceException(string.Format("An error occurred while validating shipment details: {0}", result));
+                        throw new AmeriCommerceException($"An error occurred while validating shipment details: {result}");
                     }
 
                     // perform the save
                     if (!service.Order_Save(orderTrans))
                     {
-                        throw new AmeriCommerceException(string.Format("An unknown error occurred while saving tracking number."));
+                        throw new AmeriCommerceException("An unknown error occurred while saving tracking number.");
                     }
                 }
             }
@@ -460,7 +501,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Creates the shipping record to be sent to AmeriCommerce
         /// </summary>
-        private OrderShippingTrans CreateOrderShippingTrans(OrderEntity order, ShipmentEntity shipment)
+        private OrderShippingTrans CreateOrderShippingTrans(int orderNumber, ShipmentEntity shipment)
         {
             OrderShippingTrans shippingTrans = new OrderShippingTrans();
 
@@ -468,7 +509,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.IsNew = true;
 
             shippingTrans.OrderID = new DataInt32();
-            shippingTrans.OrderID.Value = Convert.ToInt32(order.OrderNumber);
+            shippingTrans.OrderID.Value = orderNumber;
 
             shippingTrans.NumberOfPackages = new DataInt32();
             shippingTrans.NumberOfPackages.Value = GetPackageCount(shipment);

@@ -19,9 +19,8 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -667,26 +666,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete.ToString();
+        /// <param name="order">The order for which to find combined order identifiers</param>
+        public async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        {
+            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
+                OrderSearchFields.OrderID == order.OrderID, () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        public virtual async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(OrderEntity order)
-        {
-            QueryFactory factory = new QueryFactory();
-            var query = factory.OrderSearch
-                .Select(() => OrderSearchFields.OrderNumberComplete.ToValue<string>())
-                .Where(OrderSearchFields.OrderID == order.OrderID);
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
-                {
-                    return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-                }
-            }
-        }
+        public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
 
         /// <summary>
         /// Gets the online store's carrier name
