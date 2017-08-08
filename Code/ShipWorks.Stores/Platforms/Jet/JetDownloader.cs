@@ -83,8 +83,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
-
-
+        
         /// <summary>
         /// Load and acknowledge the order
         /// </summary>
@@ -104,10 +103,10 @@ namespace ShipWorks.Stores.Platforms.Jet
                     orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
                     SaveDownloadedOrder(order);
                 }
-            else
-            {
-                orderRepository.PopulateOrderDetails(order);
-            }
+                else
+                {
+                    orderRepository.PopulateOrderDetails(order);
+                }
 
                 webClient.Acknowledge(order, Store as JetStoreEntity);
             }
