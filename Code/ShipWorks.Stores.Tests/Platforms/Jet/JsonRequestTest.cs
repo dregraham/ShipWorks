@@ -5,7 +5,6 @@ using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
-using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -23,15 +22,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void ProcessRequest_LogsRequest()
         {
-            var response = mock.CreateMock<IHttpResponseReader>();
+            var response = mock.Mock<IHttpResponseReader>();
             response.Setup(r => r.ReadResult())
                 .Returns("[{\"Foo\":\"Bar\"},{\"Foo\":\"Bar\"}]");
 
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
+            var submitter = mock.Mock<IHttpRequestSubmitter>();
             submitter.Setup(s => s.GetResponse())
                 .Returns(response.Object);
 
-            Mock<IApiLogEntry> logEntry = CreateLogger();
+            Mock<IApiLogEntry> logEntry = mock.Mock<IApiLogEntry>();
+            mock.Mock<ILogEntryFactory>()
+                .Setup(l => l.GetLogEntry(ApiLogSource.Jet, "ProcessRequest", LogActionType.Other))
+                .Returns(logEntry);
 
             var testObject = mock.Create<JsonRequest>();
             testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
@@ -42,11 +44,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void ProcessRequestLogsResponse_WhenWebRequestSucessful()
         {
-            var response = mock.CreateMock<IHttpResponseReader>();
+            var response = mock.Mock<IHttpResponseReader>();
             response.Setup(r => r.ReadResult())
                 .Returns("[{\"Foo\":\"Bar\"},{\"Foo\":\"Bar\"}]");
 
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
+            var submitter = mock.Mock<IHttpRequestSubmitter>();
             submitter.Setup(s => s.GetResponse())
                 .Returns(response.Object);
 
@@ -54,7 +56,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(submitter.Object);
 
-            Mock<IApiLogEntry> logEntry = CreateLogger();
+            Mock<IApiLogEntry> logEntry = mock.Mock<IApiLogEntry>();
+            mock.Mock<ILogEntryFactory>()
+                .Setup(l => l.GetLogEntry(ApiLogSource.Jet, "ProcessRequest", LogActionType.Other))
+                .Returns(logEntry);
 
             var testObject = mock.Create<JsonRequest>();
             testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
@@ -79,7 +84,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(submitter.Object);
 
-            Mock<IApiLogEntry> logEntry = CreateLogger();
+            Mock<IApiLogEntry> logEntry = mock.Mock<IApiLogEntry>();
+            mock.Mock<ILogEntryFactory>()
+                .Setup(l => l.GetLogEntry(ApiLogSource.Jet, "ProcessRequest", LogActionType.Other))
+                .Returns(logEntry);
 
             var testObject = mock.Create<JsonRequest>();
 
@@ -133,18 +141,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             response.Verify(r => r.ReadResult());
         }
-
-        private Mock<IApiLogEntry> CreateLogger()
-        {
-            var logEntry = mock.CreateMock<IApiLogEntry>();
-
-            var apiLogEntryFactory = mock.CreateMock<Func<ApiLogSource, string, IApiLogEntry>>();
-            apiLogEntryFactory.Setup(f => f(ApiLogSource.Jet, "ProcessRequest"))
-                .Returns(logEntry.Object);
-            mock.Provide(apiLogEntryFactory.Object);
-            return logEntry;
-        }
-
+        
         public void Dispose()
         {
             mock?.Dispose();
