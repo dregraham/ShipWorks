@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -289,7 +290,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <returns>An XPathNamespaceNavigator object.</returns>
         public async Task<XPathNamespaceNavigator> GetProductDetails(List<AmazonOrderItemEntity> items)
         {
-
             if (items.Count > MaxItemsPerProductDetailsRequest)
             {
                 string message = string.Format("There is a {0} item limit on the number of products the Amazon API allows to be retrieved in a single request", MaxItemsPerProductDetailsRequest);
@@ -371,44 +371,39 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Write the common header information for the fulfillment report.
-        /// </summary>
-        private void WriteFulfillmentStart(XmlTextWriter writer)
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("AmazonEnvelope");
-            writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
-            writer.WriteAttributeString("xsi", "noNamespaceSchemaLocation", null, "amzn-envelope.xsd");
-
-            writer.WriteStartElement("Header");
-            writer.WriteElementString("DocumentVersion", "1.01");
-            writer.WriteElementString("MerchantIdentifier", store.MerchantID);
-            writer.WriteEndElement();
-
-            writer.WriteElementString("MessageType", "OrderFulfillment");
-        }
-
-        /// <summary>
         /// Creates the Amazon Feed Xml for submitting and returns the path it is written to
         /// </summary>
         private async Task<string> CreateFulfillmentFeed(List<AmazonOrderUploadDetail> details)
         {
             using (TextWriter textWriter = new EncodingStringWriter(Encoding.UTF8))
             {
-                XmlTextWriter writer = new XmlTextWriter(textWriter);
-                writer.Formatting = Formatting.Indented;
-
-                WriteFulfillmentStart(writer);
-
-                // Write each shipment
-                foreach (AmazonOrderUploadDetail detail in details)
+                using (XmlTextWriter writer = new XmlTextWriter(textWriter))
                 {
-                    await CreateFulfillmentFeedForShipment(writer, detail).ConfigureAwait(false);
-                }
+                    writer.Formatting = Formatting.Indented;
 
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Close();
+                    using (writer.WriteStartDocumentDisposable())
+                    {
+                        using (writer.WriteStartElementDisposable("AmazonEnvelope"))
+                        {
+                            writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+                            writer.WriteAttributeString("xsi", "noNamespaceSchemaLocation", null, "amzn-envelope.xsd");
+
+                            using (writer.WriteStartElementDisposable("Header"))
+                            {
+                                writer.WriteElementString("DocumentVersion", "1.01");
+                                writer.WriteElementString("MerchantIdentifier", store.MerchantID);
+                            }
+
+                            writer.WriteElementString("MessageType", "OrderFulfillment");
+
+                            // Write each shipment
+                            foreach (AmazonOrderUploadDetail detail in details)
+                            {
+                                await CreateFulfillmentFeedForShipment(writer, detail).ConfigureAwait(false);
+                            }
+                        }
+                    }
+                }
 
                 return textWriter.ToString();
             }
@@ -448,67 +443,84 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 return;
             }
 
-            writer.WriteStartElement("Message");
+            WriteMessageData(writer, orderDetail, shipment);
+        }
 
-            // Can't use order number here since the Message ID must be unique per submission, so using the shipment ID by definition
-            // will always be unique regardless of the number of shipments processed for a single order in this submission
-            writer.WriteElementString("MessageID", shipment.ShipmentID.ToString());
-
-            writer.WriteStartElement("OrderFulfillment");
-            writer.WriteElementString("AmazonOrderID", orderDetail.AmazonOrderID);
-
-            DateTime shipDate = shipment.ShipDate.ToLocalTime();
-
-            // shipdate can't be before the order was placed
-            if (shipDate < shipment.Order.OrderDate)
+        private void WriteMessageData(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, ShipmentEntity shipment)
+        {
+            using (writer.WriteStartElementDisposable("Message"))
             {
-                // set it 10 minutes after it was placed
-                shipDate = shipment.Order.OrderDate.AddMinutes(10);
+                // Message ID must be unique per submission
+                writer.WriteElementString("MessageID", $"{shipment.ShipmentID}-{orderDetail.AmazonOrderID}");
+
+                WriteOrderFulfillmentData(writer, orderDetail, shipment);
             }
+        }
 
-            // shipment can't be in the future
-            if (shipDate > DateTime.Now)
+        private void WriteOrderFulfillmentData(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, ShipmentEntity shipment)
+        {
+            using (writer.WriteStartElementDisposable("OrderFulfillment"))
             {
-                shipDate = DateTime.Now;
+                writer.WriteElementString("AmazonOrderID", orderDetail.AmazonOrderID);
+
+                DateTime shipDate = shipment.ShipDate.ToLocalTime();
+
+                // shipdate can't be before the order was placed
+                if (shipDate < shipment.Order.OrderDate)
+                {
+                    // set it 10 minutes after it was placed
+                    shipDate = shipment.Order.OrderDate.AddMinutes(10);
+                }
+
+                // shipment can't be in the future
+                if (shipDate > DateTime.Now)
+                {
+                    shipDate = DateTime.Now;
+                }
+
+                writer.WriteElementString("FulfillmentDate", shipDate.ToString("yyyy-MM-ddTHH:mm:sszzzz"));
+
+                WriteFulfillmentData(writer, shipment);
             }
+        }
 
-            writer.WriteElementString("FulfillmentDate", shipDate.ToString("yyyy-MM-ddTHH:mm:sszzzz"));
-
-            writer.WriteStartElement("FulfillmentData");
-
-            // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
-            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-            string trackingNumber = shipment.TrackingNumber;
-
-            // Get the service used and strip out any non-ascii characters
-            string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
-            serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
-
-            // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
-            string carrier = GetCarrierName(shipment, shipmentType);
-
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+        /// <summary>
+        /// Write fulfillment data
+        /// </summary>
+        private void WriteFulfillmentData(XmlTextWriter writer, ShipmentEntity shipment)
+        {
+            using (writer.WriteStartElementDisposable("FulfillmentData"))
             {
-                if (track.Length > 0)
+                // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
+                ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+                string trackingNumber = shipment.TrackingNumber;
+
+                // Get the service used and strip out any non-ascii characters
+                string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
+                serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
+
+                // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
+                string carrier = GetCarrierName(shipment, shipmentType);
+
+                // Adjust tracking details per Mail Innovations and others
+                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
                 {
-                    trackingNumber = track;
-                    carrier = "UPS Mail Innovations";
-                }
-                else
-                {
-                    shipmentType = ShipmentTypeCode.Other;
-                }
-            });
+                    if (track.Length > 0)
+                    {
+                        trackingNumber = track;
+                        carrier = "UPS Mail Innovations";
+                    }
+                    else
+                    {
+                        shipmentType = ShipmentTypeCode.Other;
+                    }
+                });
 
-            writer.WriteElementString("CarrierName", carrier);
-            writer.WriteElementString("ShippingMethod", serviceUsed);
+                writer.WriteElementString("CarrierName", carrier);
+                writer.WriteElementString("ShippingMethod", serviceUsed);
 
-            writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
-            writer.WriteEndElement();
-
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+                writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
+            }
         }
 
         /// <summary>
