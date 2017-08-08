@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly Func<string, IJetToken> tokenFactory;
         private readonly LruCache<string, IJetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
-        private object tokenLock = new object();
+        private readonly object tokenLock = new object();
 
         /// <summary>
         /// Constructor
