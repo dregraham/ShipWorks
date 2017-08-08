@@ -215,7 +215,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
-                case FedExServiceType.FedExNextDayFreight:
                 case FedExServiceType.FirstFreight:
                     return "FedExFreight";
                 default:
