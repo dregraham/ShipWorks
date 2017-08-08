@@ -6,6 +6,7 @@ using Interapptive.Shared.Security;
 using Moq;
 using Moq.Language.Flow;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Stores.Platforms.Jet.DTO;

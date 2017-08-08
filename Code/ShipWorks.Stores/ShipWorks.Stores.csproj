@@ -273,7 +273,6 @@
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\Jet\IJetOrderLoader.cs" />
     <Compile Include="Platforms\Jet\IJetProductRepository.cs" />
-    <Compile Include="Platforms\Jet\IJsonRequest.cs" />
     <Compile Include="Platforms\Jet\ITokenRepository.cs" />
     <Compile Include="Platforms\Jet\JetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\JetDownloader.cs" />
@@ -289,7 +288,6 @@
     <Compile Include="Platforms\Jet\JetToken.cs" />
     <Compile Include="Platforms\Jet\JetTokenRepository.cs" />
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
-    <Compile Include="Platforms\Jet\JsonRequest.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />

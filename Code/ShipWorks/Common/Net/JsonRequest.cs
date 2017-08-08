@@ -5,7 +5,7 @@ using Interapptive.Shared.Net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 
-namespace ShipWorks.Stores.Platforms.Jet
+namespace ShipWorks.Common.Net
 {
     /// <summary>
     /// Json request

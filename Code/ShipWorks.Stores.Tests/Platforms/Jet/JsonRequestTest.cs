@@ -4,6 +4,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Tests.Shared;
 using Xunit;

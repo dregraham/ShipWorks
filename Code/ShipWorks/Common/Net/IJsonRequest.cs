@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 
-namespace ShipWorks.Stores.Platforms.Jet
+namespace ShipWorks.Common.Net
 {
     /// <summary>
     /// Represents a Json Request
