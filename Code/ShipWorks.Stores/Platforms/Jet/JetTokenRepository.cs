@@ -5,7 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the token for the store
         /// </summary>
-        public IJetToken GetToken(JetStoreEntity store)
+        public IJetToken GetToken(IJetStoreEntity store)
         {
             string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
                 .Decrypt(store.Secret);
@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Removes the token from the Cache
         /// </summary>
-        public void RemoveToken(JetStoreEntity store)
+        public void RemoveToken(IJetStoreEntity store)
         {
             if (tokenCache.Contains(store.ApiUser))
             {

@@ -56,18 +56,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
-            List<ShipmentItem> items = new List<ShipmentItem>();
-
-            foreach (JetOrderItemEntity jetItem in shipment.Order.OrderItems.Cast<JetOrderItemEntity>())
-            {
-                items.Add(new ShipmentItem
+            return shipment.Order.OrderItems.Cast<JetOrderItemEntity>()
+                .Select(jetItem => new ShipmentItem
                 {
                     MerchantSku = jetItem.MerchantSku,
                     ResponseShipmentSkuQuantity = Convert.ToInt32(jetItem.Quantity)
-                });
-            }
-
-            return items;
+                })
+                .ToList();
         }
 
         /// <summary>
