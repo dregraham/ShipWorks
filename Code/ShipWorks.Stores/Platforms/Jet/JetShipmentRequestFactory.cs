@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get a list of ShipmentItems for the shipment
         /// </summary>
-        private List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
+        private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
             List<ShipmentItem> items = new List<ShipmentItem>();
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the Jet specific carrier for the shipment
         /// </summary>
-        private string GetCarrier(ShipmentEntity shipment)
+        private static string GetCarrier(ShipmentEntity shipment)
         {
             switch (shipment.ShipmentTypeCode)
             {
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the Fedex specific carrier for Jet
         /// </summary>
-        private string GetFedExCarrier(FedExShipmentEntity shipmentFedEx)
+        private static string GetFedExCarrier(FedExShipmentEntity shipmentFedEx)
         {
             switch ((FedExServiceType)shipmentFedEx.Service)
             {
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the Ups specific carrier for Jet
         /// </summary>
-        private string GetUpsCarrier(UpsShipmentEntity shipmentUps)
+        private static string GetUpsCarrier(UpsShipmentEntity shipmentUps)
         {
             UpsServiceType service = (UpsServiceType) shipmentUps.Service;
 
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the carrier specific Jet shipment method
         /// </summary>
-        private string GetShipmentMethod(ShipmentEntity shipment)
+        private static string GetShipmentMethod(ShipmentEntity shipment)
         {
             switch (shipment.ShipmentTypeCode)
             {
@@ -164,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the ontrac shipment method for Jet
         /// </summary>
-        private string GetOnTracShipmentMethod(OnTracShipmentEntity shipmentOnTrac)
+        private static string GetOnTracShipmentMethod(OnTracShipmentEntity shipmentOnTrac)
         {
             switch ((OnTracServiceType) shipmentOnTrac.Service)
             {
@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         /// <param name="shipmentFedEx"></param>
         /// <returns></returns>
-        private string GetFedExShipmentMethod(FedExShipmentEntity shipmentFedEx)
+        private static string GetFedExShipmentMethod(FedExShipmentEntity shipmentFedEx)
         {
             switch ((FedExServiceType) shipmentFedEx.Service)
             {
@@ -224,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         /// <param name="shipmentPostal"></param>
         /// <returns></returns>
-        private string GetUspsShipmentMethod(PostalShipmentEntity shipmentPostal)
+        private static string GetUspsShipmentMethod(PostalShipmentEntity shipmentPostal)
         {
             switch ((PostalServiceType) shipmentPostal.Service)
             {
@@ -250,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         /// <param name="shipmentUps"></param>
         /// <returns></returns>
-        private string GetUpsShipmentMethod(UpsShipmentEntity shipmentUps)
+        private static string GetUpsShipmentMethod(UpsShipmentEntity shipmentUps)
         {
             switch ((UpsServiceType) shipmentUps.Service)
             {  
