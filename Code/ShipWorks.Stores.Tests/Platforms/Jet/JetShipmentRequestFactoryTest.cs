@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             {
                 Processed = true,
                 TrackingNumber = "abcd123",
-                ShipmentType = (int)ShipmentTypeCode.Other,
+                ShipmentType = (int) ShipmentTypeCode.Other,
                 Order = new JetOrderEntity(),
                 OriginPostalCode = "63040"
             };
@@ -47,15 +47,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithShipmentDate()
         {
-            DateTime processedDate = DateTime.UtcNow.AddDays(-23);
-            DateTime shipDate = DateTime.UtcNow.AddDays(-21);
+            DateTime shipDate = new DateTime(2017, 8, 8, 8, 8, 8, DateTimeKind.Utc);
 
-            shipment.ProcessedDate = processedDate;
             shipment.ShipDate = shipDate;
 
             JetShipmentRequest result = testObject.Create(shipment);
 
-            Assert.Equal(processedDate, result.Shipments.First().ResponseShipmentDate);
+            Assert.Equal(shipDate, result.Shipments.First().ResponseShipmentDate);
         }
 
         [Fact]
@@ -77,10 +75,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsFedEx()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
             shipment.FedEx = new FedExShipmentEntity
             {
-                Service = (int)FedExServiceType.FedExGround
+                Service = (int) FedExServiceType.FedExGround
             };
 
             JetShipmentRequest result = testObject.Create(shipment);
@@ -91,10 +89,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsFedExFreight()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
             shipment.FedEx = new FedExShipmentEntity
             {
-                Service = (int)FedExServiceType.FedEx1DayFreight
+                Service = (int) FedExServiceType.FedEx1DayFreight
             };
 
             JetShipmentRequest result = testObject.Create(shipment);
@@ -119,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsUps()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            shipment.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
             shipment.Ups = new UpsShipmentEntity
             {
                 Service = (int) UpsServiceType.UpsGround
@@ -133,10 +131,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsUpsMI()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            shipment.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
             shipment.Ups = new UpsShipmentEntity
             {
-                Service = (int)UpsServiceType.UpsMailInnovationsFirstClass
+                Service = (int) UpsServiceType.UpsMailInnovationsFirstClass
             };
 
             JetShipmentRequest result = testObject.Create(shipment);
@@ -147,10 +145,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsUpsSurePost()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            shipment.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
             shipment.Ups = new UpsShipmentEntity
             {
-                Service = (int)UpsServiceType.UpsSurePostLessThan1Lb
+                Service = (int) UpsServiceType.UpsSurePostLessThan1Lb
             };
 
             JetShipmentRequest result = testObject.Create(shipment);
@@ -161,7 +159,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsUsps()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
             shipment.Postal = new PostalShipmentEntity();
 
             JetShipmentRequest result = testObject.Create(shipment);
@@ -172,18 +170,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsOnTrac()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.OnTrac;
+            shipment.ShipmentType = (int) ShipmentTypeCode.OnTrac;
             shipment.OnTrac = new OnTracShipmentEntity();
 
             JetShipmentRequest result = testObject.Create(shipment);
-            
+
             Assert.Equal("OnTrac", result.Shipments.First().Carrier);
         }
 
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithCarrier_WhenShipmentIsOther()
         {
-            shipment.ShipmentType = (int)ShipmentTypeCode.Other;
+            shipment.ShipmentType = (int) ShipmentTypeCode.Other;
             shipment.Other = new OtherShipmentEntity();
 
             JetShipmentRequest result = testObject.Create(shipment);

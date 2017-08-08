@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Shipments.Add(new Shipment
             {
                 ShipmentTrackingNumber = shipment.TrackingNumber,
-                ResponseShipmentDate = shipment.ProcessedDate ?? DateTime.UtcNow,
+                ResponseShipmentDate = shipment.ShipDate,
                 ResponseShipmentMethod = GetShipmentMethod(shipment),
                 ShipFromZipCode = shipment.OriginPostalCode,
                 Carrier = GetCarrier(shipment),
