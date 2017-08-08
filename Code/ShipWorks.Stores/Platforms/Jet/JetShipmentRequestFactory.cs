@@ -215,12 +215,9 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
-                case FedExServiceType.InternationalPriorityFreight:
-                case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.FedExNextDayFreight:
                 case FedExServiceType.FirstFreight:
                     return "FedExFreight";
-                case FedExServiceType.FedExGround:
                 default:
                     return "FedExGround";
             }
@@ -278,8 +275,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case UpsServiceType.UpsMailInnovationsFirstClass:
                 case UpsServiceType.UpsMailInnovationsPriority:
                 case UpsServiceType.UpsMailInnovationsExpedited:
-                case UpsServiceType.UpsMailInnovationsIntEconomy:
-                case UpsServiceType.UpsMailInnovationsIntPriority:
                     return "UPSMailInnovations";
                 case UpsServiceType.UpsSurePostLessThan1Lb:
                 case UpsServiceType.UpsSurePost1LbOrGreater:
@@ -290,7 +285,6 @@ namespace ShipWorks.Stores.Platforms.Jet
                 case UpsServiceType.UpsExpressEarlyAm:
                 case UpsServiceType.UpsExpressSaver:
                     return "UPSExpressCritical";
-                case UpsServiceType.UpsGround:
                 default:
                     return "UPSGround";
             }
