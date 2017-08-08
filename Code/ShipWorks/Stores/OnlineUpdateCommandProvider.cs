@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -25,7 +27,7 @@ namespace ShipWorks.Stores
             public StoreTypeCode StoreTypeCode;
 
             public IEnumerable<IMenuCommand> CommonCommands;
-            public Dictionary<StoreType, IEnumerable<IMenuCommand>> InstanceCommands;
+            public Dictionary<StoreEntity, IEnumerable<IMenuCommand>> InstanceCommands;
         }
 
         #endregion
@@ -48,9 +50,9 @@ namespace ShipWorks.Stores
         /// Creates a new set of Online Update commands based on the current stores.  The new set is saved and tracked for update state operations.
         /// Any previously created set is discarded.
         /// </summary>
-        public List<IMenuCommand> CreateOnlineUpdateCommands(IEnumerable<long> selected)
+        public List<IMenuCommand> CreateOnlineUpdateCommands(IEnumerable<long> selected, ILifetimeScope lifetimeScope)
         {
-            storeTypeCommands = CreateCommandsByStoreType(selected);
+            storeTypeCommands = CreateCommandsByStoreType(selected, lifetimeScope);
             commands = BuildCommandLayout(storeTypeCommands);
 
             if (commands.None())
@@ -82,11 +84,11 @@ namespace ShipWorks.Stores
             else
             {
                 // Find the exact instance
-                StoreType storeType = commandSet.InstanceCommands.Where(p => p.Value.Contains(command)).Select(p => p.Key).Single();
+                StoreEntity store = commandSet.InstanceCommands.Where(p => p.Value.Contains(command)).Select(p => p.Key).Single();
 
                 // Build the set of headers to process
                 relevantKeys = selectedKeys.Select(orderID => DataProvider.GetOrderHeader(orderID)).Where(
-                    header => header.StoreID == storeType.Store.StoreID && !header.IsManual).Select(header => header.OrderID).ToList();
+                    header => header.StoreID == store.StoreID && !header.IsManual).Select(header => header.OrderID).ToList();
             }
 
             if (relevantKeys.Count != selectedKeys.Count())
@@ -172,57 +174,47 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create command sets broken up by store type
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private static Dictionary<StoreTypeCode, OnlineUpdateCommandSet> CreateCommandsByStoreType(IEnumerable<long> selected)
+        private static Dictionary<StoreTypeCode, OnlineUpdateCommandSet> CreateCommandsByStoreType(IEnumerable<long> selected, ILifetimeScope lifetimeScope)
         {
-            Dictionary<StoreTypeCode, OnlineUpdateCommandSet> storeTypeCommands = new Dictionary<StoreTypeCode, OnlineUpdateCommandSet>();
-
-            // Get all the store keys of non-manual orders
-            List<long> storeKeys = selected.Select(orderID => DataProvider.GetOrderHeader(orderID)).Where(header => !header.IsManual).Select(h => h.StoreID).Distinct().ToList();
-
-            // Filter the storekeys by the ones that still exist
-            List<StoreEntity> stores = storeKeys.Select(k => StoreManager.GetStore(k)).Where(s => s != null).ToList();
-
             // Instances that the user is allowed to update status for
-            IEnumerable<StoreEntity> updatableStores = stores.Where(s => UserSession.Security.HasPermission(PermissionType.OrdersEditStatus, s.StoreID));
+            return selected.Select(orderID => DataProvider.GetOrderHeader(orderID))
+                .Where(header => !header.IsManual)
+                .Select(h => h.StoreID)
+                .Distinct()
+                .Select(StoreManager.GetStore)
+                .Where(s => s != null)
+                .Where(s => UserSession.Security.HasPermission(PermissionType.OrdersEditStatus, s.StoreID))
+                .GroupBy(x => x.StoreTypeCode)
+                .Select(x => new { StoreType = x.Key, Commands = CreateOnlineCommandSet(lifetimeScope, x) })
+                .Where(x => x.Commands.CommonCommands.Any() || x.Commands.InstanceCommands.Any())
+                .ToDictionary(x => x.StoreType, x => x.Commands);
+        }
 
-            // Go through each store type present
-            foreach (StoreType storeType in updatableStores.Select(s => (StoreTypeCode) s.TypeCode).Distinct().Select(c => StoreTypeManager.GetType(c)))
-            {
-                OnlineUpdateCommandSet commands = new OnlineUpdateCommandSet();
-                commands.StoreTypeCode = storeType.TypeCode;
+        /// <summary>
+        /// Create an online command set from a store grouping
+        /// </summary>
+        private static OnlineUpdateCommandSet CreateOnlineCommandSet(ILifetimeScope lifetimeScope, IGrouping<StoreTypeCode, StoreEntity> grouping)
+        {
+            IOnlineUpdateCommandCreator commandCreator = GetCommandCreator(lifetimeScope, grouping.Key);
 
-                // Get all the instance of this StoreType
-                List<StoreType> instances = updatableStores.Where(s => s.TypeCode == (int) storeType.TypeCode).Select(s => StoreTypeManager.GetType(s)).ToList();
+            OnlineUpdateCommandSet commands = new OnlineUpdateCommandSet();
+            commands.StoreTypeCode = grouping.Key;
+            commands.CommonCommands = commandCreator.CreateOnlineUpdateCommonCommands();
+            commands.InstanceCommands = grouping
+                .Select(x => new { Store = x, Commands = commandCreator.CreateOnlineUpdateInstanceCommands(x) })
+                .Where(x => x.Commands.Any())
+                .ToDictionary(x => x.Store, x => x.Commands);
+            return commands;
+        }
 
-                // Create the list of common commands
-                commands.CommonCommands = storeType.CreateOnlineUpdateCommonCommands();
-
-                // Map store names to their instance commands
-                Dictionary<StoreType, IEnumerable<IMenuCommand>> instanceCommands = new Dictionary<StoreType, IEnumerable<IMenuCommand>>();
-
-                // Create all the instance commands
-                foreach (StoreType storeInstance in instances)
-                {
-                    IEnumerable<IMenuCommand> storeCommands = storeInstance.CreateOnlineUpdateInstanceCommands();
-
-                    if (storeCommands.Any())
-                    {
-                        instanceCommands[storeInstance] = storeCommands;
-                    }
-                }
-
-                // Set the list of instance commands for the storetype
-                commands.InstanceCommands = instanceCommands;
-
-                // Add to the map if there are any
-                if (commands.CommonCommands.Any() || instanceCommands.Any())
-                {
-                    storeTypeCommands[storeType.TypeCode] = commands;
-                }
-            }
-
-            return storeTypeCommands;
+        /// <summary>
+        /// Get a command creator for the given key
+        /// </summary>
+        private static IOnlineUpdateCommandCreator GetCommandCreator(ILifetimeScope lifetimeScope, StoreTypeCode key)
+        {
+            return lifetimeScope.IsRegisteredWithKey<IOnlineUpdateCommandCreator>(key) ?
+                lifetimeScope.ResolveKeyed<IOnlineUpdateCommandCreator>(key) :
+                lifetimeScope.Resolve<IOnlineUpdateCommandCreator>(TypedParameter.From(key));
         }
 
         /// <summary>
@@ -286,7 +278,7 @@ namespace ShipWorks.Stores
 
                     if (instanceInSubMenu)
                     {
-                        instanceRoot = new MenuCommand(instanceEntry.Key.Store.StoreName);
+                        instanceRoot = new MenuCommand(instanceEntry.Key.StoreName);
                         parent.ChildCommands.Add(instanceRoot);
                     }
                     else

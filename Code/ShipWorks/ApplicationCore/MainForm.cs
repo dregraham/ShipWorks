@@ -139,6 +139,7 @@ namespace ShipWorks
         long searchRestoreFilterNodeID = 0;
 
         Lazy<DockControl> shipmentDock;
+        private ILifetimeScope menuCommandLifetimeScope;
 
         /// <summary>
         /// Constructor
@@ -1360,10 +1361,14 @@ namespace ShipWorks
         /// <summary>
         /// Apply the given set of MenuCommands to the given menuitem and ribbon popup
         /// </summary>
-        private void ApplyMenuCommands(IEnumerable<IMenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
+        private void ApplyMenuCommands(IEnumerable<IMenuCommand> commands, ToolStripMenuItem menuItem,
+            Popup ribbonPopup, EventHandler actionHandler, ILifetimeScope lifetimeScope)
         {
             menuItem.DropDownItems.Clear();
             ribbonPopup.Items.Clear();
+
+            menuCommandLifetimeScope?.Dispose();
+            menuCommandLifetimeScope = lifetimeScope;
 
             // Update available local status options
             menuItem.DropDownItems.AddRange(MenuCommandConverter.ToToolStripItems(commands, actionHandler));
@@ -1579,11 +1584,13 @@ namespace ShipWorks
         /// </summary>
         private void UpdateOnlineUpdateCommands()
         {
+            var lifetimeScope = IoC.BeginLifetimeScope();
+
             // Update the update online options
-            IEnumerable<IMenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys);
+            IEnumerable<IMenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys, lifetimeScope);
 
             // Update the ui to display the commands
-            ApplyMenuCommands(updateOnlineCommands, contextOrderOnlineUpdate, popupUpdateOnline, OnExecuteUpdateOnlineCommand);
+            ApplyMenuCommands(updateOnlineCommands, contextOrderOnlineUpdate, popupUpdateOnline, OnExecuteUpdateOnlineCommand, lifetimeScope);
         }
 
         /// <summary>
@@ -1611,7 +1618,8 @@ namespace ShipWorks
                 StatusPresetCommands.CreateMenuCommands(StatusPresetTarget.Order, gridControl.SelectedStoreKeys, true),
                 contextOrderLocalStatus,
                 popupLocalStatus,
-                OnExecuteMenuCommand);
+                OnExecuteMenuCommand,
+                null);
         }
 
         /// <summary>

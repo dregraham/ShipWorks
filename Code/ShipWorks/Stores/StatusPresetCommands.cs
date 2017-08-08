@@ -68,7 +68,7 @@ namespace ShipWorks.Stores
                 }
             }
 
-            // Create the comands for editing the status presets.  Editing the presets is considered managment of the store,
+            // Create the commands for editing the status presets.  Editing the presets is considered management of the store,
             // so they have to be clear to do that.
             if (showEditPresets && UserSession.Security.HasPermission(PermissionType.ManageStores))
             {
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Create the comands for editing the status presets
+        /// Create the commands for editing the status presets
         /// </summary>
         private static void CreateEditPresetsCommands(List<MenuCommand> commands, List<StoreEntity> stores)
         {

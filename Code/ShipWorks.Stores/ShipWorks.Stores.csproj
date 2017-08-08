@@ -153,6 +153,7 @@
     <Compile Include="Content\CombineOrderAudit.cs" />
     <Compile Include="Content\CombineOrderGateway.cs" />
     <Compile Include="Content\CombineOrderViewModel.cs" />
+    <Compile Include="Content\DefaultOnlineUpdateCommandCreator.cs" />
     <Compile Include="Content\ICombineOrderAudit.cs" />
     <Compile Include="Content\ICombineOrderDialog.cs" />
     <Compile Include="Content\ICombineOrderSuccessDialog.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />

@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -40,21 +38,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
     {
         // Logger
         private readonly ILog log;
-        private readonly IAmazonOnlineUpdater shipmentUpdater;
-        private readonly IMessageHelper messageHelper;
         private readonly Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonStoreType(StoreEntity store, IAmazonOnlineUpdater shipmentUpdater,
-            IMessageHelper messageHelper, Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient,
+        public AmazonStoreType(StoreEntity store,
+            Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient,
             Func<Type, ILog> createLogger)
             : base(store)
         {
             this.createMwsClient = createMwsClient;
-            this.messageHelper = messageHelper;
-            this.shipmentUpdater = shipmentUpdater;
             log = createLogger(GetType());
         }
 
@@ -484,56 +478,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("ASIN", () => item.Value.ASIN);
             outline.AddElement("OrderItemCode", () => item.Value.AmazonOrderItemCode);
             outline.AddElement("ConditionNote", () => item.Value.ConditionNote);
-        }
-
-        /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new[]
-            {
-                new AsyncMenuCommand("Upload Shipment Details", OnUploadDetails)
-            };
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            var results = await ShipmentUploadCallback(context.SelectedKeys).ConfigureAwait(true);
-            var exceptions = results.Failure ? new[] { results.Exception } : Enumerable.Empty<Exception>();
-
-            context.Complete(exceptions, MenuCommandResult.Error);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private async Task<IResult> ShipmentUploadCallback(IEnumerable<long> orderKeys)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                using (var progressDialog = messageHelper.ShowProgressDialog(
-                    "Upload Shipment Details",
-                    "ShipWorks is uploading shipment information."))
-                {
-                    progressDialog.ToUpdater($"Updating {orderKeys} orders...");
-
-                    await shipmentUpdater.UploadOrderShipmentDetails((AmazonStoreEntity) Store, orderKeys).ConfigureAwait(false);
-
-                    return Result.FromSuccess();
-                }
-            }
-            catch (AmazonException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                return Result.FromError(ex);
-            }
         }
 
         /// <summary>
