@@ -39,6 +39,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             requestSubmitterFactory.Setup(h => h.GetHttpVariableRequestSubmitter()).Returns(variableRequestSubmitter);
             requestSubmitterFactory.Setup(h => h.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json")).Returns(requestSubmitter);
+
+            mock.Mock<IJetAuthenticatedRequest>()
+                .Setup(r => r.ProcessRequest<JetShipResponse>(It.IsAny<string>(), It.IsAny<IHttpRequestSubmitter>(),
+                    It.IsAny<JetStoreEntity>()))
+                .Returns(GenericResult.FromSuccess(new JetShipResponse()));
+
         }
 
         [Fact]
@@ -265,7 +271,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().UpdateShipmentDetails(shipment);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<object>("UpdateShipmentDetails", requestSubmitter.Object, store));
+                .Verify(r => r.ProcessRequest<JetShipResponse>("UpdateShipmentDetails", requestSubmitter.Object, store));
         }
 
         public void Dispose()

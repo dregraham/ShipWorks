@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             testObject.ProcessRequest<string>("action", submitter, new JetStoreEntity());
 
-            jetToken.Verify(t=>t.AttachTo(submitter), Times.Once);
+            jetToken.Verify(t => t.AttachTo(submitter), Times.Once);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             // This line here is a sanity check to make sure that we attach twice. It is included in other
             // tests, but the point of the test is the method being called twice...
-            jetToken.Verify(t=> t.AttachTo(submitter), Times.Exactly(2));
+            jetToken.Verify(t => t.AttachTo(submitter), Times.Exactly(2));
 
             Assert.True(processRequest.Success);
             Assert.Equal("success", processRequest.Value);
@@ -251,6 +251,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             mock.Dispose();
         }
-
     }
 }
