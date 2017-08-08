@@ -4,7 +4,6 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Moq;
-using Moq.Language.Flow;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,12 +25,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithUsernameAndPassword_ReturnsToken_WhenProcessRequestSuccessful()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
@@ -53,12 +48,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithUsernameAndPassword_CreatesHttpTextPostRequestSubmitter_WithCorrectUsernameAndPassword()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
@@ -74,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             mock.Create<JetTokenRepository>().GetToken("username", "password");
 
-            submitterFactory.Verify(
+            mock.Mock<IHttpRequestSubmitterFactory>().Verify(
                 f => f.GetHttpTextPostRequestSubmitter("{\"user\": \"username\",\"pass\":\"password\"}",
                     "application/json"), Times.Once);
         }
@@ -82,12 +73,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithUsernameAndPassword_ProcessTokenIsCalled()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
@@ -109,12 +96,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithUsernameAndPassword_ProcessTokenIsCalledOnce_WhenGetTokenCalledTwice()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
@@ -140,13 +123,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void RemoveToken_ProcessRequestIsCalledTwice_WhenRemoveTokenCalledBetweenGetTokenCalls()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
-
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+            
             var jetTokenResponse = new JetTokenResponse()
             {
                 Token = "the token"
@@ -174,13 +153,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithStore_GetHttpTextPostRequest_WithDeobfuscatedPassword()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
-
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+            
             var jetTokenResponse = new JetTokenResponse()
             {
                 Token = "the token"
@@ -209,7 +184,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             mock.Create<JetTokenRepository>().GetToken(jetStoreEntity);
 
-            submitterFactory.Verify(
+            mock.Mock<IHttpRequestSubmitterFactory>().Verify(
                 f => f.GetHttpTextPostRequestSubmitter("{\"user\": \"username\",\"pass\":\"decrypted password\"}",
                     "application/json"), Times.Once);
         }
@@ -217,12 +192,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithStore_GetHttpTextPostRequest_CreatesEncryptionProvider_WithCorrectSalt()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
@@ -259,12 +230,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void GetTokenWithStore_GetHttpTextPostRequest_DecryptsApiPassword()
         {
-            var submitter = mock.CreateMock<IHttpRequestSubmitter>();
-
-            var submitterFactory = mock.Mock<IHttpRequestSubmitterFactory>();
-            submitterFactory
-                .Setup(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"))
-                .Returns(submitter.Object);
+            var submitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var jetTokenResponse = new JetTokenResponse()
             {
