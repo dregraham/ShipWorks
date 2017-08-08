@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -121,8 +122,18 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             submitter.Uri = new Uri($"{orderEndpointPath}/{merchantOrderId}/shipped");
             submitter.Verb = HttpVerb.Put;
+            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
 
-            jetAuthenticatedRequest.ProcessRequest<object>("UpdateShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UpdateShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            
+            if (result.Failure)
+            {
+                throw new JetException(result.Message);
+            }
+            if (result.Value?.Errors?.Any() ?? false)
+            {
+                throw new JetException($"Error message when uploading shipment details to Jet.com: \r\n\r\n{result.Value.Errors.First()}");
+            }
         }
     }
 }

@@ -246,6 +246,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
     <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetShipResponse.cs" />
     <Compile Include="Platforms\Jet\DTO\JetAddress.cs" />
     <Compile Include="Platforms\Jet\DTO\JetBuyer.cs" />
     <Compile Include="Platforms\Jet\DTO\JetFeeAdjustment.cs" />
