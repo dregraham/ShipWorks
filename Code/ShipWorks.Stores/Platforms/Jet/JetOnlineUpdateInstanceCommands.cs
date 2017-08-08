@@ -8,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
-
     /// <summary>
     /// Generates and handles OnlineUpdateInstanceCommands
     /// </summary>

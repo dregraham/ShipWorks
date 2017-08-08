@@ -14,7 +14,6 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetAuthenticatedRequest : IJetAuthenticatedRequest
     {
-
         private readonly IJsonRequest jsonRequest;
         private readonly IJetTokenRepository tokenRepo;
 
