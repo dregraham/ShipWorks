@@ -53,6 +53,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MyEbayShipped = source.MyEbayShipped;
             PayPalTransactionID = source.PayPalTransactionID;
             PayPalAddressStatus = source.PayPalAddressStatus;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             
@@ -163,6 +164,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 PayPalAddressStatus { get; }
+        /// <summary> The OriginalOrderID property of the Entity EbayOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EbayOrderItem"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         

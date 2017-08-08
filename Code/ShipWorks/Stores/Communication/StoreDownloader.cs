@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, 
+        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration,
                                 ISqlAdapterFactory sqlAdapterFactory, IOrderUtility orderUtility)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));

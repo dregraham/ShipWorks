@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.Content
                 x => new ShopifyOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    ShopifyOrderID = x.ShopifyOrderID
+                    ShopifyOrderID = x.ShopifyOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

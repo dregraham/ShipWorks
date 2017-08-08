@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ClickCartProOrderSearchID = source.ClickCartProOrderSearchID;
             OrderID = source.OrderID;
             ClickCartProOrderID = source.ClickCartProOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             ClickCartProOrder = source.ClickCartProOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ClickCartProOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity ClickCartProOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ClickCartProOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IClickCartProOrderEntity ClickCartProOrder { get; }

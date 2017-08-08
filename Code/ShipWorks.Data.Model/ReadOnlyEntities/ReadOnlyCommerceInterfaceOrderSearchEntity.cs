@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CommerceInterfaceOrderSearchID = source.CommerceInterfaceOrderSearchID;
             OrderID = source.OrderID;
             CommerceInterfaceOrderNumber = source.CommerceInterfaceOrderNumber;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             CommerceInterfaceOrder = source.CommerceInterfaceOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String CommerceInterfaceOrderNumber { get; }
+        /// <summary> The OriginalOrderID property of the Entity CommerceInterfaceOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "CommerceInterfaceOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public ICommerceInterfaceOrderEntity CommerceInterfaceOrder { get; }

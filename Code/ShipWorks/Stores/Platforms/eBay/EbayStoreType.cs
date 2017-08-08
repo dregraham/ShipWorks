@@ -304,7 +304,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            return new EbayOrderItemEntity()
+            var orderItem = new EbayOrderItemEntity()
             {
                 FeedbackLeftType = (int) EbayFeedbackType.None,
                 FeedbackLeftComments = "",
@@ -320,8 +320,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 PayPalAddressStatus = (int) AddressStatusCodeType.None,
                 PayPalTransactionID = "",
 
-                SellingManagerRecord = 0,
+                SellingManagerRecord = 0
             };
+
+            orderItem.Fields[EbayOrderItemFields.OriginalOrderID.FieldIndex].ExpressionToApply =
+                new Expression(OrderItemFields.OrderID);
+
+            return orderItem;
         }
 
         /// <summary>

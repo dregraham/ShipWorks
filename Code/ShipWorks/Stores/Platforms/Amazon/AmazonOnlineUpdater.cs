@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             var source = factory.AmazonOrderSearch
                 .InnerJoin(factory.OrderSearch)
-                .On(AmazonOrderSearchFields.OrderID == OrderSearchFields.OrderID);
+                .On(AmazonOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
 
             var query = factory.Create()
                 .From(source)

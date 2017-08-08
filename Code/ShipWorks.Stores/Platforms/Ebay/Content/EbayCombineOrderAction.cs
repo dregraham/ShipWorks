@@ -38,7 +38,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
                     OrderID = combinedOrder.OrderID,
                     EbayOrderID = x.EbayOrderID,
                     EbayBuyerID = x.EbayBuyerID,
-                    SellingManagerRecord = x.SellingManagerRecord
+                    SellingManagerRecord = x.SellingManagerRecord,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

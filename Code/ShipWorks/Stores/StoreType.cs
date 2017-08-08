@@ -175,10 +175,9 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Creates a store-specific instance of an OrderItemEntity
         /// </summary>
-        public virtual OrderItemEntity CreateOrderItemInstance()
-        {
-            return new OrderItemEntity();
-        }
+        /// <returns></returns>
+        public virtual OrderItemEntity CreateOrderItemInstance() =>
+            new OrderItemEntity();
 
         /// <summary>
         /// Creates a store-specific instance of OrderItemAttributeEntity

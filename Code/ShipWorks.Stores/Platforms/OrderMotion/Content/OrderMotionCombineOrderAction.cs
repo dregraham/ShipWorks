@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.Content
                 x => new OrderMotionOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    OrderMotionShipmentID = x.OrderMotionShipmentID
+                    OrderMotionShipmentID = x.OrderMotionShipmentID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

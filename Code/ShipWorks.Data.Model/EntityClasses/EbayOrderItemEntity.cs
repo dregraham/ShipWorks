@@ -382,6 +382,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PayPalTransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PayPalAddressStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -603,6 +605,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.PayPalAddressStatus, true); }
 			set	{ SetValue((int)EbayOrderItemFieldIndex.PayPalAddressStatus, value); }
+		}
+
+		/// <summary> The OriginalOrderID property of the Entity EbayOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EbayOrderItem"."OriginalOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OriginalOrderID
+		{
+			get { return (System.Int64)GetValue((int)EbayOrderItemFieldIndex.OriginalOrderID, true); }
+			set	{ SetValue((int)EbayOrderItemFieldIndex.OriginalOrderID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

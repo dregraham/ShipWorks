@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             YahooOrderSearchID = source.YahooOrderSearchID;
             OrderID = source.OrderID;
             YahooOrderID = source.YahooOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             YahooOrder = source.YahooOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String YahooOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity YahooOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "YahooOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IYahooOrderEntity YahooOrder { get; }

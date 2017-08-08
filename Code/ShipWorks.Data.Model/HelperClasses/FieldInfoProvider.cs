@@ -391,6 +391,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonOrderSearchEntity", "AmazonOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)AmazonOrderSearchFieldIndex.AmazonOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)AmazonOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonOrderSearchEntity", "AmazonOrderID", typeof(System.String), false, false, false, false,  (int)AmazonOrderSearchFieldIndex.AmazonOrderID, 32, 0, 0);
+			this.AddElementFieldInfo("AmazonOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)AmazonOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits AmazonProfileEntity's FieldInfo objects</summary>
 		private void InitAmazonProfileEntityInfos()
@@ -615,6 +616,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorOrderSearchEntity", "ChannelAdvisorOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)ChannelAdvisorOrderSearchFieldIndex.ChannelAdvisorOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("ChannelAdvisorOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ChannelAdvisorOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ChannelAdvisorOrderSearchEntity", "CustomOrderIdentifier", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderSearchFieldIndex.CustomOrderIdentifier, 50, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)ChannelAdvisorOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits ChannelAdvisorStoreEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorStoreEntityInfos()
@@ -644,6 +646,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ClickCartProOrderSearchEntity", "ClickCartProOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)ClickCartProOrderSearchFieldIndex.ClickCartProOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("ClickCartProOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ClickCartProOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ClickCartProOrderSearchEntity", "ClickCartProOrderID", typeof(System.String), false, false, false, false,  (int)ClickCartProOrderSearchFieldIndex.ClickCartProOrderID, 25, 0, 0);
+			this.AddElementFieldInfo("ClickCartProOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)ClickCartProOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits CommerceInterfaceOrderEntity's FieldInfo objects</summary>
 		private void InitCommerceInterfaceOrderEntityInfos()
@@ -659,6 +662,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("CommerceInterfaceOrderSearchEntity", "CommerceInterfaceOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)CommerceInterfaceOrderSearchFieldIndex.CommerceInterfaceOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("CommerceInterfaceOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)CommerceInterfaceOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("CommerceInterfaceOrderSearchEntity", "CommerceInterfaceOrderNumber", typeof(System.String), false, false, false, false,  (int)CommerceInterfaceOrderSearchFieldIndex.CommerceInterfaceOrderNumber, 60, 0, 0);
+			this.AddElementFieldInfo("CommerceInterfaceOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)CommerceInterfaceOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits ComputerEntity's FieldInfo objects</summary>
 		private void InitComputerEntityInfos()
@@ -832,6 +836,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderItemEntity", "MyEbayShipped", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderItemFieldIndex.MyEbayShipped, 0, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalTransactionID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalTransactionID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalAddressStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalAddressStatus, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits EbayOrderSearchEntity's FieldInfo objects</summary>
 		private void InitEbayOrderSearchEntityInfos()
@@ -842,6 +847,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayOrderID, 0, 0, 19);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayBuyerID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits EbayStoreEntity's FieldInfo objects</summary>
 		private void InitEbayStoreEntityInfos()
@@ -1546,6 +1552,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)GrouponOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits GrouponOrderSearchEntity's FieldInfo objects</summary>
 		private void InitGrouponOrderSearchEntityInfos()
@@ -1555,6 +1562,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)GrouponOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderSearchFieldIndex.GrouponOrderID, 50, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderSearchEntity", "ParentOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderSearchFieldIndex.ParentOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("GrouponOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)GrouponOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
 		private void InitGrouponStoreEntityInfos()
@@ -1720,6 +1728,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("LemonStandOrderSearchEntity", "LemonStandOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)LemonStandOrderSearchFieldIndex.LemonStandOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("LemonStandOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)LemonStandOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("LemonStandOrderSearchEntity", "LemonStandOrderID", typeof(System.String), false, false, false, false,  (int)LemonStandOrderSearchFieldIndex.LemonStandOrderID, 20, 0, 0);
+			this.AddElementFieldInfo("LemonStandOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)LemonStandOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits LemonStandStoreEntity's FieldInfo objects</summary>
 		private void InitLemonStandStoreEntityInfos()
@@ -1744,6 +1753,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("MagentoOrderSearchEntity", "MagentoOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)MagentoOrderSearchFieldIndex.MagentoOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("MagentoOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)MagentoOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("MagentoOrderSearchEntity", "MagentoOrderID", typeof(System.Int64), false, false, false, false,  (int)MagentoOrderSearchFieldIndex.MagentoOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("MagentoOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)MagentoOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits MagentoStoreEntity's FieldInfo objects</summary>
 		private void InitMagentoStoreEntityInfos()
@@ -1771,6 +1781,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("MarketplaceAdvisorOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)MarketplaceAdvisorOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("MarketplaceAdvisorOrderSearchEntity", "InvoiceNumber", typeof(System.String), false, false, false, false,  (int)MarketplaceAdvisorOrderSearchFieldIndex.InvoiceNumber, 50, 0, 0);
 			this.AddElementFieldInfo("MarketplaceAdvisorOrderSearchEntity", "SellerOrderNumber", typeof(System.Int64), false, false, false, false,  (int)MarketplaceAdvisorOrderSearchFieldIndex.SellerOrderNumber, 0, 0, 19);
+			this.AddElementFieldInfo("MarketplaceAdvisorOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)MarketplaceAdvisorOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits MarketplaceAdvisorStoreEntity's FieldInfo objects</summary>
 		private void InitMarketplaceAdvisorStoreEntityInfos()
@@ -1816,6 +1827,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("NetworkSolutionsOrderSearchEntity", "NetworkSolutionsOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("NetworkSolutionsOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)NetworkSolutionsOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("NetworkSolutionsOrderSearchEntity", "NetworkSolutionsOrderID", typeof(System.Int64), false, false, false, false,  (int)NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("NetworkSolutionsOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)NetworkSolutionsOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits NetworkSolutionsStoreEntity's FieldInfo objects</summary>
 		private void InitNetworkSolutionsStoreEntityInfos()
@@ -2121,6 +2133,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderMotionOrderSearchEntity", "OrderMotionOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)OrderMotionOrderSearchFieldIndex.OrderMotionOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderMotionOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)OrderMotionOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderMotionOrderSearchEntity", "OrderMotionShipmentID", typeof(System.Int32), false, false, false, false,  (int)OrderMotionOrderSearchFieldIndex.OrderMotionShipmentID, 0, 0, 10);
+			this.AddElementFieldInfo("OrderMotionOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderMotionOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits OrderMotionStoreEntity's FieldInfo objects</summary>
 		private void InitOrderMotionStoreEntityInfos()
@@ -2150,6 +2163,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderSearchEntity", "OrderNumber", typeof(System.Int64), false, false, false, false,  (int)OrderSearchFieldIndex.OrderNumber, 0, 0, 19);
 			this.AddElementFieldInfo("OrderSearchEntity", "OrderNumberComplete", typeof(System.String), false, false, false, false,  (int)OrderSearchFieldIndex.OrderNumberComplete, 50, 0, 0);
 			this.AddElementFieldInfo("OrderSearchEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderSearchFieldIndex.IsManual, 0, 0, 0);
+			this.AddElementFieldInfo("OrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits OtherProfileEntity's FieldInfo objects</summary>
 		private void InitOtherProfileEntityInfos()
@@ -2185,6 +2199,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PayPalOrderSearchEntity", "PayPalOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)PayPalOrderSearchFieldIndex.PayPalOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("PayPalOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)PayPalOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("PayPalOrderSearchEntity", "TransactionID", typeof(System.String), false, false, false, false,  (int)PayPalOrderSearchFieldIndex.TransactionID, 50, 0, 0);
+			this.AddElementFieldInfo("PayPalOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)PayPalOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits PayPalStoreEntity's FieldInfo objects</summary>
 		private void InitPayPalStoreEntityInfos()
@@ -2306,6 +2321,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProStoresOrderSearchEntity", "ProStoresOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)ProStoresOrderSearchFieldIndex.ProStoresOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("ProStoresOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ProStoresOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ProStoresOrderSearchEntity", "ConfirmationNumber", typeof(System.String), false, false, false, false,  (int)ProStoresOrderSearchFieldIndex.ConfirmationNumber, 12, 0, 0);
+			this.AddElementFieldInfo("ProStoresOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)ProStoresOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits ProStoresStoreEntity's FieldInfo objects</summary>
 		private void InitProStoresStoreEntityInfos()
@@ -2388,6 +2404,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("SearsOrderSearchEntity", "SearsOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)SearsOrderSearchFieldIndex.SearsOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("SearsOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)SearsOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("SearsOrderSearchEntity", "PoNumber", typeof(System.String), false, false, false, false,  (int)SearsOrderSearchFieldIndex.PoNumber, 30, 0, 0);
+			this.AddElementFieldInfo("SearsOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)SearsOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits SearsStoreEntity's FieldInfo objects</summary>
 		private void InitSearsStoreEntityInfos()
@@ -2704,6 +2721,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyOrderSearchEntity", "ShopifyOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)ShopifyOrderSearchFieldIndex.ShopifyOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ShopifyOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ShopifyOrderSearchEntity", "ShopifyOrderID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderSearchFieldIndex.ShopifyOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("ShopifyOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)ShopifyOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits ShopifyStoreEntity's FieldInfo objects</summary>
 		private void InitShopifyStoreEntityInfos()
@@ -2893,6 +2911,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ThreeDCartOrderSearchEntity", "ThreeDCartOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("ThreeDCartOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)ThreeDCartOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("ThreeDCartOrderSearchEntity", "ThreeDCartOrderID", typeof(System.Int64), false, false, false, false,  (int)ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("ThreeDCartOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)ThreeDCartOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits ThreeDCartStoreEntity's FieldInfo objects</summary>
 		private void InitThreeDCartStoreEntityInfos()
@@ -3340,6 +3359,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)WalmartOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "LineNumber", typeof(System.String), false, false, false, false,  (int)WalmartOrderItemFieldIndex.LineNumber, 20, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "OnlineStatus", typeof(System.String), false, false, false, false,  (int)WalmartOrderItemFieldIndex.OnlineStatus, 20, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)WalmartOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits WalmartOrderSearchEntity's FieldInfo objects</summary>
 		private void InitWalmartOrderSearchEntityInfos()
@@ -3348,6 +3368,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "WalmartOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)WalmartOrderSearchFieldIndex.WalmartOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)WalmartOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "PurchaseOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.PurchaseOrderID, 32, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits WalmartStoreEntity's FieldInfo objects</summary>
 		private void InitWalmartStoreEntityInfos()
@@ -3538,6 +3559,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("YahooOrderSearchEntity", "YahooOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)YahooOrderSearchFieldIndex.YahooOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("YahooOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)YahooOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("YahooOrderSearchEntity", "YahooOrderID", typeof(System.String), false, false, false, false,  (int)YahooOrderSearchFieldIndex.YahooOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("YahooOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)YahooOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits YahooProductEntity's FieldInfo objects</summary>
 		private void InitYahooProductEntityInfos()

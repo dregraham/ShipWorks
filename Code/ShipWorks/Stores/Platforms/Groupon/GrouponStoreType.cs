@@ -194,7 +194,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            return new GrouponOrderItemEntity
+            var orderItem = new GrouponOrderItemEntity
             {
                 Permalink = string.Empty,
                 ChannelSKUProvided = string.Empty,
@@ -202,6 +202,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 BomSKU = string.Empty,
                 GrouponLineItemID = string.Empty
             };
+
+            orderItem.Fields[GrouponOrderItemFields.OriginalOrderID.FieldIndex].ExpressionToApply =
+                new Expression(OrderItemFields.OrderID);
+
+            return orderItem;
         }
 
         /// <summary>

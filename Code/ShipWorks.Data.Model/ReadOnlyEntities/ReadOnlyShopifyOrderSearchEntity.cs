@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShopifyOrderSearchID = source.ShopifyOrderSearchID;
             OrderID = source.OrderID;
             ShopifyOrderID = source.ShopifyOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             ShopifyOrder = source.ShopifyOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ShopifyOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity ShopifyOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShopifyOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IShopifyOrderEntity ShopifyOrder { get; }

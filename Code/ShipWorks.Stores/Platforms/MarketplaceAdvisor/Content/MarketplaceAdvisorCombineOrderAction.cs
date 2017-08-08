@@ -27,7 +27,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.Content
                 {
                     OrderID = combinedOrder.OrderID,
                     SellerOrderNumber = x.SellerOrderNumber,
-                    InvoiceNumber = x.InvoiceNumber
+                    InvoiceNumber = x.InvoiceNumber,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

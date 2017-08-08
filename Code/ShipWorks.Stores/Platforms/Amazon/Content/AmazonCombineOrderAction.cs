@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
                 x => new AmazonOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    AmazonOrderID = x.AmazonOrderID
+                    AmazonOrderID = x.AmazonOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

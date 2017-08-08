@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderID = source.OrderID;
             InvoiceNumber = source.InvoiceNumber;
             SellerOrderNumber = source.SellerOrderNumber;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             MarketplaceAdvisorOrder = source.MarketplaceAdvisorOrder?.AsReadOnly(objectMap);
@@ -73,6 +74,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 SellerOrderNumber { get; }
+        /// <summary> The OriginalOrderID property of the Entity MarketplaceAdvisorOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "MarketplaceAdvisorOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IMarketplaceAdvisorOrderEntity MarketplaceAdvisorOrder { get; }

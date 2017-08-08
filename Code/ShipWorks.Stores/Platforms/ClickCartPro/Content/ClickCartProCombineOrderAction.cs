@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
                 x => new ClickCartProOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    ClickCartProOrderID = x.ClickCartProOrderID
+                    ClickCartProOrderID = x.ClickCartProOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

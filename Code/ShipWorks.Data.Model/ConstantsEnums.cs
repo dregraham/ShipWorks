@@ -420,6 +420,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
 		AmazonOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1302,6 +1304,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
 		CustomOrderIdentifier,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1558,6 +1562,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
 		ClickCartProOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1730,6 +1736,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
 		CommerceInterfaceOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2226,6 +2234,8 @@ namespace ShipWorks.Data.Model
 		PayPalTransactionID,
 		///<summary>PayPalAddressStatus. </summary>
 		PayPalAddressStatus,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2242,6 +2252,8 @@ namespace ShipWorks.Data.Model
 		EbayBuyerID,
 		///<summary>SellingManagerRecord. </summary>
 		SellingManagerRecord,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4094,6 +4106,8 @@ namespace ShipWorks.Data.Model
 		BomSKU,
 		///<summary>GrouponLineItemID. </summary>
 		GrouponLineItemID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4108,6 +4122,8 @@ namespace ShipWorks.Data.Model
 		GrouponOrderID,
 		///<summary>ParentOrderID. </summary>
 		ParentOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4728,6 +4744,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
 		LemonStandOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4974,6 +4992,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
 		MagentoOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5266,6 +5286,8 @@ namespace ShipWorks.Data.Model
 		InvoiceNumber,
 		///<summary>SellerOrderNumber. </summary>
 		SellerOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5660,6 +5682,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
 		NetworkSolutionsOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6718,6 +6742,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
 		OrderMotionShipmentID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6824,6 +6850,8 @@ namespace ShipWorks.Data.Model
 		OrderNumberComplete,
 		///<summary>IsManual. </summary>
 		IsManual,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7028,6 +7056,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>TransactionID. </summary>
 		TransactionID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7452,6 +7482,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
 		ConfirmationNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7834,6 +7866,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>PoNumber. </summary>
 		PoNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8644,6 +8678,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
 		ShopifyOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9332,6 +9368,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
 		ThreeDCartOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10428,6 +10466,8 @@ namespace ShipWorks.Data.Model
 		LineNumber,
 		///<summary>OnlineStatus. </summary>
 		OnlineStatus,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10440,6 +10480,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
 		PurchaseOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11034,6 +11076,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>YahooOrderID. </summary>
 		YahooOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

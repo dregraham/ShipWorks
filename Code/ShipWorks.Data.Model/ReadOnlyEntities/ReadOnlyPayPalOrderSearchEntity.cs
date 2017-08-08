@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PayPalOrderSearchID = source.PayPalOrderSearchID;
             OrderID = source.OrderID;
             TransactionID = source.TransactionID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             PayPalOrder = source.PayPalOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String TransactionID { get; }
+        /// <summary> The OriginalOrderID property of the Entity PayPalOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "PayPalOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IPayPalOrderEntity PayPalOrder { get; }

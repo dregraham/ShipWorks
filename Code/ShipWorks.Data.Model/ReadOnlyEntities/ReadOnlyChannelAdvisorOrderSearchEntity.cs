@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ChannelAdvisorOrderSearchID = source.ChannelAdvisorOrderSearchID;
             OrderID = source.OrderID;
             CustomOrderIdentifier = source.CustomOrderIdentifier;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             ChannelAdvisorOrder = source.ChannelAdvisorOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String CustomOrderIdentifier { get; }
+        /// <summary> The OriginalOrderID property of the Entity ChannelAdvisorOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ChannelAdvisorOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IChannelAdvisorOrderEntity ChannelAdvisorOrder { get; }

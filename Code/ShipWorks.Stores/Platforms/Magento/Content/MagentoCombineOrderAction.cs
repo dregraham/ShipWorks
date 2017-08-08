@@ -25,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.Magento.Content
                 .Select(x => new MagentoOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    MagentoOrderID = x.MagentoOrderID
+                    MagentoOrderID = x.MagentoOrderID,
+                    OriginalOrderID = x.OrderID
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());

@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.Content
                 x => new LemonStandOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    LemonStandOrderID = x.LemonStandOrderID
+                    LemonStandOrderID = x.LemonStandOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

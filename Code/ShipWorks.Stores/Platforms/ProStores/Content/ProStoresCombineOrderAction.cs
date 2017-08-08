@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ProStores.Content
                 x => new ProStoresOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    ConfirmationNumber = x.ConfirmationNumber
+                    ConfirmationNumber = x.ConfirmationNumber,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

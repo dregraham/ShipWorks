@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
                 x => new ChannelAdvisorOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    CustomOrderIdentifier = x.CustomOrderIdentifier
+                    CustomOrderIdentifier = x.CustomOrderIdentifier,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

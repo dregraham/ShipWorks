@@ -22,7 +22,8 @@ CREATE TABLE [dbo].[OrderSearch]
 [StoreID] [bigint] NOT NULL,
 [OrderNumber] [bigint] NOT NULL,
 [OrderNumberComplete] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsManual] [bit] NOT NULL
+[IsManual] [bit] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderSearch] on [dbo].[OrderSearch]'
@@ -49,7 +50,8 @@ CREATE TABLE [dbo].[AmazonOrderSearch]
 (
 [AmazonOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrderSearch] on [dbo].[AmazonOrderSearch]'
@@ -66,7 +68,8 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderSearch]
 (
 [ChannelAdvisorOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[CustomOrderIdentifier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CustomOrderIdentifier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderSearch] on [dbo].[ChannelAdvisorOrderSearch]'
@@ -83,7 +86,8 @@ CREATE TABLE [dbo].[ClickCartProOrderSearch]
 (
 [ClickCartProOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ClickCartProOrderID] [varchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ClickCartProOrderID] [varchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ClickCartProOrderSearch] on [dbo].[ClickCartProOrderSearch]'
@@ -100,7 +104,8 @@ CREATE TABLE [dbo].[CommerceInterfaceOrderSearch]
 (
 [CommerceInterfaceOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[CommerceInterfaceOrderNumber] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CommerceInterfaceOrderNumber] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_CommerceInterfaceOrderSearch] on [dbo].[CommerceInterfaceOrderSearch]'
@@ -119,7 +124,8 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [OrderID] [bigint] NOT NULL,
 [EbayOrderID] [bigint] NOT NULL,
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellingManagerRecord] [int] NULL
+[SellingManagerRecord] [int] NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
@@ -136,7 +142,8 @@ CREATE TABLE [dbo].[GrouponOrderSearch]
 (
 [GrouponOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearch]'
@@ -153,7 +160,8 @@ CREATE TABLE [dbo].[LemonStandOrderSearch]
 (
 [LemonStandOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[LemonStandOrderID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[LemonStandOrderID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderSearch] on [dbo].[LemonStandOrderSearch]'
@@ -170,7 +178,8 @@ CREATE TABLE [dbo].[MagentoOrderSearch]
 (
 [MagentoOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[MagentoOrderID] [bigint] NOT NULL
+[MagentoOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoOrderSearch] on [dbo].[MagentoOrderSearch]'
@@ -188,7 +197,8 @@ CREATE TABLE [dbo].[MarketplaceAdvisorOrderSearch]
 [MarketplaceAdvisorOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [InvoiceNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellerOrderNumber] [bigint] NOT NULL
+[SellerOrderNumber] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MarketplaceAdvisorOrderSearch] on [dbo].[MarketplaceAdvisorOrderSearch]'
@@ -201,7 +211,8 @@ CREATE TABLE [dbo].[NetworkSolutionsOrderSearch]
 (
 [NetworkSolutionsOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[NetworkSolutionsOrderID] [bigint] NOT NULL
+[NetworkSolutionsOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_NetworkSolutionsOrderSearch] on [dbo].[NetworkSolutionsOrderSearch]'
@@ -214,7 +225,8 @@ CREATE TABLE [dbo].[OrderMotionOrderSearch]
 (
 [OrderMotionOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[OrderMotionShipmentID] [int] NOT NULL
+[OrderMotionShipmentID] [int] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderMotionOrderSearch] on [dbo].[OrderMotionOrderSearch]'
@@ -227,7 +239,8 @@ CREATE TABLE [dbo].[PayPalOrderSearch]
 (
 [PayPalOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[TransactionID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[TransactionID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PayPalOrderSearch] on [dbo].[PayPalOrderSearch]'
@@ -240,7 +253,8 @@ CREATE TABLE [dbo].[ProStoresOrderSearch]
 (
 [ProStoresOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ConfirmationNumber] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ConfirmationNumber] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderSearch]'
@@ -253,7 +267,8 @@ CREATE TABLE [dbo].[SearsOrderSearch]
 (
 [SearsOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[PoNumber] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PoNumber] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_SearsOrderSearch] on [dbo].[SearsOrderSearch]'
@@ -266,7 +281,8 @@ CREATE TABLE [dbo].[ShopifyOrderSearch]
 (
 [ShopifyOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ShopifyOrderID] [bigint] NOT NULL
+[ShopifyOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyOrderSearch] on [dbo].[ShopifyOrderSearch]'
@@ -279,7 +295,8 @@ CREATE TABLE [dbo].[ThreeDCartOrderSearch]
 (
 [ThreeDCartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ThreeDCartOrderID] [bigint] NOT NULL
+[ThreeDCartOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartOrderSearch] on [dbo].[ThreeDCartOrderSearch]'
@@ -292,7 +309,8 @@ CREATE TABLE [dbo].[WalmartOrderSearch]
 (
 [WalmartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderSearch] on [dbo].[WalmartOrderSearch]'
@@ -309,7 +327,8 @@ CREATE TABLE [dbo].[YahooOrderSearch]
 (
 [YahooOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[YahooOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[YahooOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderSearch] on [dbo].[YahooOrderSearch]'
@@ -387,4 +406,28 @@ GO
 PRINT N'Adding foreign keys to [dbo].[YahooOrderSearch]'
 GO
 ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID]) ON DELETE CASCADE
+GO
+PRINT N'Adding OriginalOrderID to [dbo].[EbayOrderItem]'
+GO
+ALTER TABLE [dbo].[EbayOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_EbayOrderItem_OriginalOrderID] DEFAULT ((0))
+GO
+UPDATE [dbo].[EbayOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[EbayOrderItem]
+GO
+ALTER TABLE [dbo].[EbayOrderItem] DROP CONSTRAINT [DF_EbayOrderItem_OriginalOrderID]
+GO
+PRINT N'Adding OriginalOrderID to [dbo].[GrouponOrderItem]'
+GO
+ALTER TABLE [dbo].[GrouponOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_GrouponOrderItem_OriginalOrderID] DEFAULT ((0))
+GO
+UPDATE [dbo].[GrouponOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[GrouponOrderItem]
+GO
+ALTER TABLE [dbo].[GrouponOrderItem] DROP CONSTRAINT [DF_GrouponOrderItem_OriginalOrderID]
+GO
+PRINT N'Adding OriginalOrderID to [dbo].[WalmartOrderItem]'
+GO
+ALTER TABLE [dbo].[WalmartOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_WalmartOrderItem_OriginalOrderID] DEFAULT ((0))
+GO
+UPDATE [dbo].[WalmartOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[WalmartOrderItem]
+GO
+ALTER TABLE [dbo].[WalmartOrderItem] DROP CONSTRAINT [DF_WalmartOrderItem_OriginalOrderID]
 GO

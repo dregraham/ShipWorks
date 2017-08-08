@@ -352,6 +352,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ClickCartProOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -478,6 +480,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ClickCartProOrderSearchFieldIndex.ClickCartProOrderID, true); }
 			set	{ SetValue((int)ClickCartProOrderSearchFieldIndex.ClickCartProOrderID, value); }
+		}
+
+		/// <summary> The OriginalOrderID property of the Entity ClickCartProOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ClickCartProOrderSearch"."OriginalOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OriginalOrderID
+		{
+			get { return (System.Int64)GetValue((int)ClickCartProOrderSearchFieldIndex.OriginalOrderID, true); }
+			set	{ SetValue((int)ClickCartProOrderSearchFieldIndex.OriginalOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ClickCartProOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

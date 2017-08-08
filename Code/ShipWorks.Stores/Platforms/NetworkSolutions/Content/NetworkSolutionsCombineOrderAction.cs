@@ -23,7 +23,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutionss.Content
                 .Select(x => new NetworkSolutionsOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    NetworkSolutionsOrderID = x.NetworkSolutionsOrderID
+                    NetworkSolutionsOrderID = x.NetworkSolutionsOrderID,
+                    OriginalOrderID = x.OrderID
                 });
 
             return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());

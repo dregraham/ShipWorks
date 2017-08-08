@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Walmart.Content
                 x => new WalmartOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    PurchaseOrderID = x.PurchaseOrderID
+                    PurchaseOrderID = x.PurchaseOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }
