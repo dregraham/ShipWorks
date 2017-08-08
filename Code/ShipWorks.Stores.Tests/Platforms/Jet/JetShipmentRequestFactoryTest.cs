@@ -56,8 +56,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             JetShipmentRequest result = testObject.Create(shipment);
 
             Assert.Equal(processedDate, result.Shipments.First().ResponseShipmentDate);
-            Assert.Equal(shipDate, result.Shipments.First().ExpectedDeliveryDate);
-            Assert.Equal(shipDate, result.Shipments.First().CarrierPickUpDate);
         }
 
         [Fact]

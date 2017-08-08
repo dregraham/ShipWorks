@@ -43,9 +43,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 ShipmentTrackingNumber = shipment.TrackingNumber,
                 ResponseShipmentDate = shipment.ProcessedDate ?? DateTime.UtcNow,
                 ResponseShipmentMethod = GetShipmentMethod(shipment),
-                ExpectedDeliveryDate = shipment.ShipDate,
                 ShipFromZipCode = shipment.OriginPostalCode,
-                CarrierPickUpDate = shipment.ShipDate,
                 Carrier = GetCarrier(shipment),
                 ShipmentItems = GetShipmentItems(shipment)
             });

@@ -38,15 +38,9 @@ namespace ShipWorks.Stores.Platforms.Jet.DTO.Requests
 
         [JsonProperty("response_shipment_method")]
         public string ResponseShipmentMethod { get; set; }
-
-        [JsonProperty("expected_delivery_date")]
-        public DateTime ExpectedDeliveryDate { get; set; }
-
+        
         [JsonProperty("ship_from_zip_code")]
         public string ShipFromZipCode { get; set; }
-
-        [JsonProperty("carrier_pick_up_date")]
-        public DateTime CarrierPickUpDate { get; set; }
 
         [JsonProperty("carrier")]
         public string Carrier { get; set; }
