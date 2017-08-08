@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Miva.WizardPages;
@@ -25,8 +27,8 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaStoreType(StoreEntity store)
-            : base(store)
+        public MivaStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

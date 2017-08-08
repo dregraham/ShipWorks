@@ -158,9 +158,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private async Task<IEnumerable<string>> GetOrderIdentifiers(OrderEntity order)
         {
-            return order.CombineSplitStatus == CombineSplitStatusType.Combined ? 
-                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) : 
-                new[] {StoreType.GetOnlineOrderIdentifier(order)};
+            return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
+                new[] { StoreType.GetOnlineOrderIdentifier(order) };
         }
 
         /// <summary>
@@ -206,9 +206,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             AppendExtendedShipmentDetails(request, shipment);
 
-            ProcessRequest(request, "updateshipment");
+            await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Appends the extended shipment details to the request's Variables collection if the store's module
         /// version >= 3.10.0.

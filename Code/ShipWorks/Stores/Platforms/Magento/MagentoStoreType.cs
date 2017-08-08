@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -34,8 +35,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoStoreType(StoreEntity store)
-            : base(store)
+        public MagentoStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 

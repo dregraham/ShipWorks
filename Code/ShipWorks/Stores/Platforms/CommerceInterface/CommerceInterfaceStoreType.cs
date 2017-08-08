@@ -4,6 +4,7 @@ using System.Net;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
@@ -42,8 +43,8 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommerceInterfaceStoreType(StoreEntity store)
-            : base(store)
+        public CommerceInterfaceStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }

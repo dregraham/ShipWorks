@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -21,7 +18,8 @@ namespace ShipWorks.Stores.Platforms.GeekSeller
         /// Constructor
         /// </summary>
         /// <param name="store"></param>
-        public GeekSellerStoreType(StoreEntity store) : base(store)
+        public GeekSellerStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 

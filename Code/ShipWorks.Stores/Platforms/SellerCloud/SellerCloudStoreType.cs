@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.SellerCloud
@@ -8,13 +10,14 @@ namespace ShipWorks.Stores.Platforms.SellerCloud
     /// <summary>
     /// SellerCloud generic module store implementation
     /// </summary>
-    [KeyedComponent(typeof(StoreType), StoreTypeCode.SellerCloud, ExternallyOwned=true)]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SellerCloud, ExternallyOwned = true)]
     public class SellerCloudStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public SellerCloudStoreType(StoreEntity store) : base(store)
+        public SellerCloudStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 
@@ -31,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SellerCloud
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => 
+        public override string AccountSettingsHelpUrl =>
             "http://support.shipworks.com/support/solutions/articles/4000097089-adding-a-sellercloud-store";
     }
 }

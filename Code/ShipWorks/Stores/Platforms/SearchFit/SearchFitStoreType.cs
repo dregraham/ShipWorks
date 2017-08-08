@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
@@ -20,8 +22,8 @@ namespace ShipWorks.Stores.Platforms.SearchFit
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearchFitStoreType(StoreEntity store)
-            : base(store)
+        public SearchFitStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

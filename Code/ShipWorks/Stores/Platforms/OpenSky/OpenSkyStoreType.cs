@@ -1,8 +1,10 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.OpenSky
@@ -17,8 +19,8 @@ namespace ShipWorks.Stores.Platforms.OpenSky
         /// <summary>
         /// Constructor
         /// </summary>
-        public OpenSkyStoreType(StoreEntity store) :
-            base(store)
+        public OpenSkyStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

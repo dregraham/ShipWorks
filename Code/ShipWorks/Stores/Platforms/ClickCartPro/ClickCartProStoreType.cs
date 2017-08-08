@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
@@ -32,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Constructor
         /// </summary>
-        public ClickCartProStoreType(StoreEntity store)
-            : base(store)
+        public ClickCartProStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }

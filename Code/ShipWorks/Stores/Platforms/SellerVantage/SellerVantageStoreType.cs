@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
@@ -20,8 +22,8 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Constructor
         /// </summary>
-        public SellerVantageStoreType(StoreEntity store)
-            : base(store)
+        public SellerVantageStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

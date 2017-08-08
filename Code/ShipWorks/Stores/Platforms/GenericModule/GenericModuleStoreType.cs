@@ -19,7 +19,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -42,14 +41,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleStoreType));
+        private readonly IMessageHelper messageHelper;
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericModuleStoreType(StoreEntity store)
-            : base(store)
+        public GenericModuleStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store)
         {
-
+            this.orderManager = orderManager;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -505,7 +507,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     commands.Add(command);
                 }
 
-
                 // Check if we can add the ability to manually set status with comment
                 if (statusSupport == GenericOnlineStatusSupport.StatusWithComment)
                 {
@@ -525,10 +526,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (((GenericModuleStoreEntity) Store).ModuleOnlineShipmentDetails)
             {
                 // Add the option to Upload shipment details
-                MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
+                IMenuCommand uploadCommand = new AsyncMenuCommand("Upload Shipment Details", OnUploadShipmentDetails)
+                {
+                    BreakBefore = true
+                };
                 commands.Add(uploadCommand);
-
-                uploadCommand.BreakBefore = true;
             }
 
             return commands;
@@ -537,47 +539,50 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Upload shipment details for the selected orders
         /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
+        private async Task OnUploadShipmentDetails(MenuCommandExecutionContext context)
         {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading the tracking number.",
-                "Updating order {0} of {1}...");
+            var results = await UploadShipmentDetails(context.SelectedKeys).ConfigureAwait(true);
 
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
+        }
 
-            executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys);
+        /// <summary>
+        /// Set the online status of all the requested orders
+        /// </summary>
+        private async Task<IEnumerable<IResult>> UploadShipmentDetails(IEnumerable<long> keys)
+        {
+            return await keys
+                .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading the tracking number.", "Updating order {0} of {1}...",
+                    orderID => UploadShipmentDetailsCallback(orderID))
+                .ConfigureAwait(false);
         }
 
         /// <summary>
         /// The worker thread function that does the actual details uploading
         /// </summary>
-        private void UploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async Task<IResult> UploadShipmentDetailsCallback(long orderID)
         {
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
+                return Result.FromSuccess();
             }
-            else
-            {
-                try
-                {
-                    GenericStoreOnlineUpdater updater = CreateOnlineUpdater();
-                    updater.UploadTrackingNumber(shipment);
-                }
-                catch (GenericStoreException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
 
-                    // add the error to issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
+            try
+            {
+                GenericStoreOnlineUpdater updater = CreateOnlineUpdater();
+                await updater.UploadTrackingNumber(shipment).ConfigureAwait(false);
+                return Result.FromSuccess();
+            }
+            catch (GenericStoreException ex)
+            {
+                // log it
+                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
+
+                return Result.FromError(ex);
             }
         }
 
@@ -622,48 +627,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private async Task<IEnumerable<GenericResult<long>>> SetOnlineStatus(MenuCommandExecutionContext context, object code, string comment)
         {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-
-                return await context.SelectedKeys
-                    .SelectWithProgress(messageHelper, "Set Status", "ShipWorks is setting the online status.", "Updating order {0} of {1}...",
-                        key => SetOnlineStatusCallback(key, code, comment))
-                    .ConfigureAwait(false);
-            }
-
-            //return await PerformOperation(context, async (key, updater) =>
-            //{
-            //    var result = await SetOnlineStatusCallback(key, code, comment).ConfigureAwait(true);
-            //    updater.Update();
-            //    return result;
-            //}).ConfigureAwait(false);
+            return await context.SelectedKeys
+                .SelectWithProgress(messageHelper, "Set Status", "ShipWorks is setting the online status.", "Updating order {0} of {1}...",
+                    key => SetOnlineStatusCallback(key, code, comment))
+                .ConfigureAwait(false);
         }
-
-        ///// <summary>
-        ///// Set the online status of all the requested orders
-        ///// </summary>
-        //private async Task<IEnumerable<GenericResult<long>>> PerformOperation(MenuCommandExecutionContext context,
-        //    Func<long, IProgressUpdater, Task<GenericResult<long>>> processItem)
-        //{
-        //    var results = new List<GenericResult<long>>();
-
-        //    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-        //    {
-        //        IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-        //        using (var progress = messageHelper.ShowProgressDialog("Set Status", "ShipWorks is setting the online status."))
-        //        {
-        //            var updater = progress.ToUpdater(context.SelectedKeys, "Updating order {0} of {1}...");
-
-        //            foreach (var key in context.SelectedKeys.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
-        //            {
-        //                results.Add(await processItem(key, updater).ConfigureAwait(false));
-        //            }
-        //        }
-        //    }
-
-        //    return results;
-        //}
 
         /// <summary>
         /// The worker thread function that does the actual status setting

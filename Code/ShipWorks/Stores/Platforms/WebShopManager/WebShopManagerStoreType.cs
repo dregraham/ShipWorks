@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
@@ -19,8 +21,8 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         /// <summary>
         /// Constructor
         /// </summary>
-        public WebShopManagerStoreType(StoreEntity store)
-            : base(store)
+        public WebShopManagerStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

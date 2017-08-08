@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         }
 
         /// <summary>
-        /// Validate the response agains the generic schema
+        /// Validate the response against the generic schema
         /// </summary>
         protected override void ValidateSchema(string resultXml, string action)
         {
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         }
 
         /// <summary>
-        /// Finish prepareing the request with miva specific data
+        /// Finish preparing the request with miva specific data
         /// </summary>
         protected override void TransformRequest(HttpVariableRequestSubmitter request, string action)
         {
@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                 // Online Status
                 request.Variables.Add("statusSource", GetOnlineStatusSource((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy));
 
-                // For encyrption passphrase
+                // For encryption passphrase
                 if (store.ModuleUrl.StartsWith("https", StringComparison.OrdinalIgnoreCase) && store.EncryptionPassphrase.Length > 0)
                 {
                     request.Variables.Add("swpassphrase", SecureText.Decrypt(store.EncryptionPassphrase, store.ModuleUsername));
@@ -238,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                         request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
                         request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
 
-                        GenericModuleResponse response = ProcessRequest(request, "updateshipment");
+                        GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
 
                         // extract the new status
                         string newStatus = XPathUtility.Evaluate(response.XPath, "//OrderStatus", "failed_after_update");

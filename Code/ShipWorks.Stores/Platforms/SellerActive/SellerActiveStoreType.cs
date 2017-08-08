@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.SellerActive
@@ -14,8 +16,8 @@ namespace ShipWorks.Stores.Platforms.SellerActive
         /// <summary>
         /// Constructor
         /// </summary>
-        public SellerActiveStoreType(StoreEntity store)
-            : base(store)
+        public SellerActiveStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 

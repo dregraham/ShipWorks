@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
@@ -25,8 +27,8 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderDynamicsStoreType(StoreEntity store)
-            : base(store)
+        public OrderDynamicsStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

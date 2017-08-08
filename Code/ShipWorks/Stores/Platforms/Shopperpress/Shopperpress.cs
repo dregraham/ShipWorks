@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Shopperpress
@@ -15,8 +17,8 @@ namespace ShipWorks.Stores.Platforms.Shopperpress
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopperpressStoreType(StoreEntity store) :
-            base(store)
+        public ShopperpressStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }

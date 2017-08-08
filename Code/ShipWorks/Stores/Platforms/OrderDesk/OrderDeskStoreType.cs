@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.OrderDesk
@@ -16,8 +18,8 @@ namespace ShipWorks.Stores.Platforms.OrderDesk
         /// Initializes a new instance of the <see cref="OrderDeskStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public OrderDeskStoreType(StoreEntity store)
-            : base(store)
+        public OrderDeskStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 
