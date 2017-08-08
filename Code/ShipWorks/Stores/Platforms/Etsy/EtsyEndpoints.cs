@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
         public const string LogOnURLQueryParameter = "login_url=";
 
-        public const string DefaultScope = "email_r transactions_r transactions_w";
+        public const string DefaultScope = "email_r transactions_r transactions_w listings_r";
         public const string OrderIncludes = "Transactions/MainImage(url_75x75,url_570xN),Country(iso_country_code),Coupon";
         public const string TransactionIncludes = "MainImage(url_75x75,url_570xN)";
 
@@ -105,9 +105,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static Uri GetProductUrl(string listingID, string productID)
         {
-            //return new Uri($"{etsyURL}listings/{listingID}/products/{productID}");
-
-            return new Uri("https://openapi.etsy.com/v2/oauth/scopes");
+            return new Uri($"{etsyURL}listings/{listingID}/products/{productID}");
         }
     }
 }
