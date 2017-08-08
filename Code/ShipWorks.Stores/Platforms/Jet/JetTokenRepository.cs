@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly Func<string, IJetToken> tokenFactory;
         private readonly LruCache<string, IJetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
+        private object tokenLock = new object();
 
         /// <summary>
         /// Constructor
@@ -52,28 +53,31 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public IJetToken GetToken(string username, string password)
         {
-            if (tokenCache.Contains(username))
+            lock (tokenLock)
             {
-                return tokenCache[username];
-            }
+                if (tokenCache.Contains(username))
+                {
+                    return tokenCache[username];
+                }
 
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
-                $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
-                "application/json");
+                IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
+                    $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
+                    "application/json");
 
-            submitter.Uri = new Uri(tokenEndpoint);
+                submitter.Uri = new Uri(tokenEndpoint);
 
-            try
-            {
-                JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
+                try
+                {
+                    JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
 
-                tokenCache[username] = tokenFactory(tokenResponse.Token);
+                    tokenCache[username] = tokenFactory(tokenResponse.Token);
 
-                return tokenCache[username];
-            }
-            catch (WebException)
-            {
-                return JetToken.InvalidToken;
+                    return tokenCache[username];
+                }
+                catch (WebException)
+                {
+                    return JetToken.InvalidToken;
+                }
             }
         }
 
