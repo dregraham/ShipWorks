@@ -25,7 +25,9 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            // manually format the date with an offset of -00:00 because the jet api requires it
+            DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffffff-00:00"
         };
 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
