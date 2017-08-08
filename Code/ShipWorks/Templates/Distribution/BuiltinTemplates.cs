@@ -83,6 +83,19 @@ namespace ShipWorks.Templates.Distribution
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
+
+                if (installed < new Version("5.15.0.10926"))
+                {
+                    InstallTemplate(@"Packing Slips\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
+
+                    if (TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
+                    {
+                        InstallTemplate(@"Invoices\ItemGroup", TemplateManager.Tree.CreateEditableClone());
+                    }
+
+                    UpdateDatabaseTemplateVersion(swVersion);
+                }
             }
         }
 

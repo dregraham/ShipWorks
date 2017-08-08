@@ -439,6 +439,8 @@
     <Content Include="Templates\Distribution\Source\Invoices\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Invoices\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard Grouping by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\settings.xml" />
@@ -473,6 +475,8 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Customers\settings.xml" />
