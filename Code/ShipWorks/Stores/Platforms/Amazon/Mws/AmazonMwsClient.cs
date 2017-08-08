@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// Handles communication with Amazon MWS (Marketplace Web Service) for
     /// retrieving orders and uploading shipment information
     /// </summary>
+    [Component(RegistrationType.Self)]
     public sealed class AmazonMwsClient : IDisposable
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
@@ -45,42 +46,32 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
         // Throttling request submitter
         AmazonMwsRequestThrottle throttler;
-
-        // Progress reporting
-        IProgressReporter progress;
+        private readonly IShippingManager shippingManager;
+        private readonly AmazonStoreType storeType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsClient(AmazonStoreEntity store, IProgressReporter progress)
+        public AmazonMwsClient(AmazonStoreEntity store, IShippingManager shippingManager, Func<StoreEntity, AmazonStoreType> getStoreType)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            storeType = getStoreType(store);
+            this.shippingManager = shippingManager;
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
             this.mwsSettings = new AmazonMwsWebClientSettings(store as IAmazonCredentials);
             this.throttler = new AmazonMwsRequestThrottle();
-            this.progress = progress;
-        }
-
-        /// <summary>
-        /// Constructor for no throttling
-        /// </summary>
-        public AmazonMwsClient(AmazonStoreEntity store)
-            : this(store, null)
-        {
-
         }
 
         /// <summary>
         /// The store the webClient is operating on behalf of
         /// </summary>
-        public AmazonStoreEntity Store
-        {
-            get { return store; }
-        }
+        public AmazonStoreEntity Store => store;
+
+        /// <summary>
+        /// Progress reporter that will be used for requests
+        /// </summary>
+        public IProgressReporter Progress { get; set; }
 
         /// <summary>
         /// Makes an api call to make sure the MWS system is not RED (down)
@@ -333,14 +324,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Upload shipments
         /// </summary>
-        public Task UploadShipmentDetails(List<ShipmentEntity> shipments)
+        public async Task UploadShipmentDetails(List<AmazonOrderUploadDetail> shipments)
         {
             if (shipments == null || shipments.Count == 0)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            return SubmitFulfillmentFeed(CreateFulfillmentFeed(shipments));
+            string fulfillmentFeed = await CreateFulfillmentFeed(shipments).ConfigureAwait(false);
+            await SubmitFulfillmentFeed(fulfillmentFeed).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -399,8 +391,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Creates the Amazon Feed Xml for submitting and returns the path it is written to
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private string CreateFulfillmentFeed(List<ShipmentEntity> shipments)
+        private async Task<string> CreateFulfillmentFeed(List<AmazonOrderUploadDetail> details)
         {
             using (TextWriter textWriter = new EncodingStringWriter(Encoding.UTF8))
             {
@@ -410,104 +401,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 WriteFulfillmentStart(writer);
 
                 // Write each shipment
-                foreach (ShipmentEntity shipment in shipments)
+                foreach (AmazonOrderUploadDetail detail in details)
                 {
-                    AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
-                    if (amazonOrder == null)
-                    {
-                        log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is not for an Amazon order.", shipment.ShipmentID);
-                        continue;
-                    }
-
-                    if (amazonOrder.IsManual)
-                    {
-                        log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is manual.", shipment.ShipmentID);
-                        continue;
-                    }
-
-                    if (!shipment.Processed || shipment.Voided)
-                    {
-                        log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is not processed or it is voided.", shipment.ShipmentID);
-                        continue;
-                    }
-
-                    try
-                    {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it or it's related info has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-                    catch (SqlForeignKeyException)
-                    {
-                        log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it or it's related info has been deleted.", shipment.ShipmentID);
-                        continue;
-                    }
-
-                    writer.WriteStartElement("Message");
-
-                    // Can't use order number here since the Message ID must be unique per submission, so using the shipment ID by definition
-                    // will always be unique regardless of the number of shipments processed for a single order in this submission
-                    writer.WriteElementString("MessageID", shipment.ShipmentID.ToString());
-
-                    writer.WriteStartElement("OrderFulfillment");
-                    writer.WriteElementString("AmazonOrderID", amazonOrder.AmazonOrderID);
-
-                    DateTime shipDate = shipment.ShipDate.ToLocalTime();
-
-                    // shipdate can't be before the order was placed
-                    if (shipDate < shipment.Order.OrderDate)
-                    {
-                        // set it 10 minutes after it was placed
-                        shipDate = shipment.Order.OrderDate.AddMinutes(10);
-                    }
-
-                    // shipment can't be in the future
-                    if (shipDate > DateTime.Now)
-                    {
-                        shipDate = DateTime.Now;
-                    }
-
-                    writer.WriteElementString("FulfillmentDate", shipDate.ToString("yyyy-MM-ddTHH:mm:sszzzz"));
-
-                    writer.WriteStartElement("FulfillmentData");
-
-                    // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
-                    ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-                    string trackingNumber = shipment.TrackingNumber;
-
-                    // Get the service used and strip out any non-ascii characters
-                    string serviceUsed = ShippingManager.GetOverriddenSerivceUsed(shipment);
-                    serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
-
-                    // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
-                    string carrier = GetCarrierName(shipment, shipmentType);
-
-                    // Adjust tracking details per Mail Innovations and others
-                    WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
-                    {
-                        if (track.Length > 0)
-                        {
-                            trackingNumber = track;
-                            carrier = "UPS Mail Innovations";
-                        }
-                        else
-                        {
-                            shipmentType = ShipmentTypeCode.Other;
-                        }
-
-                    });
-
-                    writer.WriteElementString("CarrierName", carrier);
-                    writer.WriteElementString("ShippingMethod", serviceUsed);
-
-                    writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
-                    writer.WriteEndElement();
-
-                    writer.WriteEndElement();
-                    writer.WriteEndElement();
+                    await CreateFulfillmentFeedForShipment(writer, detail).ConfigureAwait(false);
                 }
 
                 writer.WriteEndElement();
@@ -519,19 +415,116 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
+        /// Create a fulfillment feed for a shipment
+        /// </summary>
+        private async Task CreateFulfillmentFeedForShipment(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail)
+        {
+            var shipment = orderDetail.Shipment;
+
+            if (orderDetail.IsManual)
+            {
+                log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is manual.", shipment.ShipmentID);
+                return;
+            }
+
+            if (!shipment.Processed || shipment.Voided)
+            {
+                log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is not processed or it is voided.", shipment.ShipmentID);
+                return;
+            }
+
+            try
+            {
+                await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+            }
+            catch (ObjectDeletedException)
+            {
+                log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it or it's related info has been deleted.", shipment.ShipmentID);
+                return;
+            }
+            catch (SqlForeignKeyException)
+            {
+                log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it or it's related info has been deleted.", shipment.ShipmentID);
+                return;
+            }
+
+            writer.WriteStartElement("Message");
+
+            // Can't use order number here since the Message ID must be unique per submission, so using the shipment ID by definition
+            // will always be unique regardless of the number of shipments processed for a single order in this submission
+            writer.WriteElementString("MessageID", shipment.ShipmentID.ToString());
+
+            writer.WriteStartElement("OrderFulfillment");
+            writer.WriteElementString("AmazonOrderID", orderDetail.AmazonOrderID);
+
+            DateTime shipDate = shipment.ShipDate.ToLocalTime();
+
+            // shipdate can't be before the order was placed
+            if (shipDate < shipment.Order.OrderDate)
+            {
+                // set it 10 minutes after it was placed
+                shipDate = shipment.Order.OrderDate.AddMinutes(10);
+            }
+
+            // shipment can't be in the future
+            if (shipDate > DateTime.Now)
+            {
+                shipDate = DateTime.Now;
+            }
+
+            writer.WriteElementString("FulfillmentDate", shipDate.ToString("yyyy-MM-ddTHH:mm:sszzzz"));
+
+            writer.WriteStartElement("FulfillmentData");
+
+            // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
+            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+            string trackingNumber = shipment.TrackingNumber;
+
+            // Get the service used and strip out any non-ascii characters
+            string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
+            serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
+
+            // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
+            string carrier = GetCarrierName(shipment, shipmentType);
+
+            // Adjust tracking details per Mail Innovations and others
+            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+            {
+                if (track.Length > 0)
+                {
+                    trackingNumber = track;
+                    carrier = "UPS Mail Innovations";
+                }
+                else
+                {
+                    shipmentType = ShipmentTypeCode.Other;
+                }
+            });
+
+            writer.WriteElementString("CarrierName", carrier);
+            writer.WriteElementString("ShippingMethod", serviceUsed);
+
+            writer.WriteElementString("ShipperTrackingNumber", trackingNumber);
+            writer.WriteEndElement();
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+        }
+
+        /// <summary>
         /// Gets the carrier for the shipment.  If the shipment type is Other, it will use Other.Carrier.
         /// </summary>
         /// <param name="shipment">The shipment for which to get the carrier name.</param>
         /// <param name="shipmentTypeCode">The shipment type code for this shipment.</param>
         /// <returns>The carrier name of the shipment type, unless it is of type Other, then the Other.Carrier is returned.</returns>
-        public static string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
+        public string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
         {
-            string carrier;
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)
             {
-                carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
+                return shippingManager.GetOtherCarrierDescription(shipment).Name;
             }
-            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
+
+            if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
             {
                 PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
@@ -539,31 +532,26 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 if (ShipmentTypeManager.IsDhl(service))
                 {
                     // The DHL carrier for Endicia/Stamps is:
-                    carrier = "DHL eCommerce";
+                    return "DHL eCommerce";
                 }
-                else if (ShipmentTypeManager.IsConsolidator(service))
+
+                if (ShipmentTypeManager.IsConsolidator(service))
                 {
-                    carrier = "Consolidator";
+                    return "Consolidator";
                 }
-                else
-                {
-                    // Use the default carrier for other Endicia types
-                    carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
-                }
-            }
-            else
-            {
-                carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
+
+                // Use the default carrier for other Endicia types
+                return shippingManager.GetCarrierName(shipmentTypeCode);
             }
 
-            return carrier;
+            return shippingManager.GetCarrierName(shipmentTypeCode);
         }
 
         /// <summary>
         /// Determines if the local system clock is in sync with Amazon's servers.
         /// ONLY fails if we receive a time from Amazon and we are for sure out of sync.
         /// </summary>
-        public bool ClockInSyncWithMWS()
+        public async Task<bool> ClockInSyncWithMWS()
         {
             try
             {
@@ -572,9 +560,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 submitter.Uri = new Uri(mwsSettings.Endpoint);
                 submitter.Verb = HttpVerb.Get;
 
-                using (IHttpResponseReader reader = submitter.GetResponse())
+                using (IHttpResponseReader reader = await submitter.GetResponseAsync().ConfigureAwait(false))
                 {
-                    string response = reader.ReadResult();
+                    string response = await reader.ReadResultAsync().ConfigureAwait(false);
                     if (!string.IsNullOrEmpty(response))
                     {
                         XDocument document = XDocument.Parse(response);
@@ -619,55 +607,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Executes a request
         /// </summary>
-        [NDependIgnoreLongMethod]
         private async Task<IHttpResponseReader> ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
         {
             try
             {
-                DateTime timestamp = DateTime.UtcNow;
-
-                string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
-
-                request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
-                request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
-
-                request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
-
-                // For the ListParticipations call, this is exactly the data we are trying to find
-                if (amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
-                {
-                    request.Variables.Add("SellerId", store.MerchantID);
-                    request.Variables.Add("Marketplace", store.MarketplaceID);
-                }
-
-                if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken && amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
-                {
-                    await AddMwsAuthToken(request).ConfigureAwait(false);
-                }
-
-                request.Variables.Add("SignatureMethod", "HmacSHA256");
-                request.Variables.Add("SignatureVersion", "2");
-                request.Variables.Add("Timestamp", FormatDate(timestamp));
-                request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
-                request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
-
-                // now construct the signature parameter
-                string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
-                string queryString = QueryStringUtility.GetQueryString(
-                    request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
-                    QueryStringEncodingCasing.Upper);
-
-                string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
-
-                // sign the string and add it to the request
-                string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
-                request.Variables.Add("Signature", signature);
-
-                // add a User Agent header
-                request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
-
-                // business logic failures are handled through status codes
-                request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
+                await PrepareRequest(request, amazonMwsApiCall).ConfigureAwait(false);
 
                 log.InfoFormat("Submitting request for {0}", amazonMwsApiCall);
 
@@ -683,7 +627,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
                 }
 
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, progress);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, Progress);
 
                 IHttpResponseReader response = await throttler
                     .ExecuteRequestAsync<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest)
@@ -701,6 +645,57 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
             }
+        }
+
+        /// <summary>
+        /// Prepare a request for execution
+        /// </summary>
+        private async Task PrepareRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
+        {
+            DateTime timestamp = DateTime.UtcNow;
+
+            string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
+
+            request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
+            request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
+
+            request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
+
+            // For the ListParticipations call, this is exactly the data we are trying to find
+            if (amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
+            {
+                request.Variables.Add("SellerId", store.MerchantID);
+                request.Variables.Add("Marketplace", store.MarketplaceID);
+            }
+
+            if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken && amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
+            {
+                await AddMwsAuthToken(request).ConfigureAwait(false);
+            }
+
+            request.Variables.Add("SignatureMethod", "HmacSHA256");
+            request.Variables.Add("SignatureVersion", "2");
+            request.Variables.Add("Timestamp", FormatDate(timestamp));
+            request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
+            request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
+
+            // now construct the signature parameter
+            string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
+            string queryString = QueryStringUtility.GetQueryString(
+                request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
+                QueryStringEncodingCasing.Upper);
+
+            string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
+
+            // sign the string and add it to the request
+            string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
+            request.Variables.Add("Signature", signature);
+
+            // add a User Agent header
+            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+
+            // business logic failures are handled through status codes
+            request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
         }
 
         /// <summary>

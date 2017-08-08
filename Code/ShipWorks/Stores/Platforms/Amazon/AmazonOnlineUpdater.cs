@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using log4net;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -21,12 +27,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager, ISqlAdapterFactory sqlAdapterFactory)
+        public AmazonOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
+            ISqlAdapterFactory sqlAdapterFactory, Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient)
         {
+            this.createMwsClient = createMwsClient;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.shippingManager = shippingManager;
             this.orderManager = orderManager;
@@ -108,10 +117,62 @@ namespace ShipWorks.Stores.Platforms.Amazon
             else
             {
                 // upload the feed using the MWS API
-                using (AmazonMwsClient client = new AmazonMwsClient(store))
+                using (AmazonMwsClient client = createMwsClient(store))
                 {
-                    await client.UploadShipmentDetails(shipments).ConfigureAwait(false);
+                    var uploadDetails = await CreateUploadDetails(shipments).ConfigureAwait(false);
+                    await client.UploadShipmentDetails(uploadDetails).ConfigureAwait(false);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Create upload details for the list of shipments
+        /// </summary>
+        private async Task<List<AmazonOrderUploadDetail>> CreateUploadDetails(List<ShipmentEntity> shipments)
+        {
+            List<AmazonOrderUploadDetail> details = new List<AmazonOrderUploadDetail>();
+
+            foreach (var shipment in shipments)
+            {
+                var orderDetails = await CreateUploadDetailForShipment(shipment, shipment.Order as AmazonOrderEntity).ConfigureAwait(false);
+                details.AddRange(orderDetails.Where(x => x != null));
+            }
+
+            return details;
+        }
+
+        /// <summary>
+        /// Create upload details for a given shipment
+        /// </summary>
+        private async Task<IEnumerable<AmazonOrderUploadDetail>> CreateUploadDetailForShipment(ShipmentEntity shipment, AmazonOrderEntity order)
+        {
+            if (order == null)
+            {
+                return null;
+            }
+
+            if (order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            {
+                return new[] { new AmazonOrderUploadDetail(shipment, order) };
+            }
+
+            QueryFactory factory = new QueryFactory();
+
+            var source = factory.AmazonOrderSearch
+                .InnerJoin(factory.OrderSearch)
+                .On(AmazonOrderSearchFields.OrderID == OrderSearchFields.OrderID);
+
+            var query = factory.Create()
+                .From(source)
+                .Select(() => new AmazonOrderUploadDetail(
+                    shipment,
+                    AmazonOrderSearchFields.AmazonOrderID.ToValue<string>(),
+                    OrderSearchFields.IsManual.ToValue<bool>()))
+                .Where(OrderSearchFields.OrderID == order.OrderID);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             }
         }
     }

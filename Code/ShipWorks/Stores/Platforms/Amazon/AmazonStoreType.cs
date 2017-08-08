@@ -42,14 +42,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private readonly ILog log;
         private readonly IAmazonOnlineUpdater shipmentUpdater;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonStoreType(StoreEntity store, IAmazonOnlineUpdater shipmentUpdater,
-            IMessageHelper messageHelper, Func<Type, ILog> createLogger)
+            IMessageHelper messageHelper, Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient,
+            Func<Type, ILog> createLogger)
             : base(store)
         {
+            this.createMwsClient = createMwsClient;
             this.messageHelper = messageHelper;
             this.shipmentUpdater = shipmentUpdater;
             log = createLogger(GetType());
@@ -499,7 +502,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private async Task OnUploadDetails(MenuCommandExecutionContext context)
         {
-            var results = await ShipmentUploadCallback(context.SelectedKeys).ConfigureAwait(false);
+            var results = await ShipmentUploadCallback(context.SelectedKeys).ConfigureAwait(true);
             var exceptions = results.Failure ? new[] { results.Exception } : Enumerable.Empty<Exception>();
 
             context.Complete(exceptions, MenuCommandResult.Error);
@@ -519,7 +522,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     progressDialog.ToUpdater($"Updating {orderKeys} orders...");
 
-                    //AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity) Store);
                     await shipmentUpdater.UploadOrderShipmentDetails((AmazonStoreEntity) Store, orderKeys).ConfigureAwait(false);
 
                     return Result.FromSuccess();
@@ -550,7 +552,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     // The domain name has not been retrieved from Amazon yet (the store was registered before
                     // this functionality was added), so we need to try to look it up
-                    using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
+                    using (AmazonMwsClient client = createMwsClient(amazonStore))
                     {
                         List<AmazonMwsMarketplace> marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
                         if (marketplaces != null)
@@ -568,7 +570,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                                 // Save the domain to the store, so we don't have to retrieve it from Amazon next time
                                 amazonStore.DomainName = domainName;
-                                StoreManager.SaveStore(amazonStore);
+                                await StoreManager.SaveStoreAsync(amazonStore).ConfigureAwait(false);
                             }
                             else
                             {
@@ -578,7 +580,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                                 if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
                                 {
                                     amazonStore.DomainName = GetDomainNameFromApiRegion(amazonStore);
-                                    StoreManager.SaveStore(amazonStore);
+                                    await StoreManager.SaveStoreAsync(amazonStore).ConfigureAwait(false);
                                 }
                             }
                         }

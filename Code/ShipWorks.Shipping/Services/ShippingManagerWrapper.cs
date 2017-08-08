@@ -12,6 +12,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -276,6 +277,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
+
+        /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        public CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipmentTypeCode) =>
+            ShippingManager.GetOtherCarrierDescription(shipmentTypeCode);
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.

@@ -37,12 +37,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
+        readonly Func<AmazonStoreEntity, AmazonMwsClient> createWebClient;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsDownloader(StoreEntity store)
+        public AmazonMwsDownloader(StoreEntity store, Func<AmazonStoreEntity, AmazonMwsClient> createWebClient)
             : base(store)
         {
+            this.createWebClient = createWebClient;
         }
 
         /// <summary>
@@ -64,10 +67,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.Detail = "Connecting to Amazon...";
 
                 // declare upfront which api calls we are going to be using so they will be throttled
-                using (AmazonMwsClient client = new AmazonMwsClient((AmazonStoreEntity) Store, Progress))
+                using (AmazonMwsClient client = createWebClient(AmazonStore))
                 {
+                    client.Progress = Progress;
+
                     // test the local system clock
-                    if (!client.ClockInSyncWithMWS())
+                    if (!await client.ClockInSyncWithMWS().ConfigureAwait(false))
                     {
                         throw new AmazonException("Your system time is out of sync with the Amazon servers.  Ensure your clock is accurate, including the time zone.", null);
                     }

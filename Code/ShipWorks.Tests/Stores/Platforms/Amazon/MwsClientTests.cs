@@ -1,38 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using Autofac;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
-    public class MwsClientTests
+    public class MwsClientTests : IDisposable
     {
         private ShipmentEntity shipmentEntity;
         private AmazonOrderEntity orderEntity;
         private PostalShipmentEntity postalShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
+        private readonly AutoMock mock;
+        private readonly AmazonStoreEntity store;
 
         public MwsClientTests()
         {
-            orderEntity = new AmazonOrderEntity { OrderNumber = 123456 };
-            postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
-            otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
-            shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int)ShipmentTypeCode.Usps, Postal = postalShipmentEntity };
-        }
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-        [Fact]
-        public void ClockSyncTest()
-        {
-            using (AmazonMwsClient client = new AmazonMwsClient(new AmazonStoreEntity {AmazonApiRegion = "US"}))
-            {
-                Assert.True(client.ClockInSyncWithMWS());   
-            }
+            store = new AmazonStoreEntity { StoreTypeCode = StoreTypeCode.Amazon };
+            orderEntity = new AmazonOrderEntity { OrderNumber = 123456 };
+            postalShipmentEntity = new PostalShipmentEntity { Service = (int) PostalServiceType.FirstClass };
+            otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
+            shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int) ShipmentTypeCode.Usps, Postal = postalShipmentEntity };
         }
 
         [Fact]
@@ -49,8 +46,14 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsUsps_WhenUspsAndFirstClass()
         {
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
+
+            mock.Mock<IShippingManager>()
+                .Setup(x => x.GetCarrierName(ShipmentTypeCode.Usps))
+                .Returns("USPS");
+
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
             Assert.Equal("USPS", carrierName);
         }
@@ -58,8 +61,15 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsUsps_WhenEndiciaAndFirstClass()
         {
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
+
+            mock.Mock<IShippingManager>()
+                .Setup(x => x.GetCarrierName(ShipmentTypeCode.Usps))
+                .Returns("USPS");
+
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
             Assert.Equal("USPS", carrierName);
         }
@@ -67,10 +77,12 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsDhl_WhenEndiciaAndDhl()
         {
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
 
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
             Assert.Equal("DHL eCommerce", carrierName);
         }
@@ -78,10 +90,12 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsDhl_WhenUspsAndDhl()
         {
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
 
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
             Assert.Equal("DHL eCommerce", carrierName);
         }
@@ -89,10 +103,12 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsConsolidator_WhenEndiciaAndConsolidator()
         {
-            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
-            postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
 
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
+            postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
             Assert.Equal("Consolidator", carrierName);
         }
@@ -100,13 +116,20 @@ namespace ShipWorks.Tests.Stores.Amazon
         [Fact]
         public void GetCarrierName_ReturnsOtherCarrierDesc_WhenOther()
         {
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
+            var testObject = mock.Create<AmazonMwsClient>(TypedParameter.From(store));
+
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
             shipmentEntity.Other = otherShipmentEntity;
 
-            string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
+            mock.Mock<IShippingManager>()
+                .Setup(x => x.GetOtherCarrierDescription(shipmentEntity))
+                .Returns(new CarrierDescription(shipmentEntity));
+
+            string carrierName = testObject.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
             Assert.Equal("Some other carrier", carrierName);
         }
 
+        public void Dispose() => mock.Dispose();
     }
 }

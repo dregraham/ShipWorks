@@ -5,8 +5,11 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -104,11 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             // validate we get an AmazonStoreEntity
-            amazonStore = store as AmazonStoreEntity;
-            if (amazonStore == null)
-            {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store");
-            }
+            amazonStore = MethodConditions.EnsureArgumentIsNotNull(store as AmazonStoreEntity, nameof(store));
 
             merchantID.Text = amazonStore.MerchantID;
             authToken.Text = amazonStore.AuthToken;
@@ -125,11 +124,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
-            AmazonStoreEntity saveStore = store as AmazonStoreEntity;
-            if (saveStore == null)
-            {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store");
-            }
+            AmazonStoreEntity saveStore = MethodConditions.EnsureArgumentIsNotNull(store as AmazonStoreEntity, nameof(store));
 
             if (merchantID.Text.Trim().Length == 0)
             {
@@ -158,8 +153,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 saveStore.DomainName = await GetStoreDomainName(saveStore.MarketplaceID).ConfigureAwait(true);
 
-                using (AmazonMwsClient client = new AmazonMwsClient(saveStore))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    var client = lifetimeScope.Resolve<AmazonMwsClient>(TypedParameter.From(saveStore));
                     await client.TestCredentials().ConfigureAwait(true);
                 }
 
@@ -264,8 +260,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             Cursor.Current = Cursors.WaitCursor;
 
-            using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                var client = lifetimeScope.Resolve<AmazonMwsClient>(TypedParameter.From(amazonStore));
                 marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
             }
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -116,6 +117,11 @@ namespace ShipWorks.Shipping
         /// Gets the shipment type carrier name.
         /// </summary>
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipment);
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
