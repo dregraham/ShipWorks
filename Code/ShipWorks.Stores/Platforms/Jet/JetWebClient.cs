@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
@@ -26,18 +27,24 @@ namespace ShipWorks.Stores.Platforms.Jet
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        
+
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IJetAuthenticatedRequest jetAuthenticatedRequest;
+        private readonly IJetShipmentRequestFactory jetShipmentRequestFactory;
+        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public JetWebClient(IHttpRequestSubmitterFactory submitterFactory,
-            IJetAuthenticatedRequest jetAuthenticatedRequest)
+            IJetAuthenticatedRequest jetAuthenticatedRequest,
+            IJetShipmentRequestFactory jetShipmentRequestFactory,
+            IShippingManager shippingManager)
         {
             this.submitterFactory = submitterFactory;
             this.jetAuthenticatedRequest = jetAuthenticatedRequest;
+            this.jetShipmentRequestFactory = jetShipmentRequestFactory;
+            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -51,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             return jetAuthenticatedRequest.ProcessRequest<JetOrderResponse>("GetOrders", request, store);
         }
-        
+
         /// <summary>
         /// Gets jet product details for the given item
         /// </summary>
@@ -63,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             return jetAuthenticatedRequest.ProcessRequest<JetProduct>("GetProduct", request, store);
         }
-        
+
         /// <summary>
         /// Acknowledges the order will be fulfilled by the seller
         /// </summary>
@@ -96,9 +103,24 @@ namespace ShipWorks.Stores.Platforms.Jet
             return jetAuthenticatedRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
         }
 
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            shippingManager.EnsureShipmentIsLoadedWithOrder(shipment);
+
+            JetOrderEntity order = (JetOrderEntity) shipment.Order;
+            string merchantOrderId = order.MerchantOrderId;
+
+            JetShipmentRequest shipmentRequest = jetShipmentRequestFactory.Create(shipment);
+            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(shipmentRequest, jsonSerializerSettings),
+                "application/json");
+
+            submitter.Uri = new Uri($"{orderEndpointPath}/{merchantOrderId}/shipped");
+            submitter.Verb = HttpVerb.Put;
+
+            jetAuthenticatedRequest.ProcessRequest<object>("UpdateShipmentDetails", submitter, (JetStoreEntity) order.Store);
         }
     }
 }
