@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -15,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     public class JetStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+        private readonly Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
 
         /// <summary>
         /// The walmart store
@@ -24,10 +27,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Initializes a new instance of the <see cref="JetStoreType"/> class.
         /// </summary>
-        public JetStoreType(StoreEntity store, IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
+        public JetStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
+            Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
+            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             jetStore = (JetStoreEntity) store;
         }
 
@@ -97,5 +103,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Online Status filter.
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices() => new[] {"Acknowledged", "Complete" };
+
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() => onlineUpdateInstanceCommandsFactory(jetStore).Create().ToList();
+
+
+
     }
 }

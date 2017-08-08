@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
@@ -7,6 +8,11 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
+
+    /// <summary>
+    /// Generates and handles OnlineUpdateInstanceCommands
+    /// </summary>
+    [Component(RegistrationType.Self)]
     public class JetOnlineUpdateInstanceCommands 
     {
         private readonly JetStoreEntity store;
