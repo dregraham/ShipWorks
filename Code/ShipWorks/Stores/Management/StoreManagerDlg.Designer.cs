@@ -216,6 +216,7 @@ namespace ShipWorks.Stores.Management
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancel;
             this.ClientSize = new System.Drawing.Size(616, 233);
             this.Controls.Add(this.labelDisabledCount);
             this.Controls.Add(this.showDisabledStores);
