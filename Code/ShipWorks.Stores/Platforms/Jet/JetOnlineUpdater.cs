@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 try
                 {
-                    webClient.UpdateShipmentDetails(shipment);
+                    webClient.UploadShipmentDetails(shipment);
                     order.OnlineStatus = "Complete";
                     orderRepository.Save(order);
                 }

@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        public void UploadShipmentDetails(ShipmentEntity shipment)
         {
             shippingManager.EnsureShipmentIsLoadedWithOrder(shipment);
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Verb = HttpVerb.Put;
             submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
 
-            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UpdateShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
             
             if (result.Failure)
             {

@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 if (!token.IsValid)
                 {
-                    throw new JetException("Unable to obtain a valid token to authenticate request.");
+                    return GenericResult.FromError<T>("Unable to obtain a valid token to authenticate request.");
                 }
 
                 token.AttachTo(request);

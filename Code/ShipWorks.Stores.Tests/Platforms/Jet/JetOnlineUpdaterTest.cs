@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(shipment);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UpdateShipmentDetails(shipment), Times.Never);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment), Times.Never);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(shipment);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UpdateShipmentDetails(shipment), Times.Once);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment), Times.Once);
         }
 
         [Fact]
