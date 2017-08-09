@@ -263,6 +263,8 @@
     <Compile Include="Platforms\Jet\DTO\JetTokenResponse.cs" />
     <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementRequest.cs" />
     <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementOrderItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipment.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipmentItem.cs" />
     <Compile Include="Platforms\Jet\DTO\Requests\JetShipmentRequest.cs" />
     <Compile Include="Platforms\Jet\IJetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />

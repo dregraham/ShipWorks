@@ -37,8 +37,8 @@ namespace ShipWorks.Stores.Platforms.Jet
         public JetShipmentRequest Create(ShipmentEntity shipment)
         {
             orderManager.PopulateOrderDetails(shipment);
-            JetShipmentRequest request = new JetShipmentRequest {Shipments = new List<Shipment>()};
-            request.Shipments.Add(new Shipment
+            JetShipmentRequest request = new JetShipmentRequest {Shipments = new List<JetShipment>()};
+            request.Shipments.Add(new JetShipment
             {
                 ShipmentTrackingNumber = shipment.TrackingNumber,
                 ResponseShipmentDate = shipment.ShipDate,
@@ -54,10 +54,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get a list of ShipmentItems for the shipment
         /// </summary>
-        private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
+        private static List<JetShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
             return shipment.Order.OrderItems.Cast<JetOrderItemEntity>()
-                .Select(jetItem => new ShipmentItem
+                .Select(jetItem => new JetShipmentItem
                 {
                     MerchantSku = jetItem.MerchantSku,
                     ResponseShipmentSkuQuantity = Convert.ToInt32(jetItem.Quantity)
