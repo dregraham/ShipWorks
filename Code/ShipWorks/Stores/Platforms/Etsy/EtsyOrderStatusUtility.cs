@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Reflection;
-using System.ComponentModel;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
     /// <summary>
-    /// Handles updating Etsy Statuses Localy.
+    /// Handles updating Etsy Statuses Locally.
     /// </summary>
     public static class EtsyOrderStatusUtility
     {
@@ -47,14 +42,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="wasShipped">If null, leaves unchanged.</param>
         public static void UpdateOrderStatus(EtsyOrderEntity order, bool? wasPaid, bool? wasShipped, UnitOfWork2 unitOfWork)
         {
-            if (unitOfWork == null)
-            {
-                throw new ArgumentNullException("unitOfWork", "unitOfWork required");
-            }
-            if (order == null)
-            {
-                throw new ArgumentNullException("order");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(unitOfWork, nameof(unitOfWork));
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             if (wasShipped.HasValue)
             {
@@ -76,10 +65,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public static void UpdateEntityOrderStatus(EtsyOrderEntity orderEntity)
         {
-            if (orderEntity == null)
-            {
-                throw new ArgumentNullException("orderEntity", "orderEntity Required");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(orderEntity, nameof(orderEntity));
 
             EtsyOrderStatus orderStatus = EtsyOrderStatus.Open;
 
@@ -95,24 +81,19 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Given a list of orders of a specific status, return the order numbers where their etsy status has changed.
         /// If order not found, Online Order Status set to not found
-        /// </summary>     
-        public static List<EtsyOrderEntity> GetOrdersWithChangedStatus(EtsyStoreType storeType, List<EtsyOrderEntity> orders, string etsyFieldName, bool currentStatus)
+        /// </summary>
+        public static List<EtsyOrderEntity> GetOrdersWithChangedStatus(EtsyStoreEntity store, List<EtsyOrderEntity> orders, string etsyFieldName, bool currentStatus)
         {
-            if (storeType == null)
-            {
-                throw new ArgumentNullException("storeType");
-            }
-            if (orders == null)
-            {
-                throw new ArgumentNullException("orders");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            MethodConditions.EnsureArgumentIsNotNull(orders, nameof(orders));
+
             if (string.IsNullOrWhiteSpace(etsyFieldName))
             {
                 throw new ArgumentException("etsyFieldName must be provided and not blank.", "etsyFieldName");
             }
 
             List<EtsyOrderEntity> changedOrders = new List<EtsyOrderEntity>();
-            EtsyWebClient webClient = new EtsyWebClient(storeType.EtsyStore);
+            EtsyWebClient webClient = new EtsyWebClient(store);
 
             //Create tempOrder Queue to iterate through.
             List<EtsyOrderEntity> tempOrders = new List<EtsyOrderEntity>();
@@ -132,21 +113,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private static void ProcessBatch(string etsyFieldName, bool currentStatus, List<EtsyOrderEntity> changedOrders, EtsyWebClient webClient, List<EtsyOrderEntity> tempOrders)
         {
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
-
-            if (changedOrders == null)
-            {
-                throw new ArgumentNullException("changedOrders");
-            }
-            if (webClient == null)
-            {
-                throw new ArgumentNullException("webClient");
-            }
-            if (tempOrders == null)
-            {
-                throw new ArgumentNullException("tempOrders");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(changedOrders, nameof(changedOrders));
+            MethodConditions.EnsureArgumentIsNotNull(webClient, nameof(webClient));
+            MethodConditions.EnsureArgumentIsNotNull(tempOrders, nameof(tempOrders));
 
             int batchSize = EtsyEndpoints.GetOrderLimit;
             bool batchComplete = false;
@@ -162,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     //there might be less orders than the batch size.
                     batchSize = pageOfOrders.Count();
 
-                    //format the order numbers into a comma seperated list
+                    //format the order numbers into a comma separated list
                     string formattedOrderNumbers = string.Join(",", pageOfOrders.Select(x => x.OrderNumber.ToString()));
 
                     //send list to etsy and add the updated orders to list of changed orders.
@@ -183,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     {
                         if (batchSize == 1)
                         {
-                            //this order 
+                            //this order
                             batchComplete = true;
                             var missingOrder = pageOfOrders[0];
                             MarkOrderAsNotFound(missingOrder);
@@ -191,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                         else
                         {
                             //split batch in half
-                            batchSize = batchSize/2;
+                            batchSize = batchSize / 2;
                         }
                     }
                     else

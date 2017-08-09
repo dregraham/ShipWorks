@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.Choxi 
+namespace ShipWorks.Stores.Platforms.Choxi
 {
+    /// <summary>
+    /// Choxi store type
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Choxi)]
+    [Component(RegistrationType.Self)]
     public class ChoxiStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -57,10 +62,10 @@ namespace ShipWorks.Stores.Platforms.Choxi
         {
             get
             {
-                //NMR rebranded as Choxi, have to send old url as the identifier 
+                //NMR rebranded as Choxi, have to send old url as the identifier
                 //to keep from having to reset all of the tango licenses
 
-                return ((GenericModuleStoreEntity)Store).ModuleUrl.Replace( "choxi", "nomorerack");
+                return ((GenericModuleStoreEntity) Store).ModuleUrl.Replace("choxi", "nomorerack");
             }
         }
 

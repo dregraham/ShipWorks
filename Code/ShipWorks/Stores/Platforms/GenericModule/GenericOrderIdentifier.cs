@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+﻿using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -15,13 +11,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     public class GenericOrderIdentifier : OrderNumberIdentifier
     {
         // the postfix on the order number
-        string orderPostfix = "";
+        readonly string orderPostfix = "";
 
         // the prefix on the order number
-        string orderPrefix = "";
+        readonly string orderPrefix = "";
 
         // the complete order number, including pre- and post- fix
-        string orderNumberComplete = null;
+        readonly string orderNumberString = "";
 
         /// <summary>
         /// Constructor
@@ -29,17 +25,27 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public GenericOrderIdentifier(long orderNumber, string prefix, string postfix)
             : base(orderNumber)
         {
-            this.orderPrefix = prefix;
-            this.orderPostfix = postfix;
+            orderNumberString = orderNumber.ToString();
+            orderPrefix = prefix;
+            orderPostfix = postfix;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericOrderIdentifier(long orderNumber, string orderNumberComplete)
-            : base(orderNumber)
+        public GenericOrderIdentifier(string orderNumber, string prefix, string postfix)
+            : this(long.MinValue, prefix, postfix)
         {
-            this.orderNumberComplete = orderNumberComplete;
+            orderNumberString = orderNumber;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GenericOrderIdentifier(string orderNumbercomplete)
+            : base(long.MinValue)
+        {
+            orderNumberString = orderNumbercomplete;
         }
 
         /// <summary>
@@ -49,15 +55,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             base.ApplyTo(order);
 
-            if (orderNumberComplete == null)
-            {
-                order.ApplyOrderNumberPrefix(orderPrefix);
-                order.ApplyOrderNumberPostfix(orderPostfix);
-            }
-            else
-            {
-                order.OrderNumberComplete = orderNumberComplete;
-            }
+            order.ChangeOrderNumber(orderNumberString, orderPrefix, orderPostfix);
         }
 
         /// <summary>
@@ -68,19 +66,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // using the base behavior
             base.ApplyTo(downloadDetail);
 
-            if (orderNumberComplete == null)
-            {
-                OrderEntity prototype = new OrderEntity();
-                prototype.OrderNumber = base.OrderNumber;
-                prototype.ApplyOrderNumberPrefix(orderPrefix);
-                prototype.ApplyOrderNumberPostfix(orderPostfix);
+            OrderEntity prototype = new OrderEntity();
+            ApplyTo(prototype);
 
-                downloadDetail.ExtraStringData1 = prototype.OrderNumberComplete;
-            }
-            else
-            {
-                downloadDetail.ExtraStringData1 = orderNumberComplete;
-            }
+            downloadDetail.ExtraStringData1 = prototype.OrderNumberComplete;
         }
     }
 }

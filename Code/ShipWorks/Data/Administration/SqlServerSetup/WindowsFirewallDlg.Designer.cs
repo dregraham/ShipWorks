@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.close = new System.Windows.Forms.Button();
             this.updateWindowsFirewall = new ShipWorks.UI.Controls.ShieldButton();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.SuspendLayout();
             // 
             // label27
@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             this.label27.Size = new System.Drawing.Size(420, 13);
             this.label27.TabIndex = 13;
             this.label27.Text = "Only the minimum changes required for running ShipWorks will be made to the firew" +
-                "all.";
+    "all.";
             // 
             // label28
             // 
@@ -53,7 +53,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             this.label28.Size = new System.Drawing.Size(394, 32);
             this.label28.TabIndex = 11;
             this.label28.Text = "Windows Firewall needs to be configured to allow ShipWorks to work on multiple co" +
-                "mputers.";
+    "mputers.";
             // 
             // pictureBox6
             // 
@@ -77,6 +77,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             // 
             // updateWindowsFirewall
             // 
+            this.updateWindowsFirewall.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.updateWindowsFirewall.Location = new System.Drawing.Point(64, 82);
             this.updateWindowsFirewall.Name = "updateWindowsFirewall";
             this.updateWindowsFirewall.Size = new System.Drawing.Size(168, 23);
@@ -89,13 +90,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.close;
             this.ClientSize = new System.Drawing.Size(502, 180);
             this.Controls.Add(this.close);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.updateWindowsFirewall);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.pictureBox6);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -103,7 +105,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Windows Firewall";
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Net;
 using System.Net;
-using Interapptive.Shared.Win32;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
 namespace ShipWorks.Stores.Platforms.SearchFit
 {
+    /// <summary>
+    /// Search fit store
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SearchFit)]
+    [Component(RegistrationType.Self)]
     public class SearchFitStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -66,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.SearchFit
             // get custom store capabilities
             GenericModuleCapabilities capabilities = LegacyAdapterCapabilities.CreateXCartDerivativeDefaults();
 
-            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity)Store, LegacyStyleSheets.XCartStyleSheet, capabilities, transformers);
+            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity) Store, LegacyStyleSheets.XCartStyleSheet, capabilities, transformers);
 
             // SearchFit has a feature to allow us to not delete a customer's pending orders during support
             if (LeaveOnServer)

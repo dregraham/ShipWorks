@@ -351,6 +351,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IsFBA", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("MPN", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DistributionCenterID", fieldHashtable);
 		}
 		#endregion
 
@@ -492,6 +494,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MPN, true); }
 			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.MPN, value); }
+		}
+
+		/// <summary> The DistributionCenterID property of the Entity ChannelAdvisorOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."DistributionCenterID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 DistributionCenterID
+		{
+			get { return (System.Int64)GetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, true); }
+			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

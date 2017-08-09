@@ -33,6 +33,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         OdbcFieldValueResolutionStrategy ResolutionStrategy { get; }
 
         /// <summary>
+        /// Changes ShipWorks backing field
+        /// </summary>
+        void ChangeBackingField(IEntityField2 newField);
+
+        /// <summary>
         /// Set the Value to the given value
         /// </summary>
         void LoadValue(object value);

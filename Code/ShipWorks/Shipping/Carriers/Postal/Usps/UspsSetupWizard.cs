@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -63,6 +64,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             allowRegisteringExistingAccount = true;
 
             InitializeComponent();
+
+            wizardPageNewAccountPaymentAndBilling.StepNextAsync = OnStepNextNewAccountPaymentAndBilling;
+            wizardPagePostageMeterAddress.StepNextAsync = OnStepNextPostageMeterAddress;
 
             initialPersonControlHeight = personControl.Height;
 
@@ -841,7 +845,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next new account payment and billing].
         /// </summary>
-        private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
+        private async Task OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
         {
             if (!paymentAndBillingAddress.ValidateData())
             {
@@ -853,14 +857,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
-                e.AwaitTask = request.Execute().ContinueWith(r =>
+                AssociateShipWorksWithItselfResponse response = await request.Execute().ConfigureAwait(true);
+
+                if (response?.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
-                    if (r.Result?.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
-                    {
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                    }
-                });
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                }
             }
         }
 
@@ -895,7 +898,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next postage meter address].
         /// </summary>
-        private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
+        private async Task OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
         {
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
@@ -913,8 +916,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 request.PhysicalAddress = meterAddressAdapter;
 
-                e.AwaitTask =
-                    request.Execute().ContinueWith(r => ProcessAssociateShipWorksResponse(r.Result, request, e));
+                AssociateShipWorksWithItselfResponse response = await request.Execute().ConfigureAwait(true);
+
+                ProcessAssociateShipWorksResponse(response, request, e);
             }
         }
 
@@ -955,11 +959,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private AssociateShipworksWithItselfRequest PopulateAssociateWithSelfRequestWithBilling(ILifetimeScope ioc)
         {
-            IUspsWebClient uspsWebClient =
-                ioc.Resolve<IUspsWebClient>(new TypedParameter(typeof(UspsResellerType), UspsResellerType.None));
+            IUspsWebClient uspsWebClient = ioc.Resolve<IUspsWebClient>(TypedParameter.From(UspsResellerType.None));
 
             AssociateShipworksWithItselfRequest request =
-                ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
+                ioc.Resolve<AssociateShipworksWithItselfRequest>(TypedParameter.From(uspsWebClient));
 
             ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 

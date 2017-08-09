@@ -52,7 +52,7 @@ namespace ShipWorks.Users
             // 
             // close
             // 
-            this.close.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.close.Location = new System.Drawing.Point(478, 212);
             this.close.Name = "close";
@@ -63,7 +63,7 @@ namespace ShipWorks.Users
             // 
             // showDeletedUsers
             // 
-            this.showDeletedUsers.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showDeletedUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showDeletedUsers.AutoSize = true;
             this.showDeletedUsers.Location = new System.Drawing.Point(12, 212);
             this.showDeletedUsers.Name = "showDeletedUsers";
@@ -75,9 +75,9 @@ namespace ShipWorks.Users
             // 
             // labelManage
             // 
-            this.labelManage.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelManage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelManage.AutoSize = true;
-            this.labelManage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelManage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelManage.Location = new System.Drawing.Point(402, 12);
             this.labelManage.Name = "labelManage";
             this.labelManage.Size = new System.Drawing.Size(52, 13);
@@ -86,9 +86,9 @@ namespace ShipWorks.Users
             // 
             // labelAdd
             // 
-            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelAdd.AutoSize = true;
-            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAdd.Location = new System.Drawing.Point(402, 150);
             this.labelAdd.Name = "labelAdd";
             this.labelAdd.Size = new System.Drawing.Size(29, 13);
@@ -98,9 +98,9 @@ namespace ShipWorks.Users
             // sandGrid
             // 
             this.sandGrid.AllowMultipleSelection = false;
-            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sandGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnUser,
@@ -111,7 +111,7 @@ namespace ShipWorks.Users
             this.sandGrid.Name = "sandGrid";
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.InitiateDragDrop;
-            gridCell1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            gridCell1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             gridCell1.ForeColor = System.Drawing.Color.DimGray;
             gridCell1.Text = "Deleted";
             this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
@@ -141,7 +141,7 @@ namespace ShipWorks.Users
             this.gridColumnUser.AllowReorder = false;
             this.gridColumnUser.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnUser.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
-            this.gridColumnUser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnUser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnUser.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnUser.HeaderText = "User";
             this.gridColumnUser.MinimumWidth = 120;
@@ -152,7 +152,7 @@ namespace ShipWorks.Users
             this.gridColumnEmail.AllowReorder = false;
             this.gridColumnEmail.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnEmail.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
-            this.gridColumnEmail.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnEmail.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnEmail.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnEmail.HeaderText = "Email";
             this.gridColumnEmail.Width = 159;
@@ -161,7 +161,7 @@ namespace ShipWorks.Users
             // 
             this.gridColumnDescription.AllowReorder = false;
             this.gridColumnDescription.AutoSortType = Divelements.SandGrid.ColumnAutoSortType.None;
-            this.gridColumnDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnDescription.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnDescription.HeaderText = "Description";
             // 
@@ -182,7 +182,7 @@ namespace ShipWorks.Users
             // 
             // viewAuditHistory
             // 
-            this.viewAuditHistory.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewAuditHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.viewAuditHistory.Image = global::ShipWorks.Properties.Resources.surveillance_camera;
             this.viewAuditHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.viewAuditHistory.Location = new System.Drawing.Point(405, 57);
@@ -195,7 +195,7 @@ namespace ShipWorks.Users
             // 
             // newUser
             // 
-            this.newUser.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newUser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newUser.Image = global::ShipWorks.Properties.Resources.user_add_16;
             this.newUser.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.newUser.Location = new System.Drawing.Point(405, 166);
@@ -208,7 +208,7 @@ namespace ShipWorks.Users
             // 
             // edit
             // 
-            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.edit.Image = global::ShipWorks.Properties.Resources.edit16;
             this.edit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.edit.Location = new System.Drawing.Point(405, 28);
@@ -221,7 +221,7 @@ namespace ShipWorks.Users
             // 
             // copyRightsFrom
             // 
-            this.copyRightsFrom.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.copyRightsFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.copyRightsFrom.AutoSize = true;
             this.copyRightsFrom.ContextMenuStrip = this.menuCopyRightsFrom;
             this.copyRightsFrom.Image = global::ShipWorks.Properties.Resources.id_card;
@@ -236,7 +236,7 @@ namespace ShipWorks.Users
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(405, 115);
@@ -249,8 +249,9 @@ namespace ShipWorks.Users
             // 
             // infotipDeletedUsers
             // 
-            this.infotipDeletedUsers.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.infotipDeletedUsers.Caption = "ShipWorks users are never really deleted so that ShipWorks can keep the full history for every user.";
+            this.infotipDeletedUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.infotipDeletedUsers.Caption = "ShipWorks users are never really deleted so that ShipWorks can keep the full hist" +
+    "ory for every user.";
             this.infotipDeletedUsers.Location = new System.Drawing.Point(130, 214);
             this.infotipDeletedUsers.Name = "infotipDeletedUsers";
             this.infotipDeletedUsers.Size = new System.Drawing.Size(12, 12);
@@ -261,6 +262,7 @@ namespace ShipWorks.Users
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.close;
             this.ClientSize = new System.Drawing.Size(566, 247);
             this.Controls.Add(this.infotipDeletedUsers);
             this.Controls.Add(this.delete);
@@ -273,7 +275,7 @@ namespace ShipWorks.Users
             this.Controls.Add(this.showDeletedUsers);
             this.Controls.Add(this.newUser);
             this.Controls.Add(this.close);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(531, 255);

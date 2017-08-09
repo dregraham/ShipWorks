@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.Threading;
-using System.Globalization;
 
 namespace Interapptive.Shared
 {
@@ -19,5 +14,10 @@ namespace Interapptive.Shared
         public NDependIgnoreTooManyParamsAttribute()
         {
         }
+
+        /// <summary>
+        /// Justification for ignoring too many parameters check
+        /// </summary>
+        public string Justification { get; set; }
     }
 }

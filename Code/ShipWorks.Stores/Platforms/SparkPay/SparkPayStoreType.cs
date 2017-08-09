@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
 
@@ -13,7 +11,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     public class SparkPayStoreType : StoreType
     {
         private readonly StoreEntity store;
-        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
         private readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
         private readonly SparkPayStoreEntity sparkPayStore;
@@ -23,7 +20,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public SparkPayStoreType(
             StoreEntity store,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
             Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory
             ) : base(store)
@@ -31,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
             sparkPayStore = (SparkPayStoreEntity) store;
 
-            this.downloaderFactory = downloaderFactory;
             this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             this.statusCodeProviderFactory = statusCodeProviderFactory;
             this.store = store;
@@ -51,11 +46,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// Creates the license identifier
         /// </summary>
         protected override string InternalLicenseIdentifier => sparkPayStore.StoreUrl;
-
-        /// <summary>
-        /// Creates a downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](store);
 
         /// <summary>
         /// Creates the order identifier

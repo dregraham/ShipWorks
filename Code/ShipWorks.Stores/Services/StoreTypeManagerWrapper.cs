@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Services
@@ -9,9 +10,14 @@ namespace ShipWorks.Stores.Services
     public class StoreTypeManagerWrapper : IStoreTypeManager
     {
         private readonly IStoreManager storeManager;
+        private readonly ILifetimeScope lifetimeScope;
 
-        public StoreTypeManagerWrapper(IStoreManager storeManager)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StoreTypeManagerWrapper(IStoreManager storeManager, ILifetimeScope lifetimeScope)
         {
+            this.lifetimeScope = lifetimeScope;
             this.storeManager = storeManager;
         }
 
@@ -23,18 +29,18 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Get the StoreType instance of the specified StoreEntity
         /// </summary>
-        public StoreType GetType(StoreEntity store) => StoreTypeManager.GetType(store);
+        public StoreType GetType(StoreEntity store) => StoreTypeManager.GetType(store.StoreTypeCode, store, lifetimeScope);
 
         /// <summary>
         /// The indexer of the class based on store type
         /// </summary>
-        public StoreType GetType(StoreTypeCode typeCode) => StoreTypeManager.GetType(typeCode);
+        public StoreType GetType(StoreTypeCode typeCode) => StoreTypeManager.GetType(typeCode, null, lifetimeScope);
 
         /// <summary>
         /// Get the StoreType based on the given type code
         /// </summary>
         public StoreType GetType(StoreTypeCode typeCode, StoreEntity store) =>
-            StoreTypeManager.GetType(typeCode, store);
+            StoreTypeManager.GetType(typeCode, store, lifetimeScope);
 
         /// <summary>
         /// Get the store type from the shipment
@@ -42,7 +48,7 @@ namespace ShipWorks.Stores.Services
         public StoreType GetType(ShipmentEntity shipment)
         {
             StoreEntity store = storeManager.GetRelatedStore(shipment.ShipmentID);
-            return StoreTypeManager.GetType(store);
+            return StoreTypeManager.GetType(store.StoreTypeCode, store, lifetimeScope);
         }
     }
 }

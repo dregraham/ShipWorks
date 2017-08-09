@@ -40,5 +40,11 @@
         /// Creates the walmart encryption provider.
         /// </summary>
         IEncryptionProvider CreateWalmartEncryptionProvider();
+
+        /// <summary>
+        /// Creates the ChannelAdvisor encryption provider.
+        /// </summary>
+        /// <returns></returns>
+        IEncryptionProvider CreateChannelAdvisorEncryptionProvider();
     }
 }

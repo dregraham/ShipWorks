@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
@@ -100,33 +101,33 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         }
 
         [Fact]
-        public void Download_SetsProgressToNoOrdersToDownload()
+        public async Task Download_SetsProgressToNoOrdersToDownload()
         {
-            testObject.Download(mockProgressReporter.Object, 0, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, 0, dbConnection);
 
             mockProgressReporter.VerifySet(reporter => reporter.Detail = "No orders to download.", Times.Once);
         }
 
         [Fact]
-        public void Download_RequestsOrdersFromDaysBackSpecifiedByDownloadModifiedNumberOfDaysBack()
+        public async Task Download_RequestsOrdersFromDaysBackSpecifiedByDownloadModifiedNumberOfDaysBack()
         {
             store.DownloadModifiedNumberOfDaysBack = 5;
             mock.Mock<IDateTimeProvider>()
                 .SetupGet(d => d.UtcNow)
                 .Returns(utcNow);
 
-            testObject.Download(mockProgressReporter.Object, 0, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, 0, dbConnection);
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(client => client.GetOrders(store, utcNow.AddDays(-5)), Times.Once);
         }
 
         [Fact]
-        public void Download_SavesSingleOrder_WhenSingleOrderInFirstBatch()
+        public async Task Download_SavesSingleOrder_WhenSingleOrderInFirstBatch()
         {
             firstBatch = CreateSingleOrderListType("5", "6", null);
 
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             WalmartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -142,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         }
 
         [Fact]
-        public void Download_SavesOrdersFromMultipleBatches_WhenLinkToNextBatchProvided()
+        public async Task Download_SavesOrdersFromMultipleBatches_WhenLinkToNextBatchProvided()
         {
             string nextCursor = "http://www.shipworks.com/blah?x=42";
             firstBatch = CreateSingleOrderListType("5", "6", nextCursor);
@@ -152,7 +153,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Setup(c => c.GetOrders(store, nextCursor))
                 .Returns(secondBatch);
 
-            testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
 
             List<WalmartOrderEntity> createdOrders;
             using (SqlAdapter adapter = SqlAdapter.Default)

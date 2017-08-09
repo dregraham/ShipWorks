@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Core;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -12,19 +12,20 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Stores.Platforms.Magento.WizardPages;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
     /// Magento integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Magento)]
+    [Component(RegistrationType.Self)]
     public class MagentoStoreType : GenericModuleStoreType
     {
         // Logger
@@ -68,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     throw new InvalidOperationException("Can not get Magento version for a non-Magento store");
                 }
 
-                return (MagentoVersion) magentoStore.MagentoVersion ;
+                return (MagentoVersion) magentoStore.MagentoVersion;
             }
         }
 
@@ -104,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            string[] splitCompleteOrderNumber = order.OrderNumberComplete.Split(new [] {order.OrderNumber.ToString()}, StringSplitOptions.None);
+            string[] splitCompleteOrderNumber = order.OrderNumberComplete.Split(new[] { order.OrderNumber.ToString() }, StringSplitOptions.None);
 
             return new MagentoOrderIdentifier(order.OrderNumber, splitCompleteOrderNumber[0], splitCompleteOrderNumber[1]);
         }
@@ -214,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void ExecuteOrderCommandCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
-            Dictionary<string, string> state = (Dictionary<string, string>)userState;
+            Dictionary<string, string> state = (Dictionary<string, string>) userState;
             MagentoUploadCommand action = (MagentoUploadCommand) Enum.Parse(typeof(MagentoUploadCommand), state["action"]);
             string comments = state["comments"];
 
@@ -253,21 +254,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         new TypedParameter(typeof(GenericModuleStoreEntity), Store)).Value;
             }
 
-            return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);
-        }
-
-        /// <summary>
-        /// Create a custom magento downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
-            {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<StoreDownloader>>(MagentoVersion.MagentoTwoREST,
-                    new TypedParameter(typeof(StoreEntity), Store)).Value;
-            }
-
-            return new MagentoDownloader(Store);
+            return new MagentoOnlineUpdater((GenericModuleStoreEntity) Store);
         }
 
         /// <summary>
@@ -300,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// If the store is Magento Two rest dont initialize from onlinemodule
+        /// If the store is Magento Two rest don't initialize from onlinemodule
         /// </summary>
         public override void InitializeFromOnlineModule()
         {

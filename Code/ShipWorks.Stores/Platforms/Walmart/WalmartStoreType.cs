@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Filters;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -25,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
-        private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
         private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
         private readonly WalmartStoreEntity walmartStore;
 
@@ -36,11 +33,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <param name="downloaderFactory"></param>
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
         public WalmartStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
             Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
-            this.downloaderFactory = downloaderFactory;
             this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
 
             walmartStore = store as WalmartStoreEntity;
@@ -76,11 +71,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
-        /// Create the downloader instance that is used to retrieve data from the store.
-        /// </summary>
-        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
-
-        /// <summary>
         /// Creates a Walmart Order Entity
         /// </summary>
         protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();
@@ -112,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            Lazy<WalmartOrderEntity> order = new Lazy<WalmartOrderEntity>(() => (WalmartOrderEntity)orderSource());
+            Lazy<WalmartOrderEntity> order = new Lazy<WalmartOrderEntity>(() => (WalmartOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Walmart");
             outline.AddElement("CustomerOrderID", () => order.Value.CustomerOrderID);
@@ -126,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            Lazy<WalmartOrderItemEntity> item = new Lazy<WalmartOrderItemEntity>(() => (WalmartOrderItemEntity)itemSource());
+            Lazy<WalmartOrderItemEntity> item = new Lazy<WalmartOrderItemEntity>(() => (WalmartOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("Walmart");
             outline.AddElement("OnlineStatus", () => item.Value.OnlineStatus);
@@ -198,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 Name = filterName,
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -230,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 Name = filterName,
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
     }

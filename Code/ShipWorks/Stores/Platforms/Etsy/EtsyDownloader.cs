@@ -3,32 +3,34 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using System.Text;
-using log4net;
-using Newtonsoft.Json.Linq;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
-using Interapptive.Shared;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
     /// <summary>
     /// Downloader for EtsyStores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
     public class EtsyDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyDownloader));
@@ -37,7 +39,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         const int goBackDaysForUnpaid = 60;
         const int goBackDaysForUnshipped = 60;
         EtsyWebClient webClient;
-        EtsyStoreType storeType;
 
         /// <summary>
         /// Number of orders to download at a time.
@@ -47,23 +48,18 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyDownloader(EtsyStoreType etsyStoreType, EtsyStoreEntity store)
+        public EtsyDownloader(StoreEntity store)
             : base(store)
         {
-            if (etsyStoreType == null)
-            {
-                throw new ArgumentNullException("etsyStoreType");
-            }
-            webClient = new EtsyWebClient(etsyStoreType.EtsyStore);
-            storeType = etsyStoreType;
+            webClient = new EtsyWebClient(store as EtsyStoreEntity);
         }
 
         /// <summary>
         /// Download data for the Etsy store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -74,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 UpdatePaidOrders();
 
                 Progress.Detail = "Checking for new orders...";
-                DownloadNewOrders();
+                await DownloadNewOrders().ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
@@ -95,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasShipped, false, goBackDaysForUnshipped, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(storeType, shipWorksOrders, "was_shipped", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
 
             //Update those statuses locally
             foreach (var changedOrder in newlyChangedOrders)
@@ -114,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasPaid, false, goBackDaysForUnpaid, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(storeType, shipWorksOrders, "was_paid", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
             UpdatePaymentInformation(newlyChangedOrders);
         }
 
@@ -142,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             using (EntityCollection<EtsyOrderEntity> collection = new EntityCollection<EtsyOrderEntity>(orders))
             {
                 SqlAdapter.Default.SaveEntityCollection(collection);
-            }            
+            }
         }
 
         /// <summary>
@@ -150,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void UpdatePaymentInformationBatch(IEnumerable<EtsyOrderEntity> pageOfOrderNumbers)
         {
-            //format the order numbers into a comma seperated list
+            //format the order numbers into a comma separated list
             string formattedOrderNumbers = string.Join(",", pageOfOrderNumbers.Select(x => x.OrderNumber.ToString()));
 
             var orderDetails = webClient.GetPaymentInformation(formattedOrderNumbers);
@@ -188,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Handles the downloading of orders.
         /// </summary>
-        private void DownloadNewOrders()
+        private async Task DownloadNewOrders()
         {
             while (true)
             {
@@ -198,7 +194,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return;
                 }
 
-                if (!DownloadNextOrdersPage())
+                bool morePages = await DownloadNextOrdersPage().ConfigureAwait(false);
+                if (!morePages)
                 {
                     return;
                 }
@@ -208,7 +205,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Download the next page of orders. Return True if more to process.
         /// </summary>
-        private bool DownloadNextOrdersPage()
+        private async Task<bool> DownloadNextOrdersPage()
         {
             DateTime startDate;
             DateTime endDate;
@@ -231,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             if (orders.Count > 0)
             {
                 //Load orders into the database
-                LoadOrders(orders);
+                await LoadOrders(orders).ConfigureAwait(false);
             }
 
             if (offset == 0)
@@ -251,7 +248,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Gets the current time from Etsy and subtracts 5 minutes.
             endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
 
-            //The most recent order date. 
+            //The most recent order date.
             DateTime? calculatedStartDate = GetOrderDateStartingPoint();
 
             if (calculatedStartDate.HasValue)
@@ -293,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(List<JToken> orders)
+        private async Task LoadOrders(List<JToken> orders)
         {
             // Go through each order in the XML Document
             foreach (var order in orders)
@@ -307,7 +304,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // Update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -318,14 +315,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Extract and save the order from the downloaded order
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadOrder(JToken orderFromEtsy)
+        private async Task LoadOrder(JToken orderFromEtsy)
         {
             // Now extract the Order#
             long orderNumber = (long) orderFromEtsy["receipt_id"];
 
             // Get the order instance
-            OrderEntity orderEntity = InstantiateOrder(new OrderNumberIdentifier(orderNumber));
-            EtsyOrderEntity order = (EtsyOrderEntity)orderEntity;
+            OrderEntity orderEntity = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            EtsyOrderEntity order = (EtsyOrderEntity) orderEntity;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = orderFromEtsy.GetValue("grandtotal", 0m);
@@ -350,7 +347,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Only update the rest for brand new orders
             if (order.IsNew)
             {
-                InstantiateNote(order, WebUtility.HtmlDecode(orderFromEtsy.GetValue("message_from_buyer", "")), order.OrderDate, NoteVisibility.Public);
+                string noteText = WebUtility.HtmlDecode(orderFromEtsy.GetValue("message_from_buyer", ""));
+                await InstantiateNote(order, noteText, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
                 // Items
                 int loadedItems = LoadItems(order, (JArray) orderFromEtsy["Transactions"]);
@@ -373,7 +371,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                             JToken transactionToken = webClient.GetTransactionsForReceipt(orderNumber, limit, offset);
 
                             totalTransactions = transactionToken.GetValue("count", 0);
-                            loadedItems = LoadItems(order, (JArray)transactionToken["results"]);
+                            loadedItems = LoadItems(order, (JArray) transactionToken["results"]);
 
                             offset = offset + loadedItems;
 
@@ -394,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "EtsyDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -496,14 +494,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity item, JArray variations)
         {
-            if (variations!=null)
+            if (variations != null)
             {
                 foreach (JToken variation in variations)
                 {
                     item.OrderItemAttributes.Add(new OrderItemAttributeEntity()
                     {
-                        Name = variation.GetValue("formatted_name",""),
-                        Description = variation.GetValue("formatted_value",""),
+                        Name = variation.GetValue("formatted_name", ""),
+                        Description = variation.GetValue("formatted_value", ""),
                         IsManual = false,
                         UnitPrice = 0
                     });
@@ -546,7 +544,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value, bool ignoreDuplicates = false)
         {
@@ -567,7 +565,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 }
 
                 // Just check the label, since the Value could have been truncated and not exactly match
-                if (detailsToCheck.Any(pd => string.Compare(pd.Label, label, true) == 0))
+                if (detailsToCheck.Any(pd => string.Compare(pd.Label, label, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     return;
                 }

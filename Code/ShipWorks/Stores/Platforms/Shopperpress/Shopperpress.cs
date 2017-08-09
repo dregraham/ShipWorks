@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -8,6 +8,8 @@ namespace ShipWorks.Stores.Platforms.Shopperpress
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Shopperpress)]
+    [Component(RegistrationType.Self)]
     public class ShopperpressStoreType : GenericModuleStoreType
     {
         /// <summary>

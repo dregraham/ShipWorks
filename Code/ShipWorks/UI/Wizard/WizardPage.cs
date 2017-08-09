@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard.Design;
 
@@ -26,6 +27,11 @@ namespace ShipWorks.UI.Wizard
         // Event for when the user hits next
         [Category("Wizard")]
         public event EventHandler<WizardStepEventArgs> StepNext;
+
+        /// <summary>
+        /// Handle a StepNext async event
+        /// </summary>
+        public Func<object, WizardStepEventArgs, Task> StepNextAsync;
 
         // Event handler for when the page is about to be shown.
         [Category("Wizard")]
@@ -114,8 +120,13 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// Raise the SteppingNext event.
         /// </summary>
-        internal void RaiseSteppingNext(WizardStepEventArgs e)
+        internal async Task RaiseSteppingNext(WizardStepEventArgs e)
         {
+            if (StepNextAsync != null)
+            {
+                await StepNextAsync(this, e).ConfigureAwait(true);
+            }
+
             StepNext?.Invoke(this, e);
         }
 
@@ -138,7 +149,7 @@ namespace ShipWorks.UI.Wizard
         }
 
         /// <summary>
-        /// Raise the Cancelling event.
+        /// Raise the Canceling event.
         /// </summary>
         internal void RaiseCancelling(CancelEventArgs e)
         {

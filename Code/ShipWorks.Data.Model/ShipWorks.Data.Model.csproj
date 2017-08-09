@@ -130,6 +130,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
@@ -148,6 +149,10 @@
     <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\AmazonOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\CommonEntityBase.cs" />
+    <Compile Include="Custom\EntityClasses\CustomerEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ActionEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
@@ -2509,6 +2514,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\CustomerEntity.Interface.cs" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>

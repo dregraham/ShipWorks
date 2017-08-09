@@ -45,7 +45,7 @@ namespace ShipWorks.SqlServer.Data.Auditing
                 // Determine which columns we need to audit
                 List<string> auditColumns = DetermineAuditColumns(tableInfo);
 
-                // If there are no auditable columns, then get out
+                // If there are no audit table columns, then get out
                 if (auditColumns.Count == 0)
                 {
                     return;
@@ -55,7 +55,7 @@ namespace ShipWorks.SqlServer.Data.Auditing
                 UserContext userContext = UtilityFunctions.GetUserContext(con);
 
                 // Quit if auditing is not enable
-                if (userContext.AuditState == AuditState.Disabled)
+                if (DetermineAuditState(tableName, userContext, con) == AuditState.Disabled)
                 {
                     return;
                 }
@@ -65,6 +65,46 @@ namespace ShipWorks.SqlServer.Data.Auditing
                 // Create the audit-changes - one for each row that is changing
                 CreateAuditChanges(con, userContext, tableInfo, auditID, auditColumns);
             }
+        }
+
+        /// <summary>
+        /// Determines the audit state.  This is now needed as we try to reuse connections, and therefore 
+        /// connection strings which hold audit state.  But when inserting Orders/Customers, we may have a
+        /// connection string that doesn't have the correct audit scope detail, like don't audit new orders
+        /// or customers.  
+        /// 
+        /// This method will determine if the TriggerAction is an insert and if the table is an Order related
+        /// table, Customer or Note, and check the Configuration.AuditNewOrders to determine if we should
+        /// switch to Disabled.
+        /// 
+        /// </summary>
+        private static AuditState DetermineAuditState(string tableName, UserContext userContext, SqlConnection con)
+        {
+            // Quit if auditing is not enable
+            if (userContext.AuditState == AuditState.Disabled)
+            {
+                return AuditState.Disabled;
+            }
+
+            // Now check for inserted Order tables or Customer table
+            bool isInsert = SqlContext.TriggerContext?.TriggerAction == TriggerAction.Insert;
+            if (isInsert && 
+                (tableName.IndexOf("Order", StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                 tableName.Equals("Customer", StringComparison.InvariantCultureIgnoreCase) ||
+                 tableName.Equals("Note", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                object auditNewOrders;
+                using (SqlCommand findCmd = con.CreateCommand())
+                {
+                    findCmd.CommandText = "SELECT AuditNewOrders FROM Configuration";
+                    auditNewOrders = findCmd.ExecuteScalar();
+                }
+
+                AuditState auditState = (bool) auditNewOrders ? AuditState.Default : AuditState.Disabled;
+                return auditState;
+            }
+
+            return userContext.AuditState;
         }
 
         /// <summary>
