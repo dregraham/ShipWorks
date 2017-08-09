@@ -5,14 +5,18 @@
   <xsl:output method="html" encoding="utf-8" indent="yes" />
 
   <!-- Setup the key table for grouping by item code -->
-  <xsl:key name="items-specific" match="Item" use="sw:GetOrderItemKeyValue(., true())" />
-  <xsl:key name="items-non-specific" match="Item" use="sw:GetOrderItemKeyValue(., false())" />
+  <xsl:key name="items-specific" match="Item" use="sw:GetOrderItemKeyValue(./SKU,., true())" />
+  <xsl:key name="items-non-specific" match="Item" use="sw:GetOrderItemKeyValue(./SKU,., false())" />
 
   <!-- Start of template -->
   <xsl:template name="ItemGroup">
+    <!-- order node to use -->
     <xsl:param name="order" />
+    <!-- bool group based on item options or not -->
     <xsl:param name="optionSpecific" />
+    <!-- bool show thumbnails or not -->
     <xsl:param name="thumbnailsEnabled" />
+    <!-- bool show prices or not-->
     <xsl:param name="showPrices" />
 
     <!-- Determine which key table to use based on if we are option specific or not -->

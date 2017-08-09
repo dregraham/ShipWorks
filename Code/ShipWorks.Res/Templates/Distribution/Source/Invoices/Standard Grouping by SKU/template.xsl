@@ -5,23 +5,6 @@
 
   <xsl:output method="html" encoding="utf-8" indent="yes" />
 
-  <!-- This can be used to control if items are grouped based on options -->
-  <xsl:variable name="optionSpecific" select="false()" />
-
-  <!-- Setup the key table for grouping by item code -->
-  <xsl:key name="items-specific" match="Item" use="sw:GetOrderItemKeyValue(., true())" />
-  <xsl:key name="items-non-specific" match="Item" use="sw:GetOrderItemKeyValue(., false())" />
-
-  <!-- Determine which key table to use based on if we are option specific or not -->
-  <xsl:variable name="keyTable">
-    <xsl:if test="$optionSpecific">
-      <xsl:value-of select="'items-specific'" />
-    </xsl:if>
-    <xsl:if test="not($optionSpecific)">
-      <xsl:value-of select="'items-non-specific'" />
-    </xsl:if>
-  </xsl:variable>
-
   <!-- Start of template -->
   <xsl:template match="/">
     <xsl:apply-templates />
@@ -30,8 +13,6 @@
 
     <!-- Controls display of thumbnail images -->
     <xsl:variable name="thumbnailsEnabled" select="false()" />
-    <xsl:variable name="thumbnailWidth" select="'50px'" />
-    <xsl:variable name="thumbnailHeight" select="'50px'" />
 
     <!-- Width defined by the template PageSettings -->
     <xsl:variable name="pageWidth" select="concat(Template/Output/ContentWidth, 'in')" />
@@ -191,103 +172,12 @@
           <!--
             Line Items
         -->
-          <table style="width:{$pageWidth}; margin: 0; border-collapse: collapse;" cellspacing="0">
-
-            <tr>
-
-              <!-- The variables controlling thumbnails are up near the top of the template. -->
-              <xsl:if test="$thumbnailsEnabled">
-                <td style="{$orderDetailHeaderStyle}; width: {$thumbnailWidth};">Image</td>
-              </xsl:if>
-
-              <td style="{$orderDetailHeaderStyle}; width: 20%;">Item #</td>
-              <td style="{$orderDetailHeaderStyle};">Name</td>
-              <td style="{$orderDetailHeaderStyle};" align="right">QTY</td>
-              <td style="{$orderDetailHeaderStyle};" align="right">Price</td>
-              <td style="{$orderDetailHeaderStyle};" align="right">Total</td>
-            </tr>
-
-            <xsl:for-each select="$order/Item[generate-id(.)=generate-id(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific)))]">
-
-              <xsl:variable name="groupQuantity" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/Quantity)" />
-              <xsl:variable name="groupTotal" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/Total)" />
-
-              <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
-              <xsl:variable name="orderDetailContentStyle">
-                padding: 4px 8px 4px 8px;
-                <xsl:if test="position() != 1">border-top: 1px solid lightgrey;</xsl:if>
-              </xsl:variable>
-
-              <tr>
-
-                <!-- The variables controlling thumbnails are up near the top of the template. -->
-                <xsl:if test="$thumbnailsEnabled">
-                  <td style="{$orderDetailContentStyle};">
-                    <xsl:if test="Thumbnail != ''">
-                      <img src="{Thumbnail}" alt="" style="height:{$thumbnailWidth}; width:{$thumbnailHeight}; border:0;" />
-                    </xsl:if>
-                  </td>
-                </xsl:if>
-
-                <td style="{$orderDetailContentStyle};">
-                  <!-- Shared Snippet -->
-                  <xsl:call-template name="OrderItemCode">
-                    <xsl:with-param name="item" select="." />
-                  </xsl:call-template>
-                </td>
-                <td style="{$orderDetailContentStyle};">
-                  <xsl:value-of select="Name" />
-                </td>
-                <td style="{$orderDetailContentStyle};" align="right">
-                  <xsl:value-of select="$groupQuantity" />
-                </td>
-                <td style="{$orderDetailContentStyle};" align="right">
-                  <xsl:value-of select="format-number(UnitPrice, '#,##0.00')" />
-                </td>
-                <td style="{$orderDetailContentStyle};" align="right">
-                  <xsl:value-of select="format-number($groupTotal * Quantity, '#,##0.00')" />
-                </td>
-              </tr>
-
-              <!-- Displays any item attribuets that may exists -->
-              <xsl:for-each select="Option">
-                <tr>
-                  <xsl:if test="$thumbnailsEnabled">
-                    <td></td>
-                  </xsl:if>
-                  <td></td>
-                  <td>
-                    <table style="width: 100%; margin-left: 30px;" cellspacing="0">
-                      <tr>
-                        <td style="{$orderDetailAttributeStyle}; white-space: nowrap;">
-                          <xsl:value-of select="Name" />:
-                        </td>
-                        <td style="{$orderDetailAttributeStyle}; width: 100%;">
-                          <xsl:value-of select="Description" />
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                  <td></td>
-                  <xsl:choose>
-                    <xsl:when test="UnitPrice != 0">
-                      <td style="{$orderDetailAttributeStyle};" align="right">
-                        <xsl:value-of select="format-number(UnitPrice, '#,##0.00')" />
-                      </td>
-                      <td style="{$orderDetailAttributeStyle};" align="right">
-                        <xsl:value-of select="format-number(UnitPrice * ../Quantity, '#,##0.00')" />
-                      </td>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <td></td>
-                      <td></td>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </tr>
-              </xsl:for-each>
-            </xsl:for-each>
-
-          </table>
+          <xsl:call-template name="ItemGroup">
+            <xsl:with-param name="order" select="$order" />
+            <xsl:with-param name="optionSpecific" select="true()" />
+            <xsl:with-param name="showThumbnailImages" select="$thumbnailsEnabled" />
+            <xsl:with-param name="showPrices" select="true()" />
+          </xsl:call-template>
 
           <div style="border-top: 1px solid grey; width:{$pageWidth}; height: 1px; margin: 0px 0px 10px 0px; *margin-bottom: 1;"></div>
 

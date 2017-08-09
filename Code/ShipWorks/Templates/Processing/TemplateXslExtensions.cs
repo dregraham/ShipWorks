@@ -378,10 +378,25 @@ namespace ShipWorks.Templates.Processing
                 return "";
             }
 
-            XPathNavigator xpath = itemNode.Current;
-
             // It starts out with the item code
-            string key = XPathUtility.Evaluate(xpath, "Code", "");
+            string key = XPathUtility.Evaluate(itemNode.Current, "Code", "");
+
+            return GetOrderItemKeyValue(key, itemNode, optionSpecific);
+        }
+        
+        /// <summary>
+        /// Generates a key value for an OrderItem.  The XPathNavigator should be positioned
+        /// such that the OrderItem is the current node.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string GetOrderItemKeyValue(string key, XPathNodeIterator itemNode, bool optionSpecific)
+        {
+            if (!itemNode.MoveNext())
+            {
+                return "";
+            }
+
+            XPathNavigator xpath = itemNode.Current;
 
             if (optionSpecific)
             {

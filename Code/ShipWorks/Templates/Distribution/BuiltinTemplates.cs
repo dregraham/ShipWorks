@@ -91,7 +91,7 @@ namespace ShipWorks.Templates.Distribution
 
                     if (TemplateManager.Tree.AllTemplates.None(t => t.Name == "ItemGroup" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
                     {
-                        InstallTemplate(@"Invoices\ItemGroup", TemplateManager.Tree.CreateEditableClone());
+                        InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
                     }
 
                     UpdateDatabaseTemplateVersion(swVersion);
