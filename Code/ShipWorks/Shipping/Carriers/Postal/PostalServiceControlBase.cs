@@ -239,6 +239,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 confirmationTypes.AddRange(availableConfirmations.Select(type => new KeyValuePair<string, PostalConfirmationType>(EnumHelper.GetDescription(type), type)));
             }
 
+            var existingConfirmationTypes = confirmation.DataSource as List<KeyValuePair<string, PostalConfirmationType>>;
+            if (existingConfirmationTypes != null && confirmationTypes.SequenceEqual(existingConfirmationTypes))
+            {
+                return;
+            }
+
             confirmation.DataSource = confirmationTypes;
 
             // Set back the previous value
@@ -348,8 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType) service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;
-            UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType?) packagingType.SelectedValue));
+            UpdateConfirmationTypes(serviceType);
 
             // Only show express options for express
             sectionExpress.Visible = (serviceType == PostalServiceType.ExpressMail);
@@ -373,24 +378,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (!service.MultiValued && !confirmation.MultiValued)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
-                RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
-                {
-                    if (r.Tag == null)
-                    {
-                        // The rates in the rates grid hasn't caught up or something else wacky is going on
-                        return false;
-                    }
+                PostalShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
+                var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
 
-                    PostalRateSelection current = r.OriginalTag as PostalRateSelection;
-                    if (current == null)
-                    {
-                        // This isn't an actual rate - just a row in the grid for the section header
-                        return false;
-                    }
-
-                    return current.ConfirmationType == rateSelection.ConfirmationType && current.ServiceType == rateSelection.ServiceType;
-                });
+                RateResult matchingRate = RateControl.RateGroup.Rates
+                    .Where(x => x.Selectable)
+                    .FirstOrDefault(r => RateMatchesShipmentService(r, serviceType, confirmationType, shipmentType, selectedPackagingType));
 
                 RateControl.SelectRate(matchingRate);
             }
@@ -398,6 +391,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 RateControl.ClearSelection();
             }
+        }
+
+        /// <summary>
+        /// Does the rate match the shipment service
+        /// </summary>
+        private bool RateMatchesShipmentService(RateResult r, PostalServiceType serviceType, PostalConfirmationType confirmationType,
+            PostalShipmentType shipmentType, PostalPackagingType? selectedPackagingType)
+        {
+            if (r.Tag == null)
+            {
+                // The rates in the rates grid hasn't caught up or something else wacky is going on
+                return false;
+            }
+
+            PostalRateSelection current = r.OriginalTag as PostalRateSelection;
+            if (current == null)
+            {
+                // This isn't an actual rate - just a row in the grid for the section header
+                return false;
+            }
+
+            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
+                selectedPackagingType, personControl.CountryCode);
         }
 
         /// <summary>
@@ -412,12 +428,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 PostalServiceType serviceType = (PostalServiceType) service.SelectedValue;
 
-                // Update the available confirmation types based on the shipping provider
-                PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
-                UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode, serviceType, (PostalPackagingType) packagingType.SelectedValue));
+                UpdateConfirmationTypes(serviceType);
 
                 UpdateAvailableShipmentOptions((PostalPackagingType) packagingType.SelectedValue);
             }
+        }
+
+        private void UpdateConfirmationTypes(PostalServiceType serviceType)
+        {
+            // Update the available confirmation types based on the shipping provider
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
+            UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode,
+                serviceType, (PostalPackagingType) packagingType.SelectedValue));
         }
 
         /// <summary>
@@ -479,12 +501,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalRateSelection rate = e.Rate.OriginalTag as PostalRateSelection;
 
             service.SelectedValue = rate.ServiceType;
+            UpdateConfirmationTypes(rate.ServiceType);
 
-            confirmation.SelectedValue = rate.ConfirmationType;
+            PostalConfirmationType rateConfirmationType = GetConfirmationTypeFromRateSelection(rate);
+
+            confirmation.SelectedValue = rateConfirmationType;
             if (confirmation.SelectedIndex == -1)
             {
                 confirmation.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Get the confirmation type from the selected rate
+        /// </summary>
+        private PostalConfirmationType GetConfirmationTypeFromRateSelection(PostalRateSelection rate)
+        {
+            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
+            var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
+
+            return rate.ConfirmationType == PostalConfirmationType.None &&
+                    postalShipmentType.IsFreeInternationalDeliveryConfirmation(personControl.CountryCode, rate.ServiceType, selectedPackagingType) ?
+                PostalConfirmationType.Delivery :
+                rate.ConfirmationType;
         }
 
         /// <summary>
