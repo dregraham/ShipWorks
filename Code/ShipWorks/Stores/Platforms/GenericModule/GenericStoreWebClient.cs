@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 request.Variables.Add("voideddate", shipment.VoidedDate.HasValue ? shipment.VoidedDate.Value.ToString("s") : string.Empty);
                 request.Variables.Add("voideduser", shipment.VoidedUserID.HasValue ? shipment.VoidedUserID.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
 
-                request.Variables.Add("serviceused", ShippingManager.GetOverriddenSerivceUsed(shipment));
+                request.Variables.Add("serviceused", ShippingManager.GetOverriddenServiceUsed(shipment));
                 request.Variables.Add("totalcharges", shipment.ShipmentCost.ToString());
                 request.Variables.Add("totalweight", shipment.TotalWeight.ToString(CultureInfo.InvariantCulture));
                 request.Variables.Add("returnshipment", shipment.ReturnShipment.ToString(CultureInfo.InvariantCulture));

@@ -407,11 +407,25 @@ PRINT N'Adding foreign keys to [dbo].[YahooOrderSearch]'
 GO
 ALTER TABLE [dbo].[YahooOrderSearch] ADD CONSTRAINT [FK_YahooOrderSearch_YahooOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[YahooOrder] ([OrderID]) ON DELETE CASCADE
 GO
+PRINT N'Adding OriginalOrderID to [dbo].[BigCommerceOrderItem]'
+GO
+ALTER TABLE [dbo].[BigCommerceOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_OriginalOrderID] DEFAULT ((0))
+GO
+UPDATE [dbo].[BigCommerceOrderItem] SET OriginalOrderID = OrderID
+	FROM [dbo].[BigCommerceOrderItem]
+		INNER JOIN [dbo].[OrderItem] ON [dbo].[BigCommerceOrderItem].[OrderItemID] = [dbo].[OrderItem].[OrderItemID]
+GO
+ALTER TABLE [dbo].[BigCommerceOrderItem] DROP CONSTRAINT [DF_BigCommerceOrderItem_OriginalOrderID]
+GO
+CREATE NONCLUSTERED INDEX [IX_BigCommerceOrderItem_OriginalOrderID] ON [dbo].[BigCommerceOrderItem] ([OriginalOrderID] ASC)
+GO
 PRINT N'Adding OriginalOrderID to [dbo].[EbayOrderItem]'
 GO
 ALTER TABLE [dbo].[EbayOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_EbayOrderItem_OriginalOrderID] DEFAULT ((0))
 GO
-UPDATE [dbo].[EbayOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[EbayOrderItem]
+UPDATE [dbo].[EbayOrderItem] SET OriginalOrderID = OrderID
+	FROM [dbo].[EbayOrderItem]
+		INNER JOIN [dbo].[OrderItem] ON [dbo].[EbayOrderItem].[OrderItemID] = [dbo].[OrderItem].[OrderItemID]
 GO
 ALTER TABLE [dbo].[EbayOrderItem] DROP CONSTRAINT [DF_EbayOrderItem_OriginalOrderID]
 GO
@@ -419,7 +433,9 @@ PRINT N'Adding OriginalOrderID to [dbo].[GrouponOrderItem]'
 GO
 ALTER TABLE [dbo].[GrouponOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_GrouponOrderItem_OriginalOrderID] DEFAULT ((0))
 GO
-UPDATE [dbo].[GrouponOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[GrouponOrderItem]
+UPDATE [dbo].[GrouponOrderItem] SET OriginalOrderID = OrderID
+	FROM [dbo].[GrouponOrderItem]
+		INNER JOIN [dbo].[OrderItem] ON [dbo].[GrouponOrderItem].[OrderItemID] = [dbo].[OrderItem].[OrderItemID]
 GO
 ALTER TABLE [dbo].[GrouponOrderItem] DROP CONSTRAINT [DF_GrouponOrderItem_OriginalOrderID]
 GO
@@ -427,7 +443,9 @@ PRINT N'Adding OriginalOrderID to [dbo].[WalmartOrderItem]'
 GO
 ALTER TABLE [dbo].[WalmartOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_WalmartOrderItem_OriginalOrderID] DEFAULT ((0))
 GO
-UPDATE [dbo].[WalmartOrderItem] SET OriginalOrderID = OrderID FROM [dbo].[WalmartOrderItem]
+UPDATE [dbo].[WalmartOrderItem] SET OriginalOrderID = OrderID
+	FROM [dbo].[WalmartOrderItem]
+		INNER JOIN [dbo].[OrderItem] ON [dbo].[WalmartOrderItem].[OrderItemID] = [dbo].[OrderItem].[OrderItemID]
 GO
 ALTER TABLE [dbo].[WalmartOrderItem] DROP CONSTRAINT [DF_WalmartOrderItem_OriginalOrderID]
 GO

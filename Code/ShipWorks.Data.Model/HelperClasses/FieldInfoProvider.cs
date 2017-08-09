@@ -540,6 +540,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "IsDigitalItem", typeof(System.Boolean), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.IsDigitalItem, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventDate, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventName", typeof(System.String), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventName, 255, 0, 0);
+			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits BigCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitBigCommerceStoreEntityInfos()

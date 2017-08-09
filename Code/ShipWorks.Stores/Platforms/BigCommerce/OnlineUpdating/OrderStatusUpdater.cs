@@ -1,0 +1,102 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
+{
+    /// <summary>
+    /// Updates BigCommerce order status/shipments
+    /// </summary>
+    [Component]
+    public class OrderStatusUpdater : IOrderStatusUpdater
+    {
+        private readonly ILog log;
+        private readonly IBigCommerceWebClientFactory webClientFactory;
+        private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
+        private readonly IDataAccess dataAccess;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderStatusUpdater(
+            IDataAccess dataAccess,
+            IBigCommerceWebClientFactory webClientFactory,
+            Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
+            Func<Type, ILog> createLogger)
+        {
+            this.dataAccess = dataAccess;
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            this.webClientFactory = webClientFactory;
+            log = createLogger(GetType());
+        }
+
+        /// <summary>
+        /// Changes the status of an BigCommerce order to that specified
+        /// </summary>
+        public async Task UpdateOrderStatus(BigCommerceStoreEntity store, long orderID, int statusCode)
+        {
+            IUnitOfWorkCore unitOfWork = dataAccess.GetUnitOfWork();
+            await UpdateOrderStatus(store, orderID, statusCode, unitOfWork).ConfigureAwait(false);
+            await dataAccess.Commit(unitOfWork).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Changes the status of an BigCommerce order to that specified
+        /// </summary>
+        public async Task UpdateOrderStatus(BigCommerceStoreEntity store, long orderID, int statusCode, IUnitOfWorkCore unitOfWork)
+        {
+            var orderDetails = await dataAccess.GetOrderDetailsAsync(orderID).ConfigureAwait(false);
+
+            if (orderDetails == null)
+            {
+                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
+                return;
+            }
+
+            await UpdateOrderStatus(orderDetails, statusCode, store, unitOfWork).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Changes the status of an BigCommerce order to that specified
+        /// </summary>
+        public async Task UpdateOrderStatus(BigCommerceStoreEntity store, OnlineOrder orderDetails, int statusCode)
+        {
+            IUnitOfWorkCore unitOfWork = dataAccess.GetUnitOfWork();
+            await UpdateOrderStatus(orderDetails, statusCode, store, unitOfWork).ConfigureAwait(false);
+            await dataAccess.Commit(unitOfWork).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Changes the status of an BigCommerce order to that specified
+        /// </summary>
+        private async Task UpdateOrderStatus(OnlineOrder orderDetails, int statusCode, BigCommerceStoreEntity store, IUnitOfWorkCore unitOfWork)
+        {
+            if (orderDetails.AreAllManual)
+            {
+                log.InfoFormat("Not uploading order status since order {0} is manual or the order only has digital items.", orderDetails.OrderID);
+                return;
+            }
+
+            IBigCommerceWebClient webClient = webClientFactory.Create(store);
+
+            foreach (var chunk in orderDetails.OrdersToUpload.SplitIntoChunksOf(4))
+            {
+                await Task.WhenAll(chunk.Select(x => webClient.UpdateOrderStatus(Convert.ToInt32(x.OrderNumber), statusCode))).ConfigureAwait(false);
+            }
+
+            IBigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(store);
+
+            // Update the local database with the new status
+            OrderEntity basePrototype = new OrderEntity(orderDetails.OrderID) { IsNew = false };
+            basePrototype.OnlineStatusCode = statusCode;
+            basePrototype.OnlineStatus = statusCodeProvider.GetCodeName(statusCode);
+
+            unitOfWork.AddForSave(basePrototype);
+        }
+    }
+}

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 {
@@ -45,27 +43,29 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
-            foreach (long entityID in inputKeys)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                BigCommerceStoreEntity storeEntity = StoreManager.GetRelatedStore(entityID) as BigCommerceStoreEntity;
-                if (storeEntity == null)
-                {
-                    continue;
-                }
+                IShipmentDetailsUpdater updater = lifetimeScope.Resolve<IShipmentDetailsUpdater>();
+                IStoreManager storeManager = lifetimeScope.Resolve<IStoreManager>();
 
-                try
+                foreach (long entityID in inputKeys)
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    BigCommerceStoreEntity storeEntity = storeManager.GetRelatedStore(entityID) as BigCommerceStoreEntity;
+                    if (storeEntity == null)
                     {
-                        IBigCommerceOnlineUpdater updater = lifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(storeEntity));
-                        updater.UpdateShipmentDetails(entityID);
+                        continue;
                     }
-                }
-                catch (BigCommerceException ex)
-                {
-                    throw new ActionTaskRunException(ex.Message, ex);
+
+                    try
+                    {
+                        await updater.UpdateShipmentDetails(storeEntity, entityID).ConfigureAwait(false);
+                    }
+                    catch (BigCommerceException ex)
+                    {
+                        throw new ActionTaskRunException(ex.Message, ex);
+                    }
                 }
             }
         }

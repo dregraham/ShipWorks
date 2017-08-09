@@ -304,7 +304,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            var orderItem = new EbayOrderItemEntity()
+            return new EbayOrderItemEntity()
             {
                 FeedbackLeftType = (int) EbayFeedbackType.None,
                 FeedbackLeftComments = "",
@@ -322,11 +322,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 SellingManagerRecord = 0
             };
-
-            orderItem.Fields[EbayOrderItemFields.OriginalOrderID.FieldIndex].ExpressionToApply =
-                new Expression(OrderItemFields.OrderID);
-
-            return orderItem;
         }
 
         /// <summary>

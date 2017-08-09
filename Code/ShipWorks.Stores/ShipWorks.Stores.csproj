@@ -173,6 +173,18 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
     <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\CommandCreator.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineItems.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\ItemLoader.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineOrderDetails.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IOrderStatusUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IShipmentDetailsUpdaterClient.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\OrderStatusUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\DataAccess.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineOrder.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IItemLoader.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\ShipmentDetailsUpdaterClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
@@ -218,7 +230,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloader.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceException.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceMaxIncompleteOrdersReachedException.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
@@ -272,7 +284,7 @@
     <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAuthenticationPersistenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
-    <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />

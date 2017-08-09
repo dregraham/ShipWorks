@@ -394,6 +394,7 @@
           <Field Name="IsDigitalItem" Type="bool" FieldIndex="2" />
           <Field Name="OrderAddressID" Type="long" FieldIndex="0" />
           <Field Name="OrderProductID" Type="long" FieldIndex="1" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="BigCommerceStore" ObjectID="63a4d250-0560-4123-aba9-480d238fc84a" InheritanceType="2">
@@ -3988,7 +3989,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-08T14:18:02.1960387Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-10T17:06:30.586545Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4302,6 +4303,7 @@
                     <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
                     <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="OriginalOrderID" Ordinal="7" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -9907,6 +9909,7 @@
             <FieldMapping FieldName="OrderAddressID" TargetFieldName="OrderAddressID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="OrderProductID" TargetFieldName="OrderProductID" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":BigCommerceStore" TargetName="ShipWorksLocal:dbo:BigCommerceStore">

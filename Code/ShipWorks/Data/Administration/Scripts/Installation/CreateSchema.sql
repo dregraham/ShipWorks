@@ -1,4 +1,5 @@
 
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -12,12 +13,15 @@ CREATE TABLE [dbo].[BigCommerceOrderItem]
 [OrderProductID] [bigint] NOT NULL,
 [IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
 [EventDate] [datetime] NULL,
-[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[OriginalOrderID] BIGINT NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrderItem]'
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+CREATE NONCLUSTERED INDEX [IX_BigCommerceOrderItem_OriginalOrderID] ON [dbo].[BigCommerceOrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[FedExPackage]'
 GO

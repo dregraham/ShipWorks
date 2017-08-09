@@ -270,7 +270,7 @@ namespace ShipWorks.Shipping.Services
         /// Gets the service used.
         /// </summary>
         public string GetOverriddenServiceUsed(ShipmentEntity shipment) =>
-            ShippingManager.GetOverriddenSerivceUsed(shipment);
+            ShippingManager.GetOverriddenServiceUsed(shipment);
 
         /// <summary>
         /// Gets the service used.

@@ -834,6 +834,8 @@ namespace ShipWorks.Data.Model
 		EventDate,
 		///<summary>EventName. </summary>
 		EventName,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

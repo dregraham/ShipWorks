@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
                 ShipmentTypeCode shipmentType = (ShipmentTypeCode)shipment.ShipmentType;
                 string trackingNumber = shipment.TrackingNumber;
-                string serviceUsed = ShippingManager.GetOverriddenSerivceUsed(shipment);
+                string serviceUsed = ShippingManager.GetOverriddenServiceUsed(shipment);
                 string carrier = ShippingManager.GetCarrierName(shipmentType).ToUpper(CultureInfo.InvariantCulture);
 
                 // Adjust tracking details per Mail Innovations and others

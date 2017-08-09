@@ -8,7 +8,6 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -21,6 +20,7 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce;
+using ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating;
 using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
-        public void UpdateOnlineStatus_ToPending_Succeeds()
+        public async Task UpdateOnlineStatus_ToPending_Succeeds()
         {
             using (var webApp = replayServer.Start("BigCommerce_UpdateStoreToPending.har"))
             {
@@ -136,8 +136,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                     .Set(x => x.OrderDate, DateTime.UtcNow)
                     .Save();
 
-                var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
-                updater.UpdateOrderStatus(order.OrderID, BigCommerceConstants.OrderStatusCompleted);
+                var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderStatusUpdater>(TypedParameter.From(store));
+                await updater.UpdateOrderStatus(store, order.OrderID, BigCommerceConstants.OrderStatusCompleted);
             }
         }
 

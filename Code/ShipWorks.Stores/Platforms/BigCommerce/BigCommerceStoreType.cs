@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
-using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
@@ -26,8 +20,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [KeyedComponent(typeof(StoreType), StoreTypeCode.BigCommerce)]
     public class BigCommerceStoreType : StoreType
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStoreType));
-        readonly Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater;
         readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
         readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
         readonly IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex;
@@ -43,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </remarks>
         [NDependIgnoreTooManyParams]
         public BigCommerceStoreType(StoreEntity store,
-            Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
             IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex,
             IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex,
@@ -56,7 +47,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this.updateActionIndex = updateActionIndex;
             this.storeSettingsControlIndex = storeSettingsControlIndex;
             this.createStatusCodeProvider = createStatusCodeProvider;
-            this.createOnlineUpdater = createOnlineUpdater;
         }
 
         /// <summary>
@@ -125,10 +115,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Creates a BigCommerce store-specific instance of an BigCommerceOrderItemEntity
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            return new BigCommerceOrderItemEntity();
-        }
+        public override OrderItemEntity CreateOrderItemInstance() => new BigCommerceOrderItemEntity();
 
         /// <summary>
         /// Create the customer Order Item Xml for the order item provided
@@ -197,130 +184,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             }
 
             return base.GridOnlineColumnSupported(column);
-        }
-
-        /// <summary>
-        /// Create any MenuCommand's that are applied to this specific store instance
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            // get possible status codes from the provider
-            IBigCommerceStatusCodeProvider codeProvider = createStatusCodeProvider(TypedStore);
-
-            // create a menu item for each status
-            ICollection<string> statusCodeNames = GetOnlineStatusChoices();
-
-            // Filter out Deleted online status (it isn't a real status)
-            statusCodeNames = statusCodeNames.Where(codeName => codeName != BigCommerceConstants.OnlineStatusDeletedName).ToList();
-
-            bool isOne = false;
-            foreach (string codeName in statusCodeNames)
-            {
-                isOne = true;
-
-                MenuCommand command = new MenuCommand(codeName, new MenuCommandExecutor(OnSetOnlineStatus));
-                command.Tag = codeProvider.GetCodeValue(codeName);
-
-                commands.Add(command);
-            }
-
-            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            uploadCommand.BreakBefore = isOne;
-            commands.Add(uploadCommand);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            // kick off the execution
-            executor.ExecuteAsync(UploadDetailsCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void UploadDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
-                if (order == null)
-                {
-                    log.WarnFormat("Not uploading shipment details for order {0} as it went away.", orderID);
-                    return;
-                }
-
-                IBigCommerceOnlineUpdater updater = createOnlineUpdater(TypedStore);
-                updater.UpdateShipmentDetails(order);
-            }
-            catch (BigCommerceException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders.  Error message: {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(orderID, ex);
-            }
-        }
-
-        /// <summary>
-        /// Command handler for setting online order status
-        /// </summary>
-        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-               "Set Status",
-               "ShipWorks is setting the online status.",
-               "Updating order {0} of {1}...");
-
-            IMenuCommand command = context.MenuCommand;
-            int statusCode = (int) command.Tag;
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
-        }
-
-        /// <summary>
-        /// Worker thread method for updating online order status
-        /// </summary>
-        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            log.Debug(Store.StoreName);
-
-            int statusCode = (int) userState;
-            try
-            {
-                IBigCommerceOnlineUpdater updater = createOnlineUpdater(TypedStore);
-                updater.UpdateOrderStatus(orderID, statusCode);
-            }
-            catch (BigCommerceException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
-            }
         }
     }
 }

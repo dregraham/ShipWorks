@@ -49,12 +49,17 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Special procesing to ensure change tracking for entity hierarchy
+        /// Special processing to ensure change tracking for entity hierarchy
         /// </summary>
         protected override void OnBeforeEntitySave()
         {
             // Keep the foreign key up to date
             this.LocalEbayOrderID = OrderID;
+
+            if (IsNew)
+            {
+                OriginalOrderID = OrderID;
+            }
 
             base.OnBeforeEntitySave();
         }

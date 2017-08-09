@@ -543,7 +543,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.ShippingDate = new DataDateTime();
             shippingTrans.ShippingDate.Value = shipment.ShipDate;
 
-            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenSerivceUsed(shipment);
+            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
             shippingTrans.TrackingNumbers = shipment.TrackingNumber;
 
             return shippingTrans;

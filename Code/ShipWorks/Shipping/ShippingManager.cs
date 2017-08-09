@@ -582,7 +582,7 @@ namespace ShipWorks.Shipping
         /// Override one off service types that are shipworks specific to
         /// their more widely known counterparts
         /// </remarks>
-        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
+        public static string GetOverriddenServiceUsed(ShipmentEntity shipment)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
             return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetOveriddenServiceDescription);

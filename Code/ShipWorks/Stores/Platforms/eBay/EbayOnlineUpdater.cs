@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             // We can't upload tracking details because this isn't a supported carrier, so create a
                             // note with the tracking number instead
                             string notesText = string.Format("Shipped {0} on {1}. Tracking number: {2}",
-                                ShippingManager.GetOverriddenSerivceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
+                                ShippingManager.GetOverriddenServiceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
 
                             webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -78,15 +76,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates a Walmart Order Item Entity
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            var orderItem = new WalmartOrderItemEntity();
-
-            orderItem.Fields[WalmartOrderItemFields.OriginalOrderID.FieldIndex].ExpressionToApply =
-                new Expression(OrderItemFields.OrderID);
-
-            return orderItem;
-        }
+        public override OrderItemEntity CreateOrderItemInstance() =>
+            new WalmartOrderItemEntity();
 
         /// <summary>
         /// This is a string that uniquely identifies the store.

@@ -596,7 +596,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         private void GetShipmentUploadValues(ShipmentEntity shipment, out CarrierCodeType carrier, out string serviceName, out string trackingNumber)
         {
             CarrierCodeType tempCarrier = GetShipmentCarrierCodeType(shipment);
-            string tempServiceName = ShippingManager.GetOverriddenSerivceUsed(shipment);
+            string tempServiceName = ShippingManager.GetOverriddenServiceUsed(shipment);
             string tempTrackingNumber = shipment.TrackingNumber;
 
 
