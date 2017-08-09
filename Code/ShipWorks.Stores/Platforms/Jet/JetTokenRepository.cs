@@ -70,10 +70,14 @@ namespace ShipWorks.Stores.Platforms.Jet
                 try
                 {
                     JetTokenResponse tokenResponse = jsonRequest.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
+                    IJetToken token = tokenFactory(tokenResponse.Token);
 
-                    tokenCache[username] = tokenFactory(tokenResponse.Token);
-
-                    return tokenCache[username];
+                    if (token.IsValid)
+                    {
+                        tokenCache[username] = token;
+                    }
+                    
+                    return token;
                 }
                 catch (WebException)
                 {
@@ -87,9 +91,12 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public void RemoveToken(IJetStoreEntity store)
         {
-            if (tokenCache.Contains(store.ApiUser))
+            lock (tokenLock)
             {
-                tokenCache.Remove(store.ApiUser);
+                if (tokenCache.Contains(store.ApiUser))
+                {
+                    tokenCache.Remove(store.ApiUser);
+                }
             }
         }
     }
