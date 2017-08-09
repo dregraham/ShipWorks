@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+                .Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+                .Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             var request = mock.Mock<IJsonRequest>();
-            request.Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+            request.Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             mock.Create<JetTokenRepository>().GetToken("username", "password");
 
-            request.Verify(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
+            request.Verify(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             var request = mock.Mock<IJsonRequest>();
-            request.Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+            request.Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -114,10 +114,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = mock.Create<JetTokenRepository>();
 
             testObject.GetToken("username", "password");
-            request.Verify(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
+            request.Verify(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
 
             testObject.GetToken("username", "password");
-            request.Verify(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
+            request.Verify(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             var request = mock.Mock<IJsonRequest>();
-            request.Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+            request.Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -142,12 +142,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             testObject.GetToken("username", "password");
 
-            request.Verify(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
+            request.Verify(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Once);
 
             testObject.RemoveToken(new JetStoreEntity {ApiUser = "username"});
 
             testObject.GetToken("username", "password");
-            request.Verify(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Exactly(2));
+            request.Verify(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object), Times.Exactly(2));
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+                .Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -201,7 +201,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+                .Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
@@ -239,7 +239,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
+                .Setup(r => r.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter.Object))
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();

@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri($"{orderEndpointPath}/ready");
             request.Verb = HttpVerb.Get;
 
-            return jetAuthenticatedRequest.ProcessRequest<JetOrderResponse>("GetOrders", request, store);
+            return jetAuthenticatedRequest.Submit<JetOrderResponse>("GetOrders", request, store);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri($"{productEndpointPath}/{item.MerchantSku}");
             request.Verb = HttpVerb.Get;
 
-            return jetAuthenticatedRequest.ProcessRequest<JetProduct>("GetProduct", request, store);
+            return jetAuthenticatedRequest.Submit<JetProduct>("GetProduct", request, store);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Uri = new Uri($"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
             submitter.Verb = HttpVerb.Put;
 
-            jetAuthenticatedRequest.ProcessRequest<string>("AcknowledgeOrder", submitter, store);
+            jetAuthenticatedRequest.Submit<string>("AcknowledgeOrder", submitter, store);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             request.Uri = new Uri(EndpointBase + orderUrl);
             request.Verb = HttpVerb.Get;
 
-            return jetAuthenticatedRequest.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", request, store);
+            return jetAuthenticatedRequest.Submit<JetOrderDetailsResult>("GetOrderDetails", request, store);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Verb = HttpVerb.Put;
             submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
 
-            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.Submit<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
             
             if (result.Failure)
             {

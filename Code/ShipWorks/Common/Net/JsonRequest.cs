@@ -32,7 +32,7 @@ namespace ShipWorks.Common.Net
         /// <summary>
         /// Process the request
         /// </summary>
-        public T ProcessRequest<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request)
+        public T Submit<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request)
         {
             IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(logSource, action, LogActionType.Other);
             apiLogEntry.LogRequest(request);

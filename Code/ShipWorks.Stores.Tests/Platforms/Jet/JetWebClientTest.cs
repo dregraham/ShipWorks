@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             requestSubmitterFactory.Setup(h => h.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json")).Returns(requestSubmitter);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetShipResponse>(It.IsAny<string>(), It.IsAny<IHttpRequestSubmitter>(),
+                .Setup(r => r.Submit<JetShipResponse>(It.IsAny<string>(), It.IsAny<IHttpRequestSubmitter>(),
                     It.IsAny<JetStoreEntity>()))
                 .Returns(GenericResult.FromSuccess(new JetShipResponse()));
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetOrderDetails("url", store);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", variableRequestSubmitter.Object, store));
+                .Verify(r => r.Submit<JetOrderDetailsResult>("GetOrderDetails", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             GenericResult<JetOrderDetailsResult> expectedResult = new GenericResult<JetOrderDetailsResult>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetOrderDetailsResult>("GetOrderDetails", requestSubmitter.Object, store))
+                .Setup(r => r.Submit<JetOrderDetailsResult>("GetOrderDetails", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             GenericResult<JetOrderDetailsResult> actualResult = mock.Create<JetWebClient>().GetOrderDetails("url", store);
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetOrders(store);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetOrderResponse>("GetOrders", variableRequestSubmitter.Object, store));
+                .Verify(r => r.Submit<JetOrderResponse>("GetOrders", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             GenericResult<JetOrderResponse> expectedResult = new GenericResult<JetOrderResponse>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetOrderResponse>("GetOrders", requestSubmitter.Object, store))
+                .Setup(r => r.Submit<JetOrderResponse>("GetOrders", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             GenericResult<JetOrderResponse> actualResult = mock.Create<JetWebClient>().GetOrders(store);
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().GetProduct(jetOrderItem, store);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetProduct>("GetProduct", variableRequestSubmitter.Object, store));
+                .Verify(r => r.Submit<JetProduct>("GetProduct", variableRequestSubmitter.Object, store));
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
             GenericResult<JetProduct> expectedResult = new GenericResult<JetProduct>();
             mock.Mock<IJetAuthenticatedRequest>()
-                .Setup(r => r.ProcessRequest<JetProduct>("GetProduct", requestSubmitter.Object, store))
+                .Setup(r => r.Submit<JetProduct>("GetProduct", requestSubmitter.Object, store))
                 .Returns(expectedResult);
 
             var actualResult = mock.Create<JetWebClient>().GetProduct(jetOrderItem, store);
@@ -271,7 +271,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
 
             mock.Mock<IJetAuthenticatedRequest>()
-                .Verify(r => r.ProcessRequest<JetShipResponse>("UploadShipmentDetails", requestSubmitter.Object, store));
+                .Verify(r => r.Submit<JetShipResponse>("UploadShipmentDetails", requestSubmitter.Object, store));
         }
 
         public void Dispose()

@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(logEntry);
 
             var testObject = mock.Create<JsonRequest>();
-            testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
+            testObject.Submit<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
 
             logEntry.Verify(e => e.LogRequest(submitter.Object), Times.Once());
         }
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(logEntry);
 
             var testObject = mock.Create<JsonRequest>();
-            testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
+            testObject.Submit<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
 
             logEntry.Verify(e => e.LogResponse("[{\"Foo\":\"Bar\"},{\"Foo\":\"Bar\"}]", "json"), Times.Once());
         }
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = mock.Create<JsonRequest>();
 
             Assert.Throws<WebException>( () =>
-                testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object));
+                testObject.Submit<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object));
 
             logEntry.Verify(e => e.LogResponse(exception), Times.Once());
         }
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             JsonRequest testObject = mock.Create<JsonRequest>();
 
-            testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
+            testObject.Submit<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
 
             submitter.Verify(s => s.GetResponse());
         }
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             JsonRequest testObject = mock.Create<JsonRequest>();
 
-            testObject.ProcessRequest<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
+            testObject.Submit<object>("ProcessRequest", ApiLogSource.Jet, submitter.Object);
 
             response.Verify(r => r.ReadResult());
         }

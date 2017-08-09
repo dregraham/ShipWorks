@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 try
                 {
-                    JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
+                    JetTokenResponse tokenResponse = jsonRequest.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
 
                     tokenCache[username] = tokenFactory(tokenResponse.Token);
 

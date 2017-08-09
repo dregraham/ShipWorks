@@ -9,8 +9,8 @@ namespace ShipWorks.Common.Net
     public interface IJsonRequest
     {
         /// <summary>
-        /// Process the request, log the result and deserialize 
+        /// Process the request, log the result and deserialize
         /// </summary>
-        T ProcessRequest<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request);
+        T Submit<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request);
     }
 }

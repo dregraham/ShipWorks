@@ -29,11 +29,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(new JetToken("valid"));
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Returns("success");
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
-            var result = testObject.ProcessRequest<string>("action", mock.CreateMock<IHttpRequestSubmitter>().Object,
+            var result = testObject.Submit<string>("action", mock.CreateMock<IHttpRequestSubmitter>().Object,
                 new JetStoreEntity());
 
             Assert.True(result.Success);
@@ -47,11 +47,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(new JetToken("valid"));
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Returns("success");
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
-            var result = testObject.ProcessRequest<string>("action", mock.CreateMock<IHttpRequestSubmitter>().Object,
+            var result = testObject.Submit<string>("action", mock.CreateMock<IHttpRequestSubmitter>().Object,
                 new JetStoreEntity());
 
             Assert.Equal("success", result.Value);
@@ -68,12 +68,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(jetToken.Object);
             
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Returns("success");
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
-            testObject.ProcessRequest<string>("action", submitter, new JetStoreEntity());
+            testObject.Submit<string>("action", submitter, new JetStoreEntity());
 
             jetToken.Verify(t => t.AttachTo(submitter), Times.Once);
         }
@@ -89,13 +89,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(jetToken.Object);
 
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Returns("success");
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
-            testObject.ProcessRequest<string>("action", submitter, store);
+            testObject.Submit<string>("action", submitter, store);
 
             mock.Mock<IJetTokenRepository>()
                 .Verify(r => r.GetToken(store), Times.Once);
@@ -116,14 +116,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var webException = new WebException("error message", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Throws(webException);
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
 
-            var response = testObject.ProcessRequest<string>("action", submitter, store);
+            var response = testObject.Submit<string>("action", submitter, store);
             
             Assert.True(response.Failure);
             Assert.Equal("error message", response.Message);
@@ -144,14 +144,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var webException = new WebException("error message", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Throws(webException);
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
 
-            testObject.ProcessRequest<string>("action", submitter, store);
+            testObject.Submit<string>("action", submitter, store);
 
             mock.Mock<IJetTokenRepository>()
                 .Verify(r => r.GetToken(store), Times.Exactly(2));
@@ -172,14 +172,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var webException = new WebException("error message", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Throws(webException);
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
 
-            testObject.ProcessRequest<string>("action", submitter, store);
+            testObject.Submit<string>("action", submitter, store);
 
             mock.Mock<IJetTokenRepository>()
                 .Verify(r => r.RemoveToken(store), Times.Once);
@@ -200,14 +200,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var webException = new WebException("error message", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
             mock.Mock<IJsonRequest>()
-                .Setup(r => r.ProcessRequest<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
+                .Setup(r => r.Submit<string>("action", ApiLogSource.Jet, It.IsAny<IHttpRequestSubmitter>()))
                 .Throws(webException);
 
             var testObject = mock.Create<JetAuthenticatedRequest>();
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
 
-            var processRequest = testObject.ProcessRequest<string>("action", submitter, store);
+            var processRequest = testObject.Submit<string>("action", submitter, store);
 
             Assert.True(processRequest.Failure);
             Assert.Equal("error message", processRequest.Message);
@@ -228,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var webException = new WebException("error message", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
             mock.Mock<IJsonRequest>()
-                .SetupSequence(r => r.ProcessRequest<string>("action", ApiLogSource.Jet,
+                .SetupSequence(r => r.Submit<string>("action", ApiLogSource.Jet,
                     It.IsAny<IHttpRequestSubmitter>()))
                 .Throws(webException)
                 .Returns("success");
@@ -237,7 +237,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var submitter = mock.CreateMock<IHttpRequestSubmitter>().Object;
             var store = new JetStoreEntity();
 
-            var processRequest = testObject.ProcessRequest<string>("action", submitter, store);
+            var processRequest = testObject.Submit<string>("action", submitter, store);
 
             // This line here is a sanity check to make sure that we attach twice. It is included in other
             // tests, but the point of the test is the method being called twice...
