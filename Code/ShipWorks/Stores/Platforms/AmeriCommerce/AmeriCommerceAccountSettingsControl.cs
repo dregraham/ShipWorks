@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,6 +11,7 @@ using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.Data;
 using ShipWorks.Properties;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Stores.Management;
 
@@ -87,8 +89,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             try
             {
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient(store);
-                return client.GetStores();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var client = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(store));
+                    return client.GetStores();
+                }
             }
             catch (AmeriCommerceException)
             {
@@ -211,27 +216,30 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 {
                     Cursor.Current = Cursors.WaitCursor;
 
-                    // Create the client for connecting to the module
-                    AmeriCommerceWebClient webClient = new AmeriCommerceWebClient(ameriCommerceStore);
-
-                    // perform basic connectivity test
-                    webClient.TestConnection();
-
-                    // check the selected store, if there is one
-                    if (storeComboBox.SelectedIndex < 0)
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        MessageHelper.ShowError(this, "Please select the AmeriCommerce store for ShipWorks to connect to.");
-                        return false;
-                    }
-                    else
-                    {
-                        ameriCommerceStore.StoreCode = foundStores[storeComboBox.SelectedIndex].ID.GetValue(-1);
+                        // Create the client for connecting to the module
+                        AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
 
-                        // Execute call to AmeriCommerce to get store details
-                        webClient.GetStore(ameriCommerceStore.StoreCode);
+                        // perform basic connectivity test
+                        webClient.TestConnection();
 
-                        // connection is ok, selected store is ok
-                        return true;
+                        // check the selected store, if there is one
+                        if (storeComboBox.SelectedIndex < 0)
+                        {
+                            MessageHelper.ShowError(this, "Please select the AmeriCommerce store for ShipWorks to connect to.");
+                            return false;
+                        }
+                        else
+                        {
+                            ameriCommerceStore.StoreCode = foundStores[storeComboBox.SelectedIndex].ID.GetValue(-1);
+
+                            // Execute call to AmeriCommerce to get store details
+                            webClient.GetStore(ameriCommerceStore.StoreCode);
+
+                            // connection is ok, selected store is ok
+                            return true;
+                        }
                     }
                 }
                 else
@@ -246,8 +254,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     if (ameriCommerceStore.Fields[(int)AmeriCommerceStoreFieldIndex.StoreCode].IsChanged)
                     {
                         // execute call to americommerce to get store details
-                        AmeriCommerceWebClient webClient = new AmeriCommerceWebClient(ameriCommerceStore);
-                        webClient.GetStore(ameriCommerceStore.StoreCode);
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            // Create the client for connecting to the module
+                            AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
+
+                            webClient.GetStore(ameriCommerceStore.StoreCode);
+                        }
 
                         // if the GetStore call didn't fail, it's good
                         return true;

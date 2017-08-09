@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
 {
@@ -27,6 +31,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// The ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// The status code the task will be run with
         /// </summary>
         public int StatusCode
@@ -38,24 +47,12 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         /// <summary>
         /// How to label input selection for the task
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Set status of:";
-            }
-        }
+        public override string InputLabel => "Set status of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.OrderEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
         /// Insantiates the editor for this action
@@ -68,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -83,10 +80,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
 
             try
             {
-                AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater(store);
-                foreach (long entityID in inputKeys)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    updater.UpdateOrderStatus(entityID, statusCode, context.CommitWork);
+                    IAmeriCommerceOnlineUpdater updater = scope.Resolve<IAmeriCommerceOnlineUpdater>();
+                    foreach (long entityID in inputKeys)
+                    {
+                        await updater.UpdateOrderStatus(store, entityID, statusCode, context.CommitWork).ConfigureAwait(false);
+                    }
                 }
             }
             catch (AmeriCommerceException ex)

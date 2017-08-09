@@ -24,13 +24,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     [Component(RegistrationType.Self)]
     public class AmeriCommerceStoreType : StoreType
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStoreType));
+        private readonly IAmeriCommerceOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceStoreType(StoreEntity store)
+        public AmeriCommerceStoreType(StoreEntity store, IAmeriCommerceOnlineUpdater onlineUpdater)
             : base(store)
         {
 #pragma warning disable 168,219
@@ -41,6 +41,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             var y = OrderType.PaymentOrder;
             var z = OrderItemType.OrderPayment;
 #pragma warning restore 168,219
+
+            this.onlineUpdater = onlineUpdater;
         }
 
         /// <summary>
@@ -143,13 +145,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        public new int GetOnlineOrderIdentifier(OrderEntity order) => (int) order.OrderNumber;
+        public int GetOnlineOrderIdentifier(OrderEntity order) => (int) order.OrderNumber;
 
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
         /// <param name="order">The order for which to find combined order identifiers</param>
-        public new async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        public async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, 
                 "OrderSearch", 
@@ -226,27 +228,18 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// </summary>
         private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
+            try
             {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
+                // upload
+                onlineUpdater.UploadOrderShipmentDetails(Store as IAmeriCommerceStoreEntity, new[]{ orderID });
             }
-            else
+            catch (AmeriCommerceException ex)
             {
-                try
-                {
-                    // upload
-                    AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
-                    updater.UploadShipmentDetails(shipment);
-                }
-                catch (AmeriCommerceException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
+                // log it
+                log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
 
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
+                // add the error to the issues so we can react later
+                issueAdder.Add(orderID, ex);
             }
         }
 
@@ -281,8 +274,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             int statusCode = (int) userState;
             try
             {
-                AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
-                updater.UpdateOrderStatus(orderID, statusCode);
+                onlineUpdater.UpdateOrderStatus(Store as IAmeriCommerceStoreEntity, orderID, statusCode);
             }
             catch (AmeriCommerceException ex)
             {

@@ -10,19 +10,22 @@ using log4net;
 using System.Globalization;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
     /// <summary>
     /// Web client for communicating with the AmeriCommerce SOAP api
     /// </summary>
-    public class AmeriCommerceWebClient
+    [Component(RegistrationType.Self)]
+    public class AmeriCommerceWebClient : IAmeriCommerceWebClient
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceWebClient));
@@ -33,18 +36,20 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         Dictionary<int, string> stateCache = new Dictionary<int, string>();
         Dictionary<int, string> countryCache = new Dictionary<int, string>();
 
-        // the store
-        AmeriCommerceStoreEntity store;
-
-        private AmeriCommerceStoreType storeType;
+        private readonly AmeriCommerceStoreEntity store;
+        private readonly AmeriCommerceStoreType storeType;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceWebClient(AmeriCommerceStoreEntity store)
+        public AmeriCommerceWebClient(AmeriCommerceStoreEntity store, 
+            Func<StoreEntity, AmeriCommerceStoreType> getStoreType, 
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.store = store;
-            storeType = new AmeriCommerceStoreType(store);
+            storeType = getStoreType(store);
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -395,14 +400,17 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
-                await Task.WhenAll(chunk.Select(orderIdentifier => PerformOrderStatusUpdate(orderIdentifier, statusCode))).ConfigureAwait(false);
+                foreach (var orderIdentifier in chunk)
+                {
+                    PerformOrderStatusUpdate(orderIdentifier, statusCode);
+                }
             }
         }
 
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        private async Task PerformOrderStatusUpdate(int orderNumber, int statusCode)
+        private void PerformOrderStatusUpdate(int orderNumber, int statusCode)
         {
             try
             {
@@ -450,14 +458,17 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
-                await Task.WhenAll(chunk.Select(orderIdentifier => PerformUploadShipmentDetails(orderIdentifier, shipment))).ConfigureAwait(false);
+                foreach (var orderIdentifier in chunk)
+                {
+                    PerformUploadShipmentDetails(orderIdentifier, shipment);
+                }
             }
         }
 
         /// <summary>
         /// Uploads the tracking number for shipments related to order OrderNumber
         /// </summary>
-        private async Task PerformUploadShipmentDetails(int orderNumber, ShipmentEntity shipment)
+        private void PerformUploadShipmentDetails(int orderNumber, ShipmentEntity shipment)
         {
             try
             {
@@ -550,14 +561,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     shipmentType == ShipmentTypeCode.UpsWorldShip)
                 {
                     // load the particular shipment type details
-                    ShipmentTypeManager.GetType(shipment).LoadShipmentData(shipment, true);
+                    shipmentTypeManager.Get(shipment).LoadShipmentData(shipment, true);
 
                     return shipment.Ups.Packages.Count;
                 }
                 else if (shipmentType == ShipmentTypeCode.FedEx)
                 {
                     // load the particular shipment type details
-                    ShipmentTypeManager.GetType(shipment).LoadShipmentData(shipment, true);
+                    shipmentTypeManager.Get(shipment).LoadShipmentData(shipment, true);
 
                     return shipment.FedEx.Packages.Count;
                 }

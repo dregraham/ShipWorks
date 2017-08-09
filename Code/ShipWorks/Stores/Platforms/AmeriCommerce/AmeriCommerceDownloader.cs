@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -51,47 +53,55 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             {
                 Progress.Detail = "Updating status codes...";
 
+                AmeriCommerceStoreEntity americommerceStore = Store as AmeriCommerceStoreEntity;
+
                 // refresh the status codes from AmeriCommerce
-                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
+                statusProvider = new AmeriCommerceStatusCodeProvider(americommerceStore);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
 
                 DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
+                List<OrderTrans> orders;
+
                 // create the web client
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
-
-                // get orders
-                List<OrderTrans> orders = client.GetOrders(lastModified);
-
-                totalCount = orders.Count;
-
-                if (totalCount == 0)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    Progress.Detail = "No orders to download.";
-                    Progress.PercentComplete = 100;
-                    return;
-                }
+                    // Create the client for connecting to the module
+                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(americommerceStore));
 
-                Progress.Detail = String.Format("Downloading {0} orders...", totalCount);
+                    // get orders
+                    orders = webClient.GetOrders(lastModified);
 
-                // cycle through each order, importing
-                for (int i = 0; i < totalCount; i++)
-                {
-                    OrderTrans order = orders[i];
+                    totalCount = orders.Count;
 
-                    // check for cancel
-                    if (Progress.IsCancelRequested)
+                    if (totalCount == 0)
                     {
+                        Progress.Detail = "No orders to download.";
+                        Progress.PercentComplete = 100;
                         return;
                     }
 
-                    Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
+                    Progress.Detail = String.Format("Downloading {0} orders...", totalCount);
 
-                    await LoadOrder(client, order).ConfigureAwait(false);
+                    // cycle through each order, importing
+                    for (int i = 0; i < totalCount; i++)
+                    {
+                        OrderTrans order = orders[i];
 
-                    Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
+                        // check for cancel
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
+                        Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
+
+                        await LoadOrder(webClient, order).ConfigureAwait(false);
+
+                        Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
+                    }
                 }
             }
             catch (AmeriCommerceException ex)

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,60 +28,53 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// The ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload tracking number of:";
-            }
-        }
+        public override string InputLabel { get; } = "Upload tracking number of:";
 
         /// <summary>
         /// This task only operates on shipments
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType { get; } = EntityType.ShipmentEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
-            foreach (long entityID in inputKeys)
+            foreach (long shipmentID in inputKeys)
             {
-                List<long> storeKeys = DataProvider.GetRelatedKeys(entityID, EntityType.StoreEntity);
+                List<long> storeKeys = DataProvider.GetRelatedKeys(shipmentID, EntityType.StoreEntity);
                 if (storeKeys.Count == 0)
                 {
-                    // Store or shipment disapeared
+                    // Store or shipment disappeared
                     continue;
                 }
 
-                AmeriCommerceStoreEntity storeEntity = StoreManager.GetStore(storeKeys[0]) as AmeriCommerceStoreEntity;
-                if (storeEntity == null)
+                AmeriCommerceStoreEntity store = StoreManager.GetStore(storeKeys[0]) as AmeriCommerceStoreEntity;
+                if (store == null)
                 {
-                    // This isnt a generic store or the store went away
+                    // This isn't a generic store or the store went away
                     continue;
                 }
 
                 try
                 {
-                    AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater(storeEntity);
-                    updater.UploadShipmentDetails(entityID);
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IAmeriCommerceOnlineUpdater updater = scope.Resolve< IAmeriCommerceOnlineUpdater>();
+                        await updater.UploadOrderShipmentDetails(store, shipmentID).ConfigureAwait(false);
+                    }
                 }
                 catch (AmeriCommerceException ex)
                 {

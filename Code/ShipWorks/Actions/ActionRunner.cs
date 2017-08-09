@@ -530,11 +530,8 @@ namespace ShipWorks.Actions
                         {
                             // Dispose the adapter if it was created, because that would mean the exception was
                             // thrown during the commit step.  A new adapter will be created below.
-                            if (adapter != null)
-                            {
-                                adapter.Dispose();
-                                adapter = null;
-                            }
+                            adapter?.Dispose();
+                            adapter = null;
 
                             step.StepStatus = (int) ActionQueueStepStatus.Error;
                             step.AttemptError = ex.Message;
@@ -581,11 +578,8 @@ namespace ShipWorks.Actions
                 finally
                 {
                     // Implementing using pattern ourselves due to weirdness with nesting and catch blocks
-                    if (adapter != null)
-                    {
-                        adapter.Dispose();
-                        adapter = null;
-                    }
+                    adapter?.Dispose();
+                    adapter = null;
                 }
             }
         }

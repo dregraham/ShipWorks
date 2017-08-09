@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
@@ -82,8 +84,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
                 Cursor.Current = Cursors.WaitCursor;
 
                 // try to connect
-                AmeriCommerceWebClient webClient = new AmeriCommerceWebClient(store);
-                webClient.TestConnection();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    // Create the client for connecting to the module
+                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(store));
+
+                    webClient.TestConnection();
+                }
             }
             catch (AmeriCommerceException ex)
             {

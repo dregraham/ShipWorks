@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
@@ -15,7 +14,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     public class AmeriCommerceStatusCodeProvider : OnlineStatusCodeProvider<int>
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStatusCodeProvider));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStatusCodeProvider));
+        private readonly AmeriCommerceStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         public AmeriCommerceStatusCodeProvider(AmeriCommerceStoreEntity store)
             : base(store, AmeriCommerceStoreFields.StatusCodes)
         {
-
+            this.store = store;
         }
 
         /// <summary>
@@ -35,10 +35,15 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             {
                 Dictionary<int, string> codeMap = new Dictionary<int, string>();
 
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity)Store);
-                foreach (OrderStatusTrans orderStatus in client.GetStatusCodes())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    codeMap.Add(orderStatus.orderStatusID.GetValue(0), orderStatus.orderStatus);
+                    // Create the client for connecting to the module
+                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(store));
+
+                    foreach (OrderStatusTrans orderStatus in webClient.GetStatusCodes())
+                    {
+                        codeMap.Add(orderStatus.orderStatusID.GetValue(0), orderStatus.orderStatus);
+                    }
                 }
 
                 return codeMap;

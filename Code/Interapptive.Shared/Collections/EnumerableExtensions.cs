@@ -358,6 +358,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Perform an async select, showing a progress dialog
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public static async Task<IEnumerable<TResult>> SelectWithProgress<T, TResult>(this IEnumerable<T> source,
             IMessageHelper messageHelper, string title, string description, string detailFormat,
             Func<T, Task<TResult>> processItem)

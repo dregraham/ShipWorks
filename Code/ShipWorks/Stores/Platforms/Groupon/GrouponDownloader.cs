@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
@@ -36,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GrouponDownloader(StoreEntity store, IGrouponWebClient webClient,
             ICombineOrder orderCombiner, IDataProvider dataProvider,
             IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger)

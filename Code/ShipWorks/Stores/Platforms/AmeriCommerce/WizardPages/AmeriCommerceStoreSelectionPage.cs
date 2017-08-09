@@ -6,11 +6,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
@@ -54,8 +56,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
                 Cursor.Current = Cursors.WaitCursor;
 
                 // try getting a list of the stores on the Amc account
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient(Store);
-                foundStores = client.GetStores();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    // Create the client for connecting to the module
+                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(Store));
+
+                    foundStores = webClient.GetStores();
+                }
             }
             catch(AmeriCommerceException ex)
             {
@@ -118,25 +125,29 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
         /// </summary>
         private void LoadStoreDetails()
         {
-            AmeriCommerceWebClient webClient = new AmeriCommerceWebClient(Store);
-
-            StoreTrans storeTrans = webClient.GetStore(Store.StoreCode);
-            Store.StoreName = storeTrans.storeName;
-            Store.Street1 = storeTrans.storeAddressLine1;
-            Store.Street2 = storeTrans.storeAddressLine2;
-            Store.City = storeTrans.storeCity;
-            Store.PostalCode = storeTrans.storeZipCode;
-            Store.Phone = storeTrans.storePhone;
-            Store.Email = storeTrans.email;
-            Store.Website = storeTrans.domainName;
-
-            try
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                Store.StateProvCode = webClient.GetStateCode(storeTrans.storeStateID.GetValue(0));
-            }
-            catch (AmeriCommerceException)
-            {
-                Store.StateProvCode = "";
+                // Create the client for connecting to the module
+                AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(Store));
+
+                StoreTrans storeTrans = webClient.GetStore(Store.StoreCode);
+                Store.StoreName = storeTrans.storeName;
+                Store.Street1 = storeTrans.storeAddressLine1;
+                Store.Street2 = storeTrans.storeAddressLine2;
+                Store.City = storeTrans.storeCity;
+                Store.PostalCode = storeTrans.storeZipCode;
+                Store.Phone = storeTrans.storePhone;
+                Store.Email = storeTrans.email;
+                Store.Website = storeTrans.domainName;
+
+                try
+                {
+                    Store.StateProvCode = webClient.GetStateCode(storeTrans.storeStateID.GetValue(0));
+                }
+                catch (AmeriCommerceException)
+                {
+                    Store.StateProvCode = "";
+                }
             }
         }
 
