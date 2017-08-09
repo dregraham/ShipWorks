@@ -67,7 +67,7 @@
       <xsl:for-each select="$order/Item[generate-id(.)=generate-id(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific)))]">
 
         <xsl:variable name="groupQuantity" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/Quantity)" />
-        <xsl:variable name="groupTotal" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/Total)" />
+        <xsl:variable name="groupTotal" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/TotalPrice)" />
 
         <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
         <xsl:variable name="orderDetailContentStyle">
