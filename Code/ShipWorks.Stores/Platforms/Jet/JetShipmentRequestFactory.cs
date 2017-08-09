@@ -38,10 +38,15 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             orderManager.PopulateOrderDetails(shipment);
             JetShipmentRequest request = new JetShipmentRequest {Shipments = new List<JetShipment>()};
+
+            DateTime responseShipmentDate = shipment.ProcessedDate > shipment.ShipDate
+                ? shipment.ProcessedDate.Value
+                : shipment.ShipDate;
+            
             request.Shipments.Add(new JetShipment
             {
                 ShipmentTrackingNumber = shipment.TrackingNumber,
-                ResponseShipmentDate = shipment.ShipDate,
+                ResponseShipmentDate = responseShipmentDate,
                 ResponseShipmentMethod = GetShipmentMethod(shipment),
                 ShipFromZipCode = shipment.OriginPostalCode,
                 Carrier = GetCarrier(shipment),

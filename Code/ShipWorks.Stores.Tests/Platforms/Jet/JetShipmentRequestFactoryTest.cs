@@ -45,17 +45,33 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void Create_ReturnsJetShipmentRequestWithShipmentDate()
+        public void Create_ReturnsJetShipmentRequestWithShipmentDate_WhenShipDateIsGreaterThanProcessedDate()
         {
             DateTime shipDate = new DateTime(2017, 8, 8, 8, 8, 8, DateTimeKind.Utc);
+            DateTime processedDate = new DateTime(2016, 8, 8, 8, 8, 8, DateTimeKind.Utc);
 
             shipment.ShipDate = shipDate;
+            shipment.ProcessedDate = processedDate;
 
             JetShipmentRequest result = testObject.Create(shipment);
 
             Assert.Equal(shipDate, result.Shipments.First().ResponseShipmentDate);
         }
 
+        [Fact]
+        public void Create_ReturnsJetShipmentRequestWithShipmentDate_WhenProcessedDateIsGreaterThanProcessedDate()
+        {
+            DateTime shipDate = new DateTime(2016, 8, 8, 8, 8, 8, DateTimeKind.Utc);
+            DateTime processedDate = new DateTime(2017, 8, 8, 8, 8, 8, DateTimeKind.Utc);
+
+            shipment.ShipDate = shipDate;
+            shipment.ProcessedDate = processedDate;
+
+            JetShipmentRequest result = testObject.Create(shipment);
+
+            Assert.Equal(processedDate, result.Shipments.First().ResponseShipmentDate);
+        }
+        
         [Fact]
         public void Create_ReturnsJetShipmentRequestWithTrackingNumber()
         {
