@@ -378,10 +378,12 @@ namespace ShipWorks.Templates.Processing
                 return "";
             }
 
-            // It starts out with the item code
-            string key = XPathUtility.Evaluate(itemNode.Current, "Code", "");
+            XPathNavigator xpath = itemNode.Current;
 
-            return GetOrderItemKeyValue(key, itemNode, optionSpecific);
+            // It starts out with the item code
+            string key = XPathUtility.Evaluate(xpath, "Code", "");
+
+            return GenerateItemKeyValue(key, xpath, optionSpecific);
         }
         
         /// <summary>
@@ -398,6 +400,14 @@ namespace ShipWorks.Templates.Processing
 
             XPathNavigator xpath = itemNode.Current;
 
+            return GenerateItemKeyValue(key, xpath, optionSpecific);
+        }
+
+        /// <summary>
+        /// Generate the item key value based on the key and option specific 
+        /// </summary>
+        private string GenerateItemKeyValue(string key, XPathNavigator xpath, bool optionSpecific)
+        {
             if (optionSpecific)
             {
                 // Then add in all the option info
