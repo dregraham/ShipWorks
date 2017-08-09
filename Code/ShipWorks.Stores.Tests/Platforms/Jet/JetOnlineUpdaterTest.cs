@@ -14,19 +14,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
     public class JetOnlineUpdaterTest : IDisposable
     {
         private readonly AutoMock mock;
+        private JetStoreEntity store;
+        private OrderEntity order;
+        private JetOnlineUpdater testObject;
+        private ShipmentEntity shipment;
 
         public JetOnlineUpdaterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            store = new JetStoreEntity();
+
+            order = new OrderEntity() {OrderNumber = 42};
+            shipment = new ShipmentEntity { Order = order };
+            mock.Mock<IOrderManager>()
+                .Setup(m => m.GetLatestActiveShipment(It.IsAny<long>()))
+                .Returns(() => shipment);
+
+            testObject = mock.Create<JetOnlineUpdater>();
         }
 
         [Fact]
         public void UpdateShipmentDetailsWithShipment_PopulateOrderDetailsCalledWithOrder()
         {
-            var order = new OrderEntity();
-            var shipment = new ShipmentEntity { Order = order };
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(shipment);
+            testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(order), Times.Once);
         }
@@ -34,32 +44,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_DoesNotUpdateShipmentDetails_WhenOrderIsManual()
         {
-            var order = new OrderEntity { IsManual = true };
-            var shipment = new ShipmentEntity { Order = order };
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(shipment);
+            order.IsManual = true;
+            
+            testObject.UpdateShipmentDetails(42, store);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment), Times.Never);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Never);
         }
 
         [Fact]
         public void UpdateShipmentDetailsWithShipment_CallsUpdateShipmentDetails_WhenOrderIsNotManual()
         {
-            var order = new OrderEntity();
-            var shipment = new ShipmentEntity { Order = order };
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(shipment);
+            testObject.UpdateShipmentDetails(42, store);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment), Times.Once);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Once);
         }
 
         [Fact]
         public void UpdateShipmentDetailsWithShipment_SetsOnlineStatusToComplete()
         {
-            var order = new OrderEntity();
-            var shipment = new ShipmentEntity { Order = order };
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(shipment);
+            testObject.UpdateShipmentDetails(42, store);
 
             Assert.Equal("Complete", order.OnlineStatus);
         }
@@ -67,10 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_SavesOrderToRepository()
         {
-            var order = new OrderEntity();
-            var shipment = new ShipmentEntity { Order = order };
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(shipment);
+            testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IOrderRepository>().Verify(r => r.Save(order));
         }
@@ -78,9 +78,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_LogsSqlException()
         {
-            var order = new OrderEntity { OrderNumber = 42 };
-            var shipment = new ShipmentEntity { Order = order };
-            
             var sqlException = UninitializeObjectCreator.Create<SqlException>();
             mock.Mock<IOrderRepository>()
                 .Setup(r => r.Save(It.IsAny<OrderEntity>()))
@@ -89,8 +86,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var log = mock.CreateMock<ILog>();
             mock.MockFunc<Type, ILog>(log);
 
-            var testObject = mock.Create<JetOnlineUpdater>();
-            Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(shipment));
+            Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
             log.Verify(l => l.Error(errorMessage, sqlException), Times.Once);
@@ -99,9 +95,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_ThrowsExpectedException()
         {
-            var order = new OrderEntity { OrderNumber = 42 };
-            var shipment = new ShipmentEntity { Order = order };
-
             var sqlException = Instantiate<SqlException>();
             mock.Mock<IOrderRepository>()
                 .Setup(r => r.Save(It.IsAny<OrderEntity>()))
@@ -111,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.MockFunc<Type, ILog>(log);
 
             var testObject = mock.Create<JetOnlineUpdater>();
-            var exception = Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(shipment));
+            var exception = Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
             Assert.Equal(errorMessage, exception.Message);
@@ -119,30 +112,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithOrderId_UpdatesShipmentWhenShipmentFound()
+        public void UpdateShipmentDetailsWithOrderId_DoesNotPopulateOrder_IfOrderNotFound()
         {
-            var order = new OrderEntity { OrderNumber = 42 };
-            var shipment = new ShipmentEntity { Order = order };
+            shipment = null;
 
-            mock.Mock<IOrderManager>()
-                .Setup(m => m.GetLatestActiveShipment(22))
-                .Returns(shipment);
-
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(22);
-
-            mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(order), Times.Once);
-        }
-
-        [Fact]
-        public void UpdateShipmentDetailsWithOrderId_DoesNotPoulateOrder_IfOrderNotFound()
-        {
-            mock.Mock<IOrderManager>()
-                .Setup(m => m.GetLatestActiveShipment(22))
-                .Returns<ShipmentEntity>(null);
-
-            var testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(22);
+            testObject.UpdateShipmentDetails(22, store);
 
             mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(It.IsAny<OrderEntity>()), Times.Never);
         }

@@ -5,7 +5,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 using ShipWorks.Tests.Shared;
@@ -34,14 +33,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             };
 
             shipment.Order.OrderItems.Add(new JetOrderItemEntity() { MerchantSku = "123", Quantity = 3 });
-        }
-
-        [Fact]
-        public void Create_PopulatesOrderDetails()
-        {
-            testObject.Create(shipment);
-
-            mock.Mock<IOrderManager>().Verify(m => m.PopulateOrderDetails(shipment));
         }
 
         [Fact]

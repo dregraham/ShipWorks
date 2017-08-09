@@ -33,6 +33,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UploadShipmentDetails(ShipmentEntity shipment);
+        void UploadShipmentDetails(ShipmentEntity shipment, JetStoreEntity store);
     }
 }

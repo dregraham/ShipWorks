@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             try
             {
-                onlineUpdater.UpdateShipmentDetails(orderID);
+                onlineUpdater.UpdateShipmentDetails(orderID, store);
             }
             catch (JetException ex)
             {

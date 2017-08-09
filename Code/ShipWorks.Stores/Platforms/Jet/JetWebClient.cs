@@ -34,20 +34,17 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IJetAuthenticatedRequest jetAuthenticatedRequest;
         private readonly IJetShipmentRequestFactory jetShipmentRequestFactory;
-        private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public JetWebClient(IHttpRequestSubmitterFactory submitterFactory,
             IJetAuthenticatedRequest jetAuthenticatedRequest,
-            IJetShipmentRequestFactory jetShipmentRequestFactory,
-            IShippingManager shippingManager)
+            IJetShipmentRequestFactory jetShipmentRequestFactory)
         {
             this.submitterFactory = submitterFactory;
             this.jetAuthenticatedRequest = jetAuthenticatedRequest;
             this.jetShipmentRequestFactory = jetShipmentRequestFactory;
-            this.shippingManager = shippingManager;
         }
 
         /// <summary>
@@ -79,13 +76,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public void Acknowledge(JetOrderEntity order, JetStoreEntity store)
         {
-            JetAcknowledgementRequest jetAcknowledgement = new JetAcknowledgementRequest
+            JetAcknowledgementRequest jetAcknowledgment = new JetAcknowledgementRequest
             {
                 OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
                     .Select(i => new JetAcknowledgementOrderItem { OrderItemId = i.JetOrderItemID }).ToList()
             };
 
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgement, jsonSerializerSettings),
+            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgment, jsonSerializerSettings),
                 "application/json");
 
             submitter.Uri = new Uri($"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
@@ -109,10 +106,8 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public void UploadShipmentDetails(ShipmentEntity shipment, JetStoreEntity store)
         {
-            shippingManager.EnsureShipmentIsLoadedWithOrder(shipment);
-
             JetOrderEntity order = (JetOrderEntity) shipment.Order;
             string merchantOrderId = order.MerchantOrderId;
 
@@ -122,9 +117,9 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             submitter.Uri = new Uri($"{orderEndpointPath}/{merchantOrderId}/shipped");
             submitter.Verb = HttpVerb.Put;
-            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
-
-            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.Submit<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NoContent);
+            
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
             
             if (result.Failure)
             {
