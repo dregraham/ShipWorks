@@ -166,26 +166,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void UpdateShipmentDetails_EnsuresShipmentIsLoaded()
-        {
-            var shippingManager = mock.Mock<IShippingManager>();
-
-            JetOrderEntity order = new JetOrderEntity()
-            {
-                MerchantOrderId = "1",
-                Store = store
-            };
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Order = order
-            };
-
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
-
-            shippingManager.Verify(s => s.EnsureShipmentIsLoadedWithOrder(shipment));
-        }
-
-        [Fact]
         public void UpdateShipmentDetails_DelegatesToShipmentRequestFactory()
         {
             JetOrderEntity order = new JetOrderEntity()

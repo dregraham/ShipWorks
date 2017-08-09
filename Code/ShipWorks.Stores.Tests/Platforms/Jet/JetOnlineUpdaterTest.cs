@@ -14,8 +14,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
     public class JetOnlineUpdaterTest : IDisposable
     {
         private readonly AutoMock mock;
-        private JetStoreEntity store;
-        private OrderEntity order;
+        private readonly JetStoreEntity store;
+        private readonly OrderEntity order;
         private JetOnlineUpdater testObject;
         private ShipmentEntity shipment;
 
@@ -29,23 +29,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.Mock<IOrderManager>()
                 .Setup(m => m.GetLatestActiveShipment(It.IsAny<long>()))
                 .Returns(() => shipment);
-
-            testObject = mock.Create<JetOnlineUpdater>();
-        }
-
-        [Fact]
-        public void UpdateShipmentDetailsWithShipment_PopulateOrderDetailsCalledWithOrder()
-        {
-            testObject.UpdateShipmentDetails(42, store);
-
-            mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(order), Times.Once);
         }
 
         [Fact]
         public void UpdateShipmentDetailsWithShipment_DoesNotUpdateShipmentDetails_WhenOrderIsManual()
         {
             order.IsManual = true;
-            
+
+            testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Never);
@@ -54,6 +45,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_CallsUpdateShipmentDetails_WhenOrderIsNotManual()
         {
+            testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Once);
@@ -62,6 +54,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_SetsOnlineStatusToComplete()
         {
+            testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(42, store);
 
             Assert.Equal("Complete", order.OnlineStatus);
@@ -70,6 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void UpdateShipmentDetailsWithShipment_SavesOrderToRepository()
         {
+            testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IOrderRepository>().Verify(r => r.Save(order));
@@ -86,6 +80,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var log = mock.CreateMock<ILog>();
             mock.MockFunc<Type, ILog>(log);
 
+            testObject = mock.Create<JetOnlineUpdater>();
             Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
@@ -103,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var log = mock.CreateMock<ILog>();
             mock.MockFunc<Type, ILog>(log);
 
-            var testObject = mock.Create<JetOnlineUpdater>();
+            testObject = mock.Create<JetOnlineUpdater>();
             var exception = Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
@@ -112,13 +107,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithOrderId_DoesNotPopulateOrder_IfOrderNotFound()
+        public void UpdateShipmentDetails_DoesNotUploadShipmentDetail_IfOrderNotFound()
         {
             shipment = null;
 
+            testObject = mock.Create<JetOnlineUpdater>();
             testObject.UpdateShipmentDetails(22, store);
 
-            mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(It.IsAny<OrderEntity>()), Times.Never);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Never);
         }
 
         public static T Instantiate<T>() where T : class

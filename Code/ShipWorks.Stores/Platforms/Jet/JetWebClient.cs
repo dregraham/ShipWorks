@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Verb = HttpVerb.Put;
             submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NoContent);
             
-            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.ProcessRequest<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.Submit<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
             
             if (result.Failure)
             {

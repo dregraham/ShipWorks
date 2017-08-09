@@ -110,6 +110,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
 
             var tokenResponse = mock.Mock<IJetToken>();
             mock.MockFunc<string, IJetToken>(tokenResponse);
+            tokenResponse.SetupGet(r => r.IsValid).Returns(true);
 
             var testObject = mock.Create<JetTokenRepository>();
 
@@ -136,6 +137,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 .Returns(jetTokenResponse);
 
             var tokenResponse = mock.Mock<IJetToken>();
+            tokenResponse.SetupGet(r => r.IsValid).Returns(true);
             mock.MockFunc<string, IJetToken>(tokenResponse);
 
             var testObject = mock.Create<JetTokenRepository>();
