@@ -21,7 +21,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Constructor
         /// </summary>
-        public JetOnlineUpdater(IOrderManager orderManager, IOrderRepository orderRepository, IJetWebClient webClient, Func<Type, ILog> logFactory)
+        public JetOnlineUpdater(IOrderManager orderManager,
+            IOrderRepository orderRepository,
+            IJetWebClient webClient,
+            Func<Type, ILog> logFactory)
         {
             this.orderManager = orderManager;
             this.orderRepository = orderRepository;
@@ -32,39 +35,29 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Updates the shipment details.
         /// </summary>
-        public void UpdateShipmentDetails(long orderID)
+        public void UpdateShipmentDetails(long orderID, JetStoreEntity store)
         {
             ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderID);
-
+            
             // Check to see if shipment exists and order has shippable line item
             if (shipment != null)
             {
-                UpdateShipmentDetails(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Updates the shipment details.
-        /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
-        {
-            OrderEntity order = shipment.Order;
-            orderRepository.PopulateOrderDetails(order);
-            
-            if (!shipment.Order.IsManual)
-            {
-                try
+                OrderEntity order = shipment.Order;
+                if (!order.IsManual)
                 {
-                    webClient.UploadShipmentDetails(shipment);
-                    order.OnlineStatus = "Complete";
-                    orderRepository.Save(order);
-                }
-                catch (SqlException ex)
-                {
-                    string errorMessage = $"Error saving online status for order {order.OrderNumberComplete}.";
+                    try
+                    {
+                        webClient.UploadShipmentDetails(shipment, store);
+                        order.OnlineStatus = "Complete";
+                        orderRepository.Save(order);
+                    }
+                    catch (SqlException ex)
+                    {
+                        string errorMessage = $"Error saving online status for order {order.OrderNumberComplete}.";
 
-                    log.Error(errorMessage, ex);
-                    throw new JetException(errorMessage, ex);
+                        log.Error(errorMessage, ex);
+                        throw new JetException(errorMessage, ex);
+                    }
                 }
             }
         }

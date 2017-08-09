@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
 
             shippingManager.Verify(s => s.EnsureShipmentIsLoadedWithOrder(shipment));
         }
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
 
             shipmentRequestFactory.Verify(s => s.Create(shipment));
         }
@@ -216,7 +216,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
 
             requestSubmitterFactory.Verify(s => s.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
         }
@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://merchant-api.jet.com/api/orders/1/shipped"));
         }
 
@@ -251,7 +251,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
             requestSubmitter.VerifySet(r => r.Verb = HttpVerb.Put);
         }
 
@@ -268,7 +268,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
                 Order = order
             };
 
-            mock.Create<JetWebClient>().UploadShipmentDetails(shipment);
+            mock.Create<JetWebClient>().UploadShipmentDetails(shipment, store);
 
             mock.Mock<IJetAuthenticatedRequest>()
                 .Verify(r => r.ProcessRequest<JetShipResponse>("UploadShipmentDetails", requestSubmitter.Object, store));

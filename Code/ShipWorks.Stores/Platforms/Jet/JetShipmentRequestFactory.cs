@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -20,23 +23,25 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetShipmentRequestFactory : IJetShipmentRequestFactory
     {
-        private readonly IOrderManager orderManager;
+        private readonly IShippingManager shippingManager;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="JetShipmentRequestFactory"/> class.
         /// </summary>
-        /// <param name="orderManager"></param>
-        public JetShipmentRequestFactory(IOrderManager orderManager)
+        public JetShipmentRequestFactory(IShippingManager shippingManager, ISqlAdapterFactory sqlAdapterFactory)
         {
-            this.orderManager = orderManager;
+            this.shippingManager = shippingManager;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
-        
+
         /// <summary>
         /// Create a jet shipment request from a shipment
         /// </summary>
         public JetShipmentRequest Create(ShipmentEntity shipment)
         {
-            orderManager.PopulateOrderDetails(shipment);
+            shippingManager.EnsureShipmentLoaded(shipment);
+
             JetShipmentRequest request = new JetShipmentRequest {Shipments = new List<Shipment>()};
             request.Shipments.Add(new Shipment
             {
@@ -54,15 +59,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get a list of ShipmentItems for the shipment
         /// </summary>
-        private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
+        private List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
-            return shipment.Order.OrderItems.Cast<JetOrderItemEntity>()
-                .Select(jetItem => new ShipmentItem
-                {
-                    MerchantSku = jetItem.MerchantSku,
-                    ResponseShipmentSkuQuantity = Convert.ToInt32(jetItem.Quantity)
-                })
-                .ToList();
+            return shipment.Order.OrderItems.OfType<JetOrderItemEntity>().Select(i => new ShipmentItem
+            {
+                MerchantSku = i.MerchantSku,
+                ResponseShipmentSkuQuantity = (int) i.Quantity
+            }).ToList();
         }
 
         /// <summary>

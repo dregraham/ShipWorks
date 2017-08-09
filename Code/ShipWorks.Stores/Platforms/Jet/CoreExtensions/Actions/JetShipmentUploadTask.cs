@@ -55,6 +55,7 @@ namespace ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 try
@@ -62,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions
                     JetOnlineUpdater updater = scope.Resolve<JetOnlineUpdater>();
                     foreach (long entityID in inputKeys)
                     {
-                        updater.UpdateShipmentDetails(entityID);
+                        updater.UpdateShipmentDetails(entityID, store);
                     }
                 }
                 catch (JetException ex)
