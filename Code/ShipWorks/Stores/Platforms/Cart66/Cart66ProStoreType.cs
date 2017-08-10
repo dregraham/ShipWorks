@@ -1,4 +1,4 @@
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -8,6 +8,8 @@ namespace ShipWorks.Stores.Platforms.Cart66
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Cart66Pro)]
+    [Component(RegistrationType.Self)]
     public class Cart66ProStoreType : GenericModuleStoreType
     {
         /// <summary>

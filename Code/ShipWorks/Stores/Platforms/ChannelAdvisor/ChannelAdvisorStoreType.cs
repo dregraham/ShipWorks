@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using log4net;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -29,6 +27,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Store implementation for ChannelAdvisor
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
+    [Component(RegistrationType.Self)]
     public class ChannelAdvisorStoreType : StoreType
     {
         // Logger
@@ -54,7 +54,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the Authorization URL parameters
         /// </summary>
-        public string AuthorizeUrlParameters => $"?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri={RedirectUrl}";
+        public string AuthorizeUrlParameters =>
+            $"?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri={RedirectUrl}";
 
         /// <summary>
         /// String uniquely identifying a store instance
@@ -63,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             get
             {
-                ChannelAdvisorStoreEntity caStore = (ChannelAdvisorStoreEntity)Store;
+                ChannelAdvisorStoreEntity caStore = (ChannelAdvisorStoreEntity) Store;
 
                 return caStore.ProfileID.ToString();
             }
@@ -136,23 +137,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
-        /// Create the custom downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
-
-            if (string.IsNullOrWhiteSpace(caStore.RefreshToken))
-            {
-                return new ChannelAdvisorDownloader(Store);
-            }
-
-            return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(StoreTypeCode.ChannelAdvisor,
-                TypedParameter.From(Store));
-        }
-
-
-        /// <summary>
         /// Create the control for generating the online update shipment tasks
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
@@ -212,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 Name = "Amazon Prime",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -266,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 Name = "Shipped",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -311,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             return new FilterEntity
             {
-                Name="Ready to Ship",
+                Name = "Ready to Ship",
                 Definition = definition.GetXml(),
                 IsFolder = false,
                 FilterTarget = (int) FilterTarget.Orders
@@ -452,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 try
                 {
-                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity)Store);
+                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
                     updater.UploadTrackingNumber(shipment);
                 }
                 catch (ChannelAdvisorException ex)

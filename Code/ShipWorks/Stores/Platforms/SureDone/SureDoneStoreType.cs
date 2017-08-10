@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -17,6 +17,8 @@ namespace ShipWorks.Stores.Platforms.SureDone
     [SuppressMessage("CSharp.Analyzers",
         "CA5351: Do not use insecure cryptographic algorithm MD5",
         Justification = "This is what SureDone currently uses")]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SureDone)]
+    [Component(RegistrationType.Self)]
     public class SureDoneStoreType : GenericModuleStoreType
     {
         /// <summary>

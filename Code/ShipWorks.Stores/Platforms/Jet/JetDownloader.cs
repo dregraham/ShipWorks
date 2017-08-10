@@ -9,13 +9,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet.DTO;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
     /// <summary>
     /// Jet downloader
     /// </summary>
-    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Jet, ExternallyOwned = true)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Jet)]
     public class JetDownloader : StoreDownloader
     {
         private readonly IJetOrderLoader orderLoader;
@@ -39,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Download orders from jet
         /// </summary>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -65,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                         // Update the status
                         Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
-                        LoadAndAcknowledgeOrder(orderUrl);
+                        await LoadAndAcknowledgeOrder(orderUrl);
                     }
 
                     ordersResult = webClient.GetOrders(Store as JetStoreEntity);
@@ -88,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Load and acknowledge the order
         /// </summary>
-        private void LoadAndAcknowledgeOrder(string orderUrl)
+        private async Task LoadAndAcknowledgeOrder(string orderUrl)
         {
             GenericResult<JetOrderDetailsResult> orderDetails = webClient.GetOrderDetails(orderUrl, Store as JetStoreEntity);
 
@@ -97,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 JetOrderDetailsResult jetOrder = orderDetails.Value;
 
                 JetOrderEntity order =
-                    (JetOrderEntity) InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
+                    (JetOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
 
                 if (order.IsNew)
                 {

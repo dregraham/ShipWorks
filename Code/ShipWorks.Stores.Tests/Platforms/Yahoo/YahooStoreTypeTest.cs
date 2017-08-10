@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Core;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
@@ -10,6 +13,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Yahoo
@@ -24,17 +28,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         private readonly List<EnumEntry<YahooApiOrderStatus>> orderStatuses =
             EnumHelper.GetEnumList<YahooApiOrderStatus>().ToList();
         private readonly YahooOrderItemEntity item;
+        private readonly AutoMock mock;
 
         public YahooStoreTypeTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             yahooApiStore.Setup(x => x.TypeCode).Returns(2);
             yahooApiStore.Setup(x => x.YahooStoreID).Returns("ysht-123456789");
 
             yahooEmailStore.Setup(x => x.TypeCode).Returns(2);
             yahooEmailStore.Setup(x => x.YahooStoreID).Returns("");
 
-            apiTestObject = new YahooStoreType(yahooApiStore.Object);
-            emailTestObject = new YahooStoreType(yahooEmailStore.Object);
+            apiTestObject = mock.Create<YahooStoreType>(TypedParameter.From<StoreEntity>(yahooApiStore.Object));
+            emailTestObject = mock.Create<YahooStoreType>(TypedParameter.From<StoreEntity>(yahooEmailStore.Object));
 
             item = new YahooOrderItemEntity()
             {
@@ -51,7 +58,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void Constructor_ThrowsInvalidOperationException_WhenStoreIsNotYahoo()
         {
-            Assert.Throws<InvalidOperationException>(() => new YahooStoreType(otherStore.Object));
+            var ex = Assert.Throws<DependencyResolutionException>(() => mock.Create<YahooStoreType>(TypedParameter.From<StoreEntity>(otherStore.Object)));
+            Assert.IsAssignableFrom<InvalidOperationException>(ex.GetBaseException());
         }
 
         [Fact]
@@ -90,18 +98,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         public void CreateOrderItemInstance_ReturnsYahooOrderItemEntity()
         {
             Assert.IsAssignableFrom<YahooOrderItemEntity>(apiTestObject.CreateOrderItemInstance());
-        }
-
-        [Fact]
-        public void CreateDownloader_ReturnsYahooEmailDownloader_WhenEmailUser()
-        {
-            Assert.IsAssignableFrom<YahooEmailDownloader>(emailTestObject.CreateDownloader());
-        }
-
-        [Fact]
-        public void CreateDownloader_ReturnsYahooApiDownloader_WhenApiUser()
-        {
-            Assert.IsAssignableFrom<YahooApiDownloader>(apiTestObject.CreateDownloader());
         }
 
         [Fact]

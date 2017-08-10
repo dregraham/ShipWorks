@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -186,18 +187,17 @@ namespace Interapptive.Shared.Utility
         /// Split the given text into as many lines of ideal length of idealLineLength.  If the text is too long to fit in maxLines with lines of length idealLineLength,
         /// then each line will be longer.
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002: Expressions used in the nameof() operator should not be obfuscated",
+            Justification = "Parameter is not used for binding")]
         [NDependIgnoreLongMethod]
         public static string[] SplitLines(string text, int idealLineLength, int maxLines = Int32.MaxValue)
         {
             if (idealLineLength <= 0)
             {
-                throw new ArgumentException("lineLength must be greater than 0", "idealLineLength");
+                throw new ArgumentException("lineLength must be greater than 0", nameof(idealLineLength));
             }
 
-            if (text == null)
-            {
-                throw new ArgumentNullException("text");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(text, nameof(text));
 
             List<string> lines = new List<string>();
 

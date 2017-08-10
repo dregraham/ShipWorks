@@ -10,11 +10,6 @@ namespace ShipWorks.UI.Wizard
     public enum WizardStepReason
     {
         /// <summary>
-        /// The page is being jumped to directly, possibly without user insteraction.
-        /// </summary>
-        None,
-
-        /// <summary>
         /// The user clicked the back button
         /// </summary>
         StepBack,

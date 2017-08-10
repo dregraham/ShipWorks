@@ -1,12 +1,10 @@
 using System;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 
@@ -19,15 +17,13 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     public class ShopSiteStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
-        private readonly Func<IShopSiteStoreEntity, ShopSiteDownloader> createDownloader;
         private readonly IShopSiteIdentifier identifier;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteStoreType(StoreEntity store, 
+        public ShopSiteStoreType(StoreEntity store,
             IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex,
-            Func<IShopSiteStoreEntity, ShopSiteDownloader> createDownloader,
             IShopSiteIdentifier identifier)
             : base(store)
         {
@@ -37,7 +33,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             }
 
             this.accountSettingsControlIndex = accountSettingsControlIndex;
-            this.createDownloader = createDownloader;
             this.identifier = identifier;
         }
 
@@ -80,11 +75,6 @@ namespace ShipWorks.Stores.Platforms.ShopSite
 
             return new IEntityField2[] { OrderFields.OnlineCustomerID };
         }
-
-        /// <summary>
-        /// Create the downloader instance that is used to retrieve data from the store.
-        /// </summary>
-        public override StoreDownloader CreateDownloader() => createDownloader(Store as IShopSiteStoreEntity);
 
         /// <summary>
         /// Create the control that is used for editing the account settings in the Store Settings window.

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.SparkPay;
 using ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions;
@@ -23,10 +22,6 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         {
             builder.RegisterType<SparkPayStoreType>()
                 .Keyed<StoreType>(StoreTypeCode.SparkPay)
-                .ExternallyOwned();
-
-            builder.RegisterType<SparkPayDownloader>()
-                .Keyed<StoreDownloader>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();
 
             builder.RegisterType<SparkPayOnlineUpdateInstanceCommandsFactory>()

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -256,22 +258,30 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static long GetNextOrderNumber(long storeID)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == storeID & OrderFields.IsManual == false);
+            long orderNumber = -1;
 
-                long orderNumber = result is DBNull ? 0 : (long) result;
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -6, "OrderUtility.GetNextOrderNumber.");
+            sqlAdapterRetry.ExecuteWithRetry(() =>
+            {
+                object result = DBNull.Value;
+
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    result = adapter.GetScalar(
+                        OrderFields.OrderNumber,
+                        null, AggregateFunction.Max,
+                        OrderFields.StoreID == storeID & OrderFields.IsManual == false);
+                }
+
+                orderNumber = result is DBNull ? 0 : (long) result;
 
                 // Get the next one
                 orderNumber++;
 
                 log.InfoFormat("GetNextOrderNumber = {0}", orderNumber);
+            });
 
-                return orderNumber;
-            }
+            return orderNumber;
         }
 
         /// <summary>
@@ -380,7 +390,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         /// <param name="order">The order.</param>
         /// <param name="adapter">The adapter.</param>
-        public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
+        public static void PopulateOrderDetails(OrderEntity order, ISqlAdapter adapter)
         {
             if (order.Store == null)
             {

@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using log4net;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
-using Interapptive.Shared.Business;
-using ShipWorks.Stores.Content;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
     /// <summary>
     /// Order downloader for NetworkSolutions stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NetworkSolutions)]
     public class NetworkSolutionsDownloader : StoreDownloader
     {
         // Logger
@@ -37,20 +40,20 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Retrieve new orders from NetworkSolutions
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Updating status codes...";
 
-                statusProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity)Store);
+                statusProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity) Store);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
 
-                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity)Store);
+                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity) Store);
 
                 // check for cancel
                 if (Progress.IsCancelRequested)
@@ -79,11 +82,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                             return;
                         }
 
-                        // after the first order pull, we can get the total number of orders available for progress 
+                        // after the first order pull, we can get the total number of orders available for progress
                         Progress.Detail = String.Format("Downloading order {0} of {1}...", QuantitySaved + 1, webClient.TotalCount);
 
                         // import the order
-                        LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // update progress
                         Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / webClient.TotalCount);
@@ -103,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Loads a NetworkSolutions order into ShipWorks
         /// </summary>
-        private void LoadOrder(OrderType nsOrder)
+        private async Task LoadOrder(OrderType nsOrder)
         {
             if (string.IsNullOrWhiteSpace(nsOrder.OrderNumber))
             {
@@ -113,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             long networkSolutionsOrderId = nsOrder.OrderId;
 
-            NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity)InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId));
+            NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity) await InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId)).ConfigureAwait(false);
 
             // populate things that can change between downloads
             order.OrderDate = nsOrder.CreateDate;
@@ -121,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             order.OrderNumber = Convert.ToInt64(nsOrder.OrderNumber);
 
             // online customer id
-            order.OnlineCustomerID = nsOrder.Customer == null ? null : nsOrder.Customer.CustomerId;
+            order.OnlineCustomerID = nsOrder.Customer?.CustomerId;
 
             // requested shipping
             order.RequestedShipping = nsOrder.Shipping == null ? string.Empty : nsOrder.Shipping.Name;
@@ -139,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             // the remainder is only to be done on new orders
             if (order.IsNew)
             {
-                LoadNotes(order, nsOrder);
+                await LoadNotes(order, nsOrder).ConfigureAwait(false);
 
                 LoadOrderItems(order, nsOrder);
 
@@ -152,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NetworkSolutionsDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -399,21 +402,21 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
 
             TextAnswerType textAnswer = answer as TextAnswerType;
-            return textAnswer != null ? 
-                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } : 
-                new BooleanAnswerType { Value = false};
+            return textAnswer != null ?
+                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } :
+                new BooleanAnswerType { Value = false };
         }
 
         /// <summary>
         /// Load order notes into ShipWorks
         /// </summary>
-        private void LoadNotes(NetworkSolutionsOrderEntity order, OrderType nsOrder)
+        private async Task LoadNotes(NetworkSolutionsOrderEntity order, OrderType nsOrder)
         {
-            InstantiateNote(order, nsOrder.Notes, order.OrderDate, NoteVisibility.Public);
+            await InstantiateNote(order, nsOrder.Notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
 
             foreach (KeyValuePair<string, string> question in BuildQuestionAnswerList(nsOrder.QuestionList))
             {
-                InstantiateNote(order, question.Key + Environment.NewLine + question.Value, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, question.Key + Environment.NewLine + question.Value, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
@@ -432,7 +435,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             // email address
             billAdapter.Email = nsOrder.Customer.EmailAddress;
 
-            // fix bad/missing shipping information, take from teh customer record
+            // fix bad/missing shipping information, take from the customer record
             if (shipAdapter.FirstName.Length == 0 && shipAdapter.LastName.Length == 0 && shipAdapter.City.Length == 0)
             {
                 PersonAdapter.Copy(billAdapter, shipAdapter);

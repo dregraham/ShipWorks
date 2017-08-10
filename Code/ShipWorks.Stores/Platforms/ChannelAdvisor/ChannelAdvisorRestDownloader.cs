@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -11,13 +12,15 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
-    public class ChannelAdvisorRestDownloader : StoreDownloader
+    [Component]
+    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
     {
         private readonly IChannelAdvisorRestClient restClient;
         private readonly Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory;
@@ -47,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download orders from ChannelAdvisor REST
         /// </summary>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
@@ -80,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         // Get the products for the order to pass into the loader
                         List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
 
-                        LoadOrder(caOrder, caProducts);
+                        await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
 
                     ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
@@ -102,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Load the given ChannelAdvisor order
         /// </summary>
-        private void LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
+        private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
@@ -111,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             if (!Progress.IsCancelRequested)
             {
                 ChannelAdvisorOrderEntity order =
-                    (ChannelAdvisorOrderEntity) InstantiateOrder(new OrderNumberIdentifier(caOrder.ID));
+                    (ChannelAdvisorOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(caOrder.ID)).ConfigureAwait(false);
 
                 // Required by order loader
                 order.Store = Store;
@@ -120,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 
                 // Save the downloaded order
-                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
             }
         }
     }

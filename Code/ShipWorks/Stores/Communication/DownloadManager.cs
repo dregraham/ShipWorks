@@ -5,9 +5,11 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -132,7 +134,7 @@ namespace ShipWorks.Stores.Communication
 
         /// <summary>
         /// Initiates an auto-download for any stores that are due for an auto download.  By default we only actually do anything at most once every 15 seconds, but
-        /// if you really really need this to check right now-now, you can set forceCheckNow to true
+        /// if you really, really need this to check right now-now, you can set forceCheckNow to true
         /// </summary>
         public static void StartAutoDownloadIfNeeded(bool forceCheckNow = false)
         {
@@ -210,7 +212,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     DateTime? lastDownload = GetLastDownloadTime(store);
 
-                    // Its downloaded somwhere since we had the last cached time, so remove it.
+                    // Its downloaded somewhere since we had the last cached time, so remove it.
                     if (lastDownload.HasValue && lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
                     {
                         readyToDownload.Remove(store);
@@ -283,10 +285,8 @@ namespace ShipWorks.Stores.Communication
 
                     isDownloading = true;
 
-                    Thread thread = new Thread(ExceptionMonitor.WrapThread(DownloadWorkerThread));
-                    thread.Name = "DownloadThread";
-                    thread.IsBackground = true;
-                    thread.Start();
+                    Task.Run(DownloadWorkerTask)
+                        .RethrowException(() => Program.MainForm);
 
                     // Raise the starting event
                     if (DownloadStarting != null)
@@ -302,7 +302,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        private static void DownloadWorkerThread()
+        private static async Task DownloadWorkerTask()
         {
             log.InfoFormat("Download starting.");
 
@@ -373,171 +373,174 @@ namespace ShipWorks.Stores.Communication
                     }
                 }
 
-
-                DownloadEntity downloadLog = null;
-                StoreDownloader downloader = null;
-
-                try
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // This item is now running
-                    progressItem.Starting();
 
-                    if (store == null)
+                    DownloadEntity downloadLog = null;
+                    IStoreDownloader downloader = null;
+
+                    try
                     {
-                        throw new StoreDeletedException();
-                    }
+                        // This item is now running
+                        progressItem.Starting();
 
-                    if (!store.Enabled)
-                    {
-                        throw new DownloadException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
-                    }
-
-                    log.InfoFormat("Starting download for store '{0}' ({1})", store.StoreName, store.StoreID);
-
-                    // Connection to use during the download cycle, if it disconnects we
-                    // show the user an error, this ensures that if the lock taken below
-                    // is broken we stop downloading
-                    using (DbConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        // We open a lock that will stay open for the duration of the store download,
-                        // which will serve to lock out any other running instance of ShipWorks from downloading
-                        // for this store.
-                        using (SqlEntityLock storeLock = new SqlEntityLock(con, store.StoreID, "Download"))
+                        if (store == null)
                         {
-                            // We create the log entry right when we start
-                            downloadLog = CreateDownloadLog(store, initiatedBy);
+                            throw new StoreDeletedException();
+                        }
 
-                            // Create the downloader
-                            downloader = StoreTypeManager.GetType(store).CreateDownloader();
+                        if (!store.Enabled)
+                        {
+                            throw new DownloadException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+                        }
 
-                            // Verify the license
-                            progressItem.Detail = "Connecting...";
-                            CheckLicense(store);
+                        log.InfoFormat("Starting download for store '{0}' ({1})", store.StoreName, store.StoreID);
 
-                            // Do the download.  Operates as the super user.
-                            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
-                                AuditBehaviorUser.SuperUser,
-                                new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                        // Connection to use during the download cycle, if it disconnects we
+                        // show the user an error, this ensures that if the lock taken below
+                        // is broken we stop downloading
+                        using (DbConnection con = SqlSession.Current.OpenConnection())
+                        {
+                            // We open a lock that will stay open for the duration of the store download,
+                            // which will serve to lock out any other running instance of ShipWorks from downloading
+                            // for this store.
+                            using (SqlEntityLock storeLock = new SqlEntityLock(con, store.StoreID, "Download"))
                             {
-                                downloader.Download(progressItem, downloadLog.DownloadID, con);
-                            }
+                                // We create the log entry right when we start
+                                downloadLog = CreateDownloadLog(store, initiatedBy);
 
-                            // Item is complete
-                            progressItem.Completed();
+                                // Create the downloader
+                                downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+
+                                // Verify the license
+                                progressItem.Detail = "Connecting...";
+                                CheckLicense(store);
+
+                                // Do the download.  Operates as the super user.
+                                using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
+                                    AuditBehaviorUser.SuperUser,
+                                    new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                                {
+                                    await downloader.Download(progressItem, downloadLog.DownloadID, con).ConfigureAwait(false);
+                                }
+
+                                // Item is complete
+                                progressItem.Completed();
+                            }
                         }
                     }
-                }
-                catch (SqlAppResourceLockException ex)
-                {
-                    log.Error("Could not obtain download lock.", ex);
-
-                    progressItem.Failed(new DownloadException("Another computer is already downloading for this store.", ex));
-                }
-                catch (DownloadException ex)
-                {
-                    log.Error("Download error", ex);
-
-                    progressItem.Failed(ex);
-                }
-                catch (ShipWorksLicenseException ex)
-                {
-                    log.Error("License error", ex);
-
-                    progressItem.Failed(ex);
-                }
-                catch (TangoException ex)
-                {
-                    log.Error("Tango error", ex);
-
-                    progressItem.Failed(ex);
-                }
-                catch (StoreDeletedException ex)
-                {
-                    log.Error("Store Deleted", ex);
-
-                    progressItem.Failed(new StoreDeletedException(ex));
-
-                    // Can't log the download if there's no more store
-                    downloadLog = null;
-                }
-                catch (ORMQueryExecutionException ex)
-                {
-                    log.Error("Query Error", ex);
-
-                    // See if this is because the store got deleted.  Rare case, but what the hell, might as well handle it.
-                    if (StoreCollection.GetCount(SqlAdapter.Default, StoreFields.StoreID == store.StoreID) == 0)
+                    catch (SqlAppResourceLockException ex)
                     {
-                        log.Warn("The store was deleted.");
+                        log.Error("Could not obtain download lock.", ex);
+
+                        progressItem.Failed(new DownloadException("Another computer is already downloading for this store.", ex));
+                    }
+                    catch (DownloadException ex)
+                    {
+                        log.Error("Download error", ex);
+
+                        progressItem.Failed(ex);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        log.Error("License error", ex);
+
+                        progressItem.Failed(ex);
+                    }
+                    catch (TangoException ex)
+                    {
+                        log.Error("Tango error", ex);
+
+                        progressItem.Failed(ex);
+                    }
+                    catch (StoreDeletedException ex)
+                    {
+                        log.Error("Store Deleted", ex);
+
                         progressItem.Failed(new StoreDeletedException(ex));
 
                         // Can't log the download if there's no more store
                         downloadLog = null;
                     }
-                    else
+                    catch (ORMQueryExecutionException ex)
                     {
-                        // Don't know what to do with it otherwise
-                        throw;
-                    }
-                }
-                catch (InvalidOperationException ex) when (ex.Message == "ExecuteNonQuery requires an open and available Connection. The connection's current state is closed.")
-                {
-                    log.Error("Download error", ex);
+                        log.Error("Query Error", ex);
 
-                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
-                }
-                catch (SqlException ex)
-                {
-                    log.Error("Download error", ex);
-
-                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
-                }
-
-                // This would only be null if the store had been deleted before we tried to log the download
-                if (downloadLog != null)
-                {
-                    // Could be null if an error was thrown before we got that far
-                    if (downloader != null)
-                    {
-                        downloadLog.QuantityTotal = downloader.QuantitySaved;
-                        downloadLog.QuantityNew = downloader.QuantityNew;
-                    }
-
-                    // Update the download log with the result
-                    if (progressItem.Status == ProgressItemStatus.Success)
-                    {
-                        downloadLog.Result = (int) DownloadResult.Success;
-                    }
-                    else if (progressItem.Status == ProgressItemStatus.Canceled)
-                    {
-                        downloadLog.Result = (int) DownloadResult.Cancel;
-                    }
-                    else
-                    {
-                        downloadLog.Result = (int) DownloadResult.Error;
-                        downloadLog.ErrorMessage = progressItem.Error.Message;
-                        showDashboardError = true;
-                    }
-
-                    // Save the updated log
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        downloadLog.Ended = DateTime.UtcNow;
-                        adapter.SaveAndRefetch(downloadLog);
-                    }
-
-                    ActionDispatcher.DispatchDownloadFinished(store.StoreID, (DownloadResult) downloadLog.Result, downloadLog.QuantityNew);
-                }
-                else
-                {
-                    // If there wasn't a DownloadLog created for this download, (due to applock, or store deleted), then manually set the last download time
-                    // in the cache so that we don't keep trying every 15 seconds since it hasn't been updated in the database.
-                    if (store != null)
-                    {
-                        lock (lastDownloadTimesLock)
+                        // See if this is because the store got deleted.  Rare case, but what the hell, might as well handle it.
+                        if (StoreCollection.GetCount(SqlAdapter.Default, StoreFields.StoreID == store.StoreID) == 0)
                         {
-                            if (lastDownloadTimesCache != null)
+                            log.Warn("The store was deleted.");
+                            progressItem.Failed(new StoreDeletedException(ex));
+
+                            // Can't log the download if there's no more store
+                            downloadLog = null;
+                        }
+                        else
+                        {
+                            // Don't know what to do with it otherwise
+                            throw;
+                        }
+                    }
+                    catch (InvalidOperationException ex) when (ex.Message == "ExecuteNonQuery requires an open and available Connection. The connection's current state is closed.")
+                    {
+                        log.Error("Download error", ex);
+
+                        progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                    }
+                    catch (SqlException ex)
+                    {
+                        log.Error("Download error", ex);
+
+                        progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                    }
+
+                    // This would only be null if the store had been deleted before we tried to log the download
+                    if (downloadLog != null)
+                    {
+                        // Could be null if an error was thrown before we got that far
+                        if (downloader != null)
+                        {
+                            downloadLog.QuantityTotal = downloader.QuantitySaved;
+                            downloadLog.QuantityNew = downloader.QuantityNew;
+                        }
+
+                        // Update the download log with the result
+                        if (progressItem.Status == ProgressItemStatus.Success)
+                        {
+                            downloadLog.Result = (int) DownloadResult.Success;
+                        }
+                        else if (progressItem.Status == ProgressItemStatus.Canceled)
+                        {
+                            downloadLog.Result = (int) DownloadResult.Cancel;
+                        }
+                        else
+                        {
+                            downloadLog.Result = (int) DownloadResult.Error;
+                            downloadLog.ErrorMessage = progressItem.Error.Message;
+                            showDashboardError = true;
+                        }
+
+                        // Save the updated log
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            downloadLog.Ended = DateTime.UtcNow;
+                            adapter.SaveAndRefetch(downloadLog);
+                        }
+
+                        ActionDispatcher.DispatchDownloadFinished(store.StoreID, (DownloadResult) downloadLog.Result, downloadLog.QuantityNew);
+                    }
+                    else
+                    {
+                        // If there wasn't a DownloadLog created for this download, (due to applock, or store deleted), then manually set the last download time
+                        // in the cache so that we don't keep trying every 15 seconds since it hasn't been updated in the database.
+                        if (store != null)
+                        {
+                            lock (lastDownloadTimesLock)
                             {
-                                lastDownloadTimesCache[store.StoreID] = DateTime.UtcNow;
+                                if (lastDownloadTimesCache != null)
+                                {
+                                    lastDownloadTimesCache[store.StoreID] = DateTime.UtcNow;
+                                }
                             }
                         }
                     }
@@ -567,23 +570,23 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Create the window that will be used for displaying progess
+        /// Create the window that will be used for displaying progress
         /// </summary>
         private static ProgressDlg CreateProgressWindow()
         {
-            ProgressDlg progressDlg = new ProgressDlg(progressProvider);
-            progressDlg.Title = "ShipWorks Download";
-            progressDlg.Description = "ShipWorks is downloading from your online store.";
+            return new ProgressDlg(progressProvider)
+            {
+                Title = "ShipWorks Download",
+                Description = "ShipWorks is downloading from your online store.",
 
-            // Implement the hiding
-            progressDlg.AllowCloseWhenRunning = true;
-            progressDlg.AutoCloseWhenComplete = true;
+                // Implement the hiding
+                AllowCloseWhenRunning = true,
+                AutoCloseWhenComplete = true,
 
-            progressDlg.ActionColumnHeaderText = "Store";
-            progressDlg.CloseTextWhenRunning = "Hide";
-            progressDlg.CloseTextWhenComplete = "Close";
-
-            return progressDlg;
+                ActionColumnHeaderText = "Store",
+                CloseTextWhenRunning = "Hide",
+                CloseTextWhenComplete = "Close"
+            };
         }
 
         /// <summary>

@@ -83,11 +83,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         }
 
         /// <summary>
-        /// Create the downloader instance that is used to retrieve data from the store.
-        /// </summary>
-        public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
-
-        /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
         protected override string InternalLicenseIdentifier => jetStore.ApiUser;

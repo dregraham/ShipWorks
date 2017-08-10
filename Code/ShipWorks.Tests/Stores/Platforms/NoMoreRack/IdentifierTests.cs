@@ -1,15 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using ShipWorks.Stores;
+using Autofac;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Choxi;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.NoMoreRack
 {
     public class IdentifierTests
     {
+        private readonly AutoMock mock;
+
+        public IdentifierTests()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
         /// <summary>
         /// Check that the given url is the desired identifier
         /// </summary>
@@ -17,18 +24,18 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
         {
             DoTest(url, "staging.vendor-api.nomorerack.com/api/v1/shipworks/60", "1.0.0.0");
         }
-        
+
         /// <summary>
-        /// Check that the the given url is the desired identifier
+        /// Check that the given url is the desired identifier
         /// </summary>
         private void DoTest(string url, string identifier, string schemaVersion)
         {
             GenericModuleStoreEntity nmrStore = new GenericModuleStoreEntity();
             nmrStore.ModuleUrl = url;
-            nmrStore.TypeCode = (int)StoreTypeCode.Choxi;
+            nmrStore.TypeCode = (int) StoreTypeCode.Choxi;
             nmrStore.SchemaVersion = schemaVersion;
 
-            StoreType storeType = StoreTypeManager.GetType(nmrStore);
+            StoreType storeType = mock.Create<ChoxiStoreType>(TypedParameter.From<StoreEntity>(nmrStore));
 
             Assert.Equal(identifier, storeType.LicenseIdentifier);
         }
@@ -44,7 +51,5 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
         {
             DoTest("http://staging.vendor-api.nomorerack.com/api/v1/shipworks/60");
         }
-   
-   
     }
 }

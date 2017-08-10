@@ -1,4 +1,8 @@
-﻿using Interapptive.Shared;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -7,10 +11,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propagates the address changes to shipments.
         /// </summary>
-        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
+        public static void PropagateAddressChangesToShipments(ISqlAdapter adapter, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
             PropagateAddressChangesToShipments(new AdapterAddressValidationDataAccess(adapter), orderID, originalShippingAddress, newShippingAddress);
         }
@@ -106,9 +106,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets the original address for an entity
         /// </summary>
-        public static ValidatedAddressEntity GetOriginalAddress(SqlAdapter dataAccess, long entityId, string prefix)
+        public static ValidatedAddressEntity GetOriginalAddress(ISqlAdapter dataAccess, long entityId, string prefix)
         {
-            return GetSuggestedAddresses(SqlAdapter.Default, entityId, prefix)
+            return GetSuggestedAddresses(dataAccess, entityId, prefix)
                 .Where(entity => entity.IsOriginal)
                 .OrderByDescending(entity => entity.ValidatedAddressID).FirstOrDefault();
         }
@@ -116,7 +116,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets the associated validated addresses for an entity
         /// </summary>
-        public static List<ValidatedAddressEntity> GetSuggestedAddresses(SqlAdapter dataAccess, long entityId, string prefix)
+        public static List<ValidatedAddressEntity> GetSuggestedAddresses(ISqlAdapter dataAccess, long entityId, string prefix)
         {
             return GetSuggestedAddresses(new AdapterAddressValidationDataAccess(dataAccess), entityId, prefix);
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Deletes existing validated addresses
         /// </summary>
-        public static void DeleteExistingAddresses(SqlAdapter adapter, long entityId, string prefix)
+        public static void DeleteExistingAddresses(ISqlAdapter adapter, long entityId, string prefix)
         {
             DeleteExistingAddresses(new AdapterAddressValidationDataAccess(adapter), entityId, prefix);
         }

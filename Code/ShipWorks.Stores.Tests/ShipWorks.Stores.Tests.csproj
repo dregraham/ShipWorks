@@ -179,6 +179,7 @@
   <ItemGroup>
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModelTest.cs" />
@@ -206,17 +207,18 @@
     <Compile Include="Platforms\Jet\JetTokenTest.cs" />
     <Compile Include="Platforms\Jet\JetWebClientTest.cs" />
     <Compile Include="Platforms\Jet\JsonRequestTest.cs" />
-    <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoProduct.json" />
+    <Compile Include="Platforms\Magento\MagentoDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCacheTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtilityTest.cs" />
     <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
@@ -284,6 +286,7 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactoryTest.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOrderIdentifierTest.cs" />
@@ -297,6 +300,7 @@
     <Compile Include="Platforms\Walmart\WalmartStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreTypeTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiWebClientTest.cs" />

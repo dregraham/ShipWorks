@@ -5,6 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -18,8 +19,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// <summary>
     /// Amazon shipping api client
     /// </summary>
+    [Component]
     public class AmazonShippingWebClient : IAmazonShippingWebClient
     {
+        private readonly Func<IHttpVariableRequestSubmitter> createVariableRequestSubmitter;
+        private readonly IEncryptionProvider encryptionProvider;
+        private readonly ILogEntryFactory createApiLogEntry;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonShippingWebClient(IEncryptionProviderFactory encryptionFactory,
+            Func<IHttpVariableRequestSubmitter> createVariableRequestSubmitter,
+            ILogEntryFactory createApiLogEntry)
+        {
+            this.createApiLogEntry = createApiLogEntry;
+            this.createVariableRequestSubmitter = createVariableRequestSubmitter;
+            encryptionProvider = encryptionFactory.CreateSecureTextEncryptionProvider("Interapptive");
+        }
+
         /// <summary>
         /// Validate the given credentials
         /// </summary>
@@ -28,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             try
             {
                 // Request a list of marketplaces to test credentials
-                ExecuteRequest(new HttpVariableRequestSubmitter(), AmazonMwsApiCall.ListMarketplaceParticipations, mwsSettings);
+                ExecuteRequest(createVariableRequestSubmitter(), AmazonMwsApiCall.ListMarketplaceParticipations, mwsSettings);
                 return AmazonValidateCredentialsResponse.Succeeded();
             }
             catch (AmazonShippingException ex)
@@ -45,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            IHttpVariableRequestSubmitter request = createVariableRequestSubmitter();
 
             // Add Shipment Information XML
             AddShipmentRequestDetails(request, requestDetails);
@@ -60,11 +78,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
-        public CreateShipmentResponse CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
+        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            IHttpVariableRequestSubmitter request = createVariableRequestSubmitter();
 
             // Add the service
             request.Variables.Add("ShippingServiceId", shippingServiceId);
@@ -88,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            IHttpVariableRequestSubmitter request = createVariableRequestSubmitter();
 
             // Add the service
             request.Variables.Add("ShipmentId", amazonShipment.AmazonUniqueShipmentID);
@@ -112,13 +130,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the CreateShipmentResponse to ensure that it contains a label
         /// </summary>
-        public CreateShipmentResponse ValidateCreateShipmentResponse(CreateShipmentResponse createShipmentResponse)
+        private AmazonShipment ValidateCreateShipmentResponse(CreateShipmentResponse createShipmentResponse)
         {
             if (createShipmentResponse?.CreateShipmentResult?.AmazonShipment?.Label?.FileContents == null)
             {
                 throw new AmazonShippingException("Amazon failed to return a label for the Shipment.");
             }
-            return createShipmentResponse;
+
+            return createShipmentResponse.CreateShipmentResult.AmazonShipment;
         }
 
         /// <summary>
@@ -148,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
+        private void ConfigureRequest(IHttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
@@ -164,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Adds Shipment Details to the request
         /// </summary>
-        private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddShipmentRequestDetails(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
@@ -179,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Add the shipping service options to the request
         /// </summary>
-        private static void AddShippingServiceOptions(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddShippingServiceOptions(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // ShippingServiceOptions
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp",
@@ -198,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         /// <param name="request"></param>
         /// <param name="requestDetails"></param>
-        private static void AddPackageInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddPackageInfo(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Package Info
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString(CultureInfo.InvariantCulture));
@@ -212,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Add the from address to the request
         /// </summary>
-        private static void AddFromAddressInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddFromAddressInfo(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // From Address Info
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Name))
@@ -250,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Adds item information to the request
         /// </summary>
-        private static void AddItemInfo(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddItemInfo(IHttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Item Info
             int i = 1;
@@ -273,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
+        private void AddSignature(IHttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             request.Variables.Add("SignatureMethod", "HmacSHA256");
             request.Variables.Add("SignatureVersion", "2");
@@ -286,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
             string queryString = request.Variables
                 .OrderBy(v => v.Name, StringComparer.Ordinal)
-                .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
+                .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value ?? string.Empty, false))
                 .Aggregate((x, y) => x + "&" + y);
 
             string parameterString = $"{verbString}\n{request.Uri.Host}\n{endpointPath}\n{queryString}";
@@ -299,7 +318,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Executes a request
         /// </summary>
-        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
+        private IHttpResponseReader ExecuteRequest(IHttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, IAmazonMwsWebClientSettings mwsSettings)
         {
             // Adds our amazon credentials and other parameters
             // required for each api call
@@ -319,7 +338,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             try
             {
-                ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall));
+                IApiLogEntry logger = createApiLogEntry.GetLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall), LogActionType.Other);
 
                 // log the request
                 logger.LogRequest(request);
@@ -353,10 +372,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Returns the decrypted Interapptive Developer Access Key
         /// </summary>
-        private static string Decrypt(string encrypted)
-        {
-            return SecureText.Decrypt(encrypted, "Interapptive");
-        }
+        private string Decrypt(string encrypted) => encryptionProvider.Decrypt(encrypted);
 
         /// <summary>
         /// Raise AmazonShipperException for errors returned to us in the response XML

@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.IO.Text.Csv;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using System.Data.SqlClient;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
 {
     /// <summary>
     /// Download implementation for importing from CSV files
     /// </summary>
-    public class GenericFileCsvDownloader : GenericFileSpreadsheetDownloaderBase
+    [Component]
+    public class GenericFileCsvDownloader : GenericFileSpreadsheetDownloaderBase, IGenericFileCsvDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileCsvDownloader));
 
         GenericCsvMap csvMap;
@@ -30,8 +26,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericFileCsvDownloader(GenericFileStoreEntity store)
-            : base(store)
+        public GenericFileCsvDownloader(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
 
         }
@@ -52,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         }
 
         /// <summary>
-        /// Create the spreadhseet reader for the given file
+        /// Create the spreadsheet reader for the given file
         /// </summary>
         protected override GenericSpreadsheetReader CreateReader(GenericFileInstance file)
         {

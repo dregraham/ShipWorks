@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Reactive;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Autofac;
-using HarSharp;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using Microsoft.Owin;
-using Microsoft.Owin.Hosting;
-using Moq;
-using Owin;
-using RestSharp;
 using SD.LLBLGen.Pro.QuerySpec;
 using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.ApplicationCore;
@@ -27,15 +16,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.BigCommerce;
-using ShipWorks.Stores.Platforms.BigCommerce.DTO;
-using ShipWorks.Stores.Tests.Integration.Extensions;
 using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -95,16 +80,16 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
-        public void Download_PopulatesStatusCodes()
+        public async Task Download_PopulatesStatusCodes()
         {
             using (var webApp = replayServer.Start("Download_PopulatesStatusCodes.har"))
             {
                 var storeType = StoreTypeManager.GetType(store);
-                var downloader = storeType.CreateDownloader();
+                var downloader = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreDownloader>(StoreTypeCode.BigCommerce, TypedParameter.From<StoreEntity>(store));
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var statuses = storeType.GetOnlineStatusChoices();
@@ -117,12 +102,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         {
             using (var webApp = replayServer.Start("Download_CreatesOrder.har"))
             {
-                var storeType = StoreTypeManager.GetType(store);
-                var downloader = storeType.CreateDownloader();
+                var downloader = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreDownloader>(StoreTypeCode.BigCommerce, TypedParameter.From<StoreEntity>(store));
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var orderID = await GetNewestOrderIDForStore(store);
@@ -150,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                 var order = Create.Order(store, context.Customer)
                     .Set(x => x.OrderNumber, 100)
                     .Set(x => x.OrderDate, DateTime.UtcNow)
-                    .Save(); ;
+                    .Save();
 
                 var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
                 updater.UpdateOrderStatus(order.OrderID, BigCommerceConstants.OrderStatusCompleted);

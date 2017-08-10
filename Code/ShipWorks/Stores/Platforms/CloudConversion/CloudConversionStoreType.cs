@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -8,6 +8,8 @@ namespace ShipWorks.Stores.Platforms.CloudConversion
     /// <summary>
     /// Cloud Conversion StoreType
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.CloudConversion)]
+    [Component(RegistrationType.Self)]
     public class CloudConversionStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -15,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.CloudConversion
         /// </summary>
         /// <param name="store"></param>
         public CloudConversionStoreType(StoreEntity store) : base(store)
-        {}
+        { }
 
 
         /// <summary>

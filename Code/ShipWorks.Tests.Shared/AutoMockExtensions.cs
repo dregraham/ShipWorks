@@ -147,7 +147,21 @@ namespace ShipWorks.Tests.Shared
         /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
         /// </summary>
         /// <typeparam name="TInput">The type of input.</typeparam>
-        /// <typeparam name="TOutput">The type the funct will return.</typeparam>
+        /// <typeparam name="TOutput">The type the Func will return.</typeparam>
+        /// <param name="mock">The mock.</param>
+        public static Mock<Func<TInput, TOutput>> MockFunc<TInput, TOutput>(this AutoMock mock) where TOutput : class
+        {
+            Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
+            mock.Provide(function.Object);
+            return function;
+        }
+
+        /// <summary>
+        /// Mocks a Function with an input and output.
+        /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
+        /// </summary>
+        /// <typeparam name="TInput">The type of input.</typeparam>
+        /// <typeparam name="TOutput">The type the Func will return.</typeparam>
         /// <param name="mock">The mock.</param>
         /// <param name="functionOutput">The actual output of the function.</param>
         /// <remarks>
@@ -155,12 +169,9 @@ namespace ShipWorks.Tests.Shared
         /// First, create the object you want as the result. (var blah = mock.MockRepository.Create&lt;IBlah&gt;();)
         /// Then call mock.MockFunc&lt;string, IBlah&gt;(blah);
         /// </remarks>
-        public static Mock<Func<TInput, TOutput>> MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
+        public static void MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
-            Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
-            function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
-            mock.Provide(function.Object);
-            return function;
+            mock.MockFunc<TInput, TOutput>().Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
         }
 
         /// <summary>

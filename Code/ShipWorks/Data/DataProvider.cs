@@ -33,22 +33,21 @@ namespace ShipWorks.Data
         private static ExecutionMode executionMode;
 
         // The entity types we support caching of and monitor for changes
-        static EntityType[] changeMonitoredEntityTypes = new EntityType[]
-                {
-                    EntityType.CustomerEntity,
-                    EntityType.OrderEntity,
-                    EntityType.OrderItemEntity,
-                    EntityType.OrderItemAttributeEntity,
-                    EntityType.OrderChargeEntity,
-                    EntityType.OrderPaymentDetailEntity,
-                    EntityType.ShipmentEntity,
-                    EntityType.ShipmentCustomsItemEntity,
-                    EntityType.PrintResultEntity,
-                    EntityType.NoteEntity,
-                    EntityType.EmailOutboundEntity,
-                    EntityType.StoreEntity,
-                    EntityType.ServiceStatusEntity
-                };
+        static EntityType[] changeMonitoredEntityTypes = {
+            EntityType.CustomerEntity,
+            EntityType.OrderEntity,
+            EntityType.OrderItemEntity,
+            EntityType.OrderItemAttributeEntity,
+            EntityType.OrderChargeEntity,
+            EntityType.OrderPaymentDetailEntity,
+            EntityType.ShipmentEntity,
+            EntityType.ShipmentCustomsItemEntity,
+            EntityType.PrintResultEntity,
+            EntityType.NoteEntity,
+            EntityType.EmailOutboundEntity,
+            EntityType.StoreEntity,
+            EntityType.ServiceStatusEntity
+        };
 
         // Maintains version information of each entity and when update, insert, and deletes are detected for it
         static Dictionary<EntityType, EntityTypeChangeVersion> entityTypeChangeVersions;
@@ -195,18 +194,26 @@ namespace ShipWorks.Data
         /// <summary>
         /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
         /// </summary>
-        public static EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
-        {
-            return entityCache.GetEntity(entityID, fetchIfMissing);
-        }
+        public static EntityBase2 GetEntity(long entityID) =>
+            entityCache.GetEntity(entityID, true);
 
         /// <summary>
         /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
         /// </summary>
-        public static EntityBase2 GetEntity(long entityID, SqlAdapter adapter, bool fetchIfMissing = true)
-        {
-            return entityCache.GetEntity(entityID, fetchIfMissing, adapter);
-        }
+        public static EntityBase2 GetEntity(long entityID, bool fetchIfMissing) =>
+            entityCache.GetEntity(entityID, fetchIfMissing);
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// </summary>
+        public static EntityBase2 GetEntity(long entityID, ISqlAdapter adapter) =>
+            entityCache.GetEntity(entityID, true, adapter);
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// </summary>
+        public static EntityBase2 GetEntity(long entityID, ISqlAdapter adapter, bool fetchIfMissing) =>
+            entityCache.GetEntity(entityID, fetchIfMissing, adapter);
 
         /// <summary>
         /// Gets all the entities represented by the give keys.  Each key must be of the same EntityType
@@ -381,7 +388,7 @@ namespace ShipWorks.Data
             }
 
             // Only raise the shipment specific entity change event if it's subscribed to
-            // and if any of the cahnges are for shipment entities
+            // and if any of the changes are for shipment entities
             EventHandler shipmentHandler = ShipmentEntityChangeDetected;
             if (shipmentHandler != null && DidEntityTypeChanged(EntityType.ShipmentEntity, e))
             {

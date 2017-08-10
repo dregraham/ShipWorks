@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.VirtueMart
 {
     /// <summary>
     /// VirtueMart integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.VirtueMart)]
+    [Component(RegistrationType.Self)]
     class VirtueMartStoreType : GenericModuleStoreType
     {
         /// <summary>

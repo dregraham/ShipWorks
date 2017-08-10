@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Interapptive.Shared.Utility;
-using System.Xml.XPath;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
     /// Retrieves orders from Amazon.com
     /// </summary>
-    public class AmazonDownloader : StoreDownloader
+    [Component]
+    public class AmazonDownloader : StoreDownloader, IAmazonLegacyDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonDownloader));
 
         /// <summary>
@@ -41,10 +40,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -91,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
                         // import the order
-                        LoadOrder(order);
+                        await LoadOrder(order).ConfigureAwait(false);
 
                         // move the progress bar along
                         Progress.PercentComplete = Math.Min(100 * QuantitySaved / orders.Length, 100);
@@ -121,9 +120,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Import the Order 
+        /// Import the Order
         /// </summary>
-        private void LoadOrder(string orderXml)
+        private async Task LoadOrder(string orderXml)
         {
             // load the document
             XmlDocument document = new XmlDocument();
@@ -136,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             string amazonOrder = XPathUtility.Evaluate(xpath, "amazonOrderID", "");
 
             // get the order instance
-            AmazonOrderEntity order = (AmazonOrderEntity)InstantiateOrder(new AmazonOrderIdentifier(amazonOrder));
+            AmazonOrderEntity order = (AmazonOrderEntity) await InstantiateOrder(new AmazonOrderIdentifier(amazonOrder)).ConfigureAwait(false);
 
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
@@ -178,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "AmazonDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -223,10 +222,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // Shipping Discount
             LoadCharge(order, "Shipping Discount", "Shipping Discount", -XPathUtility.Evaluate(xpath, "string(sum(//promotion/component[type=\"Shipping\"]/amount/value))", 0.0m), true);
-            
+
             // Shipping
             LoadCharge(order, "Shipping", "Shipping", XPathUtility.Evaluate(xpath, "string(sum(//itemPrice/shippingComponent/amount/value))", 0.0m), false);
-            
+
             // Tax
             decimal taxAmount = XPathUtility.Evaluate(xpath, "string(sum(//itemPrice/taxComponent/amount/value))", 0.0m);
             taxAmount += XPathUtility.Evaluate(xpath, "string(sum(//itemPrice/giftWrapTaxComponent/amount/value))", 0.0m);
@@ -266,12 +265,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             while (items.MoveNext())
             {
                 XPathNavigator xpath = items.Current;
-                AmazonOrderItemEntity item = (AmazonOrderItemEntity)InstantiateOrderItem(order);
+                AmazonOrderItemEntity item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
 
                 // populate the basic fields
                 item.Name = XPathUtility.Evaluate(xpath, "title", "");
                 item.Quantity = XPathUtility.Evaluate(xpath, "quantity", 0);
-                item.UnitPrice = XPathUtility.Evaluate(xpath, "itemPrice/principalComponent/amount/value", (decimal)0.0) / (decimal)item.Quantity;
+                item.UnitPrice = XPathUtility.Evaluate(xpath, "itemPrice/principalComponent/amount/value", (decimal) 0.0) / (decimal) item.Quantity;
                 item.Code = XPathUtility.Evaluate(xpath, "sku", "");
                 item.SKU = item.Code;
 
@@ -279,7 +278,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amazonOrderItemCode", string.Empty);
                 item.ConditionNote = XPathUtility.Evaluate(xpath, "conditionNote", "");
 
-                AmazonItemDetail amazonItemDetail = AmazonAsin.GetAmazonItemDetail((AmazonStoreEntity)Store, item.SKU);
+                AmazonItemDetail amazonItemDetail = AmazonAsin.GetAmazonItemDetail((AmazonStoreEntity) Store, item.SKU);
                 item.ASIN = amazonItemDetail.Asin;
                 item.Weight = amazonItemDetail.Weight;
                 item.Image = amazonItemDetail.ItemUrl;
@@ -335,7 +334,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillFirstName = billFullName.First;
             order.BillMiddleName = billFullName.Middle;
             order.BillLastName = billFullName.LastWithSuffix;
-            order.BillNameParseStatus = (int)billFullName.ParseStatus;
+            order.BillNameParseStatus = (int) billFullName.ParseStatus;
             order.BillUnparsedName = billFullName.UnparsedName;
             order.BillCompany = "";
             order.BillPhone = XPathUtility.Evaluate(xpath, "billingData/address/phoneNumber", "");
@@ -359,7 +358,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.ShipFirstName = shipFullName.First;
             order.ShipMiddleName = shipFullName.Middle;
             order.ShipLastName = shipFullName.LastWithSuffix;
-            order.ShipNameParseStatus = (int)shipFullName.ParseStatus;
+            order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
             order.ShipUnparsedName = shipFullName.UnparsedName;
             order.ShipCompany = "";
 
