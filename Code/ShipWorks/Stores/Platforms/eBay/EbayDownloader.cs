@@ -884,12 +884,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateTransactionExtraDetails(EbayOrderItemEntity orderItem, TransactionType transaction)
         {
-            // If updating external stuff is turned off, don't do it
-            if (!((EbayStoreEntity) Store).DownloadItemDetails)
-            {
-                return;
-            }
-
             // If this item isn't new, or we already have the extra info, then we don't need to waste time on this
             if (!orderItem.IsNew || !string.IsNullOrWhiteSpace(orderItem.Image))
             {
