@@ -30,6 +30,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                             "Item.ProductListingDetails.StockPhotoURL",
                             "Item.ProductListingDetails.UPC",
                             "Item.ProductListingDetails.ISBN",
+                            "Item.ShippingPackageDetails.WeightMajor",
+                            "Item.ShippingPackageDetails.WeightMinor"
                         },
                     DetailLevel = new DetailLevelCodeType[0]
                 };
