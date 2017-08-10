@@ -34,6 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderDto.shippingInfo = new shippingInfoType
             {
                 estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12),
+                estimatedShipDate = DateTime.UtcNow.AddDays(-12),
                 postalAddress = new postalAddressType
                 {
                     name = "foo bar",
@@ -244,6 +245,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(expectedValue, orderEntity.EstimatedShipDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsEstimatedShipDateToOrderDate_WhenEstimatedShipDateIsNotValid()
+        {
+            orderDto.orderDate = new DateTime(2001, 01, 01);
+            orderDto.shippingInfo.estimatedShipDate = new DateTime(1600, 01, 01);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(new DateTime(2001, 01, 01), orderEntity.EstimatedShipDate);
         }
 
         [Theory]
