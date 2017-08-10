@@ -21,6 +21,9 @@ $mode = getenv('MODULE_MODE');
 // flag indicating if we will require SSL connection or not (default is true)
 define('REQUIRE_SECURE', $mode !== "DEV");
 
+define('ONLY_AUTHENTICATE_VALID_USER_GROUPS', false);
+define('VALID_USER_GROUPS', array());
+
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
 define('DS', DIRECTORY_SEPARATOR);
@@ -306,6 +309,22 @@ function checkAdminLogin()
     return false;
   }
 
+  if (ONLY_AUTHENTICATE_VALID_USER_GROUPS) 
+  {
+    $user = JUser::getInstance(JUserHelper::getUserID($_REQUEST['username']));
+    $groups = $user->getAuthorisedGroups();
+
+    foreach ($groups as $group) 
+    {
+      if (in_array($group, VALID_USER_GROUPS)) 
+      {
+        return true;
+      }
+    }
+
+    XmlOutput::outputError(50, "Username or password is incorrect");
+    return false;
+  }
   return true;
 }
 
