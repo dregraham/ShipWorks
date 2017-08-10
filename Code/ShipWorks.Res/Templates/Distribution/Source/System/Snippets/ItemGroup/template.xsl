@@ -64,10 +64,10 @@
         </xsl:if>
       </tr>
 
-      <xsl:for-each select="$order/Item[generate-id(.)=generate-id(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific)))]">
+      <xsl:for-each select="$order/Item[generate-id(.)=generate-id(key($keyTable, sw:GetOrderItemKeyValue(./SKU,., $optionSpecific)))]">
 
-        <xsl:variable name="groupQuantity" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/Quantity)" />
-        <xsl:variable name="groupTotal" select="sum(key($keyTable, sw:GetOrderItemKeyValue(., $optionSpecific))/TotalPrice)" />
+        <xsl:variable name="groupQuantity" select="sum(key($keyTable, sw:GetOrderItemKeyValue(./SKU,., $optionSpecific))/Quantity)" />
+        <xsl:variable name="groupTotal" select="sum(key($keyTable, sw:GetOrderItemKeyValue(./SKU,., $optionSpecific))/TotalPrice)" />
 
         <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
         <xsl:variable name="orderDetailContentStyle">
@@ -103,7 +103,7 @@
               <xsl:value-of select="format-number(UnitPrice, '#,##0.00')" />
             </td>
             <td style="{$orderDetailContentStyle};" align="right">
-              <xsl:value-of select="format-number($groupTotal * Quantity, '#,##0.00')" />
+              <xsl:value-of select="format-number($groupTotal, '#,##0.00')" />
             </td>
           </xsl:if>
         </tr>
