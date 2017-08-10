@@ -1,20 +1,19 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.UI.Wizard;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -23,16 +22,14 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// </summary>
     public class OdbcStoreType : StoreType
     {
-        private readonly Func<StoreEntity, OdbcStoreDownloader> downloaderFactory;
         private readonly Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<StoreEntity, OdbcStoreDownloader> downloaderFactory, Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory)
+        public OdbcStoreType(StoreEntity store, Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory)
             : base(store)
         {
-            this.downloaderFactory = downloaderFactory;
             this.uploadMenuCommandFactory = uploadMenuCommandFactory;
         }
 
@@ -56,23 +53,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Create a downloader for the OdbcStoreType
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
-
-            return downloaderFactory(odbcStore);
-        }
-
-        /// <summary>
         /// Create an order identifier
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
             // Put this here for now so that we can work on the downloader
-            return new GenericFileOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return CreateOrderIdentifier(order.OrderNumberComplete);
+        }
+
+        /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber)
+        {
+            return new GenericOrderIdentifier(orderNumber);
         }
 
         /// <summary>
@@ -106,8 +100,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-                IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
-                return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
+            IEnumerable<IOdbcWizardPage> wizardPages = scope.Resolve<IEnumerable<IOdbcWizardPage>>();
+            return wizardPages.OrderBy(w => w.Position).Cast<WizardPage>().ToList();
         }
 
         /// <summary>
@@ -131,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             get
             {
                 return ((OdbcStoreEntity) Store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime
-                    ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30}
+                    ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30 }
                     : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
             }
         }
@@ -146,10 +140,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
-               return new List<MenuCommand>();
+                return new List<MenuCommand>();
             }
 
-            return new List<MenuCommand>(new[] {uploadMenuCommandFactory(odbcStore)});
+            return new List<MenuCommand>(new[] { uploadMenuCommandFactory(odbcStore) });
         }
 
         /// <summary>

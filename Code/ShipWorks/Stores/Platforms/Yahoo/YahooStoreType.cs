@@ -1,54 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Email.Accounts;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
+using ShipWorks.Email.Accounts;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
 {
     /// <summary>
     /// StoreType for Yahoo! stores
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Yahoo)]
+    [Component(RegistrationType.Self)]
     public class YahooStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooStoreType));
+        private readonly Func<YahooStoreEntity, YahooApiOnlineUpdater> createOnlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public YahooStoreType(StoreEntity store)
+        public YahooStoreType(StoreEntity store, Func<YahooStoreEntity, YahooApiOnlineUpdater> createOnlineUpdater)
             : base(store)
         {
             if (store != null && !(store is YahooStoreEntity))
             {
                 throw new ArgumentException("StoreEntity is not instance of YahooStoreEntity.");
             }
+
+            this.createOnlineUpdater = createOnlineUpdater;
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             get
             {
-                YahooStoreEntity store = (YahooStoreEntity)Store;
+                YahooStoreEntity store = (YahooStoreEntity) Store;
 
                 if (store == null)
                 {
@@ -141,37 +144,19 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create a new instance of a yahoo order
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new YahooOrderEntity();
-        }
+        protected override OrderEntity CreateOrderInstance() => new YahooOrderEntity();
 
         /// <summary>
         /// Create a new instance of a yahoo order item
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            return new YahooOrderItemEntity();
-        }
-
-        /// <summary>
-        /// Create the downloader for the store
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            YahooStoreEntity store = (YahooStoreEntity) Store;
-
-            return store.YahooStoreID.IsNullOrWhiteSpace() ?
-                new YahooEmailDownloader(store) :
-                (StoreDownloader) new YahooApiDownloader(store);
-        }
+        public override OrderItemEntity CreateOrderItemInstance() => new YahooOrderItemEntity();
 
         /// <summary>
         /// Create the store settings control
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             return store.YahooStoreID.IsNullOrWhiteSpace() ?
                 new YahooEmailStoreSettingsControl() :
@@ -239,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         private void UploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
-            List<EmailOutboundEntity> generatedEmail = (List<EmailOutboundEntity>)userState;
+            List<EmailOutboundEntity> generatedEmail = (List<EmailOutboundEntity>) userState;
 
             try
             {
@@ -261,7 +246,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
         }
 
-#region Api Integration
+        #region Api Integration
 
         /// <summary>
         /// Creates the initial filters from yahoo's online statuses, if using the Api integration
@@ -323,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 Name = orderStatus,
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -335,7 +320,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             if (store == null)
             {
@@ -371,7 +356,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
@@ -391,7 +376,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
@@ -454,7 +439,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             try
             {
-                YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater((YahooStoreEntity)Store);
+                YahooApiOnlineUpdater updater = createOnlineUpdater((YahooStoreEntity) Store);
                 updater.UpdateOrderStatus(orderID, statusCode);
             }
             catch (YahooException ex)
@@ -472,7 +457,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             if (store == null)
             {
@@ -488,7 +473,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <param name="context">The context.</param>
         private void OnApiUploadShipmentDetails(MenuCommandExecutionContext context)
         {
-            YahooStoreEntity store = (YahooStoreEntity)Store;
+            YahooStoreEntity store = (YahooStoreEntity) Store;
 
             if (store == null)
             {
@@ -525,7 +510,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             try
             {
-                YahooApiOnlineUpdater shipmentUpdater = new YahooApiOnlineUpdater((YahooStoreEntity)Store);
+                YahooApiOnlineUpdater shipmentUpdater = createOnlineUpdater((YahooStoreEntity) Store);
                 shipmentUpdater.UpdateShipmentDetails(orders);
             }
             catch (YahooException ex)

@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
-    /// i-parce Profile Control
+    /// i-parcel Profile Control
     /// </summary>
     [NDependIgnoreLongTypes]
     public partial class iParcelProfileControl : ShippingProfileControlBase
@@ -44,7 +47,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             // Use the i-parcel specific factory for populating the suggested tokens
-            skuAndQuantity.TokenSuggestionFactory = new iParcelTokenSuggestionFactory();
+            skuAndQuantity.TokenSuggestionFactory = IoC.UnsafeGlobalLifetimeScope
+                .Resolve<Owned<iParcelTokenSuggestionFactory>>(TypedParameter.From(new List<ShipmentEntity>()))
+                .Value;
 
             // i-parcel does not support ZPL
             requestedLabelFormat.ExcludeFormats(ThermalLanguage.ZPL);
@@ -220,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // If there is a control for it already, it should match up with this package
                 if (panelPackageControls.Controls.Count > index)
                 {
-                    control = (iParcelProfilePackageControl)panelPackageControls.Controls[index];
+                    control = (iParcelProfilePackageControl) panelPackageControls.Controls[index];
                     control.Visible = true;
 
                     Debug.Assert(control.ProfilePackage == package);

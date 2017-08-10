@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Newegg.WizardPages;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
+using ShipWorks.Stores.Platforms.Newegg.WizardPages;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
     /// <summary>
     /// Newegg store type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.NeweggMarketplace)]
+    [Component(RegistrationType.Self)]
     public class NeweggStoreType : StoreType
     {
         // Logger
@@ -37,17 +38,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <summary>
         /// The numeric type code of the store.
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.NeweggMarketplace; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.NeweggMarketplace;
 
         /// <summary>
         /// This is a string that uniquely identifies the store.  Like the eBay user ID for ebay,  or store URL for Yahoo!
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get { return ((NeweggStoreEntity)Store).SellerID; }
+            get { return ((NeweggStoreEntity) Store).SellerID; }
         }
 
 
@@ -65,15 +63,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
             store.SellerID = string.Empty;
             store.SecretKey = string.Empty;
             store.ExcludeFulfilledByNewegg = false;
-            store.Channel = (int)NeweggChannelType.US;
-
-
+            store.Channel = (int) NeweggChannelType.US;
 
             return store;
         }
 
         /// <summary>
-        /// Get the store-specifc OrderIdentifier that can be used to identify the specified order.
+        /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
@@ -107,15 +103,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
         public override OrderItemEntity CreateOrderItemInstance()
         {
             return new NeweggOrderItemEntity();
-        }
-
-        /// <summary>
-        /// Create the downloader instance that is used to retrieve data from the store.
-        /// </summary>
-        /// <returns></returns>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new NeweggDownloader(this.Store);
         }
 
         /// <summary>
@@ -185,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <param name="orderSource"></param>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            var order = new Lazy<NeweggOrderEntity>(() => (NeweggOrderEntity)orderSource());
+            var order = new Lazy<NeweggOrderEntity>(() => (NeweggOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Newegg");
             outline.AddElement("InvoiceNumber", () => order.Value.InvoiceNumber);
@@ -240,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             {
                 try
                 {
-                    NeweggOnlineUpdater updater = new NeweggOnlineUpdater((NeweggStoreEntity)Store);
+                    NeweggOnlineUpdater updater = new NeweggOnlineUpdater((NeweggStoreEntity) Store);
                     updater.UploadShippingDetails(shipment);
                 }
                 catch (NeweggException ex)

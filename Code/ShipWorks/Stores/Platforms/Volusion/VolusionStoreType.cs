@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Management;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Volusion.WizardPages;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using log4net;
-using ShipWorks.Data.Grid;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Volusion.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
     /// <summary>
     /// Volusion integration type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Volusion)]
+    [Component(RegistrationType.Self)]
     public class VolusionStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionStoreType));
 
         /// <summary>
@@ -34,12 +31,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Indentifying type code
+        /// Identifying type code
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.Volusion; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Volusion;
 
         /// <summary>
         /// Gets the license identifier for this store
@@ -48,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         {
             get
             {
-                VolusionStoreEntity store = (VolusionStoreEntity)Store;
+                VolusionStoreEntity store = (VolusionStoreEntity) Store;
 
                 string identifier = store.StoreUrl;
                 if (identifier.EndsWith("/"))
@@ -89,14 +83,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Creates the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new VolusionDownloader(Store);
-        }
-
-        /// <summary>
         /// Create the wizard pages
         /// </summary>
         /// <param name="scope"></param>
@@ -111,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Create the control to appear in the setup wizard for configuring 
+        /// Create the control to appear in the setup wizard for configuring
         /// </summary>
         /// <returns></returns>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -146,9 +132,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 "New",
                 "New - See Order Notes",
                 "Pending",
-                "Processing", 
+                "Processing",
                 "Payment Declined",
-                "Awaiting Payment", 
+                "Awaiting Payment",
                 "Ready to Ship",
                 "Pending Shipment",
                 "Partially Shipped",
@@ -163,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
@@ -209,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// Worker thread method for uploading shipment details
         /// </summary>
         private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {           
+        {
             // get the store from the order
             VolusionStoreEntity store = (VolusionStoreEntity) StoreManager.GetRelatedStore(orderID);
 

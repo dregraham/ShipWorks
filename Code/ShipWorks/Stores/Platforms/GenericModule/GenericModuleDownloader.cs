@@ -1,79 +1,113 @@
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
-using System.Text.RegularExpressions;
-using System.Xml;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
-using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared;
+using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using Interapptive.Shared;
+using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Xml;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
     /// <summary>
     /// Provides the entrypoint into the order download processes for Generic
     /// </summary>
-    class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amosoft)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Brightpearl)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Lite)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Pro)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ChannelSale)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Choxi)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CloudConversion)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CreLoaded)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CsCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Fortune3)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.GenericModule)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.GeekSeller)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.InfiPlex)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.InstaStore)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Jigoshop)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LimeLightCRM)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LiveSite)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LoadedCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.nopCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OpenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OpenSky)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderBot)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderDesk)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderDynamics)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.osCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PowersportsSupport)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.PrestaShop)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.RevolutionParts)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SearchFit)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerActive)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerCloud)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerExpress)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SellerVantage)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopperpress)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Shopp)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SolidCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.StageBloc)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.SureDone)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.VirtueMart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WebShopManager)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WooCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.WPeCommerce)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.XCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ZenCart)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Zenventory)]
+    public class GenericModuleDownloader : OrderElementFactoryDownloaderBase, IGenericXmlOrderLoadObserver
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
+        // Logger
+        private static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleDownloader));
 
         // total download count
-        int totalCount = 0;
+        private int totalCount;
 
-        // Status code container 
-        GenericStoreStatusCodeProvider statusCodeProvider;
+        // Status code container
+        private GenericStoreStatusCodeProvider statusCodeProvider;
+
+        private readonly GenericModuleStoreType storeType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericModuleDownloader(StoreEntity store)
-            : base(store)
+        public GenericModuleDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-
+            storeType = StoreType as GenericModuleStoreType;
         }
 
         /// <summary>
         /// Convenience property for quick access to the specific entity
         /// </summary>
-        protected GenericModuleStoreEntity GenericModuleStoreEntity
-        {
-            get
-            {
-                return (GenericModuleStoreEntity)Store;
-            }
-        }
+        protected GenericModuleStoreEntity GenericModuleStoreEntity => (GenericModuleStoreEntity) Store;
 
         /// <summary>
         /// Begin order download
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        [NDependIgnoreLongMethod]
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                bool supportMode = InterapptiveOnly.MagicKeysDown;
+                bool supportModeActive = InterapptiveOnly.MagicKeysDown;
 
-                GenericModuleStoreType storeType = (GenericModuleStoreType)StoreTypeManager.GetType(Store);
-
-                if (!supportMode)
+                if (!supportModeActive)
                 {
                     // If the platform\developer or capabilities changed we need to update the store
                     storeType.UpdateOnlineModuleInfo();
@@ -86,40 +120,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 // Create the web client to download with
                 GenericStoreWebClient webClient = storeType.CreateWebClient();
 
-                // If status codes are supported download them
-                if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
-                {
-                    // Update the status codes
-                    Progress.Detail = "Updating status codes...";
-
-                    statusCodeProvider = storeType.CreateStatusCodeProvider();
-
-                    if (!supportMode)
-                    {
-                        statusCodeProvider.UpdateFromOnlineStore();
-                    }
-                }
+                GetOnlineStatusCodes(storeType, supportModeActive);
 
                 Progress.Detail = "Checking for orders...";
 
-                if (!supportMode)
+                if (!supportModeActive)
                 {
-                    // Get the largest last modified time.  We start downloading there.
-                    if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
-                    {
-                        // Downloading based on the last modified time
-                        DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
-
-                        totalCount = webClient.GetOrderCount(lastModified);
-                    }
-                    else
-                    {
-                        // Downloading based on the last ordernumber we've downloaded
-                        long lastOrderNumber = GetOrderNumberStartingPoint();
-
-                        // Get the number of orders that need downloading
-                        totalCount = webClient.GetOrderCount(lastOrderNumber);
-                    }
+                    GetOrderCount(webClient);
 
                     if (totalCount == 0)
                     {
@@ -129,51 +136,103 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     }
                 }
 
-                Progress.Detail = string.Format("Downloading {0} orders...", totalCount);
+                Progress.Detail = $"Downloading {totalCount} orders...";
 
-                // keep going until none are left
-                while (true)
-                {
-                    // support mode bypasses regular download mechanisms to load a response from disk
-                    if (supportMode)
-                    {
-                        DownloadOrdersFromFile(webClient);
-
-                        return;
-                    }
-
-                    // Check if it has been cancelled
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    if (!DownloadNextOrdersPage(webClient))
-                    {
-                        return;
-                    }
-                }
+                await DownloadOrders(supportModeActive, webClient).ConfigureAwait(false);
             }
             catch (GenericModuleConfigurationException ex)
             {
-                string message = String.Format("The ShipWorks module returned invalid configuration information.  Please contact the module developer with the following information.\n\n{0}", ex.Message);
+                string message =
+                    "The ShipWorks module returned invalid configuration information. " +
+                    $"Please contact the module developer with the following information.\n\n{ex.Message}";
 
                 throw new DownloadException(message, ex);
             }
-            catch (GenericStoreException ex)
-            {
-                throw new DownloadException(ex.Message, ex);
-            }
-            catch (SqlForeignKeyException ex)
+            catch (Exception ex) when (ex is GenericStoreException || ex is SqlForeignKeyException)
             {
                 throw new DownloadException(ex.Message, ex);
             }
         }
 
         /// <summary>
+        /// Downloads the orders.
+        /// </summary>
+        private async Task DownloadOrders(bool supportMode, GenericStoreWebClient webClient)
+        {
+            // keep going until none are left
+            while (true)
+            {
+                // support mode bypasses regular download mechanisms to load a response from disk
+                if (supportMode)
+                {
+                    await DownloadOrdersFromFile(webClient).ConfigureAwait(false);
+
+                    return;
+                }
+
+                // Check if it has been canceled
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                bool morePages = await DownloadNextOrdersPage(webClient).ConfigureAwait(false);
+                if (!morePages)
+                {
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the online status codes.
+        /// </summary>
+        /// <param name="storeType">Type of the store.</param>
+        /// <param name="supportMode">if set to <c>true</c> [support mode].</param>
+        private void GetOnlineStatusCodes(GenericModuleStoreType storeType, bool supportMode)
+        {
+            // If status codes are supported download them
+            if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
+            {
+                // Update the status codes
+                Progress.Detail = "Updating status codes...";
+
+                statusCodeProvider = storeType.CreateStatusCodeProvider();
+
+                if (!supportMode)
+                {
+                    statusCodeProvider.UpdateFromOnlineStore();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the order count.
+        /// </summary>
+        private void GetOrderCount(GenericStoreWebClient webClient)
+        {
+            // Get the largest last modified time.  We start downloading there.
+            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
+            {
+                // Downloading based on the last modified time
+                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+
+                totalCount = webClient.GetOrderCount(lastModified);
+            }
+            else
+            {
+                // Downloading based on the last order number we've downloaded
+                long lastOrderNumber = GetOrderNumberStartingPoint();
+
+                // Get the number of orders that need downloading
+                totalCount = webClient.GetOrderCount(lastOrderNumber);
+            }
+        }
+
+        /// <summary>
         /// Presents the support staff with a way to load orders from a module response file directly
         /// </summary>
-        private void DownloadOrdersFromFile(GenericStoreWebClient client)
+        private async Task DownloadOrdersFromFile(GenericStoreWebClient client)
         {
             using (GenericStoreResponseLoadDlg dlg = new GenericStoreResponseLoadDlg(client))
             {
@@ -193,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                         totalCount = orderNodes.Count;
 
                         // import the downloaded orders
-                        LoadOrders(orderNodes);
+                        await LoadOrders(orderNodes).ConfigureAwait(false);
                     }
 
                     Progress.Detail = "Done";
@@ -204,13 +263,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Downloads and imports the next batch of orders into ShipWorks
         /// </summary>
-        private bool DownloadNextOrdersPage(GenericStoreWebClient webClient)
+        private async Task<bool> DownloadNextOrdersPage(GenericStoreWebClient webClient)
         {
             // Get the largest last modified time.  We start downloading there.
             GenericModuleResponse response;
             if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
             {
-                // Downloading baed on the last modified time
+                // Downloading based on the last modified time
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
                 response = webClient.GetNextOrderPage(lastModified);
@@ -231,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (orderNodes.Count > 0)
             {
                 // import the downloaded orders
-                LoadOrders(orderNodes);
+                await LoadOrders(orderNodes).ConfigureAwait(false);
 
                 // signal that we imported some orders
                 return true;
@@ -248,7 +307,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Imports the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNodeIterator orderNodes)
+        private async Task LoadOrders(XPathNodeIterator orderNodes)
         {
             // go through each order in the batch
             while (orderNodes.MoveNext())
@@ -263,7 +322,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
@@ -276,14 +335,28 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
+            string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "");
+
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // so in that case, we leave a single 0.
+            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
+
+            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
+            {
+                long parsedOrderNumber;
+                if (!long.TryParse(orderNumber, out parsedOrderNumber))
+                {
+                    throw new DownloadException("When downloading by order number, all order numbers must be a number.\r\n\r\n" +
+                                                $"Non-numeric order number found: {orderNumber}");
+                }
+            }
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
             string postfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
 
             // create the identifier
-            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            return storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>
@@ -292,19 +365,19 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual void AssignOrderNumber(OrderEntity order)
         {
             // this is an extension point for derived class.  The GenericStoreDownloader
-            // implementation uses the OrderNumberIdentifier which has already applied an order number 
+            // implementation uses the OrderNumberIdentifier which has already applied an order number
         }
 
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        protected OrderEntity InstantiateOrder(XPathNavigator xpath)
+        protected async Task<OrderEntity> InstantiateOrder(XPathNavigator xpath)
         {
             // Construct the order identifier based on the incoming xml
             OrderIdentifier orderIdentifier = CreateOrderIdentifier(xpath);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = InstantiateOrder(orderIdentifier);
+            OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
             AssignOrderNumber(order);
 
@@ -314,9 +387,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private void LoadOrder(XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = InstantiateOrder(xpath);
+            OrderEntity order = await InstantiateOrder(xpath).ConfigureAwait(false);
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
@@ -367,7 +440,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>

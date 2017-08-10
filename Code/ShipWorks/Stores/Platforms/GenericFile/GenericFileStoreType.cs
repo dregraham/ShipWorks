@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.GenericFile.WizardPages;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data;
-using ShipWorks.Email.Accounts;
-using ShipWorks.Stores.Platforms.GenericFile.Formats.Xml;
-using ShipWorks.Stores.Platforms.GenericFile.Formats.Csv;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Data.Connection;
-using ShipWorks.FileTransfer;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Email.Accounts;
+using ShipWorks.FileTransfer;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericFile.Formats.Csv;
 using ShipWorks.Stores.Platforms.GenericFile.Formats.Excel;
+using ShipWorks.Stores.Platforms.GenericFile.Formats.Xml;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Stores.Platforms.GenericFile.WizardPages;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {
     /// <summary>
     /// StoreType for the GenericFileStore type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.GenericFile)]
+    [Component(RegistrationType.Self)]
     public class GenericFileStoreType : StoreType
     {
         /// <summary>
@@ -39,10 +40,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// The type code of the generic store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.GenericFile; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.GenericFile;
 
         /// <summary>
         /// The uniquely identifiable tango license identifier for the store
@@ -77,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         private static string TruncateFolderPath(string path)
         {
             // find the start position that will give us the last 111 characters of the string
-            // if the string is less than 111 start at the begining
+            // if the string is less than 111 start at the beginning
             int start = path.Length - 111 > 0 ? path.Length - 111 : 0;
 
             return path.Substring(start);
@@ -149,7 +147,15 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GenericFileOrderIdentifier(order.OrderNumber, order.OrderNumberComplete);
+            return new GenericOrderIdentifier(order.OrderNumberComplete);
+        }
+
+        /// <summary>
+        /// Create an order identifier
+        /// </summary>
+        public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
+        {
+            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>
@@ -186,23 +192,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         }
 
         /// <summary>
-        /// Create the downloader for the store
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            GenericFileStoreEntity generic = (GenericFileStoreEntity) Store;
-
-            switch ((GenericFileFormat) generic.FileFormat)
-            {
-                case GenericFileFormat.Xml: return new GenericFileXmlDownloader(generic);
-                case GenericFileFormat.Csv: return new GenericFileCsvDownloader(generic);
-                case GenericFileFormat.Excel: return new GenericFileExcelDownloader(generic);
-            }
-
-            throw new InvalidOperationException("Unknown FileFormat: " + generic.FileFormat);
-        }
-
-        /// <summary>
         /// Delete any additional data associated with the store
         /// </summary>
         public override void DeleteStoreAdditionalData(SqlAdapter adapter)
@@ -227,9 +216,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// or days back so we return false to skip this page
         /// </summary>
         /// <returns></returns>
-        public override bool ShowTaskWizardPage()
-        {
-            return false;
-        }
+        public override bool ShowTaskWizardPage() => false;
     }
 }

@@ -1,40 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Email.Accounts;
-using Rebex.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.Email;
-using ShipWorks.ApplicationCore.Logging;
-using Rebex.Mail;
-using System.Xml;
-using Interapptive.Shared.IO.Text.Csv;
 using System.IO;
-using ShipWorks.Stores.Content;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO.Text.Csv;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Net;
-using Rebex.Mime.Headers;
+using Interapptive.Shared.Utility;
+using log4net;
+using Rebex.Mail;
+using Rebex.Net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
+using ShipWorks.Email.Accounts;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {
     /// <summary>
     /// Order downloader for OrderMotion stores
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderMotion)]
     public class OrderMotionDownloader : StoreDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionDownloader));
 
         // number of email messages to be downloaded
@@ -60,13 +58,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Start the download process
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
-                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((OrderMotionStoreEntity)Store).OrderMotionEmailAccountID);
+                EmailAccountEntity emailAccount = EmailAccountManager.GetAccount(((OrderMotionStoreEntity) Store).OrderMotionEmailAccountID);
                 if (emailAccount == null)
                 {
                     throw new DownloadException("The email account configured for downloading has been deleted.");
@@ -94,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                             return;
                         }
 
-                        DownloadMailMessage(popClient, i);
+                        await DownloadMailMessage(popClient, i).ConfigureAwait(false);
                     }
 
                     // Must be called to finalize delete
@@ -126,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Downloads an email message from the pop server and processes it for orders.
         /// </summary>
-        private void DownloadMailMessage(Pop3 popClient, int sequenceNumber)
+        private async Task DownloadMailMessage(Pop3 popClient, int sequenceNumber)
         {
             Progress.Detail = string.Format("Processing message {0} of {1}...", sequenceNumber, messageCount);
 
@@ -154,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
                     try
                     {
-                        LoadOrders(attachment);
+                        await LoadOrders(attachment).ConfigureAwait(false);
                     }
                     catch (MalformedCsvException ex)
                     {
@@ -177,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Processes an email attachment for OrderMotion orders
         /// </summary>
-        private void LoadOrders(Attachment attachment)
+        private async Task LoadOrders(Attachment attachment)
         {
             string attachmentBody = attachment.ContentString;
             if (attachmentBody == null)
@@ -185,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // Excel spreadsheets and the like don't get put into ContentSting
                 using (StreamReader reader = new StreamReader(attachment.GetContentStream()))
                 {
-                    attachmentBody = reader.ReadToEnd();
+                    attachmentBody = await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
 
                 if (String.IsNullOrEmpty(attachmentBody))
@@ -207,8 +205,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     // cycle through the records
                     while (reader.ReadNextRecord())
                     {
-                        // load the order information ffrom the current record
-                        LoadOrder(reader);
+                        // load the order information from the current record
+                        await LoadOrder(reader).ConfigureAwait(false);
                     }
                 }
             }
@@ -217,19 +215,19 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Load the order from the current CSV record
         /// </summary>
-        private void LoadOrder(CsvReader reader)
+        private async Task LoadOrder(CsvReader reader)
         {
             try
             {
                 string invoiceId = reader["INVOICE_NO"];
-                int slash = invoiceId.IndexOf("-");
+                int slash = invoiceId.IndexOf("-", StringComparison.Ordinal);
 
                 // get the parts out we need. "ordernumber-shipmentid"
                 int orderNumber = Convert.ToInt32(invoiceId.Substring(0, slash));
                 int shipmentId = Convert.ToInt32(invoiceId.Substring(slash + 1));
 
                 OrderMotionOrderIdentifier identifier = new OrderMotionOrderIdentifier(orderNumber, shipmentId);
-                OrderMotionOrderEntity order = (OrderMotionOrderEntity)InstantiateOrder(identifier);
+                OrderMotionOrderEntity order = (OrderMotionOrderEntity) await InstantiateOrder(identifier).ConfigureAwait(false);
 
                 // set the order postfix
                 if (shipmentId > 1)
@@ -266,33 +264,45 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 // address
                 LoadAddressInfo(order, xpath);
 
-                if (order.IsNew)
-                {
-                    // notes
-                    LoadNotes(order, xpath);
-
-                    // order items
-                    LoadItems(order, xpath);
-                   
-                    // order charges
-                    LoadCharges(order, xpath);
-
-                    // payment details
-                    LoadPaymentDetails(order, xpath);
-
-                    // calculate the total
-                    order.OrderTotal = OrderUtility.CalculateTotal(order);
-                }
+                // Load new order values if the order is new
+                await LoadNewOrderValues(order, xpath).ConfigureAwait(false);
 
                 // save the order
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
             catch (ArgumentException ex)
             {
                 // Field wasn't found, skip it
                 log.Warn(ex);
+                return;
             }
+        }
+
+        /// <summary>
+        /// Load values for a new order.
+        /// </summary>
+        private async Task LoadNewOrderValues(OrderMotionOrderEntity order, XPathNavigator xpath)
+        {
+            if (!order.IsNew)
+            {
+                return;
+            }
+
+            // notes
+            await LoadNotes(order, xpath).ConfigureAwait(false);
+
+            // order items
+            LoadItems(order, xpath);
+
+            // order charges
+            LoadCharges(order, xpath);
+
+            // payment details
+            LoadPaymentDetails(order, xpath);
+
+            // calculate the total
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
         }
 
         /// <summary>
@@ -333,7 +343,6 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             PaymentDetailSecurity.Protect(detail);
         }
 
-
         /// <summary>
         /// Loads order charges from the order
         /// </summary>
@@ -348,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 charge.Description = "Tax";
                 charge.Amount = XPathUtility.Evaluate(xpath, @"sum(//LineItem/Tax)", 0.0M);
 
-                // Shipping 
+                // Shipping
                 charge = InstantiateOrderCharge(order);
                 charge.Type = "SHIPPING";
                 charge.Description = "Shipping";
@@ -385,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 item.UnitPrice = XPathUtility.Evaluate(itemNavigator, "Price", 0.0M);
                 item.LocalStatus = GetItemStatus(XPathUtility.Evaluate(itemNavigator, "LineStatus", ""));
 
-                // weight is a total weight.  need to divide by quanitty
+                // weight is a total weight.  need to divide by quantity
                 double weight = XPathUtility.Evaluate(itemNavigator, "DimensionData/Weight", 0.0);
                 if (item.Quantity > 0)
                 {
@@ -419,7 +428,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     }
 
                     string attributeName = GetItemAttributeName(item.Code, attributeID);
-                    if (attributeName != null && attributeName.Length > 0)
+                    if (!string.IsNullOrEmpty(attributeName))
                     {
                         // create an option
                         OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
@@ -529,7 +538,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 LoadAddressInfo(shipAdapter, shipAddressIterator.Current.Clone());
             }
 
-            // Billing addrss
+            // Billing address
             XPathNodeIterator billingIterator = xpath.Select(@"/OrderInformationResponse/Customer/Address[@type='BillTo']");
             if (billingIterator.MoveNext())
             {
@@ -640,18 +649,18 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             order.RequestedShipping = shipping;
         }
 
-        private void LoadNotes(OrderMotionOrderEntity order, XPathNavigator xpath)
+        private async Task LoadNotes(OrderMotionOrderEntity order, XPathNavigator xpath)
         {
             // order notes
             string notes = XPathUtility.Evaluate(xpath, "/OrderInformationResponse/ShippingInformation/SpecialInstructions", "");
             if (notes.Length > 0)
             {
-                InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
         }
 
         /// <summary>
-        /// Retrieves and temporarily caches the OrderMotion responsed ata for the order nubmer provided.
+        /// Retrieves and temporarily caches the OrderMotion response data for the order number provided.
         /// </summary>
         private XPathNavigator GetOrderMotionOrder(long orderNumber)
         {
@@ -659,7 +668,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             if (!orderResponseCache.ContainsKey(orderNumber))
             {
                 // make a web service call to get the order information from OrderMotion
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity)Store);
+                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
 
                 // get the order xml and cache it
                 orderResponseCache[orderNumber] = client.GetOrder(orderNumber);
@@ -688,7 +697,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             // now look for the attributeID
             if (itemAttributes.ContainsKey(attributeHashKey))
             {
-                attributeName = (string)itemAttributes[attributeHashKey];
+                attributeName = (string) itemAttributes[attributeHashKey];
             }
 
             return attributeName;
@@ -701,7 +710,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         {
             try
             {
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity)Store);
+                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
 
                 // get the detail information for this itemcode
                 XPathNavigator xpath = client.GetItemInformation(itemCode).CreateNavigator();

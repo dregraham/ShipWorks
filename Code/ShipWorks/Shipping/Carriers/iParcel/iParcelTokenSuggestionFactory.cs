@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Templates.Tokens;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
     /// An implementation of the ITokenSuggestionFactory that is specific to i-parcel.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class iParcelTokenSuggestionFactory : ITokenSuggestionFactory
     {
         private const string DefaultTokenXsl = "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>";
@@ -18,29 +20,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private readonly IOrderManager orderManager;
 
         private readonly TokenSuggestion defaultSkuQuantitySuggestion;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
-        /// </summary>
-        public iParcelTokenSuggestionFactory()
-            : this(new OrderManager())
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
-        /// </summary>
-        /// <param name="shipments">The shipments.</param>
-        public iParcelTokenSuggestionFactory(List<ShipmentEntity> shipments)
-            : this(shipments, new OrderManager())
-        { }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
-        /// </summary>
-        /// <param name="repository">The repository.</param>
-        public iParcelTokenSuggestionFactory(OrderManager repository)
-            : this(new List<ShipmentEntity>(), repository)
-        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelTokenSuggestionFactory" /> class.
@@ -65,14 +44,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             try
             {
-                // We only have the need for returning shipping suggestions in the context of i-parcel, 
+                // We only have the need for returning shipping suggestions in the context of i-parcel,
                 // so we ignore the token usage in this implementation
                 List<TokenSuggestion> suggestions = new List<TokenSuggestion>();
-                
+
                 if (shipments.Count == 1 && shipments.First() != null)
                 {
-                    // Since there is only one shipment selected, opulate the order details so the full list of order items
-                    // is available to us in order to build out a list of suggestions for each order item to let the user 
+                    // Since there is only one shipment selected, populate the order details so the full list of order items
+                    // is available to us in order to build out a list of suggestions for each order item to let the user
                     // to quickly pick from a list in the case where they're not shipping everything in one package
                     ShipmentEntity shipment = shipments.First();
                     orderManager.PopulateOrderDetails(shipment);

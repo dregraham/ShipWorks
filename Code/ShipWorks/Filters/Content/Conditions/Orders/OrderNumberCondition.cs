@@ -10,13 +10,21 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     public class OrderNumberCondition : NumericStringCondition<long>
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderNumberCondition()
+        {
+            IsNumeric = false;
+        }
+
+        /// <summary>
         /// Generate the SQL that evaluates the condition
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
             if (IsNumeric)
             {
-                return GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context);
+                return $"{GenerateSql(context.GetColumnReference(OrderFields.OrderNumber), context)} AND OrderNumber != {long.MinValue}";
             }
             else
             {

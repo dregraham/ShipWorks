@@ -8,9 +8,7 @@ using System.Windows.Forms;
 using Autofac;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
@@ -824,7 +822,7 @@ namespace ShipWorks.ApplicationCore
                 }
             }
         }
-        
+
         /// <summary>
         /// Raise the search query changed event
         /// </summary>

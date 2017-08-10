@@ -4,13 +4,17 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,16 +24,17 @@ using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
-
     /// <summary>
     /// Downloader for 3dcart that uses their REST API
     /// </summary>
-    public class ThreeDCartRestDownloader : StoreDownloader
+    [Component]
+    public class ThreeDCartRestDownloader : StoreDownloader, IThreeDCartRestDownloader
     {
         const int MissingCustomerID = 0;
         private readonly IThreeDCartRestWebClient restWebClient;
         private readonly ThreeDCartStoreEntity threeDCartStore;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
+        private readonly IOrderManager orderManager;
         private readonly ILog log;
         private int newOrderCount;
         private DateTime modifiedOrderEndDate;
@@ -37,35 +42,33 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private int ordersProcessed;
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="store">Store for which this downloader will operate</param>
-        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store)
-            : this(store,
-                new ThreeDCartRestWebClient(store),
-                new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder"),
-                LogManager.GetLogger(typeof(ThreeDCartRestDownloader)))
-        {
-        }
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestDownloader"/> class.
         /// </summary>
-        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store, IThreeDCartRestWebClient restWebClient, ISqlAdapterRetry sqlAdapterRetry, ILog log) : base(store)
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
+        public ThreeDCartRestDownloader(ThreeDCartStoreEntity store,
+            Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient> restWebClientFactory,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            IOrderManager orderManager,
+            Func<StoreEntity, ThreeDCartStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<Type, ILog> createLogger) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
-            this.restWebClient = restWebClient;
-            this.sqlAdapterRetry = sqlAdapterRetry;
-            this.log = log;
+            this.restWebClient = restWebClientFactory(store);
+            this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder");
+            this.orderManager = orderManager;
+            this.log = createLogger(GetType());
             threeDCartStore = store;
         }
 
         /// <summary>
         /// Download orders for the 3dcart store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -109,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     return;
                 }
 
-                DownloadOrders(startDate.Value);
+                await DownloadOrders(startDate.Value).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -125,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Downloads orders on or after the startDate
         /// </summary>
-        private void DownloadOrders(DateTime startDate)
+        private async Task DownloadOrders(DateTime startDate)
         {
             int offset = 1;
             bool ordersToDownload = true;
@@ -141,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
                 else
                 {
-                    LoadOrders(orders);
+                    await LoadOrders(orders).ConfigureAwait(false);
                     offset += orders.Count();
                 }
             }
@@ -153,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <remarks>
         /// Extracted from ThreeDCartSoapDownloader
         /// </remarks>
-        private ThreeDCartOrderIdentifier CreateOrderIdentifier(ThreeDCartOrder order, string invoiceNumberPostFix)
+        private async Task<ThreeDCartOrderIdentifier> CreateOrderIdentifier(ThreeDCartOrder order, string invoiceNumberPostFix)
         {
             // Now extract the Invoice number and ThreeDCart Order Id
             long orderId = order.OrderID;
@@ -185,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             // Create an order identifier without a prefix.  If we find an order, it must have been downloaded prior to
             // the upgrade.  If an order is found, we will not use the prefix.  If we don't find an order, we'll use the prefix.
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, string.Empty, invoiceNumberPostFix);
-            OrderEntity orderEntity = FindOrder(threeDCartOrderIdentifier);
+            OrderEntity orderEntity = await FindOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
             if (orderEntity == null)
             {
                 threeDCartOrderIdentifier = new ThreeDCartOrderIdentifier(invoiceNum, invoiceNumberPrefix, invoiceNumberPostFix);
@@ -197,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the orders.
         /// </summary>
-        public void LoadOrders(IEnumerable<ThreeDCartOrder> orders)
+        public async Task LoadOrders(IEnumerable<ThreeDCartOrder> orders)
         {
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
@@ -215,17 +218,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 {
                     string invoiceNumberPostFix = threeDCartOrder.HasSubOrders ? $"-{shipmentIndex}" : string.Empty;
 
-                    ThreeDCartOrderIdentifier orderIdentifier = CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix);
+                    ThreeDCartOrderIdentifier orderIdentifier = await CreateOrderIdentifier(threeDCartOrder, invoiceNumberPostFix).ConfigureAwait(false);
 
                     Progress.Detail = threeDCartOrder.OrderDate < modifiedOrderEndDate ?
                         $"Checking order {orderIdentifier} for modifications..." :
                         $"Processing new order {++newOrderCount}";
 
-                    OrderEntity order = InstantiateOrder(orderIdentifier);
+                    OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
 
-                    order = LoadOrder(order, threeDCartOrder, shipment, invoiceNumberPostFix);
+                    order = await LoadOrder(order, threeDCartOrder, shipment).ConfigureAwait(false);
 
-                    sqlAdapterRetry.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                    await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                     shipmentIndex++;
                     threeDCartOrder.IsSubOrder = true;
@@ -244,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public OrderEntity LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment, string invoiceNumberPostFix)
+        public async Task<OrderEntity> LoadOrder(OrderEntity order, ThreeDCartOrder threeDCartOrder, ThreeDCartShipment threeDCartShipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(threeDCartOrder, nameof(threeDCartOrder));
 
@@ -262,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             LoadAddress(order, threeDCartOrder, threeDCartShipment);
 
-            LoadOrderNotes(order, threeDCartOrder);
+            await LoadOrderNotes(order, threeDCartOrder).ConfigureAwait(false);
 
             if (order.IsNew)
             {
@@ -355,7 +358,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// </summary>
         private void AdjustAndSetOrderTotal(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            decimal total = new OrderManager().CalculateOrderTotal(order);
+            decimal total = orderManager.CalculateOrderTotal(order);
 
             var items = order.OrderItems;
 
@@ -404,7 +407,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
             LoadItemNameAndAttributes(item, threeDCartItem);
 
-            // There are some cases where discounts don't show in order discount field and actually appear as a seperate item.
+            // There are some cases where discounts don't show in order discount field and actually appear as a separate item.
             // When this happens, it has no item price, but an item option price, which we usually ignore since we
             // extract item attribute costs from the item description. So if an item matches that criteria, set the
             // item's price to the attribute price.
@@ -492,11 +495,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Loads the order notes.
         /// </summary>
-        private void LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)
+        private async Task LoadOrderNotes(OrderEntity order, ThreeDCartOrder threeDCartOrder)
         {
-            InstantiateNote(order, threeDCartOrder.CustomerComments, DateTime.Now, NoteVisibility.Public, true);
-            InstantiateNote(order, threeDCartOrder.InternalComments, DateTime.Now, NoteVisibility.Internal, true);
-            InstantiateNote(order, threeDCartOrder.ExternalComments, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(order, threeDCartOrder.CustomerComments, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
+            await InstantiateNote(order, threeDCartOrder.InternalComments, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
+            await InstantiateNote(order, threeDCartOrder.ExternalComments, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
 
             foreach (ThreeDCartQuestion question in threeDCartOrder.QuestionList)
             {
@@ -506,7 +509,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     questionNote += $" : {question.QuestionAnswer}";
                 }
 
-                InstantiateNote(order, questionNote, DateTime.Now, NoteVisibility.Internal, true);
+                await InstantiateNote(order, questionNote, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
             }
         }
 
@@ -547,7 +550,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
-        /// Load the given payment detail into the ordr
+        /// Load the given payment detail into the order
         /// </summary>
         private void LoadPaymentDetail(OrderEntity order, string label, string value)
         {

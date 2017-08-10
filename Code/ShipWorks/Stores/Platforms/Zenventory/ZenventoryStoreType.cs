@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -9,12 +9,17 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Zenventory
 {
+    /// <summary>
+    /// Zenventory store type
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Zenventory)]
+    [Component(RegistrationType.Self)]
     public class ZenventoryStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ZenventoryStoreType"/> class.
         /// </summary>
-        public ZenventoryStoreType(StoreEntity store) 
+        public ZenventoryStoreType(StoreEntity store)
             : base(store)
         {
 
@@ -45,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            List<WizardPage> pages = new List<WizardPage> {new ZenventoryAddStoreWizardPage()};
+            List<WizardPage> pages = new List<WizardPage> { new ZenventoryAddStoreWizardPage() };
 
             return pages;
         }
@@ -53,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Identifies this store type
         /// </summary>
-        protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity)Store).ModuleUsername;
+        protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity) Store).ModuleUsername;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.

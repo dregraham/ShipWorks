@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Quartz.Util;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
@@ -82,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         private void ApiShipmentUploadTask(List<long> inputKeys, ActionStepContext context, YahooStoreEntity store)
         {
             // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>)d).ToList();
+            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
 
             // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
             if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
@@ -107,22 +109,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         {
             try
             {
-                YahooApiOnlineUpdater updater = new YahooApiOnlineUpdater(store);
-
-                foreach (long shipmentKey in shipmentKeys)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+                    YahooApiOnlineUpdater updater = lifetimeScope.Resolve<YahooApiOnlineUpdater>(TypedParameter.From(store));
 
-                    OrderEntity order = shipment.Order;
-
-                    if (order == null)
+                    foreach (long shipmentKey in shipmentKeys)
                     {
-                        throw new ActionTaskRunException($"Error getting the order for shipment ID: {shipmentKey}");
-                    }
+                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    if (!order.IsManual)
-                    {
-                        updater.UpdateShipmentDetails(shipment);
+                        OrderEntity order = shipment.Order;
+
+                        if (order == null)
+                        {
+                            throw new ActionTaskRunException($"Error getting the order for shipment ID: {shipmentKey}");
+                        }
+
+                        if (!order.IsManual)
+                        {
+                            updater.UpdateShipmentDetails(shipment);
+                        }
                     }
                 }
             }

@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Communication;
-using Interapptive.Shared.Net;
 using System.Net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Content;
-using log4net;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.CommerceInterface.WizardPages;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.CommerceInterface.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.CommerceInterface.WizardPages;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface
 {
     /// <summary>
     /// CommerceInterface store integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.CommerceInterface)]
+    [Component(RegistrationType.Self)]
     public class CommerceInterfaceStoreType : GenericModuleStoreType
     {
-        // Logger 
+        // Logger
         static ILog log = LogManager.GetLogger(typeof(CommerceInterfaceStoreType));
 
         /// <summary>
@@ -72,18 +74,10 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         {
             get
             {
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
 
                 return genericStore.ModuleUsername.Trim().ToLowerInvariant();
             }
-        }
-
-        /// <summary>
-        /// Create the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new CommerceInterfaceDownloader(Store);
         }
 
         /// <summary>
@@ -118,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>
             {
-                // updatestatus call 
+                // updatestatus call
                 {"status", new VariableTransformer("code")},
 
                 // getorders, getcount
@@ -134,20 +128,20 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
             // CommerceInterface does not take status updates
             capabilities.OnlineStatusSupport = GenericOnlineStatusSupport.DownloadOnly;
 
-            // create the legacy client instead of the regular genric one
-            CommerceInterfaceWebClient client = new CommerceInterfaceWebClient((GenericModuleStoreEntity)Store, LegacyStyleSheets.CommerceInterface, capabilities, transformers);
+            // create the legacy client instead of the regular generic one
+            CommerceInterfaceWebClient client = new CommerceInterfaceWebClient((GenericModuleStoreEntity) Store, LegacyStyleSheets.CommerceInterface, capabilities, transformers);
 
             // CommerceInterface throws a 301 Moved Permanently when they receive a POST to their endpoint
             client.VersionProbeCompatibilityIndicator = HttpStatusCode.MovedPermanently;
 
-            // compatiblity mode requires GETs instead of POSTs
+            // compatibility mode requires GETs instead of POSTs
             client.CompatibilityVerb = HttpVerb.Get;
 
             return client;
         }
 
         /// <summary>
-        /// Create the condition grouip for searching
+        /// Create the condition group for searching
         /// </summary>
         public override ConditionGroup CreateBasicSearchOrderConditions(string search)
         {
@@ -167,13 +161,16 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// </summary>
         public override void GenerateTemplateOrderElements(Templates.Processing.TemplateXml.ElementOutlines.ElementOutline container, Func<OrderEntity> orderSource)
         {
-            var order = new Lazy<CommerceInterfaceOrderEntity>(() => (CommerceInterfaceOrderEntity)orderSource());
+            var order = new Lazy<CommerceInterfaceOrderEntity>(() => (CommerceInterfaceOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("CommerceInterface");
             outline.AddElement("OverstockNumber", () => order.Value.CommerceInterfaceOrderNumber);
             outline.AddElement("ChannelOrderNumber", () => order.Value.CommerceInterfaceOrderNumber);
         }
 
+        /// <summary>
+        /// Account settings help url
+        /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065045";
 
         #region Online Update Commands
@@ -219,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // unpackage the selected status code
-            int selectedCode = (int)userState;
+            int selectedCode = (int) userState;
 
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
             if (shipment == null)
@@ -231,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
                 try
                 {
                     // upload
-                    CommerceInterfaceOnlineUpdater updater = new CommerceInterfaceOnlineUpdater((GenericModuleStoreEntity)Store);
+                    CommerceInterfaceOnlineUpdater updater = new CommerceInterfaceOnlineUpdater((GenericModuleStoreEntity) Store);
                     updater.UploadTrackingNumber(shipment.ShipmentID, selectedCode);
                 }
                 catch (GenericStoreException ex)
@@ -246,6 +243,5 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         }
 
         #endregion
-
     }
 }

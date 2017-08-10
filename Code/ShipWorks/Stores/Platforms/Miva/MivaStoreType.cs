@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Miva.WizardPages;
-using ShipWorks.Stores.Communication;
-using Interapptive.Shared.Net;
-using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Model;
 using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Miva.WizardPages;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Miva
 {
     /// <summary>
     /// Miva Merchant store type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Miva)]
+    [Component(RegistrationType.Self)]
     public class MivaStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -87,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            return new List<WizardPage> 
+            return new List<WizardPage>
                 {
                     new MivaModuleQuestionPage(),
                     new MivaModuleInstallPage(),
@@ -104,14 +102,6 @@ namespace ShipWorks.Stores.Platforms.Miva
         public override GenericStoreWebClient CreateWebClient()
         {
             return new MivaWebClient((MivaStoreEntity) Store);
-        }
-
-        /// <summary>
-        /// Create the downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new MivaDownloader((MivaStoreEntity) Store);
         }
 
         /// <summary>
@@ -235,7 +225,7 @@ namespace ShipWorks.Stores.Platforms.Miva
             ElementOutline miva = container.AddElement("Miva");
             miva.AddElement("OptionCode", () => mivaOption.Value.MivaOptionCode);
             miva.AddElement("AttributeCode", () => mivaOption.Value.MivaAttributeCode);
-            miva.AddElement("AttributeID",() => mivaOption.Value.MivaAttributeID);
+            miva.AddElement("AttributeID", () => mivaOption.Value.MivaAttributeID);
         }
 
         /// <summary>

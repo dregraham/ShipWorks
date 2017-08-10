@@ -1,24 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Miva
 {
     /// <summary>
     /// Miva Downloader that overrides some base generic functionality
     /// </summary>
-    class MivaDownloader : GenericModuleDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Miva)]
+    public class MivaDownloader : GenericModuleDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaDownloader(MivaStoreEntity store)
-            : base(store)
+        public MivaDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
 
         }

@@ -343,6 +343,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonAuthToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RefreshToken", fieldHashtable);
 		}
 		#endregion
 
@@ -464,6 +466,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, value); }
+		}
+
+		/// <summary> The RefreshToken property of the Entity ChannelAdvisorStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."RefreshToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String RefreshToken
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.RefreshToken, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.RefreshToken, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

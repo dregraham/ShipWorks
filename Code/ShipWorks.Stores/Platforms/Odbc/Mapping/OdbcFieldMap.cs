@@ -3,9 +3,9 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -77,11 +77,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public void CopyToEntity(IEntity2 entity, int index)
         {
-            Entries
+            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries = Entries
                 .Where(e => e.ShipWorksField.ContainingObjectName == entity.LLBLGenProEntityName)
                 .Where(e => e.Index == index)
-                .ToList()
-                .ForEach(entry => entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value));
+                .Where(e => e.ShipWorksField.Name != OrderFields.OrderNumberComplete.Name);
+
+            foreach (IOdbcFieldMapEntry entry in odbcFieldMapEntries)
+            {
+                entity.SetNewFieldValue(entry.ShipWorksField.Name, entry.ShipWorksField.Value);
+            }
         }
 
         /// <summary>
@@ -198,6 +202,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             IOdbcFieldMapSerializer serializer = ioFactory.CreateWriter(this);
             return serializer.Serialize();
+        }
+
+        /// <summary>
+        /// Upgrades a map so that the order number mapping becomes a OrderNumberComplete mapping
+        /// </summary>
+        public void UpgradeToAlphanumericOrderNumbers()
+        {
+            IEnumerable<IOdbcFieldMapEntry> orderNumberEntries = FindEntriesBy(OrderFields.OrderNumber);
+            foreach (IOdbcFieldMapEntry orderNumberEntry in orderNumberEntries)
+            {
+                orderNumberEntry.ShipWorksField.ChangeBackingField(OrderFields.OrderNumberComplete);
+            }
         }
     }
 }

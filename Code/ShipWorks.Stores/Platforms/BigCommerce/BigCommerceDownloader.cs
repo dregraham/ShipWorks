@@ -4,14 +4,15 @@ using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     /// <summary>
     /// Downloader for BigCommerce stores
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.BigCommerce)]
     public class BigCommerceDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceDownloader));
@@ -44,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public BigCommerceDownloader(BigCommerceStoreEntity store,
+        public BigCommerceDownloader(StoreEntity store,
             IBigCommerceWebClientFactory webClientFactory,
             IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider)
@@ -53,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this.orderSearchCriteriaFactory = orderSearchCriteriaFactory;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.webClientFactory = webClientFactory;
-            bigCommerceStore = store;
+            bigCommerceStore = (BigCommerceStoreEntity) store;
             totalCount = 0;
         }
 
@@ -68,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 if (totalCount != 0)
                 {
                     // Download any newly created orders (their modified dates could be older than the last modified date SW has)
-                    DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
 
                 if (bigCommerceStore.DownloadModifiedNumberOfDaysBack != 0)
@@ -111,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     Progress.PercentComplete = QuantitySaved / totalCount;
 
                     // Download the modified orders
-                    DownloadOrders(orderSearchCriteria);
+                    await DownloadOrders(orderSearchCriteria).ConfigureAwait(false);
                 }
 
                 Progress.PercentComplete = 100;
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Download orders for specified order search criteria
         /// </summary>
         /// <param name="orderSearchCriteria"></param>
-        private void DownloadOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
+        private async Task DownloadOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             int page = 1;
             while (true)
@@ -159,7 +160,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 try
                 {
-                    if (!DownloadOrderRange(orderSearchCriteria))
+                    bool morePages = await DownloadOrderRange(orderSearchCriteria).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -184,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="orderSearchCriteria">The BigCommerceWebClientOrderSearchCriteria for which to download orders.</param>
         /// <returns>True if orders were loaded, false if the user clicks cancel or if no orders were left to download</returns>
-        private bool DownloadOrderRange(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
+        private async Task<bool> DownloadOrderRange(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             // Check for cancel
             if (Progress.IsCancelRequested)
@@ -208,16 +210,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             }
 
             // Return the result of loading the orders.
-            return LoadOrders(orders);
+            return await LoadOrders(orders).ConfigureAwait(false);
         }
-
-
 
         /// <summary>
         /// Load all the orders contained in the list
         /// </summary>
         /// <returns>True, if all orders were loaded.  False if the user pressed cancel</returns>
-        private bool LoadOrders(IEnumerable<BigCommerceOrder> orders)
+        private async Task<bool> LoadOrders(IEnumerable<BigCommerceOrder> orders)
         {
             // Go through each order in the XML Document
             foreach (BigCommerceOrder order in orders)
@@ -247,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                         // If there are multiple ship to addresses, create the post fix.  Otherwise leave it blank.
                         string orderPostfix = hasSubOrders ? string.Format("-{0}", shipToAddressIndex) : string.Empty;
 
-                        LoadOrder(order, orderPostfix, shipToAddress, isSubOrder, hasSubOrders);
+                        await LoadOrder(order, orderPostfix, shipToAddress, isSubOrder, hasSubOrders).ConfigureAwait(false);
 
                         // Set the flag to note the next order will be a sub order
                         isSubOrder = true;
@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 else
                 {
                     // It must be a digital order since no shipping was provided
-                    LoadOrder(order, string.Empty, null, false, false);
+                    await LoadOrder(order, string.Empty, null, false, false).ConfigureAwait(false);
                 }
 
                 //Update the PercentComplete
@@ -272,13 +272,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Extract and save the order from the XML
         /// </summary>
-        private void LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
+        private async Task LoadOrder(BigCommerceOrder order, string orderNumberPostfix, BigCommerceAddress shipToAddress, bool isSubOrder, bool hasSubOrders)
         {
             // Create a BigCommerceOrderIdentifier
             BigCommerceOrderIdentifier bigCommerceOrderIdentifier = new BigCommerceOrderIdentifier(order.id, orderNumberPostfix);
 
             // Get the order instance.
-            OrderEntity orderEntity = InstantiateOrder(bigCommerceOrderIdentifier);
+            OrderEntity orderEntity = await InstantiateOrder(bigCommerceOrderIdentifier).ConfigureAwait(false);
 
             // If the order does not have sub orders, set the order total.  If it does have sub orders, each order should be calculated based on it's
             // content
@@ -310,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             LoadAddressInfo(orderEntity, order, shipToAddress);
 
             // Load any order notes
-            LoadOrderNotes(orderEntity, order);
+            await LoadOrderNotes(orderEntity, order).ConfigureAwait(false);
 
             // Only update the rest for brand new orders
             if (orderEntity.IsNew)
@@ -326,9 +326,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BigCommerceDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Populate the contents of a new order
+        /// </summary>
         private void PopulateNewOrder(BigCommerceOrder order, BigCommerceAddress shipToAddress, bool isSubOrder, OrderEntity orderEntity, bool hasSubOrders)
         {
             // If the order isn't new, return
@@ -649,13 +652,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// If the order has any notes, save them
         /// </summary>
-        private void LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
+        private async Task LoadOrderNotes(OrderEntity orderEntity, BigCommerceOrder order)
         {
             string orderComment = order.customer_message;
-            InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true);
+            await InstantiateNote(orderEntity, orderComment, DateTime.Now, NoteVisibility.Public, true).ConfigureAwait(false);
 
             string orderInternalComment = order.staff_notes;
-            InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true);
+            await InstantiateNote(orderEntity, orderInternalComment, DateTime.Now, NoteVisibility.Internal, true).ConfigureAwait(false);
         }
 
         /// <summary>

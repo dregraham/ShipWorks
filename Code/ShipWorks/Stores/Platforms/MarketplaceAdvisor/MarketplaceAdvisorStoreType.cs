@@ -1,37 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using log4net;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
 using Autofac;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// StoreType instance for MarketplaceAdvisor stores
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.MarketplaceAdvisor)]
+    [Component(RegistrationType.Self)]
     public class MarketplaceAdvisorStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorStoreType));
@@ -51,18 +43,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// The type code of the store.
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.MarketplaceAdvisor; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.MarketplaceAdvisor;
 
         /// <summary>
         /// License identifier to uniquely identify the store
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get { return ((MarketplaceAdvisorStoreEntity) Store).Username; }
-        }
+        protected override string InternalLicenseIdentifier => ((MarketplaceAdvisorStoreEntity) Store).Username;
 
         /// <summary>
         /// Create a new default initialized instance of the store type
@@ -95,10 +81,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create the control for creating online action tasks in the add store wizard
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new MarketplaceAdvisorOnlineUpdateActionControl();
-        }
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new MarketplaceAdvisorOnlineUpdateActionControl();
 
         /// <summary>
         /// Create the identifier to uniquely identify the order
@@ -117,29 +101,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         }
 
         /// <summary>
-        /// Create the downloader for the store
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            MarketplaceAdvisorStoreEntity mwStore = (MarketplaceAdvisorStoreEntity) Store;
-
-            if (mwStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS)
-            {
-                return new MarketplaceAdvisorOmsDownloader(mwStore);
-            }
-            else
-            {
-                return new MarketplaceAdvisorLegacyDownloader(mwStore);
-            }
-        }
-
-        /// <summary>
         /// Create the control for editing the account settings
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            return new MarketplaceAdvisorAccountSettingsControl();
-        }
+        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+            new MarketplaceAdvisorAccountSettingsControl();
 
         /// <summary>
         /// Create the store settings control
@@ -148,23 +113,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         {
             MarketplaceAdvisorStoreEntity mwStore = (MarketplaceAdvisorStoreEntity) Store;
 
-            if (mwStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS)
-            {
-                return new MarketplaceAdvisorStoreSettingsControl();
-            }
-            else
-            {
-                return null;
-            }
+            return mwStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS ?
+                new MarketplaceAdvisorStoreSettingsControl() :
+                null;
         }
 
         /// <summary>
         /// Create a MarketplaceAdvisor specific order entity
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new MarketplaceAdvisorOrderEntity();
-        }
+        protected override OrderEntity CreateOrderInstance() => new MarketplaceAdvisorOrderEntity();
 
         /// <summary>
         /// Create additional conditions that can be used for basic search
@@ -373,7 +330,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             };
 
             executor.ExecuteAsync(
-                ChangeOrderFlagsCallback, 
+                ChangeOrderFlagsCallback,
                 context.SelectedKeys,
                 new MarketplaceAdvisorOmsFlagTypes[] { flagsOn, flagsOff });
         }

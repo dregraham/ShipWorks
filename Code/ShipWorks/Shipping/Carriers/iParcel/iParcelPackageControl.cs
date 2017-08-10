@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Divelements.SandGrid;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -146,7 +149,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             // Use the i-parcel specific factory for populating the suggested tokens
-            skuAndQuantity.TokenSuggestionFactory = new iParcelTokenSuggestionFactory(shipments);
+            skuAndQuantity.TokenSuggestionFactory = IoC.UnsafeGlobalLifetimeScope
+                .Resolve<Owned<iParcelTokenSuggestionFactory>>(TypedParameter.From(shipments))
+                .Value;
 
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;

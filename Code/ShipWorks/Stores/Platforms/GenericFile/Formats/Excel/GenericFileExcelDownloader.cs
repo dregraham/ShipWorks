@@ -1,28 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using Interapptive.Shared.IO.Text.Csv;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using System.Data.SqlClient;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Excel;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
 {
     /// <summary>
     /// Download implementation for importing from Excel files
     /// </summary>
-    public class GenericFileExcelDownloader : GenericFileSpreadsheetDownloaderBase
+    [Component]
+    public class GenericFileExcelDownloader : GenericFileSpreadsheetDownloaderBase, IGenericFileExcelDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericFileExcelDownloader));
 
         GenericExcelMap excelMap;
@@ -30,8 +25,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericFileExcelDownloader(GenericFileStoreEntity store)
-            : base(store)
+        public GenericFileExcelDownloader(GenericFileStoreEntity store,
+            Func<StoreEntity, GenericFileStoreType> getStoreType,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory)
         {
 
         }

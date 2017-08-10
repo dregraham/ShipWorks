@@ -1,40 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.OrderMotion.WizardPages;
-using ShipWorks.Email.Accounts;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using log4net;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email.Accounts;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.OrderMotion.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {
     /// <summary>
     /// Store integration for OrderMotion
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.OrderMotion)]
+    [Component(RegistrationType.Self)]
     public class OrderMotionStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionStoreType));
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderMotionStoreType(StoreEntity store)
+            : base(store)
+        {
+        }
+
+        /// <summary>
         /// Identifying typecode for OrderMotion
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.OrderMotion; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.OrderMotion;
 
         /// <summary>
         /// Identifying account information for licensing
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         {
             get
             {
-                EmailAccountEntity account = EmailAccountManager.GetAccount(((OrderMotionStoreEntity)Store).OrderMotionEmailAccountID);
+                EmailAccountEntity account = EmailAccountManager.GetAccount(((OrderMotionStoreEntity) Store).OrderMotionEmailAccountID);
 
                 // If the account was deleted we have to create a made up license that obviously will not be activated to them
                 if (account == null)
@@ -72,15 +73,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderMotionStoreType(StoreEntity store)
-            : base(store)
-        {
-        }
-
-        /// <summary>
-        /// Create an OrderMotion orderj
+        /// Create an OrderMotion order
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
@@ -95,14 +88,6 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             OrderMotionOrderEntity omOrder = order as OrderMotionOrderEntity;
 
             return new OrderMotionOrderIdentifier(omOrder.OrderNumber, omOrder.OrderMotionShipmentID);
-        }
-
-        /// <summary>
-        /// Create the store downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new OrderMotionDownloader(Store);
         }
 
         /// <summary>
@@ -145,11 +130,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             ElementOutline outline = container.AddElement("OrderMotion");
 
             // Outputting both elements despite using the same value for historical purposes so existing templates
-            // do not break. The shipment number value was originally built by combining the order motion ID and 
+            // do not break. The shipment number value was originally built by combining the order motion ID and
             // the order motion shipment ID values which were parsed out of the INVOICE_NO field from the order download.
             outline.AddElementLegacy2x("ShipmentNumber", () => order.Value.OrderMotionInvoiceNumber);
             outline.AddElement("InvoiceNumber", () => order.Value.OrderMotionInvoiceNumber);
-            
+
             outline.AddElement("Promotion", () => order.Value.OrderMotionPromotion);
         }
 

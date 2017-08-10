@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
-using ShipWorks.UI.Wizard;
 using System.Data.SqlTypes;
+using System.Linq;
 using Autofac;
-using ShipWorks.Templates.Processing.TemplateXml;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
+using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
     /// <summary>
-    /// Implemenation of the PayPal store integration
+    /// Implementation of the PayPal store integration
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.PayPal)]
+    [Component(RegistrationType.Self)]
     public class PayPalStoreType : StoreType
     {
         /// <summary>
@@ -39,17 +33,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Gets the typecode for this store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.PayPal; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.PayPal;
 
         /// <summary>
         /// Unique account identifier
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get { return ((PayPalStoreEntity)Store).ApiUserName; }
+            get { return ((PayPalStoreEntity) Store).ApiUserName; }
         }
 
         /// <summary>
@@ -94,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             InitializeStoreDefaults(storeEntity);
 
             // set defaults
-            storeEntity.ApiCredentialType = (short)PayPalCredentialType.Signature;
+            storeEntity.ApiCredentialType = (short) PayPalCredentialType.Signature;
             storeEntity.ApiUserName = "";
             storeEntity.ApiPassword = "";
             storeEntity.ApiSignature = "";
@@ -134,14 +125,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
             }
 
             return new PayPalOrderIdentifier(payPalOrder.TransactionID);
-        }
-
-        /// <summary>
-        /// Instantiate the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new PayPalDownloader(Store);
         }
 
         /// <summary>

@@ -435,6 +435,7 @@
         <Fields>
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
+          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
           <Field Name="IsFBA" Type="bool" FieldIndex="7" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
@@ -453,6 +454,7 @@
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
+          <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ClickCartProOrder" ObjectID="d483348d-8aef-4b58-a81e-b06b4592c323" InheritanceType="2">
@@ -3720,7 +3722,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-04T16:51:04.8200685Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4122,6 +4124,7 @@
                     <Field Name="HarmonizedCode" Ordinal="8" DbType="12" Length="20" />
                     <Field Name="IsFBA" Ordinal="9" DbType="2" />
                     <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
+                    <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -4135,6 +4138,7 @@
                     <Field Name="AmazonMerchantID" Ordinal="6" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
+                    <Field Name="AmazonShippingToken" Ordinal="9" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -9399,6 +9403,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
+            <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
@@ -9418,6 +9423,7 @@
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
+            <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>

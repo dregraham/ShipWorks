@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
-using ShipWorks.Stores.Content;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// Downloader for OMS MarketplaceAdvisor stores
     /// </summary>
-    class MarketplaceAdvisorOmsDownloader : StoreDownloader
+    [Component]
+    public class MarketplaceAdvisorOmsDownloader : StoreDownloader, IMarketplaceAdvisorOmsDownloader
     {
         // Download page size
         const int pageSize = 200;
@@ -28,21 +28,18 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorOmsDownloader(MarketplaceAdvisorStoreEntity store) 
+        public MarketplaceAdvisorOmsDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }
 
         /// <summary>
         /// Download the orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -53,13 +50,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Keep going until no more to download
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(currentPage++))
+                    bool morePages = await DownloadNextOrdersPage(currentPage++).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -72,15 +70,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             catch (SqlForeignKeyException ex)
             {
                 throw new DownloadException(ex.Message, ex);
-            }   
+            }
         }
 
         /// <summary>
         /// Download the next page of MarketplaceAdvisor orders
         /// </summary>
-        private bool DownloadNextOrdersPage(int currentPage)
+        private async Task<bool> DownloadNextOrdersPage(int currentPage)
         {
-            OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).GetOrders(currentPage);
+            OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity) Store).GetOrders(currentPage);
 
             if (orders.Orders.Length == 0)
             {
@@ -98,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             }
             else
             {
-                LoadOrders(orders);
+                await LoadOrders(orders).ConfigureAwait(false);
 
                 return true;
             }
@@ -107,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Load the given OMS orders into ShipWorks
         /// </summary>
-        private void LoadOrders(OMOrders ordersResult)
+        private async Task LoadOrders(OMOrders ordersResult)
         {
             OMOrder[] orders = ordersResult.Orders;
 
@@ -135,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Always add to this list, even if already downloaded
                 markAsProcessed.Add(order.OrderUid);
 
-                LoadOrder(order);
+                await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
                 Progress.PercentComplete = 100 * quantityDownloaded / ordersResult.TotalRecords;
@@ -146,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Only make the call if there are any to do
                 if (markAsProcessed.Count > 0)
                 {
-                    MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).MarkOrdersProcessed(markAsProcessed);
+                    MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity) Store).MarkOrdersProcessed(markAsProcessed);
                 }
             }
         }
@@ -154,16 +152,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Load the given OMS order into ShipWorks
         /// </summary>
-        private void LoadOrder(OMOrder omsOrder)
+        private async Task LoadOrder(OMOrder omsOrder)
         {
-            bool isNew = CreateMasterOrder(omsOrder);
+            bool isNew = await CreateMasterOrder(omsOrder).ConfigureAwait(false);
 
             if (isNew)
             {
                 // Now, create an extra order for each additional parcels
                 for (int i = 1; i < omsOrder.Parcels.OrderParcels.Length; i++)
                 {
-                    CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]);
+                    await CreateParcelOrder(omsOrder, omsOrder.Parcels.OrderParcels[i]).ConfigureAwait(false);
                 }
             }
         }
@@ -172,12 +170,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// Create the master order for the oms order.  If there is only one parcel,
         /// then this will be the only order.  Returns true if the order that was created was a newly downloaded order.
         /// </summary>
-        private bool CreateMasterOrder(OMOrder omsOrder)
+        private async Task<bool> CreateMasterOrder(OMOrder omsOrder)
         {
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid));
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid)).ConfigureAwait(false);
 
-            // Setup the basic proprites
+            // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);
 
             // First parcel
@@ -189,8 +187,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             bool isNew = order.IsNew;
             if (isNew)
             {
-                // If there are more than 1 parcel, we have to add a charge to make up 
-                // for the fact that some line items arent on the master order
+                // If there are more than 1 parcel, we have to add a charge to make up
+                // for the fact that some line items aren't on the master order
                 if (omsOrder.Parcels.OrderParcels.Length > 1)
                 {
                     double otherParcelsTotal = 0;
@@ -211,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 LoadPaymentDetails(order, omsOrder);
 
                 // Notes
-                LoadNotes(order, omsOrder);
+                await LoadNotes(order, omsOrder).ConfigureAwait(false);
 
                 // Update the total
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
@@ -219,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateMasterOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return isNew;
         }
@@ -227,14 +225,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create an order to represent the given additional parcel of the oms order.
         /// </summary>
-        private void CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
+        private async Task CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
         {
-            // Create a new order instance with parce information
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
-                omsOrder.OrderUid, 
-                Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1));
+            // Create a new order instance with parse information
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
+                omsOrder.OrderUid,
+                Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1)).ConfigureAwait(false);
 
-            // Setup the basic proprites
+            // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);
 
             // Load the parcel specific info for the order
@@ -249,16 +247,13 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorOmsDownloader.CreateParcelOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Get the total value of all line items in the given parcel.
         /// </summary>
-        private double GetParcelLineItemTotal(OMOrderParcel parcel)
-        {
-            return parcel.MerchandiseTotal;
-        }
+        private double GetParcelLineItemTotal(OMOrderParcel parcel) => parcel.MerchandiseTotal;
 
         /// <summary>
         /// Load order properties common to master orders and parcel orders.
@@ -300,23 +295,23 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the notes for the order based on the OMS order.
         /// </summary>
-        private void LoadNotes(MarketplaceAdvisorOrderEntity order, OMOrder omsOrder)
+        private async Task LoadNotes(MarketplaceAdvisorOrderEntity order, OMOrder omsOrder)
         {
             if (omsOrder.InvoiceNote.Length > 0)
             {
-                InstantiateNote(order, "Buyer note: " + omsOrder.InvoiceNote, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Buyer note: " + omsOrder.InvoiceNote, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // Instructions
             if (omsOrder.SpecialBuyerInstructions.Length > 0)
             {
-                InstantiateNote(order, "Special Instructions: " + omsOrder.SpecialBuyerInstructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, "Special Instructions: " + omsOrder.SpecialBuyerInstructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             // Private notes
             if (omsOrder.PrivateOrderNotes.Length > 0)
             {
-                InstantiateNote(order, omsOrder.PrivateOrderNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, omsOrder.PrivateOrderNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
         }
 
@@ -350,7 +345,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private void LoadCharge(MarketplaceAdvisorOrderEntity order, string type, string name, double amount, bool ignoreZeroAmount)
         {
-            if (amount == 0 && ignoreZeroAmount)
+            if (amount.IsEquivalentTo(0) && ignoreZeroAmount)
             {
                 return;
             }
@@ -396,7 +391,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             person.Phone = ship.PhoneNumber;
             person.Fax = ship.FaxNumber;
 
-            // If we had a state, and a province, use them both seperated by a space
+            // If we had a state, and a province, use them both separated by a space
             if (person.StateProvCode.Length > 0 && ship.Province.Length > 0)
             {
                 person.StateProvCode += " ";
@@ -406,22 +401,22 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             person.StateProvCode += Geography.GetStateProvCode(ship.Province);
 
             // Special case for MW giving a name for Russia that's not in Geography
-            if (String.Compare(person.CountryCode, "Russian Federation", true) == 0)
+            if (String.Compare(person.CountryCode, "Russian Federation", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "RU";
             }
 
-            if (String.Compare(person.CountryCode, "Slovakia", true) == 0)
+            if (String.Compare(person.CountryCode, "Slovakia", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "SK";
             }
 
-            if (String.Compare(person.CountryCode, "Korea, Republic of (South Korea)", true) == 0)
+            if (String.Compare(person.CountryCode, "Korea, Republic of (South Korea)", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "KR";
             }
 
-            if (String.Compare(person.CountryCode, "Croatia, Republic of", true) == 0)
+            if (String.Compare(person.CountryCode, "Croatia, Republic of", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 person.CountryCode = "HR";
             }
