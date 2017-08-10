@@ -19087,6 +19087,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentEditLimit);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipmentsLoaderEnsureFiltersLoadedTimeout field instance</summary>
+		public static EntityField2 ShipmentsLoaderEnsureFiltersLoadedTimeout
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

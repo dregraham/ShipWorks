@@ -8178,6 +8178,8 @@ namespace ShipWorks.Data.Model
 		FedExFimsPassword,
 		///<summary>ShipmentEditLimit. </summary>
 		ShipmentEditLimit,
+		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
+		ShipmentsLoaderEnsureFiltersLoadedTimeout,
 		/// <summary></summary>
 		AmountOfFields
 	}

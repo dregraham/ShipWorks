@@ -400,6 +400,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FedExFimsPassword", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipmentEditLimit", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentsLoaderEnsureFiltersLoadedTimeout", fieldHashtable);
 		}
 		#endregion
 
@@ -976,6 +978,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentEditLimit, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentEditLimit, value); }
+		}
+
+		/// <summary> The ShipmentsLoaderEnsureFiltersLoadedTimeout property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentsLoaderEnsureFiltersLoadedTimeout"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipmentsLoaderEnsureFiltersLoadedTimeout
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
