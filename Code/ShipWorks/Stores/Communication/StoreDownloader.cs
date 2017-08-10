@@ -1197,8 +1197,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Create a note for the given order
         /// </summary>
-        async Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
-            NoteVisibility noteVisibility) => await InstantiateNote(order, noteText, noteDate, noteVisibility);
+        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility);
 
         /// <summary>
         /// Crate a payment for the given order
@@ -1209,8 +1209,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Create a payment for the given order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value)
-            => InstantiateOrderPaymentDetail(order, label, value);
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => 
+            InstantiateOrderPaymentDetail(order, label, value);
 
         #endregion
     }

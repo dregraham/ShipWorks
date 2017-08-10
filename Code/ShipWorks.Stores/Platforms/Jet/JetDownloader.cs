@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                         // Update the status
                         Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
-                        await LoadAndAcknowledgeOrder(orderUrl);
+                        await LoadAndAcknowledgeOrder(orderUrl).ConfigureAwait(false);
                     }
 
                     ordersResult = webClient.GetOrders(Store as JetStoreEntity);
@@ -84,8 +84,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
-
-
+        
         /// <summary>
         /// Load and acknowledge the order
         /// </summary>
@@ -98,12 +97,12 @@ namespace ShipWorks.Stores.Platforms.Jet
                 JetOrderDetailsResult jetOrder = orderDetails.Value;
 
                 JetOrderEntity order =
-                    (JetOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId));
+                    (JetOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId)).ConfigureAwait(false);
 
                 if (order.IsNew)
                 {
                     orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
-                    await SaveDownloadedOrder(order);
+                    await SaveDownloadedOrder(order).ConfigureAwait(false);
                 }
             else
             {

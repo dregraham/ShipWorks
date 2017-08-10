@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
+    /// <summary>
+    /// Channel Advisor Rest Downloader
+    /// </summary>
     public interface IChannelAdvisorRestDownloader : IStoreDownloader
     {
     }
