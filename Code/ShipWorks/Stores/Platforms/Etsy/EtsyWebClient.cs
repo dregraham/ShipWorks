@@ -246,12 +246,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
             string response = ProcessRequest(oAuth, "GetTransactions");
             return JObject.Parse(response);
         }
+
         /// <summary>
         /// Gets a list of products
         /// </summary>
         /// <param name="listingId"></param>
         /// <param name="productId"></param>
-        /// <returns></returns>
         public JToken GetProduct(int listingId, int productId)
         {
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetProductUrl(listingId, productId));

@@ -478,7 +478,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             int productId = transaction["product_data"].GetValue("product_id", 0);
             item.ListingID = transaction.GetValue("listing_id", 0);
             JToken product = webClient.GetProduct(item.ListingID, productId);
-            item.SKU = product["results"].GetValue("sku", string.Empty);
+            item.SKU = product["results"]?.GetValue("sku", string.Empty) ?? string.Empty;
             item.Code = item.SKU;
             item.TransactionID = transaction.GetValue("transaction_id", 0);
             item.Quantity = transaction.GetValue("quantity", 0);

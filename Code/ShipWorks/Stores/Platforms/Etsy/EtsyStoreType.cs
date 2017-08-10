@@ -90,11 +90,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<EtsyOrderItemEntity>(() => (EtsyOrderItemEntity) itemSource());
+            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity );
 
             ElementOutline outline = container.AddElement("Etsy");
-            outline.AddElement("TransactionID", () => item.Value.TransactionID.ToString());
-            outline.AddElement("ListingID", () => item.Value.ListingID.ToString());
+            outline.AddElement("TransactionID", () => item.Value?.TransactionID.ToString() ?? string.Empty);
+            outline.AddElement("ListingID", () => item.Value?.ListingID.ToString() ?? string.Empty);
         }
 
         /// <summary>
