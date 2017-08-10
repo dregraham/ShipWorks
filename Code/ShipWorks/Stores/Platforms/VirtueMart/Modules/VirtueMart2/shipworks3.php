@@ -24,9 +24,6 @@ define('REQUIRE_SECURE', $mode !== "DEV");
 // flag indicating if we should check to see if the user has admin rights before authenticating
 define('REQUIRE_ADMIN', true);
 
-define('ONLY_AUTHENTICATE_VALID_USER_GROUPS', false);
-define('VALID_USER_GROUPS', array());
-
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
 define('DS', DIRECTORY_SEPARATOR);
