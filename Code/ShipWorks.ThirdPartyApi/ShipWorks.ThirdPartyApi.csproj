@@ -1494,12 +1494,6 @@
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetApiAccessRulesResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAttributesCSResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetAttributesXSLResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetBestOffersResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -1507,9 +1501,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoriesResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategory2CSResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCategoryFeaturesResponseType.datasource">
@@ -1536,9 +1527,6 @@
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetContextualKeywordsResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetCrossPromotionsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetDescriptionTemplatesResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -1552,12 +1540,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetFeedbackResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetHighBiddersResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemRecommendationsResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetItemResponseType.datasource">
@@ -1602,40 +1584,13 @@
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetOrderTransactionsResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPictureManagerDetailsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPictureManagerOptionsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPopularKeywordsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFamilyMembersResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFinderResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductFinderXSLResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSearchPageResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSearchResultsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductSellingPagesResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetProductsResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPromotionalSaleDetailsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetPromotionRulesResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetSearchResultsResponseType.datasource">
@@ -1731,12 +1686,6 @@
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetVeROReportStatusResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetWantItNowPostResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\GetWantItNowSearchResultsResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\IssueRefundResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -1824,9 +1773,6 @@
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\RespondToFeedbackResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\RespondToWantItNowPostResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\ReviseCheckoutStatusResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -1873,9 +1819,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetNotificationPreferencesResponseType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetPictureManagerDetailsResponseType.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Stores.Platforms.Ebay.WebServices\SetPromotionalSaleListingsResponseType.datasource">
