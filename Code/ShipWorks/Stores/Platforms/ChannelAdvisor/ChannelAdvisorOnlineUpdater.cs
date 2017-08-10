@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -40,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public void UploadTrackingNumber(long shipmentID)
+        public async Task UploadTrackingNumber(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -49,14 +51,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
             else
             {
-                UploadTrackingNumber(shipment);
+                await UploadTrackingNumber(shipment).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public void UploadTrackingNumber(ShipmentEntity shipment)
+        public async Task UploadTrackingNumber(ShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Voided)
             {
@@ -66,7 +68,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             OrderEntity order = shipment.Order;
 
-            if (!order.IsManual)
+            // If the order is manual but also has combined orders, let it through so the updater
+            // can check the combined orders manual status.
+            if (!order.IsManual || order.CombineSplitStatus == CombineSplitStatusType.Combined)
             {
                 string carrierCode = "";
                 string serviceClass = "";
@@ -103,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
                         IChannelAdvisorUpdateClient updateClient = scope.Resolve<IChannelAdvisorUpdateClient>();
-                        updateClient.UploadShipmentDetails(store, uploadShipment, order.OrderNumber);
+                        await updateClient.UploadShipmentDetails(store, uploadShipment, order).ConfigureAwait(false);
                     }
                 }
                 catch (ChannelAdvisorException ex)
@@ -112,8 +116,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         string newMessage = String.Format("The shipment details upload failed for Carrier '{0}' and Class '{1}'.\r\n\r\n" +
                                                           "Update your ChannelAdvisor store's Account Shipping Carriers to include these values as supported carriers.   The supported carriers are located under the Sales menu in your online store.",
-                                                          carrierCode,
-                                                          serviceClass);
+                            carrierCode,
+                            serviceClass);
 
                         throw new ChannelAdvisorException(newMessage, ex);
                     }

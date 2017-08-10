@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -29,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Store implementation for ChannelAdvisor
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
-    [Component(RegistrationType.Self)]
-    public class ChannelAdvisorStoreType : StoreType
+    [Component]
+    public class ChannelAdvisorStoreType : StoreType, IChannelAdvisorStoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
@@ -419,7 +423,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
@@ -432,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 try
                 {
                     ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
-                    updater.UploadTrackingNumber(shipment);
+                    await updater.UploadTrackingNumber(shipment).ConfigureAwait(false);
                 }
                 catch (ChannelAdvisorException ex)
                 {
@@ -443,6 +447,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     issueAdder.Add(orderID, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        public int GetOnlineOrderIdentifier(IOrderEntity order) => (int) order.OrderNumber;
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        /// <param name="order">The order for which to find combined order identifiers</param>
+        public async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        {
+            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity,
+                "OrderSearch",
+                OrderSearchFields.OrderID == order.OrderID,
+                () => OrderSearchFields.OrderNumber.ToValue<int>()).ConfigureAwait(false);
         }
     }
 }

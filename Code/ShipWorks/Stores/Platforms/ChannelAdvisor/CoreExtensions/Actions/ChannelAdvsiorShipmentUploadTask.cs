@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
@@ -60,9 +61,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously.
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Executes the task
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             if (StoreID <= 0)
             {
@@ -80,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
                 ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater(store);
                 foreach (long entityID in inputKeys)
                 {
-                    updater.UploadTrackingNumber(entityID);
+                    await updater.UploadTrackingNumber(entityID).ConfigureAwait(false);
                 }
             }
             catch (ChannelAdvisorException ex)

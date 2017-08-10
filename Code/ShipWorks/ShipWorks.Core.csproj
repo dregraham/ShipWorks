@@ -1753,6 +1753,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
