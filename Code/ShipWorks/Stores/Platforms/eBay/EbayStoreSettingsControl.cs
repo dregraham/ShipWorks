@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Stores.Platforms.PayPal;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
@@ -42,7 +35,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("A non eBay store was passed to the EbayStoreSettingsControl");
             }
 
-            downloadDetailsCheckBox.Checked = ebayStore.DownloadItemDetails;
             downloadPayPalCheckBox.Checked = ebayStore.DownloadPayPalDetails;
             downloadOlderOrders.Checked = ebayStore.DownloadOlderOrders;
 
@@ -82,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 domesticComboBox.SelectedValue = ebayStore.DomesticShippingService;
             }
 
-            // default 
+            // default
             if (ebayStore.InternationalShippingService.Length == 0)
             {
                 internationalComboBox.SelectedIndex = 0;
@@ -143,14 +135,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ebayStore.PayPalApiUserName = storeCopy.PayPalApiUserName;
 
             // download details
-            ebayStore.DownloadItemDetails = downloadDetailsCheckBox.Checked;
             ebayStore.DownloadPayPalDetails = downloadPayPalCheckBox.Checked;
             ebayStore.DownloadOlderOrders = downloadOlderOrders.Checked;
 
             // accepted payments
             acceptedPaymentsControl.SaveToEntity(ebayStore);
 
-            // default shipping servives when creating invoices
+            // default shipping services when creating invoices
             ebayStore.DomesticShippingService = domesticComboBox.SelectedValue == null ? "" : (string)domesticComboBox.SelectedValue;
             ebayStore.InternationalShippingService = internationalComboBox.SelectedValue == null ? "" : (string)internationalComboBox.SelectedValue;
 
@@ -178,16 +169,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 UpdatePayPalConfig();
             }
-        }
-
-        /// <summary>
-        /// Control is loaded
-        /// </summary>
-        private void OnLoad(object sender, EventArgs e)
-        {
-            // resize the InvoicesTitle
-            sectionInvoices.Width = Width - sectionInvoices.Left - 30;
-            sectionInvoices.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
         }
     }
 }
