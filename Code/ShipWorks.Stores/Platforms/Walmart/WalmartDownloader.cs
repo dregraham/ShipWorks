@@ -25,6 +25,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
 
+        private DateTime startDateTime;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
@@ -96,8 +98,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private ordersListType GetFirstBatch()
         {
-            DateTime startTime = GetOrderDateStartingPoint();
-            return walmartWebClient.GetOrders(walmartStore, startTime);
+            startDateTime = GetOrderDateStartingPoint();
+            return walmartWebClient.GetOrders(walmartStore, startDateTime);
         }
 
         /// <summary>
@@ -122,7 +124,29 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             foreach (Order downloadedOrder in ordersList.elements)
             {
+                FixOrderDates(downloadedOrder);
                 await LoadOrder(downloadedOrder).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Ensure that the order dates are valid, if not use the start date time as the date
+        /// </summary>
+        private void FixOrderDates(Order order)
+        {
+            if (order.orderDate.Year < 1754)
+            {
+                order.orderDate = startDateTime;
+            }
+
+            if (order.shippingInfo.estimatedDeliveryDate.Year < 1754)
+            {
+                order.shippingInfo.estimatedDeliveryDate = startDateTime;
+            }
+
+            if (order.shippingInfo.estimatedShipDate.Year < 1754)
+            {
+                order.shippingInfo.estimatedShipDate = startDateTime;
             }
         }
 
