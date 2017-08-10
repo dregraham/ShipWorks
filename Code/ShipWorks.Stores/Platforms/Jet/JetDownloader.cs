@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Jet
                 if (order.IsNew)
                 {
                     orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
-                    SaveDownloadedOrder(order);
+                    await SaveDownloadedOrder(order);
                 }
             else
             {
