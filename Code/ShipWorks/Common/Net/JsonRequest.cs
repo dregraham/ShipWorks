@@ -5,7 +5,7 @@ using Interapptive.Shared.Net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 
-namespace ShipWorks.Stores.Platforms.Jet
+namespace ShipWorks.Common.Net
 {
     /// <summary>
     /// Json request
@@ -13,7 +13,8 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JsonRequest : IJsonRequest
     {
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ILogEntryFactory apiLogEntryFactory;
+
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Constructor
         /// </summary>
-        public JsonRequest(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        public JsonRequest(ILogEntryFactory apiLogEntryFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
         }
@@ -31,9 +32,9 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request
         /// </summary>
-        public T ProcessRequest<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request)
+        public T Submit<T>(string action, ApiLogSource logSource, IHttpRequestSubmitter request)
         {
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(logSource, action);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(logSource, action, LogActionType.Other);
             apiLogEntry.LogRequest(request);
             try
             {

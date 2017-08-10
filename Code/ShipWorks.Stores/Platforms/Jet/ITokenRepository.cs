@@ -1,4 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get a token for the given store
         /// </summary>
-        IJetToken GetToken(JetStoreEntity store);
+        IJetToken GetToken(IJetStoreEntity store);
 
         /// <summary>
         /// Get a token for the given username and password
@@ -20,6 +20,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Removes the token from the Cache
         /// </summary>
-        void RemoveToken(JetStoreEntity store);
+        void RemoveToken(IJetStoreEntity store);
     }
 }

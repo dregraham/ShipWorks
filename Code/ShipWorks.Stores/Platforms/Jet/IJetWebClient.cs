@@ -29,5 +29,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Get order details for the given order
         /// </summary>
         GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store);
+
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        void UploadShipmentDetails(ShipmentEntity shipment, JetStoreEntity store);
     }
 }

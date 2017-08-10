@@ -5,7 +5,8 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Common.Net;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -19,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly Func<string, IJetToken> tokenFactory;
         private readonly LruCache<string, IJetToken> tokenCache;
         private readonly string tokenEndpoint = "https://merchant-api.jet.com/api/token";
+        private readonly object tokenLock = new object();
 
         /// <summary>
         /// Constructor
@@ -39,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get the token for the store
         /// </summary>
-        public IJetToken GetToken(JetStoreEntity store)
+        public IJetToken GetToken(IJetStoreEntity store)
         {
             string password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ApiUser)
                 .Decrypt(store.Secret);
@@ -52,39 +54,49 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public IJetToken GetToken(string username, string password)
         {
-            if (tokenCache.Contains(username))
+            lock (tokenLock)
             {
-                return tokenCache[username];
-            }
+                if (tokenCache.Contains(username))
+                {
+                    return tokenCache[username];
+                }
 
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
-                $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
-                "application/json");
+                IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(
+                    $"{{\"user\": \"{username}\",\"pass\":\"{password}\"}}",
+                    "application/json");
 
-            submitter.Uri = new Uri(tokenEndpoint);
+                submitter.Uri = new Uri(tokenEndpoint);
 
-            try
-            {
-                JetTokenResponse tokenResponse = jsonRequest.ProcessRequest<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
+                try
+                {
+                    JetTokenResponse tokenResponse = jsonRequest.Submit<JetTokenResponse>("GetToken", ApiLogSource.Jet, submitter);
+                    IJetToken token = tokenFactory(tokenResponse.Token);
 
-                tokenCache[username] = tokenFactory(tokenResponse.Token);
-
-                return tokenCache[username];
-            }
-            catch (WebException)
-            {
-                return JetToken.InvalidToken;
+                    if (token.IsValid)
+                    {
+                        tokenCache[username] = token;
+                    }
+                    
+                    return token;
+                }
+                catch (WebException)
+                {
+                    return JetToken.InvalidToken;
+                }
             }
         }
 
         /// <summary>
         /// Removes the token from the Cache
         /// </summary>
-        public void RemoveToken(JetStoreEntity store)
+        public void RemoveToken(IJetStoreEntity store)
         {
-            if (tokenCache.Contains(store.ApiUser))
+            lock (tokenLock)
             {
-                tokenCache.Remove(store.ApiUser);
+                if (tokenCache.Contains(store.ApiUser))
+                {
+                    tokenCache.Remove(store.ApiUser);
+                }
             }
         }
     }

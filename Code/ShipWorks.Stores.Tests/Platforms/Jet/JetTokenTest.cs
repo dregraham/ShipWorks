@@ -30,9 +30,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
+        public void IsValid_ReturnsFalse_WhenTokenIsNull()
+        {
+            Assert.False(new JetToken(null).IsValid);
+        }
+
+        [Fact]
         public void InvalidToken_ReturnsTokenThatIsNotValid()
         {
             Assert.False(JetToken.InvalidToken.IsValid);
+        }
+
+        [Fact]
+        public void InvalidToken_ReturnsSameTokenEveryTime()
+        {
+            Assert.Equal(JetToken.InvalidToken, JetToken.InvalidToken);
         }
 
         [Fact]

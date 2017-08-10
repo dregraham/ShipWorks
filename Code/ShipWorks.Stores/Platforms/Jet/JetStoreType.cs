@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -15,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     public class JetStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
+        private readonly Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
 
         /// <summary>
         /// The walmart store
@@ -24,10 +30,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Initializes a new instance of the <see cref="JetStoreType"/> class.
         /// </summary>
-        public JetStoreType(StoreEntity store, IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
+        public JetStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
+            Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
+            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             jetStore = (JetStoreEntity) store;
         }
 
@@ -92,5 +101,17 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Online Status filter.
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices() => new[] {"Acknowledged", "Complete" };
+
+        /// <summary>
+        /// Creates the upload menu commands for Jet
+        /// </summary>
+        /// <returns></returns>
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() => onlineUpdateInstanceCommandsFactory(jetStore).Create().ToList();
+        
+        /// <summary>
+        /// Creates the add store wizard online update action control for Jet
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new OnlineUpdateShipmentUpdateActionControl(typeof(JetShipmentUploadTask));
     }
 }

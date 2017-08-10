@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     public class JetToken : IJetToken
     {
         private readonly string token;
+        private static JetToken invalidToken;
 
         /// <summary>
         /// Constructor
@@ -18,16 +19,16 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             this.token = token;
         }
-        
+
         /// <summary>
         /// Returns an invalid token
         /// </summary>
-        public static IJetToken InvalidToken => new JetToken(string.Empty);
+        public static IJetToken InvalidToken => invalidToken ?? (invalidToken = new JetToken(string.Empty));
 
         /// <summary>
         /// Check to see if the token is valid
         /// </summary>
-        public bool IsValid => token != string.Empty;
+        public bool IsValid => !string.IsNullOrWhiteSpace(token);
 
         /// <summary>
         /// Attach the token to the request

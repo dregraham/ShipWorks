@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -14,7 +15,6 @@ namespace ShipWorks.Stores.Platforms.Jet
     [Component]
     public class JetAuthenticatedRequest : IJetAuthenticatedRequest
     {
-
         private readonly IJsonRequest jsonRequest;
         private readonly IJetTokenRepository tokenRepo;
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request. If an error is thrown, refresh the token and try again.
         /// </summary>
-        public GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store)
+        public GenericResult<T> Submit<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store)
         {
             return ProcessRequest<T>(action, request, store, true);
         }
@@ -46,12 +46,12 @@ namespace ShipWorks.Stores.Platforms.Jet
 
                 if (!token.IsValid)
                 {
-                    throw new JetException("Unable to obtain a valid token to authenticate request.");
+                    return GenericResult.FromError<T>("Unable to obtain a valid token to authenticate request.");
                 }
 
                 token.AttachTo(request);
 
-                return GenericResult.FromSuccess(jsonRequest.ProcessRequest<T>(action, ApiLogSource.Jet, request));
+                return GenericResult.FromSuccess(jsonRequest.Submit<T>(action, ApiLogSource.Jet, request));
             }
             catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
             {
