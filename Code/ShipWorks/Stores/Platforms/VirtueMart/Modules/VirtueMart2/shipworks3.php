@@ -21,8 +21,10 @@ $mode = getenv('MODULE_MODE');
 // flag indicating if we will require SSL connection or not (default is true)
 define('REQUIRE_SECURE', $mode !== "DEV");
 
+// flag indicating if we should check to see if the user belongs to a valid group
+// when authenticating
 define('ONLY_AUTHENTICATE_VALID_USER_GROUPS', false);
-define('VALID_USER_GROUPS', array());
+$validUserGroups = array();
 
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
@@ -222,7 +224,7 @@ if (!$secure && REQUIRE_SECURE)
 else
 {
   // verify that the credentials are valid
-  if (checkAdminLogin())
+  if (checkAdminLogin($validUserGroups))
   {
     $action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
 
@@ -289,7 +291,7 @@ function Action_Debug()
 
 // Check to see if admin functions exist.  And if so, determine if the user
 // has access.
-function checkAdminLogin()
+function checkAdminLogin($validUserGroups)
 {
   if (!isset($_REQUEST['username']) || !isset($_REQUEST['password']))
   {
@@ -316,7 +318,7 @@ function checkAdminLogin()
 
     foreach ($groups as $group) 
     {
-      if (in_array($group, VALID_USER_GROUPS)) 
+      if (in_array($group, $validUserGroups)) 
       {
         return true;
       }
