@@ -21,10 +21,11 @@ $mode = getenv('MODULE_MODE');
 // flag indicating if we will require SSL connection or not (default is true)
 define('REQUIRE_SECURE', $mode !== "DEV");
 
-// flag indicating if we should check to see if the user belongs to a valid group
-// when authenticating
+// flag indicating if we should check to see if the user has admin rights before authenticating
+define('REQUIRE_ADMIN', true);
+
 define('ONLY_AUTHENTICATE_VALID_USER_GROUPS', false);
-$validUserGroups = array();
+define('VALID_USER_GROUPS', array());
 
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
@@ -224,7 +225,7 @@ if (!$secure && REQUIRE_SECURE)
 else
 {
   // verify that the credentials are valid
-  if (checkAdminLogin($validUserGroups))
+  if (checkAdminLogin())
   {
     $action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
 
@@ -291,7 +292,7 @@ function Action_Debug()
 
 // Check to see if admin functions exist.  And if so, determine if the user
 // has access.
-function checkAdminLogin($validUserGroups)
+function checkAdminLogin()
 {
   if (!isset($_REQUEST['username']) || !isset($_REQUEST['password']))
   {
@@ -311,22 +312,17 @@ function checkAdminLogin($validUserGroups)
     return false;
   }
 
-  if (ONLY_AUTHENTICATE_VALID_USER_GROUPS) 
+  if (REQUIRE_ADMIN) 
   {
     $user = JUser::getInstance(JUserHelper::getUserID($_REQUEST['username']));
-    $groups = $user->getAuthorisedGroups();
 
-    foreach ($groups as $group) 
+    if(!$user->authorise('core.admin')) 
     {
-      if (in_array($group, $validUserGroups)) 
-      {
-        return true;
-      }
+      XmlOutput::outputError(50, "Username or password is incorrect");
+      return false;
     }
-
-    XmlOutput::outputError(50, "Username or password is incorrect");
-    return false;
   }
+
   return true;
 }
 
