@@ -248,6 +248,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
+        public void LoadOrder_SetsEstimatedDeliveryDateToOrderDate_WhenEstimatedDeliveryDateIsNotValid()
+        {
+            orderDto.orderDate = new DateTime(2001, 01, 01);
+            orderDto.shippingInfo.estimatedDeliveryDate = new DateTime(1600, 01, 01);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(new DateTime(2001, 01, 01), orderEntity.EstimatedDeliveryDate);
+        }
+
+        [Fact]
         public void LoadOrder_SetsEstimatedShipDateToOrderDate_WhenEstimatedShipDateIsNotValid()
         {
             orderDto.orderDate = new DateTime(2001, 01, 01);
