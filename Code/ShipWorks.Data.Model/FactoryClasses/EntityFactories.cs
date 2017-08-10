@@ -999,6 +999,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty EtsyOrderItemEntity objects.</summary>
+	[Serializable]
+	public partial class EtsyOrderItemEntityFactory : EntityFactoryBase2<EtsyOrderItemEntity> {
+		/// <summary>CTor</summary>
+		public EtsyOrderItemEntityFactory() : base("EtsyOrderItemEntity", ShipWorks.Data.Model.EntityType.EtsyOrderItemEntity, true) { }
+		
+		/// <summary>Creates a new EtsyOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new EtsyOrderItemEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty EtsyStoreEntity objects.</summary>
 	[Serializable]
 	public partial class EtsyStoreEntityFactory : EntityFactoryBase2<EtsyStoreEntity> {
@@ -3965,6 +3985,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					factoryToUse = new EtsyOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.EtsyOrderItemEntity:
+					factoryToUse = new EtsyOrderItemEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					factoryToUse = new EtsyStoreEntityFactory();

@@ -1,0 +1,79 @@
+﻿///////////////////////////////////////////////////////////////
+// This is generated code.
+//////////////////////////////////////////////////////////////
+// Code is generated using LLBLGen Pro version: 5.0
+// Code is generated on: 
+// Code is generated using templates: ShipWorks
+// Templates vendor: Solutions Design.
+// Templates version: 
+//////////////////////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
+
+namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
+{
+    /// <summary>
+    /// Read-only representation of the entity 'EtsyOrderItem'. <br/><br/>
+    /// 
+    /// </summary>
+    [Serializable]
+    public partial class ReadOnlyEtsyOrderItemEntity : ReadOnlyOrderItemEntity, IEtsyOrderItemEntity
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal ReadOnlyEtsyOrderItemEntity(IEtsyOrderItemEntity source, IDictionary<object, object> objectMap) : base(source, objectMap)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
+
+            if (objectMap.ContainsKey(source) && objectMap[source] == null)
+            {
+                objectMap[source] = this;
+            }
+            
+            ListingID = source.ListingID;
+            TransactionID = source.TransactionID;
+            
+            
+            
+
+            CopyCustomEtsyOrderItemData(source);
+        }
+
+        
+        /// <summary> The ListingID property of the Entity EtsyOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EtsyOrderItem"."ListingID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 ListingID { get; }
+        /// <summary> The TransactionID property of the Entity EtsyOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EtsyOrderItem"."TransactionID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 TransactionID { get; }
+        
+        
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public new IEtsyOrderItemEntity AsReadOnly() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public new IEtsyOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        /// <summary>
+        /// Copy any custom data
+        /// </summary>
+        partial void CopyCustomEtsyOrderItemData(IEtsyOrderItemEntity source);
+    }
+}

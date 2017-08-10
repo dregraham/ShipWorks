@@ -65,6 +65,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "EndiciaScanFormEntity": return EntityType.EndiciaScanFormEntity;
 				case "EndiciaShipmentEntity": return EntityType.EndiciaShipmentEntity;
 				case "EtsyOrderEntity": return EntityType.EtsyOrderEntity;
+				case "EtsyOrderItemEntity": return EntityType.EtsyOrderItemEntity;
 				case "EtsyStoreEntity": return EntityType.EtsyStoreEntity;
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
@@ -269,6 +270,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.EbayOrderItemEntity: return new EbayOrderItemRelations();
 				case EntityType.EbayStoreEntity: return new EbayStoreRelations();
 				case EntityType.EtsyOrderEntity: return new EtsyOrderRelations();
+				case EntityType.EtsyOrderItemEntity: return new EtsyOrderItemRelations();
 				case EntityType.EtsyStoreEntity: return new EtsyStoreRelations();
 				case EntityType.GenericFileStoreEntity: return new GenericFileStoreRelations();
 				case EntityType.GenericModuleStoreEntity: return new GenericModuleStoreRelations();

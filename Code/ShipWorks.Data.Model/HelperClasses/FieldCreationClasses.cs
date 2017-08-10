@@ -6199,6 +6199,116 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity EtsyOrderItemEntity</summary>
+	public partial class EtsyOrderItemFields
+	{
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.ListingID field instance</summary>
+		public static EntityField2 ListingID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.ListingID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.TransactionID field instance</summary>
+		public static EntityField2 TransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.TransactionID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity EtsyStoreEntity</summary>
 	public partial class EtsyStoreFields
 	{

@@ -13,7 +13,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using System.Text;
 using log4net;
 using Newtonsoft.Json.Linq;
 using Interapptive.Shared.Net;
@@ -473,22 +472,20 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private void LoadItem(OrderEntity order, JToken transaction)
         {
-            OrderItemEntity item = InstantiateOrderItem(order);
+            EtsyOrderItemEntity item = (EtsyOrderItemEntity) InstantiateOrderItem(order);
 
             item.Name = transaction.GetValue("title", "");
-            item.Code = transaction.GetValue("transaction_id", "");
-            item.SKU = transaction.GetValue("product_id", "");
+            int productId = transaction["product_data"].GetValue("product_id", 0);
+            item.ListingID = transaction.GetValue("listing_id", 0);
 
-            var productId = transaction["product_data"].GetValue("product_id", string.Empty);
-            var transactionId = transaction.GetValue("listing_id", string.Empty);
-
-            if (!string.IsNullOrEmpty(productId) && !string.IsNullOrEmpty(transactionId))
+            if (productId != null && item.ListingID != null)
             {
-                var product = webClient.GetProduct(transactionId, productId);
-                item.SKU = product.GetValue("sku", string.Empty);
+                JToken product = webClient.GetProduct(item.ListingID, productId);
+                item.SKU = product["results"].GetValue("sku", string.Empty);
+                item.Code = item.SKU;
             }
-
-            item.UPC = transactionId;
+            
+            item.TransactionID = transaction.GetValue("transaction_id", 0);
             item.Quantity = transaction.GetValue("quantity", 0);
             item.UnitPrice = transaction.GetValue("price", 0m);
 

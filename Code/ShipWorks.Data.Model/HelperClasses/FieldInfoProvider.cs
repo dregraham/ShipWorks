@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (186 + 0));
+			this.InitClass( (187 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -95,6 +95,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitEndiciaScanFormEntityInfos();
 			InitEndiciaShipmentEntityInfos();
 			InitEtsyOrderEntityInfos();
+			InitEtsyOrderItemEntityInfos();
 			InitEtsyStoreEntityInfos();
 			InitExcludedPackageTypeEntityInfos();
 			InitExcludedServiceTypeEntityInfos();
@@ -942,6 +943,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EtsyOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)EtsyOrderFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("EtsyOrderEntity", "WasPaid", typeof(System.Boolean), false, false, false, false,  (int)EtsyOrderFieldIndex.WasPaid, 0, 0, 0);
 			this.AddElementFieldInfo("EtsyOrderEntity", "WasShipped", typeof(System.Boolean), false, false, false, false,  (int)EtsyOrderFieldIndex.WasShipped, 0, 0, 0);
+		}
+		/// <summary>Inits EtsyOrderItemEntity's FieldInfo objects</summary>
+		private void InitEtsyOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(EtsyOrderItemFieldIndex), "EtsyOrderItemEntity");
+			this.AddElementFieldInfo("EtsyOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)EtsyOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("EtsyOrderItemEntity", "ListingID", typeof(System.Int32), false, false, false, false,  (int)EtsyOrderItemFieldIndex.ListingID, 0, 0, 10);
+			this.AddElementFieldInfo("EtsyOrderItemEntity", "TransactionID", typeof(System.Int32), false, false, false, false,  (int)EtsyOrderItemFieldIndex.TransactionID, 0, 0, 10);
 		}
 		/// <summary>Inits EtsyStoreEntity's FieldInfo objects</summary>
 		private void InitEtsyStoreEntityInfos()

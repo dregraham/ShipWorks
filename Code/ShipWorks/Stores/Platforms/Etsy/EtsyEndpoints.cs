@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Given a listing and product id, return the Product URL 
         /// </summary>
-        public static Uri GetProductUrl(string listingID, string productID)
+        public static Uri GetProductUrl(int listingID, int productID)
         {
             return new Uri($"{etsyURL}listings/{listingID}/products/{productID}");
         }

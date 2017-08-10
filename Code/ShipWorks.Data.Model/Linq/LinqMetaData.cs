@@ -197,6 +197,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					toReturn = this.EtsyOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.EtsyOrderItemEntity:
+					toReturn = this.EtsyOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
 					break;
@@ -904,6 +907,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<EtsyOrderEntity> EtsyOrder
 		{
 			get { return new DataSource2<EtsyOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting EtsyOrderItemEntity instances in the database.</summary>
+		public DataSource2<EtsyOrderItemEntity> EtsyOrderItem
+		{
+			get { return new DataSource2<EtsyOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting EtsyStoreEntity instances in the database.</summary>

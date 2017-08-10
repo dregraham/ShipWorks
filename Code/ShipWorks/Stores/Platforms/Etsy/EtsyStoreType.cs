@@ -21,6 +21,7 @@ using ShipWorks.Stores.Platforms.Etsy.Enums;
 using System.Linq;
 using Autofac;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -38,6 +39,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             EtsyOrderEntity.SetEffectiveOnlineStatusAlgorithm(e => EtsyOrderStatusUtility.UpdateEntityOrderStatus(e));
         }
+
+
 
         /// <summary>
         /// Constructor
@@ -63,6 +66,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
+        /// Creates a store-specific instance of an OrderItemEntity
+        /// </summary>
+        public override OrderItemEntity CreateOrderItemInstance()
+        {
+            return new EtsyOrderItemEntity();
+        }
+
+        /// <summary>
         /// Creates a new instance of an Etsy store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
@@ -72,6 +83,18 @@ namespace ShipWorks.Stores.Platforms.Etsy
             InitializeStoreDefaults(etsyStore);
 
             return etsyStore;
+        }
+
+        /// <summary>
+        /// Create the customer Order Item Xml for the order item provided
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            var item = new Lazy<EtsyOrderItemEntity>(() => (EtsyOrderItemEntity) itemSource());
+
+            ElementOutline outline = container.AddElement("Etsy");
+            outline.AddElement("TransactionID", () => item.Value.TransactionID.ToString());
+            outline.AddElement("ListingID", () => item.Value.ListingID.ToString());
         }
 
         /// <summary>

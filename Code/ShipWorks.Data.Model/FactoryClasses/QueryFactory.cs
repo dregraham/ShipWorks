@@ -376,6 +376,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<EtsyOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the EtsyOrderItem entity</summary>
+		public EntityQuery<EtsyOrderItemEntity> EtsyOrderItem
+		{
+			get { return Create<EtsyOrderItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the EtsyStore entity</summary>
 		public EntityQuery<EtsyStoreEntity> EtsyStore
 		{
