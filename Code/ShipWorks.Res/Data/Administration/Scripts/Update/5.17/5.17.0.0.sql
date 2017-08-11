@@ -1,4 +1,5 @@
-﻿PRINT N'Creating table to [dbo].[EtsyOrderItem]'
+﻿
+PRINT N'Creating table to [dbo].[EtsyOrderItem]'
 GO
 CREATE TABLE [dbo].[EtsyOrderItem](
 	[OrderItemID] [bigint] NOT NULL,
@@ -20,7 +21,15 @@ GO
 
 INSERT INTO [dbo].[EtsyOrderItem] 
 		  ([OrderItemID], [TransactionID], [ListingID])
-SELECT [OrderItemID], [Code], [SKU] FROM [dbo].[OrderItem] 
+SELECT [OrderItemID], [Code]=(CASE
+when ISNUMERIC([Code]) <> 0 then [Code]
+when ISNUMERIC([Code]) <> 1 then '' 
+END),  
+[SKU]= (CASE
+when ISNUMERIC([SKU]) <> 0 then [SKU]
+when ISNUMERIC([SKU]) <> 1 then '' 
+END)
+FROM [dbo].[OrderItem] 
 INNER JOIN [Order] ON [Order].[OrderID] = [OrderItem].[OrderID]
 INNER JOIN [Store] ON [Store].[StoreID] = [Order].[StoreID]
 WHERE [TypeCode] = 33
