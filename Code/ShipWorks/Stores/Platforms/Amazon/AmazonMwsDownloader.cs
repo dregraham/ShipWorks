@@ -25,8 +25,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Order downloader for Amazon MWS
     /// </summary>
-    [Component]
-    public class AmazonMwsDownloader : StoreDownloader, IAmazonMwsDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amazon)]
+    public class AmazonMwsDownloader : StoreDownloader, IStoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
 

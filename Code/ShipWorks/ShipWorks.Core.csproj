@@ -1349,8 +1349,6 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
-    <Compile Include="Stores\Platforms\Amazon\IAmazonLegacyDownloader.cs" />
-    <Compile Include="Stores\Platforms\Amazon\IAmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
@@ -4201,33 +4199,9 @@
     </Compile>
     <Compile Include="Stores\InitialDownloadPolicy.cs" />
     <Compile Include="Stores\InitialDownloadRestrictionType.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.Designer.cs">
-      <DependentUpon>AmazonImportInventoryControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Actions\AmazonShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Grid\GridAmazonOrderDisplayType.cs" />
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.Designer.cs">
-      <DependentUpon>AmazonCertificatePage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.Designer.cs">
-      <DependentUpon>AmazonCredentialsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.Designer.cs">
-      <DependentUpon>AmazonInventoryPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5549,46 +5523,11 @@
     <Compile Include="Stores\Management\ManualOrderSettingsControl.Designer.cs">
       <DependentUpon>ManualOrderSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.Designer.cs">
-      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAssociatesWebClient.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.Designer.cs">
-      <DependentUpon>AmazonCertificateImportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonDownloader.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonEnsClient.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonException.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonFeedClient.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonAsin.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonItemDetail.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderIdentifier.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.Designer.cs">
-      <DependentUpon>AmazonStoreSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonWeights.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonWSESecurity.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.Designer.cs">
-      <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeAttachment.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeInjectionStream.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeWebRequest.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\SellerCentralDimeService.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
@@ -8874,18 +8813,6 @@
     <EmbeddedResource Include="Stores\Content\EditPaymentDetailDlg.resx">
       <DependentUpon>EditPaymentDetailDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.resx">
-      <DependentUpon>AmazonImportInventoryControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.resx">
-      <DependentUpon>AmazonCertificatePage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.resx">
-      <DependentUpon>AmazonCredentialsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.resx">
-      <DependentUpon>AmazonInventoryPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\AmeriCommerce\AmeriCommerceAccountSettingsControl.resx">
       <DependentUpon>AmeriCommerceAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -9580,18 +9507,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ManualOrderSettingsControl.resx">
       <DependentUpon>ManualOrderSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.resx">
-      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.resx">
-      <DependentUpon>AmazonCertificateImportForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.resx">
-      <DependentUpon>AmazonStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.resx">
-      <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>

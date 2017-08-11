@@ -109,19 +109,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public async Task UploadShipmentDetails(AmazonStoreEntity store, List<ShipmentEntity> shipments)
         {
-            if (store.AmazonApi == (int) AmazonApi.LegacySoap)
+            // upload the feed using the MWS API
+            using (AmazonMwsClient client = createMwsClient(store))
             {
-                AmazonFeedClient feedClient = new AmazonFeedClient(store);
-                //await feedClient.SubmitFulfillmentFeed(shipments).ConfigureAwait(false);
-            }
-            else
-            {
-                // upload the feed using the MWS API
-                using (AmazonMwsClient client = createMwsClient(store))
-                {
-                    var uploadDetails = await CreateUploadDetails(shipments).ConfigureAwait(false);
-                    await client.UploadShipmentDetails(uploadDetails).ConfigureAwait(false);
-                }
+                var uploadDetails = await CreateUploadDetails(shipments).ConfigureAwait(false);
+                await client.UploadShipmentDetails(uploadDetails).ConfigureAwait(false);
             }
         }
 

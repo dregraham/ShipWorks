@@ -9,7 +9,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -81,39 +80,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Creates the usercontrol that sits in the Store Settings section of the Store Management
         /// window
         /// </summary>
-        public override StoreSettingsControlBase CreateStoreSettingsControl()
-        {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
-            {
-                // MWS doesn't have any store settings to configure
-                return new AmazonMwsStoreSettingsControl();
-            }
-            else
-            {
-                // Legacy has Weights to configure (and inventory to import)
-                return new AmazonStoreSettingsControl();
-            }
-        }
+        public override StoreSettingsControlBase CreateStoreSettingsControl() =>
+            new AmazonMwsStoreSettingsControl();
 
         /// <summary>
         /// Create the account settings control
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
-            {
-                return new AmazonMwsAccountSettingsControl();
-            }
-            else
-            {
-                // legacy
-                return new AmazonAccountSettingsControl();
-            }
-        }
+        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+            new AmazonMwsAccountSettingsControl();
 
         /// <summary>
         /// Create the collection of setup wizard pages for configuring the integration
@@ -121,29 +95,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            // show the old signup for as long as possible, 10/10/2011
-            // if after 10/10/2011, someone needs to signup that has used the old api in the month before, allow it via magic keys
-            bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10, 10) && !InterapptiveOnly.MagicKeysDown) ||
-                                (InterapptiveOnly.MagicKeysDown && DateTime.UtcNow >= new DateTime(2011, 10, 10));
-
-            if (showLegacy)
+            return new List<WizardPage>()
             {
-                return new List<WizardPage>()
-                {
-                    new AmazonCredentialsPage(),
-                    new AmazonCertificatePage(),
-                    new AmazonInventoryPage()
-                };
-            }
-            else
-            {
-                return new List<WizardPage>()
-                {
-                    new AmazonMwsCountryPage(),
-                    new AmazonMwsPage(),
-                    new AmazonMwsDownloadCriteriaPage()
-                };
-            }
+                new AmazonMwsCountryPage(),
+                new AmazonMwsPage(),
+                new AmazonMwsDownloadCriteriaPage()
+            };
         }
 
         /// <summary>
@@ -413,19 +370,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            // Amazon MWS has last modified and status fields
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
+            if (column == OnlineGridColumnSupport.LastModified)
             {
-                if (column == OnlineGridColumnSupport.LastModified)
-                {
-                    return true;
-                }
-                else if (column == OnlineGridColumnSupport.OnlineStatus)
-                {
-                    return true;
-                }
+                return true;
+            }
+
+            if (column == OnlineGridColumnSupport.OnlineStatus)
+            {
+                return true;
             }
 
             return base.GridOnlineColumnSupported(column);
@@ -434,21 +386,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Get the initial download policy of amazon
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
 
         /// <summary>
         /// Creates the custom OrderItem entity.
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            return new AmazonOrderItemEntity();
-        }
+        public override OrderItemEntity CreateOrderItemInstance() =>
+            new AmazonOrderItemEntity();
 
         /// <summary>
         /// Generate the template XML output for the given order
