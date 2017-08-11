@@ -99,6 +99,10 @@
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
@@ -185,6 +189,13 @@
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\IDataAccess.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\IItemLoader.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\ShipmentDetailsUpdaterClient.cs" />
+    <Compile Include="Platforms\BuyDotCom\FtpClientFactory.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\DataAccess.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\ShipmentUpload.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\ShipmentUploadOrder.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />

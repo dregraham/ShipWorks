@@ -345,6 +345,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Commission", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ItemFee", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -456,6 +458,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Decimal)GetValue((int)BuyDotComOrderItemFieldIndex.ItemFee, true); }
 			set	{ SetValue((int)BuyDotComOrderItemFieldIndex.ItemFee, value); }
+		}
+
+		/// <summary> The OriginalOrderID property of the Entity BuyDotComOrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."OriginalOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OriginalOrderID
+		{
+			get { return (System.Int64)GetValue((int)BuyDotComOrderItemFieldIndex.OriginalOrderID, true); }
+			set	{ SetValue((int)BuyDotComOrderItemFieldIndex.OriginalOrderID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

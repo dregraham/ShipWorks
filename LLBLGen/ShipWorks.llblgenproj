@@ -416,6 +416,7 @@
           <Field Name="Commission" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
           <Field Name="ItemFee" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="ListingID" Type="int" FieldIndex="1" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="6" />
           <Field Name="ReceiptItemID" Type="long" FieldIndex="0" />
           <Field Name="Shipping" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
           <Field Name="Tax" Type="decimal" Precision="19" Scale="4" FieldIndex="3" />
@@ -3989,7 +3990,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-10T17:06:30.586545Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-11T19:52:44.0740251Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4362,6 +4363,7 @@
                     <Field Name="Tax" Ordinal="5" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Commission" Ordinal="6" DbType="9" Precision="19" Scale="4" />
                     <Field Name="ItemFee" Ordinal="7" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="OriginalOrderID" Ordinal="8" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BuyDotComStore">
@@ -9933,6 +9935,7 @@
             <FieldMapping FieldName="ItemFee" TargetFieldName="ItemFee" />
             <FieldMapping FieldName="ListingID" TargetFieldName="ListingID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="ReceiptItemID" TargetFieldName="ReceiptItemID" />
             <FieldMapping FieldName="Shipping" TargetFieldName="Shipping" />
             <FieldMapping FieldName="Tax" TargetFieldName="Tax" />

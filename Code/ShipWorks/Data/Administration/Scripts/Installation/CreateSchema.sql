@@ -1321,12 +1321,15 @@ CREATE TABLE [dbo].[BuyDotComOrderItem]
 [Shipping] [money] NOT NULL,
 [Tax] [money] NOT NULL,
 [Commission] [money] NOT NULL,
-[ItemFee] [money] NOT NULL
+[ItemFee] [money] NOT NULL,
+[OriginalOrderID] BIGINT NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BuyDotComOrderItem] on [dbo].[BuyDotComOrderItem]'
 GO
 ALTER TABLE [dbo].[BuyDotComOrderItem] ADD CONSTRAINT [PK_BuyDotComOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+CREATE NONCLUSTERED INDEX [IX_BuyDotComOrderItem_OriginalOrderID] ON [dbo].[BuyDotComOrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrder]'
 GO

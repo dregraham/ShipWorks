@@ -794,9 +794,6 @@ namespace ShipWorks.Shipping
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
 
-                    // Get the ShipmentType instance
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
                     // Ensure the carrier specific data has been loaded in case the shipment type needs it for voiding
                     EnsureShipmentLoaded(shipment);
 

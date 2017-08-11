@@ -1,4 +1,5 @@
 ﻿
+
 PRINT N'Altering [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD
@@ -418,6 +419,18 @@ GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] DROP CONSTRAINT [DF_BigCommerceOrderItem_OriginalOrderID]
 GO
 CREATE NONCLUSTERED INDEX [IX_BigCommerceOrderItem_OriginalOrderID] ON [dbo].[BigCommerceOrderItem] ([OriginalOrderID] ASC)
+GO
+PRINT N'Adding OriginalOrderID to [dbo].[BuyDotComOrderItem]'
+GO
+ALTER TABLE [dbo].[BuyDotComOrderItem] ADD [OriginalOrderID] BIGINT NOT NULL CONSTRAINT [DF_BuyDotComOrderItem_OriginalOrderID] DEFAULT ((0))
+GO
+UPDATE [dbo].[BuyDotComOrderItem] SET OriginalOrderID = OrderID
+	FROM [dbo].[BuyDotComOrderItem]
+		INNER JOIN [dbo].[OrderItem] ON [dbo].[BuyDotComOrderItem].[OrderItemID] = [dbo].[OrderItem].[OrderItemID]
+GO
+ALTER TABLE [dbo].[BuyDotComOrderItem] DROP CONSTRAINT [DF_BuyDotComOrderItem_OriginalOrderID]
+GO
+CREATE NONCLUSTERED INDEX [IX_BuyDotComOrderItem_OriginalOrderID] ON [dbo].[BuyDotComOrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Adding OriginalOrderID to [dbo].[EbayOrderItem]'
 GO

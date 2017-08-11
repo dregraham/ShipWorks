@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Tax = source.Tax;
             Commission = source.Commission;
             ItemFee = source.ItemFee;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             
@@ -86,6 +87,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal ItemFee { get; }
+        /// <summary> The OriginalOrderID property of the Entity BuyDotComOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "BuyDotComOrderItem"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         

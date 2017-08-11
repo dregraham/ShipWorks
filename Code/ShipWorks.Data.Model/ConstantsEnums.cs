@@ -980,6 +980,8 @@ namespace ShipWorks.Data.Model
 		Commission,
 		///<summary>ItemFee. </summary>
 		ItemFee,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

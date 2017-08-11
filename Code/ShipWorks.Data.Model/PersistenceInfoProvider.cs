@@ -577,7 +577,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits BuyDotComOrderItemEntity's mappings</summary>
 		private void InitBuyDotComOrderItemEntityMappings()
 		{
-			this.AddElementMapping("BuyDotComOrderItemEntity", @"ShipWorksLocal", @"dbo", "BuyDotComOrderItem", 7, 0);
+			this.AddElementMapping("BuyDotComOrderItemEntity", @"ShipWorksLocal", @"dbo", "BuyDotComOrderItem", 8, 0);
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "ReceiptItemID", "ReceiptItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "ListingID", "ListingID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -585,6 +585,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "Tax", "Tax", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "Commission", "Commission", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "ItemFee", "ItemFee", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("BuyDotComOrderItemEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 7);
 		}
 
 		/// <summary>Inits BuyDotComStoreEntity's mappings</summary>

@@ -8,6 +8,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AmazonApi
     {
-        MarketplaceWebService
+        MarketplaceWebService = 1
     }
 }

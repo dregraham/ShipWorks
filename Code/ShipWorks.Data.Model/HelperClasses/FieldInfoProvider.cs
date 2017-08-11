@@ -569,6 +569,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Tax", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Tax, 0, 4, 19);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Commission", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Commission, 0, 4, 19);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "ItemFee", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.ItemFee, 0, 4, 19);
+			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits BuyDotComStoreEntity's FieldInfo objects</summary>
 		private void InitBuyDotComStoreEntityInfos()

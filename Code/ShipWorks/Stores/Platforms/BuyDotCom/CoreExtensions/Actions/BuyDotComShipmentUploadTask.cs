@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.BuyDotCom;
-using log4net;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
 {
@@ -26,24 +26,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         /// <summary>
         /// This task is for shipments
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload the tracking number for:";
-            }
-        }
+        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         /// Instantiates the editor for the action
@@ -52,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         {
             return new BasicShipmentUploadTaskEditor();
         }
+
+        /// <summary>
+        /// Is this an async action
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
@@ -70,9 +63,9 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
-            if (context==null)
+            if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
@@ -101,19 +94,22 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UploadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UploadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private void UploadShipmentDetails(BuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UploadShipmentDetails(BuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                BuyDotComOnlineUpdater updater = new BuyDotComOnlineUpdater(store);
-                updater.UploadShipmentDetails(shipmentKeys);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var updater = lifetimeScope.Resolve<IShipmentDetailsUpdater>();
+                    await updater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
+                }
             }
             catch (BuyDotComException ex)
             {

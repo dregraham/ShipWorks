@@ -1729,6 +1729,9 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IFtpClient.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IFtpClientFactory.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3411,7 +3414,6 @@
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComDownloader.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComException.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComFtpClient.cs" />
-    <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOrderImportSchema.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOrderLoader.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComStoreType.cs" />
