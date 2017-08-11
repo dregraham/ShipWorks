@@ -27,6 +27,7 @@ using ShipWorks.Editions.Freemium;
 using ShipWorks.Email;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard
 {
@@ -395,7 +396,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     if (signoff.CompareTo(online.Version) < 0)
                     {
                         panel.BeginInvoke((MethodInvoker<DashboardOnlineVersionItem>) CheckShipWorksVersionComplete,
-                            new DashboardOnlineVersionItem(online));
+                            new DashboardOnlineVersionItem(online, IoC.UnsafeGlobalLifetimeScope.Resolve<IUserSession>()));
                     }
                 }
             }

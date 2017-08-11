@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Properties;
 using System.Reflection;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -13,13 +14,15 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     class DashboardOnlineVersionItem : DashboardItem
     {
         ShipWorksOnlineVersion online;
+        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DashboardOnlineVersionItem(ShipWorksOnlineVersion online)
+        public DashboardOnlineVersionItem(ShipWorksOnlineVersion online, IUserSession userSession)
         {
             this.online = online;
+            this.userSession = userSession;
         }
 
         /// <summary>
@@ -45,10 +48,18 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 
             dashboardBar.Image = Resources.box_software;
             dashboardBar.SecondaryText = "is now available.";
+            
+            List<DashboardAction> dashboardActions = new List<DashboardAction>
+            {
+                new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
+            };
 
-            DashboardBar.ApplyActions(new List<DashboardAction> {
-                        new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl),
-                        new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl ) });
+            if (userSession.User.IsAdmin)
+            {
+                dashboardActions.Add(new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl));
+            }
+            
+            DashboardBar.ApplyActions(dashboardActions);
 
             UpdateVersionDisplay();
         }
