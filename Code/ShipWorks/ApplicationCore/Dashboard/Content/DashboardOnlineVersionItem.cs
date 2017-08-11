@@ -52,7 +52,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             {
                 if (lifetimeScope.Resolve<IUserSession>().User.IsAdmin)
                 {
-                    DashboardBar.ApplyActions(new List<DashboardAction>
+                    DashboardBar.ApplyActions(new[]
                     {
                         new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl),
                         new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
