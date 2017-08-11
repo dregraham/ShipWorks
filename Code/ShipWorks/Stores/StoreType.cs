@@ -209,35 +209,7 @@ namespace ShipWorks.Stores
 
             return null;
         }
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        /// <typeparam name="TResult">Return type of the selectExpression</typeparam>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        /// <param name="searchTableName">Name of the table, i.e. "OrderSearch"</param>
-        /// <param name="predicate">Where clause predicate, i.e. OrderSearchFields.OrderID == order.OrderID</param>
-        /// <param name="selectExpression">What to return, i.e. , () => OrderSearchFields.OrderNumber.ToValue<long>()</param>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<TResult>> GetCombinedOnlineOrderIdentifiers<TResult>(
-                                                            OrderEntity order,
-                                                            string searchTableName,
-                                                            IPredicate predicate,
-                                                            Expression<Func<TResult>> selectExpression)
-        {
-            QueryFactory factory = new QueryFactory();
-            var query = factory.Create(searchTableName)
-                .Select(selectExpression)
-                .Where(predicate);
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
-                {
-                    return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-                }
-            }
-        }
+        
 
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard

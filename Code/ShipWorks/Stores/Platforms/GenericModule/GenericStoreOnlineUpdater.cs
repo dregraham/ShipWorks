@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 return;
             }
 
-            OrderEntity order = shipment.Order;
+            OrderEntity order = shipment.Order ?? (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
 
             if (!order.IsManual)
             {

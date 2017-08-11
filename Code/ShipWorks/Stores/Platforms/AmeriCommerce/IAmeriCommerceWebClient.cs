@@ -72,12 +72,6 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         double GetWeightInPounds(decimal weight, int weightUnitId);
 
         /// <summary>
-        /// Get the order identifier(s) for the given order.  Multiple will be returned in the case of
-        /// combined orders.
-        /// </summary>
-        Task<IEnumerable<int>> GetOrderIdentifiers(OrderEntity order);
-
-        /// <summary>
         /// Update the online status of the specified order
         /// </summary>
         Task UpdateOrderStatus(OrderEntity order, int statusCode);

@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
 {
@@ -46,9 +47,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Runs this upload task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -74,21 +80,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        private void UpdloadShipmentDetails(OdbcStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UpdloadShipmentDetails(OdbcStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     IOdbcUploader uploader = scope.Resolve<IOdbcUploader>();
-                    uploader.UploadShipments(store, shipmentKeys);
+                    await uploader.UploadShipments(store, shipmentKeys).ConfigureAwait(false);
                 }
             }
             catch (ShipWorksOdbcException ex)

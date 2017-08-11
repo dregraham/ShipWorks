@@ -185,7 +185,7 @@
     <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
-    <Compile Include="Platforms\StoreTypeTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberCompleteSearchProviderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />

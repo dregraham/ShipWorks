@@ -8,6 +8,8 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -21,40 +23,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
         private readonly IChannelAdvisorRestClient restClient;
         private readonly IEncryptionProvider encryptionProvider;
-        private readonly Func<StoreEntity, IChannelAdvisorStoreType> getStoreType;
+        private ICombineOrderSearchProvider<long> combinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory, 
-            IChannelAdvisorRestClient restClient, Func<StoreEntity, IChannelAdvisorStoreType> getStoreType,
+            IChannelAdvisorRestClient restClient, ICombineOrderSearchProvider<long> combinedOrderSearchProvider,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.soapClientFactory = soapClientFactory;
             this.restClient = restClient;
-            this.getStoreType = getStoreType;
+            this.combinedOrderSearchProvider = combinedOrderSearchProvider;
 
             encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor");
         }
-
-        /// <summary>
-        /// Get the order identifier(s) for the given order.  Multiple will be returned in the case of
-        /// combined orders.
-        /// </summary>
-        public async Task<IEnumerable<int>> GetOrderIdentifiers(IChannelAdvisorStoreType storeType, IOrderEntity order)
-        {
-            return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
-                await storeType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
-                new[] { storeType.GetOnlineOrderIdentifier(order) };
-        }
-
+        
         /// <summary>
         /// Uses the soap or rest interface to update Channel Advisor shipments
         /// </summary>
         public async Task UploadShipmentDetails(ChannelAdvisorStoreEntity store, ChannelAdvisorShipment shipment, IOrderEntity order)
         {
-            IChannelAdvisorStoreType storeType = getStoreType(store);
-            IEnumerable<int> identifiers = await GetOrderIdentifiers(storeType, order).ConfigureAwait(false);
+            IEnumerable<long> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             if (identifiers.Count() == 1 && order.IsManual)
             {
@@ -68,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     if (string.IsNullOrWhiteSpace(store.RefreshToken))
                     {
                         IChannelAdvisorSoapClient soapSoapClient = soapClientFactory(store);
-                        soapSoapClient.UploadShipmentDetails(orderIdentifier, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
+                        soapSoapClient.UploadShipmentDetails((int) orderIdentifier, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
                     }
                     else
                     {

@@ -569,7 +569,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
                 return Result.FromSuccess();
             }
-
+            
             try
             {
                 GenericStoreOnlineUpdater updater = CreateOnlineUpdater();
@@ -661,16 +661,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             return new GenericStoreStatusCodeProvider((GenericModuleStoreEntity) Store);
-        }
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        public async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
-        {
-            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
-                OrderSearchFields.OrderID == order.OrderID, () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
         }
 
         /// <summary>

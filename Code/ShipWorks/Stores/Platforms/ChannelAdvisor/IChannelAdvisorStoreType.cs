@@ -86,16 +86,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Create menu commands for uploading shipment details
         /// </summary>
         IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands();
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        int GetOnlineOrderIdentifier(IOrderEntity order);
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order);
     }
 }

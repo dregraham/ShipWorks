@@ -448,22 +448,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
             }
         }
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        public int GetOnlineOrderIdentifier(IOrderEntity order) => (int) order.OrderNumber;
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        public async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
-        {
-            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity,
-                "OrderSearch",
-                OrderSearchFields.OrderID == order.OrderID,
-                () => OrderSearchFields.OrderNumber.ToValue<int>()).ConfigureAwait(false);
-        }
     }
 }

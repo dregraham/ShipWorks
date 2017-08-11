@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
@@ -16,12 +17,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class StoreTypeTest : IDisposable
+    public class CombineOrderNumberCompleteSearchProviderTest : IDisposable
     {
         private readonly DataContext context;
         private readonly GenericModuleStoreEntity store;
 
-        public StoreTypeTest(DatabaseFixture db)
+        public CombineOrderNumberCompleteSearchProviderTest(DatabaseFixture db)
         {
             DateTime utcNow = new DateTime(2017, 4, 23, 12, 0, 0, DateTimeKind.Utc);
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         [InlineData(0, null)]
         [InlineData(1, "1")]
         [InlineData(2, "1")]
-        public async Task StoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, string expectedFirstResult)
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, string expectedFirstResult)
         {
             var storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>()
                 .Select(x => x.Value)
@@ -52,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             foreach (var storeTypeCode in storeTypeCodes)
             {
                 store.StoreTypeCode = storeTypeCode;
-                StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
+                CombineOrderNumberCompleteSearchProvider searchProvider = new CombineOrderNumberCompleteSearchProvider();
 
                 OrderEntity order = Create.Order(context.Store, context.Customer)
                     .WithOrderNumber(12345)
@@ -60,8 +61,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
                 CreateOrderSearchEntities(order.OrderID, expectedCount);
 
-                var results = await storeType.GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
-                    OrderSearchFields.OrderID == order.OrderID, () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
+                var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
 
                 Assert.Equal(expectedCount, results?.Count());

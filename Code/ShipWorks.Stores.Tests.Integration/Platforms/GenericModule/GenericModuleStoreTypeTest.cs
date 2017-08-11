@@ -6,6 +6,8 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -44,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
         [InlineData(0, null)]
         [InlineData(1, "1")]
         [InlineData(2, "1")]
-        public async Task SGenericModuleStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, string expectedFirstResult)
+        public async Task GenericModuleStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, string expectedFirstResult)
         {
             var storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>()
                 .Select(x => x.Value)
@@ -55,15 +57,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                 store.StoreTypeCode = storeTypeCode;
                 StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
 
+
                 if (storeType is GenericModuleStoreType)
                 {
+                    CombineOrderNumberCompleteSearchProvider searchProvider = new CombineOrderNumberCompleteSearchProvider();
                     IOrderEntity order = Create.Order(context.Store, context.Customer)
                         .WithOrderNumber(12345)
                         .Save();
 
                     CreateOrderSearchEntities(order.OrderID, expectedCount);
 
-                    var results = await ((GenericModuleStoreType) storeType).GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false);
+                    var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
                     Assert.Equal(expectedCount, results?.Count());
                     Assert.Equal(expectedFirstResult, results?.FirstOrDefault());

@@ -143,23 +143,6 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        public int GetOnlineOrderIdentifier(OrderEntity order) => (int) order.OrderNumber;
-
-        /// <summary>
-        /// Gets the online store's order identifier
-        /// </summary>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        public async Task<IEnumerable<int>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
-        {
-            return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, 
-                "OrderSearch", 
-                OrderSearchFields.OrderID == order.OrderID, 
-                () => OrderSearchFields.OrderNumber.ToValue<int>()).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Order identifier/locater
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)

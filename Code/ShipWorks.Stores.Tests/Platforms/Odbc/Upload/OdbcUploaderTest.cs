@@ -10,8 +10,12 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
 using ShipWorks.Stores.Content;
 using Xunit;
+using System.Threading.Tasks;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 #endregion
 
@@ -19,21 +23,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 {
     public class OdbcUploaderTest : IDisposable
     {
-        public OdbcUploaderTest()
-        {
-            mock = AutoMock.GetLoose();
-        }
-
-        public void Dispose()
-        {
-            mock.Dispose();
-        }
-
         private readonly AutoMock mock;
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private Mock<IShippingManager> shippingManager;
         private Mock<IOrderManager> orderManager;
+        private Mock<IStoreTypeManager> storeTypeManager;
+        private Mock<StoreType> storeType;
         private Mock<IOdbcUploadCommandFactory> commandFactory;
+
+        public OdbcUploaderTest()
+        {
+            mock = AutoMock.GetLoose();
+
+            //storeType = mock.Mock<StoreType>();
+            //storeType.Setup(st => (st.GetCombinedOnlineOrderIdentifiers(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<IPredicate>(),
+            //    It.IsAny<Expression<Func<string>>>()))).Returns(Task.FromResult(new string[] { "1" }.AsEnumerable()));
+            //storeType.Setup(st => (st.GetOnlineOrderIdentifier(It.IsAny<OrderEntity>())).Returns(Task.FromResult(new string[] { "1" }.AsEnumerable()));
+
+
+            
+
+            //storeTypeManager = mock.Mock<IStoreTypeManager>();
+            //storeTypeManager.Setup(stm => stm.GetType(It.IsAny<StoreTypeCode>())).Returns(storeType.Object);
+        }
 
         private void SetupOrderManagerToGetLatestActiveShipment()
         {
@@ -61,14 +73,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         }
 
         [Fact]
-        public void UploadLatestShipment_ShipWorksOdbcExceptionThrown_WhenNoRowsAffected()
+        public async Task UploadLatestShipment_ShipWorksOdbcExceptionThrown_WhenNoRowsAffected()
         {
             SetupCommand(0);
             SetupOrderManagerToGetLatestActiveShipment();
 
             OdbcUploader testObject = mock.Create<OdbcUploader>();
 
-            Assert.Throws<ShipWorksOdbcException>(()=>testObject.UploadLatestShipment(new OdbcStoreEntity(), 2));
+            Assert.ThrowsAsync<ShipWorksOdbcException>(async ()=> await testObject.UploadLatestShipment(new OdbcStoreEntity(), 2).ConfigureAwait(false));
         }
 
         [Fact]
@@ -98,17 +110,22 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         }
 
         [Fact]
-        public void UploadShipments_GetsEachShipment()
+        public async Task UploadShipments_GetsEachShipment()
         {
             SetupShippingManagerToGetShipment(new ShipmentEntity());
             SetupCommand(5);
 
             OdbcUploader testObject = mock.Create<OdbcUploader>();
-            testObject.UploadShipments(new OdbcStoreEntity(), new long[] {1, 2});
+            await testObject.UploadShipments(new OdbcStoreEntity(), new long[] {1, 2}).ConfigureAwait(false);
 
             shippingManager.Verify(m => m.GetShipment(1), Times.Once);
             shippingManager.Verify(m => m.GetShipment(2), Times.Once);
             shippingManager.Verify(m => m.GetShipment(It.IsAny<long>()), Times.Exactly(2));
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

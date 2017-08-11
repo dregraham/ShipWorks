@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.AmeriCommerce;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -49,7 +48,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, int expectedFirstResult)
         {
             store.StoreTypeCode = storeTypeCode;
-            storeType = StoreTypeManager.GetType(storeTypeCode) as AmeriCommerceStoreType;
 
             OrderEntity order = Create.Order(context.Store, context.Customer)
                 .WithOrderNumber(12345)
@@ -57,7 +55,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 
             CreateOrderSearchEntities(order.OrderID, expectedCount);
 
-            var results = await storeType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false);
+            CombineOrderNumberSearchProvider searchProvider = new CombineOrderNumberSearchProvider();
+            var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(expectedCount, results?.Count());
             Assert.Equal(expectedFirstResult, results?.FirstOrDefault());

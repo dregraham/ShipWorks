@@ -9,16 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Import.Xml.Schema;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -35,6 +39,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
         // Current schema version
         private Version currentSchemaVersion = new Version("1.1.0");
+
+        private ICombineOrderSearchProvider<string> getCombinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor for using the client to talk to a given store
@@ -144,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
         {
-            IEnumerable<string> identifiers = await GetOrderIdentifiers(order);
+            IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
 
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
@@ -153,14 +159,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Get the order identifier(s) for the given order.  Multiple will be returned in the case of
-        /// combined orders.
+        /// Get the cominbed order identifiers for the given order.
         /// </summary>
-        private async Task<IEnumerable<string>> GetOrderIdentifiers(OrderEntity order)
+        private async Task<IEnumerable<string>> GetCombinedOrderIdentifiers(OrderEntity order)
         {
-            return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
-                await StoreType.GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
-                new[] { StoreType.GetOnlineOrderIdentifier(order) };
+            IEnumerable<string> identifiers;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                getCombinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<string>>(TypedParameter.From(Store.TypeCode));
+                identifiers = await getCombinedOrderSearchProvider.GetOrderIdentifiers(order);
+            }
+            return identifiers;
         }
 
         /// <summary>
@@ -182,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual async Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
         {
-            IEnumerable<string> identifiers = await GetOrderIdentifiers(order);
+            IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
 
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
