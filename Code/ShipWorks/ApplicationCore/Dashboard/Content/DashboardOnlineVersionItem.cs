@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Properties;
 using System.Reflection;
+using Autofac;
 using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -14,15 +15,13 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     class DashboardOnlineVersionItem : DashboardItem
     {
         ShipWorksOnlineVersion online;
-        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DashboardOnlineVersionItem(ShipWorksOnlineVersion online, IUserSession userSession)
+        public DashboardOnlineVersionItem(ShipWorksOnlineVersion online)
         {
             this.online = online;
-            this.userSession = userSession;
         }
 
         /// <summary>
@@ -54,9 +53,12 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
                 new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
             };
 
-            if (userSession.User.IsAdmin)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dashboardActions.Add(new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl));
+                if (lifetimeScope.Resolve<IUserSession>().User.IsAdmin)
+                {
+                    dashboardActions.Add(new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl));
+                }
             }
             
             DashboardBar.ApplyActions(dashboardActions);
