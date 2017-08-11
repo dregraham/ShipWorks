@@ -48,21 +48,18 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             dashboardBar.Image = Resources.box_software;
             dashboardBar.SecondaryText = "is now available.";
             
-            List<DashboardAction> dashboardActions = new List<DashboardAction>
-            {
-                new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
-            };
-
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 if (lifetimeScope.Resolve<IUserSession>().User.IsAdmin)
                 {
-                    dashboardActions.Add(new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl));
+                    DashboardBar.ApplyActions(new List<DashboardAction>
+                    {
+                        new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl),
+                        new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
+                    });
                 }
             }
             
-            DashboardBar.ApplyActions(dashboardActions);
-
             UpdateVersionDisplay();
         }
 
