@@ -2088,6 +2088,8 @@ namespace ShipWorks.Data.Model
 		RollupFeedbackReceivedComments,
 		///<summary>RollupPayPalAddressStatus. </summary>
 		RollupPayPalAddressStatus,
+		///<summary>GuaranteedDelivery. </summary>
+		GuaranteedDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -761,7 +761,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EbayOrderEntity's mappings</summary>
 		private void InitEbayOrderEntityMappings()
 		{
-			this.AddElementMapping("EbayOrderEntity", @"ShipWorksLocal", @"dbo", "EbayOrder", 24, 0);
+			this.AddElementMapping("EbayOrderEntity", @"ShipWorksLocal", @"dbo", "EbayOrder", 25, 0);
 			this.AddElementFieldMapping("EbayOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EbayOrderEntity", "EbayOrderID", "EbayOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EbayOrderEntity", "EbayBuyerID", "EbayBuyerID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -786,6 +786,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayOrderEntity", "RollupFeedbackReceivedType", "RollupFeedbackReceivedType", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 21);
 			this.AddElementFieldMapping("EbayOrderEntity", "RollupFeedbackReceivedComments", "RollupFeedbackReceivedComments", true, "VarChar", 80, 0, 0, false, "", null, typeof(System.String), 22);
 			this.AddElementFieldMapping("EbayOrderEntity", "RollupPayPalAddressStatus", "RollupPayPalAddressStatus", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
+			this.AddElementFieldMapping("EbayOrderEntity", "GuaranteedDelivery", "GuaranteedDelivery", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 24);
 		}
 
 		/// <summary>Inits EbayOrderItemEntity's mappings</summary>

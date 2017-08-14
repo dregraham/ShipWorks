@@ -757,6 +757,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedType, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedComments", typeof(System.String), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, 80, 0, 0);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupPayPalAddressStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupPayPalAddressStatus, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderEntity", "GuaranteedDelivery", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GuaranteedDelivery, 0, 0, 0);
 		}
 		/// <summary>Inits EbayOrderItemEntity's FieldInfo objects</summary>
 		private void InitEbayOrderItemEntityInfos()

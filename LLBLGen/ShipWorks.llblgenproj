@@ -600,6 +600,7 @@
           <Field Name="GspStateProvince" Type="string" MaxLength="128" FieldIndex="11" />
           <Field Name="GspStreet1" Type="string" MaxLength="512" FieldIndex="8" />
           <Field Name="GspStreet2" Type="string" MaxLength="512" FieldIndex="9" />
+          <Field Name="GuaranteedDelivery" Type="bool" FieldIndex="23" />
           <Field Name="RollupEbayItemCount" Type="int" FieldIndex="15" />
           <Field Name="RollupEffectiveCheckoutStatus" Type="int" IsOptional="true" FieldIndex="16" />
           <Field Name="RollupEffectivePaymentMethod" Type="int" IsOptional="true" FieldIndex="17" />
@@ -3721,7 +3722,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-07-21T18:43:37.535759Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-14T15:43:21.2326757Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4377,6 +4378,7 @@
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -9565,6 +9567,7 @@
             <FieldMapping FieldName="GspStateProvince" TargetFieldName="GspStateProvince" />
             <FieldMapping FieldName="GspStreet1" TargetFieldName="GspStreet1" />
             <FieldMapping FieldName="GspStreet2" TargetFieldName="GspStreet2" />
+            <FieldMapping FieldName="GuaranteedDelivery" TargetFieldName="GuaranteedDelivery" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RollupEbayItemCount" TargetFieldName="RollupEbayItemCount" />
             <FieldMapping FieldName="RollupEffectiveCheckoutStatus" TargetFieldName="RollupEffectiveCheckoutStatus" />
