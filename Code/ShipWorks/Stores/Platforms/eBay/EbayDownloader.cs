@@ -684,36 +684,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             #endregion
 
-            #region Insurance
-
-            decimal insuranceTotal = 0;
-
-            // Use insurance
-            if (orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Required ||
-                orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Optional)
-            {
-                if ((orderType.ShippingDetails.InsuranceWanted || orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Required))
-                {
-                    if (orderType.ShippingServiceSelected != null && orderType.ShippingServiceSelected.ShippingInsuranceCost != null)
-                    {
-                        insuranceTotal = (decimal) orderType.ShippingServiceSelected.ShippingInsuranceCost.Value;
-                    }
-                    else if (orderType.ShippingDetails.InsuranceFee != null)
-                    {
-                        insuranceTotal = (decimal) orderType.ShippingDetails.InsuranceFee.Value;
-                    }
-                }
-            }
-
-            OrderChargeEntity insurance = GetCharge(order, "INSURANCE", "Insurance", insuranceTotal != 0);
-
-            if (insurance != null)
-            {
-                insurance.Amount = insuranceTotal;
-            }
-
-            #endregion
-
             #region Sales Tax
 
             decimal salesTax = 0m;
@@ -826,9 +796,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Load variation information
             UpdateTransactionVariationDetail(orderItem, transaction);
 
-            // We can only pull weight for calculated shipping
-            UpdateTransactionWeight(orderItem, transaction);
-
             // SellingManager Pro
             orderItem.SellingManagerRecord = transaction.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? transaction.ShippingDetails.SellingManagerSalesRecordNumber : 0;
 
@@ -895,12 +862,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the weight of the given item based on the detail in the transaction
         /// </summary>
-        private void UpdateTransactionWeight(EbayOrderItemEntity orderItem, TransactionType transaction)
+        private void UpdateWeight(EbayOrderItemEntity orderItem, ItemType item)
         {
-            if (transaction.ShippingDetails.CalculatedShippingRate != null)
+            if (item.ShippingPackageDetails != null)
             {
-                WebServices.MeasureType weightMajor = transaction.ShippingDetails.CalculatedShippingRate.WeightMajor;
-                WebServices.MeasureType weightMinor = transaction.ShippingDetails.CalculatedShippingRate.WeightMinor;
+                WebServices.MeasureType weightMajor = item.ShippingPackageDetails.WeightMajor;
+                WebServices.MeasureType weightMinor = item.ShippingPackageDetails.WeightMinor;
 
                 if (weightMajor != null && weightMinor != null)
                 {
@@ -932,6 +899,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             try
             {
                 ItemType eBayItem = webClient.GetItem(transaction.Item.ItemID);
+
+                UpdateWeight(orderItem, eBayItem);
 
                 PictureDetailsType pictureDetails = eBayItem.PictureDetails;
 
