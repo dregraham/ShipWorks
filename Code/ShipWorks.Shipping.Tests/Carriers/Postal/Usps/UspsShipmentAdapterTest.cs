@@ -289,7 +289,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData(PostalServiceType.FirstClass, PostalConfirmationType.Signature)]
         public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
-            mock.WithShipmentTypeFromShipmentManager(x =>
+            mock.WithShipmentTypeFromShipmentManager<PostalShipmentType>(x =>
             {
                 x.Setup(b => b.SupportsGetRates).Returns(true);
                 x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
@@ -329,7 +329,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void DoesRateMatchSelectedService_ReturnsTrue_WhenServiceAndConfirmationMatches()
         {
-            mock.WithShipmentTypeFromShipmentManager(x =>
+            mock.WithShipmentTypeFromShipmentManager<PostalShipmentType>(x =>
             {
                 x.Setup(b => b.SupportsGetRates).Returns(true);
                 x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
