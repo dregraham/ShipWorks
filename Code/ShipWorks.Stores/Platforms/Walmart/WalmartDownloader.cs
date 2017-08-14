@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
@@ -96,8 +96,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private ordersListType GetFirstBatch()
         {
-            DateTime startTime = GetOrderDateStartingPoint();
-            return walmartWebClient.GetOrders(walmartStore, startTime);
+            DateTime startDate = GetOrderDateStartingPoint();
+            return walmartWebClient.GetOrders(walmartStore, startDate);
         }
 
         /// <summary>
