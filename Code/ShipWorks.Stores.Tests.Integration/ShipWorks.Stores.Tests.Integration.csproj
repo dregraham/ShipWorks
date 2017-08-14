@@ -177,6 +177,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProviderTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />

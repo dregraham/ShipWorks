@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         // Current schema version
         private Version currentSchemaVersion = new Version("1.1.0");
 
-        private ICombineOrderSearchProvider<string> getCombinedOrderSearchProvider;
+        private ICombineOrderSearchProvider<string> combinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor for using the client to talk to a given store
@@ -159,15 +159,24 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Get the cominbed order identifiers for the given order.
+        /// Get the combined order identifiers for the given order.
         /// </summary>
         private async Task<IEnumerable<string>> GetCombinedOrderIdentifiers(OrderEntity order)
         {
             IEnumerable<string> identifiers;
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                getCombinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<string>>(TypedParameter.From(Store.TypeCode));
-                identifiers = await getCombinedOrderSearchProvider.GetOrderIdentifiers(order);
+                // See if there is a store specific implementation of ICombineOrderSearchProvider, and if so, use it
+                if (scope.IsRegisteredWithKey(Store.StoreTypeCode, typeof(ICombineOrderSearchProvider<string>)))
+                {
+                    combinedOrderSearchProvider = scope.ResolveKeyed<ICombineOrderSearchProvider<string>>(Store.StoreTypeCode);
+                }
+                else
+                {
+                    combinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<string>>();
+                }
+
+                identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order);
             }
             return identifiers;
         }

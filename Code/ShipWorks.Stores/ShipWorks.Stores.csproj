@@ -238,6 +238,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOAuthResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorCombineOrderAction.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
