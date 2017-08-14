@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -43,12 +44,35 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         [InlineData(0, null)]
         [InlineData(1, 1)]
         [InlineData(2, 1)]
-        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(int expectedCount, int expectedFirstResult)
+        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsCombined(int expectedCount, int expectedFirstResult)
         {
             store.StoreTypeCode = storeTypeCode;
 
             OrderEntity order = Create.Order(context.Store, context.Customer)
                 .WithOrderNumber(12345)
+                .Set(o => o.CombineSplitStatus, CombineSplitStatusType.Combined)
+                .Save();
+
+            CreateOrderSearchEntities(order.OrderID, expectedCount);
+
+            CombineOrderNumberSearchProvider searchProvider = new CombineOrderNumberSearchProvider();
+            var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+            Assert.Equal(expectedCount, results?.Count());
+            Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+        }
+
+        [Theory]
+        [InlineData(0, 0, null)]
+        [InlineData(1, 1, 1)]
+        [InlineData(2, 1, 1)]
+        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsNotCombined(int numberToCreate, int expectedCount, int expectedFirstResult)
+        {
+            store.StoreTypeCode = storeTypeCode;
+
+            OrderEntity order = Create.Order(context.Store, context.Customer)
+                .WithOrderNumber(12345)
+                .Set(o => o.CombineSplitStatus, CombineSplitStatusType.Combined)
                 .Save();
 
             CreateOrderSearchEntities(order.OrderID, expectedCount);

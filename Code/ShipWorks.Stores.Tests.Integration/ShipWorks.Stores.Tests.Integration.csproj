@@ -178,6 +178,7 @@
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberSearchProviderTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
@@ -186,7 +187,7 @@
     <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
-    <Compile Include="Platforms\CombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />

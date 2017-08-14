@@ -15,13 +15,14 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
     public class CombineOrderNumberSearchProvider : CombineOrderSearchBaseProvider<long>
     {
         /// <summary>
-        /// Gets the online store's order identifier
+        /// Gets the online store's order identifier for orders that are not manual
         /// </summary>
         /// <param name="order">The order for which to find combined order identifiers</param>
         protected override async Task<IEnumerable<long>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
-                OrderSearchFields.OrderID == order.OrderID, () => OrderSearchFields.OrderNumber.ToValue<long>()).ConfigureAwait(false);
+                OrderSearchFields.OrderID == order.OrderID & OrderSearchFields.IsManual == false, 
+                () => OrderSearchFields.OrderNumber.ToValue<long>()).ConfigureAwait(false);
         }
 
         /// <summary>

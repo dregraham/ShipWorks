@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Autofac;
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
     public abstract class CombineOrderSearchBaseProvider<TResult> : ICombineOrderSearchProvider<TResult>
     {
         /// <summary>
-        /// Gets the online store's order identifier
+        /// Gets the online store's order identifiers, returning only those that are not manual orders.
         /// </summary>
         /// <typeparam name="TResult">Return type of the selectExpression</typeparam>
         /// <param name="order">The order for which to find combined order identifiers</param>
@@ -68,7 +69,7 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
         {
             return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
                 await GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
-                new[] { GetOnlineOrderIdentifier(order) };
+                order.IsManual ? Enumerable.Empty<TResult>() : new[] { GetOnlineOrderIdentifier(order) };
         }
     }
 }

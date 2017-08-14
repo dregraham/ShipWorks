@@ -21,7 +21,8 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
         protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
-                OrderSearchFields.OrderID == order.OrderID, () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
+                OrderSearchFields.OrderID == order.OrderID & OrderSearchFields.IsManual == false, 
+                () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -388,6 +388,12 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             IEnumerable<long> identifiers = await cominedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
+            if (identifiers.Count() == 1 && order.IsManual)
+            {
+                log.WarnFormat("Not uploading shipment status since order {0} is manual.", order.OrderID);
+                return;
+            }
+
             foreach (var chunk in identifiers.SplitIntoChunksOf(4))
             {
                 foreach (var orderIdentifier in chunk)
