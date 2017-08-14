@@ -103,6 +103,7 @@
         <Condition identifier="ChannelAdvisorOrder.FlagType" />
         <Condition identifier="ChannelAdvisorOrder.IsPrime" />
         <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
+        <Condition identifier="EbayOrder.GuaranteedDelivery" />
         <Condition identifier="EbayOrder.EbayBuyerID" />
         <Condition identifier="EbayOrder.SellingManagerRecord" />
         <Condition identifier="EbayOrder.SelectedShippingMethod" />
