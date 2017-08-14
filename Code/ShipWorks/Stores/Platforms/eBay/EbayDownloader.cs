@@ -232,6 +232,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
             UpdateOrderAddress(order, orderType.ShippingAddress);
 
+            order.GuaranteedDelivery = orderType.TransactionArray.Any(t => t.GuaranteedDelivery);
+
             // Requested shipping (but only if we actually have an address)
             if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
             {
