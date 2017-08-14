@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;

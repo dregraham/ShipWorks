@@ -6,11 +6,8 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Enums;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
@@ -24,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         private readonly IOrderManager orderManager;
         private readonly IOdbcUploadCommandFactory uploadCommandFactory;
         private readonly ILog log;
-        private readonly OdbcStoreType storeType;
         private readonly ICombineOrderSearchProvider<string> combineOrderSearchProvider;
 
         /// <summary>

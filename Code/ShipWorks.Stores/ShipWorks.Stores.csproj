@@ -156,7 +156,6 @@
     <Compile Include="Content\DefaultOnlineUpdateCommandCreator.cs" />
     <Compile Include="Content\ICombineOrderAudit.cs" />
     <Compile Include="Content\ICombineOrderDialog.cs" />
-    <Compile Include="Content\ICombineOrderSearchProvider.cs" />
     <Compile Include="Content\ICombineOrderSuccessDialog.cs" />
     <Compile Include="Content\ICombineOrderSuccessViewModel.cs" />
     <Compile Include="Content\ICombineOrderAddressComparer.cs" />

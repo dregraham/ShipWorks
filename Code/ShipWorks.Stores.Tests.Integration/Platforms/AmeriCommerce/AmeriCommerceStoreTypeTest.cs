@@ -6,7 +6,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
-using ShipWorks.Stores.Platforms.AmeriCommerce;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -22,7 +21,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         private readonly DataContext context;
         private const StoreTypeCode storeTypeCode = StoreTypeCode.AmeriCommerce;
         private readonly AmeriCommerceStoreEntity store;
-        private AmeriCommerceStoreType storeType;
 
         public AmeriCommerceStoreTypeTest(DatabaseFixture db)
         {

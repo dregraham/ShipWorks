@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
         private readonly IChannelAdvisorRestClient restClient;
         private readonly IEncryptionProvider encryptionProvider;
-        private ICombineOrderSearchProvider<long> combinedOrderSearchProvider;
+        private readonly ICombineOrderSearchProvider<long> combinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor
