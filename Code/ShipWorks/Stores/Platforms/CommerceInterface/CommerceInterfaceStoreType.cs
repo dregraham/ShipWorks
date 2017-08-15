@@ -214,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // unpackage the selected status code
             int selectedCode = (int) userState;
@@ -230,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
                 {
                     // upload
                     CommerceInterfaceOnlineUpdater updater = new CommerceInterfaceOnlineUpdater((GenericModuleStoreEntity) Store);
-                    updater.UploadTrackingNumber(shipment.ShipmentID, selectedCode);
+                    await updater.UploadTrackingNumber(shipment.ShipmentID, selectedCode).ConfigureAwait(false);
                 }
                 catch (GenericStoreException ex)
                 {
