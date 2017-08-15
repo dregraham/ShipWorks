@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -47,9 +48,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
+        /// This ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -67,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
                 LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
                 foreach (long orderID in inputKeys)
                 {
-                    updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                    await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
                 }
             }
             catch (LemonStandException ex)

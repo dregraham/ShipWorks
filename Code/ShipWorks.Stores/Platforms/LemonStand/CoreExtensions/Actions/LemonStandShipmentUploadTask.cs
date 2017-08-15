@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
@@ -40,9 +41,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         ///     Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -68,14 +74,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         ///     Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private static void UpdloadShipmentDetails(LemonStandStoreEntity store, IEnumerable<long> shipmentKeys)
+        private static async Task UpdloadShipmentDetails(LemonStandStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
@@ -85,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 
                     ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    updater.UpdateShipmentDetails(shipment);
+                    await updater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
                 }
             }
             catch (LemonStandException ex)

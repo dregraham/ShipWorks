@@ -323,6 +323,7 @@
     <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCode.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCodes.cs" />
     <Compile Include="Platforms\LemonStand\ILemonStandWebClient.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandException.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdater.cs" />

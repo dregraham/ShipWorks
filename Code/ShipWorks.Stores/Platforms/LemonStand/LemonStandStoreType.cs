@@ -133,14 +133,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState,
+        private async void ShipmentUploadCallback(IEnumerable<long> headers, object userState,
             BackgroundIssueAdder<IEnumerable<long>> issueAdder)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
                 LemonStandOnlineUpdater shipmentUpdater = new LemonStandOnlineUpdater((LemonStandStoreEntity) Store);
-                shipmentUpdater.UpdateShipmentDetails(headers);
+                await shipmentUpdater.UpdateShipmentDetails(headers).ConfigureAwait(false);
             }
             catch (LemonStandException ex)
             {
@@ -417,7 +417,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Worker thread method for updating online order status
         /// </summary>
-        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             log.Debug(Store.StoreName);
 
@@ -425,7 +425,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             try
             {
                 LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater((LemonStandStoreEntity) Store);
-                updater.UpdateOrderStatus(orderID, statusCode);
+                await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
             }
             catch (LemonStandException ex)
             {

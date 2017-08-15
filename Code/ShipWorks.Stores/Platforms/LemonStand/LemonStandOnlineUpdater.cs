@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using log4net;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,6 +9,10 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using System.Threading.Tasks;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -58,10 +62,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Changes the status of an LemonStand order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode)
+        public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, statusCode, unitOfWork);
+            await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -73,20 +77,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Changes the status of an LemonStand order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
             if (order != null)
             {
-                if (order.IsManual)
+                if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
                 {
                     return;
                 }
 
-                LemonStandOrderEntity lemonStandOrder = (LemonStandOrderEntity)order;
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ICombineOrderSearchProvider<string> combinedOrderSearchProvider = scope.ResolveKeyed<ICombineOrderSearchProvider<string>>(StoreTypeCode.LemonStand);
+                    IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-                client.UpdateOrderStatus(lemonStandOrder.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                    foreach (string lemonStandOrderID in identifiers)
+                    {
+                        client.UpdateOrderStatus(lemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                    }
+                }
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
@@ -107,22 +118,30 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public async Task UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             foreach (long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
+                await UpdateShipmentDetails(shipment).ConfigureAwait(false);
+            }
+        }
 
-                // Check to see if shipment exists
-                if (shipment == null)
-                {
-                    log.InfoFormat("Not uploading orderid {0} has no items.", orderKey);
-                    continue;
-                }
+        /// <summary>
+        ///     Push the online status for an shipment.
+        /// </summary>
+        public async Task UpdateShipmentDetails(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-                if (!shipment.Order.IsManual)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ICombineOrderSearchProvider<long> combinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<long>>();
+                IEnumerable<long> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+
+                foreach (long orderNumber in identifiers)
                 {
-                    string shipmentID = GetShipmentID(shipment);
+                    string shipmentID = GetShipmentID(orderNumber);
 
                     client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
                 }
@@ -130,38 +149,21 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Push the online status for an shipment.
-        /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            if (!shipment.Order.IsManual)
-            {
-                string shipmentID = GetShipmentID(shipment);
-
-                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
-            }
-        }
-
-        /// <summary>
         ///     Gets the LemonStand shipment ID as it is required to upload tracking information
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <param name="orderNumber">The Order.OrderNumber.</param>
         /// <returns>LemonStand API Shipment ID</returns>
-        private string GetShipmentID(ShipmentEntity shipmentEntity)
+        private string GetShipmentID(long orderNumber)
         {
-            LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
+            string orderID = orderNumber.ToString();
 
-            string orderID = order.OrderNumber.ToString();
             // use order id to get invoice
             JToken invoice = client.GetOrderInvoice(orderID);
             string invoiceID = invoice.SelectToken("data.invoices.data").Children().First().SelectToken("id").ToString();
 
             // use invoice id to get shipment
             JToken shipment = client.GetShipment(invoiceID);
-            string shipmentID =
-                shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
+            string shipmentID = shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
 
             return shipmentID;
         }
