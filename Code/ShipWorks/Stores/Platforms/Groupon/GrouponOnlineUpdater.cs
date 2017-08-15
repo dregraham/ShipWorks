@@ -92,25 +92,24 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Gets the tracking info to send to groupon
         /// </summary>
+        /// <remarks>
+        /// We're not checking whether the order is manual because it's possible a real order was combined into a manual
+        /// order. In that case, we'd still have legit items to upload. So just try to get GrouponOrderItems for the
+        /// order because manually created orders will only have generic OrderItems.</remarks>
         private async Task<List<GrouponTracking>> GetGrouponTracking(IOrderEntity order, ShipmentEntity shipment)
         {
-            if (order.IsManual)
-            {
-                return new List<GrouponTracking>();
-            }
-
             var loadedShipment = await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
             var orderItems = await FetchOrderItems(order.OrderID).ConfigureAwait(false);
 
             return orderItems.Where(x => !string.IsNullOrEmpty(x.GrouponLineItemID))
-                .Select(x => CreateGrouponTracking(x, shipment))
+                .Select(x => CreateGrouponTracking(x, loadedShipment))
                 .ToList();
         }
 
         /// <summary>
         /// Create a groupon tracking object
         /// </summary>
-        private GrouponTracking CreateGrouponTracking(GrouponOrderItemEntity item, IShipmentEntity shipment)
+        private GrouponTracking CreateGrouponTracking(IGrouponOrderItemEntity item, IShipmentEntity shipment)
         {
             string trackingNumber = shipment.TrackingNumber;
             string carrier = GrouponCarrier.GetCarrierCode(shipment);
@@ -124,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<GrouponOrderItemEntity>> FetchOrderItems(long orderID)
+        private async Task<IEnumerable<IGrouponOrderItemEntity>> FetchOrderItems(long orderID)
         {
             var query = new QueryFactory().GrouponOrderItem
                 .Where(OrderItemFields.OrderID == orderID);
@@ -132,7 +131,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
             // Fetch the order items
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                return await adapter.FetchQueryAsync(query).ConfigureAwait(false) as IEnumerable<GrouponOrderItemEntity>;
+                var items = await adapter.FetchQueryAsync(query).ConfigureAwait(false);
+                return items.OfType<IGrouponOrderItemEntity>();
             }
         }
 

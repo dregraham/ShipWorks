@@ -304,6 +304,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
     <Compile Include="Platforms\GenericFile\GenericFileDownloaderFactory.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponCombineOrderAction.cs" />
+    <Compile Include="Platforms\Groupon\OnlineUpdating\GrouponOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandCombineOrderAction.cs" />
