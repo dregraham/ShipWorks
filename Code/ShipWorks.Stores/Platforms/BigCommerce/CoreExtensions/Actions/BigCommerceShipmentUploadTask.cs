@@ -41,6 +41,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
+        /// This ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the details upload
         /// </summary>
         protected override async Task RunAsync(List<long> inputKeys)
