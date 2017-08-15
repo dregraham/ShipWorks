@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
-using log4net;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Shipping;
-using Interapptive.Shared;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             // Need the buyer and to convert the ShipWorks ebay message type to the
             // type expected by eBay to send an eBay message
-            string buyerID = ((EbayOrderEntity)orderItem.Order).EbayBuyerID;
+            string buyerID = ((EbayOrderEntity) orderItem.Order).EbayBuyerID;
             QuestionTypeCodeType ebayMessageType = EbayUtility.GetEbayQuestionTypeCode(messageType);
 
             try
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             log.InfoFormat("Preparing to leave eBay feedback for entity id {0}", entityID);
 
             // Leave feedback for those that haven't had feedback left for them already
-            foreach (EbayOrderItemEntity orderItem in DetermineEbayItems(entityID).Where(i => i.FeedbackLeftType == (int)EbayFeedbackType.None))
+            foreach (EbayOrderItemEntity orderItem in DetermineEbayItems(entityID).Where(i => i.FeedbackLeftType == (int) EbayFeedbackType.None))
             {
                 LeaveFeedback(orderItem, feedbackType, feedback);
             }
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
 
                 // success, since no exception was raised
-                orderItem.FeedbackLeftType = (int)EbayUtility.GetShipWorksFeedbackType(feedbackType);
+                orderItem.FeedbackLeftType = (int) EbayUtility.GetShipWorksFeedbackType(feedbackType);
                 orderItem.FeedbackLeftComments = feedback;
             }
             catch (EbayException ex)
@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // 834 is the error code for feedback already left
                 if (ex.ErrorCode == "834")
                 {
-                    orderItem.FeedbackLeftType = (int)EbayFeedbackType.Unknown;
+                    orderItem.FeedbackLeftType = (int) EbayFeedbackType.Unknown;
                     orderItem.FeedbackLeftComments = "(unknown)";
 
                     error = string.Format("Unable to leave feedback for Order{0}: Feedback has already been left.", orderItem.Order.OrderNumber);
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // if an error occurred, raise an exception
             if (error.Length > 0)
             {
-                throw new EbayException(error, (Exception)null);
+                throw new EbayException(error, (Exception) null);
             }
         }
 
@@ -238,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // IsManual should actually never be true - instead order will be null, b\c manual orders (at this time) don't have a derived table presence.
             if (order == null || order.IsManual)
             {
-                log.WarnFormat("Not updating online status for order {0} becaue it is manual or was deleted.", orderID);
+                log.WarnFormat("Not updating online status for order {0} because it is manual or was deleted.", orderID);
                 return;
             }
 
@@ -257,7 +257,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // This was a manually added item, we can't update ebay with it so continue on to the next one
                 if (ebayItem.IsManual || ebayItem.EbayItemID == 0)
                 {
-                    log.WarnFormat("Not updating online status for order item {0} becaue it is manual or was deleted.", ebayItem.EbayItemID);
+                    log.WarnFormat("Not updating online status for order item {0} because it is manual or was deleted.", ebayItem.EbayItemID);
                     continue;
                 }
 
@@ -306,8 +306,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (paid.HasValue)
                 {
                     if (!paid.Value &&
-                        ebayItem.EffectivePaymentMethod == (int)EbayEffectivePaymentMethod.PayPal &&
-                        ebayItem.EffectiveCheckoutStatus == (int)EbayEffectivePaymentStatus.Paid)
+                        ebayItem.EffectivePaymentMethod == (int) EbayEffectivePaymentMethod.PayPal &&
+                        ebayItem.EffectiveCheckoutStatus == (int) EbayEffectivePaymentStatus.Paid)
                     {
                         // cannot do this
                         throw new EbayException("Cannot change the Paid status of a completed PayPal payment.", "");
@@ -355,14 +355,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
             trackingNumber = shipment.TrackingNumber;
 
             // Is it a USPS shipment?
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    PostalServiceType service = (PostalServiceType)shipment.Postal.Service;
+                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
                     // The shipment is an Endicia/Usps shipment, check to see if it's DHL
                     if (ShipmentTypeManager.IsDhl(service))
