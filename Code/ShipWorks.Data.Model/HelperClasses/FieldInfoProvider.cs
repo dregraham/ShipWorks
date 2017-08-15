@@ -540,7 +540,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "IsDigitalItem", typeof(System.Boolean), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.IsDigitalItem, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventDate, 0, 0, 0);
 			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "EventName", typeof(System.String), false, false, false, true,  (int)BigCommerceOrderItemFieldIndex.EventName, 255, 0, 0);
-			this.AddElementFieldInfo("BigCommerceOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)BigCommerceOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits BigCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitBigCommerceStoreEntityInfos()
@@ -569,7 +568,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Tax", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Tax, 0, 4, 19);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Commission", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Commission, 0, 4, 19);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "ItemFee", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.ItemFee, 0, 4, 19);
-			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits BuyDotComStoreEntity's FieldInfo objects</summary>
 		private void InitBuyDotComStoreEntityInfos()
@@ -838,7 +836,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderItemEntity", "MyEbayShipped", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderItemFieldIndex.MyEbayShipped, 0, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalTransactionID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalTransactionID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalAddressStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalAddressStatus, 0, 0, 10);
-			this.AddElementFieldInfo("EbayOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits EbayOrderSearchEntity's FieldInfo objects</summary>
 		private void InitEbayOrderSearchEntityInfos()
@@ -1554,7 +1551,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
 			this.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
-			this.AddElementFieldInfo("GrouponOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)GrouponOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits GrouponOrderSearchEntity's FieldInfo objects</summary>
 		private void InitGrouponOrderSearchEntityInfos()
@@ -2106,6 +2102,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 0, 38);
 			this.AddElementFieldInfo("OrderItemEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.LocalStatus, 255, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()
@@ -3361,7 +3358,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)WalmartOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "LineNumber", typeof(System.String), false, false, false, false,  (int)WalmartOrderItemFieldIndex.LineNumber, 20, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderItemEntity", "OnlineStatus", typeof(System.String), false, false, false, false,  (int)WalmartOrderItemFieldIndex.OnlineStatus, 20, 0, 0);
-			this.AddElementFieldInfo("WalmartOrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)WalmartOrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits WalmartOrderSearchEntity's FieldInfo objects</summary>
 		private void InitWalmartOrderSearchEntityInfos()

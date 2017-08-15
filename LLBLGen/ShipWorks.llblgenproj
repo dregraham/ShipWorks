@@ -394,7 +394,6 @@
           <Field Name="IsDigitalItem" Type="bool" FieldIndex="2" />
           <Field Name="OrderAddressID" Type="long" FieldIndex="0" />
           <Field Name="OrderProductID" Type="long" FieldIndex="1" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="BigCommerceStore" ObjectID="63a4d250-0560-4123-aba9-480d238fc84a" InheritanceType="2">
@@ -416,7 +415,6 @@
           <Field Name="Commission" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
           <Field Name="ItemFee" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="ListingID" Type="int" FieldIndex="1" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="6" />
           <Field Name="ReceiptItemID" Type="long" FieldIndex="0" />
           <Field Name="Shipping" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
           <Field Name="Tax" Type="decimal" Precision="19" Scale="4" FieldIndex="3" />
@@ -662,7 +660,6 @@
           <Field Name="LocalEbayOrderID" Type="long" FieldIndex="0" />
           <Field Name="MyEbayPaid" Type="bool" FieldIndex="13" />
           <Field Name="MyEbayShipped" Type="bool" FieldIndex="14" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="17" />
           <Field Name="PaymentMethod" Type="int" FieldIndex="7" />
           <Field Name="PaymentStatus" Type="int" FieldIndex="6" />
           <Field Name="PayPalAddressStatus" Type="int" FieldIndex="16" />
@@ -1341,7 +1338,6 @@
           <Field Name="ChannelSKUProvided" Type="string" MaxLength="255" FieldIndex="1" />
           <Field Name="FulfillmentLineItemID" Type="string" MaxLength="255" FieldIndex="2" />
           <Field Name="GrouponLineItemID" Type="string" MaxLength="255" FieldIndex="4" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
           <Field Name="Permalink" Type="string" MaxLength="255" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -1829,6 +1825,7 @@
           <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="OrderItemID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="18" />
           <Field Name="Quantity" Type="double" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="5" />
@@ -2997,7 +2994,6 @@
         <Fields>
           <Field Name="LineNumber" Type="string" MaxLength="20" FieldIndex="0" />
           <Field Name="OnlineStatus" Type="string" MaxLength="20" FieldIndex="1" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="WalmartOrderSearch" ObjectID="0f104b64-2c28-414b-b3df-9de63987f694">
@@ -3990,7 +3986,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-11T19:52:44.0740251Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-15T20:59:11.9525543Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4304,7 +4300,6 @@
                     <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
                     <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="OriginalOrderID" Ordinal="7" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -4363,7 +4358,6 @@
                     <Field Name="Tax" Ordinal="5" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Commission" Ordinal="6" DbType="9" Precision="19" Scale="4" />
                     <Field Name="ItemFee" Ordinal="7" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="OriginalOrderID" Ordinal="8" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BuyDotComStore">
@@ -4708,7 +4702,6 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
-                    <Field Name="OriginalOrderID" Ordinal="19" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -6066,7 +6059,6 @@
                     <Field Name="FulfillmentLineItemID" Ordinal="4" DbType="12" Length="255" />
                     <Field Name="BomSKU" Ordinal="5" DbType="12" Length="255" />
                     <Field Name="GrouponLineItemID" Ordinal="6" DbType="12" Length="255" />
-                    <Field Name="OriginalOrderID" Ordinal="7" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderSearch">
@@ -6722,6 +6714,7 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -8386,7 +8379,6 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="LineNumber" Ordinal="2" DbType="12" Length="20" />
                     <Field Name="OnlineStatus" Ordinal="3" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="WalmartOrderSearch">
@@ -9911,7 +9903,6 @@
             <FieldMapping FieldName="OrderAddressID" TargetFieldName="OrderAddressID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="OrderProductID" TargetFieldName="OrderProductID" />
-            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":BigCommerceStore" TargetName="ShipWorksLocal:dbo:BigCommerceStore">
@@ -9935,7 +9926,6 @@
             <FieldMapping FieldName="ItemFee" TargetFieldName="ItemFee" />
             <FieldMapping FieldName="ListingID" TargetFieldName="ListingID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="ReceiptItemID" TargetFieldName="ReceiptItemID" />
             <FieldMapping FieldName="Shipping" TargetFieldName="Shipping" />
             <FieldMapping FieldName="Tax" TargetFieldName="Tax" />
@@ -10184,7 +10174,6 @@
             <FieldMapping FieldName="MyEbayPaid" TargetFieldName="MyEbayPaid" />
             <FieldMapping FieldName="MyEbayShipped" TargetFieldName="MyEbayShipped" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="PaymentMethod" TargetFieldName="PaymentMethod" />
             <FieldMapping FieldName="PaymentStatus" TargetFieldName="PaymentStatus" />
             <FieldMapping FieldName="PayPalAddressStatus" TargetFieldName="PayPalAddressStatus" />
@@ -10870,7 +10859,6 @@
             <FieldMapping FieldName="FulfillmentLineItemID" TargetFieldName="FulfillmentLineItemID" />
             <FieldMapping FieldName="GrouponLineItemID" TargetFieldName="GrouponLineItemID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="Permalink" TargetFieldName="Permalink" />
           </FieldMappings>
         </EntityMapping>
@@ -11376,6 +11364,7 @@
             <FieldMapping FieldName="Name" TargetFieldName="Name" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
@@ -12558,7 +12547,6 @@
             <FieldMapping FieldName="LineNumber" TargetFieldName="LineNumber" />
             <FieldMapping FieldName="OnlineStatus" TargetFieldName="OnlineStatus" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":WalmartOrderSearch" TargetName="ShipWorksLocal:dbo:WalmartOrderSearch">

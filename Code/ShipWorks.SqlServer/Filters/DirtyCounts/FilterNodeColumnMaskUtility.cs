@@ -23,7 +23,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
             tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 75;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 19;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 20;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 73;
@@ -36,7 +36,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 11;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 11;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 24;
-            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 19;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 18;
             tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
@@ -49,14 +49,14 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.EtsyOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.NeweggOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.BuyDotComOrderItem] = 8;
+            tableBitCount[(int) FilterNodeColumnMaskTable.BuyDotComOrderItem] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
-            tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 7;
+            tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;
-            tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 4;

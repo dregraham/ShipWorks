@@ -337,8 +337,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LineNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OnlineStatus", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -410,16 +408,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WalmartOrderItemFieldIndex.OnlineStatus, true); }
 			set	{ SetValue((int)WalmartOrderItemFieldIndex.OnlineStatus, value); }
-		}
-
-		/// <summary> The OriginalOrderID property of the Entity WalmartOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "WalmartOrderItem"."OriginalOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 OriginalOrderID
-		{
-			get { return (System.Int64)GetValue((int)WalmartOrderItemFieldIndex.OriginalOrderID, true); }
-			set	{ SetValue((int)WalmartOrderItemFieldIndex.OriginalOrderID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

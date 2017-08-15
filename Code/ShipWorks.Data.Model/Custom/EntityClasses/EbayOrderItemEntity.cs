@@ -54,13 +54,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         protected override void OnBeforeEntitySave()
         {
             // Keep the foreign key up to date
-            this.LocalEbayOrderID = OrderID;
-
-            if (IsNew)
-            {
-                OriginalOrderID = OrderID;
-            }
-
+            LocalEbayOrderID = OrderID;
+            
             base.OnBeforeEntitySave();
         }
     }

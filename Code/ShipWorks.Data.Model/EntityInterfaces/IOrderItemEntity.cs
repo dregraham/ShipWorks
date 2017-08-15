@@ -129,6 +129,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean IsManual { get; }
+        /// <summary> The OriginalOrderID property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 OriginalOrderID { get; }
         
         
         IOrderEntity Order { get; }

@@ -13,15 +13,12 @@ CREATE TABLE [dbo].[BigCommerceOrderItem]
 [OrderProductID] [bigint] NOT NULL,
 [IsDigitalItem] [bit] NOT NULL CONSTRAINT [DF_BigCommerceOrderItem_IsDigitalItem] DEFAULT ((0)),
 [EventDate] [datetime] NULL,
-[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[OriginalOrderID] BIGINT NOT NULL
+[EventName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrderItem]'
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
-GO
-CREATE NONCLUSTERED INDEX [IX_BigCommerceOrderItem_OriginalOrderID] ON [dbo].[BigCommerceOrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
@@ -743,7 +740,8 @@ CREATE TABLE [dbo].[OrderItem]
 [Quantity] [float] NOT NULL,
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
-[TotalWeight] AS ([Weight]*[Quantity])
+[TotalWeight] AS ([Weight]*[Quantity]),
+[OriginalOrderID] [BIGINT] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -756,7 +754,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([O
 GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Altering [dbo].[OrderItem]'
+CREATE NONCLUSTERED INDEX [IX_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[AmazonOrderItem]'
 GO
@@ -1321,15 +1319,12 @@ CREATE TABLE [dbo].[BuyDotComOrderItem]
 [Shipping] [money] NOT NULL,
 [Tax] [money] NOT NULL,
 [Commission] [money] NOT NULL,
-[ItemFee] [money] NOT NULL,
-[OriginalOrderID] BIGINT NOT NULL
+[ItemFee] [money] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BuyDotComOrderItem] on [dbo].[BuyDotComOrderItem]'
 GO
 ALTER TABLE [dbo].[BuyDotComOrderItem] ADD CONSTRAINT [PK_BuyDotComOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
-GO
-CREATE NONCLUSTERED INDEX [IX_BuyDotComOrderItem_OriginalOrderID] ON [dbo].[BuyDotComOrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrder]'
 GO
@@ -1547,8 +1542,7 @@ CREATE TABLE [dbo].[EbayOrderItem]
 [MyEbayPaid] [bit] NOT NULL,
 [MyEbayShipped] [bit] NOT NULL,
 [PayPalTransactionID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PayPalAddressStatus] [int] NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[PayPalAddressStatus] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderItem] on [dbo].[EbayOrderItem]'
@@ -5737,8 +5731,7 @@ CREATE TABLE [dbo].[GrouponOrderItem]
 [ChannelSKUProvided] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FulfillmentLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BomSKU] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[GrouponLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[GrouponLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderItem] on [dbo].[GrouponOrderItem]'
@@ -5926,8 +5919,7 @@ CREATE TABLE [dbo].[WalmartOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [LineNumber] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OnlineStatus] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OnlineStatus] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderItem] on [dbo].[WalmartOrderItem]'
