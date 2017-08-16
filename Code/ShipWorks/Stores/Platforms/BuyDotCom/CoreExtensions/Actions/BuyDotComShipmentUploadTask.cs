@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating;
@@ -20,8 +18,16 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "BuyDotComShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class BuyDotComShipmentUploadTask : StoreInstanceTaskBase
     {
-
         const long maxBatchSize = 300;
+        private readonly IShipmentDetailsUpdater shipmentDetailsUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BuyDotComShipmentUploadTask(IShipmentDetailsUpdater shipmentDetailsUpdater)
+        {
+            this.shipmentDetailsUpdater = shipmentDetailsUpdater;
+        }
 
         /// <summary>
         /// This task is for shipments
@@ -105,11 +111,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         {
             try
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var updater = lifetimeScope.Resolve<IShipmentDetailsUpdater>();
-                    await updater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
-                }
+                await shipmentDetailsUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (BuyDotComException ex)
             {

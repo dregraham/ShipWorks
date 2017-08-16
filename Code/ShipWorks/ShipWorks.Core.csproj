@@ -1775,6 +1775,7 @@
     <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClientConfiguration.cs" />
+    <Compile Include="Stores\Platforms\Infopia\IInfopiaOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
@@ -5660,7 +5661,6 @@
       <DependentUpon>InfopiaAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Infopia\InfopiaDownloader.cs" />
-    <Compile Include="Stores\Platforms\Infopia\InfopiaOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaProductInfo.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaStatusType.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaStoreType.cs" />

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Magento.WizardPages
@@ -35,11 +30,11 @@ namespace ShipWorks.Stores.Platforms.Magento.WizardPages
         /// <summary>
         /// Create tasks based on what the user has selected
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (shipmentUpdate.Checked)
             {
-                MagentoShipmentUploadTask task = (MagentoShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(MagentoShipmentUploadTask), store).CreateInstance();
+                MagentoShipmentUploadTask task = (MagentoShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(MagentoShipmentUploadTask), store).CreateInstance(lifetimeScope);
                 task.Comment = commentToken.Text;
                 task.MagentoSendEmail = sendEmail.Checked;
 

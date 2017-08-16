@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.Stores;
+using Autofac;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Actions.Tasks
 {
     /// <summary>
     /// Binds an ActionTaskDescriptor to the StoreType or store instance it will go with.  If the descriptor
-    /// is storetype or instance nuetral, then it's just not bound to anything.
+    /// is storetype or instance neutral, then it's just not bound to anything.
     /// </summary>
     public class ActionTaskDescriptorBinding
     {
@@ -63,15 +59,18 @@ namespace ShipWorks.Actions.Tasks
                 throw new InvalidOperationException(string.Format("Type '{0}' does not have an associated descriptor.", taskType.FullName));
             }
 
-            ActionTask instance = descriptor.CreateInstance();
-            if (instance is StoreTypeTaskBase)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                storeTypeCode = (StoreTypeCode) store.TypeCode;
-            }
+                ActionTask instance = descriptor.CreateInstance(lifetimeScope);
+                if (instance is StoreTypeTaskBase)
+                {
+                    storeTypeCode = (StoreTypeCode) store.TypeCode;
+                }
 
-            if (instance is StoreInstanceTaskBase)
-            {
-                storeID = store.StoreID;
+                if (instance is StoreInstanceTaskBase)
+                {
+                    storeID = store.StoreID;
+                }
             }
         }
 
@@ -105,7 +104,7 @@ namespace ShipWorks.Actions.Tasks
                 {
                     // See if this type code is the only type code we have like it in the system
                     bool onlyThisType = StoreManager.GetUniqueStoreTypes(true).Count == 1 && StoreManager.GetUniqueStoreTypes(true)[0].TypeCode == storeTypeCode.Value;
-                    
+
                     if (!onlyThisType)
                     {
                         name += string.Format(" ({0})", StoreTypeManager.GetType(storeTypeCode.Value).StoreTypeName);
@@ -166,10 +165,10 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Create a new instance of the ActionTask for this type.
         /// </summary>
-        public ActionTask CreateInstance()
+        public ActionTask CreateInstance(ILifetimeScope lifetimeScope)
         {
             // Create the blank task instance
-            ActionTask task = descriptor.CreateInstance();
+            ActionTask task = descriptor.CreateInstance(lifetimeScope);
 
             // Create a new default task to be added
             ActionTaskEntity taskEntity = new ActionTaskEntity();
@@ -217,7 +216,7 @@ namespace ShipWorks.Actions.Tasks
                 return false;
             }
 
-            return 
+            return
                 other.descriptor.Identifier == this.descriptor.Identifier &&
                 other.storeID == this.storeID &&
                 other.storeTypeCode == this.storeTypeCode;

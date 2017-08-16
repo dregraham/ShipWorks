@@ -3530,9 +3530,12 @@ namespace ShipWorks
         /// </summary>
         private void OnManageActions(object sender, EventArgs e)
         {
-            using (ActionManagerDlg dlg = new ActionManagerDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ActionManagerDlg dlg = new ActionManagerDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
 
             UpdateCustomButtonsActionsUI();

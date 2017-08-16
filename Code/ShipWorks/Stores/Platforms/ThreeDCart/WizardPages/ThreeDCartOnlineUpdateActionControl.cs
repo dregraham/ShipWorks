@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
@@ -80,14 +81,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WizardPages
         /// <summary>
         /// Create the configured tasks
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             if (setStatus.Checked)
             {
                 // Create the task instance
-                ThreeDCartOrderUpdateTask orderUpdateTask = (ThreeDCartOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(ThreeDCartOrderUpdateTask), store).CreateInstance();
+                ThreeDCartOrderUpdateTask orderUpdateTask = (ThreeDCartOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(ThreeDCartOrderUpdateTask), store).CreateInstance(lifetimeScope);
 
                 if (((ThreeDCartStoreEntity) store).RestUser)
                 {
@@ -96,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WizardPages
                 else
                 {
                     // Apply the desired status code
-                    ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)store);
+                    ThreeDCartStatusCodeProvider statusProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) store);
                     orderUpdateTask.StatusCode = statusProvider.GetCodeValue(status.Text);
                 }
 
@@ -104,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WizardPages
             }
 
             // Create the shipment upload task
-            ThreeDCartShipmentUploadTask shipmentUploadTask = (ThreeDCartShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(ThreeDCartShipmentUploadTask), store).CreateInstance();
+            ThreeDCartShipmentUploadTask shipmentUploadTask = (ThreeDCartShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(ThreeDCartShipmentUploadTask), store).CreateInstance(lifetimeScope);
 
             tasks.Add(shipmentUploadTask);
 

@@ -89,13 +89,13 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
-        /// Load the settings of the configured shipmetn type
+        /// Load the settings of the configured shipment type
         /// </summary>
         public void LoadSettings()
         {
             defaultsControl.LoadSettings(shipmentType);
             printOutputControl.LoadSettings(shipmentType);
-            automationControl.EnsureInitialized(shipmentType.ShipmentTypeCode);
+            automationControl.EnsureInitialized(lifetimeScope, shipmentType.ShipmentTypeCode);
 
             LoadGeneralSettings();
         }

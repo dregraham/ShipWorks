@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -94,7 +96,7 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
-        /// Create a shipment voided trigger for the given shipemnt type
+        /// Create a shipment voided trigger for the given shipment type
         /// </summary>
         private static ActionTrigger CreateVoidedTrigger(ShipmentTypeCode code)
         {
@@ -119,7 +121,6 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// See if we can load the action with the given identifier directly from the database.
         /// </summary>
-        [NDependIgnoreLongMethod]
         [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(
             string baseName,
@@ -168,29 +169,40 @@ namespace ShipWorks.Shipping.Settings
                     action.TriggerSettings = trigger.GetXml();
                     action.TaskSummary = "";
 
-                    adapter.SaveAndRefetch(action);
-
-                    // Get the task binding, used to create the task.
-                    ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(ActionTaskManager.GetDescriptor(taskType));
-
-                    // Create the task
-                    ActionTask task = binding.CreateInstance();
-                    task.Entity.StepIndex = 0;
-
-                    // Allow the callback to apply specific settings to the task.
-                    if (settingsApplier != null)
-                    {
-                        settingsApplier.Invoke(task);
-                    }
-
-                    // Save the task
-                    task.Save(action, adapter);
+                    SaveAction(taskType, settingsApplier, action, adapter);
                 }
 
                 adapter.Commit();
             }
 
             return action;
+        }
+
+        /// <summary>
+        /// Save the action, including task data
+        /// </summary>
+        private static void SaveAction(Type taskType, MethodInvoker<ActionTask> settingsApplier, ActionEntity action, SqlAdapter adapter)
+        {
+            adapter.SaveAndRefetch(action);
+
+            // Get the task binding, used to create the task.
+            ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(ActionTaskManager.GetDescriptor(taskType));
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                // Create the task
+                ActionTask task = binding.CreateInstance(lifetimeScope);
+                task.Entity.StepIndex = 0;
+
+                // Allow the callback to apply specific settings to the task.
+                if (settingsApplier != null)
+                {
+                    settingsApplier.Invoke(task);
+                }
+
+                // Save the task
+                task.Save(action, adapter);
+            }
         }
     }
 }

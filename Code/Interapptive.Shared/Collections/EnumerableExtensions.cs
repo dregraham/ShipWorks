@@ -378,5 +378,31 @@ namespace Interapptive.Shared.Collections
 
             return results;
         }
+
+        /// <summary>
+        /// Append an item to an enumerable
+        /// </summary>
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+
+            return AppendInternal(source, item);
+        }
+
+        /// <summary>
+        /// Append an item to an enumerable
+        /// </summary>
+        private static IEnumerable<T> AppendInternal<T>(IEnumerable<T> source, T item)
+        {
+            using (IEnumerator<T> iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                }
+            }
+
+            yield return item;
+        }
     }
 }

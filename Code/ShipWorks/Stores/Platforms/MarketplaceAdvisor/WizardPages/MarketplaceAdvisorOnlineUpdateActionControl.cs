@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages
@@ -40,18 +34,18 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages
         /// <summary>
         /// Create tasks for the given store based on user selection
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             if (shipmentUpdate.Checked)
             {
-                tasks.Add(new ActionTaskDescriptorBinding(typeof(MarketplaceAdvisorShipmentUploadTask), store).CreateInstance());
+                tasks.Add(new ActionTaskDescriptorBinding(typeof(MarketplaceAdvisorShipmentUploadTask), store).CreateInstance(lifetimeScope));
             }
 
             if (promote.Checked && promote.Visible)
             {
-                tasks.Add(new ActionTaskDescriptorBinding(typeof(MarketplaceAdvisorPromoteOrderTask), store).CreateInstance());
+                tasks.Add(new ActionTaskDescriptorBinding(typeof(MarketplaceAdvisorPromoteOrderTask), store).CreateInstance(lifetimeScope));
             }
 
             return tasks;

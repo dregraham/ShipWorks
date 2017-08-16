@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
-using System.Reflection;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
+using Autofac;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -14,7 +8,7 @@ namespace ShipWorks.Actions.Tasks
     /// Metadata about an action task that can be instantiated and used by the user.
     /// </summary>
     public class ActionTaskDescriptor
-    {        
+    {
         Type type;
         string baseName;
         string identifier;
@@ -46,18 +40,18 @@ namespace ShipWorks.Actions.Tasks
                 throw new InvalidOperationException("Cannot create ActionTaskDescriptor instance for class not derived from ActionTask.");
             }
 
-            #if DEBUG
+#if DEBUG
 
             bool validNamespace =
                 type.Namespace.StartsWith("ShipWorks.Actions.Tasks.Common") ||
-                type.Namespace.EndsWith("CoreExtensions.Actions") || 
+                type.Namespace.EndsWith("CoreExtensions.Actions") ||
                 type.Namespace.StartsWith("ShipWorks.Tests.Actions");
 
             Debug.Assert(validNamespace,
                 @"When obfuscated, only types in the above namespace formats will work.  This is due to the xr option we use with demeanor.  If a type truly
                   should go in another namespace, then ensure it will work under obfuscation, and adjust this assert.");
 
-            #endif
+#endif
 
             this.type = type;
 
@@ -72,74 +66,48 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// String representation of the object.
         /// </summary>
-        public override string ToString()
-        {
-            return BaseName;
-        }
+        public override string ToString() => BaseName;
 
         /// <summary>
-        /// This is the user-visible name of the task as defined by the original attribute.  If its a store-type specific task, this does 
+        /// This is the user-visible name of the task as defined by the original attribute.  If its a store-type specific task, this does
         /// not include the store type description.  Use DisplayName to include the Store Type information.
         /// </summary>
-        public string BaseName
-        {
-            get
-            {
-                return baseName;
-            }
-        }
+        public string BaseName => baseName;
 
         /// <summary>
         /// An identifier that uniquely identifies the action.  Once applied, this identifier cannot be changed,
         /// as it is used in a key in the serialization process.
         /// </summary>
-        public string Identifier
-        {
-            get
-            {
-                return identifier;
-            }
-        }
+        public string Identifier => identifier;
 
         /// <summary>
         /// Get the task category - used for UI display purposes
         /// </summary>
-        public ActionTaskCategory Category
-        {
-            get
-            {
-                return category;
-            }
-        }
+        public ActionTaskCategory Category => category;
 
         /// <summary>
         /// The CLR type of the action.
         /// </summary>
-        public Type SystemType
-        {
-            get
-            {
-                return type;
-            }
-        }
+        public Type SystemType => type;
 
         /// <summary>
         /// Used to determine if this ActionTask should be hidden in the UI
         /// </summary>
-        public bool Hidden
-        {
-            get
-            {
-                return hidden;
-            }
-        }
+        public bool Hidden => hidden;
+
+        ///// <summary>
+        ///// Create a new instance of the ActionTask for this type.
+        ///// </summary>
+        //public ActionTask CreateInstance() =>
+        //    (ActionTask) SystemType.GetConstructor(Type.EmptyTypes).Invoke(null);
 
         /// <summary>
         /// Create a new instance of the ActionTask for this type.
         /// </summary>
-        public ActionTask CreateInstance()
-        {
-            return (ActionTask) SystemType.GetConstructor(Type.EmptyTypes).Invoke(null);
-        }
+        /// <remarks>
+        /// This version will instantiate the entire dependency tree
+        /// </remarks>
+        public ActionTask CreateInstance(ILifetimeScope lifetimeScope) =>
+            lifetimeScope.Resolve(SystemType) as ActionTask;
     }
 }

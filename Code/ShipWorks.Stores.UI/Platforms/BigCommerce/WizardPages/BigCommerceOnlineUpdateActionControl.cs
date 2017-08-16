@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Actions.Tasks;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.BigCommerce;
@@ -82,12 +83,12 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
         /// <summary>
         /// Create the configured tasks
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             // Create the shipment upload task
-            BigCommerceShipmentUploadTask shipmentUploadTask = (BigCommerceShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(BigCommerceShipmentUploadTask), store).CreateInstance();
+            BigCommerceShipmentUploadTask shipmentUploadTask = (BigCommerceShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(BigCommerceShipmentUploadTask), store).CreateInstance(lifetimeScope);
             tasks.Add(shipmentUploadTask);
 
             return tasks;

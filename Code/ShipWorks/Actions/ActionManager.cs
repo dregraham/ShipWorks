@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Transactions;
+using Autofac;
 using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -109,13 +111,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Instantiate an existing task with the given settings, but no attached ActionTaskEntity
         /// </summary>
-        public static ActionTask InstantiateTask(string identifier, string taskSettings)
+        public static ActionTask InstantiateTask(ILifetimeScope lifetimeScope, string identifier, string taskSettings)
         {
             // We need the descriptor for this identifier
             ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(identifier);
 
             // Use the descriptor to create the instance
-            ActionTask task = descriptor.CreateInstance();
+            ActionTask task = descriptor.CreateInstance(lifetimeScope);
 
             // Initialize
             task.Initialize(taskSettings);
@@ -126,13 +128,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Instantiate an existing task instance
         /// </summary>
-        public static ActionTask InstantiateTask(ActionTaskEntity taskEntity)
+        public static ActionTask InstantiateTask(ILifetimeScope lifetimeScope, ActionTaskEntity taskEntity)
         {
             // We need the descriptor for this identifier
             ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(taskEntity.TaskIdentifier);
 
             // Use the descriptor to create the instance
-            ActionTask task = descriptor.CreateInstance();
+            ActionTask task = descriptor.CreateInstance(lifetimeScope);
 
             // Initialize
             task.Initialize(taskEntity);
@@ -151,7 +153,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Load all the tasks for the action from the database
         /// </summary>
-        public static List<ActionTask> LoadTasks(ActionEntity action)
+        public static List<ActionTask> LoadTasks(ILifetimeScope lifetimeScope, ActionEntity action)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
@@ -162,7 +164,7 @@ namespace ShipWorks.Actions
 
             foreach (ActionTaskEntity taskEntity in ActionTaskCollection.Fetch(SqlAdapter.Default, ActionTaskFields.ActionID == action.ActionID))
             {
-                ActionTask task = InstantiateTask(taskEntity);
+                ActionTask task = InstantiateTask(lifetimeScope, taskEntity);
                 tasks.Add(task);
             }
 
@@ -174,28 +176,31 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DeleteAction(ActionEntity action)
         {
-            // We have to load all the tasks, they'll need deleted
-            List<ActionTask> tasks = LoadTasks(action);
-
-            // We have to give the trigger a chance to cleanup its state too
-            ActionTrigger trigger = LoadTrigger(action);
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // Delete all the tasks
-                foreach (ActionTask task in tasks)
+                // We have to load all the tasks, they'll need deleted
+                List<ActionTask> tasks = LoadTasks(lifetimeScope, action);
+
+                // We have to give the trigger a chance to cleanup its state too
+                ActionTrigger trigger = LoadTrigger(action);
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    task.Delete(adapter);
+                    // Delete all the tasks
+                    foreach (ActionTask task in tasks)
+                    {
+                        task.Delete(adapter);
+                    }
+
+                    // Cleanup the trigger state
+                    trigger.DeleteExtraState(action, adapter);
+
+                    // Finally delete the action entity itself
+                    adapter.DeleteEntity(action);
+
+                    // Commit transaction
+                    adapter.Commit();
                 }
-
-                // Cleanup the trigger state
-                trigger.DeleteExtraState(action, adapter);
-
-                // Finally delete the action entity itself
-                adapter.DeleteEntity(action);
-
-                // Commit transaction
-                adapter.Commit();
             }
         }
 
@@ -241,7 +246,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Get the summar to display for the given list of tasks
+        /// Get the summary to display for the given list of tasks
         /// </summary>
         public static string GetTaskSummary(List<ActionTask> tasks)
         {

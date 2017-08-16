@@ -8,24 +8,20 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Data;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.IO.Text.Ini;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using Microsoft.Win32;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
-using log4net;
 
-namespace ShipWorks.Shipping.Carriers.UPS.WorldShip 
+namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
     /// <summary>
     /// Utility classes for dealing with the WorldShip integration
@@ -33,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     public static class WorldShipUtility
     {
         static readonly ILog log = LogManager.GetLogger(typeof(WorldShipUtility));
- 
+
         /// <summary>
         /// Service codes for the UPS API
         /// </summary>
@@ -48,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         /// <summary>
         /// Static constructor
-        /// 
+        ///
         /// Codes listed here: http://www.ups.com/worldshiphelp/WS12/ENU/AppHelp/Codes/UPS_Service_Codes.htm
         /// </summary>
         [NDependIgnoreLongMethod]
@@ -92,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Save this shipment to the WorldShip table to be 
+        /// Save this shipment to the WorldShip table to be
         /// </summary>
         /// <exception cref="ShippingException" />
         /// <exception cref="TemplateTokenException" />
@@ -218,11 +214,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Create the new entity
             WorldShipShipmentEntity worldship = new WorldShipShipmentEntity
-                {
-                    ShipmentID = shipment.ShipmentID,
-                    DeliveryConfirmation = "N",
-                    DeliveryConfirmationAdult = "N"
-                };
+            {
+                ShipmentID = shipment.ShipmentID,
+                DeliveryConfirmation = "N",
+                DeliveryConfirmationAdult = "N"
+            };
 
             UpsPayorType payorType = (UpsPayorType) ups.PayorType;
 
@@ -337,7 +333,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             // WorldShip, for MI, doesn't allow QVN
             SetShipmentQvnFields(worldship, ups, from, to);
 
-            // Set the Usps Endorsement, only if it's not blank.  WS treats blanks as values, so we want it to 
+            // Set the Usps Endorsement, only if it's not blank.  WS treats blanks as values, so we want it to
             // stay null if we aren't an MI or SurePost shipment.
             string uspsEndorsementCode = GetUspsEndorsementCode(ups);
             if (!string.IsNullOrWhiteSpace(uspsEndorsementCode))
@@ -380,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         return "Carrier - Leave If No Response";
                 }
             }
-            
+
             if (UpsUtility.IsUpsMiService(upsServiceType))
             {
                 // MI Expedited & International MI does not support endorsements
@@ -423,8 +419,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         [NDependIgnoreLongMethod]
         private static void SetShipmentQvnFields(WorldShipShipmentEntity worldship, UpsShipmentEntity ups, PersonAdapter from, PersonAdapter to)
         {
-            bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType) ups.Service); 
-            
+            bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType) ups.Service);
+
             // Default to no QVN
             worldship.QvnFrom = "";
             worldship.QvnMemo = "";
@@ -463,13 +459,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 worldship.QvnFrom = UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyFrom);
                 worldship.QvnMemo = ups.EmailNotifyMessage;
-                worldship.QvnSubjectLine = (ups.EmailNotifySubject == (int)UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
+                worldship.QvnSubjectLine = (ups.EmailNotifySubject == (int) UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
                 worldship.QvnOption = "Y";
 
                 // Sender QVN
-                worldship.Qvn1ShipNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
-                worldship.Qvn1DeliveryNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
-                worldship.Qvn1ExceptionNotify = (ups.EmailNotifySender & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
+                worldship.Qvn1ShipNotify = (ups.EmailNotifySender & (int) UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
+                worldship.Qvn1DeliveryNotify = (ups.EmailNotifySender & (int) UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
+                worldship.Qvn1ExceptionNotify = (ups.EmailNotifySender & (int) UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
                 if (ups.EmailNotifySender > 0)
                 {
                     // Only write this info out if notify sender was selected.  Otherwise, WorldShip fails on hands off.
@@ -478,9 +474,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 }
 
                 // Recipient QVN
-                worldship.Qvn2ShipNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
-                worldship.Qvn2DeliveryNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
-                worldship.Qvn2ExceptionNotify = (ups.EmailNotifyRecipient & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
+                worldship.Qvn2ShipNotify = (ups.EmailNotifyRecipient & (int) UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
+                worldship.Qvn2DeliveryNotify = (ups.EmailNotifyRecipient & (int) UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
+                worldship.Qvn2ExceptionNotify = (ups.EmailNotifyRecipient & (int) UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
                 if (ups.EmailNotifyRecipient > 0)
                 {
                     // Only write this info out if notify recipient was selected.  Otherwise, WorldShip fails on hands off.
@@ -489,9 +485,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 }
 
                 // Other QVN
-                worldship.Qvn3ShipNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
-                worldship.Qvn3DeliveryNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
-                worldship.Qvn3ExceptionNotify = (ups.EmailNotifyOther & (int)UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
+                worldship.Qvn3ShipNotify = (ups.EmailNotifyOther & (int) UpsEmailNotificationType.Ship) != 0 ? "Y" : "N";
+                worldship.Qvn3DeliveryNotify = (ups.EmailNotifyOther & (int) UpsEmailNotificationType.Deliver) != 0 ? "Y" : "N";
+                worldship.Qvn3ExceptionNotify = (ups.EmailNotifyOther & (int) UpsEmailNotificationType.Exception) != 0 ? "Y" : "N";
                 if (ups.EmailNotifyOther > 0)
                 {
                     // Only write this info out if notify other was selected.  Otherwise, WorldShip fails on hands off.
@@ -507,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         [NDependIgnoreLongMethod]
         private static void SetPackageQvnFields(WorldShipPackageEntity worldshipPackage, UpsShipmentEntity upsShipment, PersonAdapter from, PersonAdapter to)
         {
-            bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType)upsShipment.Service); 
+            bool isMiService = UpsUtility.IsUpsMiService((UpsServiceType) upsShipment.Service);
 
             // In v16 (2013), QVN is supported for MI, but not in 2012 and earlier, so see which version we are.
             bool isWsVersionGreaterThanLegacyVersion = WorldShipMajorVersion > worldShipDefaultMajorVersion;
@@ -541,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             worldshipPackage.QvnFrom = UpsUtility.GetCorrectedEmailAddress(upsShipment.EmailNotifyFrom);
             worldshipPackage.QvnMemo = upsShipment.EmailNotifyMessage;
-            worldshipPackage.QvnSubjectLine = (upsShipment.EmailNotifySubject == (int)UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
+            worldshipPackage.QvnSubjectLine = (upsShipment.EmailNotifySubject == (int) UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
             worldshipPackage.QvnOption = "Y";
 
             // Sender QVN
@@ -580,22 +576,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             UpsShipmentEntity ups = package.UpsShipment;
 
             WorldShipPackageEntity worldshipPackage = new WorldShipPackageEntity
-                {
-                    UpsPackageID = package.UpsPackageID,
-                    ShipmentID = worldshipShipment.ShipmentID,
-                    PackageType = GetPackageTypeCode((UpsPackagingType) package.PackagingType),
-                    DeliveryConfirmation = "N",
-                    DeliveryConfirmationAdult = "N",
-                    DeliveryConfirmationSignature = "N",
-                    MIDeliveryConfirmation = "N"
-                };
+            {
+                UpsPackageID = package.UpsPackageID,
+                ShipmentID = worldshipShipment.ShipmentID,
+                PackageType = GetPackageTypeCode((UpsPackagingType) package.PackagingType),
+                DeliveryConfirmation = "N",
+                DeliveryConfirmationAdult = "N",
+                DeliveryConfirmationSignature = "N",
+                MIDeliveryConfirmation = "N"
+            };
 
             double weight = UpsUtility.GetPackageTotalWeight(package);
 
             // Get the settings for this shipment/package type so we can determine weight unit of measure and declared value setting
             // Before calling this method, the shipment/package type should be validated so that a setting is always found if we make it this far.
-            UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType)ups.Service &&
-                                                        s.PackageType == (UpsPackagingType)package.PackagingType);
+            UpsServicePackageTypeSetting upsSetting = UpsServicePackageTypeSetting.ServicePackageValidationSettings.First(s => s.ServiceType == (UpsServiceType) ups.Service &&
+                                                        s.PackageType == (UpsPackagingType) package.PackagingType);
 
             if (upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces)
             {
@@ -631,13 +627,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             SetPackageQvnFields(worldshipPackage, package.UpsShipment, from, to);
 
             // Reference has to be set on every package (due to the way worldship maps)
-            worldshipPackage.ReferenceNumber =  ups.ReferenceNumber;
+            worldshipPackage.ReferenceNumber = ups.ReferenceNumber;
             worldshipPackage.ReferenceNumber2 = ups.ReferenceNumber2;
 
             // Since the DeclaredValue amount stays even if the user unchecks the checkbox, we need to check package.Insurance too
             if (package.Insurance && package.DeclaredValue > 0 && upsSetting.DeclaredValueAllowed)
             {
-                worldshipPackage.DeclaredValueAmount = (double)package.DeclaredValue;
+                worldshipPackage.DeclaredValueAmount = (double) package.DeclaredValue;
                 worldshipPackage.DeclaredValueOption = "Y";
             }
             else
@@ -654,10 +650,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Postal sub class
             // From the WS UI, this is only required for SurePost less than 1 pound
-            if (UpsServiceType.UpsSurePostLessThan1Lb == (UpsServiceType)ups.Service)
+            if (UpsServiceType.UpsSurePostLessThan1Lb == (UpsServiceType) ups.Service)
             {
                 // The two options are Irregular and Machinable
-                worldshipPackage.PostalSubClass = (UpsPostalSubclassificationType)ups.Subclassification == UpsPostalSubclassificationType.Irregular ? "Irregular" : "Machinable";
+                worldshipPackage.PostalSubClass = (UpsPostalSubclassificationType) ups.Subclassification == UpsPostalSubclassificationType.Irregular ? "Irregular" : "Machinable";
             }
 
             worldshipPackage.ShipperRelease = ups.ShipperRelease ? "Y" : "N";
@@ -714,7 +710,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 worldshipPackage.VerbalConfirmationOption = "Y";
                 worldshipPackage.VerbalConfirmationContactName = package.VerbalConfirmationName;
-                
+
                 // WorldShip imports correctly when all non-numerics are removed from the concatenated phone number.
                 Regex onlyNumbers = new Regex("[^.0-9]");
                 string worldShipPhone = onlyNumbers.Replace(package.VerbalConfirmationPhone, string.Empty);
@@ -736,9 +732,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldshipPackage.DeliveryConfirmationSignature = "N";
             worldshipPackage.MIDeliveryConfirmation = "N";
 
-            if (!UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)ups.Service))
+            if (!UpsUtility.IsUpsMiOrSurePostService((UpsServiceType) ups.Service))
             {
-                // Delivery confirm 
+                // Delivery confirm
                 if (ups.DeliveryConfirmation != (int) UpsDeliveryConfirmationType.None)
                 {
                     worldshipPackage.DeliveryConfirmation = "Y";
@@ -746,10 +742,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     worldshipPackage.DeliveryConfirmationAdult = (ups.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.AdultSignature) ? "Y" : "N";
                 }
             }
-            else if (UpsUtility.IsUpsMiService((UpsServiceType)ups.Service))
+            else if (UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
             {
-                // Delivery confirm 
-                if (ups.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
+                // Delivery confirm
+                if (ups.DeliveryConfirmation != (int) UpsDeliveryConfirmationType.None)
                 {
                     worldshipPackage.MIDeliveryConfirmation = "Y";
                 }
@@ -757,11 +753,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns>
-        /// 0 for Shipment, 
+        /// 0 for Shipment,
         /// 1 for Package</returns>
         private static UpsDeliveryConfirmationEntityLevel GetShipmentOrPackageForDeliveryConfirmation(ShipmentEntity shipment)
         {
@@ -801,14 +797,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             worldshipShipment.DeliveryConfirmation = "N";
             worldshipShipment.DeliveryConfirmationAdult = "N";
-            
-            if (!UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)ups.Service))
+
+            if (!UpsUtility.IsUpsMiOrSurePostService((UpsServiceType) ups.Service))
             {
                 // Delivery confirm (for domestic)
-                if (ups.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
+                if (ups.DeliveryConfirmation != (int) UpsDeliveryConfirmationType.None)
                 {
                     worldshipShipment.DeliveryConfirmation = "Y";
-                    worldshipShipment.DeliveryConfirmationAdult = (ups.DeliveryConfirmation == (int)UpsDeliveryConfirmationType.AdultSignature) ? "Y" : "N";
+                    worldshipShipment.DeliveryConfirmationAdult = (ups.DeliveryConfirmation == (int) UpsDeliveryConfirmationType.AdultSignature) ? "Y" : "N";
                 }
             }
         }
@@ -819,18 +815,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static void SaveToGoodsTable(ShipmentCustomsItemEntity customsItem, WorldShipShipmentEntity worldship, SqlAdapter adapter)
         {
             WorldShipGoodsEntity goods = new WorldShipGoodsEntity
-                {
-                    ShipmentCustomsItemID = customsItem.ShipmentCustomsItemID,
-                    ShipmentID = worldship.ShipmentID,
-                    Description = customsItem.Description,
-                    Units = (int) Math.Ceiling(customsItem.Quantity),
-                    UnitPrice = customsItem.UnitValue,
-                    UnitOfMeasure = worldship.ToCountryCode == "CA" ? "NMB" : "EA",
-                    Weight = customsItem.Weight,
-                    CountryOfOrigin = customsItem.CountryOfOrigin,
-                    TariffCode = customsItem.HarmonizedCode,
-                    InvoiceCurrencyCode = worldship.InvoiceCurrencyCode
-                };
+            {
+                ShipmentCustomsItemID = customsItem.ShipmentCustomsItemID,
+                ShipmentID = worldship.ShipmentID,
+                Description = customsItem.Description,
+                Units = (int) Math.Ceiling(customsItem.Quantity),
+                UnitPrice = customsItem.UnitValue,
+                UnitOfMeasure = worldship.ToCountryCode == "CA" ? "NMB" : "EA",
+                Weight = customsItem.Weight,
+                CountryOfOrigin = customsItem.CountryOfOrigin,
+                TariffCode = customsItem.HarmonizedCode,
+                InvoiceCurrencyCode = worldship.InvoiceCurrencyCode
+            };
 
             adapter.SaveAndRefetch(goods);
         }
@@ -962,7 +958,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 if (regKey != null)
                 {
-                    path = (string)regKey.GetValue("NetworkShareDir", "");
+                    path = (string) regKey.GetValue("NetworkShareDir", "");
 
                     if (!string.IsNullOrEmpty(path))
                     {
@@ -1044,7 +1040,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 if (regKey != null)
                 {
-                    path = (string)regKey.GetValue("ShipMain", "");
+                    path = (string) regKey.GetValue("ShipMain", "");
 
                     if (!File.Exists(path))
                     {
@@ -1105,7 +1101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Luanch worldship.  If an error occurs the message will be parented to the given owner window
+        /// Launch worldship.  If an error occurs the message will be parented to the given owner window
         /// </summary>
         public static void LaunchWorldShip(IWin32Window errorOwner)
         {

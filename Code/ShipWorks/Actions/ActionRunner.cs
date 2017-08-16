@@ -5,12 +5,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -226,61 +228,71 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Generate the steps that will be executed for the given queue item
         /// </summary>
-        [NDependIgnoreLongMethod]
         private bool GenerateActionQueueSteps(ActionQueueEntity queue, ActionEntity action)
         {
-            List<ActionTask> tasks = ActionManager.LoadTasks(action);
-
-            // If there are not any tasks, there's no reason to execute the queue\action
-            if (tasks.Count == 0)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                log.InfoFormat("Ignoring action '{0}' since it has no tasks.", action.Name);
+                List<ActionTask> tasks = ActionManager.LoadTasks(lifetimeScope, action);
 
-                result = ActionRunnerResult.NoTasks;
-                return false;
-            }
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
-            {
-                // If dispatched from a filter trigger the name and version won't be set yet
-                queue.ActionName = action.Name;
-                queue.ActionVersion = action.RowVersion;
-
-                queue.Status = (int) ActionQueueStatus.Incomplete;
-
-                // Convert each task to a step to be executed
-                foreach (ActionTask task in tasks)
+                // If there are not any tasks, there's no reason to execute the queue\action
+                if (tasks.Count == 0)
                 {
-                    ActionQueueStepEntity step = new ActionQueueStepEntity();
-                    queue.Steps.Add(step);
+                    log.InfoFormat("Ignoring action '{0}' since it has no tasks.", action.Name);
 
-                    step.StepStatus = (int) ActionQueueStepStatus.Pending;
-                    step.StepIndex = task.Entity.StepIndex;
-                    step.StepName = ActionTaskManager.GetBinding(task).BaseName;
-
-                    step.TaskIdentifier = task.Entity.TaskIdentifier;
-                    step.TaskSettings = task.Entity.TaskSettings;
-
-                    step.InputSource = task.Entity.InputSource;
-                    step.InputFilterNodeID = task.Entity.InputFilterNodeID;
-
-                    step.FilterCondition = task.Entity.FilterCondition;
-                    step.FilterConditionNodeID = task.Entity.FilterConditionNodeID;
-
-                    step.FlowSuccess = task.Entity.FlowSuccess;
-                    step.FlowSkipped = task.Entity.FlowSkipped;
-                    step.FlowError = task.Entity.FlowError;
-
-                    step.AttemptDate = DateTime.UtcNow;
-                    step.AttemptError = "";
-                    step.AttemptCount = 0;
+                    result = ActionRunnerResult.NoTasks;
+                    return false;
                 }
 
-                adapter.SaveAndRefetch(queue);
-                adapter.Commit();
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    // If dispatched from a filter trigger the name and version won't be set yet
+                    queue.ActionName = action.Name;
+                    queue.ActionVersion = action.RowVersion;
+
+                    queue.Status = (int) ActionQueueStatus.Incomplete;
+
+                    // Convert each task to a step to be executed
+                    foreach (ActionTask task in tasks)
+                    {
+                        AddTaskToActionQueue(queue, task);
+                    }
+
+                    adapter.SaveAndRefetch(queue);
+                    adapter.Commit();
+                }
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Add the task to the action queue
+        /// </summary>
+        private static void AddTaskToActionQueue(ActionQueueEntity queue, ActionTask task)
+        {
+            ActionQueueStepEntity step = new ActionQueueStepEntity();
+            queue.Steps.Add(step);
+
+            step.StepStatus = (int) ActionQueueStepStatus.Pending;
+            step.StepIndex = task.Entity.StepIndex;
+            step.StepName = ActionTaskManager.GetBinding(task).BaseName;
+
+            step.TaskIdentifier = task.Entity.TaskIdentifier;
+            step.TaskSettings = task.Entity.TaskSettings;
+
+            step.InputSource = task.Entity.InputSource;
+            step.InputFilterNodeID = task.Entity.InputFilterNodeID;
+
+            step.FilterCondition = task.Entity.FilterCondition;
+            step.FilterConditionNodeID = task.Entity.FilterConditionNodeID;
+
+            step.FlowSuccess = task.Entity.FlowSuccess;
+            step.FlowSkipped = task.Entity.FlowSkipped;
+            step.FlowError = task.Entity.FlowError;
+
+            step.AttemptDate = DateTime.UtcNow;
+            step.AttemptError = "";
+            step.AttemptCount = 0;
         }
 
         /// <summary>
@@ -393,7 +405,10 @@ namespace ShipWorks.Actions
 
                 try
                 {
-                    await RunStep(stepContext).ConfigureAwait(false);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        await RunStep(lifetimeScope, stepContext).ConfigureAwait(false);
+                    }
 
                     // If successful raise the event
                     if (stepContext.Step.StepStatus == (int) ActionQueueStepStatus.Success)
@@ -423,7 +438,7 @@ namespace ShipWorks.Actions
         /// Run the step referred to be the given context.  The input keys will be determined using the task settings and the specified objectid
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async Task RunStep(ActionStepContext stepContext)
+        private async Task RunStep(ILifetimeScope lifetimeScope, ActionStepContext stepContext)
         {
             ActionQueueEntity queue = ActionQueue;
 
@@ -440,7 +455,7 @@ namespace ShipWorks.Actions
             bool filtersUpdated = true;
 
             // Create an instance of the task that created this step - we need information from it
-            ActionTask actionTask = ActionManager.InstantiateTask(step.TaskIdentifier, step.TaskSettings);
+            ActionTask actionTask = ActionManager.InstantiateTask(lifetimeScope, step.TaskIdentifier, step.TaskSettings);
 
             // If we aren't skipping this step and filter contents need read, do further investigation.
             if (!skipStep && actionTask.ReadsFilterContents)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
@@ -29,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             store.TypeCode = (int) StoreTypeCode.Walmart;
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
-            OrderEntity order = new OrderEntity() {OrderNumber = 7};
+            OrderEntity order = new OrderEntity() { OrderNumber = 7 };
             OrderNumberIdentifier identifier = new OrderNumberIdentifier(7);
 
             Assert.Equal(identifier.ToString(), testObject.CreateOrderIdentifier(order).ToString());
@@ -39,13 +38,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControlWithWalmartTaskType()
         {
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.TypeCode = (int)StoreTypeCode.Walmart;
+            store.TypeCode = (int) StoreTypeCode.Walmart;
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
 
             var onlineUpdateActionControl = testObject.CreateAddStoreWizardOnlineUpdateActionControl();
 
-            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(store).FirstOrDefault();
+            var scope = mock.CreateMock<ILifetimeScope>();
+            scope.Setup(x => x.Resolve(typeof(WalmartShipmentUploadTask)))
+                .Returns(new WalmartShipmentUploadTask());
+
+            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(scope.Object, store).FirstOrDefault();
 
             Assert.Equal(typeof(WalmartShipmentUploadTask), actionTask.GetType());
         }
@@ -54,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void CreateOnlineUpdateInstanceCommands_DelegatesToWalmartOnlineUpdateInstanceCommandsFactory()
         {
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.TypeCode = (int)StoreTypeCode.Walmart;
+            store.TypeCode = (int) StoreTypeCode.Walmart;
 
             var commandFactory = mock.Mock<IWalmartOnlineUpdateInstanceCommands>();
             mock.MockFunc<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands>(commandFactory);

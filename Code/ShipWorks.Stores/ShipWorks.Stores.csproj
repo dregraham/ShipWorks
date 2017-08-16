@@ -307,6 +307,8 @@
     <Compile Include="Platforms\Groupon\OnlineUpdating\GrouponOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
+    <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdater.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandCombineOrderAction.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
