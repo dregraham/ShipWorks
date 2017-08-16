@@ -44,8 +44,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
                 orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
                 orderToSave.OrderDate = downloadedOrder.orderDate;
-                orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
-                orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate;
+
+                orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate.Year > 1754
+                    ? downloadedOrder.shippingInfo.estimatedDeliveryDate
+                    : downloadedOrder.orderDate;
+
+                orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate.Year > 1754
+                    ? downloadedOrder.shippingInfo.estimatedShipDate
+                    : downloadedOrder.orderDate;
+
                 orderToSave.RequestedShipping = downloadedOrder.shippingInfo.methodCode.ToString();
                 orderToSave.RequestedShippingMethodCode = orderToSave.RequestedShipping;
 

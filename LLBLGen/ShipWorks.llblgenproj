@@ -2250,6 +2250,7 @@
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
+          <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ShipSenseEnabled" Type="bool" FieldIndex="43" />
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
@@ -7186,6 +7187,7 @@
                     <Field Name="FedExFimsUsername" Ordinal="50" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
+                    <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -11306,6 +11308,7 @@
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
+            <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />
             <FieldMapping FieldName="ShipSenseEnabled" TargetFieldName="ShipSenseEnabled" />
             <FieldMapping FieldName="ShipSenseEndShipmentID" TargetFieldName="ShipSenseEndShipmentID" />

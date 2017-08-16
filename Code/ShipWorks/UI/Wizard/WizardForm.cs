@@ -943,7 +943,10 @@ namespace ShipWorks.UI.Wizard
                 }
             }
 
-            DialogResult = result;
+            if (DialogResult == DialogResult.None)
+            {
+                DialogResult = result;
+            }
         }
 
         /// <summary>

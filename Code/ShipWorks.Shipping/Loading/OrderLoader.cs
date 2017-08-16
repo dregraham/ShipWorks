@@ -11,6 +11,7 @@ using log4net;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Loading
 {
@@ -25,16 +26,18 @@ namespace ShipWorks.Shipping.Loading
         private readonly IShipmentsValidator shipmentsLoaderValidator;
         private readonly IShipmentsLoader shipmentLoader;
         private readonly ILog log;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLoader(IMessageHelper messageHelper, IShipmentsLoader shipmentLoader,
-            IShipmentsValidator shipmentsLoaderValidator, Func<Type, ILog> getLogger)
+            IShipmentsValidator shipmentsLoaderValidator, Func<Type, ILog> getLogger, IShippingSettings shippingSettings)
         {
             this.messageHelper = messageHelper;
             this.shipmentLoader = shipmentLoader;
             this.shipmentsLoaderValidator = shipmentsLoaderValidator;
+            this.shippingSettings = shippingSettings;
             log = getLogger(GetType());
         }
 
@@ -113,7 +116,8 @@ namespace ShipWorks.Shipping.Loading
             using (BlockingCollection<ShipmentEntity> shipmentsToValidate = new BlockingCollection<ShipmentEntity>())
             {
                 Task<bool> loadShipmentsTask = shipmentLoader
-                    .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
+                    .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments, 
+                               shippingSettings.FetchReadOnly().ShipmentsLoaderEnsureFiltersLoadedTimeout);
 
                 Task<bool> validateTask = shipmentsLoaderValidator
                     .StartTask(progressProvider, globalShipments, shipmentsToValidate);
