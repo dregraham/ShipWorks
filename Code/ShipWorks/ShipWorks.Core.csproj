@@ -947,6 +947,8 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Common\Net\IJsonRequest.cs" />
+    <Compile Include="Common\Net\JsonRequest.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
     <Compile Include="Common\CompositeValidatorResult.cs" />
@@ -1729,7 +1731,6 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
@@ -1744,6 +1745,7 @@
     <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Jet\IJetStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
@@ -10592,6 +10594,7 @@
     <None Include="Resources\infiplex.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
+    <None Include="Resources\jet.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

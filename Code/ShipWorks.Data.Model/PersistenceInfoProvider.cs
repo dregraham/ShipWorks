@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(186);
+			this.InitClass(189);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -125,6 +125,9 @@ namespace ShipWorks.Data.Model
 			InitIParcelProfileEntityMappings();
 			InitIParcelProfilePackageEntityMappings();
 			InitIParcelShipmentEntityMappings();
+			InitJetOrderEntityMappings();
+			InitJetOrderItemEntityMappings();
+			InitJetStoreEntityMappings();
 			InitLabelSheetEntityMappings();
 			InitLemonStandOrderEntityMappings();
 			InitLemonStandOrderItemEntityMappings();
@@ -1678,6 +1681,32 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("IParcelShipmentEntity", "TrackBySMS", "TrackBySMS", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 			this.AddElementFieldMapping("IParcelShipmentEntity", "IsDeliveryDutyPaid", "IsDeliveryDutyPaid", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 			this.AddElementFieldMapping("IParcelShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+		}
+
+		/// <summary>Inits JetOrderEntity's mappings</summary>
+		private void InitJetOrderEntityMappings()
+		{
+			this.AddElementMapping("JetOrderEntity", @"ShipWorksLocal", @"dbo", "JetOrder", 2, 0);
+			this.AddElementFieldMapping("JetOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("JetOrderEntity", "MerchantOrderId", "MerchantOrderId", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+		}
+
+		/// <summary>Inits JetOrderItemEntity's mappings</summary>
+		private void InitJetOrderItemEntityMappings()
+		{
+			this.AddElementMapping("JetOrderItemEntity", @"ShipWorksLocal", @"dbo", "JetOrderItem", 3, 0);
+			this.AddElementFieldMapping("JetOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("JetOrderItemEntity", "MerchantSku", "MerchantSku", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("JetOrderItemEntity", "JetOrderItemID", "JetOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+		}
+
+		/// <summary>Inits JetStoreEntity's mappings</summary>
+		private void InitJetStoreEntityMappings()
+		{
+			this.AddElementMapping("JetStoreEntity", @"ShipWorksLocal", @"dbo", "JetStore", 3, 0);
+			this.AddElementFieldMapping("JetStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("JetStoreEntity", "ApiUser", "ApiUser", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("JetStoreEntity", "Secret", "Secret", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits LabelSheetEntity's mappings</summary>

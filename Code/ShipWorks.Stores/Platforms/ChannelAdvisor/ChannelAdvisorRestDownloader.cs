@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -21,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
     [Component]
-    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader, IOrderElementFactory
+    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
     {
         private readonly IChannelAdvisorRestClient restClient;
         private readonly Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory;
@@ -127,58 +126,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
             }
         }
-
-        /// <summary>
-        /// Create an item for the order
-        /// </summary>
-        OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
-
-        /// <summary>
-        /// Create an item attribute for the item
-        /// </summary>
-        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
-            InstantiateOrderItemAttribute(item);
-
-        /// <summary>
-        /// Create an item attribute for the item
-        /// </summary>
-        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item,
-            string name,
-            string description,
-            decimal unitPrice,
-            bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
-
-        /// <summary>
-        /// Crate a charge for the given order
-        /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
-
-        /// <summary>
-        /// Create a charge for the given order
-        /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order,
-            string type,
-            string description,
-            decimal amount) => InstantiateOrderCharge(order, type, description, amount);
-
-        /// <summary>
-        /// Create a note for the given order
-        /// </summary>
-        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order,
-            string noteText,
-            DateTime noteDate,
-            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
-
-        /// <summary>
-        /// Create a payment detail for the given order
-        /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) =>
-            InstantiateOrderPaymentDetail(order);
-
-        /// <summary>
-        /// Create a payment detail for the given order
-        /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
-            InstantiateOrderPaymentDetail(order, label, value);
     }
 }
