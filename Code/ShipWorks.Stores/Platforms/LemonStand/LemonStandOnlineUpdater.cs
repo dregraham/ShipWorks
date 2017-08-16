@@ -123,7 +123,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             foreach (long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-                await UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                if (shipment != null)
+                {
+                    await UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                }
             }
         }
 
