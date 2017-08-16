@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -25,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Perform request transformation
         /// </summary>
-        protected override void TransformRequest(HttpVariableRequestSubmitter request, string action)
+        protected override void TransformRequest(IHttpVariableRequestSubmitter request, string action)
         {
             base.TransformRequest(request, action);
 

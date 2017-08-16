@@ -24,13 +24,18 @@ namespace ShipWorks.Stores.Platforms.Miva
     [Component(RegistrationType.Self)]
     public class MivaStoreType : GenericModuleStoreType
     {
+        private readonly Func<MivaStoreEntity, MivaWebClient> createWebClient;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+        public MivaStoreType(StoreEntity store,
+            IMessageHelper messageHelper,
+            IOrderManager orderManager,
+            Func<MivaStoreEntity, MivaWebClient> createWebClient) :
             base(store, messageHelper, orderManager)
         {
-
+            this.createWebClient = createWebClient;
         }
 
         /// <summary>
@@ -101,10 +106,8 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Create the MivaWebClient
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
-        {
-            return new MivaWebClient((MivaStoreEntity) Store);
-        }
+        public override GenericStoreWebClient CreateWebClient() =>
+            createWebClient((MivaStoreEntity) Store);
 
         /// <summary>
         /// Read the capabilities of the given module
@@ -170,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Miva
             {
                 try
                 {
-                    MivaWebClient webClient = new MivaWebClient(miva);
+                    MivaWebClient webClient = createWebClient(miva);
                     order.OrderNumber = webClient.GetNextOrderID();
                 }
                 catch (GenericStoreException ex)

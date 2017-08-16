@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
@@ -11,7 +12,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
 {

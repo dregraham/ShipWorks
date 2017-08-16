@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Net
 {
@@ -73,6 +74,10 @@ namespace Interapptive.Shared.Net
         /// </summary>
         IHttpResponseReader GetResponse();
 
+        /// <summary>
+        /// Execute the request
+        /// </summary>
+        Task<IHttpResponseReader> GetResponseAsync();
 
         /// <summary>
         /// Prepare the URI of the request

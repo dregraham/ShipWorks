@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
@@ -37,6 +38,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControlWithWalmartTaskType()
         {
+            IoC.Initialize(mock.Container);
+            mock.Provide(new WalmartShipmentUploadTask());
+
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.TypeCode = (int) StoreTypeCode.Walmart;
 
@@ -44,11 +48,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             var onlineUpdateActionControl = testObject.CreateAddStoreWizardOnlineUpdateActionControl();
 
-            var scope = mock.CreateMock<ILifetimeScope>();
-            scope.Setup(x => x.Resolve(typeof(WalmartShipmentUploadTask)))
-                .Returns(new WalmartShipmentUploadTask());
-
-            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(scope.Object, store).FirstOrDefault();
+            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(mock.Container, store).FirstOrDefault();
 
             Assert.Equal(typeof(WalmartShipmentUploadTask), actionTask.GetType());
         }

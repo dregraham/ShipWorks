@@ -1325,6 +1325,8 @@
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderSearchBaseProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
     <Compile Include="Stores\Content\Controls\IOrderCombinationUserInteraction.cs" />
     <Compile Include="Stores\Content\ICombineOrderGateway.cs" />

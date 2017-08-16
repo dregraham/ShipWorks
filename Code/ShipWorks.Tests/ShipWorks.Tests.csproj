@@ -209,7 +209,6 @@
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
-    <Compile Include="Actions\Tasks\ActionTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />

@@ -11,7 +11,6 @@ using System.Xml;
 using System.Xml.Schema;
 using Autofac;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -21,7 +20,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Import.Xml.Schema;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -310,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Submits a request to the online store and returns the response
         /// </summary>
-        protected virtual async Task<GenericModuleResponse> ProcessRequestAsync(HttpVariableRequestSubmitter request, string action)
+        protected virtual async Task<GenericModuleResponse> ProcessRequestAsync(IHttpVariableRequestSubmitter request, string action)
         {
             ApiLogEntry logger = PrepareRequest(request, action);
 
@@ -343,10 +341,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Prepare a web request for execution
         /// </summary>
-        private ApiLogEntry PrepareRequest(HttpVariableRequestSubmitter request, string action)
+        private ApiLogEntry PrepareRequest(IHttpVariableRequestSubmitter request, string action)
         {
-            GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
-
             // add the action parameter
             request.Variables.Add("action", action);
 
@@ -392,6 +388,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             TransformRequest(request, action);
 
             // log the request
+            GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
+
             ApiLogEntry logger = new ApiLogEntry(genericStoreType.LogSource, action);
             logger.LogRequest(request);
             return logger;
@@ -479,7 +477,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// The request construction is complete and ready to be executed.
         /// For derived classes.
         /// </summary>
-        protected virtual void TransformRequest(HttpVariableRequestSubmitter request, string action)
+        protected virtual void TransformRequest(IHttpVariableRequestSubmitter request, string action)
         {
 
         }

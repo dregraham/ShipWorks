@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
     /// Combined order search provider for order number complete
     /// </summary>
     [Component]
-    public class CombineOrderNumberCompleteSearchProvider : CombineOrderSearchBaseProvider<string>
+    public class CombineOrderNumberCompleteSearchProvider : CombineOrderSearchBaseProvider<string>, ICombineOrderNumberCompleteSearchProvider
     {
         /// <summary>
         /// Gets the online store's order identifier
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
         protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             return await GetCombinedOnlineOrderIdentifiers(order as OrderEntity, "OrderSearch",
-                OrderSearchFields.OrderID == order.OrderID & OrderSearchFields.IsManual == false, 
+                OrderSearchFields.OrderID == order.OrderID & OrderSearchFields.IsManual == false,
                 () => OrderSearchFields.OrderNumberComplete.ToValue<string>()).ConfigureAwait(false);
         }
 

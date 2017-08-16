@@ -7,7 +7,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -15,7 +16,9 @@ using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Miva
@@ -23,19 +26,26 @@ namespace ShipWorks.Stores.Platforms.Miva
     /// <summary>
     /// Web client for connecting to the miva module.  Builds on top of the generic client.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class MivaWebClient : GenericStoreWebClient
     {
         const string TemporarySessionQueryString = "TemporarySession=1";
         static readonly ILog log = LogManager.GetLogger(typeof(MivaWebClient));
 
         MivaStoreEntity store = null;
+        private readonly ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider;
+        readonly ICombineOrderNumberSearchProvider orderNumberSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaWebClient(MivaStoreEntity store)
+        public MivaWebClient(MivaStoreEntity store,
+            ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider,
+            ICombineOrderNumberSearchProvider orderNumberSearchProvider)
             : base(store)
         {
+            this.orderNumberSearchProvider = orderNumberSearchProvider;
+            this.orderNumberCompleteSearchProvider = orderNumberCompleteSearchProvider;
             this.store = store;
         }
 
@@ -58,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Finish preparing the request with miva specific data
         /// </summary>
-        protected override void TransformRequest(HttpVariableRequestSubmitter request, string action)
+        protected override void TransformRequest(IHttpVariableRequestSubmitter request, string action)
         {
             // Everything but GetStors requires the specific store code
             if (action == "getstores")
@@ -121,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         }
 
         /// <summary>
-        /// Get the list of miva stores from the the configured miva module
+        /// Get the list of miva stores from the configured miva module
         /// </summary>
         public List<MivaStoreHeader> GetMivaStores()
         {
@@ -171,30 +181,22 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Send the order status update
         /// </summary>
-        public override Task UpdateOrderStatus(OrderEntity order, object code, string comment)
+        public override async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
         {
             if (order.IsManual)
             {
                 log.InfoFormat("Not updating order {0} online since its manual.", order.OrderID);
-                return Task.CompletedTask;
+                return;
             }
 
             switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
             {
                 case MivaOnlineUpdateStrategy.None:
-                    {
-                        throw new GenericStoreException("The store is not configured for updating online status.");
-                    }
-
+                    throw new GenericStoreException("The store is not configured for updating online status.");
                 case MivaOnlineUpdateStrategy.Sebenza:
-                    {
-                        ExecuteSebenzaOnlineUpdate(CreateSebenzaOnlineUpdateXml(order, code, comment, null));
-
-                        break;
-                    }
+                    await UpdateOnlineStatusThroughSebenza(order, code, comment, null).ConfigureAwait(false);
+                    break;
             }
-
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -217,129 +219,189 @@ namespace ShipWorks.Stores.Platforms.Miva
             switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
             {
                 case MivaOnlineUpdateStrategy.None:
-                    {
-                        throw new GenericStoreException("The store is not configured for updating online status.");
-                    }
-
+                    throw new GenericStoreException("The store is not configured for updating online status.");
                 case MivaOnlineUpdateStrategy.Sebenza:
-                    {
-                        ExecuteSebenzaOnlineUpdate(CreateSebenzaOnlineUpdateXml(order, order.OnlineStatusCode, null, shipment));
-
-                        break;
-                    }
-
+                    await UpdateOnlineStatusThroughSebenza(order, order.OnlineStatusCode, null, shipment).ConfigureAwait(false);
+                    break;
                 case MivaOnlineUpdateStrategy.MivaNative:
-                    {
-                        HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                        GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(store);
+                    await ExecuteNativeOnlineUpdate(order, shipment);
+                    break;
+            }
+        }
 
-                        request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
-                        request.Variables.Add("tracking", shipment.TrackingNumber);
-                        request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
-                        request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
+        /// <summary>
+        /// Update online status using Sebenza
+        /// </summary>
+        private async Task UpdateOnlineStatusThroughSebenza(OrderEntity order, object code, string comment, ShipmentEntity shipment)
+        {
+            var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+            var results = new List<GenericStoreException>();
 
-                        GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+            foreach (long identifier in identifiers)
+            {
+                try
+                {
+                    var uploadXml = CreateSebenzaOnlineUpdateXml(identifier, order.OnlineStatusCode, code, comment, shipment);
+                    await ExecuteSebenzaOnlineUpdate(uploadXml).ConfigureAwait(false);
+                }
+                catch (GenericStoreException ex)
+                {
+                    results.Add(ex);
+                }
+            }
 
-                        // extract the new status
-                        string newStatus = XPathUtility.Evaluate(response.XPath, "//OrderStatus", "failed_after_update");
+            if (results.Any())
+            {
+                throw results.First();
+            }
+        }
 
-                        // set status to what was returned
-                        order.OnlineStatusCode = newStatus;
+        /// <summary>
+        /// Execute a Miva native online update
+        /// </summary>
+        private async Task ExecuteNativeOnlineUpdate(OrderEntity order, ShipmentEntity shipment)
+        {
+            var orderIdentifiers = await orderNumberCompleteSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-                        GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
-                        order.OnlineStatus = genericStoreType.CreateStatusCodeProvider().GetCodeName(newStatus);
+            foreach (string identifier in orderIdentifiers)
+            {
+                IHttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-                        // save the order
-                        using (SqlAdapter adapter = new SqlAdapter(true))
-                        {
-                            // update the base order table
-                            adapter.SaveEntity(order, false);
-                            adapter.Commit();
-                        }
+                request.Variables.Add("order", identifier);
+                request.Variables.Add("tracking", shipment.TrackingNumber);
+                request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
+                request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
 
-                        break;
-                    }
+                GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+
+                // extract the new status
+                string newStatus = XPathUtility.Evaluate(response.XPath, "//OrderStatus", "failed_after_update");
+
+                // set status to what was returned
+                order.OnlineStatusCode = newStatus;
+
+                GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
+                order.OnlineStatus = genericStoreType.CreateStatusCodeProvider().GetCodeName(newStatus);
+
+                // save the order
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    // update the base order table
+                    await adapter.SaveEntityAsync(order, true).ConfigureAwait(false);
+                    adapter.Commit();
+                }
             }
         }
 
         /// <summary>
         /// Create the xml to use to push to the sebenza module
         /// </summary>
-        private string CreateSebenzaOnlineUpdateXml(OrderEntity order, object statusCode, string statusComment, ShipmentEntity shipment)
+        private string CreateSebenzaOnlineUpdateXml(long orderNumber, object onlineStatusCode, object statusCode, string statusComment, IShipmentEntity shipment)
         {
             using (StringWriter stringWriter = new StringWriter())
             {
                 XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);
-                xmlWriter.WriteStartDocument();
-
-                // open element
-                xmlWriter.WriteStartElement("OrderStatus");
-
-                // open order
-                xmlWriter.WriteStartElement("Order");
-
-                xmlWriter.WriteElementString("Id", order.OrderNumber.ToString());
-                xmlWriter.WriteElementString("Note", statusComment ?? "");
-
-                // Wether to send an email on this update to the buyer
-                bool sendEmail = store.OnlineUpdateStatusChangeEmail && statusCode != null;
-
-                if (statusCode != null)
+                using (xmlWriter.WriteStartDocumentDisposable())
                 {
-                    sendEmail = sendEmail && ((string) statusCode != (string) order.OnlineStatusCode);
-
-                    xmlWriter.WriteElementString("Status", statusCode.ToString());
-                }
-
-                xmlWriter.WriteElementString("SendEmail", sendEmail ? "1" : "0");
-
-                if (shipment != null)
-                {
-                    string carrierCode = "";
-
-                    switch ((ShipmentTypeCode) shipment.ShipmentType)
+                    using (xmlWriter.WriteStartElementDisposable("OrderStatus"))
                     {
-                        case ShipmentTypeCode.FedEx:
-                            carrierCode = "FEDEX";
-                            break;
+                        using (xmlWriter.WriteStartElementDisposable("Order"))
+                        {
+                            xmlWriter.WriteElementString("Id", orderNumber.ToString());
+                            xmlWriter.WriteElementString("Note", statusComment ?? "");
 
-                        case ShipmentTypeCode.UpsOnLineTools:
-                        case ShipmentTypeCode.UpsWorldShip:
-                            carrierCode = "UPS";
-                            break;
+                            // Whether to send an email on this update to the buyer
+                            bool sendEmail = store.OnlineUpdateStatusChangeEmail && statusCode != null;
 
-                        case ShipmentTypeCode.PostalWebTools:
-                        case ShipmentTypeCode.Endicia:
-                        case ShipmentTypeCode.Express1Endicia:
-                        case ShipmentTypeCode.Express1Usps:
-                        case ShipmentTypeCode.Usps:
-                            carrierCode = "USPS";
-                            break;
+                            if (statusCode != null)
+                            {
+                                sendEmail = sendEmail && ((string) statusCode != (string) onlineStatusCode);
 
-                        default:
-                            carrierCode = "OTHER";
-                            break;
+                                xmlWriter.WriteElementString("Status", statusCode.ToString());
+                            }
+
+                            xmlWriter.WriteElementString("SendEmail", sendEmail ? "1" : "0");
+
+                            WriteShipmentDetails(shipment, xmlWriter);
+                        }
                     }
-
-                    xmlWriter.WriteElementString("Carrier", carrierCode);
-                    xmlWriter.WriteElementString("Tracking", shipment.TrackingNumber);
                 }
-
-                // end Order node
-                xmlWriter.WriteEndElement();
-
-                // end doc
-                xmlWriter.WriteEndElement();
 
                 return stringWriter.ToString();
             }
         }
 
         /// <summary>
+        /// Write shipment details to the writer
+        /// </summary>
+        private static void WriteShipmentDetails(IShipmentEntity shipment, XmlTextWriter xmlWriter)
+        {
+            if (shipment == null)
+            {
+                return;
+            }
+
+            string carrierCode = "";
+
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
+            {
+                case ShipmentTypeCode.FedEx:
+                    carrierCode = "FEDEX";
+                    break;
+
+                case ShipmentTypeCode.UpsOnLineTools:
+                case ShipmentTypeCode.UpsWorldShip:
+                    carrierCode = "UPS";
+                    break;
+
+                case ShipmentTypeCode.PostalWebTools:
+                case ShipmentTypeCode.Endicia:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Usps:
+                case ShipmentTypeCode.Usps:
+                    carrierCode = "USPS";
+                    break;
+
+                default:
+                    carrierCode = "OTHER";
+                    break;
+            }
+
+            xmlWriter.WriteElementString("Carrier", carrierCode);
+            xmlWriter.WriteElementString("Tracking", shipment.TrackingNumber);
+        }
+
+        /// <summary>
         /// Execute the Sebenza online update request
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private void ExecuteSebenzaOnlineUpdate(string xml)
+        private async Task ExecuteSebenzaOnlineUpdate(string xml)
+        {
+            IHttpVariableRequestSubmitter request = PrepareRequest(xml);
+
+            // log the request
+            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Miva, "SebenzaOnlineUpdate");
+            logger.LogRequest(request);
+
+            // execute the request
+            try
+            {
+                using (IHttpResponseReader postResponse = await request.GetResponseAsync().ConfigureAwait(false))
+                {
+                    string resultXml = await postResponse.ReadResultAsync().ConfigureAwait(false);
+
+                    ProcessResults(logger, resultXml);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+            }
+        }
+
+        /// <summary>
+        /// Prepare a request for upload
+        /// </summary>
+        private IHttpVariableRequestSubmitter PrepareRequest(string xml)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             request.Variables.Add("action", "ImportStatus");
@@ -357,66 +419,56 @@ namespace ShipWorks.Stores.Platforms.Miva
             // Setup the request
             request.Uri = new Uri(Regex.Replace(GetUrlFromStore(store).AbsoluteUri, "util/.*?[.]mvc", "fulfill/orderstatus5.mvc", RegexOptions.IgnoreCase).Replace("http:", "https:"));
             request.Timeout = TimeSpan.FromMinutes(1);
+            return request;
+        }
 
-            // log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Miva, "SebenzaOnlineUpdate");
-            logger.LogRequest(request);
+        /// <summary>
+        /// Process the results of a request
+        /// </summary>
+        private static void ProcessResults(ApiLogEntry logger, string resultXml)
+        {
+            // An XML Document cannot start with whitespace, and I'm not positive the sebenza module never would
+            if (!resultXml.StartsWith("<"))
+            {
+                resultXml = resultXml.Trim();
+            }
 
-            // execute the request
+            // log the response
+            logger.LogResponse(resultXml);
+
+            // Strip invalid input characters
+            resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
+
+            // look for the <ERROR:......>
+            Match match = Regex.Match(resultXml, @"\<ERROR:(.*)\>");
+            if (match.Success)
+            {
+                throw new WebException(match.Groups[1].Value);
+            }
+
+            // check response
+            XmlDocument xmlDocument = new XmlDocument();
             try
             {
-                using (IHttpResponseReader postResponse = request.GetResponse())
+                xmlDocument.LoadXml(resultXml);
+
+                XmlNode completeNode = xmlDocument.SelectSingleNode("//Complete");
+                if (completeNode != null)
                 {
-                    string resultXml = postResponse.ReadResult();
-
-                    // An XML Document cannot start with whitespace, and im not positive the sebenza module never would
-                    if (!resultXml.StartsWith("<"))
+                    bool success = (completeNode.InnerText.Trim() == "1");
+                    if (!success)
                     {
-                        resultXml = resultXml.Trim();
-                    }
-
-                    // log the response
-                    logger.LogResponse(resultXml);
-
-                    // Strip invalid input characters
-                    resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
-
-                    // look for the <ERROR:......>
-                    Match match = Regex.Match(resultXml, @"\<ERROR:(.*)\>");
-                    if (match.Success)
-                    {
-                        throw new WebException(match.Groups[1].Value);
-                    }
-
-                    // check response
-                    XmlDocument xmlDocument = new XmlDocument();
-                    try
-                    {
-                        xmlDocument.LoadXml(resultXml);
-
-                        XmlNode completeNode = xmlDocument.SelectSingleNode("//Complete");
-                        if (completeNode != null)
-                        {
-                            bool success = (completeNode.InnerText.Trim() == "1");
-                            if (!success)
-                            {
-                                throw new GenericStoreException("The Sebenza module reports that the order was not updated.");
-                            }
-                        }
-                        else
-                        {
-                            throw new GenericStoreException("The Sebenza module is returning results in an unknown format.");
-                        }
-                    }
-                    catch (XmlException ex)
-                    {
-                        throw new GenericStoreException("The Sebenza module is returning results in an unknown format.", ex);
+                        throw new GenericStoreException("The Sebenza module reports that the order was not updated.");
                     }
                 }
+                else
+                {
+                    throw new GenericStoreException("The Sebenza module is returning results in an unknown format.");
+                }
             }
-            catch (Exception ex)
+            catch (XmlException ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+                throw new GenericStoreException("The Sebenza module is returning results in an unknown format.", ex);
             }
         }
 

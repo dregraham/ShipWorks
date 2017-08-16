@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Xsl;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
+using System.Collections.Specialized;
 using System.IO;
+using System.Net;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Xsl;
+using Interapptive.Shared.Net;
 using log4net;
-using System.Web;
-using System.Net;
-using System.Collections.Specialized;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
 {
     /// <summary>
-    /// Web client for backward compatiblity with older V2
+    /// Web client for backward compatibility with older V2
     /// ShipWorks modules.  Provides parameter name/value and response transformation
     /// </summary>
     public class LegacyAdapterStoreWebClient : GenericStoreWebClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(LegacyAdapterStoreWebClient));
 
         // URI of the xsl extension
         const string shipworksUriBase = "http://www.interapptive.com/shipworks/";
 
         // action used to determine SW module version compatibility
-        const string ACTION_VERSIONPROBE = "version_probe"; 
+        const string ACTION_VERSIONPROBE = "version_probe";
 
         // Tracks which URL's are known conform to the legacy 2x way of doing modules
         static Dictionary<string, bool> compatibilityMap = new Dictionary<string, bool>();
@@ -46,10 +43,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
         XslCompiledTransform stylesheet;
 
         // Some modules fail the version probe with a non OK HttpStatusCode.  If that's the case this can be set so the client
-        // knows when a failure is just an indidcator to go into compatibility mode.
+        // knows when a failure is just an indicator to go into compatibility mode.
         HttpStatusCode? versionProbeCompatibilityIndicator = null;
 
-        // Whether or not to also send variables as HTTP Gets 
+        // Whether or not to also send variables as HTTP Gets
         HttpVerb compatibilityVerb = HttpVerb.Get;
 
         /// <summary>
@@ -60,22 +57,22 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
             get { return newVariables; }
         }
 
-          /// <summary>
+        /// <summary>
         /// Constructor specifying the stylesheet used to transform downloaded data
         /// </summary>
         public LegacyAdapterStoreWebClient(GenericModuleStoreEntity store, XslCompiledTransform communicationStylesheet, GenericModuleCapabilities legacyCapabilities)
             : this(store, communicationStylesheet, legacyCapabilities, null)
         {
-            
+
         }
 
         /// <summary>
         /// Constructor for providing a mapping of old parameter names to new ones
         /// </summary>
         public LegacyAdapterStoreWebClient(
-            GenericModuleStoreEntity store, 
+            GenericModuleStoreEntity store,
             XslCompiledTransform communicationStylesheet,
-            GenericModuleCapabilities legacyCapabilities, 
+            GenericModuleCapabilities legacyCapabilities,
             Dictionary<string, VariableTransformer> variableTransformers)
             : base(store)
         {
@@ -89,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 throw new ArgumentNullException("legacyCapabilities", "Adapter capapabilities must be specified.");
             }
 
-            // stylesheet for tranforming module responses
+            // stylesheet for transforming module responses
             this.stylesheet = communicationStylesheet;
 
             // store capabilities
@@ -119,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
 
         /// <summary>
         /// Some modules fail the version probe with a non OK HttpStatusCode.  If that's the case this can be set so the client
-        /// knows when a failure is just an indidcator to go into compatibility mode.
+        /// knows when a failure is just an indicator to go into compatibility mode.
         /// </summary>
         public HttpStatusCode? VersionProbeCompatibilityIndicator
         {
@@ -145,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
         }
 
         /// <summary>
-        /// Indiciates if the current webclient should run in compatibility mode
+        /// Indicates if the current web client should run in compatibility mode
         /// </summary>
         private bool IsCompatibilityMode()
         {
@@ -186,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 {
                     log.Info("Web client not running in Compatibility Mode.");
 
-                    // onliy SW 3 modules report 1.0 or higher
+                    // only SW 3 modules report 1.0 or higher
                     return false;
                 }
                 else
@@ -234,9 +231,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
         }
 
         /// <summary>
-        /// Perform any manipulation of the request variables before it is sent 
+        /// Perform any manipulation of the request variables before it is sent
         /// </summary>
-        protected override void TransformRequest(HttpVariableRequestSubmitter request, string action)
+        protected override void TransformRequest(IHttpVariableRequestSubmitter request, string action)
         {
             // If we aren't in compatibility mode there is nothing to transform
             if (action == ACTION_VERSIONPROBE || !IsCompatibilityMode())
@@ -244,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 return;
             }
 
-            // set the requst verb for running in compatibliity mode
+            // set the request verb for running in compatibility mode
             request.Verb = CompatibilityVerb;
 
             // Perform any variable transformations
@@ -252,7 +249,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
             {
                 HttpVariable currentVariable = request.Variables[i];
 
-                // determine if there's a transformer available 
+                // determine if there's a transformer available
                 if (!variableTransformers.ContainsKey(currentVariable.Name))
                 {
                     // go to the next
@@ -284,14 +281,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 request.Variables.Add(newVariableName, newVariables[newVariableName]);
             }
         }
-        
+
         /// <summary>
         /// Transforms the xml with the stylesheet
         /// </summary>
         protected override string TransformResponse(string resultXml, string action)
         {
             // Since we don't even go to the web for "getmodule" when its in compatibility mode
-            // we know we arent transforming that.  And if its not compatibilty mode, obviously we don't do anything.
+            // we know we aren't transforming that.  And if its not compatibility mode, obviously we don't do anything.
             if (action == ACTION_VERSIONPROBE || !IsCompatibilityMode() || action == "getmodule")
             {
                 return resultXml;
@@ -320,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
 
                             xmlTextWriter.Flush();
 
-                            // return the trasformed document
+                            // return the transformed document
                             return stringWriter.ToString();
                         }
                     }
@@ -354,7 +351,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter
                 XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);
 
                 xmlWriter.WriteStartElement("ShipWorks");
-                
+
                 // Just use some fake hard-coded values that will validate
                 xmlWriter.WriteAttributeString("moduleVersion", "2.9.0");
                 xmlWriter.WriteAttributeString("schemaVersion", "1.0.0");

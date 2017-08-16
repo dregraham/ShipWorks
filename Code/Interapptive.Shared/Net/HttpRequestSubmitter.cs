@@ -114,7 +114,6 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
-        [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
@@ -215,6 +214,9 @@ namespace Interapptive.Shared.Net
             return ProcessResponse(webRequest, webResponse);
         }
 
+        /// <summary>
+        /// Process the response
+        /// </summary>
         private IHttpResponseReader ProcessResponse(HttpWebRequest webRequest, HttpWebResponse webResponse)
         {
             // Check for OK
