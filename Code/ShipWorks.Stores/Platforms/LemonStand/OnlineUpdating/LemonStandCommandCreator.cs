@@ -36,6 +36,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         public IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands() =>
             Enumerable.Empty<IMenuCommand>();
 
+        /// <summary>
+        /// Create online update commands
+        /// </summary>
         public IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands(StoreEntity store)
         {
             LemonStandStoreEntity typedStore = (LemonStandStoreEntity) store;
