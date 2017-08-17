@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
@@ -9,7 +11,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Templates.Tokens;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -32,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Given shipmentID, send comment, markAsPad, and markAsShipped as applicable
         /// </summary>
-        public void UpdateOnlineStatus(long shipmentID, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
+        public async Task UpdateOnlineStatus(long shipmentID, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
 
@@ -42,17 +46,17 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 return;
             }
 
-            UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork);
+            await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Update the online status of the given shipment
         /// </summary>
-        public void UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment)
+        public async Task UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
 
-            UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork);
+            await UpdateOnlineStatus(shipment, markAsPaid, markAsShipped, comment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -62,9 +66,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Upload the online status of the shpment
+        /// Upload the online status of the shipment
         /// </summary>
-        public void UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
+        public async Task UpdateOnlineStatus(ShipmentEntity shipment, bool? markAsPaid, bool? markAsShipped, string comment, UnitOfWork2 unitOfWork)
         {
             if (shipment == null)
             {
@@ -82,17 +86,17 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // The comment is tokenizable
             string processedComment = string.IsNullOrEmpty(comment) ? string.Empty : TemplateTokenProcessor.ProcessTokens(comment, shipment.ShipmentID);
 
-            UpdateOnlineStatus(order, markAsPaid, markAsShipped, processedComment, unitOfWork);
+            await UpdateOnlineStatus(order, markAsPaid, markAsShipped, processedComment, unitOfWork).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Update the online status of the given order
         /// </summary>
-        public void UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped)
+        public async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
 
-            UpdateOnlineStatus(order, markAsPaid, markAsShipped, "", unitOfWork);
+            await UpdateOnlineStatus(order, markAsPaid, markAsShipped, "", unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -104,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Update the online status of the given order
         /// </summary>
-        private void UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped, string processedComment, UnitOfWork2 unitOfWork)
+        private async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped, string processedComment, UnitOfWork2 unitOfWork)
         {
             if (order == null)
             {
@@ -127,9 +131,19 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             try
             {
-                //set the order status at etsy
-                webClient.UploadStatusDetails(order.OrderNumber, processedComment, markAsPaid, markAsShipped);
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ICombineOrderSearchProvider<long> combinedOrderNumber = scope.Resolve<ICombineOrderSearchProvider<long>>();
 
+                    IEnumerable<long> orderNumbers = await combinedOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                    foreach (long orderNumber in orderNumbers)
+                    {
+                        //set the order status at etsy
+                        webClient.UploadStatusDetails(orderNumber, processedComment, markAsPaid, markAsShipped);
+                    } 
+                }
+                
                 // Then update the status in our local database
                 EtsyOrderStatusUtility.UpdateOrderStatus(order, markAsPaid, markAsShipped, unitOfWork);
             }
@@ -146,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Uploads the shipment details.
         /// </summary>
         /// <param name="shipmentID">The shipment ID.</param>
-        internal void UploadShipmentDetails(long shipmentID, UnitOfWork2 unitOfWork)
+        internal async Task UploadShipmentDetails(long shipmentID, UnitOfWork2 unitOfWork)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
 
@@ -165,13 +179,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 throw new EtsyException("Shipment not associated with order");
             }
 
-            UploadShipmentDetails(order, shipment, unitOfWork);
+            await UploadShipmentDetails(order, shipment, unitOfWork).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        internal void UploadShipmentDetails(long orderID)
+        internal async Task UploadShipmentDetails(long orderID)
         {
             EtsyOrderEntity order = (EtsyOrderEntity)DataProvider.GetEntity(orderID);
 
@@ -195,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             UnitOfWork2 unitOfWork = new UnitOfWork2();
 
-            UploadShipmentDetails(order, shipment, unitOfWork);
+            await UploadShipmentDetails(order, shipment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -210,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="order">The order.</param>
         /// <param name="shipment">The shipment.</param>
         /// <param name="unitOfWork">The unit of work.</param>
-        private void UploadShipmentDetails(EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
+        private async Task UploadShipmentDetails(EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
         {
             var webClient = new EtsyWebClient(etsyStore);
 
@@ -218,7 +232,17 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
-                webClient.UploadShipmentDetails(etsyStore.EtsyShopID, order.OrderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ICombineOrderSearchProvider<long> combineOrderNumber = scope.Resolve<ICombineOrderSearchProvider<long>>();
+
+                    IEnumerable<long> orderNumbers = await combineOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                    foreach (long orderNumber in orderNumbers)
+                    {
+                        webClient.UploadShipmentDetails(etsyStore.EtsyShopID, orderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
+                    }
+                }
             }
             catch (EtsyException ex)
             {

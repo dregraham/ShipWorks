@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using System.ComponentModel;
+using System.Threading.Tasks;
 using ShipWorks.Actions;
 
 namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
@@ -88,11 +85,16 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
         {
             return new EtsyUploadTaskEditor(this);
         }
+        
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (context == null)
             {
@@ -122,11 +124,11 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
             {
                 try
                 {
-                    updater.UpdateOnlineStatus(shipmentID,
+                    await updater.UpdateOnlineStatus(shipmentID,
                         MarkAsPaid ? true : (bool?)null,
                         MarkAsShipped ? true : (bool?)null,
                         WithComment ? Comment : string.Empty,
-                        context.CommitWork);
+                        context.CommitWork).ConfigureAwait(false);
                 }
                 catch (EtsyException ex)
                 {

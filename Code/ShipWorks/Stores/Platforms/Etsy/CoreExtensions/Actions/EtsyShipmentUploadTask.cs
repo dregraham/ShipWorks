@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.Etsy;
-using log4net;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -54,6 +50,11 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
         public override bool SupportsStore(StoreEntity store)
@@ -71,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (context==null)
             {
@@ -101,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
                 // Upload the details, first starting with all the postponed input, plus the current input
                 try
                 {
-                    updater.UploadShipmentDetails(shipmentID, context.CommitWork);
+                    await updater.UploadShipmentDetails(shipmentID, context.CommitWork).ConfigureAwait(false);
                 }
                 catch (EtsyException ex)
                 {
@@ -109,7 +110,5 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
                 }
             }
         }
-
-
     }
 }

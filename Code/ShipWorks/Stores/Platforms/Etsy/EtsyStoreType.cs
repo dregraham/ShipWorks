@@ -265,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
@@ -283,7 +283,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return;
                 }
 
-                onlineUpdater.UpdateOnlineStatus(shipment, null, true, comment);
+               await onlineUpdater.UpdateOnlineStatus(shipment, null, true, comment).ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
@@ -298,7 +298,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Worker thread method for marking an order as not shipped
         /// </summary>
-        private void UpdateOrdersAsNotShippedCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void UpdateOrdersAsNotShippedCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
@@ -306,7 +306,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
                 EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
-                etsyUpdater.UpdateOnlineStatus(order, null, false);
+                await etsyUpdater.UpdateOnlineStatus(order, null, false).ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
@@ -321,7 +321,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Worker thread method for uploading payment details
         /// </summary>
-        private void PaymentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async void PaymentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
@@ -332,7 +332,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
-                etsyUpdater.UpdateOnlineStatus(order, wasPaid, null);
+                await etsyUpdater.UpdateOnlineStatus(order, wasPaid, null).ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
@@ -347,13 +347,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Tracking the upload callback.
         /// </summary>
-        private void TrackingUploadCallback(long orderID, object userstate, BackgroundIssueAdder<long> issueAdder)
+        private async void TrackingUploadCallback(long orderID, object userstate, BackgroundIssueAdder<long> issueAdder)
         {
             try
             {
                 EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater((EtsyStoreEntity) Store);
 
-                etsyUpdater.UploadShipmentDetails(orderID);
+                await etsyUpdater.UploadShipmentDetails(orderID).ConfigureAwait(false);
             }
             catch (EtsyException ex)
             {
