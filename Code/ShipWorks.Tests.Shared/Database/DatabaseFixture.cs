@@ -18,6 +18,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
@@ -241,6 +242,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
         /// </summary>
         public void Dispose()
         {
+            FilterContentManager.WaitForFiltersToComplete(TimeSpan.FromSeconds(5));
             sqlSessionScope.Dispose();
             executionModeScope.Dispose();
         }
