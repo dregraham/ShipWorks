@@ -74,12 +74,12 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Acknowledges the order will be fulfilled by the seller
         /// </summary>
-        public void Acknowledge(JetOrderEntity order, JetStoreEntity store)
+        public void Acknowledge(JetOrderDetailsResult order, JetStoreEntity store)
         {
             JetAcknowledgementRequest jetAcknowledgment = new JetAcknowledgementRequest
             {
-                OrderItems = order.OrderItems.Cast<JetOrderItemEntity>()
-                    .Select(i => new JetAcknowledgementOrderItem { OrderItemId = i.JetOrderItemID }).ToList()
+                OrderItems = order.OrderItems
+                    .Select(i => new JetAcknowledgementOrderItem { OrderItemId = i.OrderItemId }).ToList()
             };
 
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(jetAcknowledgment, jsonSerializerSettings),
@@ -87,6 +87,7 @@ namespace ShipWorks.Stores.Platforms.Jet
 
             submitter.Uri = new Uri($"{orderEndpointPath}/{order.MerchantOrderId}/acknowledge");
             submitter.Verb = HttpVerb.Put;
+            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
 
             jetAuthenticatedRequest.Submit<string>("AcknowledgeOrder", submitter, store);
         }

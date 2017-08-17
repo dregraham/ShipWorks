@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Acknowledge the given order
         /// </summary>
-        void Acknowledge(JetOrderEntity order, JetStoreEntity store);
+        void Acknowledge(JetOrderDetailsResult order, JetStoreEntity store);
 
         /// <summary>
         /// Get order details for the given order
