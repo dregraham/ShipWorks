@@ -42,6 +42,5 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             return ((ILemonStandOrderEntity) order).LemonStandOrderID;
         }
-
     }
 }

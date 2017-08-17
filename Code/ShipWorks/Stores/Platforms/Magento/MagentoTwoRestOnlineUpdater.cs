@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,6 +19,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoRestShipment;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestInvoice;
@@ -37,28 +41,31 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly IDataProvider dataProvider;
         private readonly MagentoStoreEntity store;
         private readonly ILog log;
+        private readonly ICombineOrderSearchProvider<MagentoOrderSearchEntity> combineOrderSearchProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
         /// </summary>
         public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store,
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, IDataProvider dataProvider,
+            IIndex<StoreTypeCode, ICombineOrderSearchProvider<MagentoOrderSearchEntity>> combineOrderSearchProviderFactory,
             Func<Type, ILog> logFactory)
             : base(store)
         {
             this.webClientFactory = webClientFactory;
             this.dataProvider = dataProvider;
             this.store = (MagentoStoreEntity) store;
+            combineOrderSearchProvider = combineOrderSearchProviderFactory[StoreTypeCode.Magento];
             log = logFactory(typeof(MagentoTwoRestOnlineUpdater));
         }
 
         /// <summary>
         /// Uploads shipment details to Magento
         /// </summary>
-        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
+        public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork);
+            await UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -70,14 +77,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads shipment details to Magento
         /// </summary>
-        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
+        public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
             MagentoOrderEntity orderEntity = dataProvider.GetEntity(orderID) as MagentoOrderEntity;
             if (orderEntity == null)
             {
                 return;
             }
-            if (orderEntity.IsManual)
+            if (orderEntity.IsManual && orderEntity.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not executing online action since order {0} is manual.", orderEntity.OrderID);
                 return;
@@ -86,25 +93,29 @@ namespace ShipWorks.Stores.Platforms.Magento
             IMagentoTwoRestClient webClient = webClientFactory(store);
 
             string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
-            long magentoOrderID = orderEntity.MagentoOrderID;
 
-            switch (command)
+            IEnumerable<MagentoOrderSearchEntity> orderSearchEntities = await combineOrderSearchProvider.GetOrderIdentifiers(orderEntity).ConfigureAwait(false);
+
+            foreach (MagentoOrderSearchEntity orderSearchEntity in orderSearchEntities)
             {
-                case MagentoUploadCommand.Complete:
-                    UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, magentoOrderID);
-                    break;
-                case MagentoUploadCommand.Hold:
-                    UpdateAsHold(orderEntity, webClient, processedComments, magentoOrderID);
-                    break;
-                case MagentoUploadCommand.Unhold:
-                    UpdateAsPending(webClient, processedComments, magentoOrderID);
-                    break;
-                case MagentoUploadCommand.Cancel:
-                    UploadAsCancel(webClient, processedComments, magentoOrderID);
-                    break;
-                case MagentoUploadCommand.Comments:
-                    UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, true);
-                    break;
+                switch (command)
+                {
+                    case MagentoUploadCommand.Complete:
+                        UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, orderSearchEntity);
+                        break;
+                    case MagentoUploadCommand.Hold:
+                        UpdateAsHold(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                        break;
+                    case MagentoUploadCommand.Unhold:
+                        UpdateAsPending(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                        break;
+                    case MagentoUploadCommand.Cancel:
+                        UploadAsCancel(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                        break;
+                    case MagentoUploadCommand.Comments:
+                        UploadCommentsIfPresent(webClient, processedComments, orderSearchEntity.MagentoOrderID, true);
+                        break;
+                }
             }
 
             unitOfWork.AddForSave(orderEntity);
@@ -113,13 +124,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Completes the order with Magento and saves online status.
         /// </summary>
-        private void UpdateAsComplete(bool emailCustomer, MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        private void UpdateAsComplete(bool emailCustomer, MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, MagentoOrderSearchEntity orderSearchEntity)
         {
-            Order order = webClient.GetOrder(orderEntity.MagentoOrderID);
-            string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer,
-                order.Items);
-            string invoice = GetInvoice(orderEntity, order.Items);
-            webClient.UploadShipmentDetails(shipmentDetails, invoice, magentoOrderID);
+            Order order = webClient.GetOrder(orderSearchEntity.MagentoOrderID);
+            string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer, order.Items, orderSearchEntity.OriginalOrderID);
+            string invoice = GetInvoice(orderEntity, orderSearchEntity.MagentoOrderID, order.Items, orderSearchEntity.OriginalOrderID);
+            webClient.UploadShipmentDetails(shipmentDetails, invoice, orderSearchEntity.MagentoOrderID);
         }
 
         /// <summary>
@@ -142,25 +152,25 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Puts order on hold
         /// </summary>
-        private void UpdateAsHold(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        private void UpdateAsHold(IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
             UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, false);
-            webClient.HoldOrder(orderEntity.MagentoOrderID);
+            webClient.HoldOrder(magentoOrderID);
         }
 
         /// <summary>
         /// Gets the invoice.
         /// </summary>
-        private string GetInvoice(MagentoOrderEntity orderEntity, IEnumerable<Item> items)
+        private string GetInvoice(MagentoOrderEntity orderEntity, long magentoOrderID, IEnumerable<Item> items, long originalOrderID)
         {
             MagentoInvoiceRequest request = new MagentoInvoiceRequest();
-            request.Invoice.MagentoOrderID = orderEntity.MagentoOrderID;
+            request.Invoice.MagentoOrderID = magentoOrderID;
 
             foreach (Item item in items)
             {
                 MagentoInvoiceItem magentoInvoiceItem = new MagentoInvoiceItem
                 {
-                    Qty = GetQuantity(orderEntity, item),
+                    Qty = GetQuantity(orderEntity, item, originalOrderID),
                     MagentoOrderItemId = item.ItemId
                 };
                 request.Invoice.Items.Add(magentoInvoiceItem);
@@ -174,12 +184,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// First tries to get the actual quantity from the ShipWorks order, but if it cannot
         /// match the item, return the quantity from Magento
         /// </summary>
-        private double GetQuantity(MagentoOrderEntity orderEntity, Item magentoItem)
+        private double GetQuantity(MagentoOrderEntity orderEntity, Item magentoItem, long originalOrderID)
         {
             return
-                orderEntity.OrderItems.FirstOrDefault(
-                    x => x.Code == magentoItem.ItemId.ToString() || x.SKU == magentoItem.Sku || x.Name == magentoItem.Name)?.Quantity ??
-                magentoItem.QtyOrdered;
+                orderEntity.OrderItems
+                    .Where(oi => oi.OriginalOrderID == originalOrderID || oi.OriginalOrderID == orderEntity.OrderID)
+                    .FirstOrDefault(
+                        x => x.Code == magentoItem.ItemId.ToString() || x.SKU == magentoItem.Sku || x.Name == magentoItem.Name)?.Quantity ??
+                    magentoItem.QtyOrdered;
         }
 
         /// <summary>
@@ -196,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the shipment details string from the request
         /// </summary>
-        private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<Item> items)
+        private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<Item> items, long originalOrderID)
         {
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderEntity.OrderID);
             if (shipment == null)
@@ -241,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 {
                     ShipmentItem magentoInvoiceItem = new ShipmentItem()
                     {
-                        Qty = GetQuantity(orderEntity, item),
+                        Qty = GetQuantity(orderEntity, item, originalOrderID),
                         OrderItemId = item.ItemId
                     };
                     request.Items.Add(magentoInvoiceItem);

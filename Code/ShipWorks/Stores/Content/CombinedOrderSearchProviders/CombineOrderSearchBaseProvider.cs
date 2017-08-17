@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Autofac;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -24,9 +23,25 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrderSearchBaseProvider(ISqlAdapterFactory sqlAdapterFactory)
+        protected CombineOrderSearchBaseProvider(ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
+        /// <summary>
+        /// Gets the online store's order identifier entities.
+        /// </summary>
+        protected virtual async Task<IEnumerable<TEntity>> GetCombinedOnlineOrderIdentifiers<TEntity>(
+            IPredicate predicate) where TEntity : IEntity2
+        {
+            QueryFactory factory = new QueryFactory();
+            var query = factory.Create<TEntity>()
+                .Where(predicate);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false) as IEnumerable<TEntity>;
+            }
         }
 
         /// <summary>

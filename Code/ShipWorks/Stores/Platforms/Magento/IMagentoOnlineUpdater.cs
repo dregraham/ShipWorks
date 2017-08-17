@@ -1,4 +1,5 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Threading.Tasks;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -11,11 +12,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads shipment details to Magento
         /// </summary>
-        void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer);
+        Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer);
 
         /// <summary>
         /// Uploads shipment details to Magento
         /// </summary>
-        void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork);
+        Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork);
     }
 }

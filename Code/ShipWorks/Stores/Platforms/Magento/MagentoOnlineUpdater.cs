@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using System;
+using System.Collections.Generic;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -8,8 +10,13 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Templates.Tokens;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -83,10 +90,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on the specified order
         /// </summary>
-        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
+        public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork);
+            await UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -98,16 +105,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on the specified order
         /// </summary>
-        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
+        public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
             MagentoOrderEntity order = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
             if (order != null)
             {
-                if (!order.IsManual)
+                if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
+                {
+                    log.InfoFormat("Not executing online action since order {0} is manual.", order.OrderID);
+                }
+                else
                 {
                     string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
 
-                    MagentoWebClient webclient = (MagentoWebClient)GenericStoreType.CreateWebClient();
+                    MagentoWebClient webclient = (MagentoWebClient) GenericStoreType.CreateWebClient();
 
                     // look for any shipping information if we're Completing an order
                     string carrier = "";
@@ -117,18 +128,27 @@ namespace ShipWorks.Stores.Platforms.Magento
                         GetShipmentDetails(order, ref carrier, ref tracking);
                     }
 
-                    // execute the action
-                    string newStatus = webclient.ExecuteAction(order.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
+                    string newStatus = string.Empty;
+
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        ICombineOrderSearchProvider<MagentoOrderSearchEntity> orderSearchProvider =
+                            scope.ResolveKeyed<ICombineOrderSearchProvider<MagentoOrderSearchEntity>>(StoreTypeCode.Magento);
+
+                        IEnumerable<MagentoOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                        foreach (MagentoOrderSearchEntity orderSearchEntity in orderSearchEntities)
+                        {
+                            // execute the action
+                            newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
+                        }
+                    }
 
                     // set status to what was returned
                     order.OnlineStatusCode = newStatus;
                     order.OnlineStatus = StatusCodes.GetCodeName(newStatus);
 
                     unitOfWork.AddForSave(order);
-                }
-                else
-                {
-                    log.InfoFormat("Not executing online action since order {0} is manual.", order.OrderID);
                 }
             }
         }

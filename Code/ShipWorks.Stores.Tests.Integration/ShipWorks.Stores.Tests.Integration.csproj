@@ -184,6 +184,7 @@
     <Compile Include="Platforms\CombineOrderNumberSearchProviderTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestUploaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
@@ -198,6 +199,10 @@
     <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+      <Project>{41528bda-8c69-4ca9-b358-bc4e6a62d6f2}</Project>
+      <Name>ShipWorks.Tests.Integration.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
       <Name>Interapptive.Shared</Name>
