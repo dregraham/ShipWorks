@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.EbayBuyerID = orderType.BuyerUserID;
             order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
             UpdateOrderAddress(order, orderType.ShippingAddress);
-
+            
             // Requested shipping (but only if we actually have an address)
             if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
             {
@@ -413,6 +413,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private List<OrderItemEntity> LoadTransactions(EbayOrderEntity order, OrderType orderType)
         {
+            order.GuaranteedDelivery = orderType.TransactionArray.Any(t => t.GuaranteedDelivery);
+
             List<OrderItemEntity> abandonedItems = new List<OrderItemEntity>();
 
             // Go through each transaction in the order

@@ -612,6 +612,18 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Sears
                         },
 
+                    new GridColumnDefinition("{036518f8-b52e-4896-89f9-f0d43ae6f5b6}", true,
+                        new GridBooleanDisplayType()
+                        {
+                            FalseText = "No",
+                            TrueText = "Yes"
+                        },
+                        "Guaranteed Delivery", "No",
+                        EbayOrderFields.GuaranteedDelivery)
+                        {
+                            StoreTypeCode = StoreTypeCode.Ebay
+                        },
+
                     new GridColumnDefinition("{BB87F9D6-8FB9-4842-8148-517737B7918C}", true,
                         new GridEbayBuyerIDDisplayType(), "Buyer", "john_shipworks",
                         EbayOrderFields.EbayBuyerID)

@@ -155,7 +155,8 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackLeftComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupFeedbackReceivedType] [int] NULL,
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RollupPayPalAddressStatus] [int] NULL
+[RollupPayPalAddressStatus] [int] NULL,
+[GuaranteedDelivery] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -166,7 +167,10 @@ PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
 GO
-
+PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
+GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -1362,7 +1366,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
 [MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DistributionCenterID] [bigint] NOT NULL 
+[DistributionCenterID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'

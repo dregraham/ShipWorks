@@ -4862,6 +4862,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.RollupPayPalAddressStatus);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.GuaranteedDelivery field instance</summary>
+		public static EntityField2 GuaranteedDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.GuaranteedDelivery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderItemEntity</summary>

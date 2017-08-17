@@ -263,6 +263,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
 
+                GuaranteedDelivery = false,
+
                 GspEligible = false,
                 GspFirstName = "",
                 GspLastName = "",
