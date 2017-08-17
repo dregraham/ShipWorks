@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (186 + 0));
+			this.InitClass( (189 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -128,6 +128,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelProfileEntityInfos();
 			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
+			InitJetOrderEntityInfos();
+			InitJetOrderItemEntityInfos();
+			InitJetStoreEntityInfos();
 			InitLabelSheetEntityInfos();
 			InitLemonStandOrderEntityInfos();
 			InitLemonStandOrderItemEntityInfos();
@@ -1608,6 +1611,29 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelShipmentEntity", "IsDeliveryDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)IParcelShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
+		/// <summary>Inits JetOrderEntity's FieldInfo objects</summary>
+		private void InitJetOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderFieldIndex), "JetOrderEntity");
+			this.AddElementFieldInfo("JetOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)JetOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderEntity", "MerchantOrderId", typeof(System.String), false, false, false, false,  (int)JetOrderFieldIndex.MerchantOrderId, 50, 0, 0);
+		}
+		/// <summary>Inits JetOrderItemEntity's FieldInfo objects</summary>
+		private void InitJetOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderItemFieldIndex), "JetOrderItemEntity");
+			this.AddElementFieldInfo("JetOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)JetOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderItemEntity", "MerchantSku", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.MerchantSku, 50, 0, 0);
+			this.AddElementFieldInfo("JetOrderItemEntity", "JetOrderItemID", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.JetOrderItemID, 50, 0, 0);
+		}
+		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
+		private void InitJetStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetStoreFieldIndex), "JetStoreEntity");
+			this.AddElementFieldInfo("JetStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)JetStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("JetStoreEntity", "ApiUser", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.ApiUser, 100, 0, 0);
+			this.AddElementFieldInfo("JetStoreEntity", "Secret", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.Secret, 100, 0, 0);
+		}
 		/// <summary>Inits LabelSheetEntity's FieldInfo objects</summary>
 		private void InitLabelSheetEntityInfos()
 		{
@@ -2524,6 +2550,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsUsername", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsUsername, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsPassword", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsPassword, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentEditLimit", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentEditLimit, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

@@ -98,6 +98,9 @@ namespace ShipWorks.Data.Model.Custom
 				case "IParcelProfileEntity": return EntityType.IParcelProfileEntity;
 				case "IParcelProfilePackageEntity": return EntityType.IParcelProfilePackageEntity;
 				case "IParcelShipmentEntity": return EntityType.IParcelShipmentEntity;
+				case "JetOrderEntity": return EntityType.JetOrderEntity;
+				case "JetOrderItemEntity": return EntityType.JetOrderItemEntity;
+				case "JetStoreEntity": return EntityType.JetStoreEntity;
 				case "LabelSheetEntity": return EntityType.LabelSheetEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
@@ -277,6 +280,9 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.GrouponStoreEntity: return new GrouponStoreRelations();
 				case EntityType.InfopiaOrderItemEntity: return new InfopiaOrderItemRelations();
 				case EntityType.InfopiaStoreEntity: return new InfopiaStoreRelations();
+				case EntityType.JetOrderEntity: return new JetOrderRelations();
+				case EntityType.JetOrderItemEntity: return new JetOrderItemRelations();
+				case EntityType.JetStoreEntity: return new JetStoreRelations();
 				case EntityType.LemonStandOrderEntity: return new LemonStandOrderRelations();
 				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
 				case EntityType.LemonStandStoreEntity: return new LemonStandStoreRelations();

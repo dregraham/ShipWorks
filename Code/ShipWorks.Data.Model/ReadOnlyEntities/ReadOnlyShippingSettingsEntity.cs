@@ -88,6 +88,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FedExFimsUsername = source.FedExFimsUsername;
             FedExFimsPassword = source.FedExFimsPassword;
             ShipmentEditLimit = source.ShipmentEditLimit;
+            ShipmentsLoaderEnsureFiltersLoadedTimeout = source.ShipmentsLoaderEnsureFiltersLoadedTimeout;
             
             
             
@@ -408,6 +409,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipmentEditLimit { get; }
+        /// <summary> The ShipmentsLoaderEnsureFiltersLoadedTimeout property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipmentsLoaderEnsureFiltersLoadedTimeout"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 ShipmentsLoaderEnsureFiltersLoadedTimeout { get; }
         
         
         

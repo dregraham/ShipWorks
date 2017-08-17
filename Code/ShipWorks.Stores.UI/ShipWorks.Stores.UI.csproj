@@ -220,6 +220,22 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
+      <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Jet\JetStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Jet\JetStoreSetupControlHost.Designer.cs">
+      <DependentUpon>JetStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Jet\JetStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Jet\JetAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Jet\JetAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>JetAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -494,6 +510,12 @@
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Jet\JetStoreSetupControlHost.resx">
+      <DependentUpon>JetStoreSetupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Jet\JetAccountSettingsControlHost.resx">
+      <DependentUpon>JetAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\LemonStand\LemonStandOrderUpdateTaskEditor.resx">
       <DependentUpon>LemonStandOrderUpdateTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -631,6 +653,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Jet\JetStoreSetupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

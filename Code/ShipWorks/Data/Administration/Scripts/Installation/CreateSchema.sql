@@ -4922,7 +4922,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExFimsEnabled] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsEnabled] DEFAULT ((0)),
 [FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
 [FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT (''),
-[ShipmentEditLimit] [int] NOT NULL
+[ShipmentEditLimit] [int] NOT NULL,
+[ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -5942,8 +5943,57 @@ PRINT N'Adding foreign keys to [dbo].[WalmartStore]'
 GO
 ALTER TABLE [dbo].[WalmartStore] ADD CONSTRAINT [FK_WalmartStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Creating [dbo].[JetStore]'
+GO
+CREATE TABLE [dbo].[JetStore]
+(
+[StoreID] [bigint] NOT NULL,
+[ApiUser] [nvarchar](100) NOT NULL,
+[Secret] [nvarchar](100) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetStore] on [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [PK_JetStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [FK_JetStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Creating [dbo].[UpsRateTable]'
 GO
+PRINT N'Creating [dbo].[JetOrder]'
+GO
+CREATE TABLE [dbo].[JetOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[MerchantOrderId] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrder] on [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [PK_JetOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating [dbo].[JetOrderItem]'
+GO
+CREATE TABLE [dbo].[JetOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[MerchantSku] [nvarchar](50) NOT NULL,
+[JetOrderItemID] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrderItem] on [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [PK_JetOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [FK_JetOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [FK_JetOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 CREATE TABLE [dbo].[UpsRateTable](
 	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UploadDate][DateTime2] NOT NULL)
