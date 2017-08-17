@@ -1730,6 +1730,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IFtpClient.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IFtpClientFactory.cs" />
