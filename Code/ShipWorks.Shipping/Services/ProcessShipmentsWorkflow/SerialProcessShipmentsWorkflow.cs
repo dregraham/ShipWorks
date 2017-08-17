@@ -74,7 +74,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 workProgress.Completed();
 
                 return result;
-
             });
         }
 
