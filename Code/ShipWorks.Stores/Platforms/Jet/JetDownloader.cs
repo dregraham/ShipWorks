@@ -104,12 +104,8 @@ namespace ShipWorks.Stores.Platforms.Jet
                     orderLoader.LoadOrder(order, jetOrder, Store as JetStoreEntity);
                     await SaveDownloadedOrder(order).ConfigureAwait(false);
                 }
-                else
-                {
-                    orderRepository.PopulateOrderDetails(order);
-                }
 
-                webClient.Acknowledge(order, Store as JetStoreEntity);
+                webClient.Acknowledge(jetOrder, Store as JetStoreEntity);
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -158,7 +159,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         [Fact]
         public void Acknowledge_UsesCorrectEndpoint()
         {
-            JetOrderEntity order = new JetOrderEntity {MerchantOrderId = "1"};
+            JetOrderDetailsResult order = new JetOrderDetailsResult
+            {
+                MerchantOrderId = "1",
+                OrderItems = new List<JetOrderItem>()
+            };
 
             mock.Create<JetWebClient>().Acknowledge(order, store);
 
