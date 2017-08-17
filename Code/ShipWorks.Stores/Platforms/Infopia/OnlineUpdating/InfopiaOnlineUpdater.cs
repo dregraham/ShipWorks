@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingManager shippingManager;
         private readonly IDataProvider dataProvider;
-        private readonly CombineOrderNumberSearchProvider orderNumberSearchProvider;
+        private readonly ICombineOrderNumberSearchProvider orderNumberSearchProvider;
 
         /// <summary>
         /// Constructor
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
         public InfopiaOnlineUpdater(IShippingManager shippingManager,
             IDataProvider dataProvider,
             ISqlAdapterFactory sqlAdapterFactory,
-            CombineOrderNumberSearchProvider orderNumberSearchProvider,
+            ICombineOrderNumberSearchProvider orderNumberSearchProvider,
             Func<Type, ILog> createLogger)
         {
             this.orderNumberSearchProvider = orderNumberSearchProvider;

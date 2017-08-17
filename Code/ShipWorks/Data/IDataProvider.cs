@@ -16,6 +16,11 @@ namespace ShipWorks.Data
         IEnumerable<EntityBase2> GetRelatedEntities(long orderID, EntityType orderItemEntity);
 
         /// <summary>
+        /// Translate the given list ID into all the keys they relate to of the given target type
+        /// </summary>
+        IEnumerable<long> GetRelatedKeys(long id, EntityType relateToType);
+
+        /// <summary>
         /// Gets the entity with the given entity ID
         /// </summary>
         EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true);

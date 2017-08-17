@@ -21,6 +21,6 @@ namespace Interapptive.Shared.ComponentRegistration
         /// <summary>
         /// Register the component as a specific service
         /// </summary>
-        SpecificService = 3
+        SpecificService = 4
     }
 }

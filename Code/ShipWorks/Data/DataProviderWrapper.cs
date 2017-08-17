@@ -34,6 +34,12 @@ namespace ShipWorks.Data
             DataProvider.GetRelatedEntities(orderID, orderItemEntity);
 
         /// <summary>
+        /// Translate the given list ID into all the keys they relate to of the given target type
+        /// </summary>
+        public IEnumerable<long> GetRelatedKeys(long id, EntityType relateToType) =>
+            DataProvider.GetRelatedKeys(id, relateToType);
+
+        /// <summary>
         /// Gets the entity with the given entity ID
         /// </summary>
         public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true) =>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
@@ -55,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 
             CreateOrderSearchEntities(order.OrderID, expectedCount);
 
-            CombineOrderNumberSearchProvider searchProvider = new CombineOrderNumberSearchProvider();
+            CombineOrderNumberSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberSearchProvider>();
             var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(expectedCount, results?.Count());
@@ -77,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 
             CreateOrderSearchEntities(order.OrderID, expectedCount);
 
-            CombineOrderNumberSearchProvider searchProvider = new CombineOrderNumberSearchProvider();
+            CombineOrderNumberSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberSearchProvider>();
             var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(expectedCount, results?.Count());

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
 using ShipWorks.Properties;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -19,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// </summary>
     public partial class NetworkSolutionsCreateTokenControl : UserControl
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NetworkSolutionsCreateTokenControl));
 
         NetworkSolutionsStoreEntity store = null;
@@ -54,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// Raised when a token has been succesfully created and imported into ShipWorks
         /// </summary>
         public event EventHandler TokenImported;
-						  
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -64,16 +59,16 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         }
 
         /// <summary>
-        /// Create a new user token 
+        /// Create a new user token
         /// </summary>
         private void OnCreateToken(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient(store);
+            NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient();
             try
             {
-                NetworkSolutionsUserKey netSolKey = webClient.FetchUserKey();
+                NetworkSolutionsUserKey netSolKey = webClient.FetchUserKey(store);
 
                 // the GetUserKey call provides a url to redirect the user to where they
                 // sign in and grant access to ShipWorks.  We then poll for their UserToken
@@ -136,9 +131,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             try
             {
-                NetworkSolutionsWebClient client = new NetworkSolutionsWebClient(store);
+                NetworkSolutionsWebClient client = new NetworkSolutionsWebClient();
 
-                string userToken = client.FetchUserToken(userKey);
+                string userToken = client.FetchUserToken(store, userKey);
                 store.UserToken = userToken;
 
                 statusPicture.Image = Resources.check16;
@@ -149,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                     TokenImported(this, EventArgs.Empty);
                 }
             }
-            catch(NetworkSolutionsException ex)
+            catch (NetworkSolutionsException ex)
             {
                 log.InfoFormat("Poll for token failure: {0}", ex.Message);
             }

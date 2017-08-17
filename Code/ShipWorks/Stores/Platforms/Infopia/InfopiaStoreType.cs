@@ -18,6 +18,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Integration with the Infopia platform
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// Infopia is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [SuppressMessage("CSharp.Analyzers",
         "CA5351: Do not use insecure cryptographic algorithm MD5",
         Justification = "This is what Infopia currently uses")]

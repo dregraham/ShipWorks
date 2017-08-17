@@ -7,9 +7,7 @@ using Autofac;
 using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 
@@ -21,34 +19,39 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
     /// <typeparam name="TResult">Type of the resulting order identifier</typeparam>
     public abstract class CombineOrderSearchBaseProvider<TResult> : ICombineOrderSearchProvider<TResult>
     {
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CombineOrderSearchBaseProvider(ISqlAdapterFactory sqlAdapterFactory)
+        {
+            this.sqlAdapterFactory = sqlAdapterFactory;
+        }
+
         /// <summary>
         /// Gets the online store's order identifiers, returning only those that are not manual orders.
         /// </summary>
-        /// <typeparam name="TResult">Return type of the selectExpression</typeparam>
-        /// <param name="order">The order for which to find combined order identifiers</param>
-        /// <param name="searchTableName">Name of the table, i.e. "OrderSearch"</param>
-        /// <param name="predicate">Where clause predicate, i.e. OrderSearchFields.OrderID == order.OrderID</param>
-        /// <param name="selectExpression">What to return, i.e. , () => OrderSearchFields.OrderNumber.ToValue<long>()</param>
-        /// <returns></returns>
-        protected virtual async Task<IEnumerable<TResult>> GetCombinedOnlineOrderIdentifiers(
-            OrderEntity order,
-            string searchTableName,
-            IPredicate predicate,
-            Expression<Func<TResult>> selectExpression)
+        protected virtual async Task<IEnumerable<TResult>> GetCombinedOnlineOrderIdentifiers<TEntity>(
+            IPredicate predicate, Expression<Func<TResult>> selectExpression) where TEntity : IEntityCore
         {
             QueryFactory factory = new QueryFactory();
-            var query = factory.Create(searchTableName)
+            var query = factory.Create<TEntity>()
                 .Select(selectExpression)
                 .Where(predicate);
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                using (ISqlAdapter sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create())
-                {
-                    return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-                }
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             }
         }
+
+        /// <summary>
+        /// Gets the online store's order identifiers, returning only those that are not manual orders.
+        /// </summary>
+        protected virtual Task<IEnumerable<TResult>> GetCombinedOnlineOrderIdentifiers<TEntity>(
+            IPredicate predicate, IEntityFieldCore field) where TEntity : IEntityCore =>
+            GetCombinedOnlineOrderIdentifiers<TEntity>(predicate, () => field.ToValue<TResult>());
 
         /// <summary>
         /// Gets the online store's order identifier

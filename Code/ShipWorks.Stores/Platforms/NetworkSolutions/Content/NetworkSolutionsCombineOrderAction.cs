@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutionss.Content
     /// <summary>
     /// Combination action that is specific to NetworkSolutions
     /// </summary>
+    [KeyedComponent(typeof(IStoreSpecificCombineOrderAction), StoreTypeCode.NetworkSolutions)]
     public class NetworkSolutionssCombinerAction : IStoreSpecificCombineOrderAction
     {
         /// <summary>

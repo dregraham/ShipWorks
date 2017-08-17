@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Windows.Forms;
 using System.IO;
-using Interapptive.Shared.UI;
+using System.Linq;
+using System.Windows.Forms;
 using System.Xml;
-using log4net;
 using System.Xml.XPath;
-using ShipWorks.Shipping;
-using ShipWorks.ApplicationCore;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
     /// <summary>
     /// Web client for interfacing with the NetworkSolutions SOAP api
     /// </summary>
-    public class NetworkSolutionsWebClient
+    [Component]
+    public class NetworkSolutionsWebClient : INetworkSolutionsWebClient
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NetworkSolutionsWebClient));
@@ -29,9 +32,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         // Communication requirements
         private static string application = "Interapptive";
         private static string certificate = "NoeE8IbA1ne9OhnEX2w872Lp";
-
-        // store communicating for
-        NetworkSolutionsStoreEntity store;
 
         // the current page of orders being downloaded
         int currentPage = 0;
@@ -78,30 +78,21 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
         }
 
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public NetworkSolutionsWebClient(NetworkSolutionsStoreEntity store)
-        {
-            this.store = store;
-        }
-
         /// <summary>
         /// Gets the user token from the user key, as phase 2 of the authentication process
         /// </summary>
-        public string FetchUserToken(string userKey)
+        public string FetchUserToken(INetworkSolutionsStoreEntity store, string userKey)
         {
             try
             {
-                using (NetSolEcomService service = CreateWebService("GetUserToken"))
+                using (NetSolEcomService service = CreateWebService("GetUserToken", store.UserToken))
                 {
                     // create the request for getting the token from the key
                     GetUserTokenRequestType request = new GetUserTokenRequestType
                     {
                         UserToken = new UserTokenType
                         {
-                             UserKey = userKey
+                            UserKey = userKey
                         }
                     };
 
@@ -120,11 +111,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Gets the User Key and Login Url for phase 1 of authentication/signup
         /// </summary>
-        public NetworkSolutionsUserKey FetchUserKey()
+        public NetworkSolutionsUserKey FetchUserKey(INetworkSolutionsStoreEntity store)
         {
             try
             {
-                using (NetSolEcomService service = CreateWebService("GetUserKey"))
+                using (NetSolEcomService service = CreateWebService("GetUserKey", store.UserToken))
                 {
                     GetUserKeyRequestType request = new GetUserKeyRequestType();
 
@@ -149,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Create the web service proxy object configured for communication
         /// </summary>
-        private NetSolEcomService CreateWebService(string logName)
+        private NetSolEcomService CreateWebService(string logName, string userToken)
         {
             NetSolEcomService service = new NetSolEcomService(new ApiLogEntry(ApiLogSource.NetworkSolutions, logName));
 
@@ -157,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             {
                 Application = application,
                 Certificate = certificate,
-                UserToken = store.UserToken
+                UserToken = userToken
             };
 
             return service;
@@ -176,9 +167,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 List<NetworkSolutionsError> nsErrors = new List<NetworkSolutionsError>();
                 errors.ForEach(e =>
                 {
-                    nsErrors.Add(new NetworkSolutionsError { Number = e.NumberSpecified ? e.Number : -1,
-                                                             Message = e.Message,
-                                                             FieldInError = e.FieldInfo == null ? "" : e.FieldInfo.Field });
+                    nsErrors.Add(new NetworkSolutionsError
+                    {
+                        Number = e.NumberSpecified ? e.Number : -1,
+                        Message = e.Message,
+                        FieldInError = e.FieldInfo == null ? "" : e.FieldInfo.Field
+                    });
                 });
 
 
@@ -276,7 +270,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         {
             XPathNavigator xpath = tokenXml.CreateNavigator();
 
-            string token = (string)xpath.Evaluate("string(//Token)");
+            string token = (string) xpath.Evaluate("string(//Token)");
 
             // ensure the token exists
             if (token.Length == 0)
@@ -292,8 +286,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 // apply the new token to test
                 store.UserToken = token;
 
-                NetworkSolutionsWebClient client = new NetworkSolutionsWebClient(store);
-                client.TestConnection();
+                NetworkSolutionsWebClient client = new NetworkSolutionsWebClient();
+                client.TestConnection(store);
             }
             catch (NetworkSolutionsException ex)
             {
@@ -307,11 +301,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Retrieves the site settings for the configured store
         /// </summary>
-        public SiteSettingType GetSiteSettings()
+        public SiteSettingType GetSiteSettings(INetworkSolutionsStoreEntity store)
         {
             try
             {
-                using (NetSolEcomService service = CreateWebService("GetSiteSettings"))
+                using (NetSolEcomService service = CreateWebService("GetSiteSettings", store.UserToken))
                 {
                     ReadSiteSettingRequestType request = new ReadSiteSettingRequestType()
                     {
@@ -334,19 +328,18 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Tests connectivity and the registered UserToken
         /// </summary>
-        private void TestConnection()
+        private void TestConnection(INetworkSolutionsStoreEntity store)
         {
-            GetSiteSettings();
+            GetSiteSettings(store);
         }
 
         /// <summary>
         /// Gets the next page of orders
         /// </summary>
-        public List<OrderType> GetNextOrders()
+        public List<OrderType> GetNextOrders(INetworkSolutionsStoreEntity store)
         {
             try
             {
-
                 List<FilterType> filters = new List<FilterType>();
 
                 bool one = true;
@@ -355,7 +348,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                     filters.Add(new FilterType
                     {
                         Field = "Status.OrderStatusID",
-                        ValueList = new string[]{ status },
+                        ValueList = new string[] { status },
                         Operator = OperatorCodeType.Equal,
                         OperatorSpecified = true,
                         OrClause = !one,
@@ -365,7 +358,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                     one = false;
                 }
 
-                using (NetSolEcomService service = CreateWebService("GetOrders"))
+                using (NetSolEcomService service = CreateWebService("GetOrders", store.UserToken))
                 {
                     // configure the request
                     ReadOrderRequestType request = new ReadOrderRequestType
@@ -415,11 +408,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Returns the possible status codes in NetworkSolutions
         /// </summary>
-        public List<OrderStatusType> GetStatusCodes()
+        public List<OrderStatusType> GetStatusCodes(INetworkSolutionsStoreEntity store)
         {
             try
             {
-                using (NetSolEcomService service = CreateWebService("GetStatusCodes"))
+                using (NetSolEcomService service = CreateWebService("GetStatusCodes", store.UserToken))
                 {
                     ReadOrderStatusRequestType request = new ReadOrderStatusRequestType
                     {
@@ -442,13 +435,13 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Update the online status of an order
         /// </summary>
-        public void UpdateOrderStatus(long networkSolutionsOrderId, long currentStatus, long targetStatus, string comments)
+        public void UpdateOrderStatus(NetworkSolutionsStoreEntity store, long networkSolutionsOrderId, long currentStatus, long targetStatus, string comments)
         {
             try
             {
                 // figure out what sequence of status updates need to be made.  Network Solutions
                 // enforces a workflow from one status to another
-                List<long> statusPath = GetStatusPath(currentStatus, targetStatus);
+                List<long> statusPath = GetStatusPath(store, currentStatus, targetStatus);
 
                 if (statusPath.Count == 0)
                 {
@@ -461,7 +454,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                     startIndex = 1;
                 }
 
-                using (NetSolEcomService service = CreateWebService("UpdateOrderStatus"))
+                using (NetSolEcomService service = CreateWebService("UpdateOrderStatus", store.UserToken))
                 {
                     for (int x = startIndex; x < statusPath.Count; x++)
                     {
@@ -483,7 +476,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                             }
                         };
 
-                        UpdateOrderResponseType response = (UpdateOrderResponseType)service.UpdateOrder(request);
+                        UpdateOrderResponseType response = (UpdateOrderResponseType) service.UpdateOrder(request);
                         HandleErrors(response);
                     }
                 }
@@ -498,7 +491,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// Determines the series of status updates an order must go through to
         /// get from the currentStatus to the targetStatus
         /// </summary>
-        private List<long> GetStatusPath(long currentStatus, long targetStatus)
+        private List<long> GetStatusPath(NetworkSolutionsStoreEntity store, long currentStatus, long targetStatus)
         {
             // create a status code provider
             NetworkSolutionsStatusCodeProvider statusCodeProvider = new NetworkSolutionsStatusCodeProvider(store);
@@ -537,14 +530,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Uploads the tracking number for a shipment
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public void UploadShipmentDetails(INetworkSolutionsStoreEntity store, long networkSolutionsOrderID, ShipmentEntity shipment)
         {
-            NetworkSolutionsOrderEntity order = shipment.Order as NetworkSolutionsOrderEntity;
-
             try
             {
-
-                using (NetSolEcomService service = CreateWebService("UploadShipmentDetails"))
+                using (NetSolEcomService service = CreateWebService("UploadShipmentDetails", store.UserToken))
                 {
                     CarrierCodeType carrier;
                     string serviceName;
@@ -557,7 +547,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                     {
                         Order = new OrderType
                         {
-                            OrderId = order.NetworkSolutionsOrderID,
+                            OrderId = networkSolutionsOrderID,
                             OrderIdSpecified = true,
 
                             // shipment information
@@ -580,7 +570,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                         }
                     };
 
-                    UpdateOrderResponseType response = (UpdateOrderResponseType)service.UpdateOrder(request);
+                    UpdateOrderResponseType response = (UpdateOrderResponseType) service.UpdateOrder(request);
                     HandleErrors(response);
                 }
             }
@@ -624,7 +614,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private CarrierCodeType GetShipmentCarrierCodeType(ShipmentEntity shipment)
         {
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:

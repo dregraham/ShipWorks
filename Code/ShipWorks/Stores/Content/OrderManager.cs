@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,12 +19,14 @@ namespace ShipWorks.Stores.Content
     public class OrderManager : IOrderManager
     {
         readonly ISqlAdapterFactory sqlAdapterFactory;
+        readonly IDataProvider dataProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderManager(ISqlAdapterFactory sqlAdapterFactory)
+        public OrderManager(ISqlAdapterFactory sqlAdapterFactory, IDataProvider dataProvider)
         {
+            this.dataProvider = dataProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -148,7 +151,13 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        public async Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID)
+        public Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID) =>
+            GetLatestActiveShipmentAsync(orderID, false);
+
+        /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        public async Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder)
         {
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.OrderID == orderID)
@@ -158,7 +167,12 @@ namespace ShipWorks.Stores.Content
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                return await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
+                var shipment = await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
+                if (includeOrder)
+                {
+                    shipment.Order = await dataProvider.GetEntityAsync<OrderEntity>(orderID).ConfigureAwait(false);
+                }
+                return shipment;
             }
         }
     }

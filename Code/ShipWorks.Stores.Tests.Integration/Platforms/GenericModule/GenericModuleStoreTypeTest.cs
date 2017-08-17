@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Xunit;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 {
@@ -31,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             {
                 mock.Override<IDateTimeProvider>().SetupGet(x => x.UtcNow).Returns(utcNow);
                 mock.Override<ILogEntryFactory>();
-                
+
             });
 
             store = Create.Store<GenericModuleStoreEntity>()
@@ -41,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                 .Set(x => x.ModuleUrl, "https://www.com")
                 .Save();
         }
-        
+
         [Theory]
         [InlineData(0, null)]
         [InlineData(1, "1")]
@@ -57,12 +59,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                 store.StoreTypeCode = storeTypeCode;
                 StoreType storeType = StoreTypeManager.GetType(storeTypeCode);
 
-
                 if (storeType is GenericModuleStoreType)
                 {
-                    CombineOrderNumberCompleteSearchProvider searchProvider = new CombineOrderNumberCompleteSearchProvider();
+                    CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
                     IOrderEntity order = Create.Order(context.Store, context.Customer)
                         .WithOrderNumber(12345)
+                        .Set(x => x.CombineSplitStatus, CombineSplitStatusType.Combined)
                         .Save();
 
                     CreateOrderSearchEntities(order.OrderID, expectedCount);

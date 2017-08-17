@@ -1814,6 +1814,9 @@
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorOmsDownloader.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\INetworkSolutionsWebClient.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IOrderStatusUpdater.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -5819,7 +5822,6 @@
       <DependentUpon>NetworkSolutionsOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\NetworkSolutions\CoreExtensions\Actions\NetworkSolutionsOrderUpdateTask.cs" />
-    <Compile Include="Stores\Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\NetworkSolutions\NetworkSolutionsAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

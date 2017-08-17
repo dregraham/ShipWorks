@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Xunit;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms
 {
@@ -31,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             {
                 mock.Override<IDateTimeProvider>().SetupGet(x => x.UtcNow).Returns(utcNow);
                 mock.Override<ILogEntryFactory>();
-                
+
             });
 
             store = Create.Store<GenericModuleStoreEntity>()
@@ -41,9 +42,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
                 .Set(x => x.ModuleUrl, "https://www.com")
                 .Save();
         }
-        
+
         [Theory]
-        [InlineData(0, 0, null,         0)]
+        [InlineData(0, 0, null, 0)]
         [InlineData(1, 1, "12345-1-OS", 0)]
         [InlineData(2, 2, "12345-1-OS", 0)]
         [InlineData(0, 0, null, 1)]
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             foreach (var storeTypeCode in storeTypeCodes)
             {
                 store.StoreTypeCode = storeTypeCode;
-                CombineOrderNumberCompleteSearchProvider searchProvider = new CombineOrderNumberCompleteSearchProvider();
+                CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
 
                 OrderEntity order = Create.Order(context.Store, context.Customer)
                     .WithOrderNumber(12345)
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             foreach (var storeTypeCode in storeTypeCodes)
             {
                 store.StoreTypeCode = storeTypeCode;
-                CombineOrderNumberCompleteSearchProvider searchProvider = new CombineOrderNumberCompleteSearchProvider();
+                CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
 
                 OrderEntity order = Create.Order(context.Store, context.Customer)
                     .WithOrderNumber(12345)

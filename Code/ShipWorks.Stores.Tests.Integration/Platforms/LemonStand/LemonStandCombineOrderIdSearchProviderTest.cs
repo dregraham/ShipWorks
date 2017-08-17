@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -10,8 +12,8 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Xunit;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
 {
@@ -30,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
             {
                 mock.Override<IDateTimeProvider>().SetupGet(x => x.UtcNow).Returns(utcNow);
                 mock.Override<ILogEntryFactory>();
-                
+
             });
 
             store = Create.Store<LemonStandStoreEntity>()
@@ -41,17 +43,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
                 .Set(x => x.Token, "")
                 .Save();
         }
-        
+
         [Theory]
         [InlineData(CombineSplitStatusType.None, 0, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 1, 1, "12345")]
         [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345-OS")]
         [InlineData(CombineSplitStatusType.None, 2, 1, "12345")]
         [InlineData(CombineSplitStatusType.Combined, 2, 2, "12345-OS")]
-        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType, 
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType,
             int numberToCreate, int expectedCount, string expectedFirstResult)
         {
-            LemonStandCombineOrderIdSearchProvider searchProvider = new LemonStandCombineOrderIdSearchProvider();
+            LemonStandCombineOrderIdSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<LemonStandCombineOrderIdSearchProvider>();
 
             LemonStandOrderEntity order = Create.Order<LemonStandOrderEntity>(context.Store, context.Customer)
                 .WithOrderNumber(12345)
@@ -80,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
                     .Save();
 
                 Create.Entity<LemonStandOrderSearchEntity>()
-                    .Set(os => os.LemonStandOrderID,  $"{order.OrderNumberComplete}-OS")
+                    .Set(os => os.LemonStandOrderID, $"{order.OrderNumberComplete}-OS")
                     .Set(os => os.OriginalOrderID, order.OrderID)
                     .Set(os => os.OrderID, order.OrderID)
                     .Save();

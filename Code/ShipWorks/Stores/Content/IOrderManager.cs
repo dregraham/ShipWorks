@@ -63,6 +63,11 @@ namespace ShipWorks.Stores.Content
         Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID);
 
         /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder);
+
+        /// <summary>
         /// Load the specified orders using the given prefetch path
         /// </summary>
         IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath);

@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Platforms.ClickCartPro;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
-using Xunit;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.ClickCartPro
 {
@@ -31,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ClickCartPro
             {
                 mock.Override<IDateTimeProvider>().SetupGet(x => x.UtcNow).Returns(utcNow);
                 mock.Override<ILogEntryFactory>();
-                
+
             });
 
             store = Create.Store<GenericModuleStoreEntity>()
@@ -41,17 +42,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ClickCartPro
                 .Set(x => x.ModuleUrl, "https://www.com")
                 .Save();
         }
-        
+
         [Theory]
         [InlineData(CombineSplitStatusType.None, 0, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 1, 1, "12345")]
         [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345-OS")]
         [InlineData(CombineSplitStatusType.None, 2, 1, "12345")]
         [InlineData(CombineSplitStatusType.Combined, 2, 2, "12345-OS")]
-        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType, 
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType,
             int numberToCreate, int expectedCount, string expectedFirstResult)
         {
-            ClickCartProCombineOrderNumberCompleteSearchProvider searchProvider = new ClickCartProCombineOrderNumberCompleteSearchProvider();
+            ClickCartProCombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<ClickCartProCombineOrderNumberCompleteSearchProvider>();
 
             ClickCartProOrderEntity order = Create.Order<ClickCartProOrderEntity>(context.Store, context.Customer)
                 .WithOrderNumber(12345)
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ClickCartPro
                     .Save();
 
                 Create.Entity<ClickCartProOrderSearchEntity>()
-                    .Set(os => os.ClickCartProOrderID,  $"{order.OrderNumberComplete}-OS")
+                    .Set(os => os.ClickCartProOrderID, $"{order.OrderNumberComplete}-OS")
                     .Set(os => os.OriginalOrderID, order.OrderID)
                     .Set(os => os.OrderID, order.OrderID)
                     .Save();
