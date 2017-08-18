@@ -814,19 +814,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 string productCode = GetCell(line, "*PRODUCT CODE*");
                 fetchedProducts.Add(productCode);
 
-                // convert to Xml and load into an InfopiaProductInfo object
-                string xml = ConvertProductResponseToXml(line);
-                using (StringReader reader = new StringReader(xml))
-                {
-                    // Create XPath document
-                    XPathDocument xmlDocument = new XPathDocument(reader);
-
-                    // Create navigator
-                    XPathNavigator xpath = xmlDocument.CreateNavigator();
-                    xpath.MoveToFirstChild();
-
-                    productInfoMap[CreateProductMapKey(productCode)] = new InfopiaProductInfo(xpath);
-                }
+                LoadProduct(line, productCode);
             }
 
             // go through all those that weren't downloaded, and add blank productinfo entries to the cache
@@ -834,6 +822,26 @@ namespace ShipWorks.Stores.Platforms.Infopia
             {
                 // Add a blank one
                 productInfoMap[CreateProductMapKey(missingCode)] = new InfopiaProductInfo();
+            }
+        }
+
+        /// <summary>
+        /// Load a product
+        /// </summary>
+        private void LoadProduct(Line line, string productCode)
+        {
+            // convert to Xml and load into an InfopiaProductInfo object
+            string xml = ConvertProductResponseToXml(line);
+            using (StringReader reader = new StringReader(xml))
+            {
+                // Create XPath document
+                XPathDocument xmlDocument = new XPathDocument(reader);
+
+                // Create navigator
+                XPathNavigator xpath = xmlDocument.CreateNavigator();
+                xpath.MoveToFirstChild();
+
+                productInfoMap[CreateProductMapKey(productCode)] = new InfopiaProductInfo(xpath);
             }
         }
 

@@ -232,6 +232,10 @@ namespace Interapptive.Shared.Net
             return new HttpResponseReader(webRequest, webResponse);
         }
 
+        /// <summary>
+        /// Prepare a request for execution
+        /// </summary>
+        /// <returns></returns>
         private HttpWebRequest PrepareRequest()
         {
             // Get the request Uri
@@ -266,55 +270,65 @@ namespace Interapptive.Shared.Net
                 webRequest.ContentType = contentType;
             }
 
-            if (headers.Count > 0)
-            {
-                foreach (string headerName in headers)
-                {
-                    string value = headers[headerName];
-
-                    switch (headerName.ToLowerInvariant())
-                    {
-                        case "content-type":
-                            webRequest.ContentType = value;
-                            break;
-                        case "accept":
-                            webRequest.Accept = value;
-                            break;
-                        case "connection":
-                            webRequest.Connection = value;
-                            break;
-                        case "expect":
-                            webRequest.Expect = value;
-                            break;
-                        case "date":
-                            webRequest.Date = GetDateValue(headerName, value);
-                            break;
-                        case "host":
-                            webRequest.Host = value;
-                            break;
-                        case "if-modified-since":
-                            webRequest.IfModifiedSince = GetDateValue(headerName, value);
-                            break;
-                        case "range":
-                        case "content-length":
-                        case "te":
-                            throw new WebException(String.Format("{0} is not a supported header", headerName));
-                        case "referer":
-                            webRequest.Referer = value;
-                            break;
-                        case "user-agent":
-                            webRequest.UserAgent = value;
-                            break;
-                        default:
-                            webRequest.Headers.Add(headerName, value);
-                            break;
-                    }
-                }
-            }
+            SetHeaders(webRequest);
 
             // Configure request method
             SetRequestMethod(webRequest);
             return webRequest;
+        }
+
+        /// <summary>
+        /// Set the headers on the web request
+        /// </summary>
+        private void SetHeaders(HttpWebRequest webRequest)
+        {
+            if (headers.Count == 0)
+            {
+                return;
+            }
+
+            foreach (string headerName in headers)
+            {
+                string value = headers[headerName];
+
+                switch (headerName.ToLowerInvariant())
+                {
+                    case "content-type":
+                        webRequest.ContentType = value;
+                        break;
+                    case "accept":
+                        webRequest.Accept = value;
+                        break;
+                    case "connection":
+                        webRequest.Connection = value;
+                        break;
+                    case "expect":
+                        webRequest.Expect = value;
+                        break;
+                    case "date":
+                        webRequest.Date = GetDateValue(headerName, value);
+                        break;
+                    case "host":
+                        webRequest.Host = value;
+                        break;
+                    case "if-modified-since":
+                        webRequest.IfModifiedSince = GetDateValue(headerName, value);
+                        break;
+                    case "range":
+                    case "content-length":
+                    case "te":
+                        throw new WebException(String.Format("{0} is not a supported header", headerName));
+                    case "referer":
+                        webRequest.Referer = value;
+                        break;
+                    case "user-agent":
+                        webRequest.UserAgent = value;
+                        break;
+                    default:
+                        webRequest.Headers.Add(headerName, value);
+                        break;
+                }
+            }
         }
 
         /// <summary>
