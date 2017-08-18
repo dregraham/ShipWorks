@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
-using log4net;
-using System.Globalization;
-using System.Linq;
-using Autofac;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
     /// 3dcart Store Type implementation
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ThreeDCart)]
+    [Component(RegistrationType.Self)]
     public class ThreeDCartStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartStoreType));
@@ -44,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Whether or not the user is using the REST API
         /// </summary>
-        private bool RestUser => ((ThreeDCartStoreEntity)Store).RestUser;
+        private bool RestUser => ((ThreeDCartStoreEntity) Store).RestUser;
 
         /// <summary>
         /// Link to article on adding a 3dcart store
@@ -68,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             get
             {
-                ThreeDCartStoreEntity store = (ThreeDCartStoreEntity)Store;
+                ThreeDCartStoreEntity store = (ThreeDCartStoreEntity) Store;
 
                 string identifier = store.StoreUrl.ToLowerInvariant();
 
@@ -121,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Get the store-specifc OrderIdentifier that can be used to identify the specified order.
+        /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
@@ -142,18 +144,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Creates a 3dcart store-specific instance of an ThreeDCartOrderItemEntity
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            return new ThreeDCartOrderItemEntity();
-        }
+        public override OrderItemEntity CreateOrderItemInstance() => new ThreeDCartOrderItemEntity();
 
         /// <summary>
         /// Creates the order instance.
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new ThreeDCartOrderEntity();
-        }
+        protected override OrderEntity CreateOrderInstance() => new ThreeDCartOrderEntity();
 
         /// <summary>
         /// Get a list of supported online ThreeDCart statuses
@@ -166,12 +162,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 return statuses.Select(s => s.Description).ToList();
             }
 
-            ThreeDCartStatusCodeProvider statusCodeProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity)Store);
+            ThreeDCartStatusCodeProvider statusCodeProvider = new ThreeDCartStatusCodeProvider((ThreeDCartStoreEntity) Store);
             return statusCodeProvider.CodeNames;
         }
 
         /// <summary>
-        /// Get the store-specific fields that are used to unqiuely identifiy an online cusotmer record.  Such
+        /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
         /// as the eBay User ID or the osCommerce CustomerID.  If a particular store does not have any concept
         /// of a unique online customer, than this can return null.  If multiple fields are returned, they
         /// will be tested using OR.  If customer identifiers are unique per store instance,
@@ -184,19 +180,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             instanceLookup = true;
 
             return new IEntityField2[] { OrderFields.OnlineCustomerID };
-        }
-
-        /// <summary>
-        /// Create a downloader for our current store instance
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            if (RestUser)
-            {
-                return new ThreeDCartRestDownloader((ThreeDCartStoreEntity)Store);
-            }
-
-            return new ThreeDCartSoapDownloader((ThreeDCartStoreEntity)Store);
         }
 
         /// <summary>
@@ -216,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Create the control used to configurd the actions for online update after shipping
+        /// Create the control used to configured the actions for online update after shipping
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
@@ -249,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<ThreeDCartOrderItemEntity>(() => (ThreeDCartOrderItemEntity)itemSource());
+            var item = new Lazy<ThreeDCartOrderItemEntity>(() => (ThreeDCartOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("ThreeDCart");
             outline.AddElement("ShipmentID", () => item.Value.ThreeDCartShipmentID);
@@ -325,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
+                OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
                 if (order == null)
                 {
                     log.WarnFormat("Not uploading shipment details for order {0} as it went away.", orderID);
@@ -339,7 +322,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 }
                 else
                 {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity) Store);
                     updater.UpdateShipmentDetails(order);
                 }
             }
@@ -364,7 +347,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            int statusCode = (int)command.Tag;
+            int statusCode = (int) command.Tag;
 
             executor.ExecuteCompleted += (o, e) =>
             {
@@ -385,12 +368,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 if (RestUser)
                 {
-                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater((ThreeDCartStoreEntity) Store);
                     updater.UpdateOrderStatus(orderID, statusCode);
                 }
                 else
                 {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity)Store);
+                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater((ThreeDCartStoreEntity) Store);
                     updater.UpdateOrderStatus(orderID, statusCode);
                 }
             }

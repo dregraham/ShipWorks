@@ -947,6 +947,8 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Common\Net\IJsonRequest.cs" />
+    <Compile Include="Common\Net\JsonRequest.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
     <Compile Include="Common\CompositeValidatorResult.cs" />
@@ -973,6 +975,7 @@
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepository.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlServerEditionType.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\IVersionSpecificUpdate.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_16_01_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\SqlServerCompatibilityFix.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_04_00_00.cs" />
@@ -1313,12 +1316,14 @@
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
+    <Compile Include="Stores\Communication\IStoreDownloader.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\IEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\SpecificEntityGridRowSelector.cs" />
     <Compile Include="Stores\IStoreSettingsTrackedDurationEvent.cs" />
+    <Compile Include="Stores\IStoreUpgrade.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1328,6 +1333,8 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonLegacyDownloader.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1718,17 +1725,28 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorDistributionCenterIDCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>GeekSellerOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Csv\IGenericFileCsvDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Excel\IGenericFileExcelDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Jet\IJetStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
@@ -1753,6 +1771,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Track.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoUploadCommand.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoModuleDownloader.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />
@@ -1760,13 +1779,17 @@
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorOmsDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrder.cs" />
@@ -1775,6 +1798,7 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
@@ -1814,6 +1838,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooSelectedOptionList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
@@ -1822,6 +1847,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOrderStatus.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3755,7 +3781,6 @@
     <Compile Include="Stores\Platforms\GenericFile\GenericFileDownloaderBase.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileFormatException.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileLoadException.cs" />
-    <Compile Include="Stores\Platforms\GenericFile\GenericFileOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileStoreException.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileStoreType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\GenericFileFormat.cs" />
@@ -5541,13 +5566,7 @@
     <Compile Include="Stores\Platforms\Amazon\Dime\DimeInjectionStream.cs" />
     <Compile Include="Stores\Platforms\Amazon\Dime\DimeWebRequest.cs" />
     <Compile Include="Stores\Platforms\Amazon\Dime\SellerCentralDimeService.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdater.cs" />
@@ -5558,12 +5577,6 @@
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\CreLoaded\CreLoadedStoreType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackConditionStatusType.cs" />
     <Compile Include="Stores\Platforms\Ebay\OrderCombining\AcceptedPayments.cs" />
@@ -6695,12 +6708,6 @@
     <Compile Include="Common\Net\FileDownloader.cs" />
     <Compile Include="Common\Net\FileDownloadEvent.cs" />
     <Compile Include="Common\Net\FileDownloadStatus.cs" />
-    <Compile Include="ApplicationCore\MessageBoxes\WelcomeDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\MessageBoxes\WelcomeDlg.Designer.cs">
-      <DependentUpon>WelcomeDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Data\Administration\SqlServerSetup\WindowsFirewallDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7635,10 +7642,6 @@
     <EmbeddedResource Include="ApplicationCore\Options\ShipWorksOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ShipWorksOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\MessageBoxes\WelcomeDlg.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WelcomeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DetailedDatabaseSetupWizard.resx">
       <SubType>Designer</SubType>
@@ -9562,14 +9565,8 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.resx">
       <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.resx">
-      <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.resx">
       <DependentUpon>EbayAccountSettingsControl.cs</DependentUpon>
@@ -10598,6 +10595,7 @@
     <None Include="Resources\infiplex.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
+    <None Include="Resources\jet.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

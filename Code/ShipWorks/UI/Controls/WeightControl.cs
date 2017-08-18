@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -17,7 +16,6 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
@@ -618,11 +616,11 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Update the live weight display
         /// </summary>
-        private bool UpdateLiveWeight(double? weight)
+        private void UpdateLiveWeight(double? weight)
         {
             if (TopLevelControl == null || !TopLevelControl.Visible)
             {
-                return false;
+                return;
             }
 
             if (showWeighButton)
@@ -641,7 +639,7 @@ namespace ShipWorks.UI.Controls
                 weightInfo.Visible = false;
             }
 
-            return true;
+            return;
         }
 
         /// <summary>

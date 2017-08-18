@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -8,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
-using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
@@ -52,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
 
             testObject.Apply(shipment, serviceRate.Object);
 
-            serviceRate.Verify(s=>s.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
+            serviceRate.Verify(s => s.AddAmount(It.IsAny<decimal>(), It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -63,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [InlineData(401, 4.50, UpsSurchargeType.DeclaredValuePricePerHundred)]
         public void Apply_AppliesCorrectAmount_WhenValueIsOver100(decimal declaredValue, decimal expectedValue, UpsSurchargeType expectedSurchargeType)
         {
-            var shipment = new UpsShipmentEntity {Packages = {new UpsPackageEntity() {DeclaredValue = declaredValue}}};
+            var shipment = new UpsShipmentEntity { Packages = { new UpsPackageEntity() { DeclaredValue = declaredValue } } };
 
             testObject.Apply(shipment, serviceRate.Object);
 

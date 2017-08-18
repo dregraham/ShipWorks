@@ -11,20 +11,13 @@ namespace ShipWorks.UI.Wizard
     /// </summary>
     public class WizardStepEventArgs : EventArgs
     {
-        // The next page the wizard is going to show
-        WizardPage nextPage;
-
-        // Indicates if the Next\Back button wasnt actually clicked, but rather is being
-        // simulated as apart of a Skip.
-        bool skipping;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public WizardStepEventArgs(WizardPage nextPage, bool skipping) :
             this(nextPage)
         {
-            this.skipping = skipping;
+            Skipping = skipping;
         }
 
         /// <summary>
@@ -32,37 +25,18 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         public WizardStepEventArgs(WizardPage nextPage)
         {
-            this.nextPage = nextPage;
+            NextPage = nextPage;
         }
 
         /// <summary>
         /// Get or set the next page that will be shown by the wizard.
         /// </summary>
-        public WizardPage NextPage
-        {
-            get
-            {
-                return nextPage;
-            }
-            set
-            {
-                nextPage = value;
-            }
-        }
+        public WizardPage NextPage { get; set; }
 
         /// <summary>
-        /// Indicates if the Next\Back button wasnt actually clicked, but rather is being
+        /// Indicates if the Next\Back button wasn't actually clicked, but rather is being
         /// simulated as apart of a Skip.
         /// </summary>
-        public bool Skipping
-        {
-            get { return skipping; }
-            set { skipping = value; }
-        }
-
-        /// <summary>
-        /// Task to await before moving to the next page
-        /// </summary>
-        public Task AwaitTask { get; set; }
+        public bool Skipping { get; set; }
     }
 }

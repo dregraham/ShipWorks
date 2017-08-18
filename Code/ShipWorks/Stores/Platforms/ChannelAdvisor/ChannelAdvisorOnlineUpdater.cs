@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -12,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -89,9 +92,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Upload tracking number
                 try
                 {
-                    ChannelAdvisorClient client = new ChannelAdvisorClient(store);
+                    ChannelAdvisorShipment uploadShipment = new ChannelAdvisorShipment()
+                    {
+                        ShippedDateUtc = shipment.ProcessedDate.Value,
+                        ShippingCarrier = carrierCode,
+                        ShippingClass = serviceClass,
+                        TrackingNumber = trackingNumber
+                    };
 
-                    client.UploadShipmentDetails((int) order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IChannelAdvisorUpdateClient updateClient = scope.Resolve<IChannelAdvisorUpdateClient>();
+                        updateClient.UploadShipmentDetails(store, uploadShipment, order.OrderNumber);
+                    }
                 }
                 catch (ChannelAdvisorException ex)
                 {
@@ -413,10 +426,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (ShipmentTypeManager.IsDhl(postalServiceType))
             {
-                return "DHL";
+                return GetDhlClassCode(shipment);
             }
 
             return "NONE";
+        }
+
+        /// <summary>
+        /// Get the DHL class code for the shipment
+        /// </summary>
+        private static string GetDhlClassCode(ShipmentEntity shipment)
+        {
+            ChannelAdvisorOrderEntity caOrder = shipment.Order as ChannelAdvisorOrderEntity;
+            if (caOrder == null)
+            {
+                throw new ChannelAdvisorException(0, "Non ChannelAdvisor order passed to ChannelAdvisor Uploader.");
+            }
+
+            // ebay orders need to upload as Global Mail
+            if (caOrder.MarketplaceNames.IndexOf("ebay", StringComparison.OrdinalIgnoreCase) != -1)
+            {
+                return "Global Mail";
+            }
+
+            return "DHL";
         }
 
         /// <summary>

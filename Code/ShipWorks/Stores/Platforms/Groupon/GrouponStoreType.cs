@@ -1,35 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.Groupon.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Groupon.WizardPages;
-using ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Net;
-using System.Windows.Forms;
-using Autofac;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
+    /// <summary>
+    /// Groupon store type
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Groupon)]
+    [Component(RegistrationType.Self)]
     class GrouponStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
-        /// Indentifying type code
+        /// Identifying type code
         /// </summary>
         public override StoreTypeCode TypeCode
         {
@@ -55,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             get
             {
-                GrouponStoreEntity store = (GrouponStoreEntity)Store;
+                GrouponStoreEntity store = (GrouponStoreEntity) Store;
 
                 string identifier = store.SupplierID;
 
@@ -103,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                GrouponOnlineUpdater shipmentUpdater = new GrouponOnlineUpdater((GrouponStoreEntity)Store);
+                GrouponOnlineUpdater shipmentUpdater = new GrouponOnlineUpdater((GrouponStoreEntity) Store);
                 shipmentUpdater.UpdateShipmentDetails(headers);
             }
             catch (GrouponException ex)
@@ -148,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
-        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
@@ -158,14 +163,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
 
             return base.GridOnlineColumnSupported(column);
-        }
-
-        /// <summary>
-        /// Creates the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new GrouponDownloader(Store);
         }
 
         /// <summary>
@@ -189,7 +186,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            return new GrouponOrderEntity { GrouponOrderID = string.Empty};
+            return new GrouponOrderEntity { GrouponOrderID = string.Empty };
         }
 
         /// <summary>
@@ -213,7 +210,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            var order = new Lazy<GrouponOrderEntity>(() => (GrouponOrderEntity)orderSource());
+            var order = new Lazy<GrouponOrderEntity>(() => (GrouponOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Groupon");
             outline.AddElement("GrouponOrderID", () => order.Value.GrouponOrderID);
@@ -224,7 +221,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<GrouponOrderItemEntity>(() => (GrouponOrderItemEntity)itemSource());
+            var item = new Lazy<GrouponOrderItemEntity>(() => (GrouponOrderItemEntity) itemSource());
 
             ElementOutline outline = container.AddElement("Groupon");
             outline.AddElement("BOMSKU", () => item.Value.BomSKU);
@@ -235,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GrouponOrderIdentifier(((GrouponOrderEntity)order).GrouponOrderID);
+            return new GrouponOrderIdentifier(((GrouponOrderEntity) order).GrouponOrderID);
         }
 
         /// <summary>
@@ -252,7 +249,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
             string grouponURL = "http://www.groupon.com/deals";
-            string itemPermalink = ((GrouponOrderItemEntity)entity).Permalink;
+            string itemPermalink = ((GrouponOrderItemEntity) entity).Permalink;
 
             string itemURL = string.Format("{0}/{1}", grouponURL, itemPermalink);
 
@@ -321,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 Name = "Shipped",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -354,7 +351,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 Name = "Ready to Ship",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 

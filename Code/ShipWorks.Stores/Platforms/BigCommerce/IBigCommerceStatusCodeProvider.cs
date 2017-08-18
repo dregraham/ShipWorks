@@ -18,6 +18,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         ICollection<string> CodeNames { get; }
 
         /// <summary>
+        /// The list of all code values
+        /// </summary>
+        ICollection<int> CodeValues { get; }
+
+        /// <summary>
         /// Update status codes from the online store
         /// </summary>
         void UpdateFromOnlineStore();

@@ -148,6 +148,29 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenterResponse.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillment.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorFulfillmentItem.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductDistributionCenterQuantity.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductImage.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrder.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderAdjustment.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItem.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemAdjustment.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderItemBundleComponents.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOrderResult.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProduct.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProductAttribute.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorProfilesResponse.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorPromotion.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestClient.cs" />
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
@@ -155,6 +178,7 @@
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
+    <Compile Include="Platforms\Amazon\AmazonDownloaderFactory.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
@@ -174,6 +198,9 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStatusCodeProvider.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOAuthResponse.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
@@ -221,8 +248,52 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetShipResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetAddress.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetBuyer.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetFeeAdjustment.cs" />
+    <Compile Include="Platforms\GenericFile\GenericFileDownloaderFactory.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderItemPrice.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderDetail.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderTotals.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetProduct.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetProductCode.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetRecipient.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetShippingTo.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetOrderDetailsResult.cs" />
+    <Compile Include="Platforms\Jet\DTO\JetTokenResponse.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementRequest.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetAcknowledgementOrderItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipment.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipmentItem.cs" />
+    <Compile Include="Platforms\Jet\DTO\Requests\JetShipmentRequest.cs" />
+    <Compile Include="Platforms\Jet\IJetAuthenticatedRequest.cs" />
+    <Compile Include="Platforms\Jet\IJetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\IJetShipmentRequestFactory.cs" />
+    <Compile Include="Platforms\Jet\IJetToken.cs" />
+    <Compile Include="Platforms\Jet\IJetWebClient.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
+    <Compile Include="Platforms\Jet\IJetOrderLoader.cs" />
+    <Compile Include="Platforms\Jet\IJetProductRepository.cs" />
+    <Compile Include="Platforms\Jet\ITokenRepository.cs" />
+    <Compile Include="Platforms\Jet\JetAuthenticatedRequest.cs" />
+    <Compile Include="Platforms\Jet\JetDownloader.cs" />
+    <Compile Include="Platforms\Jet\JetException.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdater.cs" />
+    <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
+    <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
+    <Compile Include="Platforms\Jet\JetProductRepository.cs" />
+    <Compile Include="Platforms\Jet\JetOrderItemLoader.cs" />
+    <Compile Include="Platforms\Jet\JetShipmentRequestFactory.cs" />
+    <Compile Include="Platforms\Jet\JetStoreType.cs" />
+    <Compile Include="Platforms\Jet\JetToken.cs" />
+    <Compile Include="Platforms\Jet\JetTokenRepository.cs" />
+    <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -246,6 +317,8 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Magento\IMagentoTwoRestDownloader.cs" />
+    <Compile Include="Platforms\Magento\MagentoDownloaderFactory.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneConnectProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
@@ -255,6 +328,8 @@
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
+    <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
@@ -266,6 +341,7 @@
     <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreUpgrade.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollector.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
@@ -396,6 +472,7 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactory.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
@@ -419,6 +496,7 @@
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
@@ -467,6 +545,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

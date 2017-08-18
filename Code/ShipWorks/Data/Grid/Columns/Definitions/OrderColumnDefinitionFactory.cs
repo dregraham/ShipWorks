@@ -59,8 +59,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{13E940CA-945B-4c23-83F5-50F758AD4456}", true,
                         new GridOrderNumberDisplayType { ShowStoreIcon = false }, "Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.GenericModule),
-                        OrderFields.OrderNumberComplete,
-                        OrderFields.OrderNumber) { DefaultWidth = 75 },
+                        new GridColumnFieldValueProvider(OrderFields.OrderNumberComplete),
+                        new GridColumnSortProvider(OrderFields.OrderNumber, OrderFields.OrderNumberComplete))
+                    {
+                        DefaultWidth = 75
+                    },
 
                     new GridColumnDefinition("{E0E6E248-30BE-4eb7-B486-891321313207}", true,
                         new GridTextDisplayType()
@@ -607,6 +610,18 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridMoneyDisplayType(), "Commission", 6.15m, SearsOrderFields.Commission)
                         {
                             StoreTypeCode = StoreTypeCode.Sears
+                        },
+
+                    new GridColumnDefinition("{036518f8-b52e-4896-89f9-f0d43ae6f5b6}", true,
+                        new GridBooleanDisplayType()
+                        {
+                            FalseText = "No",
+                            TrueText = "Yes"
+                        },
+                        "Guaranteed Delivery", "No",
+                        EbayOrderFields.GuaranteedDelivery)
+                        {
+                            StoreTypeCode = StoreTypeCode.Ebay
                         },
 
                     new GridColumnDefinition("{BB87F9D6-8FB9-4842-8148-517737B7918C}", true,

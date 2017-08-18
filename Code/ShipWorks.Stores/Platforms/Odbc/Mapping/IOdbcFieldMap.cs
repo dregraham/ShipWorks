@@ -79,5 +79,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Serializes this instance to JSON
         /// </summary>
         string Serialize();
+
+        /// <summary>
+        /// Upgrades a map so that the order number mapping becomes a OrderNumberComplete mapping
+        /// </summary>
+        void UpgradeToAlphanumericOrderNumbers();
     }
 }

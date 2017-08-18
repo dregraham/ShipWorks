@@ -105,6 +105,9 @@
       <namespace name="ShipWorks\.UI\.Controls\.Html\..*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Magento\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Walmart\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.DTO\.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.Jet\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.Enums\.*" regex="true" />
       <namespace name="ShipWorks.UI.Controls.Weight" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />

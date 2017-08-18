@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
+﻿using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface
 {
     /// <summary>
     /// Order downloader for Commerce Interface stores
     /// </summary>
-    class CommerceInterfaceDownloader : GenericModuleDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.CommerceInterface)]
+    public class CommerceInterfaceDownloader : GenericModuleDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommerceInterfaceDownloader(StoreEntity store)
-            : base(store)
+        public CommerceInterfaceDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager, configurationData, sqlAdapterFactory)
         {
 
         }

@@ -1,15 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Xunit;
-using ShipWorks.Stores;
+using Autofac;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms;
+using ShipWorks.Stores.Platforms.osCommerce;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.osCommerce
 {
     public class IdentifierTests
     {
+        private readonly AutoMock mock;
+
+        public IdentifierTests()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
         /// <summary>
         /// Check that the normalization of the given url is the desired identifier
         /// </summary>
@@ -17,7 +28,7 @@ namespace ShipWorks.Tests.Stores.osCommerce
         {
             DoTest(url, "www.interapptive.com/osc/", "1.0.0.0");
         }
-        
+
         /// <summary>
         /// Check that the normalization of the given url is the desired identifier
         /// </summary>
@@ -28,7 +39,7 @@ namespace ShipWorks.Tests.Stores.osCommerce
             oscStore.TypeCode = (int) StoreTypeCode.osCommerce;
             oscStore.SchemaVersion = schemaVersion;
 
-            StoreType storeType = StoreTypeManager.GetType(oscStore);
+            StoreType storeType = mock.Create<oscStoreType>(TypedParameter.From<StoreEntity>(oscStore));
 
             Assert.Equal(identifier, storeType.LicenseIdentifier);
         }

@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
-        readonly AutoMock mock = null;
+        readonly AutoMock mock;
 
         public AmazonLabelServiceTest()
         {

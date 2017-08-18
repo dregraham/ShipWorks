@@ -417,7 +417,13 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.14.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.2.0.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -440,6 +446,8 @@
     <Content Include="Templates\Distribution\Source\Invoices\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Invoices\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard Grouping by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\settings.xml" />
@@ -474,6 +482,8 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard Grouping by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Customers\settings.xml" />
@@ -534,6 +544,10 @@
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\template.xsl" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\ItemGroup\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\ItemGroup\template.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">

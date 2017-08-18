@@ -24,7 +24,7 @@ namespace Interapptive.Shared.Net
         void Add(string name, string value);
 
         /// <summary>
-        /// Remove all variables of the specivied name
+        /// Remove all variables of the specified name
         /// </summary>
         void Remove(string name);
 
@@ -44,27 +44,27 @@ namespace Interapptive.Shared.Net
         void Clear();
 
         /// <summary>
-        /// Copy 
+        /// Copy
         /// </summary>
         void CopyTo(HttpVariable[] array, int index);
 
         /// <summary>
-        /// Contains 
+        /// Contains
         /// </summary>
         bool Contains(HttpVariable item);
 
         /// <summary>
-        /// Index of an item 
+        /// Index of an item
         /// </summary>
         int IndexOf(HttpVariable item);
 
         /// <summary>
-        /// Insert an item 
+        /// Insert an item
         /// </summary>
         void Insert(int index, HttpVariable item);
 
         /// <summary>
-        /// Remove an item 
+        /// Remove an item
         /// </summary>
         bool Remove(HttpVariable item);
 
@@ -74,7 +74,7 @@ namespace Interapptive.Shared.Net
         void RemoveAt(int index);
 
         /// <summary>
-        /// Indexer 
+        /// Indexer
         /// </summary>
         HttpVariable this[int index] { get; set; }
     }

@@ -2,77 +2,62 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
     ///     Downloader for LemonStand
     /// </summary>
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.LemonStand)]
     public class LemonStandDownloader : StoreDownloader
     {
         private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
-        private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ISqlAdapterRetry sqlAdapterRetry;
 
         LemonStandStatusCodeProvider statusProvider;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
-        /// <param name="store">The store entity</param>
-        public LemonStandDownloader(StoreEntity store)
-            : this(
-                store, new LemonStandWebClient((LemonStandStoreEntity) store),
-                new SqlAdapterRetry<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder"))
-        {
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
-        /// </summary>
         /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
-        /// <param name="storeType">The storetype, used for tests</param>
-        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter, StoreType storeType)
-            : base(store, storeType)
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
+        public LemonStandDownloader(StoreEntity store,
+            Func<LemonStandStoreEntity, ILemonStandWebClient> webClientFactory,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IStoreTypeManager storeTypeManager,
+            IConfigurationData configurationData)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-            client = webClient;
-            this.sqlAdapter = sqlAdapter;
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
-        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
-            : base(store, (LemonStandStoreType) StoreTypeManager.GetType(store))
-        {
-            client = webClient;
-            this.sqlAdapter = sqlAdapter;
+            client = webClientFactory((LemonStandStoreEntity) store);
+            this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder");
         }
 
         /// <summary>
         /// Download orders from LemonStand
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         /// <exception cref="DownloadException"></exception>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             UpdateOrderStatuses();
 
@@ -115,7 +100,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                if (ProcessOrders(jsonOrders, expectedCount))
+                bool shouldContinue = await ProcessOrders(jsonOrders, expectedCount).ConfigureAwait(false);
+                if (!shouldContinue)
                 {
                     return;
                 }
@@ -133,7 +119,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
         }
 
-        private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
+        /// <summary>
+        /// Process the collection of orders
+        /// </summary>
+        private async Task<bool> ProcessOrders(List<JToken> jsonOrders, int expectedCount)
         {
             // Load orders
             foreach (JToken jsonOrder in jsonOrders)
@@ -141,26 +130,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // check for cancellation
                 if (Progress.IsCancelRequested)
                 {
-                    return true;
+                    return false;
                 }
 
                 // Set the progress detail
                 Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
-                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+                Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
-                LoadOrder(jsonOrder);
+                await LoadOrder(jsonOrder).ConfigureAwait(false);
             }
-            return false;
+
+            return true;
         }
 
         /// <summary>
         ///     Load Order from JToken
         /// </summary>
-        public void LoadOrder(JToken jsonOrder)
+        public async Task LoadOrder(JToken jsonOrder)
         {
-            LemonStandOrderEntity order = PrepareOrder(jsonOrder);
+            LemonStandOrderEntity order = await PrepareOrder(jsonOrder).ConfigureAwait(false);
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await sqlAdapterRetry.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -169,7 +159,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="jsonOrder">The json order.</param>
         /// <returns>Order Entity to be saved to database</returns>
         /// <exception cref="LemonStandException"></exception>
-        public LemonStandOrderEntity PrepareOrder(JToken jsonOrder)
+        public async Task<LemonStandOrderEntity> PrepareOrder(JToken jsonOrder)
         {
             //                              order
             //                          /     |      \
@@ -189,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 int orderID = int.Parse(lsOrder.ID);
 
                 LemonStandOrderEntity order =
-                    (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+                    (LemonStandOrderEntity) await InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString())).ConfigureAwait(false);
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
                 order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
@@ -341,7 +331,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             // We're going to have our starting point default to either the initial download days setting or 30 days back
             int previousDaysToDownload = Store.InitialDownloadDays ?? 30;
-            DateTime startingPoint = DateTime.UtcNow.AddDays(-1*previousDaysToDownload);
+            DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
@@ -359,7 +349,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Loads Shipping and Billing address into the order entity
         /// </summary>
         /// <param name="order">The LemonStand order entity</param>
-        /// <param name="shipAddress">The shippping addres DTO</param>
+        /// <param name="shipAddress">The shipping address DTO</param>
         /// <param name="billAddress">The billing address DTO</param>
         /// <param name="email">The customers email address</param>
         private static void LoadAddressInfo(LemonStandOrderEntity order, LemonStandShippingAddress shipAddress,
@@ -508,7 +498,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             Progress.Detail = "Updating status codes...";
 
             // refresh the status codes from LemonStand
-            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity) Store);
             statusProvider.UpdateFromOnlineStore();
         }
     }

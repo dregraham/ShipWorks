@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -30,7 +31,6 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters;
@@ -49,6 +49,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// <summary>
     /// Entrypoint for the eBay integration.
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Ebay)]
+    [Component(RegistrationType.Self)]
     public class EbayStoreType : StoreType
     {
         /// <summary>
@@ -99,14 +101,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Creates the order downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new EbayDownloader((EbayStoreEntity) Store);
-        }
-
-        /// <summary>
         /// Creates the account settings control displayed in the Manage Stores window.
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
@@ -115,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Creates the account settings control displayed in the the Manage
+        /// Creates the account settings control displayed in the Manage
         /// Stores window
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
@@ -269,6 +263,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
 
+                GuaranteedDelivery = false,
+
                 GspEligible = false,
                 GspFirstName = "",
                 GspLastName = "",
@@ -323,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Creates the idnetifier to locate a particular order
+        /// Creates the identifier to locate a particular order
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
@@ -379,7 +375,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ebayStore.PayPalApiPassword = "";
             ebayStore.PayPalApiSignature = "";
             ebayStore.PayPalApiCredentialType = (short) PayPalCredentialType.Signature;
-            ebayStore.DownloadItemDetails = false;
+            ebayStore.DownloadItemDetails = true;
             ebayStore.DownloadPayPalDetails = false;
             ebayStore.DownloadOlderOrders = false;
 
@@ -558,7 +554,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     return firstItem;
                 });
 
-            // Generate all the elemnts into a temporary container
+            // Generate all the elements into a temporary container
             ElementOutline commonContainer = new ElementOutline(outline.Context);
             GenerateTemplateCommonElements(commonContainer, item);
 
@@ -1080,7 +1076,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
                 DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
 
-            // We're going to use the the GSP policy to inspect the order and configure the shipment
+            // We're going to use the GSP policy to inspect the order and configure the shipment
             // to be shipped to the GSP domestic facility if it's eligible
             Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
 
@@ -1104,7 +1100,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
                     DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
 
-                // We're going to use the the GSP policy to inspect the order and configure the shipment
+                // We're going to use the GSP policy to inspect the order and configure the shipment
                 // to be shipped to the GSP domestic facility if it's eligible
                 Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
 

@@ -4,11 +4,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Infopia.WizardPages;
@@ -23,6 +23,8 @@ namespace ShipWorks.Stores.Platforms.Infopia
     [SuppressMessage("CSharp.Analyzers",
         "CA5351: Do not use insecure cryptographic algorithm MD5",
         Justification = "This is what Infopia currently uses")]
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Infopia)]
+    [Component(RegistrationType.Self)]
     public class InfopiaStoreType : StoreType
     {
         // Logger
@@ -64,14 +66,6 @@ namespace ShipWorks.Stores.Platforms.Infopia
         public override OrderItemEntity CreateOrderItemInstance()
         {
             return new InfopiaOrderItemEntity();
-        }
-
-        /// <summary>
-        /// Instantiate the downloader used to retrieve orders
-        /// </summary>
-        public override StoreDownloader CreateDownloader()
-        {
-            return new InfopiaDownloader((InfopiaStoreEntity) Store);
         }
 
         /// <summary>

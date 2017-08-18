@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Ebay.Requests;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
@@ -12,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// <summary>
     /// Client that wraps all connectivity to the eBay API
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class EbayWebClient
     {
         EbayToken token;

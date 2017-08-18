@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -10,6 +10,8 @@ namespace ShipWorks.Stores.Platforms.OpenSky
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.OpenSky)]
+    [Component(RegistrationType.Self)]
     public class OpenSkyStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -45,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.OpenSky
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
-                if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
                 {
                     return "DHL ECOMMERCE";
                 }

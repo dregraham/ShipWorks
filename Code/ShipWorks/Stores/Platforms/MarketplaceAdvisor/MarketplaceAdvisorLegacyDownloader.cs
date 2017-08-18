@@ -1,47 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Connection;
-using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// Downloader for legacy MarketplaceAdvisor store types
     /// </summary>
-    class MarketplaceAdvisorLegacyDownloader : StoreDownloader
+    [Component]
+    public class MarketplaceAdvisorLegacyDownloader : StoreDownloader, IMarketplaceAdvisorLegacyDownloader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store) 
+        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store)
             : base(store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }
 
         /// <summary>
         /// Download the orders
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -52,13 +48,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Keep going until no more to download
                 while (true)
                 {
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(currentPage++))
+                    bool morePages = await DownloadNextOrdersPage(currentPage++).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -77,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Download the next page of MarketplaceAdvisor orders.  Returns false if there are no more orders to download.
         /// </summary>
-        private bool DownloadNextOrdersPage(int currentPage)
+        private async Task<bool> DownloadNextOrdersPage(int currentPage)
         {
             MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create((MarketplaceAdvisorStoreEntity) Store);
             XElement ordersResponse = XElement.Parse(client.GetOrders(currentPage));
@@ -101,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             }
             else
             {
-                LoadOrders(xpath);
+                await LoadOrders(xpath).ConfigureAwait(false);
 
                 return true;
             }
@@ -110,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Load all the orders contained in the iterator
         /// </summary>
-        private void LoadOrders(XPathNavigator xpath)
+        private async Task LoadOrders(XPathNavigator xpath)
         {
             XPathNodeIterator orders = xpath.Select("//Order");
 
@@ -123,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             bool totalIsEstimated;
             int totalRecords;
 
-            // Equals the page size - may not be hte last page
+            // Equals the page size - may not be the last page
             if (currentPage < totalPages)
             {
                 totalIsEstimated = true;
@@ -152,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     totalRecords);
 
                 XPathNavigator order = orders.Current.Clone();
-                long orderNumber = LoadOrder(order);
+                long orderNumber = await LoadOrder(order).ConfigureAwait(false);
 
                 markAsProcessed.Add(orderNumber);
 
@@ -173,19 +170,19 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Extract the order from the XML
         /// </summary>
-        private long LoadOrder(XPathNavigator xpath)
+        private async Task<long> LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             long orderNumber = XPathUtility.Evaluate(xpath, "Number", (long) 0);
 
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber));
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             // MarketplaceAdvisor sends shit down locally to their own server, stupid
             DateTime date = DateTime.Parse(XPathUtility.Evaluate(xpath, "Date", ""));
             date += TimeSpan.FromHours(4);
 
-            // Setup the basic proprites
+            // Setup the basic properties
             order.OrderNumber = orderNumber;
             order.OrderDate = date;
 
@@ -205,7 +202,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 string notes = XPathUtility.Evaluate(xpath, "Notes", "");
                 if (notes.Length > 0)
                 {
-                    InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public);
+                    await InstantiateNote(order, notes, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
                 }
 
                 // Load address info
@@ -230,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             // Save the order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorLegacyDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return orderNumber;
         }
@@ -321,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private void LoadCharge(MarketplaceAdvisorOrderEntity order, string type, string name, double amount, bool ignoreZeroAmount)
         {
-            if (amount == 0 && ignoreZeroAmount)
+            if (amount.IsEquivalentTo(0) && ignoreZeroAmount)
             {
                 return;
             }

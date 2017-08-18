@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Security;
 using Autofac.Extras.Moq;
-using ShipWorks.Tests.Shared;
-using Xunit;
-using ShipWorks.Stores.UI.Platforms.Magento.WizardPages;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Magento;
-using ShipWorks.Stores.Platforms.Magento.Enums;
 using Autofac.Features.Indexed;
-using Moq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Communication;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Magento;
+using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.Stores.UI.Platforms.Magento.WizardPages;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
 {
@@ -171,11 +169,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
                 {
                     throw new NotImplementedException();
                 }
-            }
-
-            public override StoreDownloader CreateDownloader()
-            {
-                throw new NotImplementedException();
             }
 
             public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)

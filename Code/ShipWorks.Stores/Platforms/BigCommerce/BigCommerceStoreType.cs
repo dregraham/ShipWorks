@@ -2,27 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Autofac;
 using Autofac.Features.Indexed;
-using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -33,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceStoreType));
-        readonly Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader;
         readonly Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater;
         readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
         readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
@@ -50,7 +43,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </remarks>
         [NDependIgnoreTooManyParams]
         public BigCommerceStoreType(StoreEntity store,
-            Func<BigCommerceStoreEntity, BigCommerceDownloader> createDownloader,
             Func<BigCommerceStoreEntity, IBigCommerceOnlineUpdater> createOnlineUpdater,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
             IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex,
@@ -65,7 +57,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             this.storeSettingsControlIndex = storeSettingsControlIndex;
             this.createStatusCodeProvider = createStatusCodeProvider;
             this.createOnlineUpdater = createOnlineUpdater;
-            this.createDownloader = createDownloader;
         }
 
         /// <summary>
@@ -175,11 +166,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             return new IEntityField2[] { OrderFields.OnlineCustomerID };
         }
-
-        /// <summary>
-        /// Create a downloader for our current store instance
-        /// </summary>
-        public override StoreDownloader CreateDownloader() => createDownloader(Store as BigCommerceStoreEntity);
 
         /// <summary>
         /// Create the control used to configured the actions for online update after shipping

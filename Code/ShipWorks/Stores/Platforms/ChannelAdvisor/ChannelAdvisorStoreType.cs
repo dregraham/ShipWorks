@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
+using System.Net;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using log4net;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -30,10 +27,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Store implementation for ChannelAdvisor
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
+    [Component(RegistrationType.Self)]
     public class ChannelAdvisorStoreType : StoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
+        public readonly string RedirectUrl = WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php");
+        public const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
 
         /// <summary>
         /// Store Type
@@ -51,13 +52,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Gets the Authorization URL parameters
+        /// </summary>
+        public string AuthorizeUrlParameters =>
+            $"?client_id={ApplicationID}&response_type=code&access_type=offline&scope=orders+inventory&approval_prompt=force&redirect_uri={RedirectUrl}";
+
+        /// <summary>
         /// String uniquely identifying a store instance
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
             get
             {
-                ChannelAdvisorStoreEntity caStore = (ChannelAdvisorStoreEntity)Store;
+                ChannelAdvisorStoreEntity caStore = (ChannelAdvisorStoreEntity) Store;
 
                 return caStore.ProfileID.ToString();
             }
@@ -118,6 +125,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.DistributionCenter = "";
             entity.HarmonizedCode = "";
             entity.IsFBA = false;
+            entity.DistributionCenterID = -1;
 
             return entity;
         }
@@ -127,22 +135,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
-
-        /// <summary>
-        /// Create the custom downloader
-        /// </summary>
-        public override StoreDownloader CreateDownloader() =>
-           new ChannelAdvisorDownloader(Store);
-
-        /// <summary>
-        /// Create the wizard pages used to set the store up
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope) =>
-            new List<WizardPage>
-            {
-                new ChannelAdvisorAccountPage()
-            };
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
@@ -204,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 Name = "Amazon Prime",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -258,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 Name = "Shipped",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
@@ -303,18 +295,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             return new FilterEntity
             {
-                Name="Ready to Ship",
+                Name = "Ready to Ship",
                 Definition = definition.GetXml(),
                 IsFolder = false,
                 FilterTarget = (int) FilterTarget.Orders
             };
         }
-
-        /// <summary>
-        /// Create the account settings control
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
-            new ChannelAdvisorAccountSettingsControl();
 
         /// <summary>
         /// Create the CA store settings
@@ -381,6 +367,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             ElementOutline outline = container.AddElement("ChannelAdvisor");
             outline.AddElement("Classification", () => item.Value.Classification);
+            outline.AddElement("DistributionCenterID", () => item.Value.DistributionCenterID);
             outline.AddElement("DistributionCenter", () => item.Value.DistributionCenter);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);
@@ -449,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 try
                 {
-                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity)Store);
+                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
                     updater.UploadTrackingNumber(shipment);
                 }
                 catch (ChannelAdvisorException ex)

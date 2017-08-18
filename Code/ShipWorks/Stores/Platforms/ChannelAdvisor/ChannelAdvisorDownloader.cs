@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -23,12 +24,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// <summary>
     /// Downloader for ChannelAdvisor
     /// </summary>
-    public class ChannelAdvisorDownloader : StoreDownloader
+    [Component]
+    public class ChannelAdvisorDownloader : StoreDownloader, IChannelAdvisorSoapDownloader
     {
         // total download count
         private int totalCount;
 
-        private List<string> itemAttributesToDownload = new List<string>(); 
+        private List<string> itemAttributesToDownload = new List<string>();
 
         /// <summary>
         /// Constructor
@@ -49,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private ChannelAdvisorStoreEntity ChannelAdvisorStore
         {
-            get { return (ChannelAdvisorStoreEntity)Store; }
+            get { return (ChannelAdvisorStoreEntity) Store; }
         }
 
         /// <summary>
@@ -64,20 +66,20 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download data
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
                 Progress.Detail = "Checking for orders...";
 
-                ChannelAdvisorClient client = new ChannelAdvisorClient(ChannelAdvisorStore);
+                ChannelAdvisorSoapClient soapClient = new ChannelAdvisorSoapClient(ChannelAdvisorStore);
 
                 DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
 
                 // Initialize the download, which will also give us the total count to download
-                totalCount = client.InitializeDownload(lastModified);
+                totalCount = soapClient.InitializeDownload(lastModified);
 
                 // exit if there's nothing to download
                 if (totalCount == 0)
@@ -98,7 +100,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         return;
                     }
 
-                    if (!DownloadNextOrdersPage(client))
+                    bool morePages = await DownloadNextOrdersPage(soapClient).ConfigureAwait(false);
+                    if (!morePages)
                     {
                         return;
                     }
@@ -117,9 +120,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Download the next page of results from CA
         /// </summary>
-        private bool DownloadNextOrdersPage(ChannelAdvisorClient client)
+        private async Task<bool> DownloadNextOrdersPage(ChannelAdvisorSoapClient soapClient)
         {
-            List<OrderResponseDetailComplete> caOrders = client.GetNextOrders();
+            List<OrderResponseDetailComplete> caOrders = soapClient.GetNextOrders();
             if (caOrders.Count == 0)
             {
                 Progress.Detail = "Done";
@@ -132,9 +135,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 return true;
             }
 
-            MarkOrdersAsExported(client, caOrders);
+            MarkOrdersAsExported(soapClient, caOrders);
 
-            LoadOrders(client, caOrders);
+            await LoadOrders(soapClient, caOrders).ConfigureAwait(false);
 
             return true;
         }
@@ -142,17 +145,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Tells Channel Advisor we downloaded the orders.
         /// </summary>
-        private void MarkOrdersAsExported(ChannelAdvisorClient client, IEnumerable<OrderResponseDetailComplete> caOrders)
+        private void MarkOrdersAsExported(ChannelAdvisorSoapClient soapClient, IEnumerable<OrderResponseDetailComplete> caOrders)
         {
-            client.SetOrdersExportStatus(caOrders.Select(x => x.ClientOrderIdentifier));
+            soapClient.SetOrdersExportStatus(caOrders.Select(x => x.ClientOrderIdentifier));
         }
 
         /// <summary>
         /// Loads the orders into ShipWorks database.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="soapClient">The soapSoapClient.</param>
         /// <param name="caOrders">The ca orders.</param>
-        private void LoadOrders(ChannelAdvisorClient client, List<OrderResponseDetailComplete> caOrders)
+        private async Task LoadOrders(ChannelAdvisorSoapClient soapClient, List<OrderResponseDetailComplete> caOrders)
         {
             foreach (OrderResponseDetailComplete caOrder in caOrders)
             {
@@ -163,22 +166,22 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
 
                 Progress.Detail = String.Format("Processing order {0}...", (QuantitySaved + 1));
-                LoadOrder(client, caOrder);
+                await LoadOrder(soapClient, caOrder).ConfigureAwait(false);
 
                 // update the status, 100 max
-                Progress.PercentComplete = Math.Min(100*QuantitySaved/totalCount, 100);
+                Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalCount, 100);
             }
         }
 
         /// <summary>
         /// Load order data from the CA response
         /// </summary>
-        private void LoadOrder(ChannelAdvisorClient client, OrderResponseDetailComplete caOrder)
+        private async Task LoadOrder(ChannelAdvisorSoapClient soapClient, OrderResponseDetailComplete caOrder)
         {
             int orderNumber = caOrder.OrderID;
 
             // get the order instance
-            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity)InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             order.OrderDate = caOrder.OrderTimeGMT.Value;
             order.OnlineLastModified = caOrder.LastUpdateDate ?? order.OrderDate;
@@ -190,9 +193,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             order.OnlineCustomerID = null;
 
             // statuses
-            order.OnlinePaymentStatus = (int)ChannelAdvisorHelper.GetShipWorksPaymentStatus(caOrder.OrderStatus.PaymentStatus);
-            order.OnlineCheckoutStatus = (int)ChannelAdvisorHelper.GetShipWorksCheckoutStatus(caOrder.OrderStatus.CheckoutStatus);
-            order.OnlineShippingStatus = (int)ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus);
+            order.OnlinePaymentStatus = (int) ChannelAdvisorHelper.GetShipWorksPaymentStatus(caOrder.OrderStatus.PaymentStatus);
+            order.OnlineCheckoutStatus = (int) ChannelAdvisorHelper.GetShipWorksCheckoutStatus(caOrder.OrderStatus.CheckoutStatus);
+            order.OnlineShippingStatus = (int) ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus);
 
             // flags
             SetChannelAdvisorOrderFlags(order, caOrder);
@@ -215,10 +218,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 IEnumerable<string> marketplaces = caOrder.ShoppingCart.LineItemSKUList.Select(item => item.ItemSaleSource).Distinct().OrderBy(source => source);
                 order.MarketplaceNames = string.Join(", ", marketplaces);
 
-                LoadNotes(order, caOrder);
+                await LoadNotes(order, caOrder).ConfigureAwait(false);
 
                 // items
-                LoadItems(client, order, caOrder);
+                LoadItems(soapClient, order, caOrder);
 
                 // charges
                 LoadCharges(order, caOrder);
@@ -231,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -250,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     order.RequestedShipping = $"{carrier} - {shippingClass}";
                 }
 
-                order.IsPrime = (int)ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
+                order.IsPrime = (int) ChannelAdvisorHelper.GetIsPrime(shippingClass, carrier);
             }
         }
 
@@ -269,7 +272,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // any reason to inspect the results of the TryParse here.
             ChannelAdvisorFlagType flagType = ChannelAdvisorFlagType.NoFlag;
             Enum.TryParse(caOrder.FlagStyle, true, out flagType);
-            order.FlagType = (int)flagType;
+            order.FlagType = (int) flagType;
         }
 
         /// <summary>
@@ -330,7 +333,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         name = "VAT Shipping";
                         type = "VAT";
                         // Skip pulling in 'VAT Shipping'
-                        // it is included in the tax 
+                        // it is included in the tax
                         // see FreshDesk 593454
                         continue;
 
@@ -408,11 +411,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethod]
-        private void LoadItems(ChannelAdvisorClient client, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
+        private void LoadItems(ChannelAdvisorSoapClient soapClient, ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemItemResponse caItem in caOrder.ShoppingCart.LineItemSKUList)
             {
-                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity)InstantiateOrderItem(order);
+                ChannelAdvisorOrderItemEntity item = (ChannelAdvisorOrderItemEntity) InstantiateOrderItem(order);
 
                 item.Name = caItem.Title;
                 item.Quantity = caItem.Quantity;
@@ -426,7 +429,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Convert KG to LBS if needed
                 if (caItem.UnitWeight.UnitOfMeasure == "KG")
                 {
-                    item.Weight = item.Weight*2.20462262;
+                    item.Weight = item.Weight * 2.20462262;
                 }
 
                 // CA-specific
@@ -458,7 +461,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             // Some data comes from a  CA Inventory service call
             List<string> skuList = caOrder.ShoppingCart.LineItemSKUList.Select(i => i.SKU).ToList();
-            InventoryItemResponse[] inventoryItems = client.GetInventoryItems(skuList);
+            InventoryItemResponse[] inventoryItems = soapClient.GetInventoryItems(skuList);
             if (inventoryItems != null)
             {
                 foreach (ChannelAdvisorOrderItemEntity orderItem in order.OrderItems.Where(item => item is ChannelAdvisorOrderItemEntity))
@@ -510,9 +513,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         {
                             orderItem.MPN = matchingItem.MPN;
                         }
-                        
-                        PopulateItemAttributes(client, orderItem);
-                        PopulateImages(client, orderItem);
+
+                        PopulateItemAttributes(soapClient, orderItem);
+                        PopulateImages(soapClient, orderItem);
                     }
                 }
             }
@@ -521,14 +524,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Retrieves the attribute information from ChannelAdvisor and populates the order item attributes appropriately.
         /// </summary>
-        private void PopulateItemAttributes(ChannelAdvisorClient client, ChannelAdvisorOrderItemEntity orderItem)
+        private void PopulateItemAttributes(ChannelAdvisorSoapClient soapSoapClient, ChannelAdvisorOrderItemEntity orderItem)
         {
             // Only add item attributes if the user has specified ones they want to download.
             if (ItemAttributesEnabled)
             {
-                IEnumerable<AttributeInfo> attributes = client.GetInventoryItemAttributes(orderItem.SKU);
+                IEnumerable<AttributeInfo> attributes = soapSoapClient.GetInventoryItemAttributes(orderItem.SKU);
 
-                // ItemAttributesEnabled is true so we have at least one attribute to download.  
+                // ItemAttributesEnabled is true so we have at least one attribute to download.
                 // Filter out all the others that don't match.
                 attributes = attributes.Where(a => itemAttributesToDownload.Contains(a.Name.ToUpperInvariant()));
 
@@ -548,9 +551,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Retrieves Image information from ChannelAdvisor and populates the OrderItem appropriately
         /// </summary>
-        private static void PopulateImages(ChannelAdvisorClient client, ChannelAdvisorOrderItemEntity orderItem)
+        private static void PopulateImages(ChannelAdvisorSoapClient soapClient, ChannelAdvisorOrderItemEntity orderItem)
         {
-            ImageInfoResponse[] itemImages = client.GetItemImages(orderItem.SKU);
+            ImageInfoResponse[] itemImages = soapClient.GetItemImages(orderItem.SKU);
             if (itemImages != null && itemImages.Length > 0)
             {
                 ImageInfoResponse image = itemImages[0];
@@ -575,16 +578,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Loads any notes from the CA order
         /// </summary>
-        private void LoadNotes(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
+        private async Task LoadNotes(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             if (caOrder.ShippingInfo != null && caOrder.ShippingInfo.ShippingInstructions.Length > 0)
             {
-                InstantiateNote(order, caOrder.ShippingInfo.ShippingInstructions, order.OrderDate, NoteVisibility.Public);
+                await InstantiateNote(order, caOrder.ShippingInfo.ShippingInstructions, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
 
             if (caOrder.TransactionNotes != null && caOrder.TransactionNotes.Length > 0)
             {
-                InstantiateNote(order, caOrder.TransactionNotes, order.OrderDate, NoteVisibility.Internal);
+                await InstantiateNote(order, caOrder.TransactionNotes, order.OrderDate, NoteVisibility.Internal).ConfigureAwait(false);
             }
 
             // A gift message can be associated with each item in the order, so we need to find any items containing
@@ -592,24 +595,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             List<OrderLineItemItem> giftItems = caOrder.ShoppingCart.LineItemSKUList.Select(item => item).Where(i => i.GiftMessage.Length > 0).ToList();
             foreach (OrderLineItemItem item in giftItems)
             {
-                string giftMessage = string.Format("Gift messsage for {0}: {1}", item.Title, item.GiftMessage);
-                InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public);
+                string giftMessage = string.Format("Gift message for {0}: {1}", item.Title, item.GiftMessage);
+                await InstantiateNote(order, giftMessage, order.OrderDate, NoteVisibility.Public).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Determine the state/provice based on the region from CA.  
-        /// </summary>
-        private static string GetStateProvCode(string region)
-        {
-            // CA will send 001 if they don't know what to do with the region.  
-            // So we'll just return ""
-            if (region == "001")
-            {
-                return string.Empty;
-            }
-            
-            return Geography.GetStateProvCode(region);   
         }
 
         /// <summary>
@@ -620,16 +608,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             // shipping address
             ShippingInfo shipping = caOrder.ShippingInfo;
-            order.ShipNameParseStatus = (int)PersonNameParseStatus.Simple;
+            order.ShipNameParseStatus = (int) PersonNameParseStatus.Simple;
             order.ShipFirstName = shipping.FirstName;
             order.ShipLastName = shipping.LastName;
             order.ShipCompany = shipping.CompanyName;
             order.ShipStreet1 = shipping.AddressLine1;
             order.ShipStreet2 = shipping.AddressLine2;
             order.ShipCity = shipping.City;
-            order.ShipStateProvCode = GetStateProvCode(shipping.Region);
+            order.ShipStateProvCode = ChannelAdvisorHelper.GetStateProvCode(shipping.Region);
             order.ShipPostalCode = shipping.PostalCode;
-            order.ShipCountryCode = shipping.CountryCode.Trim();
+            order.ShipCountryCode = ChannelAdvisorHelper.GetCountryCode(shipping.CountryCode.Trim());
             order.ShipPhone = shipping.PhoneNumberDay;
 
             // In ChannelAdvsior if the buyer selected Use Shipping as Billing during checkout,
@@ -648,28 +636,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
             else
             {
-                order.BillNameParseStatus = (int)PersonNameParseStatus.Simple;
+                order.BillNameParseStatus = (int) PersonNameParseStatus.Simple;
                 order.BillFirstName = billing.FirstName;
                 order.BillLastName = billing.LastName;
                 order.BillCompany = billing.CompanyName;
                 order.BillStreet1 = billing.AddressLine1;
                 order.BillStreet2 = billing.AddressLine2;
                 order.BillCity = billing.City;
-                order.BillStateProvCode = GetStateProvCode(billing.Region);
+                order.BillStateProvCode = ChannelAdvisorHelper.GetStateProvCode(billing.Region);
                 order.BillPostalCode = billing.PostalCode;
-                order.BillCountryCode = billing.CountryCode.Trim();
+                order.BillCountryCode = ChannelAdvisorHelper.GetCountryCode(billing.CountryCode.Trim());
                 order.BillPhone = billing.PhoneNumberDay;
-            }
-
-            // in some cases, we've seen CA provide invalid data here
-            if (string.CompareOrdinal(order.BillCountryCode, "-1") == 0)
-            {
-                order.BillCountryCode = "";
-            }
-
-            if (string.CompareOrdinal(order.ShipCountryCode, "-1") == 0)
-            {
-                order.ShipCountryCode = "";
             }
 
             // email address

@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
@@ -25,14 +28,15 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
-    public class MagentoTwoRestDownloader : StoreDownloader
+    [Component]
+    public class MagentoTwoRestDownloader : StoreDownloader, IMagentoTwoRestDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
         private readonly MagentoStoreEntity magentoStore;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
@@ -40,8 +44,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="sqlAdapterRetryFactory">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory) : base(store)
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
+        public MagentoTwoRestDownloader(StoreEntity store,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
+            Func<Type, ILog> logFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            Func<StoreEntity, MagentoStoreType> getStoreType,
+            IConfigurationData configurationData) :
+            base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             magentoStore = (MagentoStoreEntity) store;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
@@ -53,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Download orders for the Magento store
         /// </summary>
-        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
             Progress.Detail = "Checking for orders...";
@@ -79,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         return;
                     }
 
-                    // Check if it has been cancelled
+                    // Check if it has been canceled
                     if (Progress.IsCancelRequested)
                     {
                         return;
@@ -91,20 +103,25 @@ namespace ShipWorks.Stores.Platforms.Magento
                     {
                         MagentoOrderIdentifier orderIdentifier;
                         // The orders order number and orderid are not the same
-                        if (magentoOrder.EntityId != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
+                        if (magentoOrder.EntityId.ToString() != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
                         {
                             // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
                             // we have downloaded this order before used its entity id as the order number so use it again
-                             orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                         }
                         else
                         {
                             // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
-                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.IncrementId, "", "");
+                            long orderNumber =
+                                MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
+                            string orderNumberPostfix =
+                                MagentoTwoRestOrderNumberUtility.GetOrderNumberPostfix(magentoOrder.IncrementId);
+
+                            orderIdentifier = new MagentoOrderIdentifier(orderNumber, "", orderNumberPostfix);
                         }
 
-                        MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
-                        LoadOrder(orderEntity, magentoOrder, Progress);
+                        MagentoOrderEntity orderEntity = await InstantiateOrder(orderIdentifier).ConfigureAwait(false) as MagentoOrderEntity;
+                        await LoadOrder(orderEntity, magentoOrder, Progress).ConfigureAwait(false);
                     }
                 } while (ordersResponse.TotalCount > 0);
 
@@ -123,24 +140,24 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <remarks>
         /// The magento EntityId and IncrementId are the same 90% of the time, customers have the ability to customize the IncrementId to be something different
         /// the IncrementId is the value that shows up in the Magento UI, when this downloader was built we would pull the orders EntityId into the OrderNumber field
-        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we dont duplicate them 
+        /// this was changed and now we need to see if there are any old orders that still use the EntityId as the order number so that we don't duplicate them
         /// </remarks>
         private bool IsLegacyRestOrder(int magentoOrderId)
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 RelationPredicateBucket bucket =
-                    new RelationPredicateBucket(MagentoOrderFields.StoreID == Store.StoreID & 
-                    MagentoOrderFields.IsManual == false & 
-                    MagentoOrderFields.MagentoOrderID == magentoOrderId & 
+                    new RelationPredicateBucket(MagentoOrderFields.StoreID == Store.StoreID &
+                    MagentoOrderFields.IsManual == false &
+                    MagentoOrderFields.MagentoOrderID == magentoOrderId &
                     MagentoOrderFields.OrderNumber == magentoOrderId);
-                
+
                 MagentoOrderEntity order = adapter.FetchNewEntity<MagentoOrderEntity>(bucket);
 
                 return !order.IsNew;
             }
         }
-        
+
         /// <summary>
         /// Get the start date for the download cycle
         /// </summary>
@@ -160,9 +177,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
+        public async Task LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
-            // Check if it has been cancelled
+            // Check if it has been canceled
             if (progressReporter.IsCancelRequested)
             {
                 return;
@@ -181,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
-            LoadNotes(orderEntity, magentoOrder);
+            await LoadNotes(orderEntity, magentoOrder).ConfigureAwait(false);
 
             if (orderEntity.IsNew)
             {
@@ -191,7 +208,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     orderEntity.OrderDate =
                         DateTime.SpecifyKind(createdDate, DateTimeKind.Utc);
                 }
-                orderEntity.OrderNumber = magentoOrder.IncrementId;
+
+                orderEntity.OrderNumber = MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
                 orderEntity.MagentoOrderID = magentoOrder.EntityId;
                 orderEntity.OnlineCustomerID = magentoOrder.CustomerId;
@@ -200,13 +218,13 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadOrderPayment(orderEntity, magentoOrder);
             }
 
-            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+            await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(orderEntity)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Load the orders notes
         /// </summary>
-        private void LoadNotes(OrderEntity orderEntity, Order magentoOrder)
+        private async Task LoadNotes(OrderEntity orderEntity, Order magentoOrder)
         {
             foreach (StatusHistory history in magentoOrder.StatusHistories)
             {
@@ -216,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     noteDate = DateTime.UtcNow;
                 }
 
-                InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true);
+                await InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true).ConfigureAwait(false);
             }
         }
 

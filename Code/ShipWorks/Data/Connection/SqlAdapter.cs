@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -6,6 +7,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
@@ -441,6 +443,26 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
+        /// false if nothing was dirty and thus nothing written to the database.
+        /// </summary>
+        public Task<bool> SaveAndRefetchAsync(IEntity2 entity) =>
+            SaveAndRefetchAsync(entity, true);
+
+        /// <summary>
+        /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
+        /// false if nothing was dirty and thus nothing written to the database.
+        /// </summary>
+        public async Task<bool> SaveAndRefetchAsync(IEntity2 entity, bool recurse)
+        {
+            entitySaved = false;
+
+            await SaveEntityAsync(entity, true, recurse).ConfigureAwait(false);
+
+            return entitySaved;
+        }
+
+        /// <summary>
         /// Override of the SaveEntity method to wrap exceptions.
         /// </summary>
         public override bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse)
@@ -450,6 +472,28 @@ namespace ShipWorks.Data.Connection
             try
             {
                 return base.SaveEntity(entityToSave, refetchAfterSave, updateRestriction, recurse);
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                TranslateException(ex);
+                throw;
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
+        }
+
+        /// <summary>
+        /// Override of the SaveEntityAsync method to wrap exceptions.
+        /// </summary>
+        public override async Task<bool> SaveEntityAsync(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse, CancellationToken cancellationToken)
+        {
+            StartFakePyhsicalTransationIfNeeded();
+
+            try
+            {
+                return await base.SaveEntityAsync(entityToSave, refetchAfterSave, updateRestriction, recurse, cancellationToken).ConfigureAwait(false);
             }
             catch (ORMQueryExecutionException ex)
             {
@@ -502,6 +546,25 @@ namespace ShipWorks.Data.Connection
             try
             {
                 return base.DeleteEntity(entityToDelete, deleteRestriction);
+            }
+            finally
+            {
+                CloseFakePhysicalTransactionIfNeeded();
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified entity from the persistent storage. The entity is not
+        /// usable after this call, the state is set to OutOfSync.  Will use the current
+        /// transaction if a transaction is in progress.
+        /// </summary>
+        public override async Task<bool> DeleteEntityAsync(IEntity2 entityToDelete, IPredicateExpression deleteRestriction, CancellationToken cancellationToken)
+        {
+            StartFakePyhsicalTransationIfNeeded();
+
+            try
+            {
+                return await base.DeleteEntityAsync(entityToDelete, deleteRestriction, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -654,7 +717,7 @@ namespace ShipWorks.Data.Connection
                         // Utilize the fact that we use camel casing for table names
                         string friendly = new string(table.ToCharArray().SelectMany(c => char.IsUpper(c) ? new char[] { ' ', c } : new char[] { c }).ToArray()).ToLower().Trim();
 
-                        if (message.IndexOf("DELETE statement") != -1)
+                        if (message.IndexOf("DELETE statement", StringComparison.Ordinal) != -1)
                         {
                             message = $"A parent could not be deleted because it still has {friendly} children.";
                         }
@@ -711,6 +774,14 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2 =>
             (this as IDataAccessAdapter).FetchQueryAsync<T>(query);
+
+        /// <summary>
+        /// SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.Dynamic{``0}).
+        /// Fetches the query specified and returns the results in a list of TElement objects, 
+        /// which are created using the projectorFunc of the query specified.
+        /// </summary>
+        public List<TElement> FetchQuery<TElement>(DynamicQuery<TElement> query) =>
+            (this as IDataAccessAdapter).FetchQuery<TElement>(query);
 
         #endregion
 

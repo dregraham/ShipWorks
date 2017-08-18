@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
-using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
+    /// <summary>
+    /// Lemon Stand web client
+    /// </summary>
+    [Component]
     public class LemonStandWebClient : ILemonStandWebClient
     {
         private const int itemsPerPage = 50;
@@ -20,14 +25,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Constructor
         /// </summary>
-        [SuppressMessage("ShipWorks", "SW0002",
-            Justification = "The parameter name is only used for exception messages")]
         public LemonStandWebClient(LemonStandStoreEntity store)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             lemonStandEndpoint = store.StoreURL + "/api/v2";
             accessToken = store.Token;

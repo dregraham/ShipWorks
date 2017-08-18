@@ -80,18 +80,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
-        public void CreateDownloader_ReturnsThreeDCartRestDownloader_WhenRestUser()
-        {
-            Assert.IsAssignableFrom<ThreeDCartRestDownloader>(testObject.CreateDownloader());
-        }
-
-        [Fact]
-        public void CreateDownloader_ReturnsThreeDCartSoapDownloader_WhenSoapUser()
-        {
-            Assert.IsAssignableFrom<ThreeDCartSoapDownloader>(soapTestObject.CreateDownloader());
-        }
-
-        [Fact]
         public void CreateStoreSettingsControl_ReturnsThreeDCartSettingsControl()
         {
             Assert.IsAssignableFrom<ThreeDCartStoreSettingsControl>(testObject.CreateStoreSettingsControl());

@@ -24,6 +24,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ChannelAdvisorException"/> class.
+        /// </summary>
+        public ChannelAdvisorException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ChannelAdvisorException(string message, Exception inner)
@@ -34,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor for specifying CA Error Code
         /// </summary>
-        public ChannelAdvisorException(int messageCode, string message) 
+        public ChannelAdvisorException(int messageCode, string message)
             : base(message)
         {
             this.messageCode = messageCode;
@@ -50,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Serialization 
+        /// Serialization
         /// </summary>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

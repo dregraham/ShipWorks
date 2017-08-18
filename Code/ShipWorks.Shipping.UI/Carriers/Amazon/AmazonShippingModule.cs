@@ -28,10 +28,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
 
-            builder.RegisterType<AmazonShippingWebClient>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<AmazonSettingsControl>()
                 .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
