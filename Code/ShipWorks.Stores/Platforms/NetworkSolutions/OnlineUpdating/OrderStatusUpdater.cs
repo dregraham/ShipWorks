@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using log4net;
@@ -33,6 +34,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// <param name="dataProvider"></param>
         /// <param name="templateTokenProcessor"></param>
         /// <param name="sqlAdapterFactory"></param>
+        [NDependIgnoreTooManyParams]
         public OrderStatusUpdater(Func<NetworkSolutionsStoreEntity, NetworkSolutionsStatusCodeProvider> createStatusCodeProvider,
             INetworkSolutionsCombineOrderSearchProvider orderSearchProvider,
             IDataProvider dataProvider,
