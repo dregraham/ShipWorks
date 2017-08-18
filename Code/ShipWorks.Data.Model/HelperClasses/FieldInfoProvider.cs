@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (187 + 0));
+			this.InitClass( (190 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -129,6 +129,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelProfileEntityInfos();
 			InitIParcelProfilePackageEntityInfos();
 			InitIParcelShipmentEntityInfos();
+			InitJetOrderEntityInfos();
+			InitJetOrderItemEntityInfos();
+			InitJetStoreEntityInfos();
 			InitLabelSheetEntityInfos();
 			InitLemonStandOrderEntityInfos();
 			InitLemonStandOrderItemEntityInfos();
@@ -580,6 +583,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterID", typeof(System.Int64), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, 0, 0, 19);
 		}
 		/// <summary>Inits ChannelAdvisorStoreEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorStoreEntityInfos()
@@ -593,6 +597,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -756,6 +761,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedType, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedComments", typeof(System.String), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, 80, 0, 0);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupPayPalAddressStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupPayPalAddressStatus, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderEntity", "GuaranteedDelivery", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GuaranteedDelivery, 0, 0, 0);
 		}
 		/// <summary>Inits EbayOrderItemEntity's FieldInfo objects</summary>
 		private void InitEbayOrderItemEntityInfos()
@@ -1613,6 +1619,29 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("IParcelShipmentEntity", "TrackBySMS", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.TrackBySMS, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "IsDeliveryDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("IParcelShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)IParcelShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+		}
+		/// <summary>Inits JetOrderEntity's FieldInfo objects</summary>
+		private void InitJetOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderFieldIndex), "JetOrderEntity");
+			this.AddElementFieldInfo("JetOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)JetOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderEntity", "MerchantOrderId", typeof(System.String), false, false, false, false,  (int)JetOrderFieldIndex.MerchantOrderId, 50, 0, 0);
+		}
+		/// <summary>Inits JetOrderItemEntity's FieldInfo objects</summary>
+		private void InitJetOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderItemFieldIndex), "JetOrderItemEntity");
+			this.AddElementFieldInfo("JetOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)JetOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderItemEntity", "MerchantSku", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.MerchantSku, 50, 0, 0);
+			this.AddElementFieldInfo("JetOrderItemEntity", "JetOrderItemID", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.JetOrderItemID, 50, 0, 0);
+		}
+		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
+		private void InitJetStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetStoreFieldIndex), "JetStoreEntity");
+			this.AddElementFieldInfo("JetStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)JetStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("JetStoreEntity", "ApiUser", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.ApiUser, 100, 0, 0);
+			this.AddElementFieldInfo("JetStoreEntity", "Secret", typeof(System.String), false, false, false, false,  (int)JetStoreFieldIndex.Secret, 100, 0, 0);
 		}
 		/// <summary>Inits LabelSheetEntity's FieldInfo objects</summary>
 		private void InitLabelSheetEntityInfos()
@@ -2530,6 +2559,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsUsername", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsUsername, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsPassword", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsPassword, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentEditLimit", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentEditLimit, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

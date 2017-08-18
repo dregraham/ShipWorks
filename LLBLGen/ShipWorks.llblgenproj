@@ -435,6 +435,7 @@
         <Fields>
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
+          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
           <Field Name="IsFBA" Type="bool" FieldIndex="7" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
@@ -453,6 +454,7 @@
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
+          <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ClickCartProOrder" ObjectID="d483348d-8aef-4b58-a81e-b06b4592c323" InheritanceType="2">
@@ -598,6 +600,7 @@
           <Field Name="GspStateProvince" Type="string" MaxLength="128" FieldIndex="11" />
           <Field Name="GspStreet1" Type="string" MaxLength="512" FieldIndex="8" />
           <Field Name="GspStreet2" Type="string" MaxLength="512" FieldIndex="9" />
+          <Field Name="GuaranteedDelivery" Type="bool" FieldIndex="23" />
           <Field Name="RollupEbayItemCount" Type="int" FieldIndex="15" />
           <Field Name="RollupEffectiveCheckoutStatus" Type="int" IsOptional="true" FieldIndex="16" />
           <Field Name="RollupEffectivePaymentMethod" Type="int" IsOptional="true" FieldIndex="17" />
@@ -1409,6 +1412,23 @@
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="TrackByEmail" Type="bool" FieldIndex="4" />
           <Field Name="TrackBySMS" Type="bool" FieldIndex="5" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="JetOrder" ObjectID="8e4ae3c6-7489-4bba-ab73-0848c2e919df" InheritanceType="2">
+        <Fields>
+          <Field Name="MerchantOrderId" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="JetOrderItem" ObjectID="a3cbbf8a-d29a-4038-8098-9b893ddc4d8d" InheritanceType="2">
+        <Fields>
+          <Field Name="JetOrderItemID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="MerchantSku" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="JetStore" ObjectID="09c32316-900c-49e7-a066-c93d454f37bb" InheritanceType="2">
+        <Fields>
+          <Field Name="ApiUser" Type="string" MaxLength="100" FieldIndex="0" />
+          <Field Name="Secret" Type="string" MaxLength="100" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="LabelSheet" ObjectID="56e1997e-27f4-4322-b3af-2747c4eebd37">
@@ -2237,6 +2257,7 @@
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
+          <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ShipSenseEnabled" Type="bool" FieldIndex="43" />
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
@@ -3650,6 +3671,9 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":GrouponStore" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":InfopiaOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":InfopiaStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":JetOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":JetOrderItem" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":JetStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":LemonStandOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":LemonStandOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":LemonStandStore" />
@@ -3726,7 +3750,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-09T19:16:26.4523077Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-18T17:50:39.4119375Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4128,6 +4152,7 @@
                     <Field Name="HarmonizedCode" Ordinal="8" DbType="12" Length="20" />
                     <Field Name="IsFBA" Ordinal="9" DbType="2" />
                     <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
+                    <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -4141,6 +4166,7 @@
                     <Field Name="AmazonMerchantID" Ordinal="6" DbType="12" Length="50" />
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
+                    <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -4314,22 +4340,9 @@
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="EbayOrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="CombinedLocally" Ordinal="4" DbType="2">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="128" />
-                        <CustomProperty Name="AuditName" Value="Shipping Method" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
+                    <Field Name="CombinedLocally" Ordinal="4" DbType="2" />
+                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="GspEligible" Ordinal="7" DbType="2" />
                     <Field Name="GspFirstName" Ordinal="8" DbType="12" Length="128" />
                     <Field Name="GspLastName" Ordinal="9" DbType="12" Length="128" />
@@ -4340,46 +4353,15 @@
                     <Field Name="GspPostalCode" Ordinal="14" DbType="12" Length="9" />
                     <Field Name="GspCountryCode" Ordinal="15" DbType="12" Length="2" />
                     <Field Name="GspReferenceID" Ordinal="16" DbType="12" Length="128" />
-                    <Field Name="RollupEbayItemCount" Ordinal="17" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupEffectiveCheckoutStatus" Ordinal="18" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupEffectivePaymentMethod" Ordinal="19" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupFeedbackLeftType" Ordinal="20" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupFeedbackLeftComments" Ordinal="21" IsOptional="true" DbType="24" Length="80">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupFeedbackReceivedType" Ordinal="22" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupFeedbackReceivedComments" Ordinal="23" IsOptional="true" DbType="24" Length="80">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="RollupPayPalAddressStatus" Ordinal="24" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
+                    <Field Name="RollupEbayItemCount" Ordinal="17" DbType="8" Precision="10" />
+                    <Field Name="RollupEffectiveCheckoutStatus" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="RollupEffectivePaymentMethod" Ordinal="19" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="RollupFeedbackLeftType" Ordinal="20" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="RollupFeedbackLeftComments" Ordinal="21" IsOptional="true" DbType="24" Length="80" />
+                    <Field Name="RollupFeedbackReceivedType" Ordinal="22" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="RollupFeedbackReceivedComments" Ordinal="23" IsOptional="true" DbType="24" Length="80" />
+                    <Field Name="RollupPayPalAddressStatus" Ordinal="24" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5893,6 +5875,29 @@
                     <Field Name="RequestedLabelFormat" Ordinal="8" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
+                <Table Name="JetOrder">
+                  <PkConstraintName Name="PK_JetOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="MerchantOrderId" Ordinal="2" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="JetOrderItem">
+                  <PkConstraintName Name="PK_JetOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="MerchantSku" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="JetOrderItemID" Ordinal="3" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="JetStore">
+                  <PkConstraintName Name="PK_JetStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ApiUser" Ordinal="2" DbType="12" Length="100" />
+                    <Field Name="Secret" Ordinal="3" DbType="12" Length="100" />
+                  </Fields>
+                </Table>
                 <Table Name="LabelSheet">
                   <PkConstraintName Name="PK_LabelSheet" />
                   <Fields>
@@ -7154,6 +7159,7 @@
                     <Field Name="FedExFimsUsername" Ordinal="50" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
+                    <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -8600,6 +8606,21 @@
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:iParcelShipment:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetOrder:FK_JetOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:JetOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetOrderItem:FK_JetOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:JetOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetStore:FK_JetStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:JetStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:LemonStandOrder:FK_LemonStandOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:LemonStandOrder:OrderID" />
@@ -9417,6 +9438,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
+            <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
@@ -9436,6 +9458,7 @@
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
+            <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
@@ -9579,6 +9602,7 @@
             <FieldMapping FieldName="GspStateProvince" TargetFieldName="GspStateProvince" />
             <FieldMapping FieldName="GspStreet1" TargetFieldName="GspStreet1" />
             <FieldMapping FieldName="GspStreet2" TargetFieldName="GspStreet2" />
+            <FieldMapping FieldName="GuaranteedDelivery" TargetFieldName="GuaranteedDelivery" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RollupEbayItemCount" TargetFieldName="RollupEbayItemCount" />
             <FieldMapping FieldName="RollupEffectiveCheckoutStatus" TargetFieldName="RollupEffectiveCheckoutStatus" />
@@ -10403,6 +10427,26 @@
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="TrackByEmail" TargetFieldName="TrackByEmail" />
             <FieldMapping FieldName="TrackBySMS" TargetFieldName="TrackBySMS" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetOrder" TargetName="ShipWorksLocal:dbo:JetOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="MerchantOrderId" TargetFieldName="MerchantOrderId" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetOrderItem" TargetName="ShipWorksLocal:dbo:JetOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="JetOrderItemID" TargetFieldName="JetOrderItemID" />
+            <FieldMapping FieldName="MerchantSku" TargetFieldName="MerchantSku" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetStore" TargetName="ShipWorksLocal:dbo:JetStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ApiUser" TargetFieldName="ApiUser" />
+            <FieldMapping FieldName="Secret" TargetFieldName="Secret" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":LabelSheet" TargetName="ShipWorksLocal:dbo:LabelSheet">
@@ -11249,6 +11293,7 @@
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
+            <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />
             <FieldMapping FieldName="ShipSenseEnabled" TargetFieldName="ShipSenseEnabled" />
             <FieldMapping FieldName="ShipSenseEndShipmentID" TargetFieldName="ShipSenseEndShipmentID" />

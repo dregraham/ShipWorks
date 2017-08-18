@@ -43,6 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AmazonMerchantID = source.AmazonMerchantID;
             AmazonAuthToken = source.AmazonAuthToken;
             AmazonApiRegion = source.AmazonApiRegion;
+            RefreshToken = source.RefreshToken;
             
             
             
@@ -93,6 +94,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String AmazonApiRegion { get; }
+        /// <summary> The RefreshToken property of the Entity ChannelAdvisorStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ChannelAdvisorStore"."RefreshToken"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String RefreshToken { get; }
         
         
         
