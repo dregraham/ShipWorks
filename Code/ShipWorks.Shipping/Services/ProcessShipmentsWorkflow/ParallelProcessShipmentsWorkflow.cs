@@ -72,6 +72,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
             Action counterRateCarrierConfiguredWhileProcessingAction)
         {
+            workProgress.Starting();
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
             DataFlow<ProcessShipmentState, ILabelResultLogResult> dataflow = CreateDataFlow(cancellationSource);
@@ -96,7 +97,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             dataflow.Complete();
 
-            return await results;
+            ProcessShipmentsWorkflowResult result = await results;
+            workProgress.Completed();
+            return result;
         }
 
         /// <summary>
