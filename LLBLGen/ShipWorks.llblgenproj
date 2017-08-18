@@ -787,6 +787,12 @@
           <Field Name="WasShipped" Type="bool" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="EtsyOrderItem" ObjectID="63576b1d-238c-42d5-a8b7-c574008fc266" InheritanceType="2">
+        <Fields>
+          <Field Name="ListingID" Type="int" FieldIndex="0" />
+          <Field Name="TransactionID" Type="int" Precision="10" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="EtsyStore" ObjectID="b71e1a57-e10a-461d-8ce4-df530fb72b96" InheritanceType="2">
         <Fields>
           <Field Name="EtsyLoginName" Type="string" MaxLength="255" FieldIndex="1" />
@@ -1408,18 +1414,18 @@
           <Field Name="TrackBySMS" Type="bool" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="JetOrder" ObjectID="c4479225-4b3d-47e1-a1a6-e939134fc150" InheritanceType="2">
+      <EntityDefinition Name="JetOrder" ObjectID="8e4ae3c6-7489-4bba-ab73-0848c2e919df" InheritanceType="2">
         <Fields>
           <Field Name="MerchantOrderId" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="JetOrderItem" ObjectID="231f3a68-fd08-413e-834c-407652949ed9" InheritanceType="2">
+      <EntityDefinition Name="JetOrderItem" ObjectID="a3cbbf8a-d29a-4038-8098-9b893ddc4d8d" InheritanceType="2">
         <Fields>
           <Field Name="JetOrderItemID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="MerchantSku" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="JetStore" ObjectID="4b2260ee-edf2-4771-876b-3f7bf14cc64f" InheritanceType="2">
+      <EntityDefinition Name="JetStore" ObjectID="09c32316-900c-49e7-a066-c93d454f37bb" InheritanceType="2">
         <Fields>
           <Field Name="ApiUser" Type="string" MaxLength="100" FieldIndex="0" />
           <Field Name="Secret" Type="string" MaxLength="100" FieldIndex="1" />
@@ -3656,6 +3662,7 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":EbayOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EbayStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":EtsyOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":EtsyOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EtsyStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericFileStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericModuleStore" />
@@ -3743,7 +3750,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-14T15:43:21.2326757Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-18T17:50:39.4119375Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4333,22 +4340,9 @@
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="EbayOrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="CombinedLocally" Ordinal="4" DbType="2">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="128" />
-                        <CustomProperty Name="AuditName" Value="Shipping Method" />
-                      </CustomProperties>
-                    </Field>
-                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10">
-                      <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="1" />
-                      </CustomProperties>
-                    </Field>
+                    <Field Name="CombinedLocally" Ordinal="4" DbType="2" />
+                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="GspEligible" Ordinal="7" DbType="2" />
                     <Field Name="GspFirstName" Ordinal="8" DbType="12" Length="128" />
                     <Field Name="GspLastName" Ordinal="9" DbType="12" Length="128" />
@@ -4607,6 +4601,14 @@
                         <CustomProperty Name="AuditFormat" Value="120" />
                       </CustomProperties>
                     </Field>
+                  </Fields>
+                </Table>
+                <Table Name="EtsyOrderItem">
+                  <PkConstraintName Name="PK_EtsyOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="TransactionID" Ordinal="2" DbType="8" Precision="10" />
+                    <Field Name="ListingID" Ordinal="3" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyStore">
@@ -8481,6 +8483,11 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:EtsyOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:EtsyOrderItem:FK_EtsyOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:EtsyOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:EtsyStore:FK_EtsyStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:EtsyStore:StoreID" />
@@ -9816,6 +9823,13 @@
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="WasPaid" TargetFieldName="WasPaid" />
             <FieldMapping FieldName="WasShipped" TargetFieldName="WasShipped" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":EtsyOrderItem" TargetName="ShipWorksLocal:dbo:EtsyOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="ListingID" TargetFieldName="ListingID" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+            <FieldMapping FieldName="TransactionID" TargetFieldName="TransactionID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":EtsyStore" TargetName="ShipWorksLocal:dbo:EtsyStore">

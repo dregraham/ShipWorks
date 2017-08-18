@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(189);
+			this.InitClass(190);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -92,6 +92,7 @@ namespace ShipWorks.Data.Model
 			InitEndiciaScanFormEntityMappings();
 			InitEndiciaShipmentEntityMappings();
 			InitEtsyOrderEntityMappings();
+			InitEtsyOrderItemEntityMappings();
 			InitEtsyStoreEntityMappings();
 			InitExcludedPackageTypeEntityMappings();
 			InitExcludedServiceTypeEntityMappings();
@@ -987,6 +988,15 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EtsyOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EtsyOrderEntity", "WasPaid", "WasPaid", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("EtsyOrderEntity", "WasShipped", "WasShipped", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+		}
+
+		/// <summary>Inits EtsyOrderItemEntity's mappings</summary>
+		private void InitEtsyOrderItemEntityMappings()
+		{
+			this.AddElementMapping("EtsyOrderItemEntity", @"ShipWorksLocal", @"dbo", "EtsyOrderItem", 3, 0);
+			this.AddElementFieldMapping("EtsyOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("EtsyOrderItemEntity", "ListingID", "ListingID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("EtsyOrderItemEntity", "TransactionID", "TransactionID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 		}
 
 		/// <summary>Inits EtsyStoreEntity's mappings</summary>

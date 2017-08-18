@@ -2671,6 +2671,54 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrderItem.</summary>
+	public enum EtsyOrderItemFieldIndex
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. Inherited from OrderItem</summary>
+		RowVersion,
+		///<summary>OrderID. Inherited from OrderItem</summary>
+		OrderID,
+		///<summary>Name. Inherited from OrderItem</summary>
+		Name,
+		///<summary>Code. Inherited from OrderItem</summary>
+		Code,
+		///<summary>SKU. Inherited from OrderItem</summary>
+		SKU,
+		///<summary>ISBN. Inherited from OrderItem</summary>
+		ISBN,
+		///<summary>UPC. Inherited from OrderItem</summary>
+		UPC,
+		///<summary>Description. Inherited from OrderItem</summary>
+		Description,
+		///<summary>Location. Inherited from OrderItem</summary>
+		Location,
+		///<summary>Image. Inherited from OrderItem</summary>
+		Image,
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
+		Thumbnail,
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
+		UnitPrice,
+		///<summary>UnitCost. Inherited from OrderItem</summary>
+		UnitCost,
+		///<summary>Weight. Inherited from OrderItem</summary>
+		Weight,
+		///<summary>Quantity. Inherited from OrderItem</summary>
+		Quantity,
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from OrderItem</summary>
+		IsManual,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>ListingID. </summary>
+		ListingID,
+		///<summary>TransactionID. </summary>
+		TransactionID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyStore.</summary>
 	public enum EtsyStoreFieldIndex
 	{
@@ -11215,6 +11263,8 @@ namespace ShipWorks.Data.Model
 		EndiciaShipmentEntity,
 		///<summary>EtsyOrder</summary>
 		EtsyOrderEntity,
+		///<summary>EtsyOrderItem</summary>
+		EtsyOrderItemEntity,
 		///<summary>EtsyStore</summary>
 		EtsyStoreEntity,
 		///<summary>ExcludedPackageType</summary>
