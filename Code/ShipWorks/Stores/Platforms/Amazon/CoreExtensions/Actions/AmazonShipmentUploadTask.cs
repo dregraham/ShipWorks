@@ -24,6 +24,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
         const long maxBatchSize = 1000;
 
         /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// This task is for Orders
         /// </summary>
         public override EntityType? InputEntityType => EntityType.ShipmentEntity;

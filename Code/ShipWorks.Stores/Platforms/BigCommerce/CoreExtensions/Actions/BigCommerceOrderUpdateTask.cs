@@ -18,6 +18,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
     public class BigCommerceOrderUpdateTask : StoreInstanceTaskBase
     {
         /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
         public override bool SupportsStore(StoreEntity store)
