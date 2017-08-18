@@ -11,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.WizardPages
     /// <summary>
     /// Base for online update actions for the add store wizard
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class InfopiaOnlineUpdateActionControl : OnlineUpdateActionControlBase
     {
         /// <summary>

@@ -20,6 +20,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for OMS MarketplaceAdvisor stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Component]
     public class MarketplaceAdvisorOmsDownloader : StoreDownloader, IMarketplaceAdvisorOmsDownloader
     {

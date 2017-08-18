@@ -12,6 +12,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions
     /// <summary>
     /// Task for uploading shipment details to an Infopia Store
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [ActionTask("Upload shipment details", "InfopiaShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class InfopiaShipmentUploadTask : StoreTypeTaskBase
     {

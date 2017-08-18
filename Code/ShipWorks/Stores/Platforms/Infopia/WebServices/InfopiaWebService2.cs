@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using ShipWorks.ApplicationCore.Logging;
 
@@ -10,6 +7,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
     /// <summary>
     /// Infopia web service class that disabled KeepAlive
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public class InfopiaWebService2 : InfopiaWebService
     {
         /// <summary>
@@ -25,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
         /// </summary>
         protected override WebRequest GetWebRequest(Uri uri)
         {
-            HttpWebRequest webRequest = (HttpWebRequest)base.GetWebRequest(uri);
+            HttpWebRequest webRequest = (HttpWebRequest) base.GetWebRequest(uri);
 
             // disabling keepalive due to Infopia problems
             webRequest.KeepAlive = false;

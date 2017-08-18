@@ -13,6 +13,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Utility methods for interacting with Infopia's web service
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public static class InfopiaUtility
     {
         // Logger

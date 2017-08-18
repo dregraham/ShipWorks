@@ -14,6 +14,11 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
     /// <summary>
     /// WebShopManager Store implementation.
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.WebShopManager)]
     [Component(RegistrationType.Self)]
     public class WebShopManagerStoreType : GenericModuleStoreType

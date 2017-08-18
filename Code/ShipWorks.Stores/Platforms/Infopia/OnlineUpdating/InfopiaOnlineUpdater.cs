@@ -16,6 +16,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
     /// <summary>
     /// Handles uploading data to Infopia
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Component]
     public class InfopiaOnlineUpdater : IInfopiaOnlineUpdater
     {

@@ -17,6 +17,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
     /// <summary>
     /// Create online update commands for Buy.com stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Infopia)]
     public class InfopiaOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {

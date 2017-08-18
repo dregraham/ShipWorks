@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages
 {
     /// <summary>
     /// Wizard page for deciding which flags need to be set when a MarketplaceAdvisor order is downloaded
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class MarketplaceAdvisorOmsFlagsPage : AddStoreWizardPage
     {
         /// <summary>

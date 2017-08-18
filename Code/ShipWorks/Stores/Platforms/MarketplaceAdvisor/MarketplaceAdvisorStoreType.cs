@@ -22,6 +22,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// StoreType instance for MarketplaceAdvisor stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.MarketplaceAdvisor)]
     [Component(RegistrationType.Self)]
     public class MarketplaceAdvisorStoreType : StoreType

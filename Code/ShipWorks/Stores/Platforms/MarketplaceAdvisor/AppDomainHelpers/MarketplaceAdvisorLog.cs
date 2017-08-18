@@ -6,6 +6,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
     /// <summary>
     /// Wrap the ApiLogger in a marshalable class so logging can happen accross Appdomains
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public class MarketplaceAdvisorLog : MarshalByRefObject
     {
         readonly ILog log;

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
@@ -14,6 +6,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// UserControl for MarketplaceAdvisor store settings
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class MarketplaceAdvisorStoreSettingsControl : StoreSettingsControlBase
     {
         /// <summary>

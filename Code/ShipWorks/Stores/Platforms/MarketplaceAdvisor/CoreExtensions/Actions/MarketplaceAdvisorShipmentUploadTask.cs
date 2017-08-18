@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Stores;
-using ShipWorks.Shipping;
+﻿using System.Collections.Generic;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 {
     /// <summary>
     /// Task to update the online shipment record of a MarketplaceAdvisor order
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [ActionTask("Upload shipment details", "MarketplaceAdvisorShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class MarketplaceAdvisorShipmentUploadTask : StoreInstanceTaskBase
     {
