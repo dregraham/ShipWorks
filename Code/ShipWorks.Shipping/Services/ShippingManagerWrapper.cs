@@ -99,6 +99,8 @@ namespace ShipWorks.Shipping.Services
                 return null;
             }
 
+            await EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+
             OrderEntity order = await dataProvider.GetEntityAsync<OrderEntity>(shipment.OrderID).ConfigureAwait(false);
             if (order == null)
             {
