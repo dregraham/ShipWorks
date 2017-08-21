@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
         private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
+        private int totalOrders;
 
         /// <summary>
         /// Constructor
@@ -67,11 +68,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
+                totalOrders = ordersResult.ResultCount;
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
-                while (ordersResult?.ResultCount > 0)
+                while (ordersResult?.Orders?.Any() ?? false)
                 {
                     foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
                     {
@@ -82,12 +84,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         // Get the products for the order to pass into the loader
-                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
+                        List<ChannelAdvisorProduct> caProducts =
+                            caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
 
-                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink)
+                        ? null
+                        : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -109,7 +114,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
-            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
+            Progress.Detail = $"Processing order {QuantitySaved + 1} of {totalOrders}...";
+            Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalOrders, 100);
 
             // Check if it has been canceled
             if (!Progress.IsCancelRequested)
