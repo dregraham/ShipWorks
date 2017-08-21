@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
 
             try
             {
-                AmazonStoreEntity amazonStoreEntity = DataProvider.GetEntity(order.StoreID) as AmazonStoreEntity;
+                StoreEntity amazonStoreEntity = DataProvider.GetEntity(order.StoreID) as AmazonStoreEntity;
 
                 // Obtain the domain name from the store, so we navigate to the correct URL based on
                 // the marketplace (i.e. amazon.ca vs. amazon.com)
