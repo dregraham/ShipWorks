@@ -624,7 +624,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "EXPRESS";
                 }
 
-                if (amazonShippingServiceName.Contains("express", StringComparison.InvariantCultureIgnoreCase))
+                if (amazonShippingServiceName.Contains("priority", StringComparison.InvariantCultureIgnoreCase))
                 {
                     return "PRIORITY";
                 }
