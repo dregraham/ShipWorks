@@ -4,10 +4,7 @@ using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
@@ -179,65 +176,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         }
 
 
-        /// <summary>
-        /// Create any MenuCommand's that are applied to this specific store instance
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new[]
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails))
-            };
-        }
 
-        /// <summary>
-        /// Called when [upload shipment details].
-        /// </summary>
-        /// <param name="context">The context.</param>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    NeweggOnlineUpdater updater = new NeweggOnlineUpdater((NeweggStoreEntity) Store);
-                    updater.UploadShippingDetails(shipment);
-                }
-                catch (NeweggException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment information for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the

@@ -1818,6 +1818,13 @@
     <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IOrderStatusUpdater.cs" />
     <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
+    <Compile Include="Stores\Platforms\Newegg\INeweggWebClient.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\INeweggCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ItemDetails.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\NeweggCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\OrderUploadDetail.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ShipmentUploadDetails.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
@@ -4011,7 +4018,6 @@
     <Compile Include="UI\Controls\WeightDisplayFormat.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggException.cs" />
-    <Compile Include="Stores\Platforms\Newegg\NeweggOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggStoreCredentialsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

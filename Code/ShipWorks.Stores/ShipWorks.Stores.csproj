@@ -358,6 +358,10 @@
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\OrderStatusUpdater.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\DataAccess.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\NeweggOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />

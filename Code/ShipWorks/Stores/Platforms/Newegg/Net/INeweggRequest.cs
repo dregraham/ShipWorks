@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net
 {
@@ -15,6 +15,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         /// <returns>
         /// A NeweggResponse containing the response from the Newegg API.
         /// </returns>
-        string SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration);
+        Task<string> SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration);
     }
 }

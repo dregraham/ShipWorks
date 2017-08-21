@@ -1,8 +1,8 @@
-﻿using Xunit;
-using ShipWorks.Stores.Platforms.Newegg;
+﻿using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
@@ -24,25 +24,22 @@ namespace ShipWorks.Tests.Stores.Newegg
             invalidSecretKeyCredentials = new Credentials("A09V", "ABCD", NeweggChannelType.US);
         }
 
-        
-        public void AreCredentialsValid_ReturnsFalse_WithInvalidSellerId_IntegrationTest()
-        {            
-            // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.False(testObject.AreCredentialsValid(invalidSellerCredentials));
-        }
-
-        
-        public void AreCredentialsValid_ReturnsFalse_WithInvalidSecretKey_IntegrationTest()
+        public async Task AreCredentialsValid_ReturnsFalse_WithInvalidSellerId_IntegrationTest()
         {
             // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.False(testObject.AreCredentialsValid(invalidSecretKeyCredentials));
+            Assert.False(await testObject.AreCredentialsValid(invalidSellerCredentials));
         }
 
-        
-        public void AreCredentialsValid_ReturnsTrue_WithValidCredentials_IntegrationTest()
+        public async Task AreCredentialsValid_ReturnsFalse_WithInvalidSecretKey_IntegrationTest()
         {
             // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.True(testObject.AreCredentialsValid(validCredentials));
+            Assert.False(await testObject.AreCredentialsValid(invalidSecretKeyCredentials));
+        }
+
+        public async Task AreCredentialsValid_ReturnsTrue_WithValidCredentials_IntegrationTest()
+        {
+            // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
+            Assert.True(await testObject.AreCredentialsValid(validCredentials));
         }
     }
 }

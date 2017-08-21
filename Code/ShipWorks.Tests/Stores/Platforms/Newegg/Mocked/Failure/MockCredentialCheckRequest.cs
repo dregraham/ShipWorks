@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 
@@ -9,12 +7,11 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Failure
 {
     public class MockCredentialCheckRequest : ICheckCredentialRequest
     {
-
         public NeweggResponse SubmitRequest(Credentials credentials, Dictionary<string, object> parameters)
         {
             //This is a mocked credential request that will always return a response indicating
             // the credentials are NOT valid
-            string response = 
+            string response =
                     @"<?xml version=""1.0"" encoding=""utf-8""?>
                     <Errors xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
                       <Error>
@@ -33,11 +30,11 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Failure
         /// <returns>
         /// Returns true if the credentials are valid; otherwise false.
         /// </returns>
-        public bool AreCredentialsValid(Credentials credentials)
+        public Task<bool> AreCredentialsValid(Credentials credentials)
         {
             //This is a mocked credential request that will always return a response indicating
             // the credentials are NOT valid
-            return false;
+            return Task.FromResult(false);
         }
     }
 }

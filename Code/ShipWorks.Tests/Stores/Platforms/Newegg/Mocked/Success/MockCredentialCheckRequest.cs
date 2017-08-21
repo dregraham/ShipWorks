@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 
@@ -13,7 +11,7 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
         {
             //This is a mocked credential request that will always return a response indicating
             // the credentials are valid
-            string response = 
+            string response =
                     @"<?xml version=""1.0"" encoding=""utf-8""?>
                     <NeweggAPIResponse>
                       <IsSuccess>true</IsSuccess>
@@ -35,11 +33,11 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
         /// <returns>
         /// Returns true if the credentials are valid; otherwise false.
         /// </returns>
-        public bool AreCredentialsValid(Credentials credentials)
+        public Task<bool> AreCredentialsValid(Credentials credentials)
         {
             //This is a mocked credential request that will always return a response indicating
             // the credentials are valid
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

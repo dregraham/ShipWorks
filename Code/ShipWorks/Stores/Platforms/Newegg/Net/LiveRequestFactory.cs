@@ -1,16 +1,18 @@
-﻿using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download;
-using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
+using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net
 {
     /// <summary>
-    /// An implementation of IRequestFactory that will create request objects that hit 
+    /// An implementation of IRequestFactory that will create request objects that hit
     /// the production/live Newegg API
     /// </summary>
+    [Component]
     public class LiveRequestFactory : IRequestFactory
     {
         /// <summary>
@@ -18,7 +20,8 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>An IDownloadOrderRequest object.</returns>
-        public IDownloadOrderRequest CreateDownloadOrderRequest(Credentials credentials)
+        public IDownloadOrderRequest
+            CreateDownloadOrderRequest(Credentials credentials)
         {
             return new DownloadOrdersRequest(credentials);
         }
@@ -43,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         }
 
         /// <summary>
-        /// Creates the cancel order reqeust.
+        /// Creates the cancel order request.
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>An ICancelOrderRequest object.</returns>
@@ -51,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         {
             return new CancelOrderRequest(credentials);
         }
-        
+
         /// <summary>
         /// Creates the shipping request.
         /// </summary>
@@ -61,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         {
             return new ShippingRequest(credentials);
         }
-        
+
         /// <summary>
         /// Creates the remove item request.
         /// </summary>

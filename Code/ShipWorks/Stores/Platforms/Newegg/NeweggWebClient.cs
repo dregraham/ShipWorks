@@ -1,7 +1,15 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -16,63 +24,40 @@ using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using ShipWorks.Stores.Platforms.Newegg.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
     /// <summary>
-    /// Class that acts as a facade for funneling all requests to the Newegg API. 
+    /// Class that acts as a facade for funneling all requests to the Newegg API.
     /// </summary>
-    public class NeweggWebClient
+    [Component]
+    public class NeweggWebClient : INeweggWebClient
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(NeweggWebClient));
-
-        private NeweggStoreEntity store;
-        private IRequestFactory requestFactory;
-        private Credentials credentials; 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NeweggWebClient"/> class.
-        /// </summary>
-        /// <param name="store">The store.</param>
-        public NeweggWebClient(NeweggStoreEntity store)
-            : this (store, new LiveRequestFactory())
-        { }
+        // Logger
+        private readonly ILog log;
+        private readonly IRequestFactory requestFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NeweggWebClient"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="requestFactory">The request factory.</param>
-        public NeweggWebClient(NeweggStoreEntity store, IRequestFactory requestFactory)
+        public NeweggWebClient(IRequestFactory requestFactory, Func<Type, ILog> createLogger)
         {
-            if (store == null)
-            {
-                string message = "A null store value was provided to the NeweggWebClient.";
-                log.Error(message);
-                throw new InvalidOperationException(message);
-            }
-
-            this.store = store;
             this.requestFactory = requestFactory;
-
-            
-
-            credentials = new Credentials(store.SellerID, store.SecretKey, (NeweggChannelType)store.Channel);
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Checks whether the credentials are valid by making a request to the Newegg API.
         /// </summary>
         /// <returns>True if the credentials are valid; otherwise false.</returns>
-        public bool AreCredentialsValid()
+        public async Task<bool> AreCredentialsValid(INeweggStoreEntity store)
         {
+            var credentials = GetCredentialsFrom(store);
             ICheckCredentialRequest credentialRequest = requestFactory.CreateCheckCredentialRequest();
-            return credentialRequest.AreCredentialsValid(credentials);
+            return await credentialRequest.AreCredentialsValid(credentials).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -81,8 +66,10 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <param name="startingPoint">The starting point.</param>
         /// <param name="orderType">Types of orders to be downloaded.</param>
         /// <returns>A DownloadInfo object.</returns>
-        public DownloadInfo GetDownloadInfo(DateTime startingPoint, NeweggOrderType orderType)
+        public async Task<DownloadInfo> GetDownloadInfo(INeweggStoreEntity store, DateTime startingPoint, NeweggOrderType orderType)
         {
+            var credentials = GetCredentialsFrom(store);
+
             // Just create an instance of IDownloadOrderRequest and use the staring point
             // provided to download the orders from Newegg. We're going to download orders
             // up until 3 minutes ago to avoid potential race conditions such as orders
@@ -90,8 +77,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
             DateTime endingPoint = DateTime.UtcNow.AddMinutes(-3);
             IDownloadOrderRequest downloadRequest = requestFactory.CreateDownloadOrderRequest(credentials);
 
-            DownloadInfo downloadInfo = downloadRequest.GetDownloadInfo(startingPoint, endingPoint, orderType);
-            
+            DownloadInfo downloadInfo = await downloadRequest.GetDownloadInfo(startingPoint, endingPoint, orderType).ConfigureAwait(false);
+
             return downloadInfo;
         }
 
@@ -100,8 +87,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="orders">The orders.</param>
         /// <returns>A DownloadInfo object.</returns>
-        public DownloadInfo GetDownloadInfo(IEnumerable<NeweggOrderEntity> orderEntities)
+        public DownloadInfo GetDownloadInfo(INeweggStoreEntity store, IEnumerable<NeweggOrderEntity> orderEntities)
         {
+            var credentials = GetCredentialsFrom(store);
             List<Order> neweggOrders = CreateNeweggOrders(orderEntities);
 
             IDownloadOrderRequest downloadRequest = requestFactory.CreateDownloadOrderRequest(credentials);
@@ -116,12 +104,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <param name="orderEntities">The order entities.</param>
         /// <param name="pageNumber">The page number.</param>
         /// <returns>An IEnumerable of Newegg Order objects.</returns>
-        public IEnumerable<Order> DownloadOrders(IEnumerable<NeweggOrderEntity> orderEntities, int pageNumber)
+        public async Task<IEnumerable<Order>> DownloadOrders(INeweggStoreEntity store, IEnumerable<NeweggOrderEntity> orderEntities, int pageNumber)
         {
+            var credentials = GetCredentialsFrom(store);
             List<Order> neweggOrders = CreateNeweggOrders(orderEntities);
 
             IDownloadOrderRequest downloadRequest = requestFactory.CreateDownloadOrderRequest(credentials);
-            DownloadResult result = downloadRequest.Download(neweggOrders, pageNumber);
+            DownloadResult result = await downloadRequest.Download(neweggOrders, pageNumber).ConfigureAwait(false);
 
             return result.Body.Orders;
         }
@@ -134,19 +123,21 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <param name="pageNumber">The page number.</param>
         /// <param name="orderType">The type of orders to be downloaded.</param>
         /// <returns>An IEnumerable of Order objects.</returns>
-        public IEnumerable<Order> DownloadOrders(DateTime startingPoint, DateTime endingPoint, int pageNumber, NeweggOrderType orderType)
-        {            
-            IDownloadOrderRequest downloadRequest = requestFactory.CreateDownloadOrderRequest(credentials);
-            DownloadResult result = downloadRequest.Download(startingPoint, endingPoint, pageNumber, orderType);
+        public async Task<IEnumerable<Order>> DownloadOrders(INeweggStoreEntity store, Range<DateTime> downloadRange, int pageNumber, NeweggOrderType orderType)
+        {
+            var credentials = GetCredentialsFrom(store);
 
-            log.InfoFormat("Downloaded {0} orders (\"{1}\" order type(s)) from Newegg between {2} and {3} for seller {4}", 
-                result.Body.Orders.Count, Enum.GetName(typeof(NeweggOrderType), orderType), startingPoint.ToString(), endingPoint.ToString(), credentials.SellerId);
+            IDownloadOrderRequest downloadRequest = requestFactory.CreateDownloadOrderRequest(credentials);
+            DownloadResult result = await downloadRequest.Download(downloadRange.Start, downloadRange.End, pageNumber, orderType).ConfigureAwait(false);
+
+            log.InfoFormat("Downloaded {0} orders (\"{1}\" order type(s)) from Newegg between {2} and {3} for seller {4}",
+                result.Body.Orders.Count, Enum.GetName(typeof(NeweggOrderType), orderType), downloadRange.Start.ToString(), downloadRange.End.ToString(), credentials.SellerId);
 
             return result.Body.Orders;
         }
 
         /// <summary>
-        /// Converts a list of NeweggOrderEntity objects to a list of Newegg API order iobjects.
+        /// Converts a list of NeweggOrderEntity objects to a list of Newegg API order objects.
         /// </summary>
         /// <param name="orderEntities">The order entities.</param>
         /// <returns>A List of Order objects.</returns>
@@ -156,9 +147,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             List<Order> neweggOrders = new List<Order>();
             foreach (NeweggOrderEntity entity in orderEntities)
             {
-                Order neweggOrder = new Order 
-                { 
-                    OrderNumber = entity.OrderNumber,                    
+                Order neweggOrder = new Order
+                {
+                    OrderNumber = entity.OrderNumber,
                     // All times must be in PST for the Newegg API
                     OrderDateInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(entity.OrderDate, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"))
                 };
@@ -174,19 +165,27 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="shipmentEntity">The shipment.</param>
         /// <returns>A ShippingResult containing the results from the request to Newegg.</returns>
-        public ShippingResult UploadShippingDetails(ShipmentEntity shipmentEntity)
+        public async Task<IEnumerable<string>> UploadShippingDetails(INeweggStoreEntity store, ShipmentEntity shipmentEntity, ShipmentUploadDetails details)
         {
-            // Convert the shipment entity to a shipment object the Newegg API is expecting
-            Shipment apiShipment = CreateNeweggShipment(shipmentEntity);
-            
-            IShippingRequest shippingRequest = requestFactory.CreateShippingRequest(credentials);
-            ShippingResult result = shippingRequest.Ship(apiShipment);
+            var credentials = GetCredentialsFrom(store);
+            List<ShippingResult> results = new List<ShippingResult>();
 
-            // We'll inspect the result for any failure before returning the result to the caller.
-            CheckForShippingFailures(result);
-            return result;
+            foreach (var identifier in details.Identifiers)
+            {
+                // Convert the shipment entity to a shipment object the Newegg API is expecting
+                Shipment apiShipment = CreateNeweggShipment(shipmentEntity, identifier.OrderNumber, details.GetItemsFor(identifier), credentials);
+
+                IShippingRequest shippingRequest = requestFactory.CreateShippingRequest(credentials);
+                var result = await shippingRequest.Ship(apiShipment).ConfigureAwait(false);
+                results.Add(result);
+
+                // We'll inspect the result for any failure before returning the result to the caller.
+                CheckForShippingFailures(result);
+            }
+
+            return results.Select(x => x.Detail.OrderStatus).Distinct();
         }
-        
+
         /// <summary>
         /// Inspects a ShippingResult for any packages that failed to get updated in Newegg. A NeweggException
         /// containing the details of the failures is thrown if any failures are encountered.
@@ -209,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     {
                         if (!string.IsNullOrWhiteSpace(package.TrackingNumber))
                         {
-                            // There is a tracking number contained in the results so we will 
+                            // There is a tracking number contained in the results so we will
                             // include it in the error message.
                             errorMessage.AppendFormat("Tracking number {0}: ", package.TrackingNumber);
                         }
@@ -226,15 +225,15 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Factory method to translate a ShipWorks shipment entity into an object
         /// that the Newegg API is expecting.
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <param name="shipment">The shipment entity.</param>
         /// <returns>A Newegg Shipment object.</returns>
-        private Shipment CreateNeweggShipment(ShipmentEntity shipmentEntity)
+        private Shipment CreateNeweggShipment(ShipmentEntity shipment, long orderNumber, IEnumerable<ItemDetails> items, Credentials credentials)
         {
             Shipment apiShipment = new Shipment();
 
             try
             {
-                ShippingManager.EnsureShipmentLoaded(shipmentEntity);
+                ShippingManager.EnsureShipmentLoaded(shipment);
             }
             catch (ObjectDeletedException)
             {
@@ -245,32 +244,31 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 // Just continue, we'll assume it's OK to upload the info we do have.
             }
 
-            // The only fields required by Newegg are header, tracking number, carrier, service, 
-            // and item's seller number and the quantity of each item shipped. 
-            apiShipment.Header.OrderNumber = shipmentEntity.Order.OrderNumber;
+            // The only fields required by Newegg are header, tracking number, carrier, service,
+            // and item's seller number and the quantity of each item shipped.
+            apiShipment.Header.OrderNumber = orderNumber;
             apiShipment.Header.SellerId = credentials.SellerId;
 
             ShipmentPackage package = new ShipmentPackage();
-            package.TrackingNumber = shipmentEntity.TrackingNumber;
-            
-            package.ShipDateInPacificStandardTime = ConvertUtcToPacificStandardTime(shipmentEntity.ShipDate);
-            package.ShipCarrier = GetCarrierCode(shipmentEntity);
+            package.TrackingNumber = shipment.TrackingNumber;
 
-            package.ShipService = GetShipService(shipmentEntity);
+            package.ShipDateInPacificStandardTime = ConvertUtcToPacificStandardTime(shipment.ShipDate);
+            package.ShipCarrier = GetCarrierCode(shipment);
 
-            package.ShipFromAddress1 = shipmentEntity.OriginStreet1;
-            package.ShipFromAddress2 = shipmentEntity.OriginStreet2;
-            package.ShipFromCity = shipmentEntity.OriginCity;
-            package.ShipFromState = shipmentEntity.OriginStateProvCode;
-            package.ShipFromZipCode = shipmentEntity.OriginPostalCode;
+            package.ShipService = GetShipService(shipment);
 
-            foreach (NeweggOrderItemEntity item in shipmentEntity.Order.OrderItems)
-            {
-                // We won't be shipping partially shipping items, so the quantity of items shipped will
-                // always be the same as those ordered.
-                package.Items.Add(new ShippedItem { SellerPartNumber = item.SellerPartNumber, QuantityShipped = (int)item.Quantity});
-            }
-            
+            package.ShipFromAddress1 = shipment.OriginStreet1;
+            package.ShipFromAddress2 = shipment.OriginStreet2;
+            package.ShipFromCity = shipment.OriginCity;
+            package.ShipFromState = shipment.OriginStateProvCode;
+            package.ShipFromZipCode = shipment.OriginPostalCode;
+
+            // We won't be shipping partially shipping items, so the quantity of items shipped will
+            // always be the same as those ordered.
+            package.Items = items
+                .Select(x => new ShippedItem { SellerPartNumber = x.SellerPartNumber, QuantityShipped = (int) x.Quantity })
+                .ToList();
+
             apiShipment.Packages.Add(package);
 
             return apiShipment;
@@ -284,7 +282,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         public static string GetCarrierCode(ShipmentEntity shipmentEntity)
         {
             string carrierCode = string.Empty;
-            switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
+            switch (((ShipmentTypeCode) shipmentEntity.ShipmentType))
             {
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
@@ -295,12 +293,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
+                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType) shipmentEntity.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
                         carrierCode = "DHL";
                     }
-                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType) shipmentEntity.Postal.Service))
                     {
                         carrierCode = "Consolidator";
                     }
@@ -320,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     carrierCode = "UPS";
 
                     // Adjust tracking details per Mail Innovations and others
-                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+                    if (UpsUtility.IsUpsMiService((UpsServiceType) shipmentEntity.Ups.Service))
                     {
                         if (shipmentEntity.Ups.UspsTrackingNumber.Length > 0)
                         {
@@ -347,7 +345,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     carrierCode = "Other";
                     break;
             }
-            
+
             return carrierCode;
         }
 
@@ -359,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         private static string GetShipService(ShipmentEntity shipmentEntity)
         {
             ShippingManager.EnsureShipmentLoaded(shipmentEntity);
-            ShipmentTypeCode type = (ShipmentTypeCode)shipmentEntity.ShipmentType;
+            ShipmentTypeCode type = (ShipmentTypeCode) shipmentEntity.ShipmentType;
 
             string service = "NONE";
 
@@ -370,13 +368,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     break;
 
                 case ShipmentTypeCode.FedEx:
-                    FedExServiceType fedExServiceType = (FedExServiceType)shipmentEntity.FedEx.Service;
+                    FedExServiceType fedExServiceType = (FedExServiceType) shipmentEntity.FedEx.Service;
                     service = EnumHelper.GetDescription(fedExServiceType);
                     break;
-                     
+
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
-                    UpsServiceType upsServiceType = (UpsServiceType)shipmentEntity.Ups.Service;
+                    UpsServiceType upsServiceType = (UpsServiceType) shipmentEntity.Ups.Service;
                     service = EnumHelper.GetDescription(upsServiceType);
                     break;
 
@@ -385,7 +383,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
-                    PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
+                    PostalServiceType uspsType = (PostalServiceType) shipmentEntity.Postal.Service;
                     if (uspsType == PostalServiceType.GlobalPostEconomyIntl || uspsType == PostalServiceType.GlobalPostSmartSaverEconomyIntl)
                     {
                         uspsType = PostalServiceType.InternationalFirst;
@@ -415,7 +413,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
         private static DateTime ConvertUtcToPacificStandardTime(DateTime utcDateTime)
         {
             TimeZoneInfo pacificStandardTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, pacificStandardTimeZone);            
+            return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, pacificStandardTimeZone);
         }
+
+        /// <summary>
+        /// Create credentials from a store
+        /// </summary>
+        private Credentials GetCredentialsFrom(INeweggStoreEntity store) =>
+            new Credentials(store.SellerID, store.SecretKey, (NeweggChannelType) store.Channel);
     }
 }

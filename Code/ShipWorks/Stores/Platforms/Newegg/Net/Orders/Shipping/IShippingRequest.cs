@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
@@ -16,6 +13,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A ShippingResult object containing the details of the response.</returns>
-        ShippingResult Ship(Shipment shipment);
+        Task<ShippingResult> Ship(Shipment shipment);
     }
 }
