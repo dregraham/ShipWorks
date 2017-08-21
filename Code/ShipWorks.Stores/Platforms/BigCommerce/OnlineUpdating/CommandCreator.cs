@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
                     orderID => UploadShipmentDetailsCallback(orderID, store))
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Set Status", "ShipWorks is setting the online status.", "Updating order {0} of {1}...",
                     orderID => SetOnlineStatusCallback(orderID, statusCode, store))
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
