@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
-                while (ordersResult?.ResultCount > 0)
+                while (ordersResult?.Orders?.Any() ?? false)
                 {
                     foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
                     {
@@ -84,12 +84,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         // Get the products for the order to pass into the loader
-                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
+                        List<ChannelAdvisorProduct> caProducts =
+                            caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
 
-                    ordersResult = restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink)
+                        ? null
+                        : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
