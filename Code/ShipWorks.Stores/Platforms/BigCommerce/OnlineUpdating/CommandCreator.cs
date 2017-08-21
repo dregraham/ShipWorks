@@ -94,10 +94,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// </summary>
         private async Task<IResult> UploadShipmentDetailsCallback(long orderID, BigCommerceStoreEntity store)
         {
-            // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                await shipmentDetailsUpdater.UpdateShipmentDetails(store, orderID).ConfigureAwait(false);
+                await shipmentDetailsUpdater.UpdateShipmentDetailsForOrder(store, orderID).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (BigCommerceException ex)

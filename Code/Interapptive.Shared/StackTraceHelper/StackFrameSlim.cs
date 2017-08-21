@@ -3,22 +3,26 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Lighter analog to StackFrame
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     [DebuggerDisplay("{LongHash} : {ToString()}")]
     public struct StackFrameSlim : IEquatable<StackFrameSlim>
     {
         internal const char FirstArrow = (char) 0x21e6;
         internal const char SecondArrow = (char) 0x2190;
-
         public static readonly StackFrameSlim AsyncBoundary = new StackFrameSlim(new IntPtr(-1L), -1, -1, null, -1, -1, false);
-
         private static readonly String asyncBoundaryString = ((char) 0x231B).ToString() + " " + string.Join(" ", Enumerable.Range(0, 10).Select(x => (char) 0xB7));
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        [NDependIgnoreTooManyParams]
         public StackFrameSlim(IntPtr rgMethodHandle, int rgiOffset, int rgiILOffset,
             string rgFilename, int rgiLineNumber, int rgiColumnNumber, bool rgiLastFrameFromForeignExceptionStackTrace)
         {
@@ -26,34 +30,56 @@ namespace WindowsFormsApp1.StackTraceHelper
 
             MethodHandle = rgMethodHandle;
             Offset = rgiOffset;
-
             ILOffset = rgiILOffset;
-
             FileName = rgFilename;
-
             LineNumber = rgiLineNumber;
-
             ColumnNumber = rgiColumnNumber;
-
             IsLastFrameFromForeignExceptionStackTrace = rgiLastFrameFromForeignExceptionStackTrace;
-
         }
 
-
+        /// <summary>
+        /// Method
+        /// </summary>
         internal MethodBaseSlim Method { get; set; }
 
-
+        /// <summary>
+        /// Handle to the method
+        /// </summary>
         public IntPtr MethodHandle { get; }
+
+        /// <summary>
+        /// Offset
+        /// </summary>
         public int Offset { get; }
 
+        /// <summary>
+        /// IL Offset
+        /// </summary>
         public int ILOffset { get; }
+
+        /// <summary>
+        /// Filename
+        /// </summary>
         public string FileName { get; }
 
+        /// <summary>
+        /// Line number
+        /// </summary>
         public int LineNumber { get; }
+
+        /// <summary>
+        /// Column number
+        /// </summary>
         public int ColumnNumber { get; }
 
+        /// <summary>
+        /// Is the last frame from foreign exception
+        /// </summary>
         public bool IsLastFrameFromForeignExceptionStackTrace { get; }
 
+        /// <summary>
+        /// To string
+        /// </summary>
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -70,7 +96,6 @@ namespace WindowsFormsApp1.StackTraceHelper
                     builder.AppendFormat(" {3} {0}:line {1}:column {2}", FileName, LineNumber, ColumnNumber, FirstArrow);
 
                 }
-
             }
 
             return builder.ToString();
@@ -93,8 +118,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             }
         }
 
-
-
+        /// <summary>
+        /// Get hash code
+        /// </summary>
         public override int GetHashCode()
         {
             var hash = LongHash;
@@ -102,6 +128,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             return (int) (hash ^ (hash >> 32));
         }
 
+        /// <summary>
+        /// Equality method
+        /// </summary>
         public override bool Equals(object obj)
         {
             if (obj == null || obj.GetType() != typeof(StackFrameSlim))
@@ -112,6 +141,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             return Equals((StackFrameSlim) obj);
         }
 
+        /// <summary>
+        /// Equality method
+        /// </summary>
         public bool Equals(StackFrameSlim other)
         {
             return MethodHandle == other.MethodHandle &&

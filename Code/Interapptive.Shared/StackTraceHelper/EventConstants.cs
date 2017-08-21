@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// A set of constants from TplEtwProvider and FrameworkEventSource
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public static class EventConstants
     {
-
         /// <summary>
         /// An excerpt from TplEtwProvider
         /// </summary>
@@ -33,34 +35,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             public const int TASKWAITBEGIN_ID = 10;
             public const int TASKWAITEND_ID = 11;
 
-            //' Tasks.Loop == 1
-            //Public MustOverride Sub ParallelLoopBegin(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer, ByVal OperationType As ForkJoinOperationType, ByVal InclusiveFrom As Long, ByVal ExclusiveTo As Long)
-
-            //Public MustOverride Sub ParallelLoopEnd(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer, ByVal TotalIterations As Long)
-
-            //' Tasks.Invoke == 2
-            //Public MustOverride Sub ParallelInvokeBegin(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer, ByVal OperationType As ForkJoinOperationType, ByVal ActionCount As Integer)
-
-            //Public MustOverride Sub ParallelInvokeEnd(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer)
-
-            //' Tasks.ForkJoin == 5
-            //Public MustOverride Sub ParallelFork(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer)
-
-            //Public MustOverride Sub ParallelJoin(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal ForkJoinContextID As Integer)
-
-            //' No task
-            //Public MustOverride Sub TaskScheduled(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal TaskID As Integer, ByVal CreatingTaskID As Integer, ByVal TaskCreationOptions As Integer)
-
-            //' Tasks.TaskExecute == 3
-            //Public MustOverride Sub TaskStarted(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal TaskID As Integer)
-
-            //Public MustOverride Sub TaskCompleted(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal TaskID As Integer, ByVal IsExceptional As Boolean)
-
-            //' Tasks.TaskWait == 4
-            //Public MustOverride Sub TaskWaitBegin(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal TaskID As Integer, ByVal Behavior As TaskWaitBehavior)
-
-            //Public MustOverride Sub TaskWaitEnd(ByVal OriginatingTaskSchedulerID As Integer, ByVal OriginatingTaskID As Integer, ByVal TaskID As Integer)
-
+            /// <summary>
+            /// Type of async action
+            /// </summary>
             public enum ForkJoinOperationType
             {
                 ParallelInvoke = 1,
@@ -68,6 +45,9 @@ namespace WindowsFormsApp1.StackTraceHelper
                 ParallelForEach = 3
             }
 
+            /// <summary>
+            /// Task event types
+            /// </summary>
             public static class Tasks
             {
                 public const EventTask Loop1 = (EventTask) 1;
@@ -77,6 +57,9 @@ namespace WindowsFormsApp1.StackTraceHelper
                 public const EventTask TaskWait = (EventTask) 4;
             }
 
+            /// <summary>
+            /// Wait behavior
+            /// </summary>
             public enum TaskWaitBehavior
             {
                 Synchronous = 1,
@@ -85,7 +68,7 @@ namespace WindowsFormsApp1.StackTraceHelper
         }
 
         /// <summary>
-        /// An excerpt frm FrameworkEventSource
+        /// An excerpt from FrameworkEventSource
         /// </summary>
         public sealed class Framework
         {
@@ -94,11 +77,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             public const int THREADPOOLDEQUEUEWORK_ID = 31;
             public const int THREADPOOLENQUEUEWORK_ID = 30;
 
-            //' Keywords.ThreadPool == 2L
-            //Public MustOverride Sub ThreadPoolDequeueWork(ByVal workID As Long)
-
-            //Public MustOverride Sub ThreadPoolEnqueueWork(ByVal workID As Long)
-
+            /// <summary>
+            /// Keywords to look for
+            /// </summary>
             public static class Keywords
             {
                 public const EventKeywords Loader = (EventKeywords) 1L;

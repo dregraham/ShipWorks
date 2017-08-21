@@ -1,12 +1,13 @@
-﻿namespace WindowsFormsApp1.StackTraceHelper
+﻿namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Stack trace segment
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public class StackTraceSegment
     {
-        // Pertaining to segments
-
         /// <summary>
         /// Frames belonging to this segment
         /// </summary>
@@ -16,8 +17,6 @@
         /// Hashes belonging to this segment
         /// </summary>
         public long[] Hashes { get; }
-
-        // Pertaining to the whole sublist starting at this element
 
         /// <summary>
         /// Loops belonging to the whole list

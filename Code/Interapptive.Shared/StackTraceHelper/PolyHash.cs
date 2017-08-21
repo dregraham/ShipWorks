@@ -1,8 +1,11 @@
-﻿namespace WindowsFormsApp1.StackTraceHelper
+﻿namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Helper class that calculates polynomial hash, which allows for O(1) comparison of arbitrary sub-lists in a causality chain.
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public static class PolyHash
     {
         private const long factor = 1542691;

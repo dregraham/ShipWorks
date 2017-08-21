@@ -1,8 +1,11 @@
-﻿namespace WindowsFormsApp1.StackTraceHelper
+﻿namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Represents a loop in a causality chain
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public struct StackTraceLoop
     {
         /// <summary>

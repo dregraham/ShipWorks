@@ -4,12 +4,15 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
-	/// More lightweight analog to StackTrace
-	/// </summary>
-	public class StackTraceSlim
+    /// More lightweight analog to StackTrace
+    /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
+    public class StackTraceSlim
     {
         private static readonly Action<object> getStackFramesInternal;
         private static readonly ConcurrentDictionary<IntPtr, MethodBaseSlim> methods = new ConcurrentDictionary<IntPtr, MethodBaseSlim>();
@@ -33,6 +36,9 @@ namespace WindowsFormsApp1.StackTraceHelper
                 }).Compile();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public StackTraceSlim(StackFrameSlim[] frames)
         {
             Frames = frames;
@@ -56,6 +62,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             }
         }
 
+        /// <summary>
+        /// Frames in the stack trace
+        /// </summary>
         public StackFrameSlim[] Frames;
 
         /// <summary>

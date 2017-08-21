@@ -1,13 +1,19 @@
 ﻿using System.Reflection;
 using System.Text;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Analog to MethodBase that stores its string representation in a ready-to-consume form for easy extraction
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     internal struct MethodBaseSlim
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         internal MethodBaseSlim(string stringValue, bool isEventInfrastructure, bool isExternalCode)
         {
             StringValue = stringValue;
@@ -15,6 +21,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             IsExternalCode = isExternalCode;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MethodBaseSlim(MethodBase method)
         {
             StringValue = GetStringValue(method);
@@ -23,8 +32,19 @@ namespace WindowsFormsApp1.StackTraceHelper
             IsExternalCode = ExternalCodeHelper.IsExternalCode(method);
         }
 
+        /// <summary>
+        /// Value as string
+        /// </summary>
         public string StringValue { get; }
+
+        /// <summary>
+        /// Is this event infrastructure
+        /// </summary>
         public bool IsEventInfrastructure { get; }
+
+        /// <summary>
+        /// Is this external code
+        /// </summary>
         public bool IsExternalCode { get; }
 
         /// <summary>
@@ -32,7 +52,6 @@ namespace WindowsFormsApp1.StackTraceHelper
         /// </summary>
         /// <param name="method">Method</param>
         /// <returns>String value</returns>
-
         private static string GetStringValue(MethodBase method)
         {
             if (method == null)
@@ -46,7 +65,6 @@ namespace WindowsFormsApp1.StackTraceHelper
             {
                 builder.Append(method.DeclaringType.FullName);
                 builder.Append(".");
-
             }
 
             builder.Append(method.Name);

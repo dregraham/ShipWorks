@@ -4,11 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Filters out boilerplate eventing and framework code
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     sealed class ExternalCodeHelper
     {
         private static readonly string myNamespace = typeof(StackFrameSlim).Namespace;
@@ -21,6 +24,27 @@ namespace WindowsFormsApp1.StackTraceHelper
                 { typeof(StackTrace).FullName, "GetStackFramesInternal" },
                 { "System.Threading.Tasks.TplEtwProvider", null },
                 { "System.Diagnostics.Tracing.FrameworkEventSource", null }
+            };
+
+        private static readonly HashSet<string> externalClassesAndNamespaces =
+            new HashSet<string>
+            {
+                typeof(System.Action).Namespace,
+                typeof(System.Runtime.CompilerServices.AsyncTaskMethodBuilder).Namespace,
+                typeof(System.Threading.ThreadPool).Namespace,
+                typeof(System.Threading.Tasks.Task).Namespace,
+                typeof(System.Threading.Tasks.Task).Namespace + ".Dataflow",
+                typeof(System.Threading.Tasks.Task).Namespace + ".Dataflow.Internal",
+                "Microsoft.VisualStudio.HostingProcess.HostProc",
+                "Microsoft.Win32.SystemEvents",
+                "System.AppDomain",
+                "BaseThreadInitThunk",
+                "_RtlUserThreadStart",
+                "DestroyThread",
+                "_NtWaitForSingleObject@",
+                "_WaitForSingleObjectEx@",
+                "_NtWaitForMultipleObjects@",
+                "_WaitForMultipleObjectsEx@"
             };
 
         /// <summary>
@@ -58,7 +82,6 @@ namespace WindowsFormsApp1.StackTraceHelper
         /// </summary>
         /// <param name="method">Method</param>
         /// <returns>Whether method belongs to eventing infrastructure</returns>
-
         public static bool IsEventInfrastructure(string method)
         {
             if (method == null)
@@ -82,27 +105,6 @@ namespace WindowsFormsApp1.StackTraceHelper
             return false;
         }
 
-        private static readonly HashSet<string> externalClassesAndNamespaces =
-            new HashSet<string>
-            {
-                typeof(System.Action).Namespace,
-                typeof(System.Runtime.CompilerServices.AsyncTaskMethodBuilder).Namespace,
-                typeof(System.Threading.ThreadPool).Namespace,
-                typeof(System.Threading.Tasks.Task).Namespace,
-                typeof(System.Threading.Tasks.Task).Namespace + ".Dataflow",
-                typeof(System.Threading.Tasks.Task).Namespace + ".Dataflow.Internal",
-                "Microsoft.VisualStudio.HostingProcess.HostProc",
-                "Microsoft.Win32.SystemEvents",
-                "System.AppDomain",
-                "BaseThreadInitThunk",
-                "_RtlUserThreadStart",
-                "DestroyThread",
-                "_NtWaitForSingleObject@",
-                "_WaitForSingleObjectEx@",
-                "_NtWaitForMultipleObjects@",
-                "_WaitForMultipleObjectsEx@"
-            };
-
         /// <summary>
         /// Whether method is boilerplate framework code
         /// </summary>
@@ -116,8 +118,7 @@ namespace WindowsFormsApp1.StackTraceHelper
             }
 
             return externalClassesAndNamespaces.Contains(method.DeclaringType.FullName) ||
-                externalClassesAndNamespaces.Any(x => method.DeclaringType.Namespace.StartsWith(x, StringComparison.Ordinal)); // ||
-                                                                                                                               //externalClassesAndNamespaces.Contains(method.DeclaringType.Namespace);
+                externalClassesAndNamespaces.Any(x => method.DeclaringType.Namespace.StartsWith(x, StringComparison.Ordinal));
         }
 
         /// <summary>
@@ -125,7 +126,6 @@ namespace WindowsFormsApp1.StackTraceHelper
         /// </summary>
         /// <param name="method">Method</param>
         /// <returns>Whether method is boilerplate framework code</returns>
-
         public static bool IsExternalCode(string method)
         {
             if (method == null)

@@ -4,12 +4,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Proxy to StackFrameHelper class (the one that fills StackTrace).
     /// Working with it directly allows for slight performance increase capturing stack traces in managed code.
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public class StackFrameHelperProxy
     {
         public static Type UnderlyingType { get; set; }
@@ -36,7 +39,6 @@ namespace WindowsFormsApp1.StackTraceHelper
                     needFileLineColInfoParam,
                     Expression.Property(null, currentThreadProperty)),
                 needFileLineColInfoParam).Compile();
-
 
             var stackFrameHelperParam = Expression.Parameter(typeof(Object));
 

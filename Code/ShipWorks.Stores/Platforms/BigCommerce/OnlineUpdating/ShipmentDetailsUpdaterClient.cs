@@ -44,8 +44,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         {
             var webClient = webClientFactory.Create(store);
 
-            IEnumerable<IBigCommerceOrderItemEntity> orderItems = allItems.ContainsKey(orderDetail.OrderNumber) ?
-                    allItems[orderDetail.OrderNumber] :
+            IEnumerable<IBigCommerceOrderItemEntity> orderItems = allItems.ContainsKey(orderDetail.OrderID) ?
+                    allItems[orderDetail.OrderID] :
                     Enumerable.Empty<IBigCommerceOrderItemEntity>();
 
             if (orderItems.None())

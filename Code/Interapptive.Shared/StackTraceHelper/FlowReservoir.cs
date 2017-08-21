@@ -1,11 +1,18 @@
-﻿namespace WindowsFormsApp1.StackTraceHelper
+﻿namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Facade class for causality chain preservation engine
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public static class FlowReservoir
     {
-        private const string storageUninitialized = "Execution flow storage is not initialized. Please call FlowReservoir.Enroll first.";
+#if DEBUG
+        private const string storageUninitialized = @"Execution flow storage is not initialized. Set TraceTasks to True in ShipWorks\Options registry.";
+#else
+        private const string storageUninitialized = "Execution flow storage is not initialized.";
+#endif
 
         private static readonly object initLocker = new object();
         private static StackStorage stackStorage;

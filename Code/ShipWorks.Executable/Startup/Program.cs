@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Interapptive.Shared.Messaging.Logging;
+using Interapptive.Shared.StackTraceHelper;
+using Interapptive.Shared.Win32;
 using Newtonsoft.Json;
 using SD.Tools.OrmProfiler.Interceptor;
 using ShipWorks.ApplicationCore;
@@ -36,7 +38,11 @@ namespace ShipWorks.Startup
 
             ContainerInitializer.Initialize();
 
-            WindowsFormsApp1.StackTraceHelper.FlowReservoir.Enroll();
+            var registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Options");
+            if (registry.GetValue("TraceTasks", false))
+            {
+                FlowReservoir.Enroll();
+            }
 
             ShipWorks.Program.Main();
         }

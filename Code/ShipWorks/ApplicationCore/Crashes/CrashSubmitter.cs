@@ -15,6 +15,7 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Microsoft.WindowsAzure.Storage;
@@ -25,7 +26,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
-using WindowsFormsApp1.StackTraceHelper;
 
 namespace ShipWorks.ApplicationCore.Crashes
 {
@@ -35,11 +35,10 @@ namespace ShipWorks.ApplicationCore.Crashes
     public static class CrashSubmitter
     {
         // Use this for trying to submit crashes internally; there have been
-        // problems tyring to connect to the other URL while inside the network
-        //const string url = "http://intapp01/shipworks/crash.ashx";
+        // problems trying to connect to the other URL while inside the network
         const string url = "http://springfield.interapptive.com/shipworks/crash.ashx";
 
-        // Properties we dont want to display for exception output
+        // Properties we don't want to display for exception output
         static Regex reUnwantedProperties = new Regex(@"^(StackTrace|Source|TargetSite|InnerException|Data)$", RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -127,8 +126,8 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Formats the description of the exception into a unique identifiable string. The reason for
         /// this method and not just a simpler way of producing the description is that this
-        /// string will be used to find existing bugs in the database to add occurances to, instead of adding
-        /// new bugs for each occurance.
+        /// string will be used to find existing bugs in the database to add occurrences to, instead of adding
+        /// new bugs for each occurrence.
         /// </summary>
         public static string GetIdentifier(Exception ex)
         {
@@ -157,7 +156,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 assemblyVersion.Revision);
             desc.AppendFormat("V{0} ", version);
 
-            // Get the class name of the exception that occured
+            // Get the class name of the exception that occurred
             desc.Append(ex.GetType().Name);
 
             // Now add exception message and inner exception message (if there is one)

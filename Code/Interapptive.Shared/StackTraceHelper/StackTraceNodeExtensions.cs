@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Extensions for StackTraceNode. Implemented as extensions to allow executing on a null list head
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public static class StackTraceNodeExtensions
     {
         private const string loopHeaderFormat1 = "\u21ba {0} times {{";
@@ -31,7 +34,7 @@ namespace WindowsFormsApp1.StackTraceHelper
         /// Adds new element to the linked list and returns the new head
         /// </summary>
         /// <param name="node">Old list head</param>
-        /// <param name="topFrames">Stack frames to prepent. If empty, old list head will be returned</param>
+        /// <param name="topFrames">Stack frames to prepend. If empty, old list head will be returned</param>
         /// <returns>Head of the list with prepended frames</returns>
         public static StackTraceNode Prepend(this StackTraceNode node, IEnumerable<StackFrameSlim> topFrames)
         {
@@ -50,7 +53,6 @@ namespace WindowsFormsApp1.StackTraceHelper
 
                 lastHash = hashes[i];
             }
-
 
             var loops = node == null ? new StackTraceLoop[0] : node.Value.Loops.ToArray();
 

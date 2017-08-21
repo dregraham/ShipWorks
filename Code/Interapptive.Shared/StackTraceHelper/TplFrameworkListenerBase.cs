@@ -4,13 +4,19 @@ using System.Diagnostics.Tracing;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// TplEtwProvider and FrameworkEventSource listener base class
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public abstract class TplFrameworkListenerBase : EventListener
     {
+        /// <summary>
+        /// Ensure that the listener is initialized
+        /// </summary>
         protected static void EnsureInitialized<T>(Func<T> constructor, ref T storage) where T : TplFrameworkListenerBase
         {
             // Sometimes EventListener constructor may throw a "Collection was modified" exception,
@@ -41,6 +47,9 @@ namespace WindowsFormsApp1.StackTraceHelper
         private List<EventSource> _delayedSubscriptions;
         private TaskCompletionSource<object> _initializedTcs;
 
+        /// <summary>
+        /// Delayed subscriptions
+        /// </summary>
         private List<EventSource> DelayedSubscriptions
         {
             get
@@ -50,6 +59,9 @@ namespace WindowsFormsApp1.StackTraceHelper
             }
         }
 
+        /// <summary>
+        /// Initialize
+        /// </summary>
         private TaskCompletionSource<object> InitializedTcs
         {
             get
@@ -130,6 +142,9 @@ namespace WindowsFormsApp1.StackTraceHelper
         /// </summary>
         private int initializationCount;
 
+        /// <summary>
+        /// To complete initialization
+        /// </summary>
         private void TryCompleteInitialization()
         {
             if (Interlocked.Increment(ref initializationCount) == 2)
@@ -170,21 +185,38 @@ namespace WindowsFormsApp1.StackTraceHelper
             }
         }
 
+        /// <summary>
+        /// Get the task ID
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <returns></returns>
         private int GetTaskId(EventWrittenEventArgs eventData) => (int) eventData.Payload[2];
 
+        /// <summary>
+        /// Get the wait behavior
+        /// </summary>
         private EventConstants.Tpl.TaskWaitBehavior GetWaitBehavior(EventWrittenEventArgs eventData) =>
             (EventConstants.Tpl.TaskWaitBehavior) (int) eventData.Payload[3];
 
+        /// <summary>
+        /// Task was scheduled
+        /// </summary>
         protected virtual void TaskScheduled(int taskId)
         {
 
         }
 
+        /// <summary>
+        /// Task wait is beginning
+        /// </summary>
         protected virtual void TaskWaitBegin(int taskId, EventConstants.Tpl.TaskWaitBehavior behavior)
         {
 
         }
 
+        /// <summary>
+        /// Task wait end
+        /// </summary>
         protected virtual void TaskWaitEnd(int taskId)
         {
 

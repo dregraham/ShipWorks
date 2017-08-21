@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace WindowsFormsApp1.StackTraceHelper
+namespace Interapptive.Shared.StackTraceHelper
 {
     /// <summary>
     /// Stores stack trace segment lists per thread
     /// </summary>
+    /// <remarks>
+    /// Translated from https://msdn.microsoft.com/en-us/magazine/jj891052.aspx
+    /// </remarks>
     public class StackStorage
     {
         private readonly ConcurrentDictionary<long, StackTraceNode> stacksByTask = new ConcurrentDictionary<long, StackTraceNode>();

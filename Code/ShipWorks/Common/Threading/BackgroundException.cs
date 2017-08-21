@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using WindowsFormsApp1.StackTraceHelper;
+using Interapptive.Shared.StackTraceHelper;
 
 namespace ShipWorks.Common.Threading
 {
