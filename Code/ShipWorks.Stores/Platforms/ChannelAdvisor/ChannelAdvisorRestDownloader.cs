@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
 
-                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
+                    ordersResult = restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)

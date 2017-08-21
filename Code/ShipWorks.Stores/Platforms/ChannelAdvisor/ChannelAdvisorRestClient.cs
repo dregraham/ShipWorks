@@ -21,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorRestClient : IChannelAdvisorRestClient
     {
         private readonly LruCache<string, string> accessTokenCache;
+        private readonly LruCache<int, ChannelAdvisorProduct> productCache;
 
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -50,6 +51,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
 
             accessTokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
+            productCache = new LruCache<int, ChannelAdvisorProduct>(1000);
         }
 
         /// <summary>
@@ -144,16 +146,36 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Get orders from the start date for the store
+        /// </summary>
+        public ChannelAdvisorOrderResult GetOrders(string nextToken, string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
+
+            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
+        }
+
+
+        /// <summary>
         /// Get detailed product information from ChannelAdvisor with the given product ID
         /// </summary>
         public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
         {
+            if (productCache.Contains(productID))
+            {
+                return productCache[productID];
+            }
+
             IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
 
             submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
-            return ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
+            ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
+
+            productCache[productID] = product;
+
+            return product;
         }
 
 
@@ -178,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 string serializedShipment =
                     JsonConvert.SerializeObject(channelAdvisorShipment,
-                        new JsonSerializerSettings {DateFormatString = "yyyy-MM-ddThh:mm:ssZ"});
+                        new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddThh:mm:ssZ" });
 
                 requestBody = $"{{\"Value\":{serializedShipment}}}";
             }
@@ -204,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
             }
-            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
+            catch (WebException ex) when (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
                                           !isRetry)
             {
                 apiLogEntry.LogResponse(ex);
@@ -252,7 +274,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 });
             }
-            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
+            catch (WebException ex) when (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
             {
                 apiLogEntry.LogResponse(ex);
                 return RetryRequestWithNewToken<T>(request, action, refreshToken);
