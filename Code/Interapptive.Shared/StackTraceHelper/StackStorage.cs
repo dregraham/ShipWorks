@@ -51,7 +51,8 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <param name="taskId">Correlation id</param>
         public void RestoreStack(long taskId)
         {
-            if (stacksByTask.TryRemove(taskId, out StackTraceNode stored))
+            StackTraceNode stored = null;
+            if (stacksByTask.TryRemove(taskId, out stored))
             {
                 preservedStacks.Value = preservedStacks.Value.SelectLongest(stored);
             }

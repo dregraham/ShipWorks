@@ -156,6 +156,22 @@ namespace Interapptive.Shared.StackTraceHelper
         }
 
         /// <summary>
+        /// Operator==
+        /// </summary>
+        public static bool operator ==(StackFrameSlim left, StackFrameSlim right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Operator==
+        /// </summary>
+        public static bool operator !=(StackFrameSlim left, StackFrameSlim right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Checks if the frame should be visible against justMyCode filter
         /// </summary>
         /// <param name="justMyCode">Hide framework boilerplate</param>

@@ -14,7 +14,7 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <summary>
         /// An excerpt from TplEtwProvider
         /// </summary>
-        public abstract class Tpl
+        public static class Tpl
         {
             public static readonly Guid GUID = new Guid("2e5dba47-a3d2-4d16-8ee0-6671ffdcd7b5");
 
@@ -70,7 +70,7 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <summary>
         /// An excerpt from FrameworkEventSource
         /// </summary>
-        public sealed class Framework
+        public static class Framework
         {
             public static readonly Guid GUID = new Guid("8E9F5090-2D75-4d03-8A81-E5AFBF85DAF1");
 

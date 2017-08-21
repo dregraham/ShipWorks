@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
             shipment = new ShipmentEntity();
             allItems = new Dictionary<long, IEnumerable<IBigCommerceOrderItemEntity>>
             {
-                { 123, new [] { new BigCommerceOrderItemEntity() } }
+                { 1006, new [] { new BigCommerceOrderItemEntity() } }
             };
         }
 

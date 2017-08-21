@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -114,6 +115,8 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <param name="index">Index of the frame of interest, using continuous numbering over the entire list</param>
         /// <param name="arrayGetter">Function returning stack frame or hash array from stack trace segment</param>
         /// <returns>Stack frame or its hash</returns>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is only used for exception messages")]
         private static T GetFragment<T>(this StackTraceNode node, int index, Func<StackTraceSegment, T[]> arrayGetter)
         {
             var curCount = node.TotalCount();

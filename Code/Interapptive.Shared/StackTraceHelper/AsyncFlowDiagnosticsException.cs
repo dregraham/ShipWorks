@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Interapptive.Shared.StackTraceHelper
 {
@@ -30,7 +31,17 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <summary>
         /// Constructor
         /// </summary>
-        public AsyncFlowDiagnosticsException(string message, Exception innerException) : base(message, innerException)
+        public AsyncFlowDiagnosticsException(string message, Exception innerException) :
+            base(message, innerException)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected AsyncFlowDiagnosticsException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
         {
 
         }

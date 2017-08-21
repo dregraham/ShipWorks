@@ -18,10 +18,10 @@ using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
-using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 {
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 mock.Override<ILogEntryFactory>();
 
                 restClient = new Mock<IMagentoTwoRestClient>();
-                
+
                 webClientFactory = mock.CreateMock<Func<MagentoStoreEntity, IMagentoTwoRestClient>>();
                 webClientFactory.Setup(f => f(It.IsAny<MagentoStoreEntity>()))
                     .Returns(restClient.Object);
@@ -174,7 +174,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore as GenericModuleStoreEntity));
 
-            MagentoUploadCommand magentoCommand = MagentoUploadCommand.Complete;
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {
                 using (DbConnection con = SqlSession.Current.OpenConnection())
@@ -215,7 +214,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             {
                 EntityId = orderNumber,
                 IncrementId = orderNumber.ToString(),
-                Items = 
+                Items =
                     order.OrderItems.Select(oi => new Item()
                     {
                         ItemId = int.Parse(oi.Code),

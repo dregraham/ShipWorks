@@ -69,7 +69,8 @@ namespace Interapptive.Shared.StackTraceHelper
                 return true;
             }
 
-            if (!eventInfrastructureMethods.TryGetValue(method.DeclaringType.FullName, out string expectedName))
+            string expectedName = null;
+            if (!eventInfrastructureMethods.TryGetValue(method.DeclaringType.FullName, out expectedName))
             {
                 return false;
             }
