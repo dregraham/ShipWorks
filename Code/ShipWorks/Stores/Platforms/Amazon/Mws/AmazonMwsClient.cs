@@ -396,10 +396,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                             writer.WriteElementString("MessageType", "OrderFulfillment");
 
+                            int index = 0;
                             // Write each shipment
                             foreach (AmazonOrderUploadDetail detail in details)
                             {
-                                await CreateFulfillmentFeedForShipment(writer, detail).ConfigureAwait(false);
+                                await CreateFulfillmentFeedForShipment(writer, detail, index++).ConfigureAwait(false);
                             }
                         }
                     }
@@ -412,7 +413,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Create a fulfillment feed for a shipment
         /// </summary>
-        private async Task CreateFulfillmentFeedForShipment(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail)
+        private async Task CreateFulfillmentFeedForShipment(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, int messageIndex)
         {
             var shipment = orderDetail.Shipment;
 
@@ -443,20 +444,29 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 return;
             }
 
-            WriteMessageData(writer, orderDetail, shipment);
+            WriteMessageData(writer, orderDetail, shipment, messageIndex);
         }
 
-        private void WriteMessageData(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, ShipmentEntity shipment)
+        /// <summary>
+        /// Write message data
+        /// </summary>
+        private void WriteMessageData(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, ShipmentEntity shipment, int messageIndex)
         {
             using (writer.WriteStartElementDisposable("Message"))
             {
                 // Message ID must be unique per submission
-                writer.WriteElementString("MessageID", $"{shipment.ShipmentID}-{orderDetail.AmazonOrderID}");
+                writer.WriteElementString("MessageID", (shipment.ShipmentID + messageIndex).ToString());
 
                 WriteOrderFulfillmentData(writer, orderDetail, shipment);
             }
         }
 
+        /// <summary>
+        /// Write order fulfillment data
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="orderDetail"></param>
+        /// <param name="shipment"></param>
         private void WriteOrderFulfillmentData(XmlTextWriter writer, AmazonOrderUploadDetail orderDetail, ShipmentEntity shipment)
         {
             using (writer.WriteStartElementDisposable("OrderFulfillment"))
