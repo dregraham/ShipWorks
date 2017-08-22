@@ -44,6 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Weight = source.Weight;
             Notes = source.Notes;
             SKU = source.SKU;
+            Code = source.Code;
             
             
             Shipment = source.Shipment?.AsReadOnly(objectMap);
@@ -101,6 +102,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String SKU { get; }
+        /// <summary> The Code property of the Entity ShipmentReturnItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShipmentReturnItem"."Code"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Code { get; }
         
         
         public IShipmentEntity Shipment { get; }

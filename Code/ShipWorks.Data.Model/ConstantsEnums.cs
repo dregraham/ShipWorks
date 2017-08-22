@@ -8288,6 +8288,8 @@ namespace ShipWorks.Data.Model
 		Notes,
 		///<summary>SKU. </summary>
 		SKU,
+		///<summary>Code. </summary>
+		Code,
 		/// <summary></summary>
 		AmountOfFields
 	}

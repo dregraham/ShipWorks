@@ -13,7 +13,8 @@ CREATE TABLE [dbo].[ShipmentReturnItem]
 [Quantity] [float] NOT NULL,
 [Weight] [float] NOT NULL,
 [Notes] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Code] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShipmentReturnItem] on [dbo].[ShipmentReturnItem]'

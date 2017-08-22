@@ -2148,6 +2148,7 @@
       </EntityDefinition>
       <EntityDefinition Name="ShipmentReturnItem" ObjectID="a9402971-a342-4a37-8752-728c2c59b8e4">
         <Fields>
+          <Field Name="Code" Type="string" MaxLength="300" FieldIndex="8" />
           <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
           <Field Name="Notes" Type="string" MaxLength="300" FieldIndex="6" />
           <Field Name="Quantity" Type="double" Precision="38" FieldIndex="4" />
@@ -3767,7 +3768,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:04:31.4230943Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:57:40.4795986Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7100,6 +7101,7 @@
                     <Field Name="Weight" Ordinal="6" DbType="6" Precision="38" />
                     <Field Name="Notes" Ordinal="7" DbType="12" Length="300" />
                     <Field Name="SKU" Ordinal="8" DbType="12" Length="100" />
+                    <Field Name="Code" Ordinal="9" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="ShippingDefaultsRule">
@@ -11264,6 +11266,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShipmentReturnItem" TargetName="ShipWorksLocal:dbo:ShipmentReturnItem">
           <FieldMappings>
+            <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Name" TargetFieldName="Name" />
             <FieldMapping FieldName="Notes" TargetFieldName="Notes" />
             <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" />

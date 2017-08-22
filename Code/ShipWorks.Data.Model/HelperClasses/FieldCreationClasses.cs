@@ -19382,6 +19382,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.SKU);}
 		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Code);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShippingDefaultsRuleEntity</summary>

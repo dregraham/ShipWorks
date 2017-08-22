@@ -2439,6 +2439,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Weight", typeof(System.Double), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Notes", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Notes, 300, 0, 0);
 			this.AddElementFieldInfo("ShipmentReturnItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.SKU, 100, 0, 0);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Code", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Code, 300, 0, 0);
 		}
 		/// <summary>Inits ShippingDefaultsRuleEntity's FieldInfo objects</summary>
 		private void InitShippingDefaultsRuleEntityInfos()

@@ -2557,7 +2557,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShipmentReturnItemEntity's mappings</summary>
 		private void InitShipmentReturnItemEntityMappings()
 		{
-			this.AddElementMapping("ShipmentReturnItemEntity", @"ShipWorksLocal", @"dbo", "ShipmentReturnItem", 8, 0);
+			this.AddElementMapping("ShipmentReturnItemEntity", @"ShipWorksLocal", @"dbo", "ShipmentReturnItem", 9, 0);
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "ShipmentReturnItemID", "ShipmentReturnItemID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2566,6 +2566,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Notes", "Notes", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ShipmentReturnItemEntity", "SKU", "SKU", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Code", "Code", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits ShippingDefaultsRuleEntity's mappings</summary>
