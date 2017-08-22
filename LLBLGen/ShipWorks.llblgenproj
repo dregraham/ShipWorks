@@ -2146,6 +2146,18 @@
           <Field Name="Weight" Type="double" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="ShipmentReturnItem" ObjectID="a9402971-a342-4a37-8752-728c2c59b8e4">
+        <Fields>
+          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
+          <Field Name="Notes" Type="string" MaxLength="300" FieldIndex="6" />
+          <Field Name="Quantity" Type="double" Precision="38" FieldIndex="4" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipmentID" Type="long" FieldIndex="2" />
+          <Field Name="ShipmentReturnItemID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="7" />
+          <Field Name="Weight" Type="double" Precision="38" FieldIndex="5" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="ShippingDefaultsRule" ObjectID="e945b6c6-be24-451e-8643-7606bad4828c">
         <Fields>
           <Field Name="FilterNodeID" Type="long" FieldIndex="3" />
@@ -3437,6 +3449,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="ShipmentReturnItem.Shipment-Shipment.ShipmentReturnItem" Start=":ShipmentReturnItem" End=":Shipment" StartNavigator="Shipment" EndNavigator="ShipmentReturnItem" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="ShippingPrintOutputRule.ShippingPrintOutput-ShippingPrintOutput.Rules" Start=":ShippingPrintOutputRule" End=":ShippingPrintOutput" StartNavigator="ShippingPrintOutput" EndNavigator="Rules" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingPrintOutputID" PkField="ShippingPrintOutputID" />
@@ -3750,7 +3767,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-18T17:50:39.4119375Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:04:31.4230943Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4340,9 +4357,22 @@
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="EbayOrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="CombinedLocally" Ordinal="4" DbType="2" />
-                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="CombinedLocally" Ordinal="4" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="1" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="SelectedShippingMethod" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="128" />
+                        <CustomProperty Name="AuditName" Value="Shipping Method" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="SellingManagerRecord" Ordinal="6" IsOptional="true" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="1" />
+                      </CustomProperties>
+                    </Field>
                     <Field Name="GspEligible" Ordinal="7" DbType="2" />
                     <Field Name="GspFirstName" Ordinal="8" DbType="12" Length="128" />
                     <Field Name="GspLastName" Ordinal="9" DbType="12" Length="128" />
@@ -7059,6 +7089,19 @@
                     <Field Name="UnitPriceAmount" Ordinal="11" DbType="9" Precision="19" Scale="4" />
                   </Fields>
                 </Table>
+                <Table Name="ShipmentReturnItem">
+                  <PkConstraintName Name="PK_ShipmentReturnItem" />
+                  <Fields>
+                    <Field Name="ShipmentReturnItemID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="ShipmentID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="Name" Ordinal="4" DbType="12" Length="300" />
+                    <Field Name="Quantity" Ordinal="5" DbType="6" Precision="38" />
+                    <Field Name="Weight" Ordinal="6" DbType="6" Precision="38" />
+                    <Field Name="Notes" Ordinal="7" DbType="12" Length="300" />
+                    <Field Name="SKU" Ordinal="8" DbType="12" Length="100" />
+                  </Fields>
+                </Table>
                 <Table Name="ShippingDefaultsRule">
                   <PkConstraintName Name="PK_ShippingDefaultsRule" />
                   <Fields>
@@ -8919,6 +8962,11 @@
             <ForeignKeyConstraint Name="dbo:ShipmentCustomsItem:FK_ShipmentCustomsItem_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:ShipmentCustomsItem:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ShipmentReturnItem:FK_ShipmentReturnItem_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:ShipmentReturnItem:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ShippingPrintOutputRule:FK_ShippingPrintOutputRule_ShippingPrintOutput" DeleteRuleAction="1">
@@ -11211,6 +11259,18 @@
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="UnitPriceAmount" TargetFieldName="UnitPriceAmount" />
             <FieldMapping FieldName="UnitValue" TargetFieldName="UnitValue" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ShipmentReturnItem" TargetName="ShipWorksLocal:dbo:ShipmentReturnItem">
+          <FieldMappings>
+            <FieldMapping FieldName="Name" TargetFieldName="Name" />
+            <FieldMapping FieldName="Notes" TargetFieldName="Notes" />
+            <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="ShipmentReturnItemID" TargetFieldName="ShipmentReturnItemID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>

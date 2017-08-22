@@ -152,6 +152,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
 				case "ShipmentEntity": return EntityType.ShipmentEntity;
 				case "ShipmentCustomsItemEntity": return EntityType.ShipmentCustomsItemEntity;
+				case "ShipmentReturnItemEntity": return EntityType.ShipmentReturnItemEntity;
 				case "ShippingDefaultsRuleEntity": return EntityType.ShippingDefaultsRuleEntity;
 				case "ShippingOriginEntity": return EntityType.ShippingOriginEntity;
 				case "ShippingPrintOutputEntity": return EntityType.ShippingPrintOutputEntity;

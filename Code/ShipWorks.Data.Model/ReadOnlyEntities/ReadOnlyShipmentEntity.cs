@@ -124,6 +124,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             CustomsItems = source.CustomsItems?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IShipmentCustomsItemEntity>();
+            ShipmentReturnItem = source.ShipmentReturnItem?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IShipmentReturnItemEntity>();
             ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IValidatedAddressEntity>();
 
@@ -593,6 +595,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         public IEnumerable<IShipmentCustomsItemEntity> CustomsItems { get; }
+        
+        public IEnumerable<IShipmentReturnItemEntity> ShipmentReturnItem { get; }
         
         public IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
         

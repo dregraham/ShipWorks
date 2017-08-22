@@ -898,6 +898,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ShipmentCustomsItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ShipmentReturnItem entity</summary>
+		public EntityQuery<ShipmentReturnItemEntity> ShipmentReturnItem
+		{
+			get { return Create<ShipmentReturnItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ShippingDefaultsRule entity</summary>
 		public EntityQuery<ShippingDefaultsRuleEntity> ShippingDefaultsRule
 		{
