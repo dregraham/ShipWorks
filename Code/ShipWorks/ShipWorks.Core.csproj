@@ -1292,6 +1292,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipService.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IResidentialDeterminationService.cs" />
+    <Compile Include="Shipping\IReturnItemRepository.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
