@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         // This is the error code that is returned in the request if the last api call exceeds the allowed amount.
         public const int OverApiLimitStatusCode = 429;
 
+        // This is the error code that is returned in the request if tracking info has already been uploaded.
+        public const int AlreadyShippedStatusCode = 422;
+
         /// <summary>
         /// The ShipWorks Shopify API key
         /// </summary>

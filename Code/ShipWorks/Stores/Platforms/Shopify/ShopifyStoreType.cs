@@ -6,9 +6,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
@@ -198,64 +195,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             ElementOutline outline = container.AddElement("Shopify");
             outline.AddElement("ItemID", () => item.Value.ShopifyOrderItemID);
             outline.AddElement("ProductID", () => item.Value.ShopifyProductID);
-        }
-
-        /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new[]
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
-            };
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            // kick off the execution
-            executor.ExecuteAsync(UploadDetailsCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void UploadDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                ShopifyOrderEntity order = (ShopifyOrderEntity) DataProvider.GetEntity(orderID);
-                if (order == null)
-                {
-                    log.WarnFormat("Not uploading shipment details for order {0} as it went away.", orderID);
-                    return;
-                }
-
-                ShopifyOnlineUpdater updater = new ShopifyOnlineUpdater((ShopifyStoreEntity) Store);
-                updater.UpdateOnlineStatus(order);
-            }
-            catch (ShopifyException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders.  Error message: {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(orderID, ex);
-            }
         }
 
         /// <summary>

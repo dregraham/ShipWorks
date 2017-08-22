@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Push the online status for an order.
         /// </summary>
-        public void UpdateOnlineStatus(ShopifyOrderEntity order)
+        public async Task UpdateOnlineStatus(ShopifyOrderEntity order)
         {
             if (order == null)
             {
@@ -45,16 +46,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
-            UpdateOnlineStatus(shipment);
+            await UpdateOnlineStatus(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        public void UpdateOnlineStatus(ShipmentEntity shipment)
+        public async Task UpdateOnlineStatus(ShipmentEntity shipment)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOnlineStatus(shipment, unitOfWork);
+            await UpdateOnlineStatus(shipment, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        public void UpdateOnlineStatus(long shipmentID, UnitOfWork2 unitOfWork)
+        public async Task UpdateOnlineStatus(long shipmentID, UnitOfWork2 unitOfWork)
         {
             if (unitOfWork == null)
             {
@@ -80,13 +81,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
-            UpdateOnlineStatus(shipment, unitOfWork);
+            await UpdateOnlineStatus(shipment, unitOfWork).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        public void UpdateOnlineStatus(ShipmentEntity shipment, UnitOfWork2 unitOfWork)
+        public async Task UpdateOnlineStatus(ShipmentEntity shipment, UnitOfWork2 unitOfWork)
         {
             if (unitOfWork == null)
             {
@@ -102,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             ShopifyOrderEntity order = (ShopifyOrderEntity) shipment.Order;
 
             ShopifyWebClient webClient = new ShopifyWebClient(shopifyStore, null);
-            webClient.UploadOrderShipmentDetails(shipment);
+            await webClient.UploadOrderShipmentDetails(shipment).ConfigureAwait(false);
 
             order.FulfillmentStatusCode = (int) ShopifyFulfillmentStatus.Fulfilled;
             order.OnlineStatus = EnumHelper.GetDescription(ShopifyStatus.Shipped);

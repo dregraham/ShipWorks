@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -46,18 +47,17 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload tracking number of:";
-            }
-        }
+        public override string InputLabel => "Upload tracking number of:";
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (inputKeys == null)
             {
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
                 {
                     ShopifyOnlineUpdater updater = new ShopifyOnlineUpdater(store);
 
-                    updater.UpdateOnlineStatus(shipmentID, context.CommitWork);
+                    await updater.UpdateOnlineStatus(shipmentID, context.CommitWork).ConfigureAwait(false);
                 }
             }
             catch (ShopifyException ex)

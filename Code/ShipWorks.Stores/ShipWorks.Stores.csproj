@@ -455,7 +455,9 @@
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Shopify\Content\ShopifyCombineOrderAction.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />

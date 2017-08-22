@@ -19,6 +19,11 @@ using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using System.Text;
+using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.Enums;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -387,14 +392,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Update the online status of the given orders
         /// </summary>
-        public void UploadOrderShipmentDetails(ShipmentEntity shipment)
+        public async Task UploadOrderShipmentDetails(ShipmentEntity shipment)
         {
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
 
-            if (shipment.Order.IsManual)
+            if (shipment.Order.IsManual && shipment.Order.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", shipment.Order.OrderID);
                 return;
@@ -414,44 +419,66 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     return;
                 }
 
-                string url = Endpoints.ApiFulfillmentsUrl(order.ShopifyOrderID);
-
-                if (string.IsNullOrEmpty(trackingNumber))
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    trackingNumber = "null";
+                    ICombineOrderSearchProvider<ShopifyOrderSearchEntity> orderSearchProvider =
+                        scope.ResolveKeyed<ICombineOrderSearchProvider<ShopifyOrderSearchEntity>>(StoreTypeCode.Shopify);
+                    IEnumerable<ShopifyOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+
+                    foreach (ShopifyOrderSearchEntity orderSearchEntity in orderSearchEntities)
+                    {
+                        try
+                        {
+                            UploadOrderShipmentDetails(shipment, orderSearchEntity.ShopifyOrderID, trackingNumber, carrier);
+                        }
+                        catch (ShopifyAlreadyUploadedException ex)
+                        {
+                            log.Warn(ex.Message);
+                        }
+                    }
                 }
-
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                shipmentType.LoadShipmentData(shipment, true);
-
-                string carrierTrackingUrl = shipmentType.GetCarrierTrackingUrl(shipment);
-
-                JObject fulfillmentReq = new JObject(
-                    new JProperty("fulfillment", new JObject(
-                        new JProperty("tracking_company", carrier),
-                        new JProperty("tracking_number", trackingNumber),
-                        new JProperty("custom_tracking_url", carrierTrackingUrl))));
-
-                string jsonRequest = fulfillmentReq.ToString();
-
-                // Create the json post request submitter, with default params
-                HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") { Verb = HttpVerb.Post };
-                request.Uri = new Uri(url);
-
-                // The shopify api will return a status code of Created if it can successfully add the shipment.
-                // Therefore, we must add Created to the allowed statuses so that the submitter doesn't through
-                // when it doesn't receive the OK status code
-                List<HttpStatusCode> allowedStatuses = new List<HttpStatusCode>();
-                allowedStatuses.Add(HttpStatusCode.Created);
-                request.AllowHttpStatusCodes(allowedStatuses.ToArray());
-
-                // Make the call.  If unsuccessful, an error is thrown, so we don't care about the response value
-                ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.AddFulfillment, progress);
             }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
             }
+        }
+
+        private void UploadOrderShipmentDetails(ShipmentEntity shipment, long shopifyOrderID, string trackingNumber, string carrier)
+        {
+            string url = Endpoints.ApiFulfillmentsUrl(shopifyOrderID);
+
+            if (string.IsNullOrEmpty(trackingNumber))
+            {
+                trackingNumber = "null";
+            }
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            shipmentType.LoadShipmentData(shipment, true);
+
+            string carrierTrackingUrl = shipmentType.GetCarrierTrackingUrl(shipment);
+
+            JObject fulfillmentReq = new JObject(
+                new JProperty("fulfillment", new JObject(
+                    new JProperty("tracking_company", carrier),
+                    new JProperty("tracking_number", trackingNumber),
+                    new JProperty("custom_tracking_url", carrierTrackingUrl))));
+
+            string jsonRequest = fulfillmentReq.ToString();
+
+            // Create the JSON post request submitter, with default params
+            HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") {Verb = HttpVerb.Post};
+            request.Uri = new Uri(url);
+
+            // The shopify api will return a status code of Created if it can successfully add the shipment.
+            // Therefore, we must add Created to the allowed statuses so that the submitter doesn't through
+            // when it doesn't receive the OK status code
+            List<HttpStatusCode> allowedStatuses = new List<HttpStatusCode>();
+            allowedStatuses.Add(HttpStatusCode.Created);
+            request.AllowHttpStatusCodes(allowedStatuses.ToArray());
+
+            // Make the call.  If unsuccessful, an error is thrown, so we don't care about the response value
+            ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.AddFulfillment, progress);
         }
 
         /// <summary>
@@ -580,9 +607,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
             catch (WebException ex)
             {
                 HttpWebResponse webResponse = ex.Response as HttpWebResponse;
-                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode) ShopifyConstants.OverApiLimitStatusCode)
+                if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.OverApiLimitStatusCode)
                 {
                     throw new RequestThrottledException(ex.Message);
+                }
+                else if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
+                {
+                    throw new ShopifyAlreadyUploadedException(ex.Message);
                 }
                 else
                 {
