@@ -248,6 +248,11 @@ namespace Interapptive.Shared.StackTraceHelper
         /// </summary>
         /// <param name="node">List head</param>
         /// <returns>new list head if loops were collapsed, unchanged list head otherwise</returns>
+        /// <remarks>
+        /// Ignore the complex and long method because it was ported and difficult to break up
+        /// </remarks>
+        [NDependIgnoreComplexMethod()]
+        [NDependIgnoreLongMethod()]
         private static StackTraceNode CollapseLoops(this StackTraceNode node)
         {
             while (true)
