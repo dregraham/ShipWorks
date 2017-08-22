@@ -1827,6 +1827,9 @@
     <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ShipmentUploadDetails.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
@@ -5905,7 +5908,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Actions\OrderMotionShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionPromotionCondition.cs" />
-    <Compile Include="Stores\Platforms\OrderMotion\OrderMotionOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OrderMotionAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
