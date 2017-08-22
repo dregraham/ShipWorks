@@ -1,14 +1,14 @@
-﻿using log4net;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ShipWorks.Data;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
@@ -21,15 +21,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         private readonly IOrderManager orderManager;
         private readonly IOdbcUploadCommandFactory uploadCommandFactory;
         private readonly ILog log;
-        private readonly ICombineOrderSearchProvider<string> combineOrderSearchProvider;
+        private readonly ICombineOrderNumberCompleteSearchProvider combineOrderSearchProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploader"/> class.
         /// </summary>
         public OdbcUploader(IShippingManager shippingManager,
-            IOrderManager orderManager, 
+            IOrderManager orderManager,
             IOdbcUploadCommandFactory uploadCommandFactory,
-            ICombineOrderSearchProvider<string> combineOrderSearchProvider,
+            ICombineOrderNumberCompleteSearchProvider combineOrderSearchProvider,
             Func<Type, ILog> logFactory)
         {
             this.shippingManager = shippingManager;

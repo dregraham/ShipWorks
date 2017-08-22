@@ -4,16 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Autofac;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Templates.Tokens;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ICombineOrderSearchProvider<long> combinedOrderNumber = scope.Resolve<ICombineOrderSearchProvider<long>>();
+                    ICombineOrderNumberSearchProvider combinedOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
 
                     IEnumerable<long> orderNumbers = await combinedOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
 
@@ -141,9 +141,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     {
                         //set the order status at etsy
                         webClient.UploadStatusDetails(orderNumber, processedComment, markAsPaid, markAsShipped);
-                    } 
+                    }
                 }
-                
+
                 // Then update the status in our local database
                 EtsyOrderStatusUtility.UpdateOrderStatus(order, markAsPaid, markAsShipped, unitOfWork);
             }
@@ -187,22 +187,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         internal async Task UploadShipmentDetails(long orderID)
         {
-            EtsyOrderEntity order = (EtsyOrderEntity)DataProvider.GetEntity(orderID);
+            EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
 
-            if (order==null)
+            if (order == null)
             {
                 throw new EtsyException("Order not found");
             }
 
             List<ShipmentEntity> shipments = ShippingManager.GetShipments(orderID, false);
-            if (shipments==null)
+            if (shipments == null)
             {
                 log.InfoFormat("No shipments associated with order {0}.", orderID);
                 return;
             }
 
             ShipmentEntity shipment = shipments.FirstOrDefault(x => !string.IsNullOrEmpty(x.TrackingNumber));
-            if (shipment==null)
+            if (shipment == null)
             {
                 log.InfoFormat("No shipment with tracking number associated with order {0}.", orderID);
             }
@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ICombineOrderSearchProvider<long> combineOrderNumber = scope.Resolve<ICombineOrderSearchProvider<long>>();
+                    ICombineOrderNumberSearchProvider combineOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
 
                     IEnumerable<long> orderNumbers = await combineOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
 
@@ -246,10 +246,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
             catch (EtsyException ex)
             {
-               if (!TryManageException(order, unitOfWork, ex))
-               {
-                   throw;
-               }
+                if (!TryManageException(order, unitOfWork, ex))
+                {
+                    throw;
+                }
             }
         }
 
@@ -279,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static string GetEtsyCarrierCode(ShipmentEntity shipment)
         {
-            ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
+            ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
             switch (type)
             {
@@ -290,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia or Usps shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                    if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
                         return "dhl";

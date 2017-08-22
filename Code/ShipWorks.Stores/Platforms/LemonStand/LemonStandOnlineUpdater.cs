@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
-using System.Threading.Tasks;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Constructor
         /// </summary>
         public LemonStandOnlineUpdater(LemonStandStoreEntity store)
-            : this(LogManager.GetLogger(typeof (LemonStandOnlineUpdater)), new LemonStandWebClient(store))
+            : this(LogManager.GetLogger(typeof(LemonStandOnlineUpdater)), new LemonStandWebClient(store))
         {
             this.store = store;
         }
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ICombineOrderSearchProvider<long> combinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<long>>();
+                ICombineOrderNumberSearchProvider combinedOrderSearchProvider = scope.Resolve<ICombineOrderNumberSearchProvider>();
                 IEnumerable<long> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
                 foreach (long orderNumber in identifiers)

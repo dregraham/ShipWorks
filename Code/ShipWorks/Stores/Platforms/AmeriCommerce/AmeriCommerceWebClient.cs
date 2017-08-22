@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Utility;
-using System.Web.Services.Protocols;
-using log4net;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
-using Autofac.Features.Indexed;
+using System.Web.Services.Protocols;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using ShipWorks.Stores.Content;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
@@ -39,13 +37,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
         private readonly AmeriCommerceStoreEntity store;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly ICombineOrderSearchProvider<long> cominedOrderSearchProvider;
+        private readonly ICombineOrderNumberSearchProvider cominedOrderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmeriCommerceWebClient(AmeriCommerceStoreEntity store,
-            ICombineOrderSearchProvider<long> cominedOrderSearchProvider,
+            ICombineOrderNumberSearchProvider cominedOrderSearchProvider,
             IShipmentTypeManager shipmentTypeManager)
         {
             this.store = store;
@@ -539,7 +537,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.ShippingDate = new DataDateTime();
             shippingTrans.ShippingDate.Value = shipment.ShipDate;
 
-            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
+            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
             shippingTrans.TrackingNumbers = shipment.TrackingNumber;
 
             return shippingTrans;

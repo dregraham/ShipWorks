@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
+using System.Threading.Tasks;
 using System.Xml.Xsl;
 using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
-using ShipWorks.Shipping;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface
 {
     /// <summary>
-    /// Customized Web Client for CommerceInterface since they use a hybrid status/shipment update message 
+    /// Customized Web Client for CommerceInterface since they use a hybrid status/shipment update message
     /// </summary>
     public class CommerceInterfaceWebClient : LegacyAdapterStoreWebClient
     {
@@ -27,10 +25,10 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommerceInterfaceWebClient(GenericModuleStoreEntity store, 
+        public CommerceInterfaceWebClient(GenericModuleStoreEntity store,
             XslCompiledTransform communicationStylesheet,
-            GenericModuleCapabilities legacyCapabilities, 
-            Dictionary<string, VariableTransformer> variableTransformers) : base (store, communicationStylesheet, legacyCapabilities, variableTransformers)
+            GenericModuleCapabilities legacyCapabilities,
+            Dictionary<string, VariableTransformer> variableTransformers) : base(store, communicationStylesheet, legacyCapabilities, variableTransformers)
         {
 
         }
@@ -53,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ICombineOrderSearchProvider<string> combineOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<string>>();
+                var combineOrderSearchProvider = scope.Resolve<ICombineOrderNumberCompleteSearchProvider>();
                 IEnumerable<string> orderNumbers = await combineOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
                 foreach (string orderNumber in orderNumbers)
@@ -83,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// </summary>
         private string GetShipmentCarrier(ShipmentEntity shipment)
         {
-            return ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType);
+            return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
     }
 }

@@ -171,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 }
                 else
                 {
-                    combinedOrderSearchProvider = scope.Resolve<ICombineOrderSearchProvider<string>>();
+                    combinedOrderSearchProvider = scope.Resolve<ICombineOrderNumberCompleteSearchProvider>();
                 }
 
                 identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order);

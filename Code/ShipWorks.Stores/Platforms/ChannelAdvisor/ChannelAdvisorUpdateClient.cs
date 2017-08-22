@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
@@ -23,13 +21,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
         private readonly IChannelAdvisorRestClient restClient;
         private readonly IEncryptionProvider encryptionProvider;
-        private readonly ICombineOrderSearchProvider<long> combinedOrderSearchProvider;
+        private readonly ICombineOrderNumberSearchProvider combinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory, 
-            IChannelAdvisorRestClient restClient, ICombineOrderSearchProvider<long> combinedOrderSearchProvider,
+        public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory,
+            IChannelAdvisorRestClient restClient, ICombineOrderNumberSearchProvider combinedOrderSearchProvider,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.soapClientFactory = soapClientFactory;
@@ -38,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor");
         }
-        
+
         /// <summary>
         /// Uses the soap or rest interface to update Channel Advisor shipments
         /// </summary>
