@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             order = new OrderEntity { OrderNumber = 1234, CombineSplitStatus = CombineSplitStatusType.None };
             combinedOrder = new OrderEntity { OrderNumber = 1234, CombineSplitStatus = CombineSplitStatusType.Combined };
 
-            Mock<ICombineOrderSearchProvider<long>> combinedSearchProvider = mock.Mock<ICombineOrderSearchProvider<long>>();
+            Mock<ICombineOrderNumberSearchProvider> combinedSearchProvider = mock.Mock<ICombineOrderNumberSearchProvider>();
             combinedSearchProvider.Setup(st => st.GetOrderIdentifiers(order)).Returns(Task.FromResult(new[] { (long) 1234 }.AsEnumerable()));
             combinedSearchProvider.Setup(st => st.GetOrderIdentifiers(combinedOrder)).Returns(Task.FromResult(new[] { (long) 1234, 5678 }.AsEnumerable()));
 

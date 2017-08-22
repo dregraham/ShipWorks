@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     /// <summary>
     /// Utility class for updating the online status of ProStores orders
     /// </summary>
+    [Component]
     public class ShipmentDetailsUpdater : IShipmentDetailsUpdater
     {
         private readonly ILog log;

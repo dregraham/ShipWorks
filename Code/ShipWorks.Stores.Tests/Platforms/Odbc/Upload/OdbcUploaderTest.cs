@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         {
             mock = AutoMock.GetLoose();
 
-            Mock<ICombineOrderSearchProvider<string>>  combinedOrderSearchProvider = new Mock<ICombineOrderSearchProvider<string>>();
+            Mock<ICombineOrderNumberCompleteSearchProvider>  combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
             combinedOrderSearchProvider.Setup(sp => sp.GetOrderIdentifiers(It.IsAny<IOrderEntity>())).Returns(Task.FromResult(new[] { "1" }.AsEnumerable()));
             mock.Provide(combinedOrderSearchProvider.Object);
 
@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 
             IEnumerable<string> combinedOrderIDs = combineSplitStatusType == CombineSplitStatusType.None ? new List<string> {"1"} : new List<string> { "1", "2" };
 
-            Mock<ICombineOrderSearchProvider<string>> combinedOrderSearchProvider = new Mock<ICombineOrderSearchProvider<string>>();
+            Mock<ICombineOrderNumberCompleteSearchProvider> combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
             combinedOrderSearchProvider.Setup(sp => sp.GetOrderIdentifiers(It.IsAny<IOrderEntity>())).Returns(Task.FromResult(combinedOrderIDs));
             mock.Provide(combinedOrderSearchProvider.Object);
             shipment.Order.CombineSplitStatus = CombineSplitStatusType.None;
