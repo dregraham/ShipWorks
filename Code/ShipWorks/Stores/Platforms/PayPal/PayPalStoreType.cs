@@ -56,8 +56,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
             return CreateInitialFilters<PayPalPaymentStatus, PayPalPaymentStatusCondition>(ShippingStatuses);
         }
 
-
-
         /// <summary>
         /// Store settings control
         /// </summary>
@@ -161,6 +159,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
+        public static string AccountSettingsHelpUrl =>
+            "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
     }
 }
