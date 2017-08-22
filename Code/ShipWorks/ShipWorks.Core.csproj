@@ -1830,6 +1830,9 @@
     <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\OrderUploadDetails.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
@@ -6014,7 +6017,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\ProStores\ProStoresApiException.cs" />
     <Compile Include="Stores\Platforms\ProStores\ProStoresDownloader.cs" />
-    <Compile Include="Stores\Platforms\ProStores\ProStoresOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ProStores\ProStoresTokenCreateControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

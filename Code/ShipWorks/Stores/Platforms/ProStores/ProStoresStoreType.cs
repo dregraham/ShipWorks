@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using Autofac;
@@ -9,8 +8,6 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -237,55 +234,6 @@ namespace ShipWorks.Stores.Platforms.ProStores
             outline.AddElement("Authorized", () => order.Value.AuthorizedDate.HasValue);
             outline.AddElement("AuthorizedDate", () => order.Value.AuthorizedDate);
             outline.AddElement("AuthorizedBy", () => order.Value.AuthorizedBy);
-        }
-
-        /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new[]
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
-            };
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> orderKeys, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            try
-            {
-                ProStoresOnlineUpdater shipmentUpdater = new ProStoresOnlineUpdater();
-                shipmentUpdater.UploadOrderShipmentDetails(orderKeys);
-            }
-            catch (ProStoresException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(orderKeys, ex);
-            }
         }
     }
 }

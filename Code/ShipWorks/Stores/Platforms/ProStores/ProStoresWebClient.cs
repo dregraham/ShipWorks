@@ -8,18 +8,21 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Shipping;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -375,8 +378,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             if (proVersion)
             {
-                    selectXml += 
-                    "<Cost />";
+                selectXml +=
+                "<Cost />";
             }
 
             selectXml += @"
@@ -420,12 +423,30 @@ namespace ShipWorks.Stores.Platforms.ProStores
             xmlRequest.WriteEndElement();
         }
 
+
         /// <summary>
         /// Upload the shipment details of the given shipment for the specified ProStores store
         /// </summary>
-        public static void UploadShipmentDetails(ProStoresStoreEntity store, ShipmentEntity shipment)
+        public static async Task UploadShipmentDetails(ProStoresStoreEntity store, ShipmentEntity shipment)
         {
-            if (shipment.Order.IsManual)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var searchProvider = lifetimeScope.Resolve<IProStoresCombineOrderSearchProvider>();
+                var identifiers = await searchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+
+                foreach (var identifier in identifiers)
+                {
+                    UploadShipmentDetails(store, shipment, identifier);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Upload the shipment details of the given shipment for the specified ProStores store
+        /// </summary>
+        public static void UploadShipmentDetails(ProStoresStoreEntity store, ShipmentEntity shipment, OrderUploadDetails orderDetails)
+        {
+            if (orderDetails.IsManual)
             {
                 log.WarnFormat("Not uploading shipment details since order {0} is manual.", shipment.Order.OrderID);
                 return;
@@ -442,11 +463,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
                     }
                 });
 
-            ProStoresOrderEntity order = (ProStoresOrderEntity) shipment.Order;
-
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-            request.Uri = new Uri(GetRestUrl(store, string.Format("Invoices/{0}", order.OrderNumber), "Ship"));
+            request.Uri = new Uri(GetRestUrl(store, string.Format("Invoices/{0}", orderDetails.OrderNumber), "Ship"));
 
             request.Variables.Add("token", store.ApiToken);
             request.Variables.Add("shipdate", shipment.ShipDate.ToString("MM/dd/yy"));
