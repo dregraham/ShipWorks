@@ -29,11 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sectionContents = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.itemsGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
             this.groupSelectedContent = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.multiValueTextBox2 = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelsku = new System.Windows.Forms.Label();
+            this.multiValueTextBox1 = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.labelcode = new System.Windows.Forms.Label();
+            this.code = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.labelQuantity = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
@@ -43,12 +49,6 @@
             this.delete = new System.Windows.Forms.Button();
             this.add = new System.Windows.Forms.Button();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.code = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.labelcode = new System.Windows.Forms.Label();
-            this.multiValueTextBox1 = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.labelsku = new System.Windows.Forms.Label();
-            this.multiValueTextBox2 = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
@@ -83,7 +83,7 @@
             this.gridColumnDescription});
             this.itemsGrid.Location = new System.Drawing.Point(8, 10);
             this.itemsGrid.Name = "itemsGrid";
-            this.itemsGrid.Renderer = windowsXPRenderer2;
+            this.itemsGrid.Renderer = windowsXPRenderer1;
             this.itemsGrid.Size = new System.Drawing.Size(486, 116);
             this.itemsGrid.TabIndex = 0;
             // 
@@ -116,6 +116,67 @@
             this.groupSelectedContent.TabIndex = 3;
             this.groupSelectedContent.TabStop = false;
             this.groupSelectedContent.Text = "Selected Content";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(60, 188);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Notes:";
+            // 
+            // multiValueTextBox2
+            // 
+            this.multiValueTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.multiValueTextBox2.Location = new System.Drawing.Point(105, 188);
+            this.multiValueTextBox2.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox2, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemNote);
+            this.multiValueTextBox2.Multiline = true;
+            this.multiValueTextBox2.Name = "multiValueTextBox2";
+            this.multiValueTextBox2.Size = new System.Drawing.Size(436, 127);
+            this.multiValueTextBox2.TabIndex = 10;
+            // 
+            // labelsku
+            // 
+            this.labelsku.AutoSize = true;
+            this.labelsku.Location = new System.Drawing.Point(69, 80);
+            this.labelsku.Name = "labelsku";
+            this.labelsku.Size = new System.Drawing.Size(30, 13);
+            this.labelsku.TabIndex = 9;
+            this.labelsku.Text = "SKU:";
+            // 
+            // multiValueTextBox1
+            // 
+            this.multiValueTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.multiValueTextBox1.Location = new System.Drawing.Point(105, 77);
+            this.multiValueTextBox1.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox1, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemSku);
+            this.multiValueTextBox1.Name = "multiValueTextBox1";
+            this.multiValueTextBox1.Size = new System.Drawing.Size(436, 21);
+            this.multiValueTextBox1.TabIndex = 8;
+            // 
+            // labelcode
+            // 
+            this.labelcode.AutoSize = true;
+            this.labelcode.Location = new System.Drawing.Point(63, 107);
+            this.labelcode.Name = "labelcode";
+            this.labelcode.Size = new System.Drawing.Size(36, 13);
+            this.labelcode.TabIndex = 7;
+            this.labelcode.Text = "Code:";
+            // 
+            // code
+            // 
+            this.code.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.code.Location = new System.Drawing.Point(105, 104);
+            this.code.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemCode);
+            this.code.Name = "code";
+            this.code.Size = new System.Drawing.Size(436, 21);
+            this.code.TabIndex = 6;
             // 
             // weight
             // 
@@ -163,6 +224,7 @@
             // 
             this.quantity.Location = new System.Drawing.Point(105, 131);
             this.quantity.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.quantity, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemQuantity);
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(95, 21);
             this.quantity.TabIndex = 1;
@@ -172,7 +234,8 @@
             this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(105, 51);
-            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.CustomsDescription);
+            this.name.MaxLength = 300;
+            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemName);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(436, 21);
             this.name.TabIndex = 3;
@@ -203,58 +266,6 @@
             this.add.Text = "  Add";
             this.add.UseVisualStyleBackColor = true;
             this.add.Click += new System.EventHandler(this.OnAdd);
-            // 
-            // code
-            // 
-            this.code.Location = new System.Drawing.Point(105, 104);
-            this.code.MaxLength = 14;
-            this.code.Name = "code";
-            this.code.Size = new System.Drawing.Size(436, 21);
-            this.code.TabIndex = 6;
-            // 
-            // labelcode
-            // 
-            this.labelcode.AutoSize = true;
-            this.labelcode.Location = new System.Drawing.Point(63, 107);
-            this.labelcode.Name = "labelcode";
-            this.labelcode.Size = new System.Drawing.Size(36, 13);
-            this.labelcode.TabIndex = 7;
-            this.labelcode.Text = "Code:";
-            // 
-            // multiValueTextBox1
-            // 
-            this.multiValueTextBox1.Location = new System.Drawing.Point(105, 77);
-            this.multiValueTextBox1.MaxLength = 14;
-            this.multiValueTextBox1.Name = "multiValueTextBox1";
-            this.multiValueTextBox1.Size = new System.Drawing.Size(436, 21);
-            this.multiValueTextBox1.TabIndex = 8;
-            // 
-            // labelsku
-            // 
-            this.labelsku.AutoSize = true;
-            this.labelsku.Location = new System.Drawing.Point(69, 80);
-            this.labelsku.Name = "labelsku";
-            this.labelsku.Size = new System.Drawing.Size(30, 13);
-            this.labelsku.TabIndex = 9;
-            this.labelsku.Text = "SKU:";
-            // 
-            // multiValueTextBox2
-            // 
-            this.multiValueTextBox2.Location = new System.Drawing.Point(105, 188);
-            this.multiValueTextBox2.MaxLength = 14;
-            this.multiValueTextBox2.Multiline = true;
-            this.multiValueTextBox2.Name = "multiValueTextBox2";
-            this.multiValueTextBox2.Size = new System.Drawing.Size(436, 127);
-            this.multiValueTextBox2.TabIndex = 10;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(60, 188);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Notes:";
             // 
             // ReturnTabControl
             // 

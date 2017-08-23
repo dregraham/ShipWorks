@@ -371,6 +371,12 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceOfferID: return AmazonShipmentFields.ShippingServiceOfferID;
 
                 case EntityFieldLengthSource.OdbcStoreCustomQuery: return OdbcStoreFields.UploadColumnSource;
+                    
+                case EntityFieldLengthSource.ReturnItemName: return ShipmentReturnItemFields.Name;
+                case EntityFieldLengthSource.ReturnItemSku: return ShipmentReturnItemFields.SKU;
+                case EntityFieldLengthSource.ReturnItemCode: return ShipmentReturnItemFields.Code;
+                case EntityFieldLengthSource.ReturnItemQuantity: return ShipmentReturnItemFields.Quantity;
+                case EntityFieldLengthSource.ReturnItemNote: return ShipmentReturnItemFields.Notes;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);
