@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests
 
             testObject.LoadReturnData(shipment, true);
 
-            mock.Mock<ISqlAdapterFactory>().Verify(f=>f.Create(), Times.Never);
+            mock.Mock<ISqlAdapterFactory>().Verify(f => f.Create(), Times.Never);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests
 
             testObject.LoadReturnData(shipment, false);
 
-            sqlAdapter.Verify(a=>a.FetchQuery(It.IsAny<DynamicQuery<ShipmentReturnItemEntity>>()), Times.Never);
+            sqlAdapter.Verify(a => a.FetchQuery(It.IsAny<DynamicQuery<ShipmentReturnItemEntity>>()), Times.Never);
         }
 
         [Fact]
