@@ -187,17 +187,7 @@ namespace ShipWorks.Stores.Content
 
             if (combinedOrder.IsManual)
             {
-                StoreType storeType = storeTypeManager.GetType(combinedOrder.StoreID);
-                OrderEntity convertedOrder = storeType.CreateOrder();
-
-                convertedOrder.InitializeNullsToDefault();
-
-                foreach (IEntityFieldCore field in combinedOrder.Fields.Where(f => !f.IsReadOnly))
-                {
-                    convertedOrder.Fields[field.FieldIndex].CurrentValue = field.CurrentValue;
-                }
-
-                combinedOrder = convertedOrder;
+                combinedOrder = CreateCombinedOrderForManualSurvivingOrder(combinedOrder);
             }
 
             combinedOrder.IsNew = true;
@@ -217,6 +207,29 @@ namespace ShipWorks.Stores.Content
             }
 
             return GenericResult.FromSuccess(combinedOrder);
+        }
+
+        /// <summary>
+        /// If the order is manual, convert it to an actual store specific order type.
+        /// </summary>
+        private OrderEntity CreateCombinedOrderForManualSurvivingOrder(OrderEntity combinedOrder)
+        {
+            if (!combinedOrder.IsManual)
+            {
+                return combinedOrder;
+            }
+
+            StoreType storeType = storeTypeManager.GetType(combinedOrder.StoreID);
+            OrderEntity convertedOrder = storeType.CreateOrder();
+
+            convertedOrder.InitializeNullsToDefault();
+
+            foreach (IEntityFieldCore field in combinedOrder.Fields.Where(f => !f.IsReadOnly))
+            {
+                convertedOrder.Fields[field.FieldIndex].CurrentValue = field.CurrentValue;
+            }
+
+            return convertedOrder;
         }
 
         /// <summary>
