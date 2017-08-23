@@ -183,6 +183,24 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         }
 
         /// <summary>
+        /// Add a customs item to the shipment
+        /// </summary>
+        public ShipmentEntityBuilder WithReturnItem() => WithReturnItem(null);
+
+        /// <summary>
+        /// Add a customs item to the shipment
+        /// </summary>
+        public ShipmentEntityBuilder WithReturnItem(Action<EntityBuilder<ShipmentReturnItemEntity>> builderConfiguration)
+        {
+            EntityBuilder<ShipmentReturnItemEntity> builder = new EntityBuilder<ShipmentReturnItemEntity>();
+            builderConfiguration?.Invoke(builder);
+
+            Set(x => x.ShipmentReturnItem.Add(builder.Build()));
+
+            return this;
+        }
+
+        /// <summary>
         /// Set the shipment type
         /// </summary>
         private ShipmentEntityBuilder SetShipmentType<T, TBuilder>(Action<TBuilder> builderConfiguration,

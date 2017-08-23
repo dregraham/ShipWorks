@@ -9,6 +9,9 @@ using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping
 {
+    /// <summary>
+    /// Used to capture or initialize ReturnItem data and associate it with a shipment.
+    /// </summary>
     public class ReturnItemRepository : IReturnItemRepository
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
