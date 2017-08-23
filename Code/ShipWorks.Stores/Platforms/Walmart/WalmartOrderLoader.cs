@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             // Get all the non-zero charges where the type is not "PRODUCT" and create an
             // order charge for each charge type.
             downloadedOrderOrderLines.SelectMany(orderLine => orderLine.charges)
-                .Where(charge => (charge?.chargeAmount?.amount ?? 0) != 0 && charge.chargeType1 != "PRODUCT")
+                .Where(charge => (charge?.chargeAmount?.amount ?? 0) != 0 && charge?.chargeType1 != "PRODUCT")
                 .GroupBy(charge => new {charge.chargeType1, charge.chargeName}, charge => charge.chargeAmount.amount)
                 .ForEach(group => InstantiateOrderCharge(orderToSave, group.Key.chargeType1, group.Key.chargeName, group.Sum()));
         }
