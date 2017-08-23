@@ -392,7 +392,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Empty(orderEntity.OrderCharges);
+            Assert.Empty(orderEntity.OrderCharges.Where(c => c.Type != "Refund"));
         }
 
         [Theory]
