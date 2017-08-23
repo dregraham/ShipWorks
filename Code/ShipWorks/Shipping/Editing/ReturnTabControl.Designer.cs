@@ -136,7 +136,7 @@
             this.notes.Multiline = true;
             this.notes.Name = "notes";
             this.notes.Size = new System.Drawing.Size(436, 127);
-            this.notes.TabIndex = 10;
+            this.notes.TabIndex = 8;
             // 
             // labelsku
             // 
@@ -156,7 +156,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemSku);
             this.sku.Name = "sku";
             this.sku.Size = new System.Drawing.Size(436, 21);
-            this.sku.TabIndex = 8;
+            this.sku.TabIndex = 4;
             // 
             // labelcode
             // 
@@ -176,7 +176,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemCode);
             this.code.Name = "code";
             this.code.Size = new System.Drawing.Size(436, 21);
-            this.code.TabIndex = 6;
+            this.code.TabIndex = 5;
             // 
             // weight
             // 
@@ -190,7 +190,7 @@
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(269, 24);
-            this.weight.TabIndex = 5;
+            this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
             // 
             // labelQuantity
@@ -227,7 +227,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.quantity, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemQuantity);
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(95, 21);
-            this.quantity.TabIndex = 1;
+            this.quantity.TabIndex = 6;
             // 
             // name
             // 

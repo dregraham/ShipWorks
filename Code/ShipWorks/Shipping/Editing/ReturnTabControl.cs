@@ -24,16 +24,29 @@ namespace ShipWorks.Shipping.Editing
         // Keeps track of the selected row, if any
         List<GridRow> selectedRows = new List<GridRow>();
 
+        // Indicates if the event shouldn't currently be raised
+        int suspendShipSenseFieldEvent = 0;
+
+        /// <summary>
+        /// Some part of the packaging has changed the ShipSense criteria
+        /// </summary>
+        public event EventHandler ShipSenseFieldChanged;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ReturnTabControl()
         {
             InitializeComponent();
+
+            weight.TextChanged += OnShipSenseFieldChanged;
+            quantity.TextChanged += OnShipSenseFieldChanged;
         }
       
         public void LoadShipments(List<ShipmentEntity> shipments, bool createIfEmpty)
         {
+            SuspendShipSenseFieldChangeEvent();
+
             if (!shipments.IsCountEqualTo(1))
             {
                 sectionContents.Visible = false;
@@ -57,6 +70,8 @@ namespace ShipWorks.Shipping.Editing
                 GridRow row = new GridRow(item.Name) {Tag = item};
                 itemsGrid.Rows.Add(row);
             }
+
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -64,6 +79,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnItemsGridChangeSelectedRow(object sender, SelectionChangedEventArgs e)
         {
+            SuspendShipSenseFieldChangeEvent();
             SaveValuesToSelectedEntities();
             
             if (itemsGrid.SelectedElements.Count == 0)
@@ -85,7 +101,7 @@ namespace ShipWorks.Shipping.Editing
 
                 name.TextChanged += OnDescriptionChanged;
             }
-            
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -113,6 +129,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             SaveValuesToSelectedEntities();
+            RaiseShipSenseFieldChanged();
         }
         
         /// <summary>
@@ -121,6 +138,8 @@ namespace ShipWorks.Shipping.Editing
         private void ClearValues()
         {
             selectedRows.Clear();
+
+            SuspendShipSenseFieldChangeEvent();
 
             itemsGrid.SelectedElements.Clear();
                 
@@ -134,6 +153,9 @@ namespace ShipWorks.Shipping.Editing
             notes.Text = string.Empty;
 
             name.TextChanged += OnDescriptionChanged;
+
+            ResumeShipSenseFieldChangeEvent();
+            RaiseShipSenseFieldChanged();
         }
 
         /// <summary>
@@ -219,6 +241,8 @@ namespace ShipWorks.Shipping.Editing
             }
 
             loadedShipment.ContentWeight = loadedShipment.ShipmentReturnItem.Sum(c => c.Quantity * c.Weight);
+
+            RaiseShipSenseFieldChanged();
         }
 
         /// <summary>
@@ -246,6 +270,8 @@ namespace ShipWorks.Shipping.Editing
             itemsGrid.Rows.Add(row);
             loadedShipment.ShipmentReturnItem.Add(newItem);
 
+            RaiseShipSenseFieldChanged();
+
             SelectGridRowByTag(newItem);
             selectedRows = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
         }
@@ -262,6 +288,43 @@ namespace ShipWorks.Shipping.Editing
             {
                 matchedRow.Selected = true;
             }
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Raises the ShipSenseFieldChanged event
+        /// </summary>
+        private void RaiseShipSenseFieldChanged()
+        {
+            if (suspendShipSenseFieldEvent > 0)
+            {
+                return;
+            }
+
+            ShipSenseFieldChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Suspend raising the event that ShipSense criteria has changed
+        /// </summary>
+        protected void SuspendShipSenseFieldChangeEvent()
+        {
+            suspendShipSenseFieldEvent++;
+        }
+
+        /// <summary>
+        /// Resume raising the event that the rate ShipSense has changed.  This function does not raise the event
+        /// </summary>
+        protected void ResumeShipSenseFieldChangeEvent()
+        {
+            suspendShipSenseFieldEvent--;
         }
     }
 }

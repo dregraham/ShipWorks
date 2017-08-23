@@ -1016,6 +1016,8 @@ namespace ShipWorks.Shipping
                 if (tabControl.Contains(tabPageReturns))
                 {
                     returnTabControl.LoadShipments(shipments, createIfEmpty);
+
+                    returnTabControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
                 }
             }
         }
@@ -1035,6 +1037,7 @@ namespace ShipWorks.Shipping
             oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
             oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
             oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ReturnServiceChanged += OnReturnServiceChanged;
             oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
             oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
             oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
