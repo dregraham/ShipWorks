@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         }
 
         [Fact]
-        public async void Download_SuccessfullyProcessesXml()
+        public async Task Download_SuccessfullyProcessesXml()
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 autoMock =>
