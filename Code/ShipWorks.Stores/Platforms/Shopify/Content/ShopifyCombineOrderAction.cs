@@ -6,6 +6,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Platforms.Shopify.Enums;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Shopify.Content
 {
@@ -20,15 +23,24 @@ namespace ShipWorks.Stores.Platforms.Shopify.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            var recordCreator = new SearchRecordMerger<IShopifyOrderEntity>(combinedOrder, orders, sqlAdapter);
+            ShopifyOrderEntity shopifyCombinedOrder = combinedOrder as ShopifyOrderEntity;
 
-            return recordCreator.Perform(ShopifyOrderSearchFields.OrderID,
-                x => new ShopifyOrderSearchEntity
-                {
-                    OrderID = combinedOrder.OrderID,
-                    ShopifyOrderID = x.ShopifyOrderID,
-                    OriginalOrderID = x.OrderID
-                });
+            var recordCreator = new SearchRecordMerger<IShopifyOrderEntity>(shopifyCombinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(ShopifyOrderSearchFields.OrderID, x => CreateShopifyOrderSearchEntry(x, shopifyCombinedOrder.OrderID));
+        }
+
+        /// <summary>
+        /// Create a ShopifyOrderSearchEntity for the given Shopify order and combined order id
+        /// </summary>
+        private ShopifyOrderSearchEntity CreateShopifyOrderSearchEntry(IShopifyOrderEntity shopifyOrder, long orderID)
+        {
+            return new ShopifyOrderSearchEntity
+            {
+                OrderID = orderID,
+                ShopifyOrderID = shopifyOrder.ShopifyOrderID,
+                OriginalOrderID = shopifyOrder.OrderID
+            };
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ShipWorks.Stores.Content
         private readonly IEnumerable<ICombineOrderAction> combinationActions;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ICombineOrderAudit combinedOrderAuditor;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
@@ -40,7 +41,8 @@ namespace ShipWorks.Stores.Content
             IConfigurationData configurationData,
             IEnumerable<ICombineOrderAction> combinationActions,
             ISqlAdapterFactory sqlAdapterFactory,
-            ICombineOrderAudit combinedOrderAuditor)
+            ICombineOrderAudit combinedOrderAuditor,
+            IStoreTypeManager storeTypeManager)
         {
             this.combinationActions = combinationActions;
             this.configurationData = configurationData;
@@ -48,6 +50,7 @@ namespace ShipWorks.Stores.Content
             this.orderManager = orderManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.combinedOrderAuditor = combinedOrderAuditor;
+            this.storeTypeManager = storeTypeManager;
         }
 
         /// <summary>
@@ -182,6 +185,21 @@ namespace ShipWorks.Stores.Content
                 return GenericResult.FromError<OrderEntity>("Could not find surviving order");
             }
 
+            if (combinedOrder.IsManual)
+            {
+                StoreType storeType = storeTypeManager.GetType(combinedOrder.StoreID);
+                OrderEntity convertedOrder = storeType.CreateOrder();
+
+                convertedOrder.InitializeNullsToDefault();
+
+                foreach (IEntityFieldCore field in combinedOrder.Fields.Where(f => !f.IsReadOnly))
+                {
+                    convertedOrder.Fields[field.FieldIndex].CurrentValue = field.CurrentValue;
+                }
+
+                combinedOrder = convertedOrder;
+            }
+
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
             combinedOrder.ChangeOrderNumber(orderNumberComplete);
@@ -191,6 +209,7 @@ namespace ShipWorks.Stores.Content
             combinedOrder.RollupItemTotalWeight = 0;
             combinedOrder.RollupNoteCount = 0;
             combinedOrder.OrderTotal = orders.Sum(o => o.OrderTotal);
+            combinedOrder.IsManual = orders.All(o => o.IsManual);
 
             foreach (IEntityFieldCore field in combinedOrder.Fields)
             {
