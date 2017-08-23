@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping
         /// <param name="createIfNone">if set to <c>true</c> [create the return item if it does not exist].</param>
         public void LoadReturnData(ShipmentEntity shipment, bool createIfNone)
         {
-            if (shipment.ShipmentReturnItem.None())
+            if (shipment.ReturnItems.None())
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
@@ -42,16 +42,16 @@ namespace ShipWorks.Shipping
                     IEnumerable<ShipmentReturnItemEntity> returnItems =
                         sqlAdapter.FetchQueryAsync(query).Result.Cast<ShipmentReturnItemEntity>();
 
-                    shipment.ShipmentReturnItem.AddRange(returnItems);
+                    shipment.ReturnItems.AddRange(returnItems);
 
-                    if (shipment.ShipmentReturnItem.None() && createIfNone)
+                    if (shipment.ReturnItems.None() && createIfNone)
                     {
                         InitializeReturnData(shipment, sqlAdapter);
                     }
                 }
             }
 
-            shipment.ShipmentReturnItem.RemovedEntitiesTracker = new ShipmentReturnItemCollection();
+            shipment.ReturnItems.RemovedEntitiesTracker = new ShipmentReturnItemCollection();
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping
                     Notes = string.Empty
                 }).Where(OrderItemFields.OrderID == shipment.OrderID);
 
-            shipment.ShipmentReturnItem.AddRange(sqlAdapter.FetchQuery(query));
+            shipment.ReturnItems.AddRange(sqlAdapter.FetchQuery(query));
         }
     }
 }

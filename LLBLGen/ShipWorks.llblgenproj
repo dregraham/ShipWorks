@@ -3450,7 +3450,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ShipmentReturnItem.Shipment-Shipment.ShipmentReturnItem" Start=":ShipmentReturnItem" End=":Shipment" StartNavigator="Shipment" EndNavigator="ShipmentReturnItem" Type="4" DeleteRuleAction="1">
+      <NormalRelationship Name="ShipmentReturnItem.Shipment-Shipment.ReturnItems" Start=":ShipmentReturnItem" End=":Shipment" StartNavigator="Shipment" EndNavigator="ReturnItems" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>

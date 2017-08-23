@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Editing
                 lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(loadedShipment, createIfEmpty);
             }
 
-            foreach (ShipmentReturnItemEntity item in loadedShipment.ShipmentReturnItem)
+            foreach (ShipmentReturnItemEntity item in loadedShipment.ReturnItems)
             {
                 GridRow row = new GridRow(item.Name) {Tag = item};
                 itemsGrid.Rows.Add(row);
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Editing
                 SaveReturnItem(returnItem);
             }
 
-            loadedShipment.ContentWeight = loadedShipment.ShipmentReturnItem.Sum(c => c.Quantity * c.Weight);
+            loadedShipment.ContentWeight = loadedShipment.ReturnItems.Sum(c => c.Quantity * c.Weight);
         }
 
         /// <summary>
@@ -246,10 +246,10 @@ namespace ShipWorks.Shipping.Editing
             // Remove the return items from each of their shipments
             foreach (ShipmentReturnItemEntity item in returnItems)
             {
-                bool abcd = loadedShipment.ShipmentReturnItem.Remove(item);
+                loadedShipment.ReturnItems.Remove(item);
             }
 
-            loadedShipment.ContentWeight = loadedShipment.ShipmentReturnItem.Sum(c => c.Quantity * c.Weight);
+            loadedShipment.ContentWeight = loadedShipment.ReturnItems.Sum(c => c.Quantity * c.Weight);
 
             RaiseShipSenseFieldChanged();
         }
@@ -277,7 +277,7 @@ namespace ShipWorks.Shipping.Editing
             GridRow row = new GridRow(newItem.Name) {Tag = newItem};
 
             itemsGrid.Rows.Add(row);
-            loadedShipment.ShipmentReturnItem.Add(newItem);
+            loadedShipment.ReturnItems.Add(newItem);
 
             RaiseShipSenseFieldChanged();
 

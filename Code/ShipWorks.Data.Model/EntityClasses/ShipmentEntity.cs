@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<ShipmentCustomsItemEntity> _customsItems;
-		private EntityCollection<ShipmentReturnItemEntity> _shipmentReturnItem;
+		private EntityCollection<ShipmentReturnItemEntity> _returnItems;
 		private EntityCollection<ValidatedAddressEntity> _validatedAddress;
 		private EntityCollection<OrderEntity> _orderCollectionViaValidatedAddress;
 		private OrderEntity _order;
@@ -62,8 +62,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Order = "Order";
 			/// <summary>Member name CustomsItems</summary>
 			public static readonly string CustomsItems = "CustomsItems";
-			/// <summary>Member name ShipmentReturnItem</summary>
-			public static readonly string ShipmentReturnItem = "ShipmentReturnItem";
+			/// <summary>Member name ReturnItems</summary>
+			public static readonly string ReturnItems = "ReturnItems";
 			/// <summary>Member name ValidatedAddress</summary>
 			public static readonly string ValidatedAddress = "ValidatedAddress";
 			/// <summary>Member name OrderCollectionViaValidatedAddress</summary>
@@ -144,7 +144,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_customsItems = (EntityCollection<ShipmentCustomsItemEntity>)info.GetValue("_customsItems", typeof(EntityCollection<ShipmentCustomsItemEntity>));
-				_shipmentReturnItem = (EntityCollection<ShipmentReturnItemEntity>)info.GetValue("_shipmentReturnItem", typeof(EntityCollection<ShipmentReturnItemEntity>));
+				_returnItems = (EntityCollection<ShipmentReturnItemEntity>)info.GetValue("_returnItems", typeof(EntityCollection<ShipmentReturnItemEntity>));
 				_validatedAddress = (EntityCollection<ValidatedAddressEntity>)info.GetValue("_validatedAddress", typeof(EntityCollection<ValidatedAddressEntity>));
 				_orderCollectionViaValidatedAddress = (EntityCollection<OrderEntity>)info.GetValue("_orderCollectionViaValidatedAddress", typeof(EntityCollection<OrderEntity>));
 				_order = (OrderEntity)info.GetValue("_order", typeof(OrderEntity));
@@ -245,8 +245,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)entity);
 					break;
-				case "ShipmentReturnItem":
-					this.ShipmentReturnItem.Add((ShipmentReturnItemEntity)entity);
+				case "ReturnItems":
+					this.ReturnItems.Add((ShipmentReturnItemEntity)entity);
 					break;
 				case "ValidatedAddress":
 					this.ValidatedAddress.Add((ValidatedAddressEntity)entity);
@@ -311,7 +311,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					toReturn.Add(Relations.ShipmentCustomsItemEntityUsingShipmentID);
 					break;
-				case "ShipmentReturnItem":
+				case "ReturnItems":
 					toReturn.Add(Relations.ShipmentReturnItemEntityUsingShipmentID);
 					break;
 				case "ValidatedAddress":
@@ -382,8 +382,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)relatedEntity);
 					break;
-				case "ShipmentReturnItem":
-					this.ShipmentReturnItem.Add((ShipmentReturnItemEntity)relatedEntity);
+				case "ReturnItems":
+					this.ReturnItems.Add((ShipmentReturnItemEntity)relatedEntity);
 					break;
 				case "ValidatedAddress":
 					this.ValidatedAddress.Add((ValidatedAddressEntity)relatedEntity);
@@ -434,8 +434,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.PerformRelatedEntityRemoval(this.CustomsItems, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "ShipmentReturnItem":
-					this.PerformRelatedEntityRemoval(this.ShipmentReturnItem, relatedEntity, signalRelatedEntityManyToOne);
+				case "ReturnItems":
+					this.PerformRelatedEntityRemoval(this.ReturnItems, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "ValidatedAddress":
 					this.PerformRelatedEntityRemoval(this.ValidatedAddress, relatedEntity, signalRelatedEntityManyToOne);
@@ -562,7 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.CustomsItems);
-			toReturn.Add(this.ShipmentReturnItem);
+			toReturn.Add(this.ReturnItems);
 			toReturn.Add(this.ValidatedAddress);
 			return toReturn;
 		}
@@ -576,7 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_customsItems", ((_customsItems!=null) && (_customsItems.Count>0) && !this.MarkedForDeletion)?_customsItems:null);
-				info.AddValue("_shipmentReturnItem", ((_shipmentReturnItem!=null) && (_shipmentReturnItem.Count>0) && !this.MarkedForDeletion)?_shipmentReturnItem:null);
+				info.AddValue("_returnItems", ((_returnItems!=null) && (_returnItems.Count>0) && !this.MarkedForDeletion)?_returnItems:null);
 				info.AddValue("_validatedAddress", ((_validatedAddress!=null) && (_validatedAddress.Count>0) && !this.MarkedForDeletion)?_validatedAddress:null);
 				info.AddValue("_orderCollectionViaValidatedAddress", ((_orderCollectionViaValidatedAddress!=null) && (_orderCollectionViaValidatedAddress.Count>0) && !this.MarkedForDeletion)?_orderCollectionViaValidatedAddress:null);
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
@@ -615,7 +615,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ShipmentReturnItem' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoShipmentReturnItem()
+		public virtual IRelationPredicateBucket GetRelationInfoReturnItems()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentReturnItemFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
@@ -744,7 +744,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._customsItems);
-			collectionsQueue.Enqueue(this._shipmentReturnItem);
+			collectionsQueue.Enqueue(this._returnItems);
 			collectionsQueue.Enqueue(this._validatedAddress);
 			collectionsQueue.Enqueue(this._orderCollectionViaValidatedAddress);
 		}
@@ -755,7 +755,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._customsItems = (EntityCollection<ShipmentCustomsItemEntity>) collectionsQueue.Dequeue();
-			this._shipmentReturnItem = (EntityCollection<ShipmentReturnItemEntity>) collectionsQueue.Dequeue();
+			this._returnItems = (EntityCollection<ShipmentReturnItemEntity>) collectionsQueue.Dequeue();
 			this._validatedAddress = (EntityCollection<ValidatedAddressEntity>) collectionsQueue.Dequeue();
 			this._orderCollectionViaValidatedAddress = (EntityCollection<OrderEntity>) collectionsQueue.Dequeue();
 
@@ -767,7 +767,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			bool toReturn = false;
 			toReturn |=(this._customsItems != null);
-			toReturn |=(this._shipmentReturnItem != null);
+			toReturn |=(this._returnItems != null);
 			toReturn |=(this._validatedAddress != null);
 			toReturn |= (this._orderCollectionViaValidatedAddress != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
@@ -792,7 +792,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("Order", _order);
 			toReturn.Add("CustomsItems", _customsItems);
-			toReturn.Add("ShipmentReturnItem", _shipmentReturnItem);
+			toReturn.Add("ReturnItems", _returnItems);
 			toReturn.Add("ValidatedAddress", _validatedAddress);
 			toReturn.Add("OrderCollectionViaValidatedAddress", _orderCollectionViaValidatedAddress);
 			toReturn.Add("Amazon", _amazon);
@@ -1344,9 +1344,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShipmentReturnItem' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathShipmentReturnItem
+		public static IPrefetchPathElement2 PrefetchPathReturnItems
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<ShipmentReturnItemEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentReturnItemEntityFactory))), (IEntityRelation)GetRelationsForField("ShipmentReturnItem")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentReturnItemEntity, 0, null, null, null, null, "ShipmentReturnItem", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<ShipmentReturnItemEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentReturnItemEntityFactory))), (IEntityRelation)GetRelationsForField("ReturnItems")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentReturnItemEntity, 0, null, null, null, null, "ReturnItems", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ValidatedAddress' for this entity.</summary>
@@ -2202,9 +2202,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentReturnItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ShipmentReturnItemEntity))]
-		public virtual EntityCollection<ShipmentReturnItemEntity> ShipmentReturnItem
+		public virtual EntityCollection<ShipmentReturnItemEntity> ReturnItems
 		{
-			get { return GetOrCreateEntityCollection<ShipmentReturnItemEntity, ShipmentReturnItemEntityFactory>("Shipment", true, false, ref _shipmentReturnItem);	}
+			get { return GetOrCreateEntityCollection<ShipmentReturnItemEntity, ShipmentReturnItemEntityFactory>("Shipment", true, false, ref _returnItems);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ValidatedAddressEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

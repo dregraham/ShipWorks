@@ -155,7 +155,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                         returnItemRepository.LoadReturnData(Shipment, false);
                     }
 
-                    return Shipment.ShipmentReturnItem;
+                    return Shipment.ReturnItems;
                 }
 
                 return null;

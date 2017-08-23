@@ -195,7 +195,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             EntityBuilder<ShipmentReturnItemEntity> builder = new EntityBuilder<ShipmentReturnItemEntity>();
             builderConfiguration?.Invoke(builder);
 
-            Set(x => x.ShipmentReturnItem.Add(builder.Build()));
+            Set(x => x.ReturnItems.Add(builder.Build()));
 
             return this;
         }

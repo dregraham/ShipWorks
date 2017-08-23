@@ -25,14 +25,14 @@ namespace ShipWorks.Shipping.Tests.Integration
         public void LoadReturnData_LoadsExistingReturnItems_WhenExistingReturnItemsExist()
         {
             var shipment = Create.Shipment(context.Order).WithReturnItem().Save();
-            var returnItem = shipment.ShipmentReturnItem.Single();
+            var returnItem = shipment.ReturnItems.Single();
 
             var testObject = context.Mock.Create<ReturnItemRepository>();
 
-            shipment.ShipmentReturnItem.Clear();
+            shipment.ReturnItems.Clear();
             testObject.LoadReturnData(shipment, false);
             
-            Assert.Equal(returnItem, shipment.ShipmentReturnItem.Single());
+            Assert.Equal(returnItem, shipment.ReturnItems.Single());
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Integration
 
             testObject.LoadReturnData(shipment, true);
 
-            var returnItem = shipment.ShipmentReturnItem.Single();
+            var returnItem = shipment.ReturnItems.Single();
 
             Assert.Equal("Joe", returnItem.Name);
             Assert.Equal(10, returnItem.Quantity);
