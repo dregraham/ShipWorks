@@ -67,6 +67,8 @@ namespace ShipWorks.Shipping.Editing
 
             loadedShipment = shipments.Single();
 
+            sectionContents.Enabled = !loadedShipment.Processed;
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(loadedShipment, createIfEmpty);
