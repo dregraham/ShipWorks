@@ -892,6 +892,7 @@ namespace ShipWorks.Shipping
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
             LoadCustomsControl(shipments, shipmentType, enableEditing);
+            LoadReturnsControl(shipments, false);
 
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
@@ -960,6 +961,7 @@ namespace ShipWorks.Shipping
             newServiceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
             newServiceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
             newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            newServiceControl.ReturnServiceChanged += OnReturnServiceChanged;
             newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
             newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
@@ -974,6 +976,48 @@ namespace ShipWorks.Shipping
             newServiceControl.Dock = DockStyle.Fill;
             serviceControlArea.Controls.Clear();
             serviceControlArea.Controls.Add(newServiceControl);
+        }
+
+        /// <summary>
+        /// Update the returns control when returns are enabled/disabled
+        /// </summary>
+        private void OnReturnServiceChanged(object sender, EventArgs e)
+        {
+            LoadReturnsControl(uiDisplayedShipments, true);
+        }
+        
+        /// <summary>
+        /// Load return data into the returns tab
+        /// </summary>
+        private void LoadReturnsControl(IEnumerable<ShipmentEntity> shipments, bool createIfEmpty)
+        {
+            if (shipments.IsCountGreaterThan(1))
+            {
+                returnTabControl.Visible = false;
+                panelReturnMessage.Visible = true;
+            }
+            else
+            {
+                bool anyNeedReturns = shipments.Any(s => s.ReturnShipment);
+                returnTabControl.Visible = true;
+                panelReturnMessage.Visible = false;
+
+                if (!anyNeedReturns && tabControl.Contains(tabPageReturns))
+                {
+                    tabControl.TabPages.Remove(tabPageReturns);
+                }
+
+                if (anyNeedReturns && !tabControl.Contains(tabPageReturns))
+                {
+                    // Insert after the main tab, but before Tracking
+                    tabControl.TabPages.Insert(1, tabPageReturns);
+                }
+
+                if (tabControl.Contains(tabPageReturns))
+                {
+                    returnTabControl.LoadShipments(shipments, createIfEmpty);
+                }
+            }
         }
 
         /// <summary>

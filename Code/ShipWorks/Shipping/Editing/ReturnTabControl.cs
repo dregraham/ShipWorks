@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Controls;
 
@@ -17,11 +18,11 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class ReturnTabControl : UserControl
     {
-        // Keeps track of the selected row, if any
-        List<GridRow> selectedRows = new List<GridRow>();
-
         // The shipments that were called LoadShipments
         ShipmentEntity loadedShipment;
+
+        // Keeps track of the selected row, if any
+        List<GridRow> selectedRows = new List<GridRow>();
 
         /// <summary>
         /// Constructor
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Editing
             InitializeComponent();
         }
       
-        private void Load(List<ShipmentEntity> shipments)
+        public void LoadShipments(List<ShipmentEntity> shipments, bool createIfEmpty)
         {
             if (!shipments.IsCountEqualTo(1))
             {
@@ -46,16 +47,20 @@ namespace ShipWorks.Shipping.Editing
 
             loadedShipment = shipments.Single();
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(loadedShipment, createIfEmpty);
+            }
+
             foreach (ShipmentReturnItemEntity item in loadedShipment.ShipmentReturnItem)
             {
                 GridRow row = new GridRow(item.Name) {Tag = item};
-
                 itemsGrid.Rows.Add(row);
             }
         }
 
         /// <summary>
-        /// Selected customs row has changed
+        /// Selected return row has changed
         /// </summary>
         private void OnItemsGridChangeSelectedRow(object sender, SelectionChangedEventArgs e)
         {
@@ -68,12 +73,11 @@ namespace ShipWorks.Shipping.Editing
             else
             {
                 name.TextChanged -= OnDescriptionChanged;
-
                 selectedRows = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
 
                 using (MultiValueScope scope = new MultiValueScope())
                 {
-                    foreach (ShipmentReturnItemEntity returnItem in CustomsItemsFromRows(selectedRows))
+                    foreach (ShipmentReturnItemEntity returnItem in ReturnItemsFromRows(selectedRows))
                     {
                         LoadFormData(returnItem);
                     }
@@ -93,7 +97,7 @@ namespace ShipWorks.Shipping.Editing
             name.ApplyMultiText(returnItem.Name);
             sku.ApplyMultiText(returnItem.SKU);
             code.ApplyMultiText(returnItem.Code);
-            quantity.ApplyMultiText(returnItem.Quantity.ToString());
+            quantity.ApplyMultiText(returnItem.Quantity.ToString(CultureInfo.InvariantCulture));
             weight.ApplyMultiWeight(returnItem.Weight);
             notes.ApplyMultiText(returnItem.Notes);
         }
@@ -117,7 +121,9 @@ namespace ShipWorks.Shipping.Editing
         private void ClearValues()
         {
             selectedRows.Clear();
-            
+
+            itemsGrid.SelectedElements.Clear();
+                
             name.TextChanged -= OnDescriptionChanged;
 
             name.Text = string.Empty;
@@ -135,7 +141,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void SaveValuesToSelectedEntities()
         {
-            foreach (ShipmentReturnItemEntity returnItem in CustomsItemsFromRows(selectedRows))
+            foreach (ShipmentReturnItemEntity returnItem in ReturnItemsFromRows(selectedRows))
             {
                 SaveReturnItem(returnItem);
             }
@@ -144,39 +150,31 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Saves the customs item.
+        /// Saves the return item.
         /// </summary>
-        /// <param name="returnItem">The customs item.</param>
+        /// <param name="returnItem">The return item.</param>
         protected virtual void SaveReturnItem(ShipmentReturnItemEntity returnItem)
         {
-            try
+            quantity.ReadMultiText(s =>
             {
-                quantity.ReadMultiText(s =>
+                double quantityValue;
+                if (double.TryParse(s, NumberStyles.Any, null, out quantityValue))
                 {
-                    double quantityValue;
-                    if (double.TryParse(s, NumberStyles.Any, null, out quantityValue))
+                    if (Math.Abs(quantityValue - returnItem.Quantity) > .01)
                     {
-                        if (quantityValue != returnItem.Quantity)
-                        {
-                            returnItem.Quantity = quantityValue;
-                        }
+                        returnItem.Quantity = quantityValue;
                     }
-                });
-                weight.ReadMultiWeight(newWeight =>
-                {
-                    if (returnItem.Weight != newWeight)
-                    {
-                        returnItem.Weight = newWeight;
-                    }
-                });
-               
-            }
-            catch (ORMEntityIsDeletedException ex)
-            {
-                // ShipSense sync might delete the original customs item i think.
-                // log.Error(string.Format("Error saving customs item: {0}", ex.Message));
-            }
+                }
+            });
 
+            weight.ReadMultiWeight(newWeight =>
+            {
+                if (Math.Abs(returnItem.Weight - newWeight) > .01)
+                {
+                    returnItem.Weight = newWeight;
+                }
+            });
+               
             name.ReadMultiText(s => returnItem.Name = s);
             sku.ReadMultiText(s => returnItem.SKU = s);
             code.ReadMultiText(s => returnItem.Code = s);
@@ -186,15 +184,17 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the return items from all the selected rows
         /// </summary>
-        private static IEnumerable<ShipmentReturnItemEntity> CustomsItemsFromRows(IEnumerable<GridRow> shipmentRows) =>
-            shipmentRows.Select(x => x.Tag).Cast<List<ShipmentReturnItemEntity>>().SelectMany(x => x);
-
+        private static IEnumerable<ShipmentReturnItemEntity> ReturnItemsFromRows(IEnumerable<GridRow> shipmentRows)
+        {
+            return shipmentRows.Select(row => row.Tag as ShipmentReturnItemEntity).ToList();
+        }
+          
         /// <summary>
         /// Delete selected return item
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            DialogResult result = MessageHelper.ShowQuestion(this, "Delete all selected customs content?");
+            DialogResult result = MessageHelper.ShowQuestion(this, "Delete all selected return items?");
             if (result != DialogResult.OK)
             {
                 return;
@@ -206,17 +206,16 @@ namespace ShipWorks.Shipping.Editing
             List<GridRow> rowsToRemove = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
 
             // Capture return items that are being removed (and eventually deleted)
-            List<ShipmentReturnItemEntity> returnItems = rowsToRemove.SelectMany(r => (List<ShipmentReturnItemEntity>)r.Tag).ToList();
+            IEnumerable<ShipmentReturnItemEntity> returnItems = ReturnItemsFromRows(rowsToRemove);
 
             // Clear the selection and remove each of the rows
             itemsGrid.SelectedElements.Clear();
             rowsToRemove.ForEach(r => itemsGrid.Rows.Remove(r));
 
-            // Remove the customs items from each of their shipments
+            // Remove the return items from each of their shipments
             foreach (ShipmentReturnItemEntity item in returnItems)
             {
-                ShipmentEntity shipment = item.Shipment;
-                shipment.ShipmentReturnItem.Remove(item);
+                loadedShipment.ShipmentReturnItem.Remove(item);
             }
 
             loadedShipment.ContentWeight = loadedShipment.ShipmentReturnItem.Sum(c => c.Quantity * c.Weight);
@@ -231,15 +230,24 @@ namespace ShipWorks.Shipping.Editing
 
             itemsGrid.SelectedElements.Clear();
 
-            ShipmentReturnItemEntity newItem = new ShipmentReturnItemEntity();
+            ShipmentReturnItemEntity newItem = new ShipmentReturnItemEntity()
+            {
+                ShipmentID = loadedShipment.ShipmentID,
+                Name = string.Empty,
+                SKU = string.Empty,
+                Code = string.Empty,
+                Quantity = 0,
+                Weight = 0,
+                Notes = string.Empty
+            };
             
             GridRow row = new GridRow(newItem.Name) {Tag = newItem};
 
             itemsGrid.Rows.Add(row);
-                
+            loadedShipment.ShipmentReturnItem.Add(newItem);
+
             SelectGridRowByTag(newItem);
             selectedRows = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
-
         }
 
         /// <summary>
@@ -248,7 +256,7 @@ namespace ShipWorks.Shipping.Editing
         private void SelectGridRowByTag(ShipmentReturnItemEntity tag)
         {
             GridRow matchedRow = itemsGrid.Rows.Cast<GridRow>()
-                .FirstOrDefault(r => (ShipmentReturnItemEntity) r.Tag == tag);
+                .FirstOrDefault(r => Equals((ShipmentReturnItemEntity) r.Tag, tag));
 
             if (matchedRow != null)
             {

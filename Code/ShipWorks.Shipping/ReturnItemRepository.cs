@@ -63,7 +63,8 @@ namespace ShipWorks.Shipping
                     Quantity = OrderItemFields.Quantity.ToValue<double>(),
                     Weight = OrderItemFields.Weight.ToValue<double>(),
                     SKU = OrderItemFields.SKU.ToValue<string>(),
-                    Code = OrderItemFields.Code.ToValue<string>()
+                    Code = OrderItemFields.Code.ToValue<string>(),
+                    Notes = string.Empty
                 }).Where(OrderItemFields.OrderID == shipment.OrderID);
 
             shipment.ShipmentReturnItem.AddRange(sqlAdapter.FetchQuery(query));

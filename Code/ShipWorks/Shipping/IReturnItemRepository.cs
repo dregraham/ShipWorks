@@ -1,10 +1,12 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Repository for return items
     /// </summary>
+    [Service]
     public interface IReturnItemRepository
     {
         /// <summary>
