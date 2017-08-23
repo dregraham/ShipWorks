@@ -887,7 +887,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the service control to reflect the currently selected shipment type
         /// </summary>
-        private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
+        private void LoadServiceControl(List<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
@@ -989,7 +989,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load return data into the returns tab
         /// </summary>
-        private void LoadReturnsControl(IEnumerable<ShipmentEntity> shipments, bool createIfEmpty)
+        private void LoadReturnsControl(List<ShipmentEntity> shipments, bool createIfEmpty)
         {
             if (shipments.IsCountGreaterThan(1))
             {
