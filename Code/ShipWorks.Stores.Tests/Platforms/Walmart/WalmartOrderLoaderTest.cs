@@ -92,7 +92,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Assert.Equal(2, orderEntity.OrderItems.Count);
             Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
+        }
 
+        [Fact]
+        public void LoadOrder_LineItemAdded_WhenChargeHasNullProperties()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+            orderDto.orderLines.Single().charges[0] = new chargeType();
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
         }
 
         [Fact]
