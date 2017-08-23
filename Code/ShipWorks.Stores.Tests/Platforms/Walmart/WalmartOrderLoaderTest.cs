@@ -385,6 +385,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
+        public void LoadOrder_DoesNotAddAnyCharges_WhenOrderChargePropertiesAreNull(bool isNew)
+        {
+            orderEntity.IsNew = isNew;
+            orderDto.orderLines[0].charges = new[] { new chargeType() };
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Empty(orderEntity.OrderCharges);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void LoadOrder_LoadsTax(bool isNew)
         {
             orderEntity.IsNew = isNew;
