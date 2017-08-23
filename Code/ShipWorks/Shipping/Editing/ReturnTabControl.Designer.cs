@@ -35,9 +35,9 @@
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
             this.groupSelectedContent = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.multiValueTextBox2 = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.notes = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelsku = new System.Windows.Forms.Label();
-            this.multiValueTextBox1 = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.sku = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.labelcode = new System.Windows.Forms.Label();
             this.code = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
@@ -99,9 +99,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupSelectedContent.BackColor = System.Drawing.Color.Transparent;
             this.groupSelectedContent.Controls.Add(this.label1);
-            this.groupSelectedContent.Controls.Add(this.multiValueTextBox2);
+            this.groupSelectedContent.Controls.Add(this.notes);
             this.groupSelectedContent.Controls.Add(this.labelsku);
-            this.groupSelectedContent.Controls.Add(this.multiValueTextBox1);
+            this.groupSelectedContent.Controls.Add(this.sku);
             this.groupSelectedContent.Controls.Add(this.labelcode);
             this.groupSelectedContent.Controls.Add(this.code);
             this.groupSelectedContent.Controls.Add(this.weight);
@@ -126,17 +126,17 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Notes:";
             // 
-            // multiValueTextBox2
+            // notes
             // 
-            this.multiValueTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.notes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.multiValueTextBox2.Location = new System.Drawing.Point(105, 188);
-            this.multiValueTextBox2.MaxLength = 14;
-            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox2, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemNote);
-            this.multiValueTextBox2.Multiline = true;
-            this.multiValueTextBox2.Name = "multiValueTextBox2";
-            this.multiValueTextBox2.Size = new System.Drawing.Size(436, 127);
-            this.multiValueTextBox2.TabIndex = 10;
+            this.notes.Location = new System.Drawing.Point(105, 188);
+            this.notes.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.notes, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemNote);
+            this.notes.Multiline = true;
+            this.notes.Name = "notes";
+            this.notes.Size = new System.Drawing.Size(436, 127);
+            this.notes.TabIndex = 10;
             // 
             // labelsku
             // 
@@ -147,16 +147,16 @@
             this.labelsku.TabIndex = 9;
             this.labelsku.Text = "SKU:";
             // 
-            // multiValueTextBox1
+            // sku
             // 
-            this.multiValueTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sku.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.multiValueTextBox1.Location = new System.Drawing.Point(105, 77);
-            this.multiValueTextBox1.MaxLength = 14;
-            this.fieldLengthProvider.SetMaxLengthSource(this.multiValueTextBox1, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemSku);
-            this.multiValueTextBox1.Name = "multiValueTextBox1";
-            this.multiValueTextBox1.Size = new System.Drawing.Size(436, 21);
-            this.multiValueTextBox1.TabIndex = 8;
+            this.sku.Location = new System.Drawing.Point(105, 77);
+            this.sku.MaxLength = 14;
+            this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemSku);
+            this.sku.Name = "sku";
+            this.sku.Size = new System.Drawing.Size(436, 21);
+            this.sku.TabIndex = 8;
             // 
             // labelcode
             // 
@@ -302,9 +302,9 @@
         protected Divelements.SandGrid.SandGrid itemsGrid;
         protected ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private System.Windows.Forms.Label label1;
-        private UI.Controls.MultiValueTextBox multiValueTextBox2;
+        private UI.Controls.MultiValueTextBox notes;
         private System.Windows.Forms.Label labelsku;
-        private UI.Controls.MultiValueTextBox multiValueTextBox1;
+        private UI.Controls.MultiValueTextBox sku;
         private System.Windows.Forms.Label labelcode;
         private UI.Controls.MultiValueTextBox code;
     }
