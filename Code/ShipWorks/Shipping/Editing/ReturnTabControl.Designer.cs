@@ -275,7 +275,7 @@
             this.Controls.Add(this.sectionContents);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ReturnTabControl";
-            this.Size = new System.Drawing.Size(581, 592);
+            this.Size = new System.Drawing.Size(581, 507);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();

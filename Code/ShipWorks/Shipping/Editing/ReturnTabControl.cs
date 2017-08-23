@@ -41,6 +41,13 @@ namespace ShipWorks.Shipping.Editing
 
             weight.TextChanged += OnShipSenseFieldChanged;
             quantity.TextChanged += OnShipSenseFieldChanged;
+
+            name.Leave += OnLeaveAffectingControl;
+            sku.Leave += OnLeaveAffectingControl;
+            code.Leave += OnLeaveAffectingControl;
+            quantity.Leave += OnLeaveAffectingControl;
+            weight.Leave += OnLeaveAffectingControl;
+            notes.Leave += OnLeaveAffectingControl;
         }
       
         public void LoadShipments(List<ShipmentEntity> shipments, bool createIfEmpty)
@@ -237,7 +244,7 @@ namespace ShipWorks.Shipping.Editing
             // Remove the return items from each of their shipments
             foreach (ShipmentReturnItemEntity item in returnItems)
             {
-                loadedShipment.ShipmentReturnItem.Remove(item);
+                bool abcd = loadedShipment.ShipmentReturnItem.Remove(item);
             }
 
             loadedShipment.ContentWeight = loadedShipment.ShipmentReturnItem.Sum(c => c.Quantity * c.Weight);
@@ -288,6 +295,14 @@ namespace ShipWorks.Shipping.Editing
             {
                 matchedRow.Selected = true;
             }
+        }
+
+        /// <summary>
+        /// The focus is leaving a control that affects the item
+        /// </summary>
+        private void OnLeaveAffectingControl(object sender, EventArgs e)
+        {
+            SaveValuesToSelectedEntities();
         }
 
         /// <summary>

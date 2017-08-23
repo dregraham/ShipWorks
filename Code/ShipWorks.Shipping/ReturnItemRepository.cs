@@ -3,6 +3,7 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -49,6 +50,8 @@ namespace ShipWorks.Shipping
                     }
                 }
             }
+
+            shipment.ShipmentReturnItem.RemovedEntitiesTracker = new ShipmentReturnItemCollection();
         }
 
         /// <summary>

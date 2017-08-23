@@ -1480,6 +1480,11 @@ namespace ShipWorks.Shipping
                 ServiceControl?.RefreshContentWeight();
             }
 
+            if (tabControl.SelectedTab == tabPageReturns)
+            {
+                ServiceControl?.RefreshContentWeight();
+            }
+
             // Save the insurance data if we're switching away from the insurance tab
             if (tabControl.SelectedTab == tabPageInsurance)
             {
@@ -1501,7 +1506,7 @@ namespace ShipWorks.Shipping
 
             CustomsControl?.SaveToShipments();
 
-            if (tabControl.SelectedTab == tabPageCustoms)
+            if (tabControl.SelectedTab == tabPageCustoms || tabControl.SelectedTab == tabPageReturns)
             {
                 ServiceControl?.RefreshContentWeight();
             }
