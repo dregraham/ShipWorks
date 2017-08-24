@@ -540,7 +540,7 @@ namespace ShipWorks.Shipping
             // 
             this.panelReturnMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                                                                                      | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelReturnMessage.Controls.Add(this.labelTrackingMessage);
+            this.panelReturnMessage.Controls.Add(this.labelReturnMessage);
             this.panelReturnMessage.Location = new System.Drawing.Point(6, 6);
             this.panelReturnMessage.Name = "panelReturnMessage";
             this.panelReturnMessage.Size = new System.Drawing.Size(373, 129);
