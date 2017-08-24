@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -9,7 +10,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Services;
+using ShipWorks.Stores.Platforms.Walmart.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
 {
@@ -21,6 +22,22 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
     public class WalmartShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long MaxBatchSize = 1000;
+        private readonly IShipmentDetailsUpdater onlineUpdater;
+        private readonly IShippingManager shippingManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WalmartShipmentUploadTask(IShipmentDetailsUpdater onlineUpdater, IShippingManager shippingManager)
+        {
+            this.shippingManager = shippingManager;
+            this.onlineUpdater = onlineUpdater;
+        }
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// This task is for shipments
@@ -49,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -77,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
                     context.ConsumingPostponed();
 
                     // Upload the details, first starting with all the postponed input, plus the current input
-                    UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys), scope);
+                    await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys), scope).ConfigureAwait(false);
                 }
             }
         }
@@ -85,17 +102,15 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private void UpdloadShipmentDetails(WalmartStoreEntity store, IEnumerable<long> shipmentKeys, ILifetimeScope scope)
+        private async Task UpdloadShipmentDetails(WalmartStoreEntity store, IEnumerable<long> shipmentKeys, ILifetimeScope scope)
         {
             try
             {
-                WalmartOnlineUpdater updater = scope.Resolve<WalmartOnlineUpdater>(new TypedParameter(typeof(WalmartStoreEntity), store));
-
                 foreach (long shipmentKey in shipmentKeys)
                 {
-                    ShipmentEntity shipment = scope.Resolve<IShippingManager>().GetShipment(shipmentKey).Shipment;
+                    ShipmentEntity shipment = shippingManager.GetShipment(shipmentKey).Shipment;
 
-                    updater.UpdateShipmentDetails(shipment);
+                    await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
                 }
             }
             catch (WalmartException ex)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -22,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
-        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
         private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
@@ -30,12 +28,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         /// <param name="store"></param>
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
-        public WalmartStoreType(StoreEntity store,
-            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
+        public WalmartStoreType(StoreEntity store)
             : base(store)
         {
-            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
-
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -89,12 +84,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
-
-        /// <summary>
-        /// Create the online update instance commands for Walmart
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
-            onlineUpdateInstanceCommandsFactory(walmartStore).Create();
 
         /// <summary>
         /// Generate the walmart node for the order template
@@ -178,7 +167,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
             secondContainer.FirstGroup.Conditions.Add(notAnyItem);
 
             definition.RootContainer.SecondGroup = secondContainer;
-
 
             return new FilterEntity
             {

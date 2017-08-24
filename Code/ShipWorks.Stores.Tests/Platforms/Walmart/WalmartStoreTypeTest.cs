@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControlWithWalmartTaskType()
         {
             IoC.Initialize(mock.Container);
-            mock.Provide(new WalmartShipmentUploadTask());
+            mock.Provide(mock.Create<WalmartShipmentUploadTask>());
 
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.TypeCode = (int) StoreTypeCode.Walmart;
@@ -51,22 +50,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(mock.Container, store).FirstOrDefault();
 
             Assert.Equal(typeof(WalmartShipmentUploadTask), actionTask.GetType());
-        }
-
-        [Fact]
-        public void CreateOnlineUpdateInstanceCommands_DelegatesToWalmartOnlineUpdateInstanceCommandsFactory()
-        {
-            WalmartStoreEntity store = new WalmartStoreEntity();
-            store.TypeCode = (int) StoreTypeCode.Walmart;
-
-            var commandFactory = mock.Mock<IWalmartOnlineUpdateInstanceCommands>();
-            mock.MockFunc<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands>(commandFactory);
-
-            WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
-
-            testObject.CreateOnlineUpdateInstanceCommands();
-
-            commandFactory.Verify(x => x.Create(), Times.Once);
         }
     }
 }

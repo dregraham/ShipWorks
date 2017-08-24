@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using System.Globalization;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Signs the given request with the timestamp and generated signature
         /// </summary>
-        public void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store)
+        public void Sign(IHttpRequestSubmitter requestSubmitter, IWalmartStoreEntity store)
         {
             string epoch = (dateTimeProvider.Epoc * 1000).ToString(CultureInfo.InvariantCulture);
             RsaKeyParameters rsaKeyParameter;
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 byte[] keyBytes = Convert.FromBase64String(encryptionProvider.Decrypt(store.PrivateKey));
                 AsymmetricKeyParameter asymmetricKeyParameter = PrivateKeyFactory.CreateKey(keyBytes);
-                rsaKeyParameter = (RsaKeyParameters)asymmetricKeyParameter;
+                rsaKeyParameter = (RsaKeyParameters) asymmetricKeyParameter;
             }
             catch (Exception)
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
             byte[] signed = signer.GenerateSignature();
 
-            string signature =  Convert.ToBase64String(signed);
+            string signature = Convert.ToBase64String(signed);
 
             requestSubmitter.Headers.Add("WM_SEC.TIMESTAMP", epoch);
             requestSubmitter.Headers.Add("WM_SEC.AUTH_SIGNATURE", signature);

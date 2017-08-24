@@ -286,7 +286,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdaterTest.cs" />
+    <Compile Include="Platforms\Walmart\ShipmentDetailsUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSignerTest.cs" />

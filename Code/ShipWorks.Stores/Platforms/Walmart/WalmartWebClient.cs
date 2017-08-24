@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
 using System.Linq;
-using Interapptive.Shared.Utility;
+using System.Xml;
+using System.Xml.Serialization;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -48,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Tests the connection to Walmart, throws if invalid credentials
         /// </summary>
-        public void TestConnection(WalmartStoreEntity store)
+        public void TestConnection(IWalmartStoreEntity store)
         {
             IHttpRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(TestConnectionUrl);
@@ -60,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Executes a request
         /// </summary>
-        private string ProcessRequest(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
+        private string ProcessRequest(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
             submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
@@ -90,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Process the request and deserialize the response
         /// </summary>
-        private T ProcessRequest<T>(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
+        private T ProcessRequest<T>(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get the given PurchaseOrderId
         /// </summary>
-        public Order GetOrder(WalmartStoreEntity store, string purchaseOrderId)
+        public Order GetOrder(IWalmartStoreEntity store, string purchaseOrderId)
         {
             IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(string.Format(GetOrderUrl, purchaseOrderId));
@@ -121,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get orders from the given start date
         /// </summary>
-        public ordersListType GetOrders(WalmartStoreEntity store, DateTime start)
+        public ordersListType GetOrders(IWalmartStoreEntity store, DateTime start)
         {
             IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(GetOrdersUrl);
@@ -134,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get orders using the next cursor token
         /// </summary>
-        public ordersListType GetOrders(WalmartStoreEntity store, string nextCursor)
+        public ordersListType GetOrders(IWalmartStoreEntity store, string nextCursor)
         {
             IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri($"{GetOrdersUrl}{nextCursor}");
@@ -145,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Gets orders using the given request submitter
         /// </summary>
-        private ordersListType GetOrders(WalmartStoreEntity store, IHttpRequestSubmitter requestSubmitter)
+        private ordersListType GetOrders(IWalmartStoreEntity store, IHttpRequestSubmitter requestSubmitter)
         {
             requestSubmitter.Verb = HttpVerb.Get;
 
@@ -158,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public Order UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
+        public Order UpdateShipmentDetails(IWalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
         {
             string serializedShipment = SerializationUtility.SerializeToXml(shipment, true);
 
@@ -174,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Acknowledge the given purchase order
         /// </summary>
-        private void AcknowledgeOrders(WalmartStoreEntity store, ordersListType ordersResponse)
+        private void AcknowledgeOrders(IWalmartStoreEntity store, ordersListType ordersResponse)
         {
             for (int i = 0; i < ordersResponse.elements.Length; i++)
             {
