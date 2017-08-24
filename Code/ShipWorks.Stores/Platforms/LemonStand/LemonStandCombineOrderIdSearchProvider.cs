@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// <summary>
     /// Constructor
     /// </summary>
-    [KeyedComponent(typeof(ICombineOrderSearchProvider<string>), StoreTypeCode.LemonStand)]
+    [Component(RegistrationType.Self)]
     public class LemonStandCombineOrderIdSearchProvider : CombineOrderNumberCompleteSearchProvider
     {
         /// <summary>

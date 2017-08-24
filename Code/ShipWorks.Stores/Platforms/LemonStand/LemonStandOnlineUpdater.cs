@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ICombineOrderSearchProvider<string> combinedOrderSearchProvider = scope.ResolveKeyed<ICombineOrderSearchProvider<string>>(StoreTypeCode.LemonStand);
+                    var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
                     IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
                     foreach (string lemonStandOrderID in identifiers)
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Gets the LemonStand shipment ID as it is required to upload tracking information
+        /// Gets the LemonStand shipment ID as it is required to upload tracking information
         /// </summary>
         /// <param name="orderNumber">The Order.OrderNumber.</param>
         /// <returns>LemonStand API Shipment ID</returns>
