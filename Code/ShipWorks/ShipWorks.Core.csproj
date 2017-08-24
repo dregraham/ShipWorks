@@ -1834,6 +1834,10 @@
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\OrderUploadDetails.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />

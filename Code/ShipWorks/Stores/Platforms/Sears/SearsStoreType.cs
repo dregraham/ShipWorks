@@ -196,63 +196,6 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new[]
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails))
-            };
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    SearsOnlineUpdater updater = new SearsOnlineUpdater();
-                    updater.UploadShipmentDetails(shipment);
-                }
-                catch (SearsException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
-
-        /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>

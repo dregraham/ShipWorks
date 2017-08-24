@@ -11,6 +11,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
 {
@@ -59,16 +60,21 @@ namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Run the task
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             foreach (long shipmentID in inputKeys)
             {
                 try
                 {
                     SearsOnlineUpdater updater = new SearsOnlineUpdater();
-                    updater.UploadShipmentDetails(shipmentID);
+                    await updater.UploadShipmentDetails(shipmentID).ConfigureAwait(false);
                 }
                 catch (SearsException ex)
                 {

@@ -8,11 +8,13 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -139,9 +141,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Upload the details of the given shipment to Sears
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public void UploadShipmentDetails(SearsOrderDetail orderDetail, IEnumerable<SearsTracking> searsTrackingEntries)
         {
-            XDocument xDocument = GenerateShipmentFeedXml(shipment);
+            XDocument xDocument = GenerateShipmentFeedXml(orderDetail, searsTrackingEntries);
 
             HttpXmlVariableRequestSubmitter submitter = new HttpXmlVariableRequestSubmitter();
             submitter.Uri = new Uri(SearsUpdateUrl);
@@ -156,10 +158,8 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Generate the XML to upload to sears for the given shipment
         /// </summary>
-        private XDocument GenerateShipmentFeedXml(ShipmentEntity shipment)
+        private XDocument GenerateShipmentFeedXml(SearsOrderDetail orderDetail, IEnumerable<SearsTracking> searsTrackingEntries)
         {
-            SearsOrderEntity order = (SearsOrderEntity) shipment.Order;
-
             XNamespace nsDefault = XNamespace.Get("http://seller.marketplace.sears.com/oms/v7");
             XNamespace nsXsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
@@ -170,13 +170,13 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             XElement xShipment = new XElement(nsDefault + "shipment",
                 new XElement(nsDefault + "header",
-                    new XElement(nsDefault + "asn-number", order.PoNumber + "1000"),
-                    new XElement(nsDefault + "po-number", order.PoNumber),
-                    new XElement(nsDefault + "po-date", SearsUtility.ConvertUtcToSearsTimeZone(order.OrderDate).ToString("yyyy-MM-dd"))));
+                    new XElement(nsDefault + "asn-number", orderDetail.PoNumber + "1000"),
+                    new XElement(nsDefault + "po-number", orderDetail.PoNumber),
+                    new XElement(nsDefault + "po-date", SearsUtility.ConvertUtcToSearsTimeZone(orderDetail.OrderDate).ToString("yyyy-MM-dd"))));
 
-            foreach (SearsOrderItemEntity orderItem in DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).OfType<SearsOrderItemEntity>())
+            foreach (SearsTracking searsTracking in searsTrackingEntries)
             {
-                string trackingNumber = shipment.TrackingNumber.Trim();
+                string trackingNumber = searsTracking.TrackingNumber.Trim();
                 if (string.IsNullOrEmpty(trackingNumber))
                 {
                     trackingNumber = "Tracking unavailable";
@@ -184,21 +184,19 @@ namespace ShipWorks.Stores.Platforms.Sears
                 xShipment.Add(
                     new XElement(nsDefault + "detail",
                         new XElement(nsDefault + "tracking-number", trackingNumber),
-                        new XElement(nsDefault + "ship-date", shipment.ShipDate.ToString("yyyy-MM-dd")),
-                        new XElement(nsDefault + "shipping-carrier", SearsUtility.GetShipmentCarrierCode(shipment)),
-                        new XElement(nsDefault + "shipping-method", SearsUtility.GetShipmentServiceCode(shipment)),
+                        new XElement(nsDefault + "ship-date", searsTracking.ShipDate.ToString("yyyy-MM-dd")),
+                        new XElement(nsDefault + "shipping-carrier", searsTracking.Carrier),
+                        new XElement(nsDefault + "shipping-method", searsTracking.Method),
                         new XElement(nsDefault + "package-detail",
-                            new XElement(nsDefault + "line-number", orderItem.LineNumber),
-                            new XElement(nsDefault + "item-id", orderItem.ItemID),
-                            new XElement(nsDefault + "quantity", orderItem.Quantity))));
+                            new XElement(nsDefault + "line-number", searsTracking.LineNumber),
+                            new XElement(nsDefault + "item-id", searsTracking.ItemID),
+                            new XElement(nsDefault + "quantity", searsTracking.Quantity))));
             }
 
             xDoc.Root.Add(xShipment);
 
             return xDoc;
         }
-
-
 
         /// <summary>
         /// Process a given request, logged based on the specified action

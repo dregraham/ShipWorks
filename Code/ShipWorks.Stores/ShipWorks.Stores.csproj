@@ -462,6 +462,7 @@
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
+    <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreator.cs" />
