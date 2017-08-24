@@ -549,6 +549,8 @@
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
     <Compile Include="Platforms\Yahoo\Content\YahooCombineOrderAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

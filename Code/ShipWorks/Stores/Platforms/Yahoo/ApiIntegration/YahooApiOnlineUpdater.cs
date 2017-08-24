@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -7,23 +8,26 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 {
     /// <summary>
     /// Uploads shipment details and order status to Yahoo
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class YahooApiOnlineUpdater
+    [Component]
+    public class YahooApiOnlineUpdater : IYahooApiOnlineUpdater
     {
         private readonly ILog log;
-        private readonly IYahooApiWebClient client;
+        private readonly IYahooApiWebClient webClient;
         private readonly IShippingManager shippingManager;
+        private readonly IYahooCombineOrderSearchProvider orderNumberSearchProvider;
 
         private readonly List<string> acceptedCarrierNames = new List<string>()
         {
@@ -37,20 +41,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
         /// </summary>
-        public YahooApiOnlineUpdater(YahooStoreEntity store,
+        public YahooApiOnlineUpdater(
             Func<Type, ILog> createLog,
-            Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
-            IShippingManager shippingManager)
+            IYahooApiWebClient webClient,
+            IShippingManager shippingManager,
+            IYahooCombineOrderSearchProvider orderNumberSearchProvider)
         {
+            this.orderNumberSearchProvider = orderNumberSearchProvider;
+            this.webClient = webClient;
             this.log = createLog(GetType());
-            this.client = createWebClient(store);
             this.shippingManager = shippingManager;
         }
 
         /// <summary>
         /// Changes the status of a Yahoo order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, string status)
+        public async Task UpdateOrderStatus(IYahooStoreEntity store, long orderID, string status)
         {
             YahooOrderEntity order = (YahooOrderEntity) DataProvider.GetEntity(orderID);
 
@@ -61,7 +67,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     return;
                 }
 
-                client.UploadOrderStatus(order.YahooOrderID, status);
+                var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                foreach (var identifier in identifiers)
+                {
+                    webClient.UploadOrderStatus(store, identifier, status);
+                }
 
                 SaveOrderStatus(orderID, status);
             }
@@ -75,27 +86,24 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Updates the shipment details.
         /// </summary>
         /// <param name="orderKeys">The order keys.</param>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public async Task UpdateShipmentDetails(IYahooStoreEntity store, long orderKey)
         {
-            foreach (long orderKey in orderKeys)
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
+
+            // Check to see if shipment exists
+            if (shipment == null)
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-
-                // Check to see if shipment exists
-                if (shipment == null)
-                {
-                    log.InfoFormat("Not uploading order ID {0}: Has no items.", orderKey);
-                    continue;
-                }
-
-                UpdateShipmentDetails(shipment);
+                log.InfoFormat("Not uploading order ID {0}: Has no items.", orderKey);
+                return;
             }
+
+            await UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         ///     Push the online status for an shipment.
         /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        public async Task UpdateShipmentDetails(IYahooStoreEntity store, ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -103,7 +111,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             if (!order.IsManual)
             {
-                client.UploadShipmentDetails(order.OrderNumber.ToString(), shipment.TrackingNumber, GetCarrierCode(shipment));
+                var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                foreach (var identifier in identifiers)
+                {
+                    webClient.UploadShipmentDetails(store, identifier, shipment.TrackingNumber, GetCarrierCode(shipment));
+                }
             }
 
             string status = shipment.TrackingNumber.IsNullOrWhiteSpace() ? "Shipped" : "Tracked";

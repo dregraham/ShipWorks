@@ -7,8 +7,10 @@ using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
 {
@@ -38,6 +40,11 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
             var query = factory.Create<TEntity>()
                 .Where(predicate);
 
+            if (typeof(TEntity) == typeof(OrderSearchEntity))
+            {
+                query = query.AndWhere(OrderSearchFields.IsManual == false);
+            }
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false) as IEnumerable<TEntity>;
@@ -54,6 +61,11 @@ namespace ShipWorks.Stores.Content.CombinedOrderSearchProviders
             var query = factory.Create<TEntity>()
                 .Select(selectExpression)
                 .Where(predicate);
+
+            if (typeof(TEntity) == typeof(OrderSearchEntity))
+            {
+                query = query.AndWhere(OrderSearchFields.IsManual == false);
+            }
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {

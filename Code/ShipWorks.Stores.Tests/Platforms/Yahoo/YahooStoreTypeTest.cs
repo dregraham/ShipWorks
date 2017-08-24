@@ -130,35 +130,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser()
-        {
-            IEnumerable<IMenuCommand> commands = emailTestObject.CreateOnlineUpdateInstanceCommands();
-
-            Assert.Equal(1, commands.Count());
-
-            Assert.Equal("Upload Shipment Details", commands.FirstOrDefault()?.Text);
-        }
-
-        [Fact]
-        public void CreateOnlineUpdateInstanceCommands_ReturnsUploadShipmentDetailsAndUpdateStatusCommands_WhenApiUser()
-        {
-            List<string> commandNames = apiTestObject.CreateOnlineUpdateInstanceCommands()
-                .Select(command => command.Text).ToList();
-
-            Assert.Equal(7, commandNames.Count);
-
-            foreach (EnumEntry<YahooApiOrderStatus> orderStatus in orderStatuses.
-                Where(orderStatus => orderStatus.Value != YahooApiOrderStatus.PartiallyShipped &&
-                orderStatus.Value != YahooApiOrderStatus.FullyShipped
-                && orderStatus.Value != YahooApiOrderStatus.Tracked))
-            {
-                Assert.Contains(orderStatus.Description, commandNames);
-            }
-
-            Assert.Contains("Upload Shipment Details", commandNames);
-        }
-
-        [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenApiUserAndColumnIsOnlineStatus()
         {
             Assert.True(apiTestObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));

@@ -21,10 +21,6 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<YahooApiAccountPageViewModel>();
-
-            builder.RegisterType<YahooApiAccountSettingsViewModel>();
-
             builder.RegisterType<YahooApiAccountPageHost>()
                 .Keyed<WizardPage>(StoreTypeCode.Yahoo)
                 .ExternallyOwned();

@@ -1892,6 +1892,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
@@ -1925,6 +1926,7 @@
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailProductWeightsPage.Designer.cs">
       <DependentUpon>YahooEmailProductWeightsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
