@@ -458,6 +458,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShipmentCustomsItemEntity:
 					toReturn = this.ShipmentCustomsItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.ShipmentReturnItemEntity:
+					toReturn = this.ShipmentReturnItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.ShippingDefaultsRuleEntity:
 					toReturn = this.ShippingDefaultsRule;
 					break;
@@ -1438,6 +1441,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ShipmentCustomsItemEntity> ShipmentCustomsItem
 		{
 			get { return new DataSource2<ShipmentCustomsItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentReturnItemEntity instances in the database.</summary>
+		public DataSource2<ShipmentReturnItemEntity> ShipmentReturnItem
+		{
+			get { return new DataSource2<ShipmentReturnItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShippingDefaultsRuleEntity instances in the database.</summary>

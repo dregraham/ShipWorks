@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (190 + 0));
+			this.InitClass( (191 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -182,6 +182,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitServiceStatusEntityInfos();
 			InitShipmentEntityInfos();
 			InitShipmentCustomsItemEntityInfos();
+			InitShipmentReturnItemEntityInfos();
 			InitShippingDefaultsRuleEntityInfos();
 			InitShippingOriginEntityInfos();
 			InitShippingPrintOutputEntityInfos();
@@ -2425,6 +2426,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.HarmonizedCode, 14, 0, 0);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "NumberOfPieces", typeof(System.Int32), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.NumberOfPieces, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentCustomsItemEntity", "UnitPriceAmount", typeof(System.Decimal), false, false, false, false,  (int)ShipmentCustomsItemFieldIndex.UnitPriceAmount, 0, 4, 19);
+		}
+		/// <summary>Inits ShipmentReturnItemEntity's FieldInfo objects</summary>
+		private void InitShipmentReturnItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ShipmentReturnItemFieldIndex), "ShipmentReturnItemEntity");
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "ShipmentReturnItemID", typeof(System.Int64), true, false, true, false,  (int)ShipmentReturnItemFieldIndex.ShipmentReturnItemID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)ShipmentReturnItemFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "ShipmentID", typeof(System.Int64), false, true, false, false,  (int)ShipmentReturnItemFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Quantity, 0, 0, 38);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Weight", typeof(System.Double), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Notes", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Notes, 300, 0, 0);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.SKU, 100, 0, 0);
+			this.AddElementFieldInfo("ShipmentReturnItemEntity", "Code", typeof(System.String), false, false, false, false,  (int)ShipmentReturnItemFieldIndex.Code, 300, 0, 0);
 		}
 		/// <summary>Inits ShippingDefaultsRuleEntity's FieldInfo objects</summary>
 		private void InitShippingDefaultsRuleEntityInfos()

@@ -1280,6 +1280,12 @@
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Editing\ReturnTabControl.cs">
+		<SubType>UserControl</SubType>
+	</Compile>
+    <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
@@ -1292,6 +1298,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipService.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IResidentialDeterminationService.cs" />
+    <Compile Include="Shipping\IReturnItemRepository.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
@@ -1877,6 +1884,7 @@
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
@@ -8042,6 +8050,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>

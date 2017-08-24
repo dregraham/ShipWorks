@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(190);
+			this.InitClass(191);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -179,6 +179,7 @@ namespace ShipWorks.Data.Model
 			InitServiceStatusEntityMappings();
 			InitShipmentEntityMappings();
 			InitShipmentCustomsItemEntityMappings();
+			InitShipmentReturnItemEntityMappings();
 			InitShippingDefaultsRuleEntityMappings();
 			InitShippingOriginEntityMappings();
 			InitShippingPrintOutputEntityMappings();
@@ -2551,6 +2552,21 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "HarmonizedCode", "HarmonizedCode", false, "VarChar", 14, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "NumberOfPieces", "NumberOfPieces", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "UnitPriceAmount", "UnitPriceAmount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
+		}
+
+		/// <summary>Inits ShipmentReturnItemEntity's mappings</summary>
+		private void InitShipmentReturnItemEntityMappings()
+		{
+			this.AddElementMapping("ShipmentReturnItemEntity", @"ShipWorksLocal", @"dbo", "ShipmentReturnItem", 9, 0);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "ShipmentReturnItemID", "ShipmentReturnItemID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Quantity", "Quantity", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Notes", "Notes", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "SKU", "SKU", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("ShipmentReturnItemEntity", "Code", "Code", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits ShippingDefaultsRuleEntity's mappings</summary>

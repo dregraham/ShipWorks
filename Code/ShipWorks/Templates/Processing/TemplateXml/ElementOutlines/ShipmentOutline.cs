@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared;
+using Autofac;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
-using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
 using log4net;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Users;
 using ShipWorks.Shipping.ShipSense;
 
@@ -46,6 +43,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Address", new AddressOutline(context, "from", true), () => new PersonAdapter(Shipment, "Origin"));
 
             AddCustomsElement(context);
+            AddReturnElement(context);
 
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
             AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
@@ -142,6 +140,29 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         }
 
         /// <summary>
+        /// Add customs items to the outline
+        /// </summary>
+        private void AddReturnElement(TemplateTranslationContext context)
+        {
+            AddElement("ReturnItem", new ReturnItemOutline(context), () =>
+            {
+                if (Shipment.ReturnShipment)
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IReturnItemRepository returnItemRepository = scope.Resolve<IReturnItemRepository>();
+
+                        returnItemRepository.LoadReturnData(Shipment, false);
+                    }
+
+                    return Shipment.ReturnItems;
+                }
+
+                return null;
+            });
+        }
+
+        /// <summary>
         /// Create the outline for the ShipmentType element
         /// </summary>
         private ElementOutline CreateShipmentTypeOutline(TemplateTranslationContext context)
@@ -177,15 +198,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             // Now that we have the latest event, we can just return the description for it
             return new BestRateEventsDescription(latestEvent).ToString().Trim();
-        }
-
-        /// <summary>
-        /// Get text describing the ShipSense status of the shipment.
-        /// </summary>
-        private static string GetShipSenseStatusDescription(ShipmentEntity shipment)
-        {
-            ShipSenseStatus status = (ShipSenseStatus)shipment.ShipSenseStatus;
-            return EnumHelper.GetDescription(status);
         }
 
         /// <summary>

@@ -8269,6 +8269,30 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipmentReturnItem.</summary>
+	public enum ShipmentReturnItemFieldIndex
+	{
+		///<summary>ShipmentReturnItemID. </summary>
+		ShipmentReturnItemID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Quantity. </summary>
+		Quantity,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Notes. </summary>
+		Notes,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>Code. </summary>
+		Code,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingDefaultsRule.</summary>
 	public enum ShippingDefaultsRuleFieldIndex
 	{
@@ -11437,6 +11461,8 @@ namespace ShipWorks.Data.Model
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>
 		ShipmentCustomsItemEntity,
+		///<summary>ShipmentReturnItem</summary>
+		ShipmentReturnItemEntity,
 		///<summary>ShippingDefaultsRule</summary>
 		ShippingDefaultsRuleEntity,
 		///<summary>ShippingOrigin</summary>

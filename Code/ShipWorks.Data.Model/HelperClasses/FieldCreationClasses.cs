@@ -19339,6 +19339,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ShipmentReturnItemEntity</summary>
+	public partial class ShipmentReturnItemFields
+	{
+		/// <summary>Creates a new ShipmentReturnItemEntity.ShipmentReturnItemID field instance</summary>
+		public static EntityField2 ShipmentReturnItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.ShipmentReturnItemID);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Notes field instance</summary>
+		public static EntityField2 Notes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Notes);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Code);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ShippingDefaultsRuleEntity</summary>
 	public partial class ShippingDefaultsRuleFields
 	{
