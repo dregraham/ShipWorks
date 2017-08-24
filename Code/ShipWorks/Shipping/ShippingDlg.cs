@@ -1413,8 +1413,9 @@ namespace ShipWorks.Shipping
 
                 if (!tabControl.Contains(tabPageCustoms))
                 {
-                    // Insert after the main tab, but before Tracking
-                    tabControl.TabPages.Insert(1, tabPageCustoms);
+                    // Insert the customs tab after the main tab if no returns tab exists otherwise
+                    // after the return tab
+                    tabControl.TabPages.Insert(tabControl.Contains(tabPageReturns) ? 2 : 1, tabPageCustoms);
                 }
             }
         }
