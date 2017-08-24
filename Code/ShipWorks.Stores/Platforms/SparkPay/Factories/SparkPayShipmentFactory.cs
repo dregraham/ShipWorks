@@ -8,16 +8,25 @@ using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
+    /// <summary>
+    /// SparkPay shipment factory
+    /// </summary>
     public class SparkPayShipmentFactory
     {
         readonly IShippingManager shippingManager;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SparkPayShipmentFactory(IShippingManager shippingManager)
         {
             this.shippingManager = shippingManager;
         }
 
-        public Shipment Create(ShipmentEntity shipment)
+        /// <summary>
+        /// Create a SparkPay shipment
+        /// </summary>
+        public Shipment Create(ShipmentEntity shipment, long orderNumber)
         {
             string carrierName = GetCarrierName(shipment);
             string service = shippingManager.GetOverriddenServiceUsed(shipment).RemoveSymbols();
@@ -25,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
             return new Shipment
             {
                 ShippedAt = (DateTime)shipment.ProcessedDate,
-                OrderId = shipment.Order.OrderNumber,
+                OrderId = orderNumber,
                 TrackingNumbers = shipment.TrackingNumber,
                 ShippingMethod = $"{carrierName} {service}",
                 ShipmentName = $"{carrierName} {service}"

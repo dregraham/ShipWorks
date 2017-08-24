@@ -7,6 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
+using System.Threading.Tasks;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -20,7 +22,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         private readonly SparkPayWebClient webClient;
         private readonly StatusCodeProvider<int> statusCodeProvider;
         private readonly IOrderManager orderManager;
-        private readonly SparkPayShipmentFactory shipmentFactory;
 
         /// <summary>
         /// Constructor
@@ -29,23 +30,21 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             SparkPayStoreEntity store,
             SparkPayWebClient webClient,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
-            IOrderManager orderManager,
-            SparkPayShipmentFactory shipmentFactory)
+            IOrderManager orderManager)
         {
             this.store = store;
             this.webClient = webClient;
             statusCodeProvider = statusCodeProviderFactory(store);
             this.orderManager = orderManager;
-            this.shipmentFactory = shipmentFactory;
         }
 
         /// <summary>
         /// Changes the status of an SparkPay order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode)
+        public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, statusCode, unitOfWork);
+            await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -57,13 +56,13 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Changes the status of an SparkPay order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = orderManager.FetchOrder(orderID);
 
-            if (order != null && !order.IsManual)
+            if (order != null && (!order.IsManual || order.CombineSplitStatus == CombineSplitStatusType.Combined))
             {
-                Order orderResponse = webClient.UpdateOrderStatus(store, order.OrderNumber, statusCode);
+                Order orderResponse = await webClient.UpdateOrderStatus(store, order, statusCode).ConfigureAwait(false);
 
                 order.OnlineStatusCode = orderResponse.OrderStatusId;
                 if (orderResponse.OrderStatusId != null)
@@ -86,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         ///     Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public async Task UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             foreach (long orderKey in orderKeys)
             {
@@ -98,9 +97,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                     continue;
                 }
 
-                if (!shipment.Order.IsManual)
+                if (!shipment.Order.IsManual || shipment.Order.CombineSplitStatus == CombineSplitStatusType.Combined)
                 {
-                    webClient.AddShipment(store, shipmentFactory.Create(shipment));
+                    await webClient.AddShipment(store, shipment).ConfigureAwait(false);
                 }
             }
         }
@@ -108,13 +107,13 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         ///     Push the online status for an shipment.
         /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        public async Task UpdateShipmentDetails(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             if (!shipment.Order.IsManual)
             {
-                webClient.AddShipment(store, shipmentFactory.Create(shipment));
+                await webClient.AddShipment(store, shipment).ConfigureAwait(false);
             }
         }
     }

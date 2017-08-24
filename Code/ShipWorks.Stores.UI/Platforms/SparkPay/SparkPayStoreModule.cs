@@ -24,9 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
                 .Keyed<StoreType>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();
 
-            builder.RegisterType<SparkPayOnlineUpdateInstanceCommandsFactory>()
-                .ExternallyOwned();
-
             builder.RegisterType<SparkPayAccountHost>()
                 .Keyed<WizardPage>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();

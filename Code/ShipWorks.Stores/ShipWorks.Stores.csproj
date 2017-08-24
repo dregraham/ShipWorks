@@ -501,8 +501,10 @@
     <Compile Include="Platforms\SparkPay\DTO\StoresResponse.cs" />
     <Compile Include="Platforms\SparkPay\Enums\SparkPayWebClientApiCall.cs" />
     <Compile Include="Platforms\SparkPay\Factories\HttpJsonVariableRequestSubmitter.cs" />
-    <Compile Include="Platforms\SparkPay\Factories\SparkPayOnlineUpdateInstanceCommandsFactory.cs" />
+    <Compile Include="Platforms\SparkPay\Factories\SparkPayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\SparkPay\Factories\SparkPayShipmentFactory.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdater.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayException.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayDownloader.cs" />

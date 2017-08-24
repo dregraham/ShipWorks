@@ -11,7 +11,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     public class SparkPayStoreType : StoreType
     {
         private readonly StoreEntity store;
-        private readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
         private readonly SparkPayStoreEntity sparkPayStore;
 
@@ -20,14 +19,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public SparkPayStoreType(
             StoreEntity store,
-            Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory
             ) : base(store)
         {
 
             sparkPayStore = (SparkPayStoreEntity) store;
 
-            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             this.statusCodeProviderFactory = statusCodeProviderFactory;
             this.store = store;
         }
@@ -83,19 +80,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 StoreUrl = "",
                 StoreName = "My SparkPay Store",
             };
-        }
-
-        /// <summary>
-        /// Create menu commands for uploading shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            if (sparkPayStore == null)
-            {
-                throw new InvalidOperationException("Non SparkPay store passed to SparkPay license identifier");
-            }
-
-            return onlineUpdateInstanceCommandsFactory(sparkPayStore).Create();
         }
 
         /// <summary>

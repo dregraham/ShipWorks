@@ -13,6 +13,9 @@ using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Stores.Platforms.SparkPay.Enums;
 using HttpJsonVariableRequestSubmitter = ShipWorks.Stores.Platforms.SparkPay.Factories.HttpJsonVariableRequestSubmitter;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.SparkPay.Factories;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -23,6 +26,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     {
         private readonly int OverApiLimitStatusCode = 429;
         private readonly SparkPayWebClientRequestThrottle throttler;
+        private readonly ISparkPayCombineOrderSearchProvider combineOrderSearchProvider;
+        private readonly SparkPayShipmentFactory shipmentFactory;
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClient));
@@ -30,17 +35,21 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Constructor
         /// </summary>
-        public SparkPayWebClient()
+        public SparkPayWebClient(ISparkPayCombineOrderSearchProvider combineOrderSearchProvider, SparkPayShipmentFactory shipmentFactory) : 
+            this(new SparkPayWebClientRequestThrottle(), combineOrderSearchProvider, shipmentFactory)
         {
-            throttler = new SparkPayWebClientRequestThrottle();
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SparkPayWebClient(SparkPayWebClientRequestThrottle throttler)
+        public SparkPayWebClient(SparkPayWebClientRequestThrottle throttler,
+            ISparkPayCombineOrderSearchProvider combineOrderSearchProvider, 
+            SparkPayShipmentFactory shipmentFactory)
         {
             this.throttler = throttler;
+            this.combineOrderSearchProvider = combineOrderSearchProvider;
+            this.shipmentFactory = shipmentFactory;
         }
 
         /// <summary>
@@ -92,35 +101,49 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Adds the given shipment to the order
         /// </summary>
-        public void AddShipment(SparkPayStoreEntity store, Shipment shipment)
+        public async Task AddShipment(SparkPayStoreEntity store, ShipmentEntity shipmentEntity)
         {
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.AddShipment;
 
-            HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
-            string shipmentJson = JsonConvert.SerializeObject(shipment, GetSerializerSettings());
+            IEnumerable<long> orderNumbers = await combineOrderSearchProvider.GetOrderIdentifiers(shipmentEntity.Order).ConfigureAwait(false);
 
-            ConfigureRequest(submitter, store, SparkPayWebClientApiCall.AddShipment, new[] { new HttpVariable("", shipmentJson) }, HttpVerb.Post);
+            foreach (long orderNumber in orderNumbers)
+            {
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
 
-            ProcessRequest<OrdersResponse>(submitter, call);
+                Shipment shipment = shipmentFactory.Create(shipmentEntity, orderNumber);
+                string shipmentJson = JsonConvert.SerializeObject(shipment, GetSerializerSettings());
+
+                ConfigureRequest(submitter, store, call, new[] { new HttpVariable("", shipmentJson) }, HttpVerb.Post);
+
+                ProcessRequest<OrdersResponse>(submitter, call);
+            }
         }
 
         /// <summary>
         /// Updates the orders status
         /// </summary>
-        public Order UpdateOrderStatus(SparkPayStoreEntity store, long orderNumber, int statusId)
+        public async Task<Order> UpdateOrderStatus(SparkPayStoreEntity store, OrderEntity orderEntity, int statusId)
         {
-            SparkPayWebClientApiCall call = SparkPayWebClientApiCall.AddShipment;
+            SparkPayWebClientApiCall call = SparkPayWebClientApiCall.UpdateOrderStatus;
+            IEnumerable<long> orderNumbers = await combineOrderSearchProvider.GetOrderIdentifiers(orderEntity).ConfigureAwait(false);
+            Order order = null;
 
-            HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
-            string path = string.Format(EnumHelper.GetApiValue(SparkPayWebClientApiCall.UpdateOrderStatus), orderNumber);
+            foreach (long orderNumber in orderNumbers)
+            {
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+                string path = string.Format(EnumHelper.GetApiValue(call), orderNumber);
 
-            ConfigureRequest(submitter, store, path, new[] { new HttpVariable("", $"{{\"order_status_id\":{statusId}}}") }, HttpVerb.Put);
+                ConfigureRequest(submitter, store, path, new[] { new HttpVariable("", $"{{\"order_status_id\":{statusId}}}") }, HttpVerb.Put);
 
-            return ProcessRequest<Order>(submitter, call);
+                order = ProcessRequest<Order>(submitter, call);
+            }
+
+            return order;
         }
 
         /// <summary>
-        /// Gets the stores from the given url
+        /// Gets the stores from the given URL
         /// </summary>
         public StoresResponse GetStores(string token, string url)
         {

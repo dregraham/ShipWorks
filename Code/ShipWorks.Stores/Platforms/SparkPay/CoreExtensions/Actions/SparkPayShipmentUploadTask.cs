@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
 {
@@ -42,9 +43,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         ///     Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -70,14 +76,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         ///     Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private void UpdloadShipmentDetails(SparkPayStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UpdloadShipmentDetails(SparkPayStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
@@ -88,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                         ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
                         SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>(new TypedParameter(typeof(SparkPayStoreEntity), store));
 
-                        updater.UpdateShipmentDetails(shipment);
+                        await updater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
                     }
                 }
             }

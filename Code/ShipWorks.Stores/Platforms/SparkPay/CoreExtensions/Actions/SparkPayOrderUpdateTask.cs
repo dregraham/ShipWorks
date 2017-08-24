@@ -6,6 +6,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
 {
@@ -41,9 +42,14 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -63,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions
                     SparkPayOnlineUpdater updater = scope.Resolve<SparkPayOnlineUpdater>(new TypedParameter(typeof(SparkPayStoreEntity), store));
                     foreach (long orderID in inputKeys)
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
                     }
                 }
             }
