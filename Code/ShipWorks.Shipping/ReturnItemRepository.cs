@@ -40,7 +40,8 @@ namespace ShipWorks.Shipping
                         .Where(ShipmentReturnItemFields.ShipmentID == shipment.ShipmentID);
 
                     IEnumerable<ShipmentReturnItemEntity> returnItems =
-                        sqlAdapter.FetchQueryAsync(query).Result.Cast<ShipmentReturnItemEntity>();
+                        sqlAdapter.FetchQueryAsync(query).Result.Cast<ShipmentReturnItemEntity>()
+                            .Where(r => !shipment.ReturnItems?.RemovedEntitiesTracker?.Contains(r) ?? true);
 
                     shipment.ReturnItems.AddRange(returnItems);
 

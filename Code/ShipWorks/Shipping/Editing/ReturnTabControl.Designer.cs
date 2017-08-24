@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sectionContents = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.itemsGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
@@ -72,7 +72,7 @@
             this.sectionContents.Name = "sectionContents";
             this.sectionContents.SectionName = "Contents";
             this.sectionContents.SettingsKey = "{7fa47a04-8bd5-4ea5-a891-ab22cffa8e17}";
-            this.sectionContents.Size = new System.Drawing.Size(572, 497);
+            this.sectionContents.Size = new System.Drawing.Size(572, 418);
             this.sectionContents.TabIndex = 1;
             // 
             // itemsGrid
@@ -83,7 +83,7 @@
             this.gridColumnDescription});
             this.itemsGrid.Location = new System.Drawing.Point(8, 10);
             this.itemsGrid.Name = "itemsGrid";
-            this.itemsGrid.Renderer = windowsXPRenderer1;
+            this.itemsGrid.Renderer = windowsXPRenderer2;
             this.itemsGrid.Size = new System.Drawing.Size(486, 116);
             this.itemsGrid.TabIndex = 0;
             // 
@@ -112,7 +112,7 @@
             this.groupSelectedContent.Controls.Add(this.name);
             this.groupSelectedContent.Location = new System.Drawing.Point(8, 132);
             this.groupSelectedContent.Name = "groupSelectedContent";
-            this.groupSelectedContent.Size = new System.Drawing.Size(551, 328);
+            this.groupSelectedContent.Size = new System.Drawing.Size(551, 245);
             this.groupSelectedContent.TabIndex = 3;
             this.groupSelectedContent.TabStop = false;
             this.groupSelectedContent.Text = "Selected Content";
@@ -120,7 +120,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(60, 188);
+            this.label1.Location = new System.Drawing.Point(17, 161);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 11;
@@ -130,18 +130,18 @@
             // 
             this.notes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.notes.Location = new System.Drawing.Point(105, 188);
+            this.notes.Location = new System.Drawing.Point(62, 161);
             this.notes.MaxLength = 14;
             this.fieldLengthProvider.SetMaxLengthSource(this.notes, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemNote);
             this.notes.Multiline = true;
             this.notes.Name = "notes";
-            this.notes.Size = new System.Drawing.Size(436, 127);
+            this.notes.Size = new System.Drawing.Size(480, 75);
             this.notes.TabIndex = 8;
             // 
             // labelsku
             // 
             this.labelsku.AutoSize = true;
-            this.labelsku.Location = new System.Drawing.Point(69, 80);
+            this.labelsku.Location = new System.Drawing.Point(26, 53);
             this.labelsku.Name = "labelsku";
             this.labelsku.Size = new System.Drawing.Size(30, 13);
             this.labelsku.TabIndex = 9;
@@ -151,17 +151,17 @@
             // 
             this.sku.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sku.Location = new System.Drawing.Point(105, 77);
+            this.sku.Location = new System.Drawing.Point(62, 50);
             this.sku.MaxLength = 14;
             this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemSku);
             this.sku.Name = "sku";
-            this.sku.Size = new System.Drawing.Size(436, 21);
+            this.sku.Size = new System.Drawing.Size(480, 21);
             this.sku.TabIndex = 4;
             // 
             // labelcode
             // 
             this.labelcode.AutoSize = true;
-            this.labelcode.Location = new System.Drawing.Point(63, 107);
+            this.labelcode.Location = new System.Drawing.Point(20, 80);
             this.labelcode.Name = "labelcode";
             this.labelcode.Size = new System.Drawing.Size(36, 13);
             this.labelcode.TabIndex = 7;
@@ -171,11 +171,11 @@
             // 
             this.code.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.code.Location = new System.Drawing.Point(105, 104);
+            this.code.Location = new System.Drawing.Point(62, 77);
             this.code.MaxLength = 14;
             this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemCode);
             this.code.Name = "code";
-            this.code.Size = new System.Drawing.Size(436, 21);
+            this.code.Size = new System.Drawing.Size(480, 21);
             this.code.TabIndex = 5;
             // 
             // weight
@@ -185,7 +185,7 @@
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.ConfigureTelemetryEntityCounts = null;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.weight.Location = new System.Drawing.Point(105, 158);
+            this.weight.Location = new System.Drawing.Point(62, 131);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
@@ -196,7 +196,7 @@
             // labelQuantity
             // 
             this.labelQuantity.AutoSize = true;
-            this.labelQuantity.Location = new System.Drawing.Point(46, 134);
+            this.labelQuantity.Location = new System.Drawing.Point(3, 107);
             this.labelQuantity.Name = "labelQuantity";
             this.labelQuantity.Size = new System.Drawing.Size(53, 13);
             this.labelQuantity.TabIndex = 0;
@@ -205,7 +205,7 @@
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(61, 54);
+            this.labelName.Location = new System.Drawing.Point(18, 27);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(38, 13);
             this.labelName.TabIndex = 2;
@@ -214,7 +214,7 @@
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
-            this.labelWeight.Location = new System.Drawing.Point(54, 159);
+            this.labelWeight.Location = new System.Drawing.Point(11, 132);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 4;
@@ -222,7 +222,7 @@
             // 
             // quantity
             // 
-            this.quantity.Location = new System.Drawing.Point(105, 131);
+            this.quantity.Location = new System.Drawing.Point(62, 104);
             this.quantity.MaxLength = 14;
             this.fieldLengthProvider.SetMaxLengthSource(this.quantity, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemQuantity);
             this.quantity.Name = "quantity";
@@ -233,11 +233,11 @@
             // 
             this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.name.Location = new System.Drawing.Point(105, 51);
+            this.name.Location = new System.Drawing.Point(62, 24);
             this.name.MaxLength = 300;
             this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.ReturnItemName);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(436, 21);
+            this.name.Size = new System.Drawing.Size(480, 21);
             this.name.TabIndex = 3;
             // 
             // delete
@@ -275,7 +275,7 @@
             this.Controls.Add(this.sectionContents);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ReturnTabControl";
-            this.Size = new System.Drawing.Size(581, 507);
+            this.Size = new System.Drawing.Size(581, 429);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();

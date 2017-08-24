@@ -50,6 +50,9 @@ namespace ShipWorks.Shipping.Editing
             notes.Leave += OnLeaveAffectingControl;
         }
       
+        /// <summary>
+        /// Load the shipments into the control
+        /// </summary>
         public void LoadShipments(List<ShipmentEntity> shipments, bool createIfEmpty)
         {
             SuspendShipSenseFieldChangeEvent();
@@ -266,7 +269,7 @@ namespace ShipWorks.Shipping.Editing
             ShipmentReturnItemEntity newItem = new ShipmentReturnItemEntity()
             {
                 ShipmentID = loadedShipment.ShipmentID,
-                Name = string.Empty,
+                Name = "New Item",
                 SKU = string.Empty,
                 Code = string.Empty,
                 Quantity = 0,
