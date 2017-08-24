@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Editing
 
             loadedShipment = shipments.Single();
 
-            sectionContents.Enabled = !loadedShipment.Processed;
+            UpdateEnabledUI(!loadedShipment.Processed);
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -84,6 +84,22 @@ namespace ShipWorks.Shipping.Editing
             }
 
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Set the enabled status of the UI elements
+        /// </summary>
+        private void UpdateEnabledUI(bool enabled)
+        {
+            add.Enabled = enabled;
+            delete.Enabled = enabled;
+
+            name.Enabled = enabled;
+            sku.Enabled = enabled;
+            code.Enabled = enabled;
+            quantity.Enabled = enabled;
+            weight.Enabled = enabled;
+            notes.Enabled = enabled;
         }
 
         /// <summary>
