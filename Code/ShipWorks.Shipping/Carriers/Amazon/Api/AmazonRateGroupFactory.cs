@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     rateResults.Add(rateResult);
                 }
 
-                rateGroup = new RateGroup(rateResults);
+                rateGroup = new RateGroup(rateResults.OrderBy(r => r.Amount));
             }
 
             // Add terms and conditions footnote if needed
