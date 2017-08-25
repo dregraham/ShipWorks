@@ -263,6 +263,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
 
+                GuaranteedDelivery = false,
+
                 GspEligible = false,
                 GspFirstName = "",
                 GspLastName = "",
@@ -373,7 +375,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ebayStore.PayPalApiPassword = "";
             ebayStore.PayPalApiSignature = "";
             ebayStore.PayPalApiCredentialType = (short) PayPalCredentialType.Signature;
-            ebayStore.DownloadItemDetails = false;
+            ebayStore.DownloadItemDetails = true;
             ebayStore.DownloadPayPalDetails = false;
             ebayStore.DownloadOlderOrders = false;
 

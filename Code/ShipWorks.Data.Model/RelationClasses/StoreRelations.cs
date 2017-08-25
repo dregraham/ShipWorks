@@ -208,6 +208,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and JetStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeJetStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(StoreFields.StoreID, JetStoreFields.StoreID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and LemonStandStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeLemonStandStoreEntity
 		{
@@ -414,6 +425,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeGrouponStoreEntity;
 				case "InfopiaStoreEntity":
 					return this.RelationToSubTypeInfopiaStoreEntity;
+				case "JetStoreEntity":
+					return this.RelationToSubTypeJetStoreEntity;
 				case "LemonStandStoreEntity":
 					return this.RelationToSubTypeLemonStandStoreEntity;
 				case "MarketplaceAdvisorStoreEntity":

@@ -308,6 +308,7 @@
     <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Rating\InformationFootnoteViewModel.cs" />
+    <Compile Include="ReturnItemRepository.cs" />
     <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
     <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
     <Compile Include="Services\Builders\ShipmentPackageTypesBuilderFactory.cs" />

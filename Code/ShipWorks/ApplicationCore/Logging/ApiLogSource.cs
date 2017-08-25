@@ -129,6 +129,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		SellerActive,
 		GeekSeller,
         UpsLocalRating,
-        GoogleMaps
+        GoogleMaps,
+        Jet
     }
 }

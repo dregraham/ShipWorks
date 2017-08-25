@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -773,6 +774,14 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2 =>
             (this as IDataAccessAdapter).FetchQueryAsync<T>(query);
+
+        /// <summary>
+        /// SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.Dynamic{``0}).
+        /// Fetches the query specified and returns the results in a list of TElement objects, 
+        /// which are created using the projectorFunc of the query specified.
+        /// </summary>
+        public List<TElement> FetchQuery<TElement>(DynamicQuery<TElement> query) =>
+            (this as IDataAccessAdapter).FetchQuery<TElement>(query);
 
         #endregion
 

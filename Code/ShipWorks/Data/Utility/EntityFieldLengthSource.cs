@@ -165,6 +165,12 @@ namespace ShipWorks.Data.Utility
         AmazonShipmentShippingServiceID,
         AmazonShipmentShippingServiceOfferID,
 
-        OdbcStoreCustomQuery
+        OdbcStoreCustomQuery,
+
+        ReturnItemName,
+        ReturnItemSku,
+        ReturnItemCode,
+        ReturnItemQuantity,
+        ReturnItemNote
     }
 }

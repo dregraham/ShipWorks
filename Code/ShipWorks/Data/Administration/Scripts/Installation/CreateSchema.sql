@@ -155,7 +155,8 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackLeftComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupFeedbackReceivedType] [int] NULL,
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RollupPayPalAddressStatus] [int] NULL
+[RollupPayPalAddressStatus] [int] NULL,
+[GuaranteedDelivery] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -166,7 +167,10 @@ PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
 GO
-
+PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
+GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -1362,7 +1366,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
 [MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DistributionCenterID] [bigint] NOT NULL 
+[DistributionCenterID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
@@ -5074,6 +5078,12 @@ CREATE TABLE [dbo].[WorldShipProcessed]
 [ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
 )
 GO
+PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
+GO
+ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
+GO
+
+GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
 CREATE TABLE [dbo].[ValidatedAddress](
@@ -5105,12 +5115,30 @@ CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
     ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
 GO
 
+PRINT N'Creating [dbo].[ShipmentReturnItem]'
+GO
+CREATE TABLE [dbo].[ShipmentReturnItem]
+(
+[ShipmentReturnItemID] [bigint] NOT NULL IDENTITY(1101, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ShipmentID] [bigint] NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Quantity] [float] NOT NULL,
+[Weight] [float] NOT NULL,
+[Notes] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Code] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShipmentReturnItem] on [dbo].[ShipmentReturnItem]'
+GO
+ALTER TABLE [dbo].[ShipmentReturnItem] ADD CONSTRAINT [PK_ShipmentReturnItem] PRIMARY KEY CLUSTERED  ([ShipmentReturnItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ShipmentReturnItem]'
+GO
+ALTER TABLE [dbo].[ShipmentReturnItem] ADD CONSTRAINT [FK_ShipmentReturnItem_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
 
-GO
-PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
-GO
-ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
-GO
 PRINT N'Altering [dbo].[DimensionsProfile]'
 GO
 PRINT N'Altering [dbo].[EmailAccount]'
@@ -5751,6 +5779,26 @@ GO
 ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 
+PRINT N'Creating table to [dbo].[EtsyOrderItem]'
+GO
+CREATE TABLE [dbo].[EtsyOrderItem](
+	[OrderItemID] [bigint] NOT NULL,
+	[TransactionID] [int] NOT NULL,
+	[ListingID] [int] NOT NULL
+ CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED 
+(
+	[OrderItemID] ASC
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[EtsyOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_EtsyOrderItem_OrderItem] FOREIGN KEY([OrderItemID])
+REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[EtsyOrderItem] CHECK CONSTRAINT [FK_EtsyOrderItem_OrderItem]
+GO
+
 PRINT N'Creating [dbo].[LemonStandStore]'
 GO
 CREATE TABLE [dbo].[LemonStandStore]
@@ -5939,8 +5987,57 @@ PRINT N'Adding foreign keys to [dbo].[WalmartStore]'
 GO
 ALTER TABLE [dbo].[WalmartStore] ADD CONSTRAINT [FK_WalmartStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Creating [dbo].[JetStore]'
+GO
+CREATE TABLE [dbo].[JetStore]
+(
+[StoreID] [bigint] NOT NULL,
+[ApiUser] [nvarchar](100) NOT NULL,
+[Secret] [nvarchar](100) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetStore] on [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [PK_JetStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [FK_JetStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Creating [dbo].[UpsRateTable]'
 GO
+PRINT N'Creating [dbo].[JetOrder]'
+GO
+CREATE TABLE [dbo].[JetOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[MerchantOrderId] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrder] on [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [PK_JetOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating [dbo].[JetOrderItem]'
+GO
+CREATE TABLE [dbo].[JetOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[MerchantSku] [nvarchar](50) NOT NULL,
+[JetOrderItemID] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrderItem] on [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [PK_JetOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [FK_JetOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [FK_JetOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 CREATE TABLE [dbo].[UpsRateTable](
 	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
 	[UploadDate][DateTime2] NOT NULL)

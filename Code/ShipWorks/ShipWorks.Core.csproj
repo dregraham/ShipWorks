@@ -947,6 +947,8 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Common\Net\IJsonRequest.cs" />
+    <Compile Include="Common\Net\JsonRequest.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
     <Compile Include="Common\CompositeValidatorResult.cs" />
@@ -1278,6 +1280,12 @@
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Editing\ReturnTabControl.cs">
+		<SubType>UserControl</SubType>
+	</Compile>
+    <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
@@ -1290,6 +1298,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipService.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IResidentialDeterminationService.cs" />
+    <Compile Include="Shipping\IReturnItemRepository.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
@@ -1729,10 +1738,10 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1744,6 +1753,7 @@
     <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Jet\IJetStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
@@ -1874,6 +1884,7 @@
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
@@ -8040,6 +8051,9 @@
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -10592,6 +10606,7 @@
     <None Include="Resources\infiplex.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
+    <None Include="Resources\jet.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

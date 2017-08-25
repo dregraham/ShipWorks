@@ -21,6 +21,9 @@ $mode = getenv('MODULE_MODE');
 // flag indicating if we will require SSL connection or not (default is true)
 define('REQUIRE_SECURE', $mode !== "DEV");
 
+// flag indicating if we should check to see if the user has admin rights before authenticating
+define('REQUIRE_ADMIN', true);
+
 //set this constant so we can poke into joomla/virtuemart files
 define('_JEXEC', true);
 define('DS', DIRECTORY_SEPARATOR);
@@ -304,6 +307,17 @@ function checkAdminLogin()
   {
     XmlOutput::outputError(50, "Username or password is incorrect");
     return false;
+  }
+
+  if (REQUIRE_ADMIN) 
+  {
+    $user = JUser::getInstance(JUserHelper::getUserID($_REQUEST['username']));
+
+    if(!$user->authorise('core.admin')) 
+    {
+      XmlOutput::outputError(50, "Username or password is incorrect");
+      return false;
+    }
   }
 
   return true;
