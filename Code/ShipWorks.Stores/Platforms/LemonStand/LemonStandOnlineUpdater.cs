@@ -12,7 +12,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -139,10 +138,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ICombineOrderNumberSearchProvider combinedOrderSearchProvider = scope.Resolve<ICombineOrderNumberSearchProvider>();
-                IEnumerable<long> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+                var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
+                IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
-                foreach (long orderNumber in identifiers)
+                foreach (string orderNumber in identifiers)
                 {
                     string shipmentID = GetShipmentID(orderNumber);
 
@@ -156,10 +155,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         /// <param name="orderNumber">The Order.OrderNumber.</param>
         /// <returns>LemonStand API Shipment ID</returns>
-        private string GetShipmentID(long orderNumber)
+        private string GetShipmentID(string orderID)
         {
-            string orderID = orderNumber.ToString();
-
             // use order id to get invoice
             JToken invoice = client.GetOrderInvoice(orderID);
             string invoiceID = invoice.SelectToken("data.invoices.data").Children().First().SelectToken("id").ToString();
