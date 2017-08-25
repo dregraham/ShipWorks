@@ -405,7 +405,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             item.ThreeDCartShipmentID = threeDCartItem.ItemShipmentID;
 
             LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
-            LoadItemNameAndAttributes(item, threeDCartItem);
+
+            // Each option line (name, selected values and their prices) is separated by <br><b>
+            string[] descriptionLines = threeDCartItem.ItemDescription.Split(new[] { "<br><b>" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // First line of description is the item name, the rest are options/attributes
+            item.Name = descriptionLines[0];
+
+            LoadItemAttributes(item, descriptionLines.Skip(1));
 
             // There are some cases where discounts don't show in order discount field and actually appear as a separate item.
             // When this happens, it has no item price, but an item option price, which we usually ignore since we
@@ -418,54 +425,55 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 item.UnitPrice = Math.Round(threeDCartItem.ItemOptionPrice, 2);
             }
         }
-
         /// <summary>
         /// Loads the item name and attributes.
         /// </summary>
-        private void LoadItemNameAndAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
+        private void LoadItemAttributes(ThreeDCartOrderItemEntity item, IEnumerable<string> itemOptionLines)
         {
-            string itemDescription = threeDCartItem.ItemDescription;
-            string[] splitDescription = itemDescription.Split(new[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries);
-
-            item.Name = splitDescription[0];
-
-            for (int i = 1; i < splitDescription.Length; i++)
+            foreach (string descriptionLine in itemOptionLines)
             {
-                string optionHtml = splitDescription[i];
+                // The option name is always followed by </b>&nbsp;
+                string[] optionLine = descriptionLine.Split(new [] { "</b>&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
 
-                HtmlDocument htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(optionHtml);
+                // Remove the : because we already add one in the grid
+                string optionName = optionLine[0].Trim().TrimEnd(':');
 
-                // get optionName
-                HtmlNode optionNameNode = htmlDoc.DocumentNode.SelectSingleNode(@"/b");
-                if (optionNameNode == null)
+                foreach (string optionValues in optionLine.Skip(1))
                 {
-                    continue;
+                    // If an item has multiple values for a single option, they are split by <br>
+                    string[] optionValueLines = optionValues.Split(new[] {"<br>"}, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string optionValueLine in optionValueLines)
+                    {
+                        LoadAttribute(item, optionName, optionValueLine);
+                    }
                 }
-                string optionName = optionNameNode.InnerHtml.Trim().TrimEnd(':');
-                string optionNameAndPrice = optionNameNode.SelectSingleNode("./following-sibling::text()").InnerText.Trim();
-
-                // Get unit price
-                Regex pricePattern = new Regex(@"\$\d+(?:\.\d+)?");
-                Match match = pricePattern.Match(optionNameAndPrice);
-                decimal unitPrice = 0;
-                if (match.Groups.Count == 1)
-                {
-                    string amount = match.Groups[0].Value;
-                    decimal.TryParse(amount, NumberStyles.Currency, null, out unitPrice);
-                }
-
-                // Get description
-                Regex removePricePattern = new Regex(@"\-\ \$\d+(?:\.\d+)?");
-                string description =
-                    removePricePattern.Replace(optionNameAndPrice, string.Empty).Trim().Replace(@"&nbsp;", string.Empty);
-
-
-                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                attribute.Name = optionName;
-                attribute.Description = description;
-                attribute.UnitPrice = unitPrice;
             }
+        }
+
+        /// <summary>
+        /// Parses the option value and price out of the option value string and loads the item attribute
+        /// </summary>
+        private void LoadAttribute(ThreeDCartOrderItemEntity item, string optionName, string optionValue)
+        {
+            // Get unit price
+            Regex pricePattern = new Regex(@"\$\d+(?:\.\d+)?");
+            Match match = pricePattern.Match(optionValue);
+            decimal unitPrice = 0;
+            if (match.Groups.Count == 1)
+            {
+                string amount = match.Groups[0].Value;
+                decimal.TryParse(amount, NumberStyles.Currency, null, out unitPrice);
+            }
+
+            // Get description
+            Regex removePricePattern = new Regex(@" \$\d+(?:\.\d+)?");
+            string description =
+                removePricePattern.Replace(optionValue, string.Empty).Trim('-', ' ');
+
+            OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+            attribute.Name = optionName;
+            attribute.Description = description;
+            attribute.UnitPrice = unitPrice;
         }
 
         /// <summary>
