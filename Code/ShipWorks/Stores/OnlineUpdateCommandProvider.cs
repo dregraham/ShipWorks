@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -298,15 +299,20 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool HasOnlineUpdateCommands()
         {
-            return StoreManager.GetAllStores().Any(s => HasOnlineUpdateCommands(StoreTypeManager.GetType(s)));
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return StoreManager.GetAllStores().Any(s => HasOnlineUpdateCommands(lifetimeScope, s));
+            }
         }
 
         /// <summary>
         /// Determines if the given store type instance has any online update commands
         /// </summary>
-        public static bool HasOnlineUpdateCommands(StoreType storeType)
+        public static bool HasOnlineUpdateCommands(ILifetimeScope lifetimeScope, StoreEntity store)
         {
-            return storeType.CreateOnlineUpdateInstanceCommands().Concat(storeType.CreateOnlineUpdateCommonCommands()).Count() > 0;
+            var commandCreator = GetCommandCreator(lifetimeScope, store.StoreTypeCode);
+            return commandCreator.CreateOnlineUpdateCommonCommands().Any() ||
+                commandCreator.CreateOnlineUpdateInstanceCommands(store).Any();
         }
     }
 }
