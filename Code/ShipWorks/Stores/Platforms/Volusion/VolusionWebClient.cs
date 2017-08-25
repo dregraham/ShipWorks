@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -108,7 +107,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Uploads shipment details to Volusion
         /// </summary>
-        [NDependIgnoreLongMethod]
         public void UploadShipmentDetails(IVolusionStoreEntity store, long orderNumber, ShipmentEntity shipment, bool sendEmail)
         {
             try
@@ -129,7 +127,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
             try
             {
                 string trackingNumber = shipment.TrackingNumber;
-                string gateway = GetVolusionGateway(shipment);
 
                 // Adjust tracking details per Mail Innovations and others
                 // From Volusion chat:
@@ -153,49 +150,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         store.ApiPassword,
                         "Insert"));
 
-                string postXml;
-
-                // build the request content to be POSTed to volusion.
-                // MUST be UTF8 or Volusion just silently fails.
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    XmlTextWriter xmlWriter = new XmlTextWriter(stream, Encoding.UTF8);
-
-                    xmlWriter.WriteStartDocument();
-                    xmlWriter.WriteStartElement("xmldata");
-                    xmlWriter.WriteStartElement("TrackingNumbers");
-
-                    xmlWriter.WriteElementString("Gateway", gateway);
-                    xmlWriter.WriteElementString("OrderID", orderNumber.ToString());
-                    xmlWriter.WriteElementString("ShipDate", shipment.ShipDate.ToShortDateString());
-                    xmlWriter.WriteElementString("Shipment_Cost", shipment.ShipmentCost.ToString());
-
-                    if (trackingNumber.Length > 0)
-                    {
-                        // Volusion's XSD only allows tracking numbers up to 30 characters; anything over 30 will cause Volusion to
-                        // fail silently and the order won't get marked as shipped
-                        xmlWriter.WriteElementString("TrackingNumber", trackingNumber.Length > 30 ? trackingNumber.Substring(0, 30) : trackingNumber);
-                    }
-                    else
-                    {
-                        xmlWriter.WriteElementString("TrackingNumber", orderNumber + "NoTrack");
-                    }
-
-                    xmlWriter.WriteElementString("MarkOrderShipped", "true");
-                    xmlWriter.WriteElementString("SendShippedEmail", sendEmail.ToString().ToLower(CultureInfo.InvariantCulture));
-
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.WriteEndDocument();
-                    xmlWriter.Flush();
-
-                    stream.Position = 0;
-
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        postXml = reader.ReadToEnd();
-                    }
-                }
+                string postXml = CreateUploadShipmentDetailsPostXml(shipment, orderNumber, trackingNumber, sendEmail);
 
                 // get data to be posted
                 byte[] postBytes = Encoding.UTF8.GetBytes(postXml);
@@ -214,9 +169,59 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
+        /// Create post XML
+        /// </summary>
+        private string CreateUploadShipmentDetailsPostXml(IShipmentEntity shipment, long orderNumber, string trackingNumber, bool sendEmail)
+        {
+            string gateway = GetVolusionGateway(shipment);
+
+            // build the request content to be POSTed to volusion.
+            // MUST be UTF8 or Volusion just silently fails.
+            using (MemoryStream stream = new MemoryStream())
+            {
+                XmlTextWriter xmlWriter = new XmlTextWriter(stream, Encoding.UTF8);
+
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("xmldata");
+                xmlWriter.WriteStartElement("TrackingNumbers");
+
+                xmlWriter.WriteElementString("Gateway", gateway);
+                xmlWriter.WriteElementString("OrderID", orderNumber.ToString());
+                xmlWriter.WriteElementString("ShipDate", shipment.ShipDate.ToShortDateString());
+                xmlWriter.WriteElementString("Shipment_Cost", shipment.ShipmentCost.ToString());
+
+                if (trackingNumber.Length > 0)
+                {
+                    // Volusion's XSD only allows tracking numbers up to 30 characters; anything over 30 will cause Volusion to
+                    // fail silently and the order won't get marked as shipped
+                    xmlWriter.WriteElementString("TrackingNumber", trackingNumber.Length > 30 ? trackingNumber.Substring(0, 30) : trackingNumber);
+                }
+                else
+                {
+                    xmlWriter.WriteElementString("TrackingNumber", orderNumber + "NoTrack");
+                }
+
+                xmlWriter.WriteElementString("MarkOrderShipped", "true");
+                xmlWriter.WriteElementString("SendShippedEmail", sendEmail.ToString().ToLower(CultureInfo.InvariantCulture));
+
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndDocument();
+                xmlWriter.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the Shipping Gateway (carrier) required by Volusion
         /// </summary>
-        public static string GetVolusionGateway(ShipmentEntity shipment)
+        public static string GetVolusionGateway(IShipmentEntity shipment)
         {
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
