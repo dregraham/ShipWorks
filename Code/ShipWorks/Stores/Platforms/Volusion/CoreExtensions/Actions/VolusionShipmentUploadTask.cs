@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions
                         continue;
                     }
 
-                    shipmentUpdater.UploadShipmentDetails(store, shipment, SendEmail, context.CommitWork);
+                    await shipmentUpdater.UploadShipmentDetails(store, shipment, SendEmail, context.CommitWork).ConfigureAwait(false);
                 }
                 catch (VolusionException ex)
                 {
