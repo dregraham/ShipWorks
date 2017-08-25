@@ -15,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content.CombineOrderActions;
 using ShipWorks.Users.Audit;
+using System;
 
 namespace ShipWorks.Stores.Content
 {
@@ -190,11 +191,20 @@ namespace ShipWorks.Stores.Content
                 combinedOrder = CreateCombinedOrderForManualSurvivingOrder(combinedOrder);
             }
 
+            // Default to now, assuming all orders are manual
+            DateTime onlineLastModified = DateTime.UtcNow;
+
+            // If we have at least one order that is not manual, grab the max last modified
+            if (orders.Any(o => !o.IsManual))
+            {
+                onlineLastModified = orders.Where(o => !o.IsManual).Max(x => x.OnlineLastModified);
+            }
+
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
             combinedOrder.ChangeOrderNumber(orderNumberComplete, string.Empty, string.Empty, combinedOrder.OrderNumber);
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
-            combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
+            combinedOrder.OnlineLastModified = onlineLastModified;
             combinedOrder.RollupItemCount = 0;
             combinedOrder.RollupItemTotalWeight = 0;
             combinedOrder.RollupNoteCount = 0;
