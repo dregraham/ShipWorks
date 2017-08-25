@@ -8,6 +8,12 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using log4net;
+using Interapptive.Shared.Enums;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
+using System.Collections.Generic;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -39,10 +45,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Changes the status of an ThreeDCart order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode)
+        public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, statusCode, unitOfWork);
+            await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -54,55 +60,46 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Changes the status of an ThreeDCart order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
-            if (order != null)
-            {
-                if (!order.IsManual)
-                {
-                    ThreeDCartWebClient client = new ThreeDCartWebClient(threeDCartStore, null);
-                    client.UpdateOrderStatus(order.OrderNumber, order.OrderNumberComplete, statusCode);
 
-                    // Update the local database with the new status
-                    OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
-                    basePrototype.OnlineStatusCode = statusCode;
-                    basePrototype.OnlineStatus = StatusCodeProvider.GetCodeName(statusCode);
-
-                    unitOfWork.AddForSave(basePrototype);
-                }
-                else
-                {
-                    log.InfoFormat("Not uploading order status since order {0} is manual.", order.OrderID);
-                }
-            }
-            else
+            if (order == null)
             {
-                log.WarnFormat("Unable to update online status for order {0}: cannot find order", orderID);
-            }
-        }
-
-        /// <summary>
-        /// Push the online status for an order.
-        /// </summary>
-        public void UpdateShipmentDetails(OrderEntity order)
-        {
-            // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
-            if (shipment == null)
-            {
-                // log that there was no shipment, and return
-                log.DebugFormat("There was no shipment found for order Id: {0}", order.OrderID);
+                log.WarnFormat($"Unable to update online status for order {orderID}: Unable to find order");
                 return;
             }
 
-            UpdateShipmentDetails(shipment);
-        }
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
+            {
+                log.InfoFormat($"Not uploading order status since order {order.OrderNumberComplete} is manual.");
+                return;
+            }
 
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
+                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(orderID).ConfigureAwait(false);
+
+                foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails)
+                {
+                    ThreeDCartWebClient client = new ThreeDCartWebClient(threeDCartStore, null);
+                    client.UpdateOrderStatus(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, statusCode);
+                }
+
+                // Update the local database with the new status
+                OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
+                basePrototype.OnlineStatusCode = statusCode;
+                basePrototype.OnlineStatus = StatusCodeProvider.GetCodeName(statusCode);
+
+                unitOfWork.AddForSave(basePrototype);
+            }
+        }
+        
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(long shipmentID)
+        public async Task UpdateShipmentDetails(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -111,29 +108,34 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 return;
             }
 
-            UpdateShipmentDetails(shipment);
+            await UpdateShipmentDetails(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        private void UpdateShipmentDetails(ShipmentEntity shipment)
+        private async Task UpdateShipmentDetails(ShipmentEntity shipment)
         {
             OrderEntity order = shipment.Order;
-            if (order.IsManual)
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.WarnFormat("Not updating order {0} since it is manual.", shipment.Order.OrderNumberComplete);
                 return;
             }
 
-            // Fetch the order items
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
-            }
+                IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
+                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(order.OrderID).ConfigureAwait(false);
 
-            ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
-            webClient.UploadOrderShipmentDetails(shipment);
+                foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails)
+                {
+                    long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
+
+                    ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
+                    webClient.UploadOrderShipmentDetails(orderDetail, shipmentID, shipment.TrackingNumber);
+                }
+            }
         }
     }
 }

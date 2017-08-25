@@ -97,20 +97,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_ReturnsUploadShipmentDetailsAndUpdateStatusCommands()
-        {
-            List<string> commandNames = testObject.CreateOnlineUpdateInstanceCommands()
-                .Select(command => command.Text).ToList();
-
-            foreach (EnumEntry<ThreeDCartOrderStatus> orderStatus in orderStatuses)
-            {
-                Assert.Contains(orderStatus.Description, commandNames);
-            }
-
-            Assert.Contains("Upload Shipment Details", commandNames);
-        }
-
-        [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenOnlineGridColumnIsOnlineStatus()
         {
             Assert.True(testObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));

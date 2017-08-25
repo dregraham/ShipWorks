@@ -18,6 +18,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.AdvancedApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced;
+using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -170,31 +171,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
-        public void UploadOrderShipmentDetails(ShipmentEntity shipment)
+        public void UploadOrderShipmentDetails(ThreeDCartOnlineUpdatingOrderDetail orderDetail, long threeDCartShipmentID, string trackingNumber)
         {
-            if (shipment.Order.IsManual)
+            if (orderDetail.IsManual)
             {
-                log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", shipment.Order.OrderID);
+                log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", orderDetail.OrderNumberComplete);
                 return;
             }
 
             try
             {
-                OrderEntity order = shipment.Order;
-
-                // Find the first order item that is a ThreeDCartOrderItemEntity
-                ThreeDCartOrderItemEntity threeDCartOrderItem = order.OrderItems.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
-
-                // Get the 3dcart shipment id from the first 3dcart order item
-                if (order.OrderItems == null || !order.OrderItems.Any() || threeDCartOrderItem == null)
-                {
-                    throw new ThreeDCartException("No items were found on the order.  ShipWorks cannot upload tracking information without items from 3dcart.");
-                }
-
-                long threeDCartShipmentID = threeDCartOrderItem.ThreeDCartShipmentID;
-
                 // Create a 3dcart fulfillment
-                CreateFulfillment(order, shipment.TrackingNumber, threeDCartShipmentID);
+                CreateFulfillment(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, trackingNumber, threeDCartShipmentID);
             }
             catch (Exception ex)
             {
@@ -205,10 +193,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Add a fulfillment, aka Shipment, to the ThreeDCart online order
         /// </summary>
-        /// <param name="order">The threeDCart order for the shipment</param>
-        /// <param name="trackingNumber">Tracking number for this shipment</param>
-        /// <param name="threeDCartShipmentID">The 3dcart shipment ID to ship</param>
-        private void CreateFulfillment(OrderEntity order, string trackingNumber, long threeDCartShipmentID)
+        private void CreateFulfillment(long orderNumber, string orderNumberComplete, string trackingNumber, long threeDCartShipmentID)
         {
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter);
             XmlNode response = null;
@@ -216,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             using (cartAPI apiWebService = CreateApiWebService("CreateFulfillment"))
             {
                 // Fix the invoice number to send for the fulfillment
-                string fixedInvoiceNum = FixInvoiceNumberForFulfillment(order.OrderNumber, order.OrderNumberComplete);
+                string fixedInvoiceNum = FixInvoiceNumberForFulfillment(orderNumber, orderNumberComplete);
 
                 // Make the api call to update the order shipment
                 throttler.ExecuteRequest(requestThrottleArgs, () =>
@@ -305,7 +290,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        public void UpdateOrderStatus(long invoiceNumber, string orderNumberComplete, int statusCode)
+        public void UpdateOrderStatus(long orderNumber, string orderNumberComplete, int statusCode)
         {
             XmlNode response = null;
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter);
@@ -313,7 +298,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             try
             {
                 // Fix the invoice number to send for the fulfillment
-                string fixedInvoiceNum = FixInvoiceNumberForFulfillment(invoiceNumber, orderNumberComplete);
+                string fixedInvoiceNum = FixInvoiceNumberForFulfillment(orderNumber, orderNumberComplete);
 
                 using (cartAPI api = CreateApiWebService("UpdateOrderStatus"))
                 {
@@ -339,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 log.ErrorFormat("ShipWorks was unable to update the order status.  Error Message: {0}", errorNode.OuterXml);
                 throw new ThreeDCartException(
-                    $"ShipWorks was unable to update the order status for order number {invoiceNumber}.", errorNode);
+                    $"ShipWorks was unable to update the order status for order number { orderNumber }.", errorNode);
             }
         }
 

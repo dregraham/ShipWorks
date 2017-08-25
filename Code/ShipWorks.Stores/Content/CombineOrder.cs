@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Content
 
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
-            combinedOrder.ChangeOrderNumber(orderNumberComplete);
+            combinedOrder.ChangeOrderNumber(orderNumberComplete, string.Empty, string.Empty, combinedOrder.OrderNumber);
             combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
             combinedOrder.OnlineLastModified = orders.Max(x => x.OnlineLastModified);
             combinedOrder.RollupItemCount = 0;

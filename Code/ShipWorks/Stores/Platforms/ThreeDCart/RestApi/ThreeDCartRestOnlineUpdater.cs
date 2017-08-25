@@ -19,6 +19,11 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
+using Interapptive.Shared.Enums;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -47,10 +52,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Changes the status of an order
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusID)
+        public async Task UpdateOrderStatus(long orderID, int statusID)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, statusID, unitOfWork);
+            await UpdateOrderStatus(orderID, statusID, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -62,22 +67,31 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Changes the status of an order
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusID, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, int statusID, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
 
-            if (order != null)
+            if (order == null)
             {
-                if (order.IsManual)
-                {
-                    log.InfoFormat($"Not uploading order status since order {order.OrderNumberComplete} is manual.");
-                    return;
-                }
+                log.WarnFormat($"Unable to update online status for order {orderID}: Unable to find order");
+                return;
+            }
 
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
+            {
+                log.InfoFormat($"Not uploading order status since order {order.OrderNumberComplete} is manual.");
+                return;
+            }
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
                 ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
 
+                IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
+                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(orderID).ConfigureAwait(false);
+
                 // Downloaded using the SOAP API
-                if (threeDCartOrder == null || threeDCartOrder.ThreeDCartOrderID == -1)
+                if (orderDetails.All(od => od.ThreeDCartOrderID == -1))
                 {
                     log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
                                    "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
@@ -88,42 +102,33 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
 
                 string status = EnumHelper.GetDescription((Enums.ThreeDCartOrderStatus) statusID);
-
                 threeDCartOrder.OnlineStatus = status;
                 threeDCartOrder.OnlineStatusCode = statusID;
 
-                // Fetch the order items
-                using (SqlAdapter adapter = new SqlAdapter())
+                foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails.Where(od => od.ThreeDCartOrderID != -1))
                 {
-                    adapter.FetchEntityCollection(threeDCartOrder.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == threeDCartOrder.OrderID));
+                    long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
+
+                    ThreeDCartShipment shipment = new ThreeDCartShipment()
+                    {
+                        OrderID = orderDetail.ThreeDCartOrderID,
+                        ShipmentID = shipmentID,
+                        ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
+                        ShipmentPhone = threeDCartOrder.ShipPhone,
+                        ShipmentFirstName = threeDCartOrder.ShipFirstName,
+                        ShipmentLastName = threeDCartOrder.ShipLastName,
+                        ShipmentAddress = threeDCartOrder.ShipStreet1,
+                        ShipmentAddress2 = threeDCartOrder.ShipStreet2,
+                        ShipmentCity = threeDCartOrder.ShipCity,
+                        ShipmentState = threeDCartOrder.ShipStateProvCode,
+                        ShipmentZipCode = threeDCartOrder.ShipPostalCode,
+                        ShipmentCountry = threeDCartOrder.ShipCountryCode,
+                        ShipmentCompany = threeDCartOrder.ShipCompany,
+                        ShipmentEmail = threeDCartOrder.ShipEmail,
+                    };
+
+                    webClient.UpdateOrderStatus(shipment);
                 }
-
-                ThreeDCartOrderItemEntity item = threeDCartOrder.OrderItems?.FirstOrDefault() as ThreeDCartOrderItemEntity;
-
-                if (item == null)
-                {
-                    throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload order status information without items from 3dcart.");
-                }
-
-                ThreeDCartShipment shipment = new ThreeDCartShipment()
-                {
-                    OrderID = threeDCartOrder.ThreeDCartOrderID,
-                    ShipmentID = item.ThreeDCartShipmentID,
-                    ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
-                    ShipmentPhone = threeDCartOrder.ShipPhone,
-                    ShipmentFirstName = threeDCartOrder.ShipFirstName,
-                    ShipmentLastName = threeDCartOrder.ShipLastName,
-                    ShipmentAddress = threeDCartOrder.ShipStreet1,
-                    ShipmentAddress2 = threeDCartOrder.ShipStreet2,
-                    ShipmentCity = threeDCartOrder.ShipCity,
-                    ShipmentState = threeDCartOrder.ShipStateProvCode,
-                    ShipmentZipCode = threeDCartOrder.ShipPostalCode,
-                    ShipmentCountry = threeDCartOrder.ShipCountryCode,
-                    ShipmentCompany = threeDCartOrder.ShipCompany,
-                    ShipmentEmail = threeDCartOrder.ShipEmail,
-                };
-
-                webClient.UpdateOrderStatus(shipment);
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
@@ -135,16 +140,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
                 unitOfWork.AddForSave(basePrototype);
             }
-            else
-            {
-                log.WarnFormat($"Unable to update online status for order {orderID}: Unable to find order");
-            }
         }
 
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(OrderEntity order)
+        public async Task UpdateShipmentDetails(OrderEntity order)
         {
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
@@ -155,13 +156,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 return;
             }
 
-            UpdateShipmentDetails(shipment);
+            await UpdateShipmentDetails(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(long shipmentID)
+        public async Task UpdateShipmentDetails(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -170,74 +171,71 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 return;
             }
 
-            UpdateShipmentDetails(shipment);
+            await UpdateShipmentDetails(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Push the shipment details to the store.
         /// </summary>
-        private void UpdateShipmentDetails(ShipmentEntity shipmentEntity)
+        private async Task UpdateShipmentDetails(ShipmentEntity shipmentEntity)
         {
             ShippingManager.EnsureShipmentLoaded(shipmentEntity);
             OrderEntity order = shipmentEntity.Order;
-            if (order.IsManual)
+
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
             {
-                log.WarnFormat($"Not updating order {shipmentEntity.Order.OrderNumberComplete} since it is manual.");
+                log.InfoFormat($"Not uploading order status since order {order.OrderNumberComplete} is manual.");
                 return;
             }
 
-            ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
-
-            // Downloaded using the SOAP API
-            if (threeDCartOrder == null || threeDCartOrder.ThreeDCartOrderID == -1)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
+                ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
+
+                IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
+                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(threeDCartOrder.OrderID).ConfigureAwait(false);
+
+                // Downloaded using the SOAP API
+                if (orderDetails.All(od => od.ThreeDCartOrderID == -1))
+                {
+                    log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
                                    "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
                                    "update using the REST API.");
 
-                throw new ThreeDCartException("3dcart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
+                    throw new ThreeDCartException("3dcart orders downloaded using their SOAP API can not be updated online through ShipWorks after " +
                                                   "your store has been upgraded to use their REST API.");
+                }
+
+                foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails.Where(od => od.ThreeDCartOrderID != -1))
+                {
+                    long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
+
+                    ThreeDCartShipment shipment = new ThreeDCartShipment
+                    {
+                        OrderID = orderDetail.ThreeDCartOrderID,
+                        ShipmentID = shipmentID,
+                        ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
+                        ShipmentMethodName = GetShipmentMethod(shipmentEntity),
+                        ShipmentPhone = shipmentEntity.ShipPhone,
+                        ShipmentFirstName = shipmentEntity.ShipFirstName,
+                        ShipmentLastName = shipmentEntity.ShipLastName,
+                        ShipmentAddress = shipmentEntity.ShipStreet1,
+                        ShipmentAddress2 = shipmentEntity.ShipStreet2,
+                        ShipmentCity = shipmentEntity.ShipCity,
+                        ShipmentState = shipmentEntity.ShipStateProvCode,
+                        ShipmentZipCode = shipmentEntity.ShipPostalCode,
+                        ShipmentCountry = shipmentEntity.ShipCountryCode,
+                        ShipmentCompany = shipmentEntity.ShipCompany,
+                        ShipmentEmail = shipmentEntity.ShipEmail,
+                        ShipmentLastUpdate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                        ShipmentShippedDate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                        ShipmentTrackingCode = shipmentEntity.TrackingNumber,
+                        ShipmentWeight = shipmentEntity.TotalWeight
+                    };
+
+                    webClient.UploadShipmentDetails(shipment);
+                }
             }
-
-            // Fetch the order items
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(threeDCartOrder.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == threeDCartOrder.OrderID));
-            }
-
-            ThreeDCartOrderItemEntity threeDCartOrderItem = threeDCartOrder.OrderItems?.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
-
-            // Get the 3dcart shipment id from the first 3dcart order item
-            if (threeDCartOrderItem == null)
-            {
-                throw new ThreeDCartException("No items were found on the order. ShipWorks cannot upload tracking information without items from 3dcart.");
-            }
-
-            ThreeDCartShipment shipment = new ThreeDCartShipment
-            {
-                OrderID = threeDCartOrder.ThreeDCartOrderID,
-                ShipmentID = threeDCartOrderItem.ThreeDCartShipmentID,
-                ShipmentOrderStatus =
-                    (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
-                ShipmentMethodName = GetShipmentMethod(shipmentEntity),
-                ShipmentPhone = shipmentEntity.ShipPhone,
-                ShipmentFirstName = shipmentEntity.ShipFirstName,
-                ShipmentLastName = shipmentEntity.ShipLastName,
-                ShipmentAddress = shipmentEntity.ShipStreet1,
-                ShipmentAddress2 = shipmentEntity.ShipStreet2,
-                ShipmentCity = shipmentEntity.ShipCity,
-                ShipmentState = shipmentEntity.ShipStateProvCode,
-                ShipmentZipCode = shipmentEntity.ShipPostalCode,
-                ShipmentCountry = shipmentEntity.ShipCountryCode,
-                ShipmentCompany = shipmentEntity.ShipCompany,
-                ShipmentEmail = shipmentEntity.ShipEmail,
-                ShipmentLastUpdate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
-                ShipmentShippedDate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
-                ShipmentTrackingCode = shipmentEntity.TrackingNumber,
-                ShipmentWeight = shipmentEntity.TotalWeight
-            };
-
-            webClient.UploadShipmentDetails(shipment);
         }
 
         /// <summary>

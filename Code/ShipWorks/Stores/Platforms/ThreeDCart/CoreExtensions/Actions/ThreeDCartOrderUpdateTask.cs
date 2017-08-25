@@ -5,6 +5,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -46,9 +47,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -68,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
                     ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
                     foreach (long orderID in inputKeys)
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
                     }
                 }
                 else
@@ -76,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
                     ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
                     foreach (long orderID in inputKeys)
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
                     }
                 }
             }
