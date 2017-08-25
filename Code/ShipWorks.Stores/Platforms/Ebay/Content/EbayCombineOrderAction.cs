@@ -30,6 +30,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
                 LocalEbayOrderID = combinedOrder.OrderID
             }, itemsBucket);
 
+            EbayOrderEntity order = (EbayOrderEntity) combinedOrder;
+
+            order.GspEligible = orders.Where(o => o is EbayOrderEntity).Cast<EbayOrderEntity>()
+                .Any(o => o.GspEligible);
+
             var recordCreator = new SearchRecordMerger<IEbayOrderEntity>(combinedOrder, orders, sqlAdapter);
 
             await recordCreator.Perform(EbayOrderSearchFields.OrderID,
