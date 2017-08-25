@@ -153,5 +153,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.Equal("1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
             Assert.Equal("1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
+
+        [Theory]
+        [InlineData("gu", "US")]
+        [InlineData("Guam", "US")]
+        [InlineData("GGG", "GU")]
+        [InlineData("GGG", "guam")]
+        public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
+        {
+            shipmentEntity.ShipStateProvCode = "GU";
+            shipmentEntity.ShipCountryCode = "US";
+
+            nativeRequest = new ProcessShipmentRequest();
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Equal(string.Empty, nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode);
+            Assert.Equal("GU", nativeRequest.RequestedShipment.Recipient.Address.CountryCode);
+        }
     }
 }
