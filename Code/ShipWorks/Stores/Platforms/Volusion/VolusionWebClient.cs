@@ -1,59 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
-using System.Collections.Specialized;
-using Interapptive.Shared.Net;
-using System.Net;
-using System.Xml;
-using ShipWorks.Shipping.Carriers.Postal;
-using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
-using System.IO;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using System.Web;
-using System.Globalization;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
     /// <summary>
-    /// Web client for the Volusion API.  
-    /// 
+    /// Web client for the Volusion API.
+    /// </summary>
+    /// <remarks>
     /// Not to be confused with the VolusionWebSession class which is used
     /// for screen-scraping connection details for the api
-    /// </summary>
-    public class VolusionWebClient
+    /// </remarks>
+    [Component]
+    public class VolusionWebClient : IVolusionWebClient
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(VolusionWebClient));
-
-        // the store instanec
-        VolusionStoreEntity store;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public VolusionWebClient(VolusionStoreEntity store)
+        public VolusionWebClient(Func<Type, ILog> createLogger)
         {
-            this.store = store;
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Tests credentials against the store to see if they are valid
         /// </summary>
-        public bool ValidateCredentials()
+        public bool ValidateCredentials(IVolusionStoreEntity store)
         {
             try
             {
-                var response = GetCustomer(-1);
+                var response = GetCustomer(store, -1);
 
                 // It seems that sometimes volusion can return null for a GetOrders call and that's OK.  But for GetCustomer, from what I saw,
                 // it only does that if the credentials are bad.  Even for a bad customerID, you still get a response (provided the credentials
@@ -71,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Returns customer information for customer id
         /// </summary>
-        public IXPathNavigable GetCustomer(long customerId)
+        public IXPathNavigable GetCustomer(IVolusionStoreEntity store, long customerId)
         {
             try
             {
@@ -82,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 whereClause.Add("CustomerID", customerId.ToString());
 
                 HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-                ConfigureRequest(submitter, "Generic\\Customers", selectColumns, whereClause);
+                ConfigureRequest(store, submitter, "Generic\\Customers", selectColumns, whereClause);
 
                 return ProcessRequest(submitter, "GetCustomer");
             }
@@ -95,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Downloads orders that are Ready To Ship
         /// </summary>
-        public IXPathNavigable GetOrders(string status)
+        public IXPathNavigable GetOrders(IVolusionStoreEntity store, string status)
         {
             List<string> selectColumns = new List<string>();
             selectColumns.Add("*");
@@ -104,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             whereClause.Add("OrderStatus", status);
 
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-            ConfigureRequest(submitter, "Generic\\Orders", selectColumns, whereClause);
+            ConfigureRequest(store, submitter, "Generic\\Orders", selectColumns, whereClause);
 
             return ProcessRequest(submitter, "GetOrders");
         }
@@ -113,16 +109,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// Uploads shipment details to Volusion
         /// </summary>
         [NDependIgnoreLongMethod]
-        public void UploadShipmentDetails(ShipmentEntity shipment, bool sendEmail)
+        public void UploadShipmentDetails(IVolusionStoreEntity store, long orderNumber, ShipmentEntity shipment, bool sendEmail)
         {
-            OrderEntity order = shipment.Order;
-
-            if (order.IsManual)
-            {
-                log.WarnFormat("Not uploading shipment details since order {0} is manual.", order.OrderID);
-                return;
-            }
-
             try
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
@@ -145,10 +133,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
                 // Adjust tracking details per Mail Innovations and others
                 // From Volusion chat:
-                // Interapptive: OK. Do you know if I send a mail innovations tracking number with UPS as the carrier, 
+                // Interapptive: OK. Do you know if I send a mail innovations tracking number with UPS as the carrier,
                 // will the user get a tracking link to ups.com's tracking page?
                 // Veronica M: Yes.
-                if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) && UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                if (ShipmentTypeManager.IsUps((ShipmentTypeCode) shipment.ShipmentType) && UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
                 {
                     if (shipment.Ups.UspsTrackingNumber.Length > 0)
                     {
@@ -156,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     }
                 }
 
-                Uri uri = GetStoreApiEndpoint();
+                Uri uri = GetStoreApiEndpoint(store);
 
                 // Add the query
                 uri = new Uri(string.Format("{0}?Login={1}&EncryptedPassword={2}&Import={3}",
@@ -178,10 +166,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     xmlWriter.WriteStartElement("TrackingNumbers");
 
                     xmlWriter.WriteElementString("Gateway", gateway);
-                    xmlWriter.WriteElementString("OrderID", order.OrderNumber.ToString());
+                    xmlWriter.WriteElementString("OrderID", orderNumber.ToString());
                     xmlWriter.WriteElementString("ShipDate", shipment.ShipDate.ToShortDateString());
                     xmlWriter.WriteElementString("Shipment_Cost", shipment.ShipmentCost.ToString());
-                    
+
                     if (trackingNumber.Length > 0)
                     {
                         // Volusion's XSD only allows tracking numbers up to 30 characters; anything over 30 will cause Volusion to
@@ -190,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     }
                     else
                     {
-                        xmlWriter.WriteElementString("TrackingNumber", order.OrderNumber + "NoTrack");
+                        xmlWriter.WriteElementString("TrackingNumber", orderNumber + "NoTrack");
                     }
 
                     xmlWriter.WriteElementString("MarkOrderShipped", "true");
@@ -230,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public static string GetVolusionGateway(ShipmentEntity shipment)
         {
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.FedEx:
                     return "FEDEX";
@@ -252,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     {
                         return "DHL";
                     }
-                    
+
                     if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "OTHER";
@@ -329,13 +317,14 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Setup a request 
+        /// Setup a request
         /// </summary>
-        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, string operationName, List<string> selectColumns, NameValueCollection whereClause)
+        private void ConfigureRequest(IVolusionStoreEntity store, HttpVariableRequestSubmitter submitter,
+            string operationName, List<string> selectColumns, NameValueCollection whereClause)
         {
             submitter.Verb = HttpVerb.Get;
 
-            submitter.Uri = GetStoreApiEndpoint();
+            submitter.Uri = GetStoreApiEndpoint(store);
             submitter.Variables.Add("Login", store.WebUserName);
             submitter.Variables.Add("EncryptedPassword", store.ApiPassword);
             submitter.Variables.Add("API_Name", operationName);
@@ -355,7 +344,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Get the URL of the API endpoint for the store
         /// </summary>
-        private Uri GetStoreApiEndpoint()
+        private Uri GetStoreApiEndpoint(IVolusionStoreEntity store)
         {
             try
             {

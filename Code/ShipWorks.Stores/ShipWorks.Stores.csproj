@@ -525,6 +525,8 @@
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartCombineOrderAction.cs" />
+    <Compile Include="Platforms\Volusion\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Volusion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\Content\WalmartCombineOrderAction.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />

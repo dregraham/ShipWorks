@@ -2,8 +2,6 @@
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -160,69 +158,5 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             return base.GridOnlineColumnSupported(column);
         }
-
-        #region Online Update Commands
-
-        /// <summary>
-        /// Create online update commands
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new List<IMenuCommand>
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails))
-            };
-        }
-
-        /// <summary>
-        /// Command handler for setting online order status
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-               "Upload Shipment",
-               "ShipWorks is uploading shipment information",
-               "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // get the store from the order
-            VolusionStoreEntity store = (VolusionStoreEntity) StoreManager.GetRelatedStore(orderID);
-
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    // upload
-                    VolusionOnlineUpdater updater = new VolusionOnlineUpdater(store);
-                    updater.UploadShipmentDetails(shipment, true);
-                }
-                catch (VolusionException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
-
-        #endregion
     }
 }

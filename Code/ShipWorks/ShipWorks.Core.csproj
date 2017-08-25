@@ -1867,6 +1867,7 @@
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
+    <Compile Include="Stores\Platforms\Volusion\IVolusionWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
@@ -6105,7 +6106,7 @@
       <DependentUpon>VolusionCodeRefreshDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Volusion\VolusionDownloader.cs" />
-    <Compile Include="Stores\Platforms\Volusion\VolusionOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Volusion\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionPaymentMethod.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionPaymentMethods.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionException.cs" />
