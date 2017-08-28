@@ -473,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IOrderEntity Order { get; }
         
         IEnumerable<IShipmentCustomsItemEntity> CustomsItems { get; }
+        IEnumerable<IShipmentReturnItemEntity> ReturnItems { get; }
         IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
 
         /// <summary>
@@ -511,6 +512,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IOrderEntity IShipmentEntity.Order => Order;
         
         IEnumerable<IShipmentCustomsItemEntity> IShipmentEntity.CustomsItems => CustomsItems;
+        IEnumerable<IShipmentReturnItemEntity> IShipmentEntity.ReturnItems => ReturnItems;
         IEnumerable<IValidatedAddressEntity> IShipmentEntity.ValidatedAddress => ValidatedAddress;
 
         /// <summary>

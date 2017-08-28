@@ -49,7 +49,7 @@ namespace Interapptive.Shared.Net
         {
             if (Verb == HttpVerb.Get)
             {
-               return QueryStringUtility.GetQueryString(Variables, VariableEncodingCasing);
+                return QueryStringUtility.GetQueryString(Variables, VariableEncodingCasing);
             }
             else
             {

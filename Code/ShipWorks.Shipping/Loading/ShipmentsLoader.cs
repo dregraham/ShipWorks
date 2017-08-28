@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Loading
         private readonly IOrderManager orderManager;
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
         private readonly IShipmentFactory shipmentFactory;
+        private int ensureFiltersUpToDateTimeout;
 
         /// <summary>
         /// Constructor
@@ -46,9 +47,13 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Start the task to load shipments
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public Task<bool> StartTask(IProgressProvider progressProvider, List<long> orderIDs,
-            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
+            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, 
+            bool createIfNoShipments, int ensureFiltersUpToDateTimeout)
         {
+            this.ensureFiltersUpToDateTimeout = ensureFiltersUpToDateTimeout;
+
             IProgressReporter workProgress = progressProvider.AddItem("Load Shipments");
 
             return Task.Run(() =>
@@ -70,7 +75,7 @@ namespace ShipWorks.Shipping.Loading
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
-            bool ensureFilterCountsUpToDateCalled = false;
+            bool ensureFilterCountsUpToDateCalled = ensureFiltersUpToDateTimeout <= 0;
 
             using (ITrackedDurationEvent trackedDurationEvent = startDurationEvent("LoadShipments"))
             {
@@ -94,7 +99,7 @@ namespace ShipWorks.Shipping.Loading
                     if (!ensureFilterCountsUpToDateCalled && orders.Any(o => o.Shipments.Count == 0))
                     {
                         // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-                        filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+                        filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(ensureFiltersUpToDateTimeout));
                         ensureFilterCountsUpToDateCalled = true;
                     }
 

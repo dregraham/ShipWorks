@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Properties;
 using System.Reflection;
+using Autofac;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
@@ -45,11 +47,19 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 
             dashboardBar.Image = Resources.box_software;
             dashboardBar.SecondaryText = "is now available.";
-
-            DashboardBar.ApplyActions(new List<DashboardAction> {
+            
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.Resolve<IUserSession>().User.IsAdmin)
+                {
+                    DashboardBar.ApplyActions(new[]
+                    {
                         new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl),
-                        new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl ) });
-
+                        new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
+                    });
+                }
+            }
+            
             UpdateVersionDisplay();
         }
 

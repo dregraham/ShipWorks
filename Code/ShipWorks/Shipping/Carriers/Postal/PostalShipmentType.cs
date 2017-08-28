@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -500,7 +501,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Indicates if the combination of country, service, and packaging qualifies for the free international delivery confirmation
         /// </summary>
-        public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType packagingType)
+        public bool IsFreeInternationalDeliveryConfirmation(string countryCode, PostalServiceType serviceType, PostalPackagingType? packagingType)
         {
             if (CountriesEligibleForFreeInternationalDeliveryConfirmation().Contains(countryCode, StringComparer.OrdinalIgnoreCase))
             {
@@ -530,6 +531,30 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Does the given rate match the specified service and packaging
+        /// </summary>
+        public bool DoesRateMatchServiceAndPackaging(PostalRateSelection rate,
+            PostalServiceType serviceType,
+            PostalConfirmationType confirmationType,
+            PostalPackagingType? packagingType,
+            string shipCountry)
+        {
+            if (rate.ServiceType != serviceType)
+            {
+                return false;
+            }
+
+            if (rate.ConfirmationType == confirmationType)
+            {
+                return true;
+            }
+
+            return confirmationType == PostalConfirmationType.Delivery &&
+                packagingType.HasValue &&
+                IsFreeInternationalDeliveryConfirmation(shipCountry, serviceType, packagingType.Value);
         }
 
         /// <summary>

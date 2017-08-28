@@ -117,6 +117,8 @@ namespace ShipWorks.Users.Audit
             searchThread.IsBackground = true;
             searchThread.Name = "Related To Search";
             searchThread.Start();
+            
+            UpdateQueryFilter();
         }
 
         /// <summary>

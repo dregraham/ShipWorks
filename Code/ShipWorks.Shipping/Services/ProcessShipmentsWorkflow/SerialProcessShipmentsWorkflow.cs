@@ -58,17 +58,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
             Action counterRateCarrierConfiguredWhileProcessingAction)
         {
+            workProgress.CanCancel = false;
+            workProgress.Starting();
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
             return await Task.Run(() =>
             {
                 ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
-                return input.Where(_ => !cancellationSource.IsCancellationRequested)
+                ProcessShipmentsWorkflowResult result = input.Where(_ => !cancellationSource.IsCancellationRequested)
                     .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
                     .Where(x => x != null)
                     .Aggregate(workflowResult, AggregateResults);
 
+                workProgress.Completed();
+
+                return result;
             });
         }
 

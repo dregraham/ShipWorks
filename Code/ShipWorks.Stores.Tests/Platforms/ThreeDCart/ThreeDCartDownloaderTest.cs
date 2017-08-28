@@ -61,6 +61,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
+        public async void LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
+        {
+            var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
+            Assert.False(orderEntity.OnlineStatus.Equals("Not Complete"));
+        }
+
+        [Fact]
         public async Task LoadOrder_LoadsLastModifiedDate()
         {
             var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),

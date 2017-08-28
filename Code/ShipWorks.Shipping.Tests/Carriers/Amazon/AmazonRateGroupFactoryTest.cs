@@ -61,6 +61,40 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
+        public void GetRateGroupFromResponse_ReturnsRatesSortedByPrice()
+        {
+            GetEligibleShippingServicesResponse response = new GetEligibleShippingServicesResponse
+            {
+                GetEligibleShippingServicesResult = new GetEligibleShippingServicesResult
+                {
+                    ShippingServiceList = new ShippingServiceList
+                    {
+                        ShippingService = new List<ShippingService>
+                        {
+                            new ShippingService {Rate = new Rate() { Amount = 1.249M, CurrencyCode = "US"}},
+                            new ShippingService {Rate = new Rate() { Amount = 10.0M, CurrencyCode = "US"}},
+                            new ShippingService {Rate = new Rate() { Amount = 0.0M, CurrencyCode = "US"}},
+                            new ShippingService {Rate = new Rate() { Amount = -0.04M, CurrencyCode = "US"}},
+                            new ShippingService {Rate = new Rate() { Amount = 1.24M, CurrencyCode = "US"}},
+                            new ShippingService {Rate = new Rate() { Amount = -1.0M, CurrencyCode = "US"}}
+                        }
+                    }
+                }
+            };
+
+            AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
+
+            RateGroup result = testObject.GetRateGroupFromResponse(response);
+
+            Assert.Equal(-1.0M, result.Rates[0].AmountOrDefault);
+            Assert.Equal(-0.04M, result.Rates[1].AmountOrDefault);
+            Assert.Equal(0.0M, result.Rates[2].AmountOrDefault);
+            Assert.Equal(1.24M, result.Rates[3].AmountOrDefault);
+            Assert.Equal(1.249M, result.Rates[4].AmountOrDefault);
+            Assert.Equal(10.0M, result.Rates[5].AmountOrDefault);
+        }
+
+        [Fact]
         public void GetRateGroupFromResponse_ReturnsTermsAndConditionsFootNoteFactory_WhenApiResponseHasTermsAndConditionsCarriers()
         {
             List<string> tAndC = new List<string>() { "FEDEX", "UPS" };

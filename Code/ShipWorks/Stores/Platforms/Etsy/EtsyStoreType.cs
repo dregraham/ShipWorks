@@ -20,6 +20,7 @@ using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Etsy.Dialog;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -58,6 +59,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public EtsyStoreEntity EtsyStore => Store as EtsyStoreEntity;
 
         /// <summary>
+        /// Creates a store-specific instance of an OrderItemEntity
+        /// </summary>
+        public override OrderItemEntity CreateOrderItemInstance()
+        {
+            return new EtsyOrderItemEntity();
+        }
+
+        /// <summary>
         /// Creates a new instance of an Etsy store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
@@ -67,6 +76,18 @@ namespace ShipWorks.Stores.Platforms.Etsy
             InitializeStoreDefaults(etsyStore);
 
             return etsyStore;
+        }
+
+        /// <summary>
+        /// Create the customer Order Item Xml for the order item provided
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity );
+
+            ElementOutline outline = container.AddElement("Etsy");
+            outline.AddElement("TransactionID", () => item.Value?.TransactionID.ToString() ?? string.Empty);
+            outline.AddElement("ListingID", () => item.Value?.ListingID.ToString() ?? string.Empty);
         }
 
         /// <summary>

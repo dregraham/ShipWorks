@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
+using Autofac;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Communication.Throttling;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Shopify.Enums;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
-using Interapptive.Shared.Enums;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
     /// <summary>
     /// Interface to connecting to Shopify
     /// </summary>
-    public class ShopifyWebClient
+    [Component]
+    public class ShopifyWebClient : IShopifyWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyWebClient));
 
@@ -54,15 +55,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             this.store = store;
-
-            if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
-            {
-                throw new ShopifyException("ShopifyShopUrlName is missing.");
-            }
-
-            // Create the Endpoints object for getting api urls
-            endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
-
             this.progress = progress;
         }
 
@@ -73,6 +65,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             get
             {
+                if (endpoints == null)
+                {
+                    if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
+                    {
+                        throw new ShopifyException("ShopifyShopUrlName is missing.");
+                    }
+
+                    // Create the Endpoints object for getting api urls
+                    endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
+                }
+
                 return endpoints;
             }
         }
@@ -300,7 +303,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             request.Variables.Add("fulfillment_status", "any");
 
             // Set max results and page if provided
-            request.Variables.Add("limit", ShopifyConstants.OrdersPageSize.ToString());
+            request.Variables.Add("limit", ShopifyConstants.ShopifyOrdersPerPage.ToString());
 
             // Set page if specified
             if (page > 1)
@@ -444,6 +447,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
+        /// <summary>
+        /// Upload the shipment details for an order
+        /// </summary>
         private void UploadOrderShipmentDetails(ShipmentEntity shipment, long shopifyOrderID, string trackingNumber, string carrier)
         {
             string url = Endpoints.ApiFulfillmentsUrl(shopifyOrderID);
@@ -467,7 +473,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             string jsonRequest = fulfillmentReq.ToString();
 
             // Create the JSON post request submitter, with default params
-            HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") {Verb = HttpVerb.Post};
+            HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") { Verb = HttpVerb.Post };
             request.Uri = new Uri(url);
 
             // The shopify api will return a status code of Created if it can successfully add the shipment.
@@ -489,7 +495,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
-                if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
                 {
                     return "DHL eCommerce";
                 }

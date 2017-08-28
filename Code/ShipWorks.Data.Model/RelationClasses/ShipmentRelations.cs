@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.ShipmentCustomsItemEntityUsingShipmentID);
+			toReturn.Add(this.ShipmentReturnItemEntityUsingShipmentID);
 			toReturn.Add(this.ValidatedAddressEntityUsingConsumerID);
 			toReturn.Add(this.AmazonShipmentEntityUsingShipmentID);
 			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
@@ -62,6 +63,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, ShipmentCustomsItemFields.ShipmentID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentCustomsItemEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ShipmentReturnItemEntity over the 1:n relation they have, using the relation between the fields:
+		/// Shipment.ShipmentID - ShipmentReturnItem.ShipmentID
+		/// </summary>
+		public virtual IEntityRelation ShipmentReturnItemEntityUsingShipmentID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ReturnItems" , true);
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, ShipmentReturnItemFields.ShipmentID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentReturnItemEntity", false);
 				return relation;
 			}
 		}
@@ -337,6 +353,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticShipmentRelations
 	{
 		internal static readonly IEntityRelation ShipmentCustomsItemEntityUsingShipmentIDStatic = new ShipmentRelations().ShipmentCustomsItemEntityUsingShipmentID;
+		internal static readonly IEntityRelation ShipmentReturnItemEntityUsingShipmentIDStatic = new ShipmentRelations().ShipmentReturnItemEntityUsingShipmentID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ShipmentRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation AmazonShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AmazonShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation BestRateShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().BestRateShipmentEntityUsingShipmentID;

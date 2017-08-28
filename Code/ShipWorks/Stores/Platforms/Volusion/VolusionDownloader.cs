@@ -458,12 +458,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 TimeZoneInfo serverTz = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
                 return TimeZoneInfo.ConvertTimeToUtc(serverTime, serverTz);
             }
-            catch (InvalidTimeZoneException)
-            {
-                // just convert directly to UTC
-                return serverTime.ToUniversalTime();
-            }
-            catch (TimeZoneNotFoundException)
+            catch (Exception ex) when (ex is InvalidTimeZoneException || ex is TimeZoneNotFoundException || ex is ArgumentException)
             {
                 // just convert directly to UTC
                 return serverTime.ToUniversalTime();

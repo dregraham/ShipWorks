@@ -887,11 +887,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the service control to reflect the currently selected shipment type
         /// </summary>
-        private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
+        private void LoadServiceControl(List<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
             LoadCustomsControl(shipments, shipmentType, enableEditing);
+            LoadReturnsControl(shipments, false);
 
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
@@ -960,6 +961,7 @@ namespace ShipWorks.Shipping
             newServiceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
             newServiceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
             newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            newServiceControl.ReturnServiceChanged += OnReturnServiceChanged;
             newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
             newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
@@ -977,6 +979,50 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Update the returns control when returns are enabled/disabled
+        /// </summary>
+        private void OnReturnServiceChanged(object sender, EventArgs e)
+        {
+            LoadReturnsControl(uiDisplayedShipments, true);
+        }
+        
+        /// <summary>
+        /// Load return data into the returns tab
+        /// </summary>
+        private void LoadReturnsControl(List<ShipmentEntity> shipments, bool createIfEmpty)
+        {
+            if (shipments.IsCountGreaterThan(1))
+            {
+                returnTabControl.Visible = false;
+                panelReturnMessage.Visible = true;
+            }
+            else
+            {
+                bool anyNeedReturns = shipments.Any(s => s.ReturnShipment);
+                returnTabControl.Visible = true;
+                panelReturnMessage.Visible = false;
+
+                if (!anyNeedReturns && tabControl.Contains(tabPageReturns))
+                {
+                    tabControl.TabPages.Remove(tabPageReturns);
+                }
+
+                if (anyNeedReturns && !tabControl.Contains(tabPageReturns))
+                {
+                    // Insert after the main tab, but before Tracking
+                    tabControl.TabPages.Insert(1, tabPageReturns);
+                }
+
+                if (tabControl.Contains(tabPageReturns))
+                {
+                    returnTabControl.LoadShipments(shipments, createIfEmpty);
+
+                    returnTabControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                }
+            }
+        }
+
+        /// <summary>
         /// Add the new service control to the dialog, if it's not null
         /// </summary>
         private void UnhookEvents(ServiceControlBase oldServiceControl)
@@ -991,6 +1037,7 @@ namespace ShipWorks.Shipping
             oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
             oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
             oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ReturnServiceChanged += OnReturnServiceChanged;
             oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
             oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
             oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
@@ -1366,8 +1413,9 @@ namespace ShipWorks.Shipping
 
                 if (!tabControl.Contains(tabPageCustoms))
                 {
-                    // Insert after the main tab, but before Tracking
-                    tabControl.TabPages.Insert(1, tabPageCustoms);
+                    // Insert the customs tab after the main tab if no returns tab exists otherwise
+                    // after the return tab
+                    tabControl.TabPages.Insert(tabControl.Contains(tabPageReturns) ? 2 : 1, tabPageCustoms);
                 }
             }
         }
@@ -1433,6 +1481,11 @@ namespace ShipWorks.Shipping
                 ServiceControl?.RefreshContentWeight();
             }
 
+            if (tabControl.SelectedTab == tabPageReturns)
+            {
+                ServiceControl?.RefreshContentWeight();
+            }
+
             // Save the insurance data if we're switching away from the insurance tab
             if (tabControl.SelectedTab == tabPageInsurance)
             {
@@ -1454,7 +1507,7 @@ namespace ShipWorks.Shipping
 
             CustomsControl?.SaveToShipments();
 
-            if (tabControl.SelectedTab == tabPageCustoms)
+            if (tabControl.SelectedTab == tabPageCustoms || tabControl.SelectedTab == tabPageReturns)
             {
                 ServiceControl?.RefreshContentWeight();
             }

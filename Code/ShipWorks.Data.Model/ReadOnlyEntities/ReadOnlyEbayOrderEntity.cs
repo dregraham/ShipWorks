@@ -59,6 +59,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RollupFeedbackReceivedType = source.RollupFeedbackReceivedType;
             RollupFeedbackReceivedComments = source.RollupFeedbackReceivedComments;
             RollupPayPalAddressStatus = source.RollupPayPalAddressStatus;
+            GuaranteedDelivery = source.GuaranteedDelivery;
             
             
             
@@ -209,6 +210,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> RollupPayPalAddressStatus { get; }
+        /// <summary> The GuaranteedDelivery property of the Entity EbayOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EbayOrder"."GuaranteedDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean GuaranteedDelivery { get; }
         
         
         
