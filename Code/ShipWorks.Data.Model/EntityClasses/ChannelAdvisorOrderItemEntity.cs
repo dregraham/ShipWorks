@@ -346,8 +346,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DistributionCenter", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("HarmonizedCode", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IsFBA", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("MPN", fieldHashtable);
@@ -464,16 +462,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, true); }
 			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, value); }
-		}
-
-		/// <summary> The HarmonizedCode property of the Entity ChannelAdvisorOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."HarmonizedCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String HarmonizedCode
-		{
-			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, true); }
-			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, value); }
 		}
 
 		/// <summary> The IsFBA property of the Entity ChannelAdvisorOrderItem<br/><br/></summary>

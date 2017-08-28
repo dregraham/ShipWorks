@@ -435,14 +435,13 @@
         <Fields>
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
-          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
-          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
-          <Field Name="IsFBA" Type="bool" FieldIndex="7" />
+          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="8" />
+          <Field Name="IsFBA" Type="bool" FieldIndex="6" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
           <Field Name="MarketplaceName" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="MarketplaceSalesID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="MarketplaceStoreName" Type="string" MaxLength="100" FieldIndex="1" />
-          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="8" />
+          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ChannelAdvisorStore" ObjectID="72a2ba72-deb0-4a13-9de6-7595ad6e7bbe" InheritanceType="2">
@@ -1753,6 +1752,7 @@
         <Fields>
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="14" FieldIndex="18" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -3768,7 +3768,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:57:40.4795986Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-28T14:52:05.9874142Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4167,10 +4167,9 @@
                     <Field Name="MarketplaceSalesID" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="Classification" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="DistributionCenter" Ordinal="7" DbType="12" Length="80" />
-                    <Field Name="HarmonizedCode" Ordinal="8" DbType="12" Length="20" />
-                    <Field Name="IsFBA" Ordinal="9" DbType="2" />
-                    <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
-                    <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
+                    <Field Name="IsFBA" Ordinal="8" DbType="2" />
+                    <Field Name="MPN" Ordinal="9" DbType="12" Length="50" />
+                    <Field Name="DistributionCenterID" Ordinal="10" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -6431,6 +6430,7 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="24" Length="14" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -9521,7 +9521,6 @@
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
             <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
-            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
             <FieldMapping FieldName="MarketplaceName" TargetFieldName="MarketplaceName" />
@@ -10868,6 +10867,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
