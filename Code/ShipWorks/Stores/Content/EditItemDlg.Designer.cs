@@ -460,7 +460,7 @@
             // harmonizedCode
             // 
             this.harmonizedCode.Location = new System.Drawing.Point(109, 256);
-            this.fieldLengthProvider.SetMaxLengthSource(this.harmonizedCode, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
+            this.fieldLengthProvider.SetMaxLengthSource(this.harmonizedCode, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemHarmonizedCode);
             this.harmonizedCode.Name = "harmonizedCode";
             this.harmonizedCode.Size = new System.Drawing.Size(159, 21);
             this.harmonizedCode.TabIndex = 9;
