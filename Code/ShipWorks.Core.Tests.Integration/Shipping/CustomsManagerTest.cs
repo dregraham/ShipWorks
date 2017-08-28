@@ -155,7 +155,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 Assert.Equal("US", customs[0].CountryOfOrigin);
                 Assert.Equal("Foo", customs[0].Description);
                 Assert.Equal(3, customs[0].Quantity);
-                Assert.Equal("HAR123", customs[1].HarmonizedCode);
+                Assert.Equal("HAR123", customs[0].HarmonizedCode);
                 Assert.Equal(2.5, customs[0].Weight);
                 Assert.Equal(5.62M, customs[0].UnitValue);
 
@@ -194,7 +194,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 Assert.Equal("US", customs[0].CountryOfOrigin);
                 Assert.Equal("Foo", customs[0].Description);
                 Assert.Equal(3, customs[0].Quantity);
-                Assert.Equal("HAR123", customs[1].HarmonizedCode);
+                Assert.Equal("HAR123", customs[0].HarmonizedCode);
                 Assert.Equal(2.5, customs[0].Weight);
                 Assert.Equal(5.62M, customs[0].UnitValue);
 
