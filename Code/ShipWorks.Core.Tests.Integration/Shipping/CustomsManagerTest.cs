@@ -155,12 +155,14 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 Assert.Equal("US", customs[0].CountryOfOrigin);
                 Assert.Equal("Foo", customs[0].Description);
                 Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal("HAR123", customs[1].HarmonizedCode);
                 Assert.Equal(2.5, customs[0].Weight);
                 Assert.Equal(5.62M, customs[0].UnitValue);
 
                 Assert.Equal("US", customs[1].CountryOfOrigin);
                 Assert.Equal("Bar", customs[1].Description);
                 Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal("HAR456", customs[1].HarmonizedCode);
                 Assert.Equal(0.6, customs[1].Weight);
                 Assert.Equal(12.61M, customs[1].UnitValue);
             }
@@ -192,12 +194,14 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 Assert.Equal("US", customs[0].CountryOfOrigin);
                 Assert.Equal("Foo", customs[0].Description);
                 Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal("HAR123", customs[1].HarmonizedCode);
                 Assert.Equal(2.5, customs[0].Weight);
                 Assert.Equal(5.62M, customs[0].UnitValue);
 
                 Assert.Equal("US", customs[1].CountryOfOrigin);
                 Assert.Equal("Bar", customs[1].Description);
                 Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal("HAR456", customs[1].HarmonizedCode);
                 Assert.Equal(0.6, customs[1].Weight);
                 Assert.Equal(12.61M, customs[1].UnitValue);
             }
@@ -212,6 +216,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                     i.Set(x => x.UnitPrice, 1.8M);
                     i.Set(x => x.Quantity, 3);
                     i.Set(x => x.Weight, 2.5);
+                    i.Set(x => x.HarmonizedCode, "HAR123");
                     i.WithItemAttribute(ia =>
                     {
                         ia.Set(x => x.Name, "ItemAttr1.1");
@@ -229,6 +234,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                     i.Set(x => x.UnitPrice, 2.2M);
                     i.Set(x => x.Quantity, 2);
                     i.Set(x => x.Weight, 0.6);
+                    i.Set(x => x.HarmonizedCode, "HAR456");
                     i.WithItemAttribute(ia =>
                     {
                         ia.Set(x => x.Name, "ItemAttr2.1");
