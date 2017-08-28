@@ -66,7 +66,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnDefinition("{DE74DE4B-C85E-4942-A77A-25ACC6AFDE67}",
                             new GridTextDisplayType(), "Location", "Aisle 14",
                             OrderItemFields.Location),
-                 
+
+                         new GridColumnDefinition("{B3B7086F-D822-4463-A46E-A1454B576DEC}",
+                             new GridTextDisplayType(), "Harmonized Code", "0105.11.00",
+                             OrderItemFields.Location),
+
                         new GridColumnDefinition("{CDDEFBA1-C576-4290-A530-12F770136EB8}", true,
                             new GridTextDisplayType(), "Qty", "1",
                             OrderItemFields.Quantity) { DefaultWidth = 40 },
