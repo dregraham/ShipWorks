@@ -169,18 +169,32 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             var credentials = GetCredentialsFrom(store);
             List<ShippingResult> results = new List<ShippingResult>();
+            List<NeweggException> exceptions = new List<NeweggException>();
 
             foreach (var identifier in details.Identifiers)
             {
                 // Convert the shipment entity to a shipment object the Newegg API is expecting
                 Shipment apiShipment = CreateNeweggShipment(shipmentEntity, identifier.OrderNumber, details.GetItemsFor(identifier), credentials);
 
-                IShippingRequest shippingRequest = requestFactory.CreateShippingRequest(credentials);
-                var result = await shippingRequest.Ship(apiShipment).ConfigureAwait(false);
-                results.Add(result);
+                try
+                {
+                    IShippingRequest shippingRequest = requestFactory.CreateShippingRequest(credentials);
+                    var result = await shippingRequest.Ship(apiShipment).ConfigureAwait(false);
 
-                // We'll inspect the result for any failure before returning the result to the caller.
-                CheckForShippingFailures(result);
+                    results.Add(result);
+
+                    // We'll inspect the result for any failure before returning the result to the caller.
+                    CheckForShippingFailures(result);
+                }
+                catch (NeweggException ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                throw new NeweggException(string.Join($"{ Environment.NewLine }", exceptions.Select(e => e.Message)));
             }
 
             return results.Select(x => x.Detail.OrderStatus).Distinct();
