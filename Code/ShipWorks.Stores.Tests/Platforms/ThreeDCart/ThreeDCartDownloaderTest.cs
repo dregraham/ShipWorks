@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
     public class ThreeDCartDownloaderTest
     {
         private readonly ThreeDCartRestDownloader testObject;
-        private IEnumerable<ThreeDCartOrder> orders;
+        private readonly IEnumerable<ThreeDCartOrder> orders;
 
         public ThreeDCartDownloaderTest()
         {
