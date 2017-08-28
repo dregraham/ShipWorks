@@ -293,6 +293,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
@@ -395,9 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Platforms\Yahoo\Artifacts\YahooGetOrderResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseWithKitItem.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Platforms\Magento\Artifacts\WeirdMagentoOrder.json" />
