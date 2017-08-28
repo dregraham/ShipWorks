@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (210 + 0));
+			this.InitClass( (211 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -137,6 +137,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitIParcelShipmentEntityInfos();
 			InitJetOrderEntityInfos();
 			InitJetOrderItemEntityInfos();
+			InitJetOrderSearchEntityInfos();
 			InitJetStoreEntityInfos();
 			InitLabelSheetEntityInfos();
 			InitLemonStandOrderEntityInfos();
@@ -1713,6 +1714,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("JetOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)JetOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			this.AddElementFieldInfo("JetOrderItemEntity", "MerchantSku", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.MerchantSku, 50, 0, 0);
 			this.AddElementFieldInfo("JetOrderItemEntity", "JetOrderItemID", typeof(System.String), false, false, false, false,  (int)JetOrderItemFieldIndex.JetOrderItemID, 50, 0, 0);
+		}
+		/// <summary>Inits JetOrderSearchEntity's FieldInfo objects</summary>
+		private void InitJetOrderSearchEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(JetOrderSearchFieldIndex), "JetOrderSearchEntity");
+			this.AddElementFieldInfo("JetOrderSearchEntity", "JetOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)JetOrderSearchFieldIndex.JetOrderSearchID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)JetOrderSearchFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("JetOrderSearchEntity", "MerchantOrderID", typeof(System.String), false, false, false, false,  (int)JetOrderSearchFieldIndex.MerchantOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("JetOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)JetOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits JetStoreEntity's FieldInfo objects</summary>
 		private void InitJetStoreEntityInfos()

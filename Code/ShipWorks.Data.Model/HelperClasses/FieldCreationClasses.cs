@@ -11029,6 +11029,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity JetOrderSearchEntity</summary>
+	public partial class JetOrderSearchFields
+	{
+		/// <summary>Creates a new JetOrderSearchEntity.JetOrderSearchID field instance</summary>
+		public static EntityField2 JetOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.JetOrderSearchID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.MerchantOrderID field instance</summary>
+		public static EntityField2 MerchantOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.MerchantOrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OriginalOrderID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity JetStoreEntity</summary>
 	public partial class JetStoreFields
 	{

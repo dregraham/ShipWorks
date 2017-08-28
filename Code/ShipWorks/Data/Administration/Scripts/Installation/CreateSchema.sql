@@ -5799,7 +5799,7 @@ CREATE TABLE [dbo].[EtsyOrderItem](
 	[OrderItemID] [bigint] NOT NULL,
 	[TransactionID] [int] NOT NULL,
 	[ListingID] [int] NOT NULL
- CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
 (
 	[OrderItemID] ASC
 ) ON [PRIMARY]
@@ -6345,6 +6345,24 @@ PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID] on [dbo].[GrouponOr
 GO
 CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID]) INCLUDE ([OrderID])
 GO
+PRINT N'Creating [dbo].[JetOrderSearch]'
+GO
+CREATE TABLE [dbo].[JetOrderSearch]
+(
+[JetOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
+[OrderID] [bigint] NOT NULL,
+[MerchantOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrderSearch] on [dbo].[JetOrderSearch]'
+GO
+ALTER TABLE [dbo].[JetOrderSearch] ADD CONSTRAINT [PK_JetOrderSearch] PRIMARY KEY CLUSTERED  ([JetOrderSearchID])
+GO
+PRINT N'Creating index [IX_JetOrderSearch_JetOrderID] on [dbo].[JetOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_JetOrderSearch_JetOrderID] ON [dbo].[JetOrderSearch] ([MerchantOrderID]) INCLUDE ([OrderID])
+GO
 PRINT N'Creating [dbo].[LemonStandOrderSearch]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderSearch]
@@ -6549,6 +6567,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[GrouponOrderSearch]'
 GO
 ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [FK_GrouponOrderSearch_GrouponOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[GrouponOrder] ([OrderID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrderSearch]'
+GO
+ALTER TABLE [dbo].[JetOrderSearch] ADD CONSTRAINT [FK_JetOrderSearch_JetOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[JetOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[LemonStandOrderSearch]'
 GO

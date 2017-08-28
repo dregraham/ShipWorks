@@ -4765,6 +4765,20 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetOrderSearch.</summary>
+	public enum JetOrderSearchFieldIndex
+	{
+		///<summary>JetOrderSearchID. </summary>
+		JetOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>MerchantOrderID. </summary>
+		MerchantOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetStore.</summary>
 	public enum JetStoreFieldIndex
 	{
@@ -11735,6 +11749,8 @@ namespace ShipWorks.Data.Model
 		JetOrderEntity,
 		///<summary>JetOrderItem</summary>
 		JetOrderItemEntity,
+		///<summary>JetOrderSearch</summary>
+		JetOrderSearchEntity,
 		///<summary>JetStore</summary>
 		JetStoreEntity,
 		///<summary>LabelSheet</summary>

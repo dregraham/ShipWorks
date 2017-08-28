@@ -628,6 +628,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<JetOrderItemEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the JetOrderSearch entity</summary>
+		public EntityQuery<JetOrderSearchEntity> JetOrderSearch
+		{
+			get { return Create<JetOrderSearchEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the JetStore entity</summary>
 		public EntityQuery<JetStoreEntity> JetStore
 		{

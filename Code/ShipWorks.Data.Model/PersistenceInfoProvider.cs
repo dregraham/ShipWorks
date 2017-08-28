@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(210);
+			this.InitClass(211);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -134,6 +134,7 @@ namespace ShipWorks.Data.Model
 			InitIParcelShipmentEntityMappings();
 			InitJetOrderEntityMappings();
 			InitJetOrderItemEntityMappings();
+			InitJetOrderSearchEntityMappings();
 			InitJetStoreEntityMappings();
 			InitLabelSheetEntityMappings();
 			InitLemonStandOrderEntityMappings();
@@ -1794,6 +1795,16 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("JetOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("JetOrderItemEntity", "MerchantSku", "MerchantSku", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("JetOrderItemEntity", "JetOrderItemID", "JetOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+		}
+
+		/// <summary>Inits JetOrderSearchEntity's mappings</summary>
+		private void InitJetOrderSearchEntityMappings()
+		{
+			this.AddElementMapping("JetOrderSearchEntity", @"ShipWorksLocal", @"dbo", "JetOrderSearch", 4, 0);
+			this.AddElementFieldMapping("JetOrderSearchEntity", "JetOrderSearchID", "JetOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("JetOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("JetOrderSearchEntity", "MerchantOrderID", "MerchantOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("JetOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits JetStoreEntity's mappings</summary>

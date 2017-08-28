@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.JetOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between JetOrderEntity and JetOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// JetOrder.OrderID - JetOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation JetOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "JetOrderSearch" , true);
+				relation.AddEntityFieldPair(JetOrderFields.OrderID, JetOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("JetOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("JetOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between JetOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// JetOrder.OrderID - Note.EntityID
@@ -208,6 +224,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticJetOrderRelations
 	{
+		internal static readonly IEntityRelation JetOrderSearchEntityUsingOrderIDStatic = new JetOrderRelations().JetOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new JetOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new JetOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new JetOrderRelations().OrderItemEntityUsingOrderID;

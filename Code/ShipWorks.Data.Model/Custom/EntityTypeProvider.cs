@@ -107,6 +107,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "IParcelShipmentEntity": return EntityType.IParcelShipmentEntity;
 				case "JetOrderEntity": return EntityType.JetOrderEntity;
 				case "JetOrderItemEntity": return EntityType.JetOrderItemEntity;
+				case "JetOrderSearchEntity": return EntityType.JetOrderSearchEntity;
 				case "JetStoreEntity": return EntityType.JetStoreEntity;
 				case "LabelSheetEntity": return EntityType.LabelSheetEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;

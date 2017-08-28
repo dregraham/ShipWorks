@@ -1839,6 +1839,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty JetOrderSearchEntity objects.</summary>
+	[Serializable]
+	public partial class JetOrderSearchEntityFactory : EntityFactoryBase2<JetOrderSearchEntity> {
+		/// <summary>CTor</summary>
+		public JetOrderSearchEntityFactory() : base("JetOrderSearchEntity", ShipWorks.Data.Model.EntityType.JetOrderSearchEntity, false) { }
+		
+		/// <summary>Creates a new JetOrderSearchEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new JetOrderSearchEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewJetOrderSearchUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty JetStoreEntity objects.</summary>
 	[Serializable]
 	public partial class JetStoreEntityFactory : EntityFactoryBase2<JetStoreEntity> {
@@ -4571,6 +4592,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.JetOrderItemEntity:
 					factoryToUse = new JetOrderItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderSearchEntity:
+					factoryToUse = new JetOrderSearchEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.JetStoreEntity:
 					factoryToUse = new JetStoreEntityFactory();

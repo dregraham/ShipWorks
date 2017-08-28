@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -19,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Jet
     public class JetStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
-        private readonly Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
 
         /// <summary>
         /// The walmart store
@@ -30,12 +27,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Initializes a new instance of the <see cref="JetStoreType"/> class.
         /// </summary>
         public JetStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
-            Func<JetStoreEntity, JetOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
+            IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
-            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             jetStore = (JetStoreEntity) store;
         }
 
@@ -100,13 +95,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Online Status filter.
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices() => new[] { "Acknowledged", "Complete" };
-
-        /// <summary>
-        /// Creates the upload menu commands for Jet
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
-            onlineUpdateInstanceCommandsFactory(jetStore).Create().ToList();
 
         /// <summary>
         /// Creates the add store wizard online update action control for Jet

@@ -16,14 +16,11 @@ namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
     [Component]
     public class ProStoresCombineOrderSearchProvider : CombineOrderSearchBaseProvider<OrderUploadDetails>, IProStoresCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ProStoresCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
