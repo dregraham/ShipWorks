@@ -1288,8 +1288,8 @@
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\ReturnTabControl.cs">
-		<SubType>UserControl</SubType>
-	</Compile>
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
     </Compile>
@@ -1773,6 +1773,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
+    <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
