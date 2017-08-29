@@ -613,6 +613,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 if (nextNumberToTry != null)
                 {
                     nextOrderNumber = nextNumberToTry.Value;
+                    response = webClient.GetOrderRange(store, nextOrderNumber);
                 }
 
                 // After getting more orders, Check if the last order number in the list is the same
