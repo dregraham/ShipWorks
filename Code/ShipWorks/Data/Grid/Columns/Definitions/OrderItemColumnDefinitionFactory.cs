@@ -148,6 +148,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.ChannelAdvisor,
                             },
 
+                         new GridColumnDefinition("{0FCF5C0D-48A6-47E0-8083-2B918814DD3D}",
+                             new GridTextDisplayType(), "Distribution Center Name", "St. Louis",
+                             ChannelAdvisorOrderItemFields.DistributionCenterName)
+                         {
+                             StoreTypeCode = StoreTypeCode.ChannelAdvisor,
+                         },
+
                         new GridColumnDefinition("{6C8862F3-BA65-4F00-8327-0A8C1C7CB4A0}",
                             new GridTextDisplayType(), "Classification", "Custom",
                             ChannelAdvisorOrderItemFields.Classification)
