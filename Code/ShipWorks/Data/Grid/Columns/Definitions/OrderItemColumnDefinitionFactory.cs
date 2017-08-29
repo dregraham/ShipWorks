@@ -142,7 +142,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                          },
 
                         new GridColumnDefinition("{BED1ABAB-4730-4A83-B644-66B43E1D68D2}",
-                            new GridTextDisplayType(), "Distribution Center", "Chicago",
+                            new GridTextDisplayType(), "Distribution Center Code", "Chicago",
                             ChannelAdvisorOrderItemFields.DistributionCenter)
                             {
                                 StoreTypeCode = StoreTypeCode.ChannelAdvisor,
