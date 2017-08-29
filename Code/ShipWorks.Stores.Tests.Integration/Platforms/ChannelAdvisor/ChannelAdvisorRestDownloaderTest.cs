@@ -130,14 +130,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public async Task Download_GetsOrdersFromClientUsingCreatedDateFromPreviousGetOrdersResponse()
-        {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
-
-            client.Verify(c => c.GetOrders(order.CreatedDateUtc, It.IsAny<string>()));
-        }
-
-        [Fact]
         public async Task Download_SetsOrderNotes_WhenOrderContainsNotes()
         {
             await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);

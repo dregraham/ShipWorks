@@ -56,6 +56,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 address.StateOrProvinceCode = "PR";
             }
 
+            if (FedExRequestManipulatorUtilities.IsGuam(address.CountryCode) || FedExRequestManipulatorUtilities.IsGuam(address.StateOrProvinceCode))
+            {
+                address.StateOrProvinceCode = string.Empty;
+                address.CountryCode = "GU";
+            }
+
             // FedEx cannot display more than 50 characters per line of address
             if (address.StreetLines[0].Length > maxAddressLength)
             {

@@ -614,27 +614,29 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <returns></returns>
         private static string GetAmazonShipmentClassCodeUsps(string amazonShippingServiceName)
         {
+            // There are a lot of combinataions of USPS Express/Priority/FirstClass shipments for Amazon shipping
+            // assume that if the service contains USPS and Express that its an express shipment
+            // if the shipment contains USPS and Priority its a priority shipment and so on
+            if (amazonShippingServiceName.Contains("usps", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (amazonShippingServiceName.Contains("express", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return "EXPRESS";
+                }
+
+                if (amazonShippingServiceName.Contains("priority", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return "PRIORITY";
+                }
+
+                if (amazonShippingServiceName.Contains("first class", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return "FIRSTCLASS";
+                }
+            }
+            
             switch (amazonShippingServiceName)
             {
-                case "USPS First Class":
-                    return "FIRSTCLASS";
-                case "USPS Priority Mail":
-                case "USPS Priority Mail Flat Rate Box":
-                case "USPS Priority Mail Small Flat Rate Box":
-                case "USPS Priority Mail Large Flat Rate Box":
-                case "USPS Priority Mail Flat Rate Envelope":
-                case "USPS Priority Mail Legal Flat Rate Envelope":
-                case "USPS Priority Mail Padded Flat Rate Envelope":
-                case "USPS Priority Mail Regional Rate Box A":
-                case "USPS Priority Mail Regional Rate Box B":
-                case "USPS Priority Mail Regional Rate Box C":
-                    return "PRIORITY";
-                case "USPS Priority Mail Express":
-                case "USPS Priority Mail Express Flat Rate Envelope":
-                case "USPS Express Mail":
-                case "USPS Express Mail Flat Rate Envelope":
-                case "USPS Express Mail Legal Flat Rate Envelope":
-                    return "EXPRESS";
                 case "USPS Parcel Select":
                     return "PARCELSELECT";
                 case "USPS Bound Printed Matter":
