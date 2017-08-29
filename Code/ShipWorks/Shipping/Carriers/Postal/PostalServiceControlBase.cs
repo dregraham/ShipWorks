@@ -434,12 +434,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
         }
 
+        /// <summary>
+        /// Update the confirmation types based on the service
+        /// </summary>
         private void UpdateConfirmationTypes(PostalServiceType serviceType)
         {
             // Update the available confirmation types based on the shipping provider
             PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
             UpdateConfirmationTypes(postalShipmentType.GetAvailableConfirmationTypes(personControl.CountryCode,
-                serviceType, (PostalPackagingType) packagingType.SelectedValue));
+                serviceType, (PostalPackagingType?) packagingType.SelectedValue));
         }
 
         /// <summary>
