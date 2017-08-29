@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Interapptive.Shared.StackTraceHelper
@@ -19,7 +18,9 @@ namespace Interapptive.Shared.StackTraceHelper
         private readonly bool storeFileLineColumnInfo;
         private readonly bool justMyCode;
 
+        private static CircularBuffer<StackTraceNode> history = new CircularBuffer<StackTraceNode>(5);
         private AsyncLocal<StackTraceNode> preservedStacks = new AsyncLocal<StackTraceNode>();
+        private static StackTraceNode tagged = null;
 
         /// <summary>
         /// Constructor for stack trace segment lists storage
@@ -43,6 +44,10 @@ namespace Interapptive.Shared.StackTraceHelper
             var toStore = synchronous ? null : preservedStacks.Value.Prepend(GetCurrentSegment());
 
             stacksByTask.AddOrUpdate(taskId, toStore, (tid, existing) => existing.SelectLongest(toStore));
+            if (toStore != null)
+            {
+                history.Put(toStore);
+            }
         }
 
         /// <summary>
@@ -65,23 +70,19 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <summary>
         /// Clear thread-local storage, because a new unrelated work item has started to execute on current thread
         /// </summary>
-        public void ResetLocal() => preservedStacks = null;
+        public void ResetLocal() => preservedStacks.Value = null;
 
         /// <summary>
         /// Get formatted causality chain for current thread
         /// </summary>
         /// <returns>Formatted causality chain</returns>
-        public string GetAggregateStackString()
-        {
-            var builder = new StringBuilder();
-            foreach (var frame in GetCurrentSegment())
-            {
-                builder.AppendLine(frame.ToString().PrettifyFrame());
-            }
+        public string GetAggregateStackString() =>
+            tagged?.ToStringEx() ?? string.Empty;
 
-            builder.Append(preservedStacks?.Value?.ToStringEx() ?? string.Empty);
-            return builder.ToString();
-        }
+        /// <summary>
+        /// Tag the current stack so that we can show the causality chain of the crash and not the crash reporting
+        /// </summary>
+        public void Tag() => tagged = history.Get() ?? tagged;
 
         /// <summary>
         /// Captures current stack trace

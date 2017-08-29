@@ -17,8 +17,6 @@
         private static readonly object initLocker = new object();
         private static StackStorage stackStorage;
 
-        private static StackStorageListener listener;
-
         /// <summary>
         /// Start tracking causality in current application domain
         /// </summary>
@@ -34,10 +32,7 @@
                     {
                         stackStorage = new StackStorage(storeFileLineColumnInfo, justMyCode);
 
-                        listener = new StackStorageListener(stackStorage);
-
-                        listener.EnableSubscriptions();
-                        listener.Initialized.Wait();
+                        StackStorageListener.Initialize(stackStorage);
                     }
                 }
             }
@@ -47,7 +42,11 @@
         /// Provides causality chain for current thread in live debugging
         /// (for post-mortem scenario or when native frame is on top of the stack refer to FlowViewer add-in)
         /// </summary>
-        public static string ExtendedStack =>
-            stackStorage == null ? storageUninitialized : stackStorage.GetAggregateStackString();
+        public static string ExtendedStack => stackStorage?.GetAggregateStackString() ?? storageUninitialized;
+
+        /// <summary>
+        /// Tag the current stack so that we can show the causality chain of the crash and not the crash reporting
+        /// </summary>
+        public static void Tag() => stackStorage?.Tag();
     }
 }

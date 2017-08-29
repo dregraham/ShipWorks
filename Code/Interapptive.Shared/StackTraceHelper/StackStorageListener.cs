@@ -11,6 +11,15 @@
         private readonly StackStorage stackStorage;
 
         /// <summary>
+        /// Initialize the listener with the given storage
+        /// </summary>
+        public static void Initialize(StackStorage stackStorage)
+        {
+            StackStorageListener listener = null;
+            TplFrameworkListenerBase.EnsureInitialized(() => new StackStorageListener(stackStorage), ref listener);
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public StackStorageListener(StackStorage stackStorage)

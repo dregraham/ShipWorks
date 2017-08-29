@@ -344,7 +344,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         }
 
         /// <summary>
-        /// Get a summary of the exception, that can be used as body of our fb case
+        /// Get a summary of the exception, that can be used as body of our FogBugz case
         /// </summary>
         private static string GetExceptionSummary(Exception ex)
         {

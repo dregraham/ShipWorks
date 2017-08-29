@@ -17,6 +17,7 @@ namespace ShipWorks.Common.Threading
         {
             ActualException = backgroundEx;
             InvokingThreadTrace = invokingThreadTrace;
+            FlowReservoir.Tag();
             CausalityChain = FlowReservoir.ExtendedStack;
         }
 

@@ -260,6 +260,7 @@
     <Compile Include="Imaging\EdgeDetection.cs" />
     <Compile Include="InterapptiveOnly.cs" />
     <Compile Include="StackTraceHelper\AsyncFlowDiagnosticsException.cs" />
+    <Compile Include="StackTraceHelper\CircularBuffer.cs" />
     <Compile Include="StackTraceHelper\EventConstants.cs" />
     <Compile Include="StackTraceHelper\ExternalCodeHelper.cs" />
     <Compile Include="StackTraceHelper\FlowReservoir.cs" />

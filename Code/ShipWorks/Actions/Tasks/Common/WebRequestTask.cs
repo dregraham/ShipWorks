@@ -1,4 +1,13 @@
-﻿using Interapptive.Shared.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.XPath;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Actions.Tasks.Common.Enums;
@@ -8,16 +17,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Web;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using System.Text.RegularExpressions;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -32,7 +31,7 @@ namespace ShipWorks.Actions.Tasks.Common
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebRequestTask));
         private readonly ApiLogEntry requestLogger;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WebRequestTask"/> class.
         /// </summary>
@@ -47,69 +46,69 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the verb.
         /// </summary>
-        public HttpVerb Verb 
-        { 
-            get; 
-            set; 
+        public HttpVerb Verb
+        {
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets or sets the URL the request is being submitted to.
         /// </summary>
-        public string Url 
-        { 
-            get; 
-            set; 
+        public string Url
+        {
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use basic authentication].
         /// </summary>
-        public bool UseBasicAuthentication 
-        { 
-            get; 
-            set; 
+        public bool UseBasicAuthentication
+        {
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
-        public string Username 
-        { 
-            get; 
-            set; 
+        public string Username
+        {
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets the password in encrypted format. The getter is public so the value gets serialized, but the
         /// setter is private, so the deserialization process can set the raw, encrypted value and so consumers
-        /// cannot directly encrypt the password themselves. 
-        /// 
+        /// cannot directly encrypt the password themselves.
+        ///
         /// It would probably be worth looking into having a separate Password class to manage this at
         /// some point to avoid having to maintain the separate states...
         /// </summary>
-        public string EncryptedPassword 
-        { 
-            get; 
-            private set; 
+        public string EncryptedPassword
+        {
+            get;
+            private set;
         }
 
         /// <summary>
         /// Indicates if the HTTP headers that have been configured should be included in the request
         /// </summary>
-        public bool IncludeCustomHttpHeaders 
-        { 
-            get; 
-            set; 
+        public bool IncludeCustomHttpHeaders
+        {
+            get;
+            set;
         }
 
         /// <summary>
         /// Gets or sets the HTTP headers.
         /// </summary>
-        public KeyValuePair<string, string>[] HttpHeaders 
-        { 
-            get; 
-            set; 
+        public KeyValuePair<string, string>[] HttpHeaders
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -131,21 +130,21 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets the web request cardinality.
         /// </summary>
-        public WebRequestCardinality RequestCardinality 
-        { 
-            get; 
-            set; 
+        public WebRequestCardinality RequestCardinality
+        {
+            get;
+            set;
         }
-        
+
         /// <summary>
-        /// Uses the plain text password to encrypt and set the value backing the 
-        /// Password property. 
+        /// Uses the plain text password to encrypt and set the value backing the
+        /// Password property.
         /// </summary>
         public void SetPassword(string plainTextPassword)
         {
-            // This was added, so the various consumers (e.g. the web request editor, 
+            // This was added, so the various consumers (e.g. the web request editor,
             // serialization/deserialization, etc.) of this operations on this task
-            // don't have to try to maintain whether the password is encrypted or not.            
+            // don't have to try to maintain whether the password is encrypted or not.
             EncryptedPassword = SecureText.Encrypt(plainTextPassword, PasswordSalt);
         }
 
@@ -174,7 +173,7 @@ namespace ShipWorks.Actions.Tasks.Common
             base.DeserializeXml(xpath);
 
             XPathNodeIterator headerIterator = xpath.Select("/Settings/HttpHeaders/*/@value");
-                
+
             List<KeyValuePair<string, string>> headerList = new List<KeyValuePair<string, string>>();
             foreach (XPathNavigator header in headerIterator)
             {
@@ -206,7 +205,7 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (TemplateResult templateResult in templateResults)
             {
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(
-                    templateResult.ReadResult(), 
+                    templateResult.ReadResult(),
                     GetContentType((TemplateOutputFormat) template.OutputFormat));
 
                 templateResult.XPathSource.Context.ProcessingComplete = false;
@@ -228,55 +227,55 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            var inputSource = (ActionTaskInputSource)context.Step.InputSource;
+            var inputSource = (ActionTaskInputSource) context.Step.InputSource;
 
             // How we process individual keys depends on the cardinality
             switch (RequestCardinality)
             {
                 // Single request to process - use all the input keys at once
                 case WebRequestCardinality.SingleRequest:
-                {
-                    string processedUrl = (inputSource == ActionTaskInputSource.Nothing) ? Url : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
+                    {
+                        string processedUrl = (inputSource == ActionTaskInputSource.Nothing) ? Url : TemplateTokenProcessor.ProcessTokens(Url, inputKeys);
 
-                    ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKeys));
-                    return;
-                }
+                        ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKeys));
+                        return;
+                    }
 
                 // One request per filter result - in this case, we process per input key
                 case WebRequestCardinality.OneRequestPerFilterResult:
-                {
-                    if (inputSource != ActionTaskInputSource.FilterContents)
                     {
-                        throw new ActionTaskRunException("The task input is not a filter.");
-                    }
+                        if (inputSource != ActionTaskInputSource.FilterContents)
+                        {
+                            throw new ActionTaskRunException("The task input is not a filter.");
+                        }
 
-                    // Go through and process for each key
-                    foreach (long inputKey in inputKeys)
-                    {
-                        string processedUrl = TemplateTokenProcessor.ProcessTokens(Url, inputKey);
+                        // Go through and process for each key
+                        foreach (long inputKey in inputKeys)
+                        {
+                            string processedUrl = TemplateTokenProcessor.ProcessTokens(Url, inputKey);
 
-                        ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKey));
+                            ProcessRequest(new HttpVariableRequestSubmitter(), processedUrl, token => TemplateTokenProcessor.ProcessTokens(token, inputKey));
+                        }
+                        return;
                     }
-                    return;
-                }
 
                 // Once per template result
                 case WebRequestCardinality.OneRequestPerTemplateResult:
-                {
-                    if (TemplateID == 0)
                     {
-                        throw new ActionTaskRunException("No template is selected.");
-                    }
+                        if (TemplateID == 0)
+                        {
+                            throw new ActionTaskRunException("No template is selected.");
+                        }
 
-                    if (inputSource == ActionTaskInputSource.Nothing)
-                    {
-                        throw new ActionTaskRunException("The task has no input to use for the template.");
-                    }
+                        if (inputSource == ActionTaskInputSource.Nothing)
+                        {
+                            throw new ActionTaskRunException("The task has no input to use for the template.");
+                        }
 
-                    // Run it all through the base, which will take care of template processing
-                    base.Run(inputKeys, context);
-                    return;
-                }
+                        // Run it all through the base, which will take care of template processing
+                        base.Run(inputKeys, context);
+                        return;
+                    }
             }
 
             throw new ActionTaskRunException("The request configuration is invalid.");
@@ -305,7 +304,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 AddRequestHeaders(request, tokenProcessor);
 
                 // We want to allow all status codes so we can inspect them ourselves
-                HttpStatusCode[] allStatusCodes = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
+                HttpStatusCode[] allStatusCodes = (HttpStatusCode[]) Enum.GetValues(typeof(HttpStatusCode));
                 HttpStatusCode[] allowedStatusCodes = allStatusCodes.Where(x => x != HttpStatusCode.Continue).ToArray();
                 request.AllowHttpStatusCodes(allowedStatusCodes);
 
@@ -323,8 +322,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     {
                         // A bad response was received that should cause the task to fail
                         log.ErrorFormat("An invalid response was received from the server when submitting the request to {0}: {1} {2}",
-                            request.Uri.AbsoluteUri, 
-                            statusCode, 
+                            request.Uri.AbsoluteUri,
+                            statusCode,
                             httpResponseReader.HttpWebResponse.StatusDescription);
 
                         throw new ActionTaskRunException(string.Format("A {0} response was received from {1}.", statusCode, request.Uri.AbsoluteUri));
@@ -338,8 +337,8 @@ namespace ShipWorks.Actions.Tasks.Common
             }
             catch (WebException ex)
             {
-                // Leverage the crash submitter to extract and format the exception details, and remove 
-                // any portion of the message that would show the call stack since the log will be in plain 
+                // Leverage the crash submitter to extract and format the exception details, and remove
+                // any portion of the message that would show the call stack since the log will be in plain
                 // text to the user
                 string exceptionDetail = CrashSubmitter.GetExceptionDetail(ex);
                 string message = exceptionDetail.Substring(0, exceptionDetail.IndexOf("Callstack:", StringComparison.OrdinalIgnoreCase));
@@ -358,7 +357,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             if (UseBasicAuthentication)
             {
-                // .NET typically waits for a server challenge before sending authorization, so force the authorization headers 
+                // .NET typically waits for a server challenge before sending authorization, so force the authorization headers
                 //  be sent rather than using a NetworkCredential object
                 string authInfo = string.Format("{0}:{1}", Username, GetDecryptedPassword());
                 string encodedAuthInfo = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));

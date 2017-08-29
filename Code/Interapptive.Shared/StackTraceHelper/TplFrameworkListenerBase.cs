@@ -39,7 +39,6 @@ namespace Interapptive.Shared.StackTraceHelper
                 }
 
                 listener.EnableSubscriptions();
-                listener.Initialized.Wait();
                 return listener;
             });
         }
@@ -58,23 +57,6 @@ namespace Interapptive.Shared.StackTraceHelper
                 return _delayedSubscriptions;
             }
         }
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        private TaskCompletionSource<object> InitializedTcs
-        {
-            get
-            {
-                LazyInitializer.EnsureInitialized(ref _initializedTcs);
-                return _initializedTcs;
-            }
-        }
-
-        /// <summary>
-        /// Completes when both event sources are subscribed to
-        /// </summary>
-        public Task Initialized => InitializedTcs.Task;
 
         /// <summary>
         /// Adds event source to the list of subscriptions
@@ -127,12 +109,10 @@ namespace Interapptive.Shared.StackTraceHelper
                 if (eventSource.Guid == EventConstants.Tpl.GUID)
                 {
                     EnableEvents(eventSource, EventLevel.LogAlways);
-                    TryCompleteInitialization();
                 }
                 else if (eventSource.Guid == EventConstants.Framework.GUID)
                 {
                     EnableEvents(eventSource, EventLevel.LogAlways, EventConstants.Framework.Keywords.ThreadPool);
-                    TryCompleteInitialization();
                 }
             }
         }
@@ -141,17 +121,6 @@ namespace Interapptive.Shared.StackTraceHelper
         /// Set Initialized task as complete if subscribed to both sources
         /// </summary>
         private int initializationCount;
-
-        /// <summary>
-        /// To complete initialization
-        /// </summary>
-        private void TryCompleteInitialization()
-        {
-            if (Interlocked.Increment(ref initializationCount) == 2)
-            {
-                InitializedTcs.SetResult(null);
-            }
-        }
 
         /// <summary>
         /// Handling events
