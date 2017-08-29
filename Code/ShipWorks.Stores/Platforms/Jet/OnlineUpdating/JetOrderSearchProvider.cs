@@ -15,6 +15,9 @@ namespace ShipWorks.Stores.Platforms.Jet.OnlineUpdating
     [Component]
     public class JetOrderSearchProvider : CombineOrderSearchBaseProvider<string>, IJetOrderSearchProvider
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public JetOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
         }
