@@ -1281,8 +1281,8 @@
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\ReturnTabControl.cs">
-		<SubType>UserControl</SubType>
-	</Compile>
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
     </Compile>
@@ -1804,8 +1804,10 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartProduct.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartSkuInfo.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestItemAttributeLoader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
