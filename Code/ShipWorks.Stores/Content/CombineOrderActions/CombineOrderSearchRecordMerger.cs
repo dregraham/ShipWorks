@@ -25,10 +25,18 @@ namespace ShipWorks.Stores.Content.CombineOrderActions
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearchRecordMerger(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
+        public SearchRecordMerger(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter) :
+            this(combinedOrder, orders, sqlAdapter, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SearchRecordMerger(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter, bool includeManualOrders)
         {
             this.sqlAdapter = sqlAdapter;
-            this.orders = orders.OfType<TEntity>();
+            this.orders = orders.OfType<TEntity>().Where(x => includeManualOrders || !x.IsManual);
             this.combinedOrder = combinedOrder;
         }
 

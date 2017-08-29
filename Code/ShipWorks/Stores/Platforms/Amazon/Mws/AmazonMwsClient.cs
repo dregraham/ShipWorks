@@ -417,12 +417,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             var shipment = orderDetail.Shipment;
 
-            if (orderDetail.IsManual)
-            {
-                log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is manual.", shipment.ShipmentID);
-                return;
-            }
-
             if (!shipment.Processed || shipment.Voided)
             {
                 log.WarnFormat("Shipment '{0}' was not uploaded to Amazon because it is not processed or it is voided.", shipment.ShipmentID);

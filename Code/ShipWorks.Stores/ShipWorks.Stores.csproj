@@ -176,7 +176,9 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
-    <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\CommandCreator.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineItems.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\ItemLoader.cs" />

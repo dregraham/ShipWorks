@@ -1737,6 +1737,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
+    <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\IAmazonOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />
@@ -5577,7 +5578,6 @@
       <DependentUpon>ManualOrderSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonException.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonWeights.cs" />

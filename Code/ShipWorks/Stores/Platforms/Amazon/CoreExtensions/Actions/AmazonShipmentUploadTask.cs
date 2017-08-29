@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -22,6 +20,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonShipmentUploadTask));
 
         const long maxBatchSize = 1000;
+        private readonly IAmazonOnlineUpdater onlineUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonShipmentUploadTask(IAmazonOnlineUpdater onlineUpdater)
+        {
+            this.onlineUpdater = onlineUpdater;
+        }
 
         /// <summary>
         /// Should the ActionTask be run async
@@ -90,11 +97,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
         {
             try
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IAmazonOnlineUpdater updater = lifetimeScope.Resolve<IAmazonOnlineUpdater>();
-                    await updater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
-                }
+                await onlineUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (AmazonException ex)
             {

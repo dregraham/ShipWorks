@@ -33,7 +33,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             {
                 mock.Override<IDateTimeProvider>().SetupGet(x => x.UtcNow).Returns(utcNow);
                 mock.Override<ILogEntryFactory>();
-
             });
 
             store = Create.Store<GenericModuleStoreEntity>()

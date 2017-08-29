@@ -10,7 +10,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.Platforms.Amazon
+namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
 {
     /// <summary>
     /// Create online update commands for Amazon stores

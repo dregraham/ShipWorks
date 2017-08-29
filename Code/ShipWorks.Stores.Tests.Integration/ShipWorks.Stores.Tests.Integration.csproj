@@ -174,11 +174,13 @@
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
+    <Compile Include="Platforms\Amazon\MultiCombineTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProviderTest.cs" />

@@ -10,21 +10,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonOrderUploadDetail(ShipmentEntity shipment, AmazonOrderEntity order)
-        {
-            Shipment = shipment;
-            AmazonOrderID = order.AmazonOrderID;
-            IsManual = order.IsManual;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public AmazonOrderUploadDetail(ShipmentEntity shipment, string amazonOrderID, bool isManual)
+        public AmazonOrderUploadDetail(ShipmentEntity shipment, string amazonOrderID)
         {
             Shipment = shipment;
             AmazonOrderID = amazonOrderID;
-            IsManual = isManual;
         }
 
         /// <summary>
@@ -36,10 +25,5 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Amazon order id
         /// </summary>
         public string AmazonOrderID { get; }
-
-        /// <summary>
-        /// Is the order manual
-        /// </summary>
-        public bool IsManual { get; }
     }
 }
