@@ -152,10 +152,11 @@ namespace ShipWorks.Email
                     EmailAccountManager.CheckForChangesNeeded();
                 }
             }
-            catch (ORMQueryExecutionException)
+            catch (ORMQueryExecutionException ex)
             {
                 // Eat the exception and move on. Crash was occurring on background thread due to timeout.
                 // Since we will try again later, lets just not crash
+                log.Error("Error executing query, most likely due to timeout. Will retry on next heartbeat.", ex);
             }
         }
 
