@@ -369,6 +369,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("Classification", () => item.Value.Classification);
             outline.AddElement("DistributionCenterID", () => item.Value.DistributionCenterID);
             outline.AddElement("DistributionCenter", () => item.Value.DistributionCenter);
+            outline.AddElement("DistributionCenterName", () => item.Value.DistributionCenterName);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);
             outline.AddElement("MPN", () => item.Value.MPN);
