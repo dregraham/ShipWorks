@@ -168,10 +168,12 @@ namespace ShipWorks.Stores.Content
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 var shipment = await sqlAdapter.FetchFirstAsync(query).ConfigureAwait(false);
-                if (includeOrder)
+                
+                if (includeOrder && shipment != null)
                 {
                     shipment.Order = await dataProvider.GetEntityAsync<OrderEntity>(orderID).ConfigureAwait(false);
                 }
+
                 return shipment;
             }
         }
