@@ -309,6 +309,7 @@ namespace ShipWorks.Stores.Communication
             {
                 QueryFactory factory = new QueryFactory();
                 QuerySpec combinedSearchQuery = orderIdentifier.CreateCombinedSearchQuery(factory);
+                combinedSearchQuery.AndWhere(OrderSearchFields.StoreID == this.Store.StoreID);
                 DynamicQuery query = factory.Create().Select(combinedSearchQuery.Any());
 
                 return (await sqlAdapter.FetchScalarAsync<bool?>(query).ConfigureAwait(false)) ?? false;
