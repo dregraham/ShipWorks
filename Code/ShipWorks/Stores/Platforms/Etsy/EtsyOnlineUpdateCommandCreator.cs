@@ -43,8 +43,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             EtsyStoreEntity typedStore = (EtsyStoreEntity) store;
 
-            IMenuCommand uploadShipped = new AsyncMenuCommand("Marked as Shipped", context => OnUploadTrackingDetailsShippedStatus(context, typedStore));
-            IMenuCommand uploadNotShipped = new AsyncMenuCommand("Marked as Not Shipped", context => OnUploadTrackingDetailsNotShippedStatus(context, typedStore));
+            IMenuCommand uploadShipped = new AsyncMenuCommand("Mark as Shipped", context => OnUploadTrackingDetailsShippedStatus(context, typedStore));
+            IMenuCommand uploadNotShipped = new AsyncMenuCommand("Mark as Not Shipped", context => OnUploadTrackingDetailsNotShippedStatus(context, typedStore));
             IMenuCommand uploadPaid = new AsyncMenuCommand("Mark as Paid", context => OnUploadPaidStatus(context, typedStore));
             IMenuCommand uploadUnpaid = new AsyncMenuCommand("Mark as Not Paid", context => OnUploadNotPaidStatus(context, typedStore));
             IMenuCommand uploadTrackingInformation = new AsyncMenuCommand("Upload Tracking Information", context => OnUploadTrackingDetails(context, typedStore));
@@ -143,7 +143,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 }
 
                 await updater.UpdateOnlineStatus(shipment, null, false, comment).ConfigureAwait(false);
-
                 return Result.FromSuccess();
             }
             catch (EtsyException ex)
@@ -169,6 +168,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
             await UploadPaymentDetails(context, false, store).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Uploads payment details
+        /// </summary>
         private async Task UploadPaymentDetails(MenuCommandExecutionContext context, bool wasPaid, EtsyStoreEntity store)
         {
             var results = await context.SelectedKeys
@@ -190,16 +192,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 EtsyOrderEntity order = (EtsyOrderEntity) DataProvider.GetEntity(orderID);
                 EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater(store);
 
-                bool wasPaid = paidStatus;
-                
-                await etsyUpdater.UpdateOnlineStatus(order, wasPaid, null).ConfigureAwait(false);
+                await etsyUpdater.UpdateOnlineStatus(order, paidStatus, null).ConfigureAwait(false);
+                return Result.FromSuccess();
             }
             catch (EtsyException ex)
             {
                 log.ErrorFormat("Error uploading payment information for orders {0}", ex.Message);
+                return Result.FromError(ex);
             }
-
-            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -226,13 +226,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 EtsyOnlineUpdater etsyUpdater = new EtsyOnlineUpdater(store);
 
                 await etsyUpdater.UploadShipmentDetails(orderID).ConfigureAwait(false);
+                return Result.FromSuccess();
             }
             catch (EtsyException ex)
             {
                 log.ErrorFormat("Error uploading tracking information for orders {0}", ex.Message);
+                return Result.FromError(ex);
             }
-
-            return Result.FromSuccess();
         }
     }
 }
