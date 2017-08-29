@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -58,10 +59,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new OrderNumberIdentifier(order.OrderNumber);
-        }
+        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+            new WalmartOrderIdentifier((order as IWalmartOrderEntity)?.PurchaseOrderID);
 
         /// <summary>
         /// Creates a Walmart Order Entity

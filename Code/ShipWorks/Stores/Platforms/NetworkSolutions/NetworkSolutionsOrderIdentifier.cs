@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -49,7 +48,10 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.NetworkSolutionsOrderSearch.Where(NetworkSolutionsOrderSearchFields.NetworkSolutionsOrderID == networkSolutionsOrderID);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.NetworkSolutionsOrderSearch,
+                NetworkSolutionsOrderSearchFields.OriginalOrderID,
+                NetworkSolutionsOrderSearchFields.NetworkSolutionsOrderID == networkSolutionsOrderID);
 
         /// <summary>
         /// String representation

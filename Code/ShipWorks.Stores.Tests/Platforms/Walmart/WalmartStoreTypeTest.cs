@@ -22,14 +22,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ReturnsOrderNumberIdentifier()
+        public void CreateOrderIdentifier_ReturnsWalmartOrderIdentifier()
         {
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.TypeCode = (int) StoreTypeCode.Walmart;
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
-            OrderEntity order = new OrderEntity() { OrderNumber = 7 };
-            OrderNumberIdentifier identifier = new OrderNumberIdentifier(7);
+            OrderEntity order = new WalmartOrderEntity() { PurchaseOrderID = "7" };
+            WalmartOrderIdentifier identifier = new WalmartOrderIdentifier("7");
 
             Assert.Equal(identifier.ToString(), testObject.CreateOrderIdentifier(order).ToString());
         }

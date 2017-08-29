@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly string lemonStandStoreOrderID;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         public LemonStandOrderIdentifier(string lemonStandStoreOrderID)
         {
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Apply the order number to the order provided
+        /// Apply the order number to the order provided
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Apply the order number to the download log entity
+        /// Apply the order number to the download log entity
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
@@ -64,11 +64,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.LemonStandOrderSearch
-                .Where(LemonStandOrderSearchFields.LemonStandOrderID == lemonStandStoreOrderID);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.LemonStandOrderSearch,
+                LemonStandOrderSearchFields.OriginalOrderID,
+                LemonStandOrderSearchFields.LemonStandOrderID == lemonStandStoreOrderID);
 
         /// <summary>
-        ///     String representation
+        /// String representation
         /// </summary>
         public override string ToString() => $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
     }

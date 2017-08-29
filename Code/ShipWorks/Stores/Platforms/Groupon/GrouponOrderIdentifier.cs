@@ -50,7 +50,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.GrouponOrderSearch.Where(GrouponOrderSearchFields.GrouponOrderID == grouponStoreOrderId);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.GrouponOrderSearch,
+                GrouponOrderSearchFields.OriginalOrderID,
+                GrouponOrderSearchFields.GrouponOrderID == grouponStoreOrderId);
 
         /// <summary>
         /// String representation

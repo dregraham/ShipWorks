@@ -46,7 +46,10 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.JetOrder.Where(JetOrderFields.MerchantOrderId == merchantOrderId);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.JetOrderSearch,
+                JetOrderSearchFields.OriginalOrderID,
+                JetOrderSearchFields.MerchantOrderID == merchantOrderId);
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

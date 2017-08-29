@@ -56,8 +56,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.WalmartOrderSearch
-                .Where(WalmartOrderSearchFields.PurchaseOrderID == purchaseOrderId);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.WalmartOrderSearch,
+                WalmartOrderSearchFields.OriginalOrderID,
+                WalmartOrderSearchFields.PurchaseOrderID == purchaseOrderId);
 
         /// <summary>
         /// String representation

@@ -1,6 +1,8 @@
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -25,5 +27,19 @@ namespace ShipWorks.Stores.Content
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public abstract QuerySpec CreateCombinedSearchQuery(QueryFactory factory);
+
+        protected QuerySpec CreateCombinedSearchQueryInternal<T>(QueryFactory factory,
+            EntityQuery<T> entityQuery, EntityField2 originalOrderIDField, IPredicate predicate)
+            where T : IEntityCore
+        {
+            var from = entityQuery
+                .InnerJoin(factory.OrderSearch)
+                .On(originalOrderIDField == OrderSearchFields.OriginalOrderID);
+
+            return factory.Create()
+                .From(from)
+                .Select(originalOrderIDField)
+                .Where(predicate);
+        }
     }
 }

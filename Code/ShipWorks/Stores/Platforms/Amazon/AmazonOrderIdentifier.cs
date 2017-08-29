@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -52,7 +51,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.AmazonOrderSearch.Where(AmazonOrderSearchFields.AmazonOrderID == amazonOrderID);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.AmazonOrderSearch,
+                AmazonOrderSearchFields.OriginalOrderID,
+                AmazonOrderSearchFields.AmazonOrderID == amazonOrderID);
 
         /// <summary>
         /// String representation

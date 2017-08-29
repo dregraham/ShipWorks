@@ -179,6 +179,7 @@
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\OrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProviderTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProviderTest.cs" />

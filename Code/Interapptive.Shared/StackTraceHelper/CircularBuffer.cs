@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -52,6 +53,8 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <param name="capacity">The maximum capacity of the buffer.</param>
         /// <param name="allowOverwrite">If set to <c>true</c> the buffer will automatically overwrite the oldest items when full.</param>
         /// <exception cref="System.ArgumentException">Thrown if the <paramref name="capacity"/> is less than zero.</exception>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public CircularBuffer(int capacity, bool allowOverwrite)
         {
             if (capacity < 0)
@@ -82,6 +85,8 @@ namespace Interapptive.Shared.StackTraceHelper
         /// </summary>
         /// <value>The total number of elements that the <see cref="CircularBuffer{T}"/> can contain.</value>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the specified new capacity is smaller than the current contents of the buffer.</exception>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public int Capacity
         {
             get { return _capacity; }
@@ -166,6 +171,8 @@ namespace Interapptive.Shared.StackTraceHelper
         /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied from <see cref="CircularBuffer{T}"/>. The <see cref="Array"/> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
         /// <param name="count">The number of elements to copy.</param>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public virtual void CopyTo(int index, T[] array, int arrayIndex, int count)
         {
             int bufferIndex;

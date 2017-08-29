@@ -52,7 +52,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.YahooOrderSearch.Where(YahooOrderSearchFields.YahooOrderID == yahooOrderID);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.YahooOrderSearch,
+                YahooOrderSearchFields.OriginalOrderID,
+                YahooOrderSearchFields.YahooOrderID == yahooOrderID);
 
         /// <summary>
         /// String representation
