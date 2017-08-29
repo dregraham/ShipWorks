@@ -591,7 +591,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ChannelAdvisorOrderItemEntity's mappings</summary>
 		private void InitChannelAdvisorOrderItemEntityMappings()
 		{
-			this.AddElementMapping("ChannelAdvisorOrderItemEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorOrderItem", 11, 0);
+			this.AddElementMapping("ChannelAdvisorOrderItemEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorOrderItem", 12, 0);
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "MarketplaceName", "MarketplaceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "MarketplaceStoreName", "MarketplaceStoreName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -603,6 +603,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "IsFBA", "IsFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "MPN", "MPN", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "DistributionCenterID", "DistributionCenterID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
+			this.AddElementFieldMapping("ChannelAdvisorOrderItemEntity", "DistributionCenterName", "DistributionCenterName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
 		}
 
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>

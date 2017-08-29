@@ -436,6 +436,7 @@
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
           <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
+          <Field Name="DistributionCenterName" Type="string" MaxLength="100" FieldIndex="10" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
           <Field Name="IsFBA" Type="bool" FieldIndex="7" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
@@ -3768,7 +3769,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:57:40.4795986Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-29T15:42:36.0737792Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4171,6 +4172,7 @@
                     <Field Name="IsFBA" Ordinal="9" DbType="2" />
                     <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
                     <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
+                    <Field Name="DistributionCenterName" Ordinal="12" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -9521,6 +9523,7 @@
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
             <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
+            <FieldMapping FieldName="DistributionCenterName" TargetFieldName="DistributionCenterName" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
