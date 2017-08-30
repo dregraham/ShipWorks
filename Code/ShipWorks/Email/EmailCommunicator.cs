@@ -111,43 +111,52 @@ namespace ShipWorks.Email
         /// </summary>
         public static void StartAutoEmailingIfNeeded()
         {
-            // Don't check more often than every 15 seconds
-            if (lastAutoEmailCheck + TimeSpan.FromSeconds(15) > DateTime.UtcNow)
+            try
             {
-                return;
-            }
-
-            lastAutoEmailCheck = DateTime.UtcNow;
-
-            List<long> readyList = new List<long>();
-
-            // Check each account
-            foreach (EmailAccountEntity account in EmailAccountManager.EmailAccounts)
-            {
-                // If not auto-sending, then ignore it
-                if (!account.AutoSend)
+                // Don't check more often than every 15 seconds
+                if (lastAutoEmailCheck + TimeSpan.FromSeconds(15) > DateTime.UtcNow)
                 {
-                    continue;
+                    return;
                 }
 
-                // See if the time has passed
-                if (account.AutoSendLastTime + TimeSpan.FromMinutes(account.AutoSendMinutes) < DateTime.UtcNow)
-                {
-                    readyList.Add(account.EmailAccountID);
+                lastAutoEmailCheck = DateTime.UtcNow;
 
-                    log.InfoFormat("Account '{0}' is ready to auto-email.", account.DisplayName);
+                List<long> readyList = new List<long>();
+
+                // Check each account
+                foreach (EmailAccountEntity account in EmailAccountManager.EmailAccounts)
+                {
+                    // If not auto-sending, then ignore it
+                    if (!account.AutoSend)
+                    {
+                        continue;
+                    }
+
+                    // See if the time has passed
+                    if (account.AutoSendLastTime + TimeSpan.FromMinutes(account.AutoSendMinutes) < DateTime.UtcNow)
+                    {
+                        readyList.Add(account.EmailAccountID);
+
+                        log.InfoFormat("Account '{0}' is ready to auto-email.", account.DisplayName);
+                    }
+                }
+
+                // Start the auto-email of the ready accounts
+                StartEmailingAccounts(readyList);
+
+                // Make sure the local email account cache gets updated with changed we made to last autodownload times.  If a modal window is open,
+                // then the heartbeat won't be going through the code that does this, and we could end up trying to autoemail over and over and over
+                // until the modal window was closed (if we didn't do this)
+                if (readyList.Count > 0)
+                {
+                    EmailAccountManager.CheckForChangesNeeded();
                 }
             }
-
-            // Start the auto-email of the ready accounts
-            StartEmailingAccounts(readyList);
-
-            // Make sure the local email account cache gets updated with changed we made to last autodownload times.  If a modal window is open,
-            // then the heartbeat won't be going through the code that does this, and we could end up trying to autoemail over and over and over
-            // until the modal window was closed (if we didn't do this)
-            if (readyList.Count > 0)
+            catch (ORMQueryExecutionException ex)
             {
-                EmailAccountManager.CheckForChangesNeeded();
+                // Eat the exception and move on. Crash was occurring on background thread due to timeout.
+                // Since we will try again later, lets just not crash
+                log.Error("Error executing query, most likely due to timeout. Will retry on next heartbeat.", ex);
             }
         }
 
