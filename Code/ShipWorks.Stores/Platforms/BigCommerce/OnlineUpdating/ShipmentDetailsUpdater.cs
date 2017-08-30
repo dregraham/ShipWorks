@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -112,10 +113,17 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
                 return;
             }
 
+            var allResults = new List<IResult>();
             foreach (var orderDetail in orderDetails.OrdersToUpload)
             {
-                await updateClient.UpdateOnline(store, orderDetail, orderDetails.OrderNumberComplete, shipment, allItems).ConfigureAwait(false);
+                var result = await Result.Handle<BigCommerceException>()
+                    .ExecuteAsync(() => updateClient.UpdateOnline(store, orderDetail, orderDetails.OrderNumberComplete, shipment, allItems))
+                    .ConfigureAwait(false);
+
+                allResults.Add(result);
             }
+
+            allResults.ThrowIfNotEmpty((msg, ex) => new BigCommerceException(msg, ex));
         }
     }
 }

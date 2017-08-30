@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -94,10 +95,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // Create the client for connecting to the module
             IAmeriCommerceWebClient webClient = createWebClient(store as AmeriCommerceStoreEntity);
 
-            foreach (var orderIdentifier in identifiers)
-            {
-                webClient.UpdateOrderStatus(orderIdentifier, statusCode);
-            }
+            identifiers.Select(x => webClient.UpdateOrderStatus(x, statusCode))
+                .ThrowIfNotEmpty((msg, ex) => new AmeriCommerceException(msg, ex));
 
             // Update the local database with the new status
             OrderEntity basePrototype = new OrderEntity(orderID)
@@ -173,19 +172,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 return;
             }
 
-            foreach (var orderIdentifier in identifiers)
-            {
-                try
-                {
-                    // upload the details
-                    webClient.UploadShipmentDetails(orderIdentifier, shipment);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
+            identifiers.Select(x => webClient.UploadShipmentDetails(x, shipment))
+                .ThrowIfNotEmpty((msg, ex) => new AmeriCommerceException(msg, ex));
         }
 
         /// <summary>

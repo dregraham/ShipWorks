@@ -62,5 +62,11 @@ namespace Interapptive.Shared.Utility
         /// Get an error result
         /// </summary>
         public static Result FromError(Exception ex) => new Result(false, ex);
+
+        /// <summary>
+        /// Call a method and handle its exception
+        /// </summary>
+        public static ExceptionResultHandler<TException> Handle<TException>() where TException : Exception =>
+            new ExceptionResultHandler<TException>();
     }
 }

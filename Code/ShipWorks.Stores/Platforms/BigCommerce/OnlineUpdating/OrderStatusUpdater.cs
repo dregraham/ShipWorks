@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -84,10 +87,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
 
             IBigCommerceWebClient webClient = webClientFactory.Create(store);
 
+            List<IResult> allResults = new List<IResult>();
             foreach (var chunk in orderDetails.OrdersToUpload.SplitIntoChunksOf(4))
             {
-                await Task.WhenAll(chunk.Select(x => webClient.UpdateOrderStatus(Convert.ToInt32(x.OrderNumber), statusCode))).ConfigureAwait(false);
+                var tasks = chunk.Select(x => Result.Handle<BigCommerceException>().ExecuteAsync(() => webClient.UpdateOrderStatus(Convert.ToInt32(x.OrderNumber), statusCode)));
+                var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+                allResults.AddRange(results);
             }
+
+            allResults.ThrowIfNotEmpty((msg, ex) => new BigCommerceException(msg, ex));
 
             IBigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(store);
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
@@ -133,8 +134,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false);
 
-            webClient.Setup(x => x.UpdateOrderStatus(10L, It.IsAny<int>())).Throws<AmeriCommerceException>();
-            webClient.Setup(x => x.UpdateOrderStatus(50L, It.IsAny<int>())).Throws<AmeriCommerceException>();
+            webClient.Setup(x => x.UpdateOrderStatus(10L, It.IsAny<int>())).Returns(Result.FromError(new AmeriCommerceException()));
+            webClient.Setup(x => x.UpdateOrderStatus(50L, It.IsAny<int>())).Returns(Result.FromError(new AmeriCommerceException()));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
@@ -218,9 +219,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false);
 
             webClient.Setup(x => x.UploadShipmentDetails(10L, It.IsAny<ShipmentEntity>()))
-                .Throws<AmeriCommerceException>();
+                .Returns(Result.FromError(new AmeriCommerceException()));
             webClient.Setup(x => x.UploadShipmentDetails(50L, It.IsAny<ShipmentEntity>()))
-                .Throws<AmeriCommerceException>();
+                .Returns(Result.FromError(new AmeriCommerceException()));
 
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
 

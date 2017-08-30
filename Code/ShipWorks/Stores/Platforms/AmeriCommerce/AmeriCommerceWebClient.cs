@@ -15,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using InterapptiveResult = Interapptive.Shared.Utility.Result;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
@@ -380,7 +381,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        public void UpdateOrderStatus(long orderNumber, int statusCode)
+        public IResult UpdateOrderStatus(long orderNumber, int statusCode)
         {
             try
             {
@@ -406,17 +407,19 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                         throw new AmeriCommerceException(string.Format("An unknown error occurred while saving order status."));
                     }
                 }
+
+                return InterapptiveResult.FromSuccess();
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException));
+                return InterapptiveResult.FromError(WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException)));
             }
         }
 
         /// <summary>
         /// Uploads the tracking number for shipments related to order OrderNumber
         /// </summary>
-        public void UploadShipmentDetails(long orderNumber, ShipmentEntity shipment)
+        public IResult UploadShipmentDetails(long orderNumber, ShipmentEntity shipment)
         {
             try
             {
@@ -450,10 +453,12 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                         throw new AmeriCommerceException("An unknown error occurred while saving tracking number.");
                     }
                 }
+
+                return InterapptiveResult.FromSuccess();
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException));
+                return InterapptiveResult.FromError(WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException)));
             }
         }
 
