@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
@@ -12,6 +9,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     [Serializable]
     public class AmeriCommerceException : Exception
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmeriCommerceException()
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Deserilization 
+        /// Deserilization
         /// </summary>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

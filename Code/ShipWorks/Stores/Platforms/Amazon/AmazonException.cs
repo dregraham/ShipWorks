@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Amazon
@@ -12,26 +9,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [Serializable]
     public class AmazonException : Exception
     {
-        // which Amazon web service was the exception source
-        Type webServiceType;
-
-        // The error code
-        string code = "";
-
         /// <summary>
-        /// Amazon MWS Error Code
+        /// Constructor
         /// </summary>
-        public string Code
+        public AmazonException()
         {
-            get { return code; }
-        }
 
-        /// <summary>
-        /// Gets the Amazon Web Service type that caused the exception
-        /// </summary>
-        public Type WebServiceType
-        {
-            get { return webServiceType; }
         }
 
         /// <summary>
@@ -47,9 +30,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Constructor for MWS Api Errors
         /// </summary>
         public AmazonException(string code, string message, Exception inner)
-            : base (message, inner)
+            : base(message, inner)
         {
-            this.code = code;
+            Code = code;
         }
 
         /// <summary>
@@ -58,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public AmazonException(Type webServiceType, string message)
             : base(message)
         {
-            this.webServiceType = webServiceType;
+            WebServiceType = webServiceType;
         }
 
         /// <summary>
@@ -67,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public AmazonException(Type webServiceType, Exception inner)
             : base(inner == null ? "" : inner.Message, inner)
         {
-            this.webServiceType = webServiceType;
+            WebServiceType = webServiceType;
         }
 
         /// <summary>
@@ -76,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         protected AmazonException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            webServiceType = info.GetValue("webServiceType", typeof(Type)) as Type;
+            WebServiceType = info.GetValue("webServiceType", typeof(Type)) as Type;
         }
 
         /// <summary>
@@ -87,13 +70,23 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
+        /// Amazon MWS Error Code
+        /// </summary>
+        public string Code { get; } = string.Empty;
+
+        /// <summary>
+        /// Gets the Amazon Web Service type that caused the exception
+        /// </summary>
+        public Type WebServiceType { get; }
+
+        /// <summary>
         /// Serialize
         /// </summary>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            info.AddValue("webServiceType", webServiceType);
+            info.AddValue("webServiceType", WebServiceType);
         }
     }
 }

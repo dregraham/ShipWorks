@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Tests.Shared;
@@ -123,6 +124,27 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 o.Any(i => i.AmazonOrderID == "10000" && i.Shipment.TrackingNumber == "track-123") &&
                 o.Any(i => i.AmazonOrderID == "50000" && i.Shipment.TrackingNumber == "track-456") &&
                 o.Any(i => i.AmazonOrderID == "60000" && i.Shipment.TrackingNumber == "track-456"))));
+        }
+
+        [Fact]
+        public async Task UploadDetails_ContinuesUploading_WhenFailuresOccur()
+        {
+            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false);
+            OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false);
+
+            webClient.Setup(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o => o.Any(i => i.AmazonOrderID == "10000"))))
+                .Throws<AmazonException>();
+            webClient.Setup(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o => o.Any(i => i.AmazonOrderID == "50000"))))
+                .Throws<AmazonException>();
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
+
+            await commandCreator.OnUploadDetails(store, menuContext.Object);
+
+            webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
+                o.Any(i => i.AmazonOrderID == "60000" && i.Shipment.TrackingNumber == "track-456") &&
+                o.Any(i => i.AmazonOrderID == "70000" && i.Shipment.TrackingNumber == "track-789"))));
         }
 
         private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual)

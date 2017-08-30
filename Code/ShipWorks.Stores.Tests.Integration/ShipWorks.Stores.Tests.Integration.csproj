@@ -183,6 +183,7 @@
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
     <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />

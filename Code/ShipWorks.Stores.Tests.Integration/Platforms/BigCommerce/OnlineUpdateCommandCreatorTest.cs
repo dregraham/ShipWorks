@@ -134,6 +134,25 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
+        public async Task SetOnlineStatus_ContinuesUploading_WhenFailuresOccur()
+        {
+            OrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
+            OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            OrderEntity normalOrder2 = CreateNormalOrder(7, 8, 9, "track-789", false);
+
+            webClient.Setup(x => x.UpdateOrderStatus(10, 99)).Throws<BigCommerceException>();
+            webClient.Setup(x => x.UpdateOrderStatus(50, 99)).Throws<BigCommerceException>();
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
+
+            await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
+            webClient.Verify(x => x.UpdateOrderStatus(60, 99));
+            webClient.Verify(x => x.UpdateOrderStatus(70, 99));
+        }
+
+        [Fact]
         public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsNotCombined()
         {
             OrderEntity order = CreateNormalOrder(1, 2, 3, "track-123", false);
@@ -210,6 +229,31 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                 It.Is<List<BigCommerceItem>>(a => a.Any(i => i.order_product_id == 5000 && i.quantity == 5))));
             webClient.Verify(x => x.UploadOrderShipmentDetails(60L, 600L, "track-456", Tuple.Create(string.Empty, "Foo Bar"),
                 It.Is<List<BigCommerceItem>>(a => a.Any(i => i.order_product_id == 6000 && i.quantity == 6))));
+        }
+
+        [Fact]
+        public async Task UploadDetails_ContinuesUploading_WhenFailuresOccur()
+        {
+            OrderEntity normalOrder = CreateNormalOrder(1, 2, 3, "track-123", false);
+            OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
+            OrderEntity normalOrder2 = CreateNormalOrder(7, 8, 9, "track-789", false);
+
+            webClient.Setup(x => x.UploadOrderShipmentDetails(10L, It.IsAny<long>(), It.IsAny<string>(),
+                    It.IsAny<Tuple<string, string>>(), It.IsAny<List<BigCommerceItem>>()))
+                .Throws<BigCommerceException>();
+            webClient.Setup(x => x.UploadOrderShipmentDetails(50L, It.IsAny<long>(), It.IsAny<string>(),
+                    It.IsAny<Tuple<string, string>>(), It.IsAny<List<BigCommerceItem>>()))
+                .Throws<BigCommerceException>();
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });
+
+            await commandCreator.OnUploadDetails(menuContext.Object, store);
+
+            webClient.Verify(x => x.UploadOrderShipmentDetails(60L, 600L, "track-456", Tuple.Create(string.Empty, "Foo Bar"),
+                It.IsAny<List<BigCommerceItem>>()));
+
+            webClient.Verify(x => x.UploadOrderShipmentDetails(70L, 800L, "track-789", Tuple.Create(string.Empty, "Foo Bar"),
+                It.IsAny<List<BigCommerceItem>>()));
         }
 
         private OrderEntity CreateNormalOrder(int orderRoot, int item1Root, int item2Root, string trackingNumber, bool manual)

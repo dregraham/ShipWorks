@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, IBuyDotComStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, IBuyDotComStoreEntity store)
         {
             IResult result = null;
 
