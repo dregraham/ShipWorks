@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     // Create the client for connecting to the module
-                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(americommerceStore));
+                    IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(americommerceStore));
 
                     // get orders
                     orders = webClient.GetOrders(lastModified);
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private async Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private async Task LoadOrder(IAmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -211,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// </summary>
         private void LoadPayments(OrderEntity order, OrderTrans orderTrans)
         {
-            // number of creditcards
+            // number of credit cards
             int cardCounter = 0;
             int paymentCounter = 0;
 
@@ -317,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load order items
         /// </summary>
-        private void LoadOrderItems(AmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
+        private void LoadOrderItems(IAmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
         {
             foreach (OrderItemTrans orderItemTrans in orderTrans.OrderItemColTrans)
             {
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Loads the appropriate address info from the Americommerce order
         /// </summary>
-        private void LoadAddressInfo(AmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
+        private void LoadAddressInfo(IAmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
         {
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
@@ -441,7 +441,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Populates a person adapter with information from an AmeriCommerce order address
         /// </summary>
-        private void LoadAddressInfo(AmeriCommerceWebClient client, PersonAdapter person, OrderAddressTrans address)
+        private void LoadAddressInfo(IAmeriCommerceWebClient client, PersonAdapter person, OrderAddressTrans address)
         {
             // name
             person.FirstName = address.FirstName;

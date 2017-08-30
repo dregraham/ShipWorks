@@ -6,18 +6,18 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.Data;
-using ShipWorks.Properties;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Properties;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
-    // delegate for asyncronously loading the stores
+    // delegate for asynchronously loading the stores
     delegate List<StoreTrans> LoadStoresDelegate(AmeriCommerceStoreEntity store);
 
     /// <summary>
@@ -61,13 +61,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             usernameTextBox.Text = ameriCommerceStore.Username;
             passwordTextBox.Text = SecureText.Decrypt(ameriCommerceStore.Password, ameriCommerceStore.Username);
 
-            // try getting a list of the stores on the Amc account
-            // Asyncronously load the store combobox since it can be a slower call
+            // try getting a list of the stores on the AmeriCommerce account
+            // Asynchronously load the store combobox since it can be a slower call
             StartAsyncStoreLoading(ameriCommerceStore);
         }
 
         /// <summary>
-        /// Asyncronously loads the stores
+        /// Asynchronously loads the stores
         /// </summary>
         private void StartAsyncStoreLoading(AmeriCommerceStoreEntity ameriCommerceStore)
         {
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             linkRefreshStores.Enabled = false;
 
             LoadStoresDelegate invoker = new LoadStoresDelegate(GetStores);
-            invoker.BeginInvoke(EntityUtility.CloneEntity(ameriCommerceStore), OnGetStoresComplete, new object[] { invoker, ameriCommerceStore});
+            invoker.BeginInvoke(EntityUtility.CloneEntity(ameriCommerceStore), OnGetStoresComplete, new object[] { invoker, ameriCommerceStore });
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    var client = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(store));
+                    var client = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(store));
                     return client.GetStores();
                 }
             }
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Asyncronous callback for store loading
+        /// Asynchronous callback for store loading
         /// </summary>
         private void OnGetStoresComplete(IAsyncResult asyncResult)
         {
@@ -120,8 +120,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 return;
             }
 
-            LoadStoresDelegate invoker = (LoadStoresDelegate)((object[])asyncResult.AsyncState)[0];
-            AmeriCommerceStoreEntity store = (AmeriCommerceStoreEntity)((object[])asyncResult.AsyncState)[1];
+            LoadStoresDelegate invoker = (LoadStoresDelegate) ((object[]) asyncResult.AsyncState)[0];
+            AmeriCommerceStoreEntity store = (AmeriCommerceStoreEntity) ((object[]) asyncResult.AsyncState)[1];
 
             foundStores.Clear();
             foundStores.AddRange(invoker.EndInvoke(asyncResult) ?? new List<StoreTrans>());
@@ -210,16 +210,16 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             {
 
                 // see if we need to test the settings because they changed in some way
-                if (ameriCommerceStore.Fields[(int)AmeriCommerceStoreFieldIndex.Username].IsChanged ||
-                    ameriCommerceStore.Fields[(int)AmeriCommerceStoreFieldIndex.Password].IsChanged ||
-                    ameriCommerceStore.Fields[(int)AmeriCommerceStoreFieldIndex.StoreUrl].IsChanged)
+                if (ameriCommerceStore.Fields[(int) AmeriCommerceStoreFieldIndex.Username].IsChanged ||
+                    ameriCommerceStore.Fields[(int) AmeriCommerceStoreFieldIndex.Password].IsChanged ||
+                    ameriCommerceStore.Fields[(int) AmeriCommerceStoreFieldIndex.StoreUrl].IsChanged)
                 {
                     Cursor.Current = Cursors.WaitCursor;
 
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
                         // Create the client for connecting to the module
-                        AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
+                        IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
 
                         // perform basic connectivity test
                         webClient.TestConnection();
@@ -251,13 +251,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     }
 
                     // if the code has changed, we need to test that the store exists and is valid
-                    if (ameriCommerceStore.Fields[(int)AmeriCommerceStoreFieldIndex.StoreCode].IsChanged)
+                    if (ameriCommerceStore.Fields[(int) AmeriCommerceStoreFieldIndex.StoreCode].IsChanged)
                     {
                         // execute call to americommerce to get store details
                         using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             // Create the client for connecting to the module
-                            AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
+                            IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(ameriCommerceStore));
 
                             webClient.GetStore(ameriCommerceStore.StoreCode);
                         }

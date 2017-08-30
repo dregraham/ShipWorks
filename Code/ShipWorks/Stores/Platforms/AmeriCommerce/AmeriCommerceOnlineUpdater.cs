@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         private readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ICombineOrderNumberSearchProvider cominedOrderSearchProvider;
-        private readonly Func<AmeriCommerceStoreEntity, AmeriCommerceWebClient> createWebClient;
+        private readonly Func<AmeriCommerceStoreEntity, IAmeriCommerceWebClient> createWebClient;
 
         // status code provider
         private AmeriCommerceStatusCodeProvider statusCodeProvider;
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory,
             ICombineOrderNumberSearchProvider cominedOrderSearchProvider,
-            Func<AmeriCommerceStoreEntity, AmeriCommerceWebClient> createWebClient)
+            Func<AmeriCommerceStoreEntity, IAmeriCommerceWebClient> createWebClient)
         {
             this.cominedOrderSearchProvider = cominedOrderSearchProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
