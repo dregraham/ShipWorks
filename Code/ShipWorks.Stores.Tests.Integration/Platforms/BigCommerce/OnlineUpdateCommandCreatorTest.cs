@@ -77,6 +77,20 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
+        public async Task SetOnlineStatus_MakesOneWebRequest_WhenOneOfTwoNotCombinedOrdersIsManual()
+        {
+            OrderEntity manualOrder = CreateNormalOrder(4, 5, 6, "track-456", true);
+            OrderEntity order = CreateNormalOrder(1, 2, 3, "track-123", false);
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
+
+            await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
+            webClient.Verify(x => x.UpdateOrderStatus(10, 99));
+        }
+
+        [Fact]
         public async Task SetOnlineStatus_MakesTwoWebRequests_WhenOrderIsCombined()
         {
             OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
@@ -87,6 +101,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
 
             webClient.Verify(x => x.UpdateOrderStatus(20, 99));
+            webClient.Verify(x => x.UpdateOrderStatus(30, 99));
+        }
+
+        [Fact]
+        public async Task SetOnlineStatus_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
             webClient.Verify(x => x.UpdateOrderStatus(30, 99));
         }
 
@@ -122,6 +149,22 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         }
 
         [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOneOfTwoNotCombinedOrdersIsManual()
+        {
+            OrderEntity manualOrder = CreateNormalOrder(4, 5, 6, "track-456", true);
+            OrderEntity order = CreateNormalOrder(1, 2, 3, "track-123", false);
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
+
+            await commandCreator.OnUploadDetails(menuContext.Object, store);
+
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10L, 200L, "track-123", Tuple.Create(string.Empty, "Foo Bar"),
+                It.Is<List<BigCommerceItem>>(a =>
+                    a.Any(i => i.order_product_id == 2000 && i.quantity == 2) &&
+                    a.Any(i => i.order_product_id == 3000 && i.quantity == 3))));
+        }
+
+        [Fact]
         public async Task UploadDetails_MakesTwoWebRequests_WhenOrderIsCombined()
         {
             OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
@@ -132,6 +175,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
             webClient.Verify(x => x.UploadOrderShipmentDetails(20L, 200L, "track-123", Tuple.Create(string.Empty, "Foo Bar"),
                 It.Is<List<BigCommerceItem>>(a => a.Any(i => i.order_product_id == 2000 && i.quantity == 2))));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(30L, 300L, "track-123", Tuple.Create(string.Empty, "Foo Bar"),
+                It.Is<List<BigCommerceItem>>(a => a.Any(i => i.order_product_id == 3000 && i.quantity == 3))));
+        }
+
+        [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            await commandCreator.OnUploadDetails(menuContext.Object, store);
+
             webClient.Verify(x => x.UploadOrderShipmentDetails(30L, 300L, "track-123", Tuple.Create(string.Empty, "Foo Bar"),
                 It.Is<List<BigCommerceItem>>(a => a.Any(i => i.order_product_id == 3000 && i.quantity == 3))));
         }

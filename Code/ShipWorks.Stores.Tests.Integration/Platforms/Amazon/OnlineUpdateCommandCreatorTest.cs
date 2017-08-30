@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         }
 
         [Fact]
-        public async Task UploadDetails_MakesOneWebRequest_WhenOneOfTwoCombinedOrdersIsManual()
+        public async Task UploadDetails_MakesOneWebRequest_WhenOneOfTwoNonCombinedOrdersIsManual()
         {
             OrderEntity manualOrder = CreateNormalOrder(2, "track-456", true);
             OrderEntity order = CreateNormalOrder(1, "track-123", false);

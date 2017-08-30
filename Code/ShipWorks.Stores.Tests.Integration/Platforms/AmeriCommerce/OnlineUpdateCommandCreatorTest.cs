@@ -70,6 +70,20 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         }
 
         [Fact]
+        public async Task SetOnlineStatus_MakesOneWebRequest_WhenOneOfTwoNotCombinedOrdersIsManual()
+        {
+            OrderEntity manualOrder = CreateNormalOrder(4, 5, 6, "track-456", true);
+            OrderEntity order = CreateNormalOrder(1, 2, 3, "track-123", false);
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
+
+            await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
+            webClient.Verify(x => x.UpdateOrderStatus(10, 99));
+        }
+
+        [Fact]
         public async Task SetOnlineStatus_MakesTwoWebRequests_WhenOrderIsCombined()
         {
             OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
@@ -80,6 +94,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
 
             webClient.Verify(x => x.UpdateOrderStatus(20, 99));
+            webClient.Verify(x => x.UpdateOrderStatus(30, 99));
+        }
+
+        [Fact]
+        public async Task SetOnlineStatus_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
             webClient.Verify(x => x.UpdateOrderStatus(30, 99));
         }
 
@@ -112,6 +139,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         }
 
         [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOneOfTwoNotCombinedOrdersIsManual()
+        {
+            OrderEntity manualOrder = CreateNormalOrder(4, 5, 6, "track-456", true);
+            OrderEntity order = CreateNormalOrder(1, 2, 3, "track-123", false);
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
+
+            await commandCreator.OnUploadDetails(menuContext.Object, store);
+
+            webClient.Verify(x => x.UploadShipmentDetails(10L, It.Is<ShipmentEntity>(s => s.TrackingNumber == "track-123")));
+        }
+
+        [Fact]
         public async Task UploadDetails_MakesTwoWebRequests_WhenOrderIsCombined()
         {
             OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
@@ -121,6 +161,18 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
             webClient.Verify(x => x.UploadShipmentDetails(20L, It.Is<ShipmentEntity>(s => s.TrackingNumber == "track-123")));
+            webClient.Verify(x => x.UploadShipmentDetails(30L, It.Is<ShipmentEntity>(s => s.TrackingNumber == "track-123")));
+        }
+
+        [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            await commandCreator.OnUploadDetails(menuContext.Object, store);
+
             webClient.Verify(x => x.UploadShipmentDetails(30L, It.Is<ShipmentEntity>(s => s.TrackingNumber == "track-123")));
         }
 
