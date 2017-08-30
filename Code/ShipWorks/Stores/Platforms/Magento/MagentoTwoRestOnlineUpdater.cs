@@ -80,19 +80,29 @@ namespace ShipWorks.Stores.Platforms.Magento
         public async Task UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
             MagentoOrderEntity orderEntity = dataProvider.GetEntity(orderID) as MagentoOrderEntity;
+
             if (orderEntity == null)
             {
                 return;
             }
+
             if (orderEntity.IsManual && orderEntity.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not executing online action since order {0} is manual.", orderEntity.OrderID);
                 return;
             }
 
+            await UploadShipmentDetails(orderEntity, command, comments, emailCustomer, unitOfWork).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Uploads shipment details to Magento
+        /// </summary>
+        private async Task UploadShipmentDetails(MagentoOrderEntity orderEntity, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
+        {
             IMagentoTwoRestClient webClient = webClientFactory(store);
 
-            string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
+            string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderEntity.OrderID);
 
             IEnumerable<MagentoOrderSearchEntity> orderSearchEntities = await combineOrderSearchProvider.GetOrderIdentifiers(orderEntity).ConfigureAwait(false);
 
@@ -102,28 +112,24 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 try
                 {
-                    await Task.Run(() =>
-                        {
-                            switch (command)
-                            {
-                                case MagentoUploadCommand.Complete:
-                                    UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, orderSearchEntity);
-                                    break;
-                                case MagentoUploadCommand.Hold:
-                                    UpdateAsHold(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                                    break;
-                                case MagentoUploadCommand.Unhold:
-                                    UpdateAsPending(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                                    break;
-                                case MagentoUploadCommand.Cancel:
-                                    UploadAsCancel(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                                    break;
-                                case MagentoUploadCommand.Comments:
-                                    UploadCommentsIfPresent(webClient, processedComments, orderSearchEntity.MagentoOrderID, true);
-                                    break;
-                            }
-                        }
-                    ).ConfigureAwait(false);
+                    switch (command)
+                    {
+                        case MagentoUploadCommand.Complete:
+                            UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, orderSearchEntity);
+                            break;
+                        case MagentoUploadCommand.Hold:
+                            UpdateAsHold(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                            break;
+                        case MagentoUploadCommand.Unhold:
+                            UpdateAsPending(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                            break;
+                        case MagentoUploadCommand.Cancel:
+                            UploadAsCancel(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                            break;
+                        case MagentoUploadCommand.Comments:
+                            UploadCommentsIfPresent(webClient, processedComments, orderSearchEntity.MagentoOrderID, true);
+                            break;
+                    }
                 }
                 catch (Exception ex)
                 {

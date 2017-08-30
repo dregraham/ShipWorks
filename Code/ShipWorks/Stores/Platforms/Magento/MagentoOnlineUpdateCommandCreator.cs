@@ -27,15 +27,18 @@ namespace ShipWorks.Stores.Platforms.Magento
     {
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MagentoOnlineUpdateCommandCreator(
             IMessageHelper messageHelper,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger,
+            ILifetimeScope lifetimeScope)
         {
             this.messageHelper = messageHelper;
+            this.lifetimeScope = lifetimeScope;
             log = createLogger(GetType());
         }
 
@@ -164,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
             {
                 return (GenericStoreOnlineUpdater)
-                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<IMagentoOnlineUpdater>>(
+                    lifetimeScope.ResolveKeyed<Owned<IMagentoOnlineUpdater>>(
                         MagentoVersion.MagentoTwoREST,
                         new TypedParameter(typeof(GenericModuleStoreEntity), magentoStore)).Value;
             }

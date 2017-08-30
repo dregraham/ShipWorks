@@ -144,9 +144,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                             try
                             {
                                 // execute the action
-                                await Task.Run(() => 
-                                    newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer))
-                                    .ConfigureAwait(false);
+                                newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
                             }
                             catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
                             {
