@@ -96,26 +96,44 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             IEnumerable<MagentoOrderSearchEntity> orderSearchEntities = await combineOrderSearchProvider.GetOrderIdentifiers(orderEntity).ConfigureAwait(false);
 
+            List<Exception> exceptions = new List<Exception>();
+
             foreach (MagentoOrderSearchEntity orderSearchEntity in orderSearchEntities)
             {
-                switch (command)
+                try
                 {
-                    case MagentoUploadCommand.Complete:
-                        UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, orderSearchEntity);
-                        break;
-                    case MagentoUploadCommand.Hold:
-                        UpdateAsHold(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                        break;
-                    case MagentoUploadCommand.Unhold:
-                        UpdateAsPending(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                        break;
-                    case MagentoUploadCommand.Cancel:
-                        UploadAsCancel(webClient, processedComments, orderSearchEntity.MagentoOrderID);
-                        break;
-                    case MagentoUploadCommand.Comments:
-                        UploadCommentsIfPresent(webClient, processedComments, orderSearchEntity.MagentoOrderID, true);
-                        break;
+                    await Task.Run(() =>
+                        {
+                            switch (command)
+                            {
+                                case MagentoUploadCommand.Complete:
+                                    UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, orderSearchEntity);
+                                    break;
+                                case MagentoUploadCommand.Hold:
+                                    UpdateAsHold(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                                    break;
+                                case MagentoUploadCommand.Unhold:
+                                    UpdateAsPending(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                                    break;
+                                case MagentoUploadCommand.Cancel:
+                                    UploadAsCancel(webClient, processedComments, orderSearchEntity.MagentoOrderID);
+                                    break;
+                                case MagentoUploadCommand.Comments:
+                                    UploadCommentsIfPresent(webClient, processedComments, orderSearchEntity.MagentoOrderID, true);
+                                    break;
+                            }
+                        }
+                    ).ConfigureAwait(false);
                 }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                throw new MagentoException(string.Join($"{ Environment.NewLine }", exceptions.Select(e => e.Message)), exceptions.First());
             }
 
             unitOfWork.AddForSave(orderEntity);

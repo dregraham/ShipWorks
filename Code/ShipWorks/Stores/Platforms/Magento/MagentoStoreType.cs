@@ -19,6 +19,9 @@ using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Stores.Platforms.Magento.WizardPages;
 using ShipWorks.UI.Wizard;
+using Interapptive.Shared.Collections;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -132,115 +135,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Create the magento-custom control for store options
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl() => new MagentoStoreSettingsControl();
-
-        /// <summary>
-        /// Create the menu commands for updating status
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            // take actions to Cancel the order
-            MenuCommand command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Cancel), OnOrderCommand) { Tag = MagentoUploadCommand.Cancel };
-            commands.Add(command);
-
-            // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
-            // sets the order "state" online to complete
-            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Complete), OnOrderCommand) { Tag = MagentoUploadCommand.Complete };
-            commands.Add(command);
-
-            // place the order into Hold status
-            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Hold), OnOrderCommand) { Tag = MagentoUploadCommand.Hold };
-            commands.Add(command);
-
-            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
-            {
-                // take the order out of Hold status
-                command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Unhold), OnOrderCommand) { Tag = MagentoUploadCommand.Unhold };
-                commands.Add(command);
-            }
-
-            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Comments), OnOrderCommand) { Tag = MagentoUploadCommand.Comments, BreakBefore = true };
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// MenuCommand handler for executing order commands
-        /// </summary>
-        private void OnOrderCommand(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Online Order Action",
-                "ShipWorks is executing an action on the order.",
-                "Updating order {0} of {1}...");
-
-            IMenuCommand command = context.MenuCommand;
-            MagentoUploadCommand action;
-            string comments = "";
-            if ((MagentoUploadCommand) command.Tag == MagentoUploadCommand.Comments)
-            {
-                // open a window for the user to select an action and comments
-                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg(MagentoVersion))
-                {
-                    if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
-                    {
-                        action = dlg.Action;
-                        comments = dlg.Comments;
-                    }
-                    else
-                    {
-                        // cancel now
-                        context.Complete();
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                action = (MagentoUploadCommand) command.Tag;
-            }
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys,
-                new Dictionary<string, string> { { "action", action.ToString() }, { "comments", comments } });
-        }
-
-        /// <summary>
-        /// The worker thread function for executing commands on Magento orders online
-        /// </summary>
-        private void ExecuteOrderCommandCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            Dictionary<string, string> state = (Dictionary<string, string>) userState;
-            MagentoUploadCommand action = (MagentoUploadCommand) Enum.Parse(typeof(MagentoUploadCommand), state["action"]);
-            string comments = state["comments"];
-
-            // create the updater and execute the command
-            IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) CreateOnlineUpdater();
-
-            try
-            {
-                // lookup the store to get the email sending preference
-                MagentoStoreEntity store = StoreManager.GetStore(DataProvider.GetOrderHeader(orderID).StoreID) as MagentoStoreEntity;
-                if (store != null)
-                {
-                    updater.UploadShipmentDetails(orderID, action, comments, store.MagentoTrackingEmails);
-                }
-                else
-                {
-                    log.WarnFormat("Cannot execute online command for Magento order id {0}, the store was deleted.", orderID);
-                }
-            }
-            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
-            {
-                issueAdder.Add(orderID, ex);
-            }
-        }
 
         /// <summary>
         /// Create a magento online updater

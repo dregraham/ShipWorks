@@ -1825,6 +1825,7 @@
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoTwoRestClient.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />

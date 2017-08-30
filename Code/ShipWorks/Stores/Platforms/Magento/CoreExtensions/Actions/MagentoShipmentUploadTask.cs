@@ -9,6 +9,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 {
@@ -79,9 +80,14 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Executes the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -103,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 
                     foreach (long entityID in inputKeys)
                     {
-                        updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork);
+                        await updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork).ConfigureAwait(false);
                     }
                 }
             }

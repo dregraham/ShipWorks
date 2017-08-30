@@ -17,6 +17,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -129,6 +130,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     }
 
                     string newStatus = string.Empty;
+                    List<Exception> exceptions = new List<Exception>();
 
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
@@ -139,9 +141,23 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                         foreach (MagentoOrderSearchEntity orderSearchEntity in orderSearchEntities)
                         {
-                            // execute the action
-                            newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
+                            try
+                            {
+                                // execute the action
+                                await Task.Run(() => 
+                                    newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer))
+                                    .ConfigureAwait(false);
+                            }
+                            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
+                            {
+                                exceptions.Add(ex);
+                            }
                         }
+                    }
+
+                    if (exceptions.Any())
+                    {
+                        throw new MagentoException(string.Join($"{ Environment.NewLine }", exceptions.Select(e => e.Message)), exceptions.First());
                     }
 
                     // set status to what was returned
