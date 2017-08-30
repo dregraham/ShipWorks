@@ -28,6 +28,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         private readonly ITestOutputHelper output;
         private readonly AmazonStoreEntity store;
         private Mock<IAmazonMwsClient> webClient;
+        private readonly Mock<IMenuCommandExecutionContext> menuContext;
+        private readonly AmazonOnlineUpdateCommandCreator commandCreator;
 
         public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -38,8 +40,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 mock.Override<IMessageHelper>();
             });
 
-            store = Create.Store<AmazonStoreEntity>(StoreTypeCode.Amazon)
-                .Save();
+            menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Amazon) as AmazonOnlineUpdateCommandCreator;
+
+            store = Create.Store<AmazonStoreEntity>(StoreTypeCode.Amazon).Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
             var dummyOrder = Create.Order(store, context.Customer).Save();
@@ -54,12 +58,24 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         [Fact]
         public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsNotCombined()
         {
-            OrderEntity order = CreateNormalOrder(1, "track-123");
+            OrderEntity order = CreateNormalOrder(1, "track-123", false);
 
-            var menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
-            var commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Amazon) as AmazonOnlineUpdateCommandCreator;
+            await commandCreator.OnUploadDetails(store, menuContext.Object);
+
+            webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
+                o.Any(i => i.AmazonOrderID == "10000" && i.Shipment.TrackingNumber == "track-123"))));
+        }
+
+        [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOneOfTwoCombinedOrdersIsManual()
+        {
+            OrderEntity manualOrder = CreateNormalOrder(2, "track-456", true);
+            OrderEntity order = CreateNormalOrder(1, "track-123", false);
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
+
             await commandCreator.OnUploadDetails(store, menuContext.Object);
 
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
@@ -69,12 +85,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         [Fact]
         public async Task UploadDetails_MakesTwoWebRequests_WhenOrderIsCombined()
         {
-            OrderEntity order = CreateCombinedOrder(1, 2, 3, "track-123");
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
 
-            var menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
-            var commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Amazon) as AmazonOnlineUpdateCommandCreator;
             await commandCreator.OnUploadDetails(store, menuContext.Object);
 
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
@@ -83,15 +97,26 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         }
 
         [Fact]
+        public async Task UploadDetails_MakesOneWebRequest_WhenOrderIsCombinedAndOneIsManual()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, true), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            await commandCreator.OnUploadDetails(store, menuContext.Object);
+
+            webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
+                o.Any(i => i.AmazonOrderID == "30000" && i.Shipment.TrackingNumber == "track-123"))));
+        }
+
+        [Fact]
         public async Task UploadDetails_MakesThreeWebRequests_WhenBothCombinedAndNonCombinedAreUploaded()
         {
-            OrderEntity normalOrder = CreateNormalOrder(1, "track-123");
-            OrderEntity combinedOrder = CreateCombinedOrder(4, 5, 6, "track-456");
+            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false);
+            OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
 
-            var menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID });
 
-            var commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Amazon) as AmazonOnlineUpdateCommandCreator;
             await commandCreator.OnUploadDetails(store, menuContext.Object);
 
             webClient.Verify(x => x.UploadShipmentDetails(It.Is<List<AmazonOrderUploadDetail>>(o =>
@@ -100,12 +125,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 o.Any(i => i.AmazonOrderID == "60000" && i.Shipment.TrackingNumber == "track-456"))));
         }
 
-        private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber)
+        private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual)
         {
             var order = Create.Order<AmazonOrderEntity>(store, context.Customer)
                 .Set(x => x.AmazonOrderID, (orderRoot * 10000).ToString())
                 .Set(x => x.OrderNumber, orderRoot * 10)
                 .Set(x => x.CombineSplitStatus, CombineSplitStatusType.None)
+                .Set(x => x.IsManual, manual)
                 .Save();
 
             Create.Shipment(order)
@@ -117,10 +143,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 .Set(x => x.TrackingNumber, trackingNumber)
                 .Set(x => x.Processed, true)
                 .Save();
+
             return order;
         }
 
-        private OrderEntity CreateCombinedOrder(int orderRoot, int item1Root, int item2Root, string trackingNumber)
+        private OrderEntity CreateCombinedOrder(int orderRoot, string trackingNumber, params Tuple<int, bool>[] combinedOrderDetails)
         {
             var order = Create.Order<AmazonOrderEntity>(store, context.Customer)
                 .Set(x => x.AmazonOrderID, (orderRoot * 10000).ToString())
@@ -128,33 +155,29 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 .Set(x => x.CombineSplitStatus, CombineSplitStatusType.Combined)
                 .Save();
 
-            Create.Entity<OrderSearchEntity>()
-                .Set(x => x.OrderID, order.OrderID)
-                .Set(x => x.StoreID, store.StoreID)
-                .Set(x => x.OriginalOrderID, item1Root * -1006)
-                .Set(x => x.OrderNumber, item1Root * 10)
-                .Set(x => x.OrderNumberComplete, (item1Root * 10).ToString())
-                .Save();
+            foreach (var details in combinedOrderDetails)
+            {
+                int idRoot = details.Item1;
+                bool manual = details.Item2;
 
-            Create.Entity<AmazonOrderSearchEntity>()
-                .Set(x => x.OrderID, order.OrderID)
-                .Set(x => x.OriginalOrderID, item1Root * -1006)
-                .Set(x => x.AmazonOrderID, (item1Root * 10000).ToString())
-                .Save();
+                Create.Entity<OrderSearchEntity>()
+                    .Set(x => x.OrderID, order.OrderID)
+                    .Set(x => x.StoreID, store.StoreID)
+                    .Set(x => x.IsManual, manual)
+                    .Set(x => x.OriginalOrderID, idRoot * -1006)
+                    .Set(x => x.OrderNumber, idRoot * 10)
+                    .Set(x => x.OrderNumberComplete, (idRoot * 10).ToString())
+                    .Save();
 
-            Create.Entity<OrderSearchEntity>()
-                .Set(x => x.OrderID, order.OrderID)
-                .Set(x => x.StoreID, store.StoreID)
-                .Set(x => x.OriginalOrderID, item2Root * -1006)
-                .Set(x => x.OrderNumber, item2Root * 10)
-                .Set(x => x.OrderNumberComplete, (item2Root * 10).ToString())
-                .Save();
-
-            Create.Entity<AmazonOrderSearchEntity>()
-                .Set(x => x.OrderID, order.OrderID)
-                .Set(x => x.OriginalOrderID, item2Root * -1006)
-                .Set(x => x.AmazonOrderID, (item2Root * 10000).ToString())
-                .Save();
+                if (!manual)
+                {
+                    Create.Entity<AmazonOrderSearchEntity>()
+                        .Set(x => x.OrderID, order.OrderID)
+                        .Set(x => x.OriginalOrderID, idRoot * -1006)
+                        .Set(x => x.AmazonOrderID, (idRoot * 10000).ToString())
+                        .Save();
+                }
+            }
 
             Create.Shipment(order)
                 .AsOther(o =>
@@ -165,6 +188,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 .Set(x => x.TrackingNumber, trackingNumber)
                 .Set(x => x.Processed, true)
                 .Save();
+
             return order;
         }
 
