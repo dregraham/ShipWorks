@@ -107,8 +107,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ICombineOrderSearchProvider<EbayOrderSearchEntity> orderSearchProvider =
-                    scope.ResolveKeyed<ICombineOrderSearchProvider<EbayOrderSearchEntity>>(StoreTypeCode.Ebay);
+                EbayCombineOrderSearchProvider orderSearchProvider = scope.Resolve<EbayCombineOrderSearchProvider>();
 
                 IEnumerable<EbayOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 

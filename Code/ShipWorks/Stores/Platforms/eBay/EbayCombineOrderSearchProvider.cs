@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// <summary>
     /// Constructor
     /// </summary>
-    [KeyedComponent(typeof(ICombineOrderSearchProvider<EbayOrderSearchEntity>), StoreTypeCode.Ebay)]
+    [Component(RegistrationType.Self)]
     public class EbayCombineOrderSearchProvider : CombineOrderSearchBaseProvider<EbayOrderSearchEntity>
     {
         /// <summary>
