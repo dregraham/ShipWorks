@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
-    /// Class for handeling Amazon MWS API Related Settings
+    /// Class for handling Amazon MWS API Related Settings
     /// </summary>
     public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Amazon Mws Credentials
+        /// Amazon MWS Credentials
         /// </summary>
         public IAmazonCredentials Credentials { get; set; }
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Gets the Action parameter value for an API call 
+        /// Gets the Action parameter value for an API call
         /// </summary>
         public string GetActionName(AmazonMwsApiCall amazonMwsApiCall)
         {
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 apiNamespace = endpointNamespace + GetApiEndpointPath(api);
             }
-            
+
             return apiNamespace;
         }
     }

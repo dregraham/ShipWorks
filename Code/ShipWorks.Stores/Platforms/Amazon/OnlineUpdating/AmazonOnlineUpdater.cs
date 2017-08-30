@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient;
+        private readonly Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient;
         private readonly IAmazonOrderSearchProvider orderSearchProvider;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         /// </summary>
         public AmazonOnlineUpdater(IOrderManager orderManager, IShippingManager shippingManager,
             ISqlAdapterFactory sqlAdapterFactory, IAmazonOrderSearchProvider orderSearchProvider,
-            Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient)
+            Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient)
         {
             this.orderSearchProvider = orderSearchProvider;
             this.createMwsClient = createMwsClient;
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         public async Task UploadShipmentDetails(AmazonStoreEntity store, List<ShipmentEntity> shipments)
         {
             // upload the feed using the MWS API
-            using (AmazonMwsClient client = createMwsClient(store))
+            using (IAmazonMwsClient client = createMwsClient(store))
             {
                 var uploadDetails = await CreateUploadDetails(shipments).ConfigureAwait(false);
                 await client.UploadShipmentDetails(uploadDetails).ConfigureAwait(false);
@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         {
             if (order == null)
             {
-                return null;
+                return Enumerable.Empty<AmazonOrderUploadDetail>();
             }
 
             var identifiers = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);

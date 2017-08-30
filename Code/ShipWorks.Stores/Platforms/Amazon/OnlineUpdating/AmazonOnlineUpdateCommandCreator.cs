@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(StoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnUploadDetails(StoreEntity store, IMenuCommandExecutionContext context)
         {
             var results = await ShipmentUploadCallback(store, context.SelectedKeys).ConfigureAwait(true);
             var exceptions = results.Failure ? new[] { results.Exception } : Enumerable.Empty<Exception>();

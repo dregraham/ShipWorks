@@ -37,12 +37,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
-        readonly Func<AmazonStoreEntity, AmazonMwsClient> createWebClient;
+        readonly Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsDownloader(StoreEntity store, Func<AmazonStoreEntity, AmazonMwsClient> createWebClient)
+        public AmazonMwsDownloader(StoreEntity store, Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient)
             : base(store)
         {
             this.createWebClient = createWebClient;
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.Detail = "Connecting to Amazon...";
 
                 // declare upfront which api calls we are going to be using so they will be throttled
-                using (AmazonMwsClient client = createWebClient(AmazonStore))
+                using (IAmazonMwsClient client = createWebClient(AmazonStore))
                 {
                     client.Progress = Progress;
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load orders from a page of results
         /// </summary>
-        private async Task LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrders(IAmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             int totalCount = quantitySeen + XPathUtility.Evaluate(xpath, "count(//amz:Order)", 0);
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrder(IAmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
@@ -295,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
-        private async Task LoadOrderItems(AmazonMwsClient client, AmazonOrderEntity order)
+        private async Task LoadOrderItems(IAmazonMwsClient client, AmazonOrderEntity order)
         {
             await client.GetOrderItems(order.AmazonOrderID, navigator =>
             {
@@ -403,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         /// <param name="items">The items.</param>
         /// <param name="webClient">The web client.</param>
-        private async Task LoadOrderItemDetails(List<AmazonOrderItemEntity> items, AmazonMwsClient webClient)
+        private async Task LoadOrderItemDetails(List<AmazonOrderItemEntity> items, IAmazonMwsClient webClient)
         {
             AmazonProductDetailRepository repository = new AmazonProductDetailRepository(webClient);
             IEnumerable<XPathNamespaceNavigator> products = await repository.GetProductDetails(items).ConfigureAwait(false);

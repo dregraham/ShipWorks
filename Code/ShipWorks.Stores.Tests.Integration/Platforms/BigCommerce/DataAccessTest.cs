@@ -78,6 +78,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             Create.Entity<OrderSearchEntity>()
                 .Set(x => x.OrderID, order.OrderID)
                 .Set(x => x.StoreID, store.StoreID)
+                .Set(x => x.OriginalOrderID, -2006)
                 .Set(x => x.IsManual, true)
                 .Set(x => x.OrderNumber, 456)
                 .Set(x => x.OrderNumberComplete, "456A")
@@ -86,6 +87,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             Create.Entity<OrderSearchEntity>()
                 .Set(x => x.OrderID, order.OrderID)
                 .Set(x => x.StoreID, store.StoreID)
+                .Set(x => x.OriginalOrderID, -3006)
                 .Set(x => x.IsManual, false)
                 .Set(x => x.OrderNumber, 789)
                 .Set(x => x.OrderNumberComplete, "789B")
@@ -103,13 +105,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             Assert.Equal(2, orderDetails.OrdersToUpload.Count());
 
             var firstOrderToUpload = orderDetails.OrdersToUpload.First();
-            Assert.Equal(order.OrderID, firstOrderToUpload.OrderID);
+            Assert.Equal(-2006, firstOrderToUpload.OrderID);
             Assert.Equal(true, firstOrderToUpload.IsManual);
             Assert.Equal(456, firstOrderToUpload.OrderNumber);
             Assert.Equal("456A", firstOrderToUpload.OrderNumberComplete);
 
             var lastOrderToUpload = orderDetails.OrdersToUpload.Last();
-            Assert.Equal(order.OrderID, lastOrderToUpload.OrderID);
+            Assert.Equal(-3006, lastOrderToUpload.OrderID);
             Assert.Equal(false, lastOrderToUpload.IsManual);
             Assert.Equal(789, lastOrderToUpload.OrderNumber);
             Assert.Equal("789B", lastOrderToUpload.OrderNumberComplete);

@@ -37,13 +37,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
     {
         // Logger
         private readonly ILog log;
-        private readonly Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient;
+        private readonly Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonStoreType(StoreEntity store,
-            Func<AmazonStoreEntity, AmazonMwsClient> createMwsClient,
+            Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient,
             Func<Type, ILog> createLogger)
             : base(store)
         {
@@ -441,7 +441,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     // The domain name has not been retrieved from Amazon yet (the store was registered before
                     // this functionality was added), so we need to try to look it up
-                    using (AmazonMwsClient client = createMwsClient(amazonStore))
+                    using (IAmazonMwsClient client = createMwsClient(amazonStore))
                     {
                         List<AmazonMwsMarketplace> marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
                         if (marketplaces != null)

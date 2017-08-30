@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     public class AmazonProductDetailRepository
     {
         const int MaxItemsInCache = 1000;
-        AmazonMwsClient webClient;
+        IAmazonMwsClient webClient;
 
         // logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonProductDetailRepository));
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonProductDetailRepository"/> class.
         /// </summary>
-        public AmazonProductDetailRepository(AmazonMwsClient webClient)
+        public AmazonProductDetailRepository(IAmazonMwsClient webClient)
         {
             this.webClient = webClient;
         }

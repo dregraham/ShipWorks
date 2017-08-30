@@ -32,8 +32,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// Handles communication with Amazon MWS (Marketplace Web Service) for
     /// retrieving orders and uploading shipment information
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public sealed class AmazonMwsClient : IDisposable
+    [Component]
+    public sealed class AmazonMwsClient : IAmazonMwsClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
 

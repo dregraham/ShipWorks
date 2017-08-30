@@ -175,7 +175,8 @@
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
-    <Compile Include="Platforms\Amazon\MultiCombineTest.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Amazon\OrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\MultiCombineTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />

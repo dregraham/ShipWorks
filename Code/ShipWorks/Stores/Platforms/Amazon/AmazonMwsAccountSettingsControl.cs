@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    var client = lifetimeScope.Resolve<AmazonMwsClient>(TypedParameter.From(saveStore));
+                    var client = lifetimeScope.Resolve<IAmazonMwsClient>(TypedParameter.From(saveStore));
                     await client.TestCredentials().ConfigureAwait(true);
                 }
 
@@ -262,7 +262,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var client = lifetimeScope.Resolve<AmazonMwsClient>(TypedParameter.From(amazonStore));
+                var client = lifetimeScope.Resolve<IAmazonMwsClient>(TypedParameter.From(amazonStore));
                 marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
             }
 
