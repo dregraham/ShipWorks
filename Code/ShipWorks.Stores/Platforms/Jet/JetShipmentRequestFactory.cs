@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         private static List<JetShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
-            return shipment.Order.OrderItems.Cast<JetOrderItemEntity>()
+            return shipment.Order.OrderItems.Where(oi => oi is JetOrderItemEntity).Cast<JetOrderItemEntity>()
                 .Select(jetItem => new JetShipmentItem
                 {
                     MerchantSku = jetItem.MerchantSku,
