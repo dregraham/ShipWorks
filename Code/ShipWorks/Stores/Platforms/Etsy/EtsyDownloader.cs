@@ -397,7 +397,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get the requested shipping from the etsy order json
         /// </summary>
-        private string GetRequestedShipping(JToken orderFromEtsy)
+        private static string GetRequestedShipping(JToken orderFromEtsy)
         {
             try
             {
