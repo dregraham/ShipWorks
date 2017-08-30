@@ -725,6 +725,7 @@
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\Interaction\AsyncMenuCommand.cs" />
     <Compile Include="ApplicationCore\Interaction\IMenuCommand.cs" />
+    <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />

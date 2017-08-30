@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, BigCommerceStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, BigCommerceStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context, BigCommerceStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, BigCommerceStoreEntity store)
         {
             int statusCode = (int) context.MenuCommand.Tag;
 

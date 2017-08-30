@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.Interaction
     /// <summary>
     /// Data that is used during the execution of a MenuCommand
     /// </summary>
-    public class MenuCommandExecutionContext
+    public class MenuCommandExecutionContext : IMenuCommandExecutionContext
     {
         // The callback to call when the command completes
         MenuCommandCompleteEventHandler asyncCallback;

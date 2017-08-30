@@ -144,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
             QueryFactory factory = new QueryFactory();
             var query = factory.OrderSearch
                 .Select(() => new OnlineOrderDetails(
-                        orderID,
+                        OrderSearchFields.OriginalOrderID.ToValue<long>(),
                         OrderSearchFields.IsManual.ToValue<bool>(),
                         OrderSearchFields.OrderNumber.ToValue<long>(),
                         OrderSearchFields.OrderNumberComplete.ToValue<string>()))

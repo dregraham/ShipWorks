@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Content\CombineOrderTest.cs" />
+    <Compile Include="Content\OrderCombinationUserInteractionTest.cs" />
     <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
@@ -176,8 +177,10 @@
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
     <Compile Include="Platforms\Amazon\MultiCombineTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
+    <Compile Include="Platforms\AmeriCommerce\MultiCombineTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
     <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
