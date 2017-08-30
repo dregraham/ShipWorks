@@ -13,6 +13,7 @@ using log4net;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
 {
@@ -108,9 +109,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the eBay message sending
         /// </summary>
-        protected override void /**/Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             try
             {
@@ -125,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions
                     if (ebayStore != null)
                     {
                         EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                        updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe);
+                        await updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe).ConfigureAwait(false);
                     }
                     else
                     {

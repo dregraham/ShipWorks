@@ -18,6 +18,11 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -43,23 +48,40 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Sends a message to the buyer associated with the entityID (shipment or order)
         /// </summary>
-        public void SendMessage(long entityID, EbaySendMessageType messageType, string subject, string message, bool copySender)
+        public async Task SendMessage(long entityID, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
+            List<EbayException> exceptions = new List<EbayException>();
+
             // Send the message for each item in the collection
             foreach (EbayOrderItemEntity orderItem in DetermineEbayItems(entityID))
             {
-                SendMessage(orderItem, messageType, subject, message, copySender);
+                try
+                {
+                    await SendMessage(orderItem, messageType, subject, message, copySender).ConfigureAwait(false);
+                }
+                catch (EbayException ex)
+                {
+                    // Log the exception and re-throw it
+                    log.ErrorFormat("Exception sending a message for order {1}: {2}.", orderItem.Order.OrderNumber, ex.Message);
+                    exceptions.Add(ex);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                throw new EbayException(string.Join($"{ Environment.NewLine }", exceptions.Select(e => e.Message)));
             }
         }
 
         /// <summary>
         /// Send a message with the given properties to the buyer of the order item specified
         /// </summary>
-        private void SendMessage(EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
+        private async Task SendMessage(EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
             // Need the buyer and to convert the ShipWorks ebay message type to the
             // type expected by eBay to send an eBay message
-            string buyerID = ((EbayOrderEntity) orderItem.Order).EbayBuyerID;
+            string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
+
             QuestionTypeCodeType ebayMessageType = EbayUtility.GetEbayQuestionTypeCode(messageType);
 
             try
@@ -67,34 +89,67 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
 
                 // Fire off the message
-                webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender);
+                await Task.Run(() => 
+                    webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender)).ConfigureAwait(false);
             }
             catch (EbayException ex)
             {
                 // Log the exception and re-throw it
-                log.ErrorFormat("Exception sending a message to {0} for order {1}: {2}.", buyerID, orderItem.Order.OrderNumber, ex.Message);
+                log.ErrorFormat("Exception sending a message to {0} for order {1}, order item {2}: {3}.", buyerID, orderItem.Order.OrderNumber, orderItem.EbayItemID, ex.Message);
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the EbayOrderSearchEntity for the given order and orderItemID
+        /// </summary>
+        private async Task<string> FetchEbayOrderItemBuyerId(IOrderEntity order, long originalOrderID)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ICombineOrderSearchProvider<EbayOrderSearchEntity> orderSearchProvider =
+                    scope.ResolveKeyed<ICombineOrderSearchProvider<EbayOrderSearchEntity>>(StoreTypeCode.Ebay);
+
+                IEnumerable<EbayOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                return orderSearchEntities.FirstOrDefault(os => os.OriginalOrderID == originalOrderID)?.EbayBuyerID;
             }
         }
 
         /// <summary>
         /// Leave Feedback
         /// </summary>
-        public void LeaveFeedback(long entityID, CommentTypeCodeType feedbackType, string feedback)
+        public async Task LeaveFeedback(long entityID, CommentTypeCodeType feedbackType, string feedback)
         {
+            List<EbayException> exceptions = new List<EbayException>();
+
             log.InfoFormat("Preparing to leave eBay feedback for entity id {0}", entityID);
 
             // Leave feedback for those that haven't had feedback left for them already
             foreach (EbayOrderItemEntity orderItem in DetermineEbayItems(entityID).Where(i => i.FeedbackLeftType == (int) EbayFeedbackType.None))
             {
-                LeaveFeedback(orderItem, feedbackType, feedback);
+                try
+                {
+                    await LeaveFeedback(orderItem, feedbackType, feedback).ConfigureAwait(false);
+                }
+                catch (EbayException ex)
+                {
+                    // Log the exception and re-throw it
+                    log.ErrorFormat("Exception sending a message for order {0}, order item {1}: {2}.", orderItem.Order.OrderNumber, orderItem.EbayItemID, ex.Message);
+                    exceptions.Add(ex);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                throw new EbayException(string.Join($"{ Environment.NewLine }", exceptions.Select(e => e.Message)));
             }
         }
 
         /// <summary>
         /// Leaves eBay feedback for an eBay Order Item
         /// </summary>
-        private void LeaveFeedback(EbayOrderItemEntity orderItem, CommentTypeCodeType feedbackType, string feedback)
+        private async Task LeaveFeedback(EbayOrderItemEntity orderItem, CommentTypeCodeType feedbackType, string feedback)
         {
             string error = string.Empty;
 
@@ -105,7 +160,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
 
                 EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
-                webClient.LeaveFeedback(orderItem.EbayItemID, orderItem.EbayTransactionID, ((EbayOrderEntity) orderItem.Order).EbayBuyerID, feedbackType, feedback);
+                string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
+
+                await Task.Run(() => 
+                        webClient.LeaveFeedback(orderItem.EbayItemID, orderItem.EbayTransactionID, buyerID, feedbackType, feedback)).ConfigureAwait(false);
 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
@@ -207,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     items.Remove(item);
                 }
             }
-
+            
             return items;
         }
 

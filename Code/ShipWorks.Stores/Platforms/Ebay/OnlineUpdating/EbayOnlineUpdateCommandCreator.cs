@@ -58,8 +58,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         {
             List<IMenuCommand> commands = new List<IMenuCommand>();
 
-            commands.Add(new MenuCommand("Send Message...", OnSendMessage));
-            commands.Add(new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true });
+            commands.Add(new AsyncMenuCommand("Send Message...", OnSendMessage));
+            commands.Add(new AsyncMenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true });
 
             commands.Add(new MenuCommand("Mark as Paid", OnUpdateShipment) { Tag = EbayOnlineAction.Paid });
             commands.Add(new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped });
@@ -316,7 +316,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// <summary>
         /// MenuCommand handler for sending messages to the eBay buyer
         /// </summary>
-        private void OnSendMessage(MenuCommandExecutionContext context)
+        private async Task OnSendMessage(MenuCommandExecutionContext context)
         {
             List<long> selectedIds = context.SelectedKeys.ToList();
 
@@ -328,13 +328,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                     return;
                 }
 
-                // kick off the message sending
-                Dictionary<string, object> state = new Dictionary<string, object>();
-                state.Add("MessageType", dlg.MessageType);
-                state.Add("Message", dlg.Message);
-                state.Add("Subject", dlg.Subject);
-                state.Add("CopyMe", dlg.CopyMe);
-
                 // if the user selected to send a message relating to a Single item, we only use that key
                 if (dlg.SelectedItemID > 0)
                 {
@@ -342,36 +335,23 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                     selectedIds.Add(dlg.SelectedItemID);
                 }
 
-                BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Sending Messages",
-                    "ShipWorks is sending eBay Messages.",
-                    "Sending message for {0} of {1}...");
+                var results = await selectedIds
+                    .SelectWithProgress(messageHelper, "Sending Messages", "ShipWorks is sending eBay Messages.", "Sending message for {0} of {1}...",
+                        orderID => Task.Run(() => SendMessageCallback(orderID, dlg.Subject, dlg.Message, dlg.CopyMe, dlg.MessageType)))
+                    .ConfigureAwait(true);
 
-                executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-                // execute, passing the state which tells what message information to send
-                executor.ExecuteAsync(SendMessageCallback, selectedIds, state);
+                var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+                context.Complete(exceptions, MenuCommandResult.Error);
             }
         }
 
         /// <summary>
         /// Worker method for sending eBay messages.
         /// </summary>
-        private void SendMessageCallback(long entityId, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async Task<IResult> SendMessageCallback(long entityId, string subject, string message, bool copyMe, EbaySendMessageType messageType)
         {
             // get the store instance
             EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(entityId) as EbayStoreEntity;
-
-            // unpack the user state
-            Dictionary<string, object> state = userState as Dictionary<string, object>;
-
-            EbaySendMessageType messageType = (EbaySendMessageType) state["MessageType"];
-            string subject = (string) state["Subject"];
-            string message = (string) state["Message"];
-            bool copyMe = (bool) state["CopyMe"];
 
             // Perform token processing on the message to be sent
             string processedSubject = TemplateTokenProcessor.ProcessTokens(subject, entityId);
@@ -380,22 +360,22 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
             try
             {
                 EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe);
+                await updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe).ConfigureAwait(false);
+
+                return Result.FromSuccess();
             }
             catch (EbayException ex)
             {
                 // log it
                 log.ErrorFormat("Error sending eBay message for entityID {0}: {1}", entityId, ex.Message);
-
-                // add the error to the issues so we can react later
-                issueAdder.Add(entityId, ex);
+                return Result.FromError(ex);
             }
         }
 
         /// <summary>
         /// MenuCommand handler for leaving ebay feedback
         /// </summary>
-        private void OnLeaveFeedback(MenuCommandExecutionContext context)
+        private async Task OnLeaveFeedback(MenuCommandExecutionContext context)
         {
             // get the list of orderIds selected
             List<long> selectedIds = context.SelectedKeys.ToList();
@@ -407,10 +387,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                     context.Complete();
                     return;
                 }
-
-                string comments = dlg.Comments;
-                CommentTypeCodeType feedbackType = dlg.FeedbackType;
-
+                
                 // if the user selected to leave feedback for a single item, use it only
                 if (dlg.SelectedItemID > 0)
                 {
@@ -418,48 +395,38 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                     selectedIds.Add(dlg.SelectedItemID);
                 }
 
-                // execute
-                BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Leaving Feedback",
-                    "ShipWorks is leaving eBay Feedback.",
-                    "Leaving feedback for order {0} of {1}...");
+                var results = await selectedIds
+                    .SelectWithProgress(messageHelper, 
+                        "Leaving Feedback", 
+                        "ShipWorks is leaving eBay Feedback.", 
+                        "Leaving feedback for order {0} of {1}...",
+                        entityID => Task.Run(() => LeaveFeedbackCallback(entityID, dlg.FeedbackType, dlg.Comments)))
+                    .ConfigureAwait(true);
 
-                executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-                // execute, passing the menu command state which tells how to perform the update
-                Dictionary<string, object> state = new Dictionary<string, object>();
-                state["feedback"] = comments;
-                state["feedbackType"] = feedbackType;
-
-                executor.ExecuteAsync(LeaveFeedbackCallback, selectedIds, state);
+                var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+                context.Complete(exceptions, MenuCommandResult.Error);
             }
         }
 
         /// <summary>
         /// Worker method for leaving feedback.
         /// </summary>
-        private void LeaveFeedbackCallback(long entityId, object userState, BackgroundIssueAdder<long> issueAdder)
+        private async Task<IResult> LeaveFeedbackCallback(long entityId, CommentTypeCodeType feedbackType, string feedback)
         {
             EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(entityId) as EbayStoreEntity;
-
-            // unpack the user state
-            Dictionary<string, object> state = userState as Dictionary<string, object>;
 
             try
             {
                 EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.LeaveFeedback(entityId, (CommentTypeCodeType) state["feedbackType"], (string) state["feedback"]);
+                await updater.LeaveFeedback(entityId, feedbackType, feedback).ConfigureAwait(false);
+
+                return Result.FromSuccess();
             }
             catch (EbayException ex)
             {
                 // log it
                 log.ErrorFormat("Error updating online status for entity Id {0}: {1}", entityId, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(entityId, ex);
+                return Result.FromError(ex);
             }
         }
 

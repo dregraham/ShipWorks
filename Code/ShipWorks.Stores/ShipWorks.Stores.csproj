@@ -257,6 +257,7 @@
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\EbayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
