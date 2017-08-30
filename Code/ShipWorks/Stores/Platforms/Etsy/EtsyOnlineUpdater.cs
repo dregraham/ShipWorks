@@ -205,6 +205,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             if (shipment == null)
             {
                 log.InfoFormat("No shipment with tracking number associated with order {0}.", orderID);
+                return;
             }
 
             UnitOfWork2 unitOfWork = new UnitOfWork2();
