@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating
 {
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, AmeriCommerceStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, AmeriCommerceStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                await onlineUpdater.UploadOrderShipmentDetails(store, new []{ orderID }).ConfigureAwait(false);
+                await onlineUpdater.UploadOrderShipmentDetails(store, new[] { orderID }).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (AmeriCommerceException ex)
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context, AmeriCommerceStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, AmeriCommerceStoreEntity store)
         {
             int statusCode = (int) context.MenuCommand.Tag;
 

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Services.Protocols;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -23,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     /// <summary>
     /// Web client for communicating with the AmeriCommerce SOAP api
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [Component]
     public class AmeriCommerceWebClient : IAmeriCommerceWebClient
     {
         // Logger
@@ -380,31 +378,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Update the online status of the specified order
-        /// </summary>
-        public async Task UpdateOrderStatus(OrderEntity order, int statusCode)
-        {
-            IEnumerable<long> identifiers = await cominedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
-
-            if (identifiers.Count() == 1 && order.IsManual)
-            {
-                log.WarnFormat("Not uploading shipment status since order {0} is manual.", order.OrderID);
-                return;
-            }
-
-            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
-            {
-                foreach (var orderIdentifier in chunk)
-                {
-                    PerformOrderStatusUpdate(orderIdentifier, statusCode);
-                }
-            }
-        }
-
-        /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        private void PerformOrderStatusUpdate(long orderNumber, int statusCode)
+        public void UpdateOrderStatus(long orderNumber, int statusCode)
         {
             try
             {
@@ -438,31 +414,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Update the online status of the specified order
-        /// </summary>
-        public async Task UploadShipmentDetails(ShipmentEntity shipment)
-        {
-            IEnumerable<long> identifiers = await cominedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
-
-            if (identifiers.Count() == 1 && shipment.Order.IsManual)
-            {
-                log.WarnFormat("Not uploading shipment details since order {0} is manual.", shipment.Order.OrderID);
-                return;
-            }
-
-            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
-            {
-                foreach (var orderIdentifier in chunk)
-                {
-                    PerformUploadShipmentDetails(orderIdentifier, shipment);
-                }
-            }
-        }
-
-        /// <summary>
         /// Uploads the tracking number for shipments related to order OrderNumber
         /// </summary>
-        private void PerformUploadShipmentDetails(long orderNumber, ShipmentEntity shipment)
+        public void UploadShipmentDetails(long orderNumber, ShipmentEntity shipment)
         {
             try
             {

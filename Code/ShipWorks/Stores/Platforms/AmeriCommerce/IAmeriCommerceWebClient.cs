@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
@@ -74,11 +73,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        Task UpdateOrderStatus(OrderEntity order, int statusCode);
+        void UpdateOrderStatus(long orderNumber, int statusCode);
 
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        Task UploadShipmentDetails(ShipmentEntity shipment);
+        void UploadShipmentDetails(long orderNumber, ShipmentEntity shipment);
     }
 }
