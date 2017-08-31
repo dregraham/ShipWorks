@@ -1280,6 +1280,8 @@ namespace ShipWorks.Data.Model
 		MPN,
 		///<summary>DistributionCenterID. </summary>
 		DistributionCenterID,
+		///<summary>DistributionCenterName. </summary>
+		DistributionCenterName,
 		/// <summary></summary>
 		AmountOfFields
 	}
