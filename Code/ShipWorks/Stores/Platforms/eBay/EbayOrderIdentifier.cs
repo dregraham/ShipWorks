@@ -95,11 +95,30 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
-        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            CreateCombinedSearchQueryInternal(factory,
-                factory.EbayOrderSearch,
-                EbayOrderSearchFields.OriginalOrderID,
-                EbayOrderSearchFields.EbayOrderID == EbayOrderID);
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory)
+        {
+            // For ebay combined orders (EbayOrderID != 0), we can compare the EbayOrderID
+            if (EbayOrderID != 0)
+            {
+                return CreateCombinedSearchQueryInternal(factory,
+                    factory.EbayOrderSearch,
+                    EbayOrderSearchFields.OriginalOrderID,
+                    EbayOrderSearchFields.EbayOrderID == EbayOrderID);
+            }
+            
+            // For non-ebay combined orders we have to check the order item fields to see if it's been downloaded
+            // already.
+            var from = factory.EbayOrderSearch
+                              .InnerJoin(factory.OrderSearch)
+                              .On(EbayOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID)
+                              .InnerJoin(factory.EbayOrderItem)
+                              .On(EbayOrderItemFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            return factory.Create()
+                .From(from)
+                .Select(EbayOrderSearchFields.OriginalOrderID)
+                .Where(EbayOrderItemFields.EbayTransactionID == TransactionID & EbayOrderItemFields.EbayItemID == EbayItemID);
+        }
 
         /// <summary>
         /// String representation
