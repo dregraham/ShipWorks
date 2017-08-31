@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         private static List<JetShipmentItem> GetShipmentItems(ShipmentEntity shipment)
         {
-            return shipment.Order.OrderItems.Where(oi => oi is JetOrderItemEntity).Cast<JetOrderItemEntity>()
+            return shipment.Order.OrderItems.OfType<IJetOrderItemEntity>()
                 .Select(jetItem => new JetShipmentItem
                 {
                     MerchantSku = jetItem.MerchantSku,
