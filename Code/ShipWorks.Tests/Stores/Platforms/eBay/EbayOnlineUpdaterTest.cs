@@ -186,7 +186,6 @@ namespace ShipWorks.Tests.Stores.eBay
         }
     }
 
-
     /// <summary>
     /// This is how the old version of the EbayOnlineUpdater worked, sans the db access and non-carrier/tracking number code.
     ///

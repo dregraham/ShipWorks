@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.ApplicationCore.Logging;
 using System.Net;
 using System.Web.Services.Protocols;
 using System.Xml;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Requests
 {
@@ -26,15 +25,25 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// </summary>
         protected EbayRequest(EbayToken token, string callName)
         {
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
+
+            if (string.IsNullOrWhiteSpace(token.Token))
+            {
+                throw new ArgumentException("token cannot be blank", "token");
+            }
+
             this.configuration = new EbayRequestConfiguration(callName);
             this.token = token;
         }
 
         /// <summary>
-        /// Execute the request and resturn the response
+        /// Execute the request and return the response
         /// </summary>
         public abstract TResult Execute();
-        
+
         /// <summary>
         /// Gets the type of the eBay request.
         /// </summary>
@@ -48,11 +57,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// </summary>
         protected TEbayResponse SubmitRequest()
         {
-            // There are cases where a request could fail unexpectedly; An ebay forum post said this 
-            // is "expected behavior" and should be retried when encountered. 
+            // There are cases where a request could fail unexpectedly; An ebay forum post said this
+            // is "expected behavior" and should be retried when encountered.
             AbstractResponseType response = SubmitRequest(3);
             ValidateResponse(response);
-            
+
             TEbayResponse cast = response as TEbayResponse;
             if (cast == null)
             {
@@ -63,8 +72,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         }
 
         /// <summary>
-        /// Submits the request to eBay and conditionally retries to submit the request if an 
-        /// InvalidOperationException or WebException is encountered based on the number of 
+        /// Submits the request to eBay and conditionally retries to submit the request if an
+        /// InvalidOperationException or WebException is encountered based on the number of
         /// retry attempts remaining.
         /// </summary>
         /// <param name="retryAttemptsRemaining">The retry attempts remaining.</param>
@@ -74,8 +83,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
             AbstractResponseType response = null;
             using (CustomEBaySoapService service = CreateEbaySoapService())
             {
-                // There are cases where a request could fail unexpectedly; An ebay forum post said this 
-                // is "expected behavior" and should be retried when encountered. WebException or 
+                // There are cases where a request could fail unexpectedly; An ebay forum post said this
+                // is "expected behavior" and should be retried when encountered. WebException or
                 // InvalidOperationException could possibly warrant retrying to submit the request based
                 // on the number of attempts remaining
                 try
@@ -128,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                     if (retryAttemptsRemaining > 0)
                     {
                         // We'll get random eBay server errors such as "The data returned from eBay may be incomplete due to an eBay system error.",
-                        // XML parse exceptions, and other internal errors; they don't really provide a reason why this may occur; the mentality 
+                        // XML parse exceptions, and other internal errors; they don't really provide a reason why this may occur; the mentality
                         // is just, "Yep, that'll happen." According to eBay docs, we should retry the request for most of these types of errors.
                         response = SubmitRequest(--retryAttemptsRemaining);
                     }
@@ -165,10 +174,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         {
             if (response.Errors != null && response.Errors.Length > 0)
             {
-                // Errors occurred, but eBay treats warnings as errors; we're only interested 
-                // in those items with a serverity level of Error
+                // Errors occurred, but eBay treats warnings as errors; we're only interested
+                // in those items with a severity level of Error
                 List<ErrorType> ebayErrors = response.Errors.Where(e => e.SeverityCode == SeverityCodeType.Error).ToList();
-                
+
                 string errorMessage = string.Empty;
                 foreach (ErrorType error in ebayErrors)
                 {
@@ -197,11 +206,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <returns>A CustomEBaySoapService object.</returns>
         private CustomEBaySoapService CreateEbaySoapService()
         {
-            // Create the service 
+            // Create the service
             CustomEBaySoapService service = new CustomEBaySoapService(new ApiLogEntry(ApiLogSource.eBay, configuration.RequestName));
             service.Timeout = (int) configuration.Timeout.TotalMilliseconds;
 
-            // Set credentials 
+            // Set credentials
             service.RequesterCredentials = new CustomSecurityHeaderType();
             service.RequesterCredentials.eBayAuthToken = token.Token;
 
@@ -213,9 +222,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 // I was getting "Certificate Mistmatch" errors.  I initiated a eBay Live Chat on the eBay
                 // site and Bruce Thomson on 05/27/05 recomended leaving these properties out, as they are actually
                 // also known by eBay through the auth token.  Seems to fix the problem.
-                //  service.RequesterCredentials.Credentials.AppId = SecureText.Decrypt(liveApplication, "apptive"); 
-                //  service.RequesterCredentials.Credentials.DevId = SecureText.Decrypt(liveDeveloper,   "apptive"); 
-                //  service.RequesterCredentials.Credentials.AuthCert = SecureText.Decrypt(liveCertificate, "apptive"); 
+                //  service.RequesterCredentials.Credentials.AppId = SecureText.Decrypt(liveApplication, "apptive");
+                //  service.RequesterCredentials.Credentials.DevId = SecureText.Decrypt(liveDeveloper,   "apptive");
+                //  service.RequesterCredentials.Credentials.AuthCert = SecureText.Decrypt(liveCertificate, "apptive");
             }
             else
             {
@@ -231,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 + "&appid=" + service.RequesterCredentials.Credentials.AppId
                 + "&version=" + configuration.ApiVersion
                 + "&routing=default";
-            
+
             service.Url = requestURL;
 
             return service;
@@ -258,7 +267,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
             public AbstractResponseType ExecuteRequest(AbstractRequestType request, string callname)
             {
                 object[] results = this.Invoke(callname, new object[] { request });
-                return ((AbstractResponseType)(results[0]));
+                return ((AbstractResponseType) (results[0]));
             }
         }
 

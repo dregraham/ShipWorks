@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Ebay.Requests;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
@@ -13,33 +12,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// <summary>
     /// Client that wraps all connectivity to the eBay API
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class EbayWebClient
+    [Component]
+    public class EbayWebClient : IEbayWebClient
     {
-        EbayToken token;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public EbayWebClient(EbayToken token)
-        {
-            if (token == null)
-            {
-                throw new ArgumentNullException("token");
-            }
-
-            if (string.IsNullOrWhiteSpace(token.Token))
-            {
-                throw new ArgumentException("token cannot be blank", "token");
-            }
-
-            this.token = token;
-        }
-
         /// <summary>
         /// Get eBay official time in UTC
         /// </summary>
-        public DateTime GetOfficialTime()
+        public DateTime GetOfficialTime(EbayToken token)
         {
             EbayOfficialTimeRequest request = new EbayOfficialTimeRequest(token);
 
@@ -47,9 +26,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Get the user informatiopn for the user that is represented by the token
+        /// Get the user information for the user that is represented by the token
         /// </summary>
-        public UserType GetUser()
+        public UserType GetUser(EbayToken token)
         {
             EbayGetUserRequest request = new EbayGetUserRequest(token);
 
@@ -59,9 +38,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get a page of orders from eBay
         /// </summary>
-        public GetOrdersResponseType GetOrders(DateTime rangeStart, DateTime rangeEnd, int page)
+        public GetOrdersResponseType GetOrders(EbayToken token, Range<DateTime> range, int page)
         {
-            EbayGetOrdersRequest request = new EbayGetOrdersRequest(token, rangeStart, rangeEnd, page);
+            EbayGetOrdersRequest request = new EbayGetOrdersRequest(token, range.Start, range.End, page);
 
             return request.Execute();
         }
@@ -69,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get full item details for the given item listing ID
         /// </summary>
-        public ItemType GetItem(string itemID)
+        public ItemType GetItem(EbayToken token, string itemID)
         {
             EbayGetItemRequest request = new EbayGetItemRequest(token, itemID);
 
@@ -79,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get feedback that has been left by or for this user
         /// </summary>
-        public GetFeedbackResponseType GetFeedback(FeedbackTypeCodeType? feedbackType, int page)
+        public GetFeedbackResponseType GetFeedback(EbayToken token, FeedbackTypeCodeType? feedbackType, int page)
         {
             EbayGetFeedbackRequest request = new EbayGetFeedbackRequest(token, feedbackType, page);
 
@@ -89,7 +68,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Leave feedback for the given item and transaction
         /// </summary>
-        public void LeaveFeedback(long itemID, long transactionID, string buyerID, CommentTypeCodeType feedbackType, string feedback)
+        [NDependIgnoreTooManyParams]
+        public void LeaveFeedback(EbayToken token, long itemID, long transactionID, string buyerID, CommentTypeCodeType feedbackType, string feedback)
         {
             EbayLeaveFeedbackRequest request = new EbayLeaveFeedbackRequest(token, itemID, transactionID, buyerID, feedbackType, feedback);
 
@@ -100,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Send a message for the given item to the buyer
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public void SendMessage(long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
+        public void SendMessage(EbayToken token, long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
         {
             EbaySendMessageRequest request = new EbaySendMessageRequest(token, itemID, buyerID, messageType, subject, message, copySender);
 
@@ -110,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Add a note into the buyer's my ebay for the given item
         /// </summary>
-        public void AddUserNote(long itemID, long transactionID, string notesText)
+        public void AddUserNote(EbayToken token, long itemID, long transactionID, string notesText)
         {
             EbaySetUserNotesRequest request = new EbaySetUserNotesRequest(token, itemID, transactionID, notesText);
 
@@ -118,10 +98,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Marks a transation as paid (or not) and shipped (or not) on my ebay
+        /// Marks a transaction as paid (or not) and shipped (or not) on my ebay
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public void CompleteSale(long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
+        public void CompleteSale(EbayToken token, long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
         {
             EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(token, itemID, transactionID, paid, shipped, trackingNumber, shippingCarrier);
 
@@ -132,7 +112,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Combine the given transactions, specifying the additional costs for the combined order
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public long CombineOrders(IEnumerable<TransactionType> transactionsToCombine, double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost, string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
+        public long CombineOrders(EbayToken token, IEnumerable<TransactionType> transactionsToCombine,
+            double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost,
+            string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
         {
             EbayAddOrderRequest request = new EbayAddOrderRequest(token, transactionsToCombine, orderTotal, paymentMethods, shippingCost, shippingCountryCode, shippingService, salesTaxPercent, taxState, isShippingTaxed);
 

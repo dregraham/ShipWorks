@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -264,26 +266,31 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 // use the most recent order being combined as the template
                 EbayOrderEntity orderTemplate = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
 
-                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(ebayStore));
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IEbayWebClient webClient = lifetimeScope.Resolve<IEbayWebClient>();
+                    var token = EbayToken.FromStore(ebayStore);
 
-                // Combine the orders through eBay and pull out the new eBay order ID
-                ebayOrderID = webClient.CombineOrders(
-                    transactions,
-                    GetCombinedPaymentTotal(toCombine),
-                    AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
-                    ShippingCost,
-                    orderTemplate.ShipCountryCode,
-                    ShippingService,
-                    TaxPercent,
-                    TaxState,
-                    TaxShipping);
+                    // Combine the orders through eBay and pull out the new eBay order ID
+                    ebayOrderID = webClient.CombineOrders(
+                        token,
+                        transactions,
+                        GetCombinedPaymentTotal(toCombine),
+                        AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
+                        ShippingCost,
+                        orderTemplate.ShipCountryCode,
+                        ShippingService,
+                        TaxPercent,
+                        TaxState,
+                        TaxShipping);
+                }
             }
 
             // create the local combined order
             bool result = false;
             try
             {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = 
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry =
                     new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
                 await sqlDeadlockRetry.ExecuteWithRetryAsync((SqlAdapter adapter) =>

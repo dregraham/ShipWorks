@@ -1777,6 +1777,10 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayFeedbackDetails.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayMessagingDetails.cs" />
+    <Compile Include="Stores\Platforms\Ebay\IEbayOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>

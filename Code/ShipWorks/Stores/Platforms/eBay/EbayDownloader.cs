@@ -43,14 +43,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
-        private readonly Func<EbayToken, EbayWebClient> webClientFactory;
+        private readonly IEbayWebClient webClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
-
-        // WebClient to use for connectivity
-        EbayWebClient webClient;
 
         // Total number of orders expected during this download
         int expectedCount = -1;
@@ -58,11 +55,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory,
+        public EbayDownloader(StoreEntity store, IEbayWebClient webClient,
             IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-            this.webClientFactory = webClientFactory;
+            this.webClient = webClient;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -73,14 +70,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            webClient = webClientFactory(EbayToken.FromStore((EbayStoreEntity) Store));
-
             try
             {
                 Progress.Detail = "Connecting to eBay...";
 
                 // Get the official eBay time in UTC
-                eBayOfficialTime = webClient.GetOfficialTime();
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                eBayOfficialTime = webClient.GetOfficialTime(token);
 
                 bool morePages = await DownloadOrders().ConfigureAwait(false);
                 if (!morePages)
@@ -132,12 +128,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
             }
 
+            var token = EbayToken.FromStore((EbayStoreEntity) Store);
             int page = 1;
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
+                GetOrdersResponseType response = webClient.GetOrders(token, rangeStart.To(rangeEnd), page);
 
                 // Grab the total expected account from the first page
                 if (expectedCount < 0)
@@ -920,7 +917,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                ItemType ebayItem = webClient.GetItem(transaction.Item.ItemID);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                ItemType ebayItem = webClient.GetItem(token, transaction.Item.ItemID);
                 UpdateWeight(orderItem, ebayItem);
                 UpdateTransactionImages(orderItem, ebayItem);
             }
@@ -1497,7 +1495,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                GetFeedbackResponseType response = webClient.GetFeedback(token, feedbackType, page);
 
                 // Quit if eBay says there aren't any more
                 if (response.FeedbackDetailItemTotal == 0 || page > response.PaginationResult.TotalNumberOfPages)
@@ -1606,6 +1605,5 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         #endregion
-
     }
 }

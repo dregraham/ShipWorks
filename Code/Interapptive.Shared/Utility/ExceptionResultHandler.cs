@@ -8,6 +8,17 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public class ExceptionResultHandler<TException> where TException : Exception
     {
+        Action<TException> logMethod;
+
+        /// <summary>
+        /// Log an error when the method fails
+        /// </summary>
+        public ExceptionResultHandler<TException> LogError(Action<TException> logMethod)
+        {
+            this.logMethod = logMethod;
+            return this;
+        }
+
         /// <summary>
         /// Execute an action, handling an exception
         /// </summary>
@@ -20,6 +31,7 @@ namespace Interapptive.Shared.Utility
             }
             catch (TException ex)
             {
+                logMethod?.Invoke(ex);
                 return Result.FromError(ex);
             }
         }
@@ -35,6 +47,7 @@ namespace Interapptive.Shared.Utility
             }
             catch (TException ex)
             {
+                logMethod?.Invoke(ex);
                 return GenericResult.FromError<T>(ex);
             }
         }
@@ -51,6 +64,7 @@ namespace Interapptive.Shared.Utility
             }
             catch (TException ex)
             {
+                logMethod?.Invoke(ex);
                 return Result.FromError(ex);
             }
         }
@@ -67,6 +81,7 @@ namespace Interapptive.Shared.Utility
             }
             catch (TException ex)
             {
+                logMethod?.Invoke(ex);
                 return GenericResult.FromError<T>(ex);
             }
         }

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,6 +12,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -18,37 +22,35 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
     /// <summary>
     /// Client for updating an eBay order with shipped/paid status
     /// </summary>
-    public class EbayOnlineUpdater
+    [Component]
+    public class EbayOnlineUpdater : IEbayOnlineUpdater
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(EbayOnlineUpdater));
-
-        // the store we're working on behalf of
-        private readonly EbayStoreEntity store;
+        private readonly ILog log;
+        private readonly IEbayWebClient webClient;
+        private readonly EbayCombineOrderSearchProvider orderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayOnlineUpdater(EbayStoreEntity store)
+        public EbayOnlineUpdater(IEbayWebClient webClient, EbayCombineOrderSearchProvider orderSearchProvider, Func<Type, ILog> createLogger)
         {
-            this.store = store;
+            this.orderSearchProvider = orderSearchProvider;
+            this.webClient = webClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Sends a message to the buyer associated with the entityID (shipment or order)
         /// </summary>
-        public async Task SendMessage(long entityID, EbaySendMessageType messageType, string subject, string message, bool copySender)
+        [NDependIgnoreTooManyParams]
+        public async Task SendMessage(IEbayStoreEntity store, long entityID, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
             List<EbayException> exceptions = new List<EbayException>();
 
@@ -57,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 try
                 {
-                    await SendMessage(orderItem, messageType, subject, message, copySender).ConfigureAwait(false);
+                    await SendMessage(store, orderItem, messageType, subject, message, copySender).ConfigureAwait(false);
                 }
                 catch (EbayException ex)
                 {
@@ -76,7 +78,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Send a message with the given properties to the buyer of the order item specified
         /// </summary>
-        private async Task SendMessage(EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
+        [NDependIgnoreTooManyParams]
+        private async Task SendMessage(IEbayStoreEntity store, EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
             // Need the buyer and to convert the ShipWorks ebay message type to the
             // type expected by eBay to send an eBay message
@@ -86,11 +89,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
-
                 // Fire off the message
-                await Task.Run(() => 
-                    webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender)).ConfigureAwait(false);
+                await Task.Run(() => webClient.SendMessage(EbayToken.FromStore(store), orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender))
+                    .ConfigureAwait(false);
             }
             catch (EbayException ex)
             {
@@ -105,20 +106,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private async Task<string> FetchEbayOrderItemBuyerId(IOrderEntity order, long originalOrderID)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                EbayCombineOrderSearchProvider orderSearchProvider = scope.Resolve<EbayCombineOrderSearchProvider>();
+            IEnumerable<EbayOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-                IEnumerable<EbayOrderSearchEntity> orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
-
-                return orderSearchEntities.FirstOrDefault(os => os.OriginalOrderID == originalOrderID)?.EbayBuyerID;
-            }
+            return orderSearchEntities.FirstOrDefault(os => os.OriginalOrderID == originalOrderID)?.EbayBuyerID;
         }
 
         /// <summary>
         /// Leave Feedback
         /// </summary>
-        public async Task LeaveFeedback(long entityID, CommentTypeCodeType feedbackType, string feedback)
+        public async Task LeaveFeedback(IEbayStoreEntity store, long entityID, CommentTypeCodeType feedbackType, string feedback)
         {
             List<EbayException> exceptions = new List<EbayException>();
 
@@ -129,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 try
                 {
-                    await LeaveFeedback(orderItem, feedbackType, feedback).ConfigureAwait(false);
+                    await LeaveFeedback(store, orderItem, feedbackType, feedback).ConfigureAwait(false);
                 }
                 catch (EbayException ex)
                 {
@@ -148,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Leaves eBay feedback for an eBay Order Item
         /// </summary>
-        private async Task LeaveFeedback(EbayOrderItemEntity orderItem, CommentTypeCodeType feedbackType, string feedback)
+        private async Task LeaveFeedback(IEbayStoreEntity store, EbayOrderItemEntity orderItem, CommentTypeCodeType feedbackType, string feedback)
         {
             string error = string.Empty;
 
@@ -158,11 +154,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 log.InfoFormat("Preparing to leave eBay feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
 
-                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
                 string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
 
-                await Task.Run(() => 
-                        webClient.LeaveFeedback(orderItem.EbayItemID, orderItem.EbayTransactionID, buyerID, feedbackType, feedback)).ConfigureAwait(false);
+                await Task.Run(() => webClient.LeaveFeedback(EbayToken.FromStore(store), orderItem.EbayItemID, orderItem.EbayTransactionID, buyerID, feedbackType, feedback))
+                        .ConfigureAwait(false);
 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
@@ -264,17 +259,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     items.Remove(item);
                 }
             }
-            
+
             return items;
         }
 
         /// <summary>
         /// Push the online status for an order.
         /// </summary>
-        public void UpdateOnlineStatus(long orderID, bool? paid, bool? shipped)
+        public void UpdateOnlineStatus(IEbayStoreEntity store, long orderID, bool? paid, bool? shipped)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOnlineStatus(orderID, paid, shipped, unitOfWork);
+            UpdateOnlineStatus(store, orderID, paid, shipped, unitOfWork);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -288,8 +283,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        public void UpdateOnlineStatus(long orderID, bool? paid, bool? shipped, UnitOfWork2 unitOfWork)
+        public void UpdateOnlineStatus(IEbayStoreEntity store, long orderID, bool? paid, bool? shipped, UnitOfWork2 unitOfWork)
         {
+            var token = EbayToken.FromStore(store);
             EbayOrderEntity order = DataProvider.GetEntity(orderID) as EbayOrderEntity;
 
             // IsManual should actually never be true - instead order will be null, b\c manual orders (at this time) don't have a derived table presence.
@@ -305,8 +301,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // We only want the Ebay instances (i.e., the non-manual ones)
             order.OrderItems.Clear();
             order.OrderItems.AddRange(items.OfType<EbayOrderItemEntity>().Cast<OrderItemEntity>());
-
-            EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
 
             // update each item
             foreach (EbayOrderItemEntity ebayItem in order.OrderItems)
@@ -354,7 +348,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             string notesText = string.Format("Shipped {0} on {1}. Tracking number: {2}",
                                 ShippingManager.GetOverriddenServiceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
 
-                            webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
+                            webClient.AddUserNote(token, ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }
                     }
                 }
@@ -374,7 +368,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // log that we're about to make the request and send the request
                 log.InfoFormat("Preparing to update eBay order status for order id {0}.", orderID);
 
-                webClient.CompleteSale(ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, carrierCode);
+                webClient.CompleteSale(token, ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, carrierCode);
 
                 // update the shipped flag
                 if (shipped.HasValue)
@@ -454,7 +448,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         if (!string.IsNullOrEmpty(trackingNumber))
                         {
                             // From eBay web service info:
-                            // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations.
+                            // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innovations.
                             // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
                             useUpsMailInnovationsCarrierType = true;
                         }

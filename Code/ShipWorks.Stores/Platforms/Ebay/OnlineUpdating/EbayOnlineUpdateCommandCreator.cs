@@ -32,14 +32,20 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         private readonly IConfigurationData configuration;
         private readonly ILog log;
         private readonly IMessageHelper messageHelper;
+        private readonly IEbayOnlineUpdater updater;
+        private readonly IUserInteraction userInteraction;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public EbayOnlineUpdateCommandCreator(IConfigurationData configuration,
+            IEbayOnlineUpdater updater,
             IMessageHelper messageHelper,
+            IUserInteraction userInteraction,
             Func<Type, ILog> createLogger)
         {
+            this.userInteraction = userInteraction;
+            this.updater = updater;
             this.messageHelper = messageHelper;
             this.configuration = configuration;
             log = createLogger(GetType());
@@ -61,11 +67,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
             commands.Add(new AsyncMenuCommand("Send Message...", OnSendMessage));
             commands.Add(new AsyncMenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true });
 
-            commands.Add(new MenuCommand("Mark as Paid", OnUpdateShipment) { Tag = EbayOnlineAction.Paid });
-            commands.Add(new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped });
+            commands.Add(new AsyncMenuCommand("Mark as Paid", OnUpdateShipment) { Tag = EbayOnlineAction.Paid });
+            commands.Add(new AsyncMenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped });
 
-            commands.Add(new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true });
-            commands.Add(new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped });
+            commands.Add(new AsyncMenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true });
+            commands.Add(new AsyncMenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped });
 
             commands.AddRange(CreateCombineCommands());
 
@@ -316,33 +322,27 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// <summary>
         /// MenuCommand handler for sending messages to the eBay buyer
         /// </summary>
-        private async Task OnSendMessage(MenuCommandExecutionContext context)
+        public async Task OnSendMessage(IMenuCommandExecutionContext context)
         {
-            List<long> selectedIds = context.SelectedKeys.ToList();
-
-            using (EbayMessagingDlg dlg = new EbayMessagingDlg(selectedIds))
+            var result = userInteraction.GetMessagingDetails(context.Owner, context.SelectedKeys);
+            if (result.Failure)
             {
-                if (dlg.ShowDialog(context.Owner) != DialogResult.OK)
-                {
-                    context.Complete();
-                    return;
-                }
-
-                // if the user selected to send a message relating to a Single item, we only use that key
-                if (dlg.SelectedItemID > 0)
-                {
-                    selectedIds.Clear();
-                    selectedIds.Add(dlg.SelectedItemID);
-                }
-
-                var results = await selectedIds
-                    .SelectWithProgress(messageHelper, "Sending Messages", "ShipWorks is sending eBay Messages.", "Sending message for {0} of {1}...",
-                        orderID => Task.Run(() => SendMessageCallback(orderID, dlg.Subject, dlg.Message, dlg.CopyMe, dlg.MessageType)))
-                    .ConfigureAwait(true);
-
-                var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
-                context.Complete(exceptions, MenuCommandResult.Error);
+                context.Complete();
+                return;
             }
+
+            var details = result.Value;
+
+            // if the user selected to send a message relating to a Single item, we only use that key
+            var selectedIDs = details.SelectedItemID > 0 ? new[] { details.SelectedItemID } : context.SelectedKeys;
+
+            var results = await selectedIDs
+                .SelectWithProgress(messageHelper, "Sending Messages", "ShipWorks is sending eBay Messages.", "Sending message for {0} of {1}...",
+                    orderID => Task.Run(() => SendMessageCallback(orderID, details.Subject, details.Message, details.CopyMe, details.MessageType)))
+                .ConfigureAwait(true);
+
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
         }
 
         /// <summary>
@@ -359,8 +359,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
 
             try
             {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                await updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe).ConfigureAwait(false);
+                await updater.SendMessage(ebayStore, entityId, messageType, processedSubject, processedMessage, copyMe).ConfigureAwait(false);
 
                 return Result.FromSuccess();
             }
@@ -375,37 +374,30 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// <summary>
         /// MenuCommand handler for leaving ebay feedback
         /// </summary>
-        private async Task OnLeaveFeedback(MenuCommandExecutionContext context)
+        public async Task OnLeaveFeedback(IMenuCommandExecutionContext context)
         {
-            // get the list of orderIds selected
-            List<long> selectedIds = context.SelectedKeys.ToList();
-
-            using (LeaveFeedbackDlg dlg = new LeaveFeedbackDlg(selectedIds))
+            var result = userInteraction.GetFeedbackDetails(context.Owner, context.SelectedKeys);
+            if (result.Failure)
             {
-                if (dlg.ShowDialog(context.Owner) != DialogResult.OK)
-                {
-                    context.Complete();
-                    return;
-                }
-                
-                // if the user selected to leave feedback for a single item, use it only
-                if (dlg.SelectedItemID > 0)
-                {
-                    selectedIds.Clear();
-                    selectedIds.Add(dlg.SelectedItemID);
-                }
-
-                var results = await selectedIds
-                    .SelectWithProgress(messageHelper, 
-                        "Leaving Feedback", 
-                        "ShipWorks is leaving eBay Feedback.", 
-                        "Leaving feedback for order {0} of {1}...",
-                        entityID => Task.Run(() => LeaveFeedbackCallback(entityID, dlg.FeedbackType, dlg.Comments)))
-                    .ConfigureAwait(true);
-
-                var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
-                context.Complete(exceptions, MenuCommandResult.Error);
+                context.Complete();
+                return;
             }
+
+            var details = result.Value;
+
+            // if the user selected to leave feedback for a single item, use it only
+            var selectedIDs = details.SelectedItemID > 0 ? new[] { details.SelectedItemID } : context.SelectedKeys;
+
+            var results = await selectedIDs
+                .SelectWithProgress(messageHelper,
+                    "Leaving Feedback",
+                    "ShipWorks is leaving eBay Feedback.",
+                    "Leaving feedback for order {0} of {1}...",
+                    entityID => Task.Run(() => LeaveFeedbackCallback(entityID, details.FeedbackType, details.Comments)))
+                .ConfigureAwait(true);
+
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
         }
 
         /// <summary>
@@ -417,8 +409,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
 
             try
             {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                await updater.LeaveFeedback(entityId, feedbackType, feedback).ConfigureAwait(false);
+                await updater.LeaveFeedback(ebayStore, entityId, feedbackType, feedback).ConfigureAwait(false);
 
                 return Result.FromSuccess();
             }
@@ -433,32 +424,29 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
         /// <summary>
         /// MenuCommand handler for marking an order as paid/shipped
         /// </summary>
-        private void OnUpdateShipment(MenuCommandExecutionContext context)
+        public async Task OnUpdateShipment(IMenuCommandExecutionContext context)
         {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Updating Shipment Status",
-                "ShipWorks is updating shipment status.",
-                "Updating order {0} of {1}...");
+            var action = (EbayOnlineAction) context.MenuCommand.Tag;
 
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
+            var results = await context.SelectedKeys
+                .SelectWithProgress(messageHelper,
+                    "Updating Shipment Status",
+                    "ShipWorks is updating shipment status.",
+                    "Updating order {0} of {1}...",
+                    entityID => Task.Run(() => UpdateStatusCallback(entityID, action)))
+                .ConfigureAwait(true);
 
-            // execute, passing the menu command state which tells how to perform the update
-            executor.ExecuteAsync(UpdateStatusCallback, context.SelectedKeys, context.MenuCommand.Tag);
+            var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
+            context.Complete(exceptions, MenuCommandResult.Error);
         }
 
         /// <summary>
         /// Worker thread method for updated order status
         /// </summary>
-        private void UpdateStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        private IResult UpdateStatusCallback(long orderID, EbayOnlineAction action)
         {
             // need to get the store instance for this order
             EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(orderID) as EbayStoreEntity;
-
-            // unpack the user state
-            EbayOnlineAction action = (EbayOnlineAction) userState;
 
             bool? paid = null;
             if (action == EbayOnlineAction.Paid || action == EbayOnlineAction.NotPaid)
@@ -472,19 +460,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                 shipped = action == EbayOnlineAction.Shipped;
             }
 
-            try
-            {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.UpdateOnlineStatus(orderID, paid, shipped);
-            }
-            catch (EbayException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status for orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
-            }
+            return Result.Handle<EbayException>()
+                .LogError(ex => log.ErrorFormat("Error updating online status for orderID {0}: {1}", orderID, ex.Message))
+                .Execute(() => updater.UpdateOnlineStatus(ebayStore, orderID, paid, shipped));
         }
     }
 }
