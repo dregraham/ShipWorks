@@ -70,35 +70,37 @@
             this.code = new System.Windows.Forms.TextBox();
             this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            this.harmonizedCode = new System.Windows.Forms.TextBox();
+            this.labelHarmonizedCode = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(235, 588);
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Location = new System.Drawing.Point(248, 606);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
-            this.ok.TabIndex = 16;
+            this.ok.TabIndex = 17;
             this.ok.Text = "OK";
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.OnOK);
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(316, 588);
+            this.cancel.Location = new System.Drawing.Point(329, 606);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
-            this.cancel.TabIndex = 17;
+            this.cancel.TabIndex = 18;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(43, 9);
+            this.labelName.Location = new System.Drawing.Point(64, 9);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(38, 13);
             this.labelName.TabIndex = 2;
@@ -107,7 +109,7 @@
             // labelCode
             // 
             this.labelCode.AutoSize = true;
-            this.labelCode.Location = new System.Drawing.Point(45, 36);
+            this.labelCode.Location = new System.Drawing.Point(66, 36);
             this.labelCode.Name = "labelCode";
             this.labelCode.Size = new System.Drawing.Size(36, 13);
             this.labelCode.TabIndex = 3;
@@ -116,7 +118,7 @@
             // labelQuantity
             // 
             this.labelQuantity.AutoSize = true;
-            this.labelQuantity.Location = new System.Drawing.Point(28, 63);
+            this.labelQuantity.Location = new System.Drawing.Point(49, 63);
             this.labelQuantity.Name = "labelQuantity";
             this.labelQuantity.Size = new System.Drawing.Size(53, 13);
             this.labelQuantity.TabIndex = 4;
@@ -125,7 +127,7 @@
             // labelPrice
             // 
             this.labelPrice.AutoSize = true;
-            this.labelPrice.Location = new System.Drawing.Point(47, 90);
+            this.labelPrice.Location = new System.Drawing.Point(68, 90);
             this.labelPrice.Name = "labelPrice";
             this.labelPrice.Size = new System.Drawing.Size(34, 13);
             this.labelPrice.TabIndex = 5;
@@ -134,7 +136,7 @@
             // labelSku
             // 
             this.labelSku.AutoSize = true;
-            this.labelSku.Location = new System.Drawing.Point(51, 151);
+            this.labelSku.Location = new System.Drawing.Point(72, 151);
             this.labelSku.Name = "labelSku";
             this.labelSku.Size = new System.Drawing.Size(30, 13);
             this.labelSku.TabIndex = 6;
@@ -143,7 +145,7 @@
             // labelLocation
             // 
             this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(30, 232);
+            this.labelLocation.Location = new System.Drawing.Point(51, 232);
             this.labelLocation.Name = "labelLocation";
             this.labelLocation.Size = new System.Drawing.Size(51, 13);
             this.labelLocation.TabIndex = 7;
@@ -152,7 +154,7 @@
             // labelCost
             // 
             this.labelCost.AutoSize = true;
-            this.labelCost.Location = new System.Drawing.Point(26, 285);
+            this.labelCost.Location = new System.Drawing.Point(47, 313);
             this.labelCost.Name = "labelCost";
             this.labelCost.Size = new System.Drawing.Size(55, 13);
             this.labelCost.TabIndex = 8;
@@ -161,7 +163,7 @@
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(18, 366);
+            this.labelDescription.Location = new System.Drawing.Point(39, 394);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 9;
@@ -170,7 +172,7 @@
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
-            this.labelWeight.Location = new System.Drawing.Point(36, 260);
+            this.labelWeight.Location = new System.Drawing.Point(57, 287);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 10;
@@ -179,7 +181,7 @@
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(12, 119);
+            this.labelStatus.Location = new System.Drawing.Point(33, 119);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(69, 13);
             this.labelStatus.TabIndex = 11;
@@ -187,30 +189,30 @@
             // 
             // edge2
             // 
-            this.edge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.edge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.edge2.AutoSize = false;
             this.edge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.edge2.Location = new System.Drawing.Point(20, 437);
+            this.edge2.Location = new System.Drawing.Point(41, 463);
             this.edge2.Name = "edge2";
-            this.edge2.Size = new System.Drawing.Size(367, 1);
+            this.edge2.Size = new System.Drawing.Size(380, 1);
             this.edge2.Text = "kryptonBorderEdge1";
             // 
             // edge1
             // 
-            this.edge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.edge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.edge1.AutoSize = false;
             this.edge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.edge1.Location = new System.Drawing.Point(19, 140);
+            this.edge1.Location = new System.Drawing.Point(40, 140);
             this.edge1.Name = "edge1";
-            this.edge1.Size = new System.Drawing.Size(367, 1);
+            this.edge1.Size = new System.Drawing.Size(380, 1);
             this.edge1.Text = "kryptonBorderEdge1";
             // 
             // labelAttributes
             // 
             this.labelAttributes.AutoSize = true;
-            this.labelAttributes.Location = new System.Drawing.Point(23, 447);
+            this.labelAttributes.Location = new System.Drawing.Point(43, 473);
             this.labelAttributes.Name = "labelAttributes";
             this.labelAttributes.Size = new System.Drawing.Size(59, 13);
             this.labelAttributes.TabIndex = 23;
@@ -226,11 +228,11 @@
             this.gridLinkEdit,
             this.gridLinkDelete});
             this.attributeGrid.EnableSearching = false;
-            this.attributeGrid.Location = new System.Drawing.Point(89, 444);
+            this.attributeGrid.Location = new System.Drawing.Point(109, 470);
             this.attributeGrid.Name = "attributeGrid";
             this.attributeGrid.Renderer = windowsXPRenderer1;
             this.attributeGrid.Size = new System.Drawing.Size(300, 111);
-            this.attributeGrid.TabIndex = 14;
+            this.attributeGrid.TabIndex = 15;
             this.attributeGrid.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnRowActivated);
             // 
             // gridColumnDescription
@@ -273,7 +275,7 @@
             // labelUpc
             // 
             this.labelUpc.AutoSize = true;
-            this.labelUpc.Location = new System.Drawing.Point(50, 178);
+            this.labelUpc.Location = new System.Drawing.Point(71, 178);
             this.labelUpc.Name = "labelUpc";
             this.labelUpc.Size = new System.Drawing.Size(31, 13);
             this.labelUpc.TabIndex = 25;
@@ -282,7 +284,7 @@
             // isbnLabel
             // 
             this.isbnLabel.AutoSize = true;
-            this.isbnLabel.Location = new System.Drawing.Point(47, 205);
+            this.isbnLabel.Location = new System.Drawing.Point(68, 205);
             this.isbnLabel.Name = "isbnLabel";
             this.isbnLabel.Size = new System.Drawing.Size(34, 13);
             this.isbnLabel.TabIndex = 27;
@@ -291,7 +293,7 @@
             // imageUrlLabel
             // 
             this.imageUrlLabel.AutoSize = true;
-            this.imageUrlLabel.Location = new System.Drawing.Point(24, 339);
+            this.imageUrlLabel.Location = new System.Drawing.Point(45, 367);
             this.imageUrlLabel.Name = "imageUrlLabel";
             this.imageUrlLabel.Size = new System.Drawing.Size(57, 13);
             this.imageUrlLabel.TabIndex = 31;
@@ -300,7 +302,7 @@
             // thumbnailUrlLabel
             // 
             this.thumbnailUrlLabel.AutoSize = true;
-            this.thumbnailUrlLabel.Location = new System.Drawing.Point(6, 312);
+            this.thumbnailUrlLabel.Location = new System.Drawing.Point(27, 340);
             this.thumbnailUrlLabel.Name = "thumbnailUrlLabel";
             this.thumbnailUrlLabel.Size = new System.Drawing.Size(75, 13);
             this.thumbnailUrlLabel.TabIndex = 29;
@@ -308,21 +310,21 @@
             // 
             // imageUrl
             // 
-            this.imageUrl.Location = new System.Drawing.Point(88, 336);
+            this.imageUrl.Location = new System.Drawing.Point(109, 364);
             this.imageUrl.Name = "imageUrl";
             this.imageUrl.Size = new System.Drawing.Size(301, 21);
-            this.imageUrl.TabIndex = 12;
+            this.imageUrl.TabIndex = 13;
             // 
             // thumbnailUrl
             // 
-            this.thumbnailUrl.Location = new System.Drawing.Point(88, 309);
+            this.thumbnailUrl.Location = new System.Drawing.Point(109, 337);
             this.thumbnailUrl.Name = "thumbnailUrl";
             this.thumbnailUrl.Size = new System.Drawing.Size(301, 21);
-            this.thumbnailUrl.TabIndex = 11;
+            this.thumbnailUrl.TabIndex = 12;
             // 
             // isbn
             // 
-            this.isbn.Location = new System.Drawing.Point(88, 202);
+            this.isbn.Location = new System.Drawing.Point(109, 202);
             this.fieldLengthProvider.SetMaxLengthSource(this.isbn, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
             this.isbn.Name = "isbn";
             this.isbn.Size = new System.Drawing.Size(159, 21);
@@ -330,7 +332,7 @@
             // 
             // upc
             // 
-            this.upc.Location = new System.Drawing.Point(88, 175);
+            this.upc.Location = new System.Drawing.Point(109, 175);
             this.fieldLengthProvider.SetMaxLengthSource(this.upc, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemUpc);
             this.upc.Name = "upc";
             this.upc.Size = new System.Drawing.Size(159, 21);
@@ -342,35 +344,38 @@
             this.addAttribute.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addAttribute.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.addAttribute.ForeColor = System.Drawing.Color.Blue;
-            this.addAttribute.Location = new System.Drawing.Point(319, 558);
+            this.addAttribute.Location = new System.Drawing.Point(340, 584);
             this.addAttribute.Name = "addAttribute";
             this.addAttribute.Size = new System.Drawing.Size(72, 13);
-            this.addAttribute.TabIndex = 15;
+            this.addAttribute.TabIndex = 16;
             this.addAttribute.Text = "Add Attribute";
             this.addAttribute.Click += new System.EventHandler(this.OnAddAttribute);
             // 
             // description
             // 
             this.description.AcceptsReturn = true;
-            this.description.Location = new System.Drawing.Point(88, 363);
+            this.description.Location = new System.Drawing.Point(109, 391);
             this.description.Multiline = true;
             this.description.Name = "description";
             this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.description.Size = new System.Drawing.Size(301, 66);
-            this.description.TabIndex = 13;
+            this.description.TabIndex = 14;
             // 
             // weight
             // 
+            this.weight.AutoSize = true;
+            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(88, 256);
+            this.weight.ConfigureTelemetryEntityCounts = null;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(109, 283);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(269, 21);
-            this.weight.TabIndex = 9;
-            this.weight.Weight = 0D;
             this.weight.ShowShortcutInfo = true;
+            this.weight.Size = new System.Drawing.Size(269, 24);
+            this.weight.TabIndex = 10;
+            this.weight.Weight = 0D;
             // 
             // cost
             // 
@@ -380,15 +385,15 @@
             0,
             131072});
             this.cost.IgnoreSet = false;
-            this.cost.Location = new System.Drawing.Point(88, 282);
+            this.cost.Location = new System.Drawing.Point(109, 310);
             this.cost.Name = "cost";
             this.cost.Size = new System.Drawing.Size(100, 21);
-            this.cost.TabIndex = 10;
+            this.cost.TabIndex = 11;
             this.cost.Text = "$0.00";
             // 
             // location
             // 
-            this.location.Location = new System.Drawing.Point(88, 229);
+            this.location.Location = new System.Drawing.Point(109, 229);
             this.fieldLengthProvider.SetMaxLengthSource(this.location, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
             this.location.Name = "location";
             this.location.Size = new System.Drawing.Size(159, 21);
@@ -396,7 +401,7 @@
             // 
             // sku
             // 
-            this.sku.Location = new System.Drawing.Point(88, 148);
+            this.sku.Location = new System.Drawing.Point(109, 148);
             this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
             this.sku.Name = "sku";
             this.sku.Size = new System.Drawing.Size(159, 21);
@@ -408,7 +413,7 @@
             this.status.Cursor = System.Windows.Forms.Cursors.Hand;
             this.status.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.status.ForeColor = System.Drawing.Color.Blue;
-            this.status.Location = new System.Drawing.Point(85, 119);
+            this.status.Location = new System.Drawing.Point(106, 119);
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(38, 13);
             this.status.TabIndex = 4;
@@ -423,7 +428,7 @@
             0,
             131072});
             this.price.IgnoreSet = false;
-            this.price.Location = new System.Drawing.Point(88, 87);
+            this.price.Location = new System.Drawing.Point(109, 87);
             this.price.Name = "price";
             this.price.Size = new System.Drawing.Size(100, 21);
             this.price.TabIndex = 3;
@@ -431,14 +436,14 @@
             // 
             // quantity
             // 
-            this.quantity.Location = new System.Drawing.Point(88, 60);
+            this.quantity.Location = new System.Drawing.Point(109, 60);
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(67, 21);
             this.quantity.TabIndex = 2;
             // 
             // code
             // 
-            this.code.Location = new System.Drawing.Point(88, 33);
+            this.code.Location = new System.Drawing.Point(109, 33);
             this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemCode);
             this.code.Name = "code";
             this.code.Size = new System.Drawing.Size(129, 21);
@@ -446,11 +451,28 @@
             // 
             // name
             // 
-            this.name.Location = new System.Drawing.Point(88, 6);
+            this.name.Location = new System.Drawing.Point(109, 6);
             this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemName);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(207, 21);
             this.name.TabIndex = 0;
+            // 
+            // harmonizedCode
+            // 
+            this.harmonizedCode.Location = new System.Drawing.Point(109, 256);
+            this.fieldLengthProvider.SetMaxLengthSource(this.harmonizedCode, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemHarmonizedCode);
+            this.harmonizedCode.Name = "harmonizedCode";
+            this.harmonizedCode.Size = new System.Drawing.Size(159, 21);
+            this.harmonizedCode.TabIndex = 9;
+            // 
+            // labelHarmonizedCode
+            // 
+            this.labelHarmonizedCode.AutoSize = true;
+            this.labelHarmonizedCode.Location = new System.Drawing.Point(7, 259);
+            this.labelHarmonizedCode.Name = "labelHarmonizedCode";
+            this.labelHarmonizedCode.Size = new System.Drawing.Size(95, 13);
+            this.labelHarmonizedCode.TabIndex = 34;
+            this.labelHarmonizedCode.Text = "Harmonized Code:";
             // 
             // EditItemDlg
             // 
@@ -458,7 +480,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(403, 623);
+            this.ClientSize = new System.Drawing.Size(416, 641);
+            this.Controls.Add(this.harmonizedCode);
+            this.Controls.Add(this.labelHarmonizedCode);
             this.Controls.Add(this.imageUrl);
             this.Controls.Add(this.imageUrlLabel);
             this.Controls.Add(this.thumbnailUrl);
@@ -494,7 +518,7 @@
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -504,7 +528,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Item";
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -552,5 +576,7 @@
         private System.Windows.Forms.Label imageUrlLabel;
         private System.Windows.Forms.TextBox thumbnailUrl;
         private System.Windows.Forms.Label thumbnailUrlLabel;
+        private System.Windows.Forms.TextBox harmonizedCode;
+        private System.Windows.Forms.Label labelHarmonizedCode;
     }
 }

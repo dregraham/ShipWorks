@@ -581,7 +581,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MarketplaceSalesID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MarketplaceSalesID, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "Classification", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.Classification, 30, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenter", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, 80, 0, 0);
-			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterID", typeof(System.Int64), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, 0, 0, 19);
@@ -2023,6 +2022,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 0, 38);
 			this.AddElementFieldInfo("OrderItemEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.LocalStatus, 255, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.HarmonizedCode, 14, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

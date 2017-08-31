@@ -123,7 +123,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.MarketplaceSalesID = "";
             entity.Classification = "";
             entity.DistributionCenter = "";
-            entity.HarmonizedCode = "";
             entity.IsFBA = false;
             entity.DistributionCenterID = -1;
 

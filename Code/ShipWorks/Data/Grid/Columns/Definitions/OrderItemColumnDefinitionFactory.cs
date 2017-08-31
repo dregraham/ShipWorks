@@ -66,7 +66,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnDefinition("{DE74DE4B-C85E-4942-A77A-25ACC6AFDE67}",
                             new GridTextDisplayType(), "Location", "Aisle 14",
                             OrderItemFields.Location),
-                 
+
+                         new GridColumnDefinition("{81B29591-CEB3-4927-8F51-CECE05F9A8AB}",
+                             new GridTextDisplayType(), "Harmonized Code", "0105.11.00",
+                             OrderItemFields.HarmonizedCode),
+
                         new GridColumnDefinition("{CDDEFBA1-C576-4290-A530-12F770136EB8}", true,
                             new GridTextDisplayType(), "Qty", "1",
                             OrderItemFields.Quantity) { DefaultWidth = 40 },
@@ -151,13 +155,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnDefinition("{6C8862F3-BA65-4F00-8327-0A8C1C7CB4A0}",
                             new GridTextDisplayType(), "Classification", "Custom",
                             ChannelAdvisorOrderItemFields.Classification)
-                            {
-                                StoreTypeCode = StoreTypeCode.ChannelAdvisor,
-                            },
-
-                        new GridColumnDefinition("{81B29591-CEB3-4927-8F51-CECE05F9A8AB}",
-                            new GridTextDisplayType(), "Harmonized Code", "1006.3010",
-                            ChannelAdvisorOrderItemFields.HarmonizedCode)
                             {
                                 StoreTypeCode = StoreTypeCode.ChannelAdvisor,
                             },

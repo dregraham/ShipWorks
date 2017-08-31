@@ -398,6 +398,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -806,6 +808,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -948,6 +952,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1252,6 +1258,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1266,8 +1274,6 @@ namespace ShipWorks.Data.Model
 		Classification,
 		///<summary>DistributionCenter. </summary>
 		DistributionCenter,
-		///<summary>HarmonizedCode. </summary>
-		HarmonizedCode,
 		///<summary>IsFBA. </summary>
 		IsFBA,
 		///<summary>MPN. </summary>
@@ -2132,6 +2138,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -2710,6 +2718,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4050,6 +4060,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4176,6 +4188,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -4628,6 +4642,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -4938,6 +4954,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -6114,6 +6132,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -6692,6 +6712,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. </summary>
 		IsManual,
+		///<summary>HarmonizedCode. </summary>
+		HarmonizedCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7918,6 +7940,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -8746,6 +8770,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -9422,6 +9448,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -10512,6 +10540,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -11092,6 +11122,8 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
