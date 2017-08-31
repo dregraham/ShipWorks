@@ -7,6 +7,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -72,15 +74,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
                 try
                 {
-                    if (storeEntity.RestUser)
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(storeEntity);
-                        await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(storeEntity);
-                        await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
+                        if (storeEntity.RestUser)
+                        {
+                            ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(storeEntity));
+                            await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(storeEntity));
+                            await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
+                        }
                     }
                 }
                 catch (ThreeDCartException ex)

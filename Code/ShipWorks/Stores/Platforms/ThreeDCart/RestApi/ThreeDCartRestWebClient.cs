@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
     /// <summary>
     /// ThreeDCart REST downloader
     /// </summary>
-    [Component]
+    [Component(RegisterAs = RegistrationType.ImplementedInterfaces)]
     public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
         private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI";
@@ -167,29 +167,46 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(ThreeDCartShipment shipment)
+        public IResult UploadShipmentDetails(ThreeDCartShipment shipment)
         {
             HttpJsonVariableRequestSubmitter submitter = SetupUpdateRequest(shipment);
 
-            throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter), () =>
+            try
             {
-                submitter.ProcessRequest(CreateLogEntry("UploadShipmentDetails"), exceptionToRethrow);
-            });
+                throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter), () =>
+                {
+                    submitter.ProcessRequest(CreateLogEntry("UploadShipmentDetails"), exceptionToRethrow);
+                });
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
         }
 
         /// <summary>
         /// Updates the order status.
         /// </summary>
-        public void UpdateOrderStatus(ThreeDCartShipment shipment)
+        public IResult UpdateOrderStatus(ThreeDCartShipment shipment)
         {
             HttpJsonVariableRequestSubmitter submitter = SetupUpdateRequest(shipment);
 
-            throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter), () =>
+            try
             {
-                submitter.ProcessRequest(CreateLogEntry("UpdateOrderStatus"), exceptionToRethrow);
-            });
-        }
+                throttler.ExecuteRequest(new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter), () =>
+                {
+                    submitter.ProcessRequest(CreateLogEntry("UpdateOrderStatus"), exceptionToRethrow);
+                });
 
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
 
         /// <summary>
         /// Sets up the update request.

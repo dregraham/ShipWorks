@@ -6,6 +6,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -69,20 +71,23 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
             try
             {
-                if (store.RestUser)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
-                    foreach (long orderID in inputKeys)
+                    if (store.RestUser)
                     {
-                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(store));
+                        foreach (long orderID in inputKeys)
+                        {
+                            await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        }
                     }
-                }
-                else
-                {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
-                    foreach (long orderID in inputKeys)
+                    else
                     {
-                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(store));
+                        foreach (long orderID in inputKeys)
+                        {
+                            await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        }
                     }
                 }
             }

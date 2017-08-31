@@ -24,9 +24,11 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
+    [Component(RegisterAs = RegistrationType.Self)]
     public class ThreeDCartRestOnlineUpdater
     {
         private readonly ILog log;
@@ -35,18 +37,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestOnlineUpdater"/> class.
         /// </summary>
-        public ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store)
-            : this(LogManager.GetLogger(typeof (ThreeDCartRestOnlineUpdater)), new ThreeDCartRestWebClient(store))
+        public ThreeDCartRestOnlineUpdater(ThreeDCartStoreEntity store, Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient> webClientFactory)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ThreeDCartRestOnlineUpdater"/> class.
-        /// </summary>
-        public ThreeDCartRestOnlineUpdater(ILog log, IThreeDCartRestWebClient webClient)
-        {
-            this.log = log;
-            this.webClient = webClient;
+            this.log = LogManager.GetLogger(typeof(ThreeDCartRestOnlineUpdater));
+            this.webClient = webClientFactory(store);
         }
 
         /// <summary>
@@ -105,29 +99,48 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 threeDCartOrder.OnlineStatus = status;
                 threeDCartOrder.OnlineStatusCode = statusID;
 
+                List<ThreeDCartException> exceptions = new List<ThreeDCartException>();
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails.Where(od => od.ThreeDCartOrderID != -1))
                 {
-                    long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
-
-                    ThreeDCartShipment shipment = new ThreeDCartShipment()
+                    try
                     {
-                        OrderID = orderDetail.ThreeDCartOrderID,
-                        ShipmentID = shipmentID,
-                        ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
-                        ShipmentPhone = threeDCartOrder.ShipPhone,
-                        ShipmentFirstName = threeDCartOrder.ShipFirstName,
-                        ShipmentLastName = threeDCartOrder.ShipLastName,
-                        ShipmentAddress = threeDCartOrder.ShipStreet1,
-                        ShipmentAddress2 = threeDCartOrder.ShipStreet2,
-                        ShipmentCity = threeDCartOrder.ShipCity,
-                        ShipmentState = threeDCartOrder.ShipStateProvCode,
-                        ShipmentZipCode = threeDCartOrder.ShipPostalCode,
-                        ShipmentCountry = threeDCartOrder.ShipCountryCode,
-                        ShipmentCompany = threeDCartOrder.ShipCompany,
-                        ShipmentEmail = threeDCartOrder.ShipEmail,
-                    };
+                        long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
 
-                    webClient.UpdateOrderStatus(shipment);
+                        ThreeDCartShipment shipment = new ThreeDCartShipment()
+                        {
+                            OrderID = orderDetail.ThreeDCartOrderID,
+                            ShipmentID = shipmentID,
+                            ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
+                            ShipmentPhone = threeDCartOrder.ShipPhone,
+                            ShipmentFirstName = threeDCartOrder.ShipFirstName,
+                            ShipmentLastName = threeDCartOrder.ShipLastName,
+                            ShipmentAddress = threeDCartOrder.ShipStreet1,
+                            ShipmentAddress2 = threeDCartOrder.ShipStreet2,
+                            ShipmentCity = threeDCartOrder.ShipCity,
+                            ShipmentState = threeDCartOrder.ShipStateProvCode,
+                            ShipmentZipCode = threeDCartOrder.ShipPostalCode,
+                            ShipmentCountry = threeDCartOrder.ShipCountryCode,
+                            ShipmentCompany = threeDCartOrder.ShipCompany,
+                            ShipmentEmail = threeDCartOrder.ShipEmail,
+                        };
+
+                        IResult result = webClient.UpdateOrderStatus(shipment);
+
+                        if (!result.Success && result.Exception != null)
+                        {
+                            exceptions.Add((ThreeDCartException) result.Exception);
+                        }
+                    }
+                    catch (ThreeDCartException ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+
+                if (exceptions.Any())
+                {
+                    string msg = string.Join(Environment.NewLine, exceptions.Select(ex => ex.Message));
+                    throw new ThreeDCartException(msg, exceptions.First());
                 }
 
                 // Update the local database with the new status
@@ -206,34 +219,53 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                                                   "your store has been upgraded to use their REST API.");
                 }
 
+                List<ThreeDCartException> exceptions = new List<ThreeDCartException>();
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails.Where(od => od.ThreeDCartOrderID != -1))
                 {
-                    long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
-
-                    ThreeDCartShipment shipment = new ThreeDCartShipment
+                    try
                     {
-                        OrderID = orderDetail.ThreeDCartOrderID,
-                        ShipmentID = shipmentID,
-                        ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
-                        ShipmentMethodName = GetShipmentMethod(shipmentEntity),
-                        ShipmentPhone = shipmentEntity.ShipPhone,
-                        ShipmentFirstName = shipmentEntity.ShipFirstName,
-                        ShipmentLastName = shipmentEntity.ShipLastName,
-                        ShipmentAddress = shipmentEntity.ShipStreet1,
-                        ShipmentAddress2 = shipmentEntity.ShipStreet2,
-                        ShipmentCity = shipmentEntity.ShipCity,
-                        ShipmentState = shipmentEntity.ShipStateProvCode,
-                        ShipmentZipCode = shipmentEntity.ShipPostalCode,
-                        ShipmentCountry = shipmentEntity.ShipCountryCode,
-                        ShipmentCompany = shipmentEntity.ShipCompany,
-                        ShipmentEmail = shipmentEntity.ShipEmail,
-                        ShipmentLastUpdate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
-                        ShipmentShippedDate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
-                        ShipmentTrackingCode = shipmentEntity.TrackingNumber,
-                        ShipmentWeight = shipmentEntity.TotalWeight
-                    };
+                        long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
 
-                    webClient.UploadShipmentDetails(shipment);
+                        ThreeDCartShipment shipment = new ThreeDCartShipment
+                        {
+                            OrderID = orderDetail.ThreeDCartOrderID,
+                            ShipmentID = shipmentID,
+                            ShipmentOrderStatus = (int) EnumHelper.GetEnumByApiValue<Enums.ThreeDCartOrderStatus>(threeDCartOrder.OnlineStatus),
+                            ShipmentMethodName = GetShipmentMethod(shipmentEntity),
+                            ShipmentPhone = shipmentEntity.ShipPhone,
+                            ShipmentFirstName = shipmentEntity.ShipFirstName,
+                            ShipmentLastName = shipmentEntity.ShipLastName,
+                            ShipmentAddress = shipmentEntity.ShipStreet1,
+                            ShipmentAddress2 = shipmentEntity.ShipStreet2,
+                            ShipmentCity = shipmentEntity.ShipCity,
+                            ShipmentState = shipmentEntity.ShipStateProvCode,
+                            ShipmentZipCode = shipmentEntity.ShipPostalCode,
+                            ShipmentCountry = shipmentEntity.ShipCountryCode,
+                            ShipmentCompany = shipmentEntity.ShipCompany,
+                            ShipmentEmail = shipmentEntity.ShipEmail,
+                            ShipmentLastUpdate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                            ShipmentShippedDate = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                            ShipmentTrackingCode = shipmentEntity.TrackingNumber,
+                            ShipmentWeight = shipmentEntity.TotalWeight
+                        };
+
+                        IResult result = webClient.UploadShipmentDetails(shipment);
+
+                        if (!result.Success && result.Exception != null)
+                        {
+                            exceptions.Add((ThreeDCartException) result.Exception);
+                        }
+                    }
+                    catch (ThreeDCartException ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+
+                if (exceptions.Any())
+                {
+                    string msg = string.Join(Environment.NewLine, exceptions.Select(ex => ex.Message));
+                    throw new ThreeDCartException(msg, exceptions.First());
                 }
             }
         }

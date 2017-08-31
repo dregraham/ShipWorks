@@ -14,16 +14,20 @@ using Autofac;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 using System.Collections.Generic;
 using ShipWorks.ApplicationCore;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
     /// Updates ThreeDCart order status/shipments
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class ThreeDCartSoapOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapOnlineUpdater));
         private readonly ThreeDCartStoreEntity threeDCartStore;
+        private readonly ThreeDCartWebClient webClient;
 
         // status code provider
         private ThreeDCartStatusCodeProvider statusCodeProvider;
@@ -31,9 +35,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Constructor
         /// </summary>
-        public ThreeDCartSoapOnlineUpdater(ThreeDCartStoreEntity store)
+        public ThreeDCartSoapOnlineUpdater(ThreeDCartStoreEntity store, Func<ThreeDCartStoreEntity, IProgressReporter, ThreeDCartWebClient> webClientFactory)
         {
             threeDCartStore = store;
+            webClient = webClientFactory(threeDCartStore, null);
         }
 
         /// <summary>
@@ -83,8 +88,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails)
                 {
-                    ThreeDCartWebClient client = new ThreeDCartWebClient(threeDCartStore, null);
-                    client.UpdateOrderStatus(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, statusCode);
+                    webClient.UpdateOrderStatus(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, statusCode);
                 }
 
                 // Update the local database with the new status
@@ -132,7 +136,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
 
-                    ThreeDCartWebClient webClient = new ThreeDCartWebClient(threeDCartStore, null);
                     webClient.UploadOrderShipmentDetails(orderDetail, shipmentID, shipment.TrackingNumber);
                 }
             }

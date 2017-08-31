@@ -19,12 +19,14 @@ using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
     /// Interface for connecting to ThreeDCart
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class ThreeDCartWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartWebClient));

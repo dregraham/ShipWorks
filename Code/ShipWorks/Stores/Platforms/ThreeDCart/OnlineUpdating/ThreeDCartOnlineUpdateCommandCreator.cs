@@ -11,6 +11,8 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
 {
@@ -101,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context, ThreeDCartStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, ThreeDCartStoreEntity store)
         {
             int statusCode = (int) context.MenuCommand.Tag;
 
@@ -121,15 +123,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         {
             try
             {
-                if (store.RestUser)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
-                    await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
-                }
-                else
-                {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
-                    await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
+                    if (store.RestUser)
+                    {
+                        ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(store));
+                        await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(store));
+                        await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
+                    }
                 }
                 return Result.FromSuccess();
             }
@@ -143,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnUploadShipmentDetails(MenuCommandExecutionContext context, ThreeDCartStoreEntity store)
+        public async Task OnUploadShipmentDetails(IMenuCommandExecutionContext context, ThreeDCartStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,
@@ -170,15 +175,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
 
             try
             {
-                if (store.RestUser)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
-                    await updater.UpdateShipmentDetails(shipment.ShipmentID).ConfigureAwait(false);
-                }
-                else
-                {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
-                    await updater.UpdateShipmentDetails(shipment.ShipmentID).ConfigureAwait(false);
+                    if (store.RestUser)
+                    {
+                        ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(store));
+                        await updater.UpdateShipmentDetails(shipment.ShipmentID).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(store));
+                        await updater.UpdateShipmentDetails(shipment.ShipmentID).ConfigureAwait(false);
+                    }
                 }
 
                 return Result.FromSuccess();

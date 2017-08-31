@@ -210,6 +210,7 @@
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
     <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
