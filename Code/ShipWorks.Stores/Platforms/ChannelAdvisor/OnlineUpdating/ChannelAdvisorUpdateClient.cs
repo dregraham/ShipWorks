@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
-namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 {
     /// <summary>
     /// A facade that calls the soap or rest Channel Advisor clients to upload shipments
@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     [Component]
     public class ChannelAdvisorUpdateClient : IChannelAdvisorUpdateClient
     {
-        private readonly Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
+        private readonly Func<IChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory;
         private readonly IChannelAdvisorRestClient restClient;
         private readonly IEncryptionProvider encryptionProvider;
         private readonly ICombineOrderNumberSearchProvider combinedOrderSearchProvider;
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorUpdateClient(Func<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory,
+        public ChannelAdvisorUpdateClient(Func<IChannelAdvisorStoreEntity, IChannelAdvisorSoapClient> soapClientFactory,
             IChannelAdvisorRestClient restClient, ICombineOrderNumberSearchProvider combinedOrderSearchProvider,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Uses the soap or rest interface to update Channel Advisor shipments
         /// </summary>
-        public async Task UploadShipmentDetails(ChannelAdvisorStoreEntity store, ChannelAdvisorShipment shipment, IOrderEntity order)
+        public async Task UploadShipmentDetails(IChannelAdvisorStoreEntity store, ChannelAdvisorShipment shipment, IOrderEntity order)
         {
             IEnumerable<long> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
@@ -49,21 +49,26 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 return;
             }
 
-            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+            var handler = Result.Handle<ChannelAdvisorException>();
+            identifiers
+                .Select(x => handler.Execute(() => PerformUpload(store, shipment, x)))
+                .ThrowIfNotEmpty((msg, ex) => new ChannelAdvisorException(msg, ex));
+        }
+
+        /// <summary>
+        /// Perform the actual upload
+        /// </summary>
+        private void PerformUpload(IChannelAdvisorStoreEntity store, ChannelAdvisorShipment shipment, long orderIdentifier)
+        {
+            if (string.IsNullOrWhiteSpace(store.RefreshToken))
             {
-                foreach (var orderIdentifier in chunk)
-                {
-                    if (string.IsNullOrWhiteSpace(store.RefreshToken))
-                    {
-                        IChannelAdvisorSoapClient soapSoapClient = soapClientFactory(store);
-                        soapSoapClient.UploadShipmentDetails((int) orderIdentifier, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
-                    }
-                    else
-                    {
-                        string refreshToken = encryptionProvider.Decrypt(store.RefreshToken);
-                        restClient.UploadShipmentDetails(shipment, refreshToken, orderIdentifier.ToString());
-                    }
-                }
+                IChannelAdvisorSoapClient soapSoapClient = soapClientFactory(store);
+                soapSoapClient.UploadShipmentDetails((int) orderIdentifier, shipment.ShippedDateUtc, shipment.ShippingCarrier, shipment.ShippingClass, shipment.TrackingNumber);
+            }
+            else
+            {
+                string refreshToken = encryptionProvider.Decrypt(store.RefreshToken);
+                restClient.UploadShipmentDetails(shipment, refreshToken, orderIdentifier.ToString());
             }
         }
     }

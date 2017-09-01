@@ -202,7 +202,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenterResponse.cs" />
@@ -252,6 +252,8 @@
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOAuthResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorCombineOrderAction.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />

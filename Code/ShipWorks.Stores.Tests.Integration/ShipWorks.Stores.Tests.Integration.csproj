@@ -185,6 +185,8 @@
     <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
     <Compile Include="Platforms\BuyDotCom\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.LeaveFeedback.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.SendMessage.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
@@ -45,8 +45,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             };
             soapClient = mock.CreateMock<IChannelAdvisorSoapClient>();
 
-            mock.MockFunc<ChannelAdvisorStoreEntity, IChannelAdvisorSoapClient>(soapClient);
-                     
+            mock.MockFunc<IChannelAdvisorStoreEntity, IChannelAdvisorSoapClient>(soapClient);
+
             encryptionProvider = mock.CreateMock<IEncryptionProvider>();
             encryptionProvider.Setup(p => p.Decrypt(It.IsAny<string>())).Returns("EncryptedText");
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorUpdateClient>();
             await testObject.UploadShipmentDetails(store, shipment, order);
 
-            soapClient.Verify(c=>c.UploadShipmentDetails(1234,shipment.ShippedDateUtc, "carrier", "class", "track this!"), Times.Once);
+            soapClient.Verify(c => c.UploadShipmentDetails(1234, shipment.ShippedDateUtc, "carrier", "class", "track this!"), Times.Once);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorUpdateClient>();
             await testObject.UploadShipmentDetails(store, shipment, order);
 
-            encryptionProvider.Verify(p=>p.Decrypt("ha"), Times.Once);
+            encryptionProvider.Verify(p => p.Decrypt("ha"), Times.Once);
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public async Task UploadShipmentDetails_DoesDelegateToRestClientOnce_WhenNonCombinedOrderAndNoCombinedOrderSearchEntities()
         {
             store.RefreshToken = "ha";
-            
+
             var testObject = mock.Create<ChannelAdvisorUpdateClient>();
             await testObject.UploadShipmentDetails(store, shipment, order).ConfigureAwait(false);
 
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             soapClient.Verify(c => c.UploadShipmentDetails(1234, shipment.ShippedDateUtc, "carrier", "class", "track this!"), Times.Once);
         }
-        
+
         [Fact]
         public async Task UploadShipmentDetails_DelegatesToSoapClient_WhenCombinedOrderAndStoreHasEmptyRefreshToken()
         {

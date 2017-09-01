@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -389,64 +384,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             legacy.AddElement("StoreName", () => item.Value.MarketplaceStoreName);
             legacy.AddElement("BuyerID", () => item.Value.MarketplaceBuyerID);
             legacy.AddElement("ItemID", () => item.Value.MarketplaceSalesID);
-        }
-
-        /// <summary>
-        /// Create menu commands for uploading shipment details
-        /// </summary>
-        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new[]
-            {
-                new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails))
-            };
-        }
-
-        /// <summary>
-        /// MenuCommand handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private async void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
-                    await updater.UploadTrackingNumber(shipment).ConfigureAwait(false);
-                }
-                catch (ChannelAdvisorException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment information for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
         }
     }
 }

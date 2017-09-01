@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 
 namespace ShipWorks.Tests.Shared.ExtensionMethods
 {
@@ -23,8 +24,13 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         public static long AnyLong => It.IsAny<long>();
 
         /// <summary>
-        /// Any long
+        /// Any int
         /// </summary>
         public static int AnyInt => It.IsAny<int>();
+
+        /// <summary>
+        /// Any date
+        /// </summary>
+        public static DateTime AnyDate => It.IsAny<DateTime>();
     }
 }

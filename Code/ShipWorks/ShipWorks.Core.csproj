@@ -1770,10 +1770,11 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\OnlineUpdating\IChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\OnlineUpdating\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
@@ -5598,7 +5599,6 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
