@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "CombinedOrderUpdates")]
-    public class ThreeDCartOnlineUpdateCommandCreatorTest : IDisposable
+    public class ThreeDCartRestOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         private readonly ThreeDCartOnlineUpdateCommandCreator commandCreator;
         private Mock<Func<ThreeDCartStoreEntity, IThreeDCartRestWebClient>> webClientFactory;
 
-        public ThreeDCartOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
+        public ThreeDCartRestOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>

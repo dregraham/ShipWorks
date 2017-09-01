@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -27,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapOnlineUpdater));
         private readonly ThreeDCartStoreEntity threeDCartStore;
-        private readonly ThreeDCartWebClient webClient;
+        private readonly IThreeDCartSoapWebClient webClient;
 
         // status code provider
         private ThreeDCartStatusCodeProvider statusCodeProvider;
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Constructor
         /// </summary>
-        public ThreeDCartSoapOnlineUpdater(ThreeDCartStoreEntity store, Func<ThreeDCartStoreEntity, IProgressReporter, ThreeDCartWebClient> webClientFactory)
+        public ThreeDCartSoapOnlineUpdater(ThreeDCartStoreEntity store, Func<ThreeDCartStoreEntity, IProgressReporter, IThreeDCartSoapWebClient> webClientFactory)
         {
             threeDCartStore = store;
             webClient = webClientFactory(threeDCartStore, null);
@@ -86,9 +87,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
                 IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(orderID).ConfigureAwait(false);
 
+                List<IResult> results = new List<IResult>();
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails)
                 {
-                    webClient.UpdateOrderStatus(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, statusCode);
+                    results.Add(webClient.UpdateOrderStatus(orderDetail.OrderNumber, orderDetail.OrderNumberComplete, statusCode));
+                }
+
+                if (results.Where(r => r.Exception != null).Any())
+                {
+                    string msg = string.Join(Environment.NewLine, results.Where(r => r.Exception != null).Select(ex => ex.Message));
+                    throw new ThreeDCartException(msg, results.First(r => r.Exception != null).Exception);
                 }
 
                 // Update the local database with the new status
@@ -132,11 +140,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
                 IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(order.OrderID).ConfigureAwait(false);
 
+                List<IResult> results = new List<IResult>();
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails)
                 {
                     long shipmentID = await dataAccess.GetFirstItemShipmentIDByOriginalOrderID(orderDetail.OriginalOrderID).ConfigureAwait(false);
 
-                    webClient.UploadOrderShipmentDetails(orderDetail, shipmentID, shipment.TrackingNumber);
+                    results.Add(webClient.UploadOrderShipmentDetails(orderDetail, shipmentID, shipment.TrackingNumber));
+                }
+
+                if (results.Where(r => r.Exception != null).Any())
+                {
+                    string msg = string.Join(Environment.NewLine, results.Where(r => r.Exception != null).Select(ex => ex.Message));
+                    throw new ThreeDCartException(msg, results.First(r => r.Exception != null).Exception);
                 }
             }
         }

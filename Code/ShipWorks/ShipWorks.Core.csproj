@@ -1869,6 +1869,7 @@
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartOnlineUpdatingDataAccess.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineOrderSearchProvider.cs" />

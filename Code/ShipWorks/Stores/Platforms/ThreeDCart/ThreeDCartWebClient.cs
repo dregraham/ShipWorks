@@ -26,8 +26,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     /// <summary>
     /// Interface for connecting to ThreeDCart
     /// </summary>
-    [Component(RegisterAs = RegistrationType.Self)]
-    public class ThreeDCartWebClient
+    [Component]
+    public class ThreeDCartWebClient : IThreeDCartSoapWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartWebClient));
         IApiQueryProvider apiQueryProvider;
@@ -173,12 +173,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Update the online status and details of the given shipment
         /// </summary>
-        public void UploadOrderShipmentDetails(ThreeDCartOnlineUpdatingOrderDetail orderDetail, long threeDCartShipmentID, string trackingNumber)
+        public IResult UploadOrderShipmentDetails(ThreeDCartOnlineUpdatingOrderDetail orderDetail, long threeDCartShipmentID, string trackingNumber)
         {
             if (orderDetail.IsManual)
             {
                 log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", orderDetail.OrderNumberComplete);
-                return;
+                return Result.FromSuccess();
             }
 
             try
@@ -188,8 +188,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
+                return Result.FromError(WebHelper.TranslateWebException(ex, typeof(ThreeDCartException)));
             }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -292,7 +294,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        public void UpdateOrderStatus(long orderNumber, string orderNumberComplete, int statusCode)
+        public IResult UpdateOrderStatus(long orderNumber, string orderNumberComplete, int statusCode)
         {
             XmlNode response = null;
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter);
@@ -317,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
+                return Result.FromError(WebHelper.TranslateWebException(ex, typeof(ThreeDCartException)));
             }
 
             // If there was an error, throw
@@ -325,9 +327,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             if (errorNode != null)
             {
                 log.ErrorFormat("ShipWorks was unable to update the order status.  Error Message: {0}", errorNode.OuterXml);
-                throw new ThreeDCartException(
+                ThreeDCartException ex = new ThreeDCartException(
                     $"ShipWorks was unable to update the order status for order number { orderNumber }.", errorNode);
+                return Result.FromError(ex);
             }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
