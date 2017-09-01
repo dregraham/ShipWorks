@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
@@ -66,26 +69,32 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             var orderNumbers = await orderNumberProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-            foreach (var orderNumber in orderNumbers)
-            {
-                try
-                {
-                    webClient.UploadShipmentDetails(store, orderNumber, shipment, sendEmail);
-                }
-                catch (VolusionException ex)
-                {
-                    // re-submitting the same tracking number causes a primary key constraint error in Volusion so we ignore it
-                    if (!ex.Message.Contains("PRIMARY KEY constraint"))
-                    {
-                        throw;
-                    }
-                }
-            }
+            orderNumbers
+                .Select(x => PerformUpdate(store, shipment, sendEmail, x))
+                .ThrowIfNotEmpty((msg, ex) => new VolusionException(msg, ex));
 
             // clear out the Volusion online status locally, so that it can fall out of any local by-status filters
             order.OnlineStatus = "";
 
             unitOfWork.AddForSave(order);
+        }
+
+        private IResult PerformUpdate(IVolusionStoreEntity store, ShipmentEntity shipment, bool sendEmail, long orderNumber)
+        {
+            try
+            {
+                webClient.UploadShipmentDetails(store, orderNumber, shipment, sendEmail);
+            }
+            catch (VolusionException ex)
+            {
+                // re-submitting the same tracking number causes a primary key constraint error in Volusion so we ignore it
+                if (!ex.Message.Contains("PRIMARY KEY constraint"))
+                {
+                    return Result.FromError(ex);
+                }
+            }
+
+            return Result.FromSuccess();
         }
     }
 }
