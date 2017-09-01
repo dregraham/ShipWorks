@@ -18,6 +18,7 @@ using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.Stores.Platforms.Magento.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -89,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             searchRepo.Setup(x => x[StoreTypeCode.Magento]).Returns(combineOrderSearchProvider.Object);
             context.Mock.Provide(searchRepo.Object);
 
-            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore as GenericModuleStoreEntity));
+            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore));
 
             MagentoOrderEntity order = CreateOrder(1234, CombineSplitStatusType.None, true);
 
@@ -120,7 +121,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             searchRepo.Setup(x => x[StoreTypeCode.Magento]).Returns(combineOrderSearchProvider.Object);
             context.Mock.Provide(searchRepo.Object);
 
-            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore as GenericModuleStoreEntity));
+            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore));
 
             MagentoOrderEntity order = CreateOrder(1234, CombineSplitStatusType.None, false);
             Order magentoClientOrder = CreateMagentoOrder(1234, order);
@@ -172,7 +173,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 .Set(os => os.OriginalOrderID, order.OrderID)
                 .Save();
 
-            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore as GenericModuleStoreEntity));
+            var testObject = context.Mock.Create<MagentoTwoRestOnlineUpdater>(TypedParameter.From(magentoStore));
 
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {

@@ -191,6 +191,10 @@
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
+    <Compile Include="Platforms\Magento\MagentoOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProviderTest.cs" />

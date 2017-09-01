@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 }
 
                 // Create the web client to download with
-                GenericStoreWebClient webClient = storeType.CreateWebClient();
+                var webClient = storeType.CreateWebClient();
 
                 GetOnlineStatusCodes(storeType, supportModeActive);
 
@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Downloads the orders.
         /// </summary>
-        private async Task DownloadOrders(bool supportMode, GenericStoreWebClient webClient)
+        private async Task DownloadOrders(bool supportMode, IGenericStoreWebClient webClient)
         {
             // keep going until none are left
             while (true)
@@ -208,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Gets the order count.
         /// </summary>
-        private async Task GetOrderCount(GenericStoreWebClient webClient)
+        private async Task GetOrderCount(IGenericStoreWebClient webClient)
         {
             // Get the largest last modified time.  We start downloading there.
             if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Presents the support staff with a way to load orders from a module response file directly
         /// </summary>
-        private async Task DownloadOrdersFromFile(GenericStoreWebClient client)
+        private async Task DownloadOrdersFromFile(IGenericStoreWebClient client)
         {
             using (GenericStoreResponseLoadDlg dlg = new GenericStoreResponseLoadDlg(client))
             {
@@ -262,7 +262,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Downloads and imports the next batch of orders into ShipWorks
         /// </summary>
-        private async Task<bool> DownloadNextOrdersPage(GenericStoreWebClient webClient)
+        private async Task<bool> DownloadNextOrdersPage(IGenericStoreWebClient webClient)
         {
             // Get the largest last modified time.  We start downloading there.
             GenericModuleResponse response;

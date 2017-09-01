@@ -15,12 +15,10 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -46,7 +44,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericModuleStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+        public GenericModuleStoreType(StoreEntity store,
+            IMessageHelper messageHelper,
+            IOrderManager orderManager) :
             base(store)
         {
             this.orderManager = orderManager;
@@ -177,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             GenericModuleStoreEntity generic = (GenericModuleStoreEntity) Store;
 
-            GenericStoreWebClient webClient = CreateWebClient();
+            var webClient = CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetStore();
 
             // Create the client for connecting to the module
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         [NDependIgnoreLongMethod]
         public virtual void UpdateOnlineModuleInfo()
         {
-            GenericStoreWebClient webClient = this.CreateWebClient();
+            var webClient = this.CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetModule();
 
             GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
@@ -403,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Creates an instance of the downloader. To be overridden by derived stores if necessary.
         /// </summary>
-        public virtual GenericStoreWebClient CreateWebClient()
+        public virtual IGenericStoreWebClient CreateWebClient()
         {
             return new GenericStoreWebClient((GenericModuleStoreEntity) Store);
         }
@@ -569,7 +569,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
                 return Result.FromSuccess();
             }
-            
+
             try
             {
                 GenericStoreOnlineUpdater updater = CreateOnlineUpdater();

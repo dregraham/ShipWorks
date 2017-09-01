@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.SearchFit
         /// Create a legacy-capable web client that can communicate with X-Cart derivative
         /// SearchFit
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register variable transforming and renaming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>

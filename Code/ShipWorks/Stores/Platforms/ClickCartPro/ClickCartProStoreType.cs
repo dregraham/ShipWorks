@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Create the new web client
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>

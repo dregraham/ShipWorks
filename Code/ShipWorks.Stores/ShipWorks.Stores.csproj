@@ -397,10 +397,16 @@
     <Compile Include="Platforms\Magento\Content\MagentoCombineOrderAction.cs" />
     <Compile Include="Platforms\Magento\IMagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoHttpRequestSubmitter.cs" />
+    <Compile Include="Platforms\Magento\MagentoModuleWebClientFactory.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\ActionComments.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\IUserInteraction.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdaterFactory.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\UserInteraction.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\Content\MarketplaceAdvisorCombineOrderAction.cs" />
     <Compile Include="Platforms\NetworkSolutions\Content\NetworkSolutionsCombineOrderAction.cs" />

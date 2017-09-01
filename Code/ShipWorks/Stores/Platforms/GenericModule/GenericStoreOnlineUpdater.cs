@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (!order.IsManual)
             {
                 // Upload tracking number
-                GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
+                var webClient = GenericStoreType.CreateWebClient();
                 await webClient.UploadShipmentDetails(order, shipment).ConfigureAwait(false);
             }
             else
@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             string processedComment = (comment == null) ? "" : TemplateTokenProcessor.ProcessTokens(comment, orderID);
 
-            GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
+            var webClient = GenericStoreType.CreateWebClient();
             await webClient.UpdateOrderStatus(order, code, processedComment).ConfigureAwait(false);
 
             // Update the database to match, status code display

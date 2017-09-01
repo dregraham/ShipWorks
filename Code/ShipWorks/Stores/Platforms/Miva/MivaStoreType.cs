@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Create the MivaWebClient
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient() =>
+        public override IGenericStoreWebClient CreateWebClient() =>
             createWebClient((MivaStoreEntity) Store);
 
         /// <summary>

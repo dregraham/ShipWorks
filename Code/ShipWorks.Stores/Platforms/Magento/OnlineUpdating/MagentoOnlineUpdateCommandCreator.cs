@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -11,34 +11,34 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.ApplicationCore;
-using Autofac;
-using Autofac.Features.OwnedInstances;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
-namespace ShipWorks.Stores.Platforms.Magento
+namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
 {
     /// <summary>
-    /// Create online update commands for Etsy
+    /// Create online update commands for Magento
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Magento)]
     public class MagentoOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IMessageHelper messageHelper;
+        private readonly IMagentoOnlineUpdaterFactory updaterFactory;
+        private readonly IUserInteraction userInteraction;
         private readonly ILog log;
-        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MagentoOnlineUpdateCommandCreator(
             IMessageHelper messageHelper,
-            Func<Type, ILog> createLogger,
-            ILifetimeScope lifetimeScope)
+            IMagentoOnlineUpdaterFactory updaterFactory,
+            IUserInteraction userInteraction,
+            Func<Type, ILog> createLogger)
         {
+            this.userInteraction = userInteraction;
+            this.updaterFactory = updaterFactory;
             this.messageHelper = messageHelper;
-            this.lifetimeScope = lifetimeScope;
             log = createLogger(GetType());
         }
 
@@ -57,31 +57,36 @@ namespace ShipWorks.Stores.Platforms.Magento
             List<IMenuCommand> commands = new List<IMenuCommand>();
 
             // take actions to Cancel the order
-            AsyncMenuCommand command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Cancel), 
-                context => OnOrderCommand(context, magentoStore)) { Tag = MagentoUploadCommand.Cancel };
+            AsyncMenuCommand command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Cancel),
+                context => OnOrderCommand(context, magentoStore))
+            { Tag = MagentoUploadCommand.Cancel };
             commands.Add(command);
 
             // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
             // sets the order "state" online to complete
-            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Complete), 
-                context => OnOrderCommand(context, magentoStore)) { Tag = MagentoUploadCommand.Complete };
+            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Complete),
+                context => OnOrderCommand(context, magentoStore))
+            { Tag = MagentoUploadCommand.Complete };
             commands.Add(command);
 
             // place the order into Hold status
-            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Hold), 
-                context => OnOrderCommand(context, magentoStore)) { Tag = MagentoUploadCommand.Hold };
+            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Hold),
+                context => OnOrderCommand(context, magentoStore))
+            { Tag = MagentoUploadCommand.Hold };
             commands.Add(command);
 
             if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
             {
                 // take the order out of Hold status
-                command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Unhold), 
-                    context => OnOrderCommand(context, magentoStore)) { Tag = MagentoUploadCommand.Unhold };
+                command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Unhold),
+                    context => OnOrderCommand(context, magentoStore))
+                { Tag = MagentoUploadCommand.Unhold };
                 commands.Add(command);
             }
 
-            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Comments), 
-                context => OnOrderCommand(context, magentoStore)) { Tag = MagentoUploadCommand.Comments, BreakBefore = true };
+            command = new AsyncMenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Comments),
+                context => OnOrderCommand(context, magentoStore))
+            { Tag = MagentoUploadCommand.Comments, BreakBefore = true };
             commands.Add(command);
 
             return commands;
@@ -90,32 +95,22 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// MenuCommand handler for executing order commands
         /// </summary>
-        private async Task OnOrderCommand(MenuCommandExecutionContext context, MagentoStoreEntity magentoStore)
+        public async Task OnOrderCommand(IMenuCommandExecutionContext context, MagentoStoreEntity magentoStore)
         {
-            IMenuCommand command = context.MenuCommand;
-            MagentoUploadCommand action;
-            string comments = "";
-            if ((MagentoUploadCommand) command.Tag == MagentoUploadCommand.Comments)
+            MagentoUploadCommand action = (MagentoUploadCommand) context.MenuCommand.Tag;
+            string comments = string.Empty;
+
+            if (action == MagentoUploadCommand.Comments)
             {
-                // open a window for the user to select an action and comments
-                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg((MagentoVersion) magentoStore.MagentoVersion))
+                var actionResults = userInteraction.GetActionComments(context.Owner, (MagentoVersion) magentoStore.MagentoVersion);
+                if (actionResults.Failure)
                 {
-                    if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
-                    {
-                        action = dlg.Action;
-                        comments = dlg.Comments;
-                    }
-                    else
-                    {
-                        // cancel now
-                        context.Complete();
-                        return;
-                    }
+                    context.Complete();
+                    return;
                 }
-            }
-            else
-            {
-                action = (MagentoUploadCommand) command.Tag;
+
+                action = actionResults.Value.Action;
+                comments = actionResults.Value.Comments;
             }
 
             var results = await context.SelectedKeys.SelectWithProgress(messageHelper,
@@ -133,11 +128,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// The worker thread function for executing commands on Magento orders online
         /// </summary>
-        private async Task<IResult> ExecuteOrderCommandCallback(long orderID, MagentoUploadCommand action, 
+        private async Task<IResult> ExecuteOrderCommandCallback(long orderID, MagentoUploadCommand action,
             string comments, MagentoStoreEntity magentoStore)
         {
             // create the updater and execute the command
-            IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) CreateOnlineUpdater(magentoStore);
+            IMagentoOnlineUpdater updater = updaterFactory.Create(magentoStore);
 
             try
             {
@@ -157,22 +152,6 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 return Result.FromError(ex);
             }
-        }
-
-        /// <summary>
-        /// Create a magento online updater
-        /// </summary>
-        private GenericStoreOnlineUpdater CreateOnlineUpdater(MagentoStoreEntity magentoStore)
-        {
-            if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
-            {
-                return (GenericStoreOnlineUpdater)
-                    lifetimeScope.ResolveKeyed<Owned<IMagentoOnlineUpdater>>(
-                        MagentoVersion.MagentoTwoREST,
-                        new TypedParameter(typeof(GenericModuleStoreEntity), magentoStore)).Value;
-            }
-
-            return new MagentoOnlineUpdater((GenericModuleStoreEntity) magentoStore);
         }
     }
 }

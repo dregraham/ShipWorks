@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,14 +27,14 @@ using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Templates.Tokens;
 
-namespace ShipWorks.Stores.Platforms.Magento
+namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
 {
     /// <summary>
     /// Online updater for Magento 2 stores using the REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Platforms.GenericModule.GenericStoreOnlineUpdater" />
     /// <seealso cref="ShipWorks.Stores.Platforms.Magento.IMagentoOnlineUpdater" />
-    [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
+    [Component(RegistrationType.Self)]
     public class MagentoTwoRestOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
         private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
@@ -46,15 +46,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
         /// </summary>
-        public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, IDataProvider dataProvider,
+        public MagentoTwoRestOnlineUpdater(MagentoStoreEntity store,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
+            IDataProvider dataProvider,
             IIndex<StoreTypeCode, ICombineOrderSearchProvider<MagentoOrderSearchEntity>> combineOrderSearchProviderFactory,
             Func<Type, ILog> logFactory)
             : base(store)
         {
             this.webClientFactory = webClientFactory;
             this.dataProvider = dataProvider;
-            this.store = (MagentoStoreEntity) store;
+            this.store = store;
             combineOrderSearchProvider = combineOrderSearchProviderFactory[StoreTypeCode.Magento];
             log = logFactory(typeof(MagentoTwoRestOnlineUpdater));
         }
@@ -151,8 +152,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         private void UpdateAsComplete(bool emailCustomer, MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, MagentoOrderSearchEntity orderSearchEntity)
         {
             Order order = webClient.GetOrder(orderSearchEntity.MagentoOrderID);
-            string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer, order.Items, orderSearchEntity.OriginalOrderID);
-            string invoice = GetInvoice(orderEntity, orderSearchEntity.MagentoOrderID, order.Items, orderSearchEntity.OriginalOrderID);
+            var items = order.Items ?? Enumerable.Empty<Item>();
+
+            string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer, items, orderSearchEntity.OriginalOrderID);
+            string invoice = GetInvoice(orderEntity, orderSearchEntity.MagentoOrderID, items, orderSearchEntity.OriginalOrderID);
             webClient.UploadShipmentDetails(shipmentDetails, invoice, orderSearchEntity.MagentoOrderID);
         }
 
@@ -271,17 +274,11 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.OrderItems?.Any() ?? false)
             {
-                request.Items = new List<ShipmentItem>();
-
-                foreach (Item item in items)
+                request.Items = items.Select(item => new ShipmentItem()
                 {
-                    ShipmentItem magentoInvoiceItem = new ShipmentItem()
-                    {
-                        Qty = GetQuantity(orderEntity, item, originalOrderID),
-                        OrderItemId = item.ItemId
-                    };
-                    request.Items.Add(magentoInvoiceItem);
-                }
+                    Qty = GetQuantity(orderEntity, item, originalOrderID),
+                    OrderItemId = item.ItemId
+                }).ToList();
             }
 
             return JsonConvert.SerializeObject(request);
@@ -323,21 +320,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         private string GetShippingService(ShipmentEntity shipment)
         {
             string service;
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.FedEx:
-                    service = EnumHelper.GetDescription((FedExServiceType)shipment.FedEx.Service);
+                    service = EnumHelper.GetDescription((FedExServiceType) shipment.FedEx.Service);
                     break;
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    service = EnumHelper.GetDescription((UpsServiceType)shipment.Ups.Service);
+                    service = EnumHelper.GetDescription((UpsServiceType) shipment.Ups.Service);
                     break;
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.Usps:
-                    service = EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service);
+                    service = EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service);
                     break;
                 default:
                     service = shipment.Other.Service;

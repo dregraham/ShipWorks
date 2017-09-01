@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
+using System.Web;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Xml;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
-using System.Web;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Magento.Enums;
-using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
     /// Magento two web client
     /// </summary>
-    class MagentoTwoWebClient : MagentoWebClient
+    [Component]
+    public class MagentoTwoWebClient : MagentoWebClient, IMagentoTwoWebClient
     {
         private readonly MagentoStoreEntity store;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -167,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     string result = reader.ReadResult();
                     logEntry.LogResponse(result, "txt");
 
-                    XmlDocument xmlResponse = new XmlDocument {XmlResolver = null};
+                    XmlDocument xmlResponse = new XmlDocument { XmlResolver = null };
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();

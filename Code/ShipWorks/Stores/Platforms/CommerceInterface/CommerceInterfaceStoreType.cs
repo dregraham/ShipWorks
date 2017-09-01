@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Create the new web client, which is legacy-capable
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>

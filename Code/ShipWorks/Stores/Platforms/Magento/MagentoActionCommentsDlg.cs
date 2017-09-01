@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
@@ -42,8 +37,8 @@ namespace ShipWorks.Stores.Platforms.Magento
             };
             if (version == MagentoVersion.MagentoTwoREST)
             {
-                commands.Add(new {Text = "Unhold", Action = MagentoUploadCommand.Unhold});
-                commands.Add(new {Text = "Comments only", Action = MagentoUploadCommand.Comments});
+                commands.Add(new { Text = "Unhold", Action = MagentoUploadCommand.Unhold });
+                commands.Add(new { Text = "Comments only", Action = MagentoUploadCommand.Comments });
             }
 
             action.DataSource = commands;

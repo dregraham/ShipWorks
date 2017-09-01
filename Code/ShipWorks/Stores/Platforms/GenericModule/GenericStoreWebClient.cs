@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// <summary>
     /// Class for connecting to and working with our Generic php module
     /// </summary>
-    public class GenericStoreWebClient
+    public class GenericStoreWebClient : IGenericStoreWebClient
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreWebClient));

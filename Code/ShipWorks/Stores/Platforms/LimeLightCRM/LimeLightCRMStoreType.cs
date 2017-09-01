@@ -36,10 +36,8 @@ namespace ShipWorks.Stores.Platforms.LimeLightCRM
         /// <summary>
         /// Create a custom web client for Lime Light CRM
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
-        {
-            return new LimeLightCRMWebClient(Store as GenericModuleStoreEntity);
-        }
+        public override IGenericStoreWebClient CreateWebClient() =>
+            new LimeLightCRMWebClient(Store as GenericModuleStoreEntity);
 
         /// <summary>
         /// Gets the account settings help URL.

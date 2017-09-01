@@ -89,9 +89,7 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Create our SellerVantage specific web client
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
-        {
-            return new SellerVantageWebClient((GenericModuleStoreEntity) Store);
-        }
+        public override IGenericStoreWebClient CreateWebClient() =>
+            new SellerVantageWebClient((GenericModuleStoreEntity) Store);
     }
 }

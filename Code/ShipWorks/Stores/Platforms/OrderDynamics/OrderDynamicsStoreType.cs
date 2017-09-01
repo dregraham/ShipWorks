@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// <summary>
         /// Create the new web client, based on V2 osc behavior
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // configure transformation
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>
