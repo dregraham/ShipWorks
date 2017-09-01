@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 return product;
             }
-            catch (ChannelAdvisorException e)
+            catch (ChannelAdvisorException)
             {
                 // Log should already be written. Return null
                 return null;
