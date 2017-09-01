@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private ShipmentEntity CreateReturnShipment(CreateReturnShipmentMessage message)
         {
-            return shippingManager.CreateReturnShipment(message.Shipment);
+            return CreateShipmentCopy(message.Shipment, true);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private ShipmentEntity ShipAgain(ShipAgainMessage message)
         {
-            return CreateShipmentCopy(message.Shipment, null);
+            return CreateShipmentCopy(message.Shipment, false);
         }
 
         /// <summary>
@@ -183,11 +183,16 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Create a copy of the shipment
         /// </summary>
-        private ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment, Action<ShipmentEntity> configure)
+        private ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment, bool returnShipment)
         {
             try
             {
-                return shippingManager.CreateShipmentCopy(shipment, configure);
+                if (returnShipment)
+                {
+                    return shippingManager.CreateReturnShipment(shipment);
+                }
+
+                return shippingManager.CreateShipmentCopy(shipment);
             }
             catch (SqlForeignKeyException)
             {
