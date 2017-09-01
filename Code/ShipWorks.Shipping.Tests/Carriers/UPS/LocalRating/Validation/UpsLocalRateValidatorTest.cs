@@ -332,43 +332,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Validation
             resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 0), It.Is<List<ShipmentEntity>>(d => d.Count == 0)), Times.Once());
         }
 
-        //[Fact]
-        //public void ValidateRecentShipments_ReturnsDiscrepancy_WhenLocalRatingIsNotEnabledForAccount()
-        //{
-        //    var shipment = CreateShipment(0, UpsPayorType.Sender, UpsServiceType.Ups2DayAir);
-
-        //    var shipments = new List<ShipmentEntity>
-        //    {
-        //        shipment
-        //    };
-
-        //    var apiRates = new List<UpsServiceRate>
-        //    {
-        //        new UpsServiceRate(UpsServiceType.Ups2DayAir, 5, true, 1)
-        //    };
-
-        //    Mock<IUpsLocalRateRecentShipmentRepository> shipmentsRepo = mock.Mock<IUpsLocalRateRecentShipmentRepository>();
-        //    shipmentsRepo.Setup(s => s.GetRecentShipments(It.IsAny<UpsAccountEntity>())).Returns(shipments);
-
-        //    SetupGetLocalRatesToSucceed();
-        //    SetupApiRateClient(apiRates);
-
-        //    var account = mock.Mock<IUpsAccountEntity>();
-        //    account.Setup(a => a.LocalRatingEnabled).Returns(true);
-
-        //    var accountRetriever = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
-        //    accountRetriever.Setup(r => r.GetAccountReadOnly(It.IsAny<ShipmentEntity>())).Returns(account.Object);
-
-
-        //    //SetupLocalRatingEnabledForAccount(false, shipment.Ups.UpsAccountID);
-
-        //    testObject = mock.Create<UpsLocalRateValidator>(new TypedParameter(typeof(IIndex<UpsRatingMethod, IUpsRateClient>), rateClientFactory.Object));
-
-        //    testObject.ValidateRecentShipments(account.Object);
-
-        //    resultFactory.Verify(r => r.Create(It.Is<List<UpsLocalRateDiscrepancy>>(d => d.Count == 1), shipments), Times.Once());
-        //}
-
         [Fact]
         public void ValidateRecentShipments_ReturnsNoDiscrepancies_WhenNoLocalRateIsFoundForUpsService()
         {
