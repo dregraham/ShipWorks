@@ -162,21 +162,29 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
         {
-            if (productCache.Contains(productID))
+            try
             {
-                return productCache[productID];
+                if (productCache.Contains(productID))
+                {
+                    return productCache[productID];
+                }
+
+                IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+
+                submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+                submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
+
+                ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
+
+                productCache[productID] = product;
+
+                return product;
             }
-
-            IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
-
-            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
-
-            ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
-
-            productCache[productID] = product;
-
-            return product;
+            catch (ChannelAdvisorException e)
+            {
+                // Log should already be written. Return null
+                return null;
+            }
         }
 
 
