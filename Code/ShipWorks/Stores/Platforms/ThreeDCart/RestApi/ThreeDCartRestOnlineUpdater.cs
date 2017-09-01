@@ -57,7 +57,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 adapter.Commit();
             }
         }
-
         /// <summary>
         /// Changes the status of an order
         /// </summary>
@@ -77,17 +76,43 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 return;
             }
 
+            ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
+
+            List<ThreeDCartException> exceptions = await UpdateOrderStatus(threeDCartOrder, statusID).ConfigureAwait(false);
+
+            if (exceptions.Any())
+            {
+                string msg = string.Join(Environment.NewLine, exceptions.Select(ex => ex.Message));
+                throw new ThreeDCartException(msg, exceptions.First());
+            }
+
+            // Update the local database with the new status
+            OrderEntity basePrototype = new OrderEntity(orderID)
+            {
+                IsNew = false,
+                OnlineStatusCode = statusID,
+                OnlineStatus = threeDCartOrder.OnlineStatus
+            };
+
+            unitOfWork.AddForSave(basePrototype);
+        }
+
+        /// <summary>
+        /// Update an order's status
+        /// </summary>
+        private async Task<List<ThreeDCartException>> UpdateOrderStatus(ThreeDCartOrderEntity threeDCartOrder, int statusID)
+        {
+            List<ThreeDCartException> exceptions = new List<ThreeDCartException>();
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ThreeDCartOrderEntity threeDCartOrder = order as ThreeDCartOrderEntity;
-
                 IThreeDCartOnlineUpdatingDataAccess dataAccess = scope.Resolve<IThreeDCartOnlineUpdatingDataAccess>();
-                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(orderID).ConfigureAwait(false);
+                IEnumerable<ThreeDCartOnlineUpdatingOrderDetail> orderDetails = await dataAccess.GetOrderDetails(threeDCartOrder.OrderID).ConfigureAwait(false);
 
                 // Downloaded using the SOAP API
                 if (orderDetails.All(od => od.ThreeDCartOrderID == -1))
                 {
-                    log.WarnFormat($"Unable to update online status for order {order.OrderNumberComplete}: cannot find order." +
+                    log.WarnFormat($"Unable to update online status for order {threeDCartOrder.OrderNumberComplete}: cannot find order." +
                                    "This is most likely because the order was downloaded using the SOAP API and it is trying to" +
                                    "update using the REST API.");
 
@@ -99,7 +124,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 threeDCartOrder.OnlineStatus = status;
                 threeDCartOrder.OnlineStatusCode = statusID;
 
-                List<ThreeDCartException> exceptions = new List<ThreeDCartException>();
                 foreach (ThreeDCartOnlineUpdatingOrderDetail orderDetail in orderDetails.Where(od => od.ThreeDCartOrderID != -1))
                 {
                     try
@@ -136,23 +160,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         exceptions.Add(ex);
                     }
                 }
-
-                if (exceptions.Any())
-                {
-                    string msg = string.Join(Environment.NewLine, exceptions.Select(ex => ex.Message));
-                    throw new ThreeDCartException(msg, exceptions.First());
-                }
-
-                // Update the local database with the new status
-                OrderEntity basePrototype = new OrderEntity(orderID)
-                {
-                    IsNew = false,
-                    OnlineStatusCode = statusID,
-                    OnlineStatus = status
-                };
-
-                unitOfWork.AddForSave(basePrototype);
             }
+
+            return exceptions;
         }
 
         /// <summary>
