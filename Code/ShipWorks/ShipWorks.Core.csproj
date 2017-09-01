@@ -1863,6 +1863,8 @@
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
@@ -3646,7 +3648,6 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.Designer.cs">
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

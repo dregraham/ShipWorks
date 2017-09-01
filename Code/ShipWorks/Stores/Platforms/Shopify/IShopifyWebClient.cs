@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -52,6 +50,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Update the online status of the given orders
         /// </summary>
-        Task UploadOrderShipmentDetails(ShipmentEntity shipment);
+        void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl);
     }
 }

@@ -6,14 +6,15 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
     /// <summary>
-    /// Constructor
+    /// Order search provider for Shopify
     /// </summary>
-    [KeyedComponent(typeof(ICombineOrderSearchProvider<ShopifyOrderSearchEntity>), StoreTypeCode.Shopify)]
-    public class ShopifyCombineOrderSearchProvider : CombineOrderSearchBaseProvider<ShopifyOrderSearchEntity>
+    [Component]
+    public class ShopifyCombineOrderSearchProvider : CombineOrderSearchBaseProvider<ShopifyOrderSearchEntity>, IShopifyOrderSearchProvider
     {
         /// <summary>
         /// Constructor

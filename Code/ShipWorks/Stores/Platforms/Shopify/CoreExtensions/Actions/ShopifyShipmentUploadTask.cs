@@ -1,48 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
+using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
 {
     /// <summary>
-    /// Task for uploading shipment detials to Shopify
+    /// Task for uploading shipment details to Shopify
     /// </summary>
     [ActionTask("Upload shipment details", "ShopifyShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ShopifyShipmentUploadTask : StoreInstanceTaskBase
     {
+        readonly IShopifyOnlineUpdater onlineUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShopifyShipmentUploadTask(IShopifyOnlineUpdater onlineUpdater)
+        {
+            this.onlineUpdater = onlineUpdater;
+        }
+
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
-        public override bool SupportsStore(StoreEntity store)
-        {
-            return store is ShopifyStoreEntity;
-        }
+        public override bool SupportsStore(StoreEntity store) => store is ShopifyStoreEntity;
 
         /// <summary>
         /// This task is for Shipments
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// Instantiates the editor for the action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
         /// Descriptive label which appears on the task editor
@@ -59,15 +57,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
         {
-            if (inputKeys == null)
-            {
-                throw new ArgumentNullException("inputKeys", "inputKeys is required");
-            }
-
-            if (context == null)
-            {
-                throw new ArgumentNullException("context", "context is required");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(inputKeys, nameof(inputKeys));
+            MethodConditions.EnsureArgumentIsNotNull(context, nameof(context));
 
             if (StoreID <= 0)
             {
@@ -84,9 +75,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
             {
                 foreach (long shipmentID in inputKeys)
                 {
-                    ShopifyOnlineUpdater updater = new ShopifyOnlineUpdater(store);
-
-                    await updater.UpdateOnlineStatus(shipmentID, context.CommitWork).ConfigureAwait(false);
+                    await onlineUpdater.UpdateOnlineStatus(store, shipmentID, context.CommitWork).ConfigureAwait(false);
                 }
             }
             catch (ShopifyException ex)

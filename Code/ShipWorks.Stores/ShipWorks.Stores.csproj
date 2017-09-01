@@ -522,7 +522,8 @@
     <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
-    <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdater.cs" />
+    <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Shopify\Content\ShopifyCombineOrderAction.cs" />
     <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />

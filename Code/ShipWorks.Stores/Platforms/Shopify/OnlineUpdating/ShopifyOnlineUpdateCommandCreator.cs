@@ -12,7 +12,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.Platforms.Shopify
+namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 {
     /// <summary>
     /// Create online update commands for Shopify
@@ -21,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     public class ShopifyOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IMessageHelper messageHelper;
+        private readonly IShopifyOnlineUpdater onlineUpdater;
         private readonly ILog log;
 
         /// <summary>
@@ -28,8 +29,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public ShopifyOnlineUpdateCommandCreator(
             IMessageHelper messageHelper,
+            IShopifyOnlineUpdater onlineUpdater,
             Func<Type, ILog> createLogger)
         {
+            this.onlineUpdater = onlineUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -49,13 +52,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             IMenuCommand uploadCommand = new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(context, typedStore));
 
-            return new []{uploadCommand};
+            return new[] { uploadCommand };
         }
 
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, ShopifyStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, ShopifyStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -80,8 +83,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     return Result.FromSuccess();
                 }
 
-                ShopifyOnlineUpdater updater = new ShopifyOnlineUpdater(store);
-                await updater.UpdateOnlineStatus(order).ConfigureAwait(false);
+                await onlineUpdater.UpdateOnlineStatus(store, order).ConfigureAwait(false);
 
                 return Result.FromSuccess();
             }
