@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)
         {
-            ShipmentEntity returnShipment = CreateShipmentCopy(shipment, x =>
+            return CreateShipmentCopy(shipment, x =>
             {
                 x.ReturnShipment = true;
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -214,8 +214,6 @@ namespace ShipWorks.Shipping.Services
                     lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(x, true);
                 }
             });
-
-            return returnShipment;
         }
 
         /// <summary>
