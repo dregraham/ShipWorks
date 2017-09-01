@@ -263,6 +263,10 @@
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\UserInteraction.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\IEtsyUserInteraction.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />

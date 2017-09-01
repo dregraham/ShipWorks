@@ -1,13 +1,14 @@
 ﻿using System;
-using Interapptive.Shared.UI;
-using System.Windows.Forms;
 using System.IO;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using System.Xml.Linq;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -32,16 +33,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Shows import token dialog, imports token, validates it.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public bool ImportToken(IWin32Window parentWindow, EtsyWebClient webClient)
+        public bool ImportToken(IWin32Window parentWindow, IEtsyWebClient webClient)
         {
-            if (webClient==null)
-            {
-                throw new ArgumentNullException("webClient");
-            }
-            if (parentWindow == null)
-            {
-                throw new ArgumentNullException("parentWindow");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(webClient, nameof(webClient));
+            MethodConditions.EnsureArgumentIsNotNull(parentWindow, nameof(parentWindow));
 
             bool isTokenValid = false;
 

@@ -1782,7 +1782,8 @@
     <Compile Include="Stores\Platforms\Ebay\EbayMessagingDetails.cs" />
     <Compile Include="Stores\Platforms\Ebay\IEbayOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
-    <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Stores\Platforms\Etsy\OnlineUpdating\IEtsyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Etsy\IEtsyWebClient.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3575,7 +3576,6 @@
     <Compile Include="Stores\Platforms\Etsy\EtsyAccountSettingsControl.Designer.cs">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyOrderStatusUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyEndpoints.cs" />

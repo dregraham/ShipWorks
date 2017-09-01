@@ -192,6 +192,7 @@
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />

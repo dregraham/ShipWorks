@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         int totalCount = 0;
         const int goBackDaysForUnpaid = 60;
         const int goBackDaysForUnshipped = 60;
-        EtsyWebClient webClient;
+        private readonly IEtsyWebClient webClient;
 
         /// <summary>
         /// Number of orders to download at a time.
@@ -48,10 +48,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyDownloader(StoreEntity store)
+        public EtsyDownloader(StoreEntity store, Func<EtsyStoreEntity, IEtsyWebClient> createWebClient)
             : base(store)
         {
-            webClient = new EtsyWebClient(store as EtsyStoreEntity);
+            webClient = createWebClient(store as EtsyStoreEntity);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasShipped, false, goBackDaysForUnshipped, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(webClient, Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
 
             //Update those statuses locally
             foreach (var changedOrder in newlyChangedOrders)
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasPaid, false, goBackDaysForUnpaid, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(webClient, Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
             UpdatePaymentInformation(newlyChangedOrders);
         }
 
@@ -477,8 +477,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             item.Name = transaction.GetValue("title", "");
             int productId = transaction["product_data"].GetValue("product_id", 0);
-            
-            
+
+
             if (productId != 0)
             {
                 item.ListingID = transaction.GetValue("listing_id", 0);
@@ -492,7 +492,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 item.Code = transaction.GetValue("transaction_id", "");
                 item.SKU = transaction.GetValue("listing_id", "");
             }
-           
+
             item.Quantity = transaction.GetValue("quantity", 0);
             item.UnitPrice = transaction.GetValue("price", 0m);
 

@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Controls.Html;
-using log4net;
-using ShipWorks.Stores.Management;
-using Interapptive.Shared.UI;
-using System.IO;
-using Interapptive.Shared.Utility;
-using System.Xml;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using ShipWorks.Properties;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Web;
-using ShipWorks.Stores.Platforms.Etsy.Enums;
+using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Properties;
+using ShipWorks.UI.Controls.Html;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -30,13 +20,13 @@ namespace ShipWorks.Stores.Platforms.Etsy
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyTokenManageControl));
 
-        EtsyWebClient webClient;
+        //EtsyWebClient webClient;
         EtsyStoreEntity store;
 
         bool showTokenInfo = true;
 
         /// <summary>
-        /// Raised when a token has been succesfully created (or loaded from file) and imported into shipworks
+        /// Raised when a token has been successfully created (or loaded from file) and imported into shipworks
         /// </summary>
         public event EventHandler TokenImported;
 
@@ -48,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             InitializeComponent();
         }
 
-         /// <summary>
+        /// <summary>
         /// Populates store and validates token
         /// </summary>
         public void LoadStore(StoreEntity store)
@@ -60,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
 
             this.store = etsyStore;
-            this.webClient = new EtsyWebClient(this.store);
+            //this.webClient = new EtsyWebClient(this.store);
 
             UpdateStatusDisplay();
         }
@@ -106,11 +96,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Used to determine if the token is valid.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsTokenValid 
+        public bool IsTokenValid
         {
-            get 
+            get
             {
-                return store != null && !string.IsNullOrWhiteSpace(store.OAuthToken); 
+                return store != null && !string.IsNullOrWhiteSpace(store.OAuthToken);
             }
         }
 
@@ -129,17 +119,21 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 try
                 {
-                    authenticateDlg.InitialURL = webClient.GetRequestTokenURL(callbackURL);
-
-                    if (authenticateDlg.ShowDialog(this) == DialogResult.OK)
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        ProcessListenerUrl(authenticateDlg.ResultURL);
+                        var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
+                        authenticateDlg.InitialURL = webClient.GetRequestTokenURL(callbackURL);
+
+                        if (authenticateDlg.ShowDialog(this) == DialogResult.OK)
+                        {
+                            ProcessListenerUrl(authenticateDlg.ResultURL);
+                        }
                     }
                 }
                 catch (EtsyException ex)
                 {
                     MessageHelper.ShowError(this, ex.Message);
-                }   
+                }
             }
         }
 
@@ -149,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         private void ProcessListenerUrl(Uri url)
         {
             Cursor.Current = Cursors.WaitCursor;
-            
+
             try
             {
                 NameValueCollection queryStringCollection = HttpUtility.ParseQueryString(url.Query);
@@ -157,7 +151,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 string token = queryStringCollection["oauth_token"];
                 string verifier = queryStringCollection["oauth_verifier"];
 
-                webClient.AuthorizeToken(token, verifier);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
+                    webClient.AuthorizeToken(token, verifier);
+                }
 
                 OnTokenImported();
             }
@@ -168,16 +166,20 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
         }
 
-         /// <summary>
+        /// <summary>
         /// Imports Token
         /// </summary>
         public void ImportToken()
         {
             EtsyTokenUtility tokenManager = new EtsyTokenUtility(store);
 
-            if (tokenManager.ImportToken(this, webClient))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                OnTokenImported();
+                var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
+                if (tokenManager.ImportToken(this, webClient))
+                {
+                    OnTokenImported();
+                }
             }
         }
 
