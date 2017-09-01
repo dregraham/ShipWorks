@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -198,6 +200,23 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
+
+        /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        public ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)
+        {
+            ShipmentEntity returnShipment = CreateShipmentCopy(shipment, x =>
+            {
+                x.ReturnShipment = true;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(x, true);
+                }
+            });
+
+            return returnShipment;
+        }
 
         /// <summary>
         /// Create a shipment as a copy of an existing shipment

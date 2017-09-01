@@ -82,6 +82,11 @@ namespace ShipWorks.Shipping
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        ShipmentEntity CreateReturnShipment(ShipmentEntity shipment);
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment);

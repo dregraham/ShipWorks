@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// </summary>
         private ShipmentEntity CreateReturnShipment(CreateReturnShipmentMessage message)
         {
-            return CreateShipmentCopy(message.Shipment, x => x.ReturnShipment = true);
+            return shippingManager.CreateReturnShipment(message.Shipment);
         }
 
         /// <summary>
