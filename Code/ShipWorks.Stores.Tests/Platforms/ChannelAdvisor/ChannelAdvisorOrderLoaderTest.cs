@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OnlineLastModifiedIsSet()
         {
-            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            downloadedOrder.PaymentDateUtc = new DateTime(2017, 7, 7);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
