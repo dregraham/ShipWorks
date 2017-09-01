@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
 
-                DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
+                DateTime start = GetOrderDateStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
                 totalOrders = ordersResult.ResultCount;
