@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombineOrderActions;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutionss.Content
 {
@@ -20,6 +21,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutionss.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
+            combinedOrder.OnlineStatusCode = orders.Where(o => !o.IsManual && o.OnlineStatusCode != null).FirstOrDefault()?.OnlineStatusCode;
+            combinedOrder.OnlineStatus = orders.Where(o => !o.IsManual && !string.IsNullOrWhiteSpace(o.OnlineStatus)).FirstOrDefault()?.OnlineStatus;
+
             var recordCreator = new SearchRecordMerger<INetworkSolutionsOrderEntity>(combinedOrder, orders, sqlAdapter);
 
             return recordCreator.Perform(NetworkSolutionsOrderSearchFields.OrderID,
