@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
 
-                DateTime start = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
+                DateTime start = GetOrderDateStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
                 totalOrders = ordersResult.ResultCount;
@@ -85,7 +85,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                         // Get the products for the order to pass into the loader
                         List<ChannelAdvisorProduct> caProducts =
-                            caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
+                            caOrder.Items
+                                .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
+                                .Where(p => p != null).ToList();
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
