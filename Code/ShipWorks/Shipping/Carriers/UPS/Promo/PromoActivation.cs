@@ -11,8 +11,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Create a PromoActivation from a PromoDiscountResponse
         /// </summary>
-        /// <param name="upsResponse"></param>
-        /// <returns></returns>
         public static PromoActivation FromPromoDiscountResponse(PromoDiscountResponse upsResponse)
         {
             return new PromoActivation(upsResponse);
@@ -40,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private PromoActivation(string errorMessage)
         {
-            IsSuccessful = string.IsNullOrWhiteSpace(errorMessage);
+            IsSuccessful = false;
             Info = errorMessage;
         }
 
