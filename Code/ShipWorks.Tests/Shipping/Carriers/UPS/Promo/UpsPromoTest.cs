@@ -140,14 +140,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void Apply_ThrowsUpsPromoException_WhenTermsHaveNotBeenAccepted()
+        public void Apply_ReturnsPromoActivationWithInfo_WhenTermsHaveNotBeenAccepted()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 var testObject = CreateUpsPromo(mock, client);
 
-                Assert.Throws<UpsPromoException>(() => testObject.Apply());
+                PromoActivation result = testObject.Apply();
+
+                Assert.False(result.IsSuccessful);
+                Assert.Equal("You must first accept the Terms and Conditions", result.Info);
             }
         }
 

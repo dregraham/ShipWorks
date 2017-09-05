@@ -116,12 +116,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Log the results to telemetry
         /// </summary>
-        private void LogResult(string action, PromoActivation activateion)
+        private void LogResult(string action, PromoActivation activation)
         {
             ITrackedEvent telemetryEvent = telemetryEventFunc("Ups.Promo");
 
             telemetryEvent.AddProperty("Ups.Promo.Acceptance.Result",
-                activateion?.IsSuccessful ?? false ? "Applied" : "Declined by UPS");
+                activation?.IsSuccessful ?? false ? "Applied" : "Declined by UPS");
             LogResult(action, telemetryEvent);
 
             telemetryEvent.Dispose();
