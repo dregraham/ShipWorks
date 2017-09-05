@@ -241,7 +241,7 @@ namespace ShipWorks.Data
                             log.Warn(string.Format("Unable to access file {0}", filePath), ex);
                         }
 
-                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceDataWithRetry - comitted: "))
+                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
                         {
                             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                             {
