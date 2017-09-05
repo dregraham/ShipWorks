@@ -9,10 +9,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     /// </summary>
     public class PromoActivation
     {
+        public static PromoActivation FromPromoDiscountResponse(PromoDiscountResponse upsResponse)
+        {
+            return new PromoActivation(upsResponse);
+        }
+
+        public static PromoActivation FromError(string errorMessage)
+        {
+            return new PromoActivation(errorMessage);   
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public PromoActivation(PromoDiscountResponse upsResponse)
+        private PromoActivation(PromoDiscountResponse upsResponse)
         {
             IsSuccessful = ((upsResponse?.Response?.ResponseStatus?.Code ?? "0") == "1");
             Info = upsResponse?.Response?.Alert?.FirstOrDefault()?.Description ?? string.Empty;
@@ -21,11 +31,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Constructor
         /// </summary>
-        public PromoActivation(Exception exception)
+        private PromoActivation(string errorMessage)
         {
-            Exception = exception;
             IsSuccessful = false;
-            Info = exception.Message;
+            Info = errorMessage;
         }
 
         /// <summary>
@@ -37,7 +46,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// Returns true if activation was sucessful.
         /// </summary>
         public bool IsSuccessful { get; }
-
-        public Exception Exception { get; }
     }
 }

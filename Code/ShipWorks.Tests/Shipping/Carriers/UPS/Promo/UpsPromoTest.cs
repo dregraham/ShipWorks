@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     }
                 };
 
-                var promoActivation = new PromoActivation(discountResponse);
+                var promoActivation = PromoActivation.FromPromoDiscountResponse(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
@@ -196,7 +196,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "MO"
                 };
 
-                var promoActivation = new PromoActivation(discountResponse);
+                var promoActivation = PromoActivation.FromPromoDiscountResponse(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
@@ -228,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "MO"
                 };
 
-                var promoActivation = new PromoActivation(discountResponse);
+                var promoActivation = PromoActivation.FromPromoDiscountResponse(discountResponse);
                 var accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
@@ -260,7 +260,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "MO"
                 };
 
-                var promoActivation = new PromoActivation(discountResponse);
+                var promoActivation = PromoActivation.FromPromoDiscountResponse(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
                 client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);

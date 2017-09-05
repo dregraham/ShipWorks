@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             // Check to see if the terms have been accepted
             if (Terms.IsAccepted == false)
             {
-                return new PromoActivation(new UpsPromoException("You must first accept the Terms and Conditions"));
+                return PromoActivation.FromError("You must first accept the Terms and Conditions");
             }
 
             PromoActivation promoActivation;
@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                     // Set the promo status on the account as applied because our promo has already been applied
                     account.PromoStatus = (int)UpsPromoStatus.Applied;
                     upsAccountRepository.Save(account);
-                    return new PromoActivation(soapEx);
+                    return PromoActivation.FromError(soapEx.Message);
                 }
 
                 if (errCode == "9560010")
@@ -138,12 +138,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                     // Account is on a bid that cannot be overridden
                     // Set the promo status to declined because our promo cannot be applied
                     Decline();
-                    return new PromoActivation(new UpsPromoException("Your UPS Account is on a promo that cannot be overridden."));
+                    return PromoActivation.FromError("Your UPS Account is on a promo that cannot be overridden.");
                 }
 
                 // This is an error we dont know about, could be an outage so remind me later
                 RemindMe();
-                return new PromoActivation(ex);
+                return PromoActivation.FromError(ex.Message);
             }
 
             return promoActivation;
