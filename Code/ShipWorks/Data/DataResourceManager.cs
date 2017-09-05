@@ -111,7 +111,7 @@ namespace ShipWorks.Data
         private static DataResourceReference InstantiateResource(byte[] data, long consumerID, string label, bool compress)
         {
             string resourceFilename;
-            long resourceID = EnsureResourceData(data, label, compress, out resourceFilename);
+            long resourceID = EnsureResourceDataWithRetry(data, label, compress, out resourceFilename);
 
             // The key is the data itself - in other words one reference per unique type of resource data.  We can use
             // the ResourceID as a key in that case.
@@ -136,6 +136,27 @@ namespace ShipWorks.Data
             }
 
             return reference;
+        }
+
+        /// <summary>
+        /// Ensure a Resource row exists for the given data.  If 'label' contains a filename and the resource does not yet exist, the extension of the filename is used
+        /// as the new resource filename extension.
+        /// </summary>
+        /// <remarks>
+        /// Despite the lock, we were still getting an ORMQueryExecutionException when saving the new resource. I assume this was due to another machine inserting a resource
+        /// record before we save the record here but after we check to see if the record exists.
+        /// </remarks>
+        private static long EnsureResourceDataWithRetry(byte[] data, string label, bool compress, out string resourceFilename)
+        {
+            try
+            {
+                return EnsureResourceData(data, label, compress, out resourceFilename);
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                log.Error("EnsureResourceDataWithRetry failed first time. Retrying....", ex);
+                return EnsureResourceData(data, label, compress, out resourceFilename);
+            }
         }
 
         /// <summary>
@@ -220,7 +241,7 @@ namespace ShipWorks.Data
                             log.Warn(string.Format("Unable to access file {0}", filePath), ex);
                         }
 
-                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
+                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceDataWithRetry - comitted: "))
                         {
                             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                             {
