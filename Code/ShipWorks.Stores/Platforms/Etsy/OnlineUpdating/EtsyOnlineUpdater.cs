@@ -5,6 +5,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -114,47 +117,42 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// </summary>
         private async Task UpdateOnlineStatus(EtsyOrderEntity order, bool? markAsPaid, bool? markAsShipped, string processedComment, UnitOfWork2 unitOfWork)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
+            MethodConditions.EnsureArgumentIsNotNull(unitOfWork, nameof(unitOfWork));
 
-            if (unitOfWork == null)
-            {
-                throw new ArgumentNullException("unitOfWork");
-            }
-
-            if (order.IsManual)
+            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
                 return;
             }
 
-            try
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                ICombineOrderNumberSearchProvider combinedOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
+
+                IEnumerable<long> orderNumbers = await combinedOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
+                var exceptions = new List<Exception>();
+
+                foreach (long orderNumber in orderNumbers)
                 {
-                    ICombineOrderNumberSearchProvider combinedOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
-
-                    IEnumerable<long> orderNumbers = await combinedOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
-
-                    foreach (long orderNumber in orderNumbers)
+                    try
                     {
-                        //set the order status at etsy
                         webClient.UploadStatusDetails(orderNumber, processedComment, markAsPaid, markAsShipped);
+                    }
+                    catch (EtsyException ex)
+                    {
+                        if (!TryManageException(order, unitOfWork, ex))
+                        {
+                            exceptions.Add(ex);
+                        }
                     }
                 }
 
-                // Then update the status in our local database
-                EtsyOrderStatusUtility.UpdateOrderStatus(order, markAsPaid, markAsShipped, unitOfWork);
+                exceptions.ThrowIfNotEmpty((msg, ex) => new EtsyException(msg, ex));
             }
-            catch (EtsyException ex)
-            {
-                if (!TryManageException(order, unitOfWork, ex))
-                {
-                    throw;
-                }
-            }
+
+            // Then update the status in our local database
+            EtsyOrderStatusUtility.UpdateOrderStatus(order, markAsPaid, markAsShipped, unitOfWork);
         }
 
         /// <summary>
@@ -228,28 +226,31 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         /// <param name="unitOfWork">The unit of work.</param>
         private async Task UploadShipmentDetails(EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
         {
-            try
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                ICombineOrderNumberSearchProvider combineOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
 
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                IEnumerable<long> orderNumbers = await combineOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                var exceptions = new List<EtsyException>();
+                foreach (long orderNumber in orderNumbers)
                 {
-                    ICombineOrderNumberSearchProvider combineOrderNumber = scope.Resolve<ICombineOrderNumberSearchProvider>();
-
-                    IEnumerable<long> orderNumbers = await combineOrderNumber.GetOrderIdentifiers(order).ConfigureAwait(false);
-
-                    foreach (long orderNumber in orderNumbers)
+                    try
                     {
                         webClient.UploadShipmentDetails(etsyStore.EtsyShopID, orderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
                     }
+                    catch (EtsyException ex)
+                    {
+                        if (!TryManageException(order, unitOfWork, ex))
+                        {
+                            exceptions.Add(ex);
+                        }
+                    }
                 }
-            }
-            catch (EtsyException ex)
-            {
-                if (!TryManageException(order, unitOfWork, ex))
-                {
-                    throw;
-                }
+
+                exceptions.ThrowIfNotEmpty((msg, ex) => new EtsyException(msg, ex));
             }
         }
 
@@ -309,8 +310,6 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     return "ontrac";
                 case ShipmentTypeCode.iParcel:
                     return "iparcel";
-                case ShipmentTypeCode.Other:
-                    return "other";
                 case ShipmentTypeCode.None:
                     return "none";
                 default:

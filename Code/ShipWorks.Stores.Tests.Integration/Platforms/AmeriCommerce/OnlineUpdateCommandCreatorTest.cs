@@ -16,6 +16,7 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 {
@@ -41,6 +42,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.AmeriCommerce) as AmeriCommerceCommandCreator;
+
+            webClient.Setup(x => x.UpdateOrderStatus(AnyLong, AnyInt)).Returns(Result.FromSuccess());
+            webClient.Setup(x => x.UploadShipmentDetails(AnyLong, It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess());
 
             store = Create.Store<AmeriCommerceStoreEntity>(StoreTypeCode.AmeriCommerce)
                 .Set(x => x.StoreUrl, "http://www.example.com")
@@ -134,8 +138,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false);
 
-            webClient.Setup(x => x.UpdateOrderStatus(10L, It.IsAny<int>())).Returns(Result.FromError(new AmeriCommerceException()));
-            webClient.Setup(x => x.UpdateOrderStatus(50L, It.IsAny<int>())).Returns(Result.FromError(new AmeriCommerceException()));
+            webClient.Setup(x => x.UpdateOrderStatus(10L, AnyInt)).Returns(Result.FromError(new AmeriCommerceException()));
+            webClient.Setup(x => x.UpdateOrderStatus(50L, AnyInt)).Returns(Result.FromError(new AmeriCommerceException()));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(99)));
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID, normalOrder2.OrderID });

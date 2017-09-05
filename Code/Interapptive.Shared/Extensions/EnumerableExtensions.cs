@@ -13,11 +13,22 @@ namespace Interapptive.Shared.Extensions
         /// <summary>
         /// Throw a consolidated exception if the collection isn't empty
         /// </summary>
-        public static void ThrowIfNotEmpty(this IEnumerable<IResult> results, Func<string, Exception, Exception> createException)
+        public static void ThrowIfNotEmpty(this IEnumerable<IResult> results, Func<string, Exception, Exception> createException) =>
+            results.Select(x => x.Exception).ThrowIfNotEmpty(createException);
+
+        /// <summary>
+        /// Throw a consolidated exception if the collection isn't empty
+        /// </summary>
+        public static void ThrowIfNotEmpty(this IEnumerable<Exception> results, Func<string, Exception, Exception> createException)
         {
-            var exceptions = results.Select(x => x.Exception)
+            var exceptions = results
                 .Where(x => x != null)
                 .ToList();
+
+            if (exceptions.Count == 1)
+            {
+                throw exceptions.Single();
+            }
 
             if (exceptions.Any())
             {
