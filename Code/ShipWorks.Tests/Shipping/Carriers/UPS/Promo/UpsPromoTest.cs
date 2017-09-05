@@ -242,7 +242,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void Apply_ThrowsUpsPromoException_WhenPromoActivationIsNotSuccessful()
+        public void Apply_ReturnsPromoActivation_WhenPromoActivationIsNotSuccessful()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
@@ -267,7 +267,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
-                Assert.Throws<UpsPromoException>(() => testObject.Apply());
+                Assert.False(testObject.Apply().IsSuccessful);
             }
         }
 

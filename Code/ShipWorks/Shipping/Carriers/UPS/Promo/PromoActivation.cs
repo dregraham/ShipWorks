@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
@@ -18,6 +19,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public PromoActivation(Exception exception)
+        {
+            Exception = exception;
+            IsSuccessful = false;
+            Info = exception.Message;
+        }
+
+        /// <summary>
         /// Gets any information if there were any alerts
         /// </summary>
         public string Info { get; }
@@ -26,5 +37,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// Returns true if activation was sucessful.
         /// </summary>
         public bool IsSuccessful { get; }
+
+        public Exception Exception { get; }
     }
 }

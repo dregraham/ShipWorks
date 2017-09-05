@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.Promo
         /// <summary>
         /// Returns null
         /// </summary>
-        public IUpsPromo Get(UpsAccountEntity account, bool existingAccount)
+        public IUpsPromo Get(UpsAccountEntity account, bool existingAccount, bool newAccount)
         {
             return null;
         }

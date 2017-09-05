@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
             TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
             testObject.Apply();
 
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Applied"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Accepted"));
             telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "upsaccountnumber"));
             telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "true"));
         }
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
             TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), false));
             testObject.Apply();
 
-            telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Applied"));
+            telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Accepted"));
             telemetry.Verify(t => t.AddProperty("Ups.Promo.AccountNumber", "upsaccountnumber"));
             telemetry.Verify(t => t.AddProperty("Ups.Promo.AppliedToExistingAccount", "false"));
         }
