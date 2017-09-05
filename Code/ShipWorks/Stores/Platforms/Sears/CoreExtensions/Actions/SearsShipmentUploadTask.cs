@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.BuyDotCom;
-using log4net;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
 {
@@ -21,43 +15,38 @@ namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "SearsShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class SearsShipmentUploadTask : StoreTypeTaskBase
     {
+        private readonly ISearsOnlineUpdater onlineUpdater;
+        private readonly IStoreManager storeManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SearsShipmentUploadTask(ISearsOnlineUpdater onlineUpdater, IStoreManager storeManager)
+        {
+            this.storeManager = storeManager;
+            this.onlineUpdater = onlineUpdater;
+        }
+
         /// <summary>
         /// This task is for shipments
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload the shipment details for:";
-            }
-        }
+        public override string InputLabel => "Upload the shipment details for:";
 
         /// <summary>
         /// Instantiates the editor for the action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
-        public override bool SupportsType(StoreType storeType)
-        {
-            return storeType.TypeCode == StoreTypeCode.Sears;
-        }
+        public override bool SupportsType(StoreType storeType) =>
+            storeType.TypeCode == StoreTypeCode.Sears;
 
         /// <summary>
         /// This task should be run asynchronously
@@ -73,8 +62,8 @@ namespace ShipWorks.Stores.Platforms.Sears.CoreExtensions.Actions
             {
                 try
                 {
-                    SearsOnlineUpdater updater = new SearsOnlineUpdater();
-                    await updater.UploadShipmentDetails(shipmentID).ConfigureAwait(false);
+                    var store = storeManager.GetRelatedStore(shipmentID) as ISearsStoreEntity;
+                    await onlineUpdater.UploadShipmentDetails(store, shipmentID).ConfigureAwait(false);
                 }
                 catch (SearsException ex)
                 {

@@ -8,11 +8,11 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.Platforms.Sears
+namespace ShipWorks.Stores.Platforms.Sears.OnlineUpdating
 {
     /// <summary>
     /// Create online update commands for Sears
@@ -22,14 +22,17 @@ namespace ShipWorks.Stores.Platforms.Sears
     {
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
+        private readonly ISearsOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public SearsOnlineUpdateCommandCreator(
+            ISearsOnlineUpdater onlineUpdater,
             IMessageHelper messageHelper,
             Func<Type, ILog> createLogger)
         {
+            this.onlineUpdater = onlineUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -45,17 +48,18 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         public IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands(StoreEntity store)
         {
-            SearsStoreEntity typedStore = (SearsStoreEntity) store;
+            var typedStore = store as ISearsStoreEntity;
 
-            IMenuCommand uploadCommand = new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(context, typedStore));
-
-            return new []{uploadCommand};
+            return new[]
+            {
+                new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(context, typedStore))
+            };
         }
 
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, SearsStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, ISearsStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -69,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, SearsStoreEntity store)
+        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, ISearsStoreEntity store)
         {
             try
             {
@@ -80,8 +84,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                     return Result.FromSuccess();
                 }
 
-                SearsOnlineUpdater updater = new SearsOnlineUpdater();
-                await updater.UploadShipmentDetails(shipment).ConfigureAwait(false);
+                await onlineUpdater.UploadShipmentDetails(store, shipment).ConfigureAwait(false);
 
                 return Result.FromSuccess();
             }

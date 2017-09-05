@@ -15,6 +15,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 
@@ -26,16 +27,17 @@ namespace ShipWorks.Stores.Platforms.Sears
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Sears)]
     public class SearsDownloader : StoreDownloader
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SearsDownloader));
+        private readonly ILog log;
+        private readonly ISearsWebClient webClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsDownloader(StoreEntity store)
+        public SearsDownloader(StoreEntity store, ISearsWebClient webClient, Func<Type, ILog> createLogger)
             : base(store)
         {
-
+            this.webClient = webClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -61,14 +63,13 @@ namespace ShipWorks.Stores.Platforms.Sears
                 orderDate = (minDaysBack < orderDate.Value) ? minDaysBack : orderDate.Value;
             }
 
-            SearsWebClient client = new SearsWebClient((SearsStoreEntity) Store);
-            client.InitializeForDownload(orderDate.Value);
+            webClient.InitializeForDownload(orderDate.Value);
 
             try
             {
                 Progress.Detail = "Downloading orders...";
 
-                while (await DownloadNextOrdersPage(client).ConfigureAwait(false))
+                while (await DownloadNextOrdersPage(webClient).ConfigureAwait(false))
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -92,9 +93,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Downloads and imports the next batch of orders into ShipWorks
         /// </summary>
-        private async Task<bool> DownloadNextOrdersPage(SearsWebClient webClient)
+        private async Task<bool> DownloadNextOrdersPage(ISearsWebClient webClient)
         {
-            SearsOrdersPage page = webClient.GetNextOrdersPage();
+            SearsOrdersPage page = webClient.GetNextOrdersPage((ISearsStoreEntity) Store);
 
             Progress.PercentComplete = (page.PageNumber * 100) / page.TotalPages;
 

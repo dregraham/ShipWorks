@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
@@ -58,22 +56,12 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Create a Sears specific order instance
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            SearsOrderEntity order = new SearsOrderEntity();
-
-            return order;
-        }
+        protected override OrderEntity CreateOrderInstance() => new SearsOrderEntity();
 
         /// <summary>
         /// Create a sears specific item instance
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            SearsOrderItemEntity item = new SearsOrderItemEntity();
-
-            return item;
-        }
+        public override OrderItemEntity CreateOrderItemInstance() => new SearsOrderItemEntity();
 
         /// <summary>
         /// Create an identifier to uniquely identify a sears order
@@ -120,37 +108,19 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// The initial download restriction policy for Sears
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { MaxDaysBack = 90 };
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { MaxDaysBack = 90 };
 
         /// <summary>
         /// Determines if certain columns should be visible or not in the grid
         /// </summary>
-        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
-        {
-            if (column == OnlineGridColumnSupport.OnlineStatus)
-            {
-                return true;
-            }
-
-            return base.GridOnlineColumnSupported(column);
-        }
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column) =>
+            column == OnlineGridColumnSupport.OnlineStatus || base.GridOnlineColumnSupported(column);
 
         /// <summary>
         /// Create the license identifier for uniquely identifying Sears.com stores
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                return ((SearsStoreEntity) Store).SearsEmail;
-            }
-        }
+        protected override string InternalLicenseIdentifier => ((SearsStoreEntity) Store).SearsEmail;
 
         /// <summary>
         /// Create the condition group for searching on Amazon Order ID
@@ -199,9 +169,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices()
-        {
-            return new[] { "New", "Open", "Closed", "Overdue" };
-        }
+        public override ICollection<string> GetOnlineStatusChoices() =>
+            new[] { "New", "Open", "Closed", "Overdue" };
     }
 }

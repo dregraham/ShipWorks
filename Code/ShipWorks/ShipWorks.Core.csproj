@@ -1863,6 +1863,9 @@
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\OrderUploadDetails.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Sears\ISearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\Sears\ISearsWebClient.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
@@ -3619,7 +3622,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Sears\SearsDownloader.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsException.cs" />
-    <Compile Include="Stores\Platforms\Sears\SearsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsOrdersPage.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsStoreType.cs" />

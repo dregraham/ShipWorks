@@ -1,19 +1,17 @@
-﻿using Autofac;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using log4net;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Sears
@@ -21,25 +19,24 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// <summary>
     /// Used to interact with a sears.com store
     /// </summary>
-    public class SearsWebClient
+    [Component]
+    public class SearsWebClient : ISearsWebClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(SearsWebClient));
+        private readonly ILog log;
+        private readonly ISearsCredentials credentials;
+        private readonly ILogEntryFactory logEntryFactory;
 
-        private readonly SearsStoreEntity searsStore;
         private DateTime downloadPageStart = DateTime.MinValue;
         private DateTime downloadPageCurrent = DateTime.MinValue;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsWebClient(SearsStoreEntity searsStore)
+        public SearsWebClient(ISearsCredentials credentials, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLogger)
         {
-            if (searsStore == null)
-            {
-                throw new ArgumentNullException("searsStore");
-            }
-
-            this.searsStore = searsStore;
+            this.logEntryFactory = logEntryFactory;
+            this.credentials = credentials;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -67,28 +64,23 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// </summary>
         private string SearsUpdateUrl => $"https://{HostName}/SellerPortal/api/oms/asn/v7";
 
-
         /// <summary>
         /// Gets the name of the host.
         /// </summary>
-        private string HostName
-        {
-            get {
-                return UseLiveServer ? "seller.marketplace.sears.com" : "sellersandbox.sears.com";
-            }
-        }
+        private string HostName =>
+            UseLiveServer ? "seller.marketplace.sears.com" : "sellersandbox.sears.com";
 
         /// <summary>
         /// Test to see if the credentials for the current store are valid
         /// </summary>
-        public void TestConnection()
+        public void TestConnection(ISearsStoreEntity store)
         {
             try
             {
                 InitializeForDownload(DateTime.UtcNow);
 
                 // Just try to get today's worth of orders as a test
-                GetNextOrdersPage();
+                GetNextOrdersPage(store);
             }
             catch (SearsException ex)
             {
@@ -109,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Return the next page of orders based on the given lastModified date
         /// </summary>
-        public SearsOrdersPage GetNextOrdersPage()
+        public SearsOrdersPage GetNextOrdersPage(ISearsStoreEntity store)
         {
             if (downloadPageStart == DateTime.MinValue)
             {
@@ -124,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Sears
             request.Variables.Add("todate", downloadPageCurrent.ToString("yyyy-MM-dd"));
 
             // Get the response and the navigator
-            XmlDocument response = ProcessRequest(request, string.Format("GetOrders [{0}]", request.Variables["fromdate"]));
+            XmlDocument response = ProcessRequest(store, request, string.Format("GetOrders [{0}]", request.Variables["fromdate"]));
             XPathNavigator xpath = response.CreateNavigator();
 
             SearsOrdersPage page = new SearsOrdersPage(
@@ -141,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Upload the details of the given shipment to Sears
         /// </summary>
-        public void UploadShipmentDetails(SearsOrderDetail orderDetail, IEnumerable<SearsTracking> searsTrackingEntries)
+        public void UploadShipmentDetails(ISearsStoreEntity store, SearsOrderDetail orderDetail, IEnumerable<SearsTracking> searsTrackingEntries)
         {
             XDocument xDocument = GenerateShipmentFeedXml(orderDetail, searsTrackingEntries);
 
@@ -152,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             submitter.Variables.Add(string.Empty, xDocument.ToString());
 
-            ProcessRequest(submitter, "UploadShipmentDetails");
+            ProcessRequest(store, submitter, "UploadShipmentDetails");
         }
 
         /// <summary>
@@ -201,21 +193,13 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Process a given request, logged based on the specified action
         /// </summary>
-        private XmlDocument ProcessRequest(HttpVariableRequestSubmitter request, string action)
+        private XmlDocument ProcessRequest(ISearsStoreEntity store, IHttpVariableRequestSubmitter request, string action)
         {
             // Add the credentials
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                // Resolve the SearsCredentials using our store entity and request parameters
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), searsStore);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
-
-                SearsCredentials credentials = lifetimeScope.Resolve<SearsCredentials>(storeParameter, requestParameter);
-                credentials.AddCredentials();
-            }
+            credentials.AddCredentials(store, request);
 
             // log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Sears, action);
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.Sears, action, LogActionType.Other);
             logger.LogRequest(request);
 
             // execute the request
@@ -231,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                     // Strip invalid input characters. (Don't trust anyone)
                     resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
 
-                    // Stripping the default namespace will make XPath querying much much much easier
+                    // Stripping the default namespace will make XPath querying much easier
                     resultXml = StripDefaultNamespace(resultXml);
 
                     XmlDocument xmlDocument = new XmlDocument();
@@ -253,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Strip the default namesapace, if any
+        /// Strip the default namespace, if any
         /// </summary>
         private string StripDefaultNamespace(string resultXml)
         {
