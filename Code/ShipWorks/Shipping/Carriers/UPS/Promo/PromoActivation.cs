@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
@@ -9,11 +8,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     /// </summary>
     public class PromoActivation
     {
+        /// <summary>
+        /// Create a PromoActivation from a PromoDiscountResponse
+        /// </summary>
+        /// <param name="upsResponse"></param>
+        /// <returns></returns>
         public static PromoActivation FromPromoDiscountResponse(PromoDiscountResponse upsResponse)
         {
             return new PromoActivation(upsResponse);
         }
 
+        /// <summary>
+        /// Create a PromoActivation from an error message
+        /// </summary>
         public static PromoActivation FromError(string errorMessage)
         {
             return new PromoActivation(errorMessage);   
@@ -24,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private PromoActivation(PromoDiscountResponse upsResponse)
         {
-            IsSuccessful = ((upsResponse?.Response?.ResponseStatus?.Code ?? "0") == "1");
+            IsSuccessful = (upsResponse?.Response?.ResponseStatus?.Code ?? "0") == "1";
             Info = upsResponse?.Response?.Alert?.FirstOrDefault()?.Description ?? string.Empty;
         }
 
@@ -33,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private PromoActivation(string errorMessage)
         {
-            IsSuccessful = false;
+            IsSuccessful = !string.IsNullOrWhiteSpace(errorMessage);
             Info = errorMessage;
         }
 
