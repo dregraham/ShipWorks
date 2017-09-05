@@ -1019,6 +1019,8 @@
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEdition.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
+    <Compile Include="Email\EmailCommunicatorWrapper.cs" />
+    <Compile Include="Email\IEmailCommunicatorWrapper.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
@@ -1940,6 +1942,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

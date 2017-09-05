@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -69,10 +71,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-                foreach (var identifier in identifiers)
-                {
-                    webClient.UploadOrderStatus(store, identifier, status);
-                }
+                var handler = Result.Handle<YahooException>();
+                identifiers.Select(x => handler.Execute(() => webClient.UploadOrderStatus(store, x, status)))
+                    .ThrowIfNotEmpty((msg, ex) => new YahooException(msg, ex));
 
                 SaveOrderStatus(orderID, status);
             }
@@ -107,16 +108,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
+            IYahooOrderEntity order = (IYahooOrderEntity) shipment.Order;
 
             if (!order.IsManual)
             {
                 var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-                foreach (var identifier in identifiers)
-                {
-                    webClient.UploadShipmentDetails(store, identifier, shipment.TrackingNumber, GetCarrierCode(shipment));
-                }
+                var resultHandler = Result.Handle<YahooException>();
+                identifiers
+                    .Select(x => resultHandler.Execute(() => webClient.UploadShipmentDetails(store, x, shipment.TrackingNumber, GetCarrierCode(shipment))))
+                    .ToList()
+                    .ThrowIfNotEmpty((msg, ex) => new YahooException(msg, ex));
             }
 
             string status = shipment.TrackingNumber.IsNullOrWhiteSpace() ? "Shipped" : "Tracked";

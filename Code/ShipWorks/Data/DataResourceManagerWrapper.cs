@@ -46,9 +46,13 @@ namespace ShipWorks.Data
         /// <summary>
         /// Saves Image to database
         /// </summary>
-        public DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label)
-        {
-            return DataResourceManager.CreateFromBytes(data, consumerID, label);
-        }
+        public DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label) =>
+            DataResourceManager.CreateFromBytes(data, consumerID, label);
+
+        /// <summary>
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
+        /// </summary>
+        public DataResourceReference CreateFromText(string text, long consumerID) =>
+            DataResourceManager.CreateFromText(text, consumerID);
     }
 }

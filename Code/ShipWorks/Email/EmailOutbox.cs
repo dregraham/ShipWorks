@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rebex.Mail;
-using Interapptive.Shared.Utility;
-using System.IO;
+using Autofac;
 using HtmlAgilityPack;
-using ShipWorks.Templates.Processing;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
+using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Controls.Html;
 
 namespace ShipWorks.Email
@@ -84,7 +80,11 @@ namespace ShipWorks.Email
             }
 
             // Create the plain part resource
-            emailOutbound.PlainPartResourceID = DataResourceManager.CreateFromText(plainContent, emailOutbound.EmailOutboundID).ReferenceID;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var dataResourceManager = lifetimeScope.Resolve<IDataResourceManager>();
+                emailOutbound.PlainPartResourceID = dataResourceManager.CreateFromText(plainContent, emailOutbound.EmailOutboundID).ReferenceID;
+            }
 
             if (htmlContent != null)
             {

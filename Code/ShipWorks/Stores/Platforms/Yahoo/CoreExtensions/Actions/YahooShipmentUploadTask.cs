@@ -23,12 +23,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
     {
         private const long maxBatchSize = 1000;
         private readonly IYahooApiOnlineUpdater onlineUpdater;
+        private readonly IYahooEmailOnlineUpdater emailUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public YahooShipmentUploadTask(IYahooApiOnlineUpdater onlineUpdater)
+        public YahooShipmentUploadTask(IYahooApiOnlineUpdater onlineUpdater, IYahooEmailOnlineUpdater emailUpdater)
         {
+            this.emailUpdater = emailUpdater;
             this.onlineUpdater = onlineUpdater;
         }
 
@@ -153,8 +155,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
             {
                 try
                 {
-                    YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
-                    IEnumerable<EmailOutboundEntity> emails = await updater.GenerateShipmentUpdateEmail(entityID).ConfigureAwait(false);
+                    IEnumerable<EmailOutboundEntity> emails = await emailUpdater.GenerateShipmentUpdateEmail(entityID).ConfigureAwait(false);
 
                     foreach (var email in emails)
                     {

@@ -221,6 +221,11 @@
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.UploadShipmentDetails.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.ApiUploadShipmentDetails.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
   </ItemGroup>

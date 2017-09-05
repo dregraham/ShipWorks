@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Autofac;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -28,9 +29,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
     /// <summary>
     /// Responsible for updating the online status of Yahoo! orders
     /// </summary>
-    public class YahooEmailOnlineUpdater
+    [Component]
+    public class YahooEmailOnlineUpdater : IYahooEmailOnlineUpdater
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailOnlineUpdater));
+        private readonly ILog log;
+        private readonly ILogEntryFactory logEntryFactory;
+        private readonly IYahooCombineOrderSearchProvider searchProvider;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public YahooEmailOnlineUpdater(IYahooCombineOrderSearchProvider searchProvider, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLogger)
+        {
+            this.searchProvider = searchProvider;
+            this.logEntryFactory = logEntryFactory;
+            log = createLogger(GetType());
+        }
 
         /// <summary>
         /// Upload the shipment details of the most recent shipment of the given order
@@ -99,12 +113,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
             YahooStoreEntity store = (YahooStoreEntity) StoreManager.GetStore(order.StoreID);
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                var searchProvider = lifetimeScope.Resolve<IYahooCombineOrderSearchProvider>();
-                var identifiers = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
-                return identifiers.Select(x => GenerateShipmentUpdateEmailForOrder(shipment, order, store, x)).ToList();
-            }
+            var identifiers = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+            return identifiers.Select(x => GenerateShipmentUpdateEmailForOrder(shipment, order, store, x)).ToList();
         }
 
         /// <summary>
@@ -128,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 throw new YahooException("The email account associated with the store is not configured for sending email.");
             }
 
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Yahoo, "TrackingUpdate");
+            IApiLogEntry logEntry = logEntryFactory.GetLogEntry(ApiLogSource.Yahoo, "TrackingUpdate", LogActionType.Other);
             logEntry.LogRequest(emailXmlContent);
 
             return CreateEmailOutboundEntity(shipment, order.OrderID, account, emailXmlContent, yahooOrderID);
@@ -175,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         {
             if (trackingPassword.Length == 0)
             {
-                throw new YahooException("You must configured the 'Email Tracking Password' in the store settings window.");
+                throw new YahooException("You must configure the 'Email Tracking Password' in the store settings window.");
             }
 
             string trackingNumber;

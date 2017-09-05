@@ -23,16 +23,24 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Yahoo)]
     public class OnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly IYahooApiOnlineUpdater onlineUpdater;
+        private readonly IYahooApiOnlineUpdater apiUpdater;
+        private readonly IYahooEmailOnlineUpdater emailUpdater;
+        private readonly IEmailCommunicatorWrapper emailCommunicator;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineUpdateCommandCreator(IYahooApiOnlineUpdater onlineUpdater, IMessageHelper messageHelper, Func<Type, ILog> createLogger)
+        public OnlineUpdateCommandCreator(IYahooApiOnlineUpdater apiUpdater,
+            IYahooEmailOnlineUpdater emailUpdater,
+            IEmailCommunicatorWrapper emailCommunicator,
+            IMessageHelper messageHelper,
+            Func<Type, ILog> createLogger)
         {
-            this.onlineUpdater = onlineUpdater;
+            this.emailUpdater = emailUpdater;
+            this.emailCommunicator = emailCommunicator;
+            this.apiUpdater = apiUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -84,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         /// <summary>
         /// Upload shipment details for the selected orders
         /// </summary>
-        private async Task OnUploadShipmentDetails(MenuCommandExecutionContext context)
+        public async Task OnUploadShipmentDetails(IMenuCommandExecutionContext context)
         {
             var results = await context.SelectedKeys.SelectWithProgress(messageHelper,
                     "Upload Shipment Details",
@@ -95,8 +103,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
             var resultsList = results.ToList();
 
             // Start emailing for the yahoo email account after generating the online update emails
-            var emails = resultsList.SelectMany(x => x.Value).Where(x => x != null);
-            EmailCommunicator.StartEmailingMessages(emails);
+            var emails = resultsList.Where(x => x.Value != null).SelectMany(x => x.Value);
+            emailCommunicator.StartEmailingMessages(emails);
 
             var exceptions = resultsList.Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
@@ -109,8 +117,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         {
             try
             {
-                YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
-                var emails = await updater.GenerateOrderShipmentUpdateEmail(orderID).ConfigureAwait(false);
+                var emails = await emailUpdater.GenerateOrderShipmentUpdateEmail(orderID).ConfigureAwait(false);
                 return GenericResult.FromSuccess(emails);
             }
             catch (YahooException ex)
@@ -124,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         /// Called when [API upload shipment details].
         /// </summary>
         /// <param name="context">The context.</param>
-        private async Task OnApiUploadShipmentDetails(IYahooStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnApiUploadShipmentDetails(IYahooStoreEntity store, IMenuCommandExecutionContext context)
         {
             if (store == null)
             {
@@ -157,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         {
             try
             {
-                await onlineUpdater.UpdateShipmentDetails(store, orderID).ConfigureAwait(false);
+                await apiUpdater.UpdateShipmentDetails(store, orderID).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (YahooException ex)
@@ -170,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(IYahooStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnSetOnlineStatus(IYahooStoreEntity store, IMenuCommandExecutionContext context)
         {
             string statusCode = context.MenuCommand.Text;
 
@@ -194,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
 
             try
             {
-                await onlineUpdater.UpdateOrderStatus(store, orderID, statusCode).ConfigureAwait(false);
+                await apiUpdater.UpdateOrderStatus(store, orderID, statusCode).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (YahooException ex)

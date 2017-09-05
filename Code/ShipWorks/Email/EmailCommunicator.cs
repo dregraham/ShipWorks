@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using HtmlAgilityPack;
-using Interapptive.Shared;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -30,14 +29,14 @@ using ShipWorks.Users;
 namespace ShipWorks.Email
 {
     /// <summary>
-    /// Class for sending and recieving email
+    /// Class for sending and receiving email
     /// </summary>
     public static class EmailCommunicator
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EmailCommunicator));
 
-        // Indiciates if we are currently emailing
+        // Indicates if we are currently emailing
         static volatile bool isEmailing = false;
 
         // The progress dlg currently displayed, or null if not displayed.
@@ -142,8 +141,8 @@ namespace ShipWorks.Email
             // Start the auto-email of the ready accounts
             StartEmailingAccounts(readyList);
 
-            // Make sure the local email account cache gets updated with changed we made to last autodownload times.  If a modal window is open,
-            // then the heartbeat won't be going through the code that does this, and we could end up trying to autoemail over and over and over
+            // Make sure the local email account cache gets updated with changed we made to last auto-download times.  If a modal window is open,
+            // then the heartbeat won't be going through the code that does this, and we could end up trying to auto-email over and over and over
             // until the modal window was closed (if we didn't do this)
             if (readyList.Count > 0)
             {
@@ -156,7 +155,7 @@ namespace ShipWorks.Email
         /// </summary>
         public static bool StartEmailingAccounts()
         {
-            // Email all accounts, including normally hidden "Owned" accounts - like the Yahoo! account used for recieving\sending yahoo stuf
+            // Email all accounts, including normally hidden "Owned" accounts - like the Yahoo! account used for receiving\sending yahoo stuff
             return StartEmailingAccounts(EmailAccountManager.GetEmailAccounts(true).Select(a => a.EmailAccountID));
         }
 
@@ -261,7 +260,7 @@ namespace ShipWorks.Email
                 // List how many messages are likely to go up front
                 progressItem.Detail = throttler.ProgressPendingDescription;
 
-                // Add to the email throttler to the qeue
+                // Add to the email throttler to the queue
                 PendingThrottler pendingThrottler = new PendingThrottler { Throttler = throttler, ProgressItem = progressItem };
                 emailQueue.Add(pendingThrottler);
 
@@ -369,8 +368,6 @@ namespace ShipWorks.Email
         /// <summary>
         /// Send all the messages for the given throttler
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         private static bool SendMessagesForThrottler(EmailOutboundThrottler throttler, ProgressItem progress)
         {
             bool errors = false;
@@ -395,133 +392,7 @@ namespace ShipWorks.Email
 
                     try
                     {
-                        using (SqlEntityLock messageLock = new SqlEntityLock(outboxItemID.Value, "Send Email"))
-                        {
-                            EmailOutboundEntity outboxItem = new EmailOutboundEntity(outboxItemID.Value);
-                            SqlAdapter.Default.FetchEntity(outboxItem);
-
-                            // If its null, its been deleted.  Or if its already send, just ignore it either way.
-                            if (outboxItem.Fields.State != EntityState.Fetched || outboxItem.SendStatus == (int) EmailOutboundStatus.Sent)
-                            {
-                                log.InfoFormat("Outbox item {0} has been deleted or already sent.", outboxItemID);
-                            }
-                            else
-                            {
-                                outboxItem.SendAttemptCount++;
-                                outboxItem.SendAttemptLastError = "";
-                                outboxItem.SentDate = DateTime.UtcNow;
-
-                                try
-                                {
-                                    if (outboxItem.AccountID != throttler.EmailAccount.EmailAccountID)
-                                    {
-                                        throw new EmailException("The email account to be used has changed. The message will be sent during the next of the updated account.", EmailExceptionErrorNumber.EmailAccountChanged);
-                                    }
-
-                                    // Somehow this snuck in
-                                    if (outboxItem.DontSendBefore != null && outboxItem.DontSendBefore > DateTime.UtcNow)
-                                    {
-                                        throw new EmailException("The message is configured to not be sent until " + StringUtility.FormatFriendlyDateTime(outboxItem.DontSendBefore.Value) + ".", EmailExceptionErrorNumber.DelaySending);
-                                    }
-
-                                    // Need to create a Rebex message from our outbox definition
-                                    MailMessage mailMessage = CreateMailMessageFromOutbox(outboxItem);
-
-                                    // Send the message
-                                    Smtp smtpConnection = throttler.GetSmtpConnection();
-
-                                    try
-                                    {
-                                        smtpConnection.Send(mailMessage);
-                                    }
-                                    catch (ArgumentException ex)
-                                    {
-                                        // I'm not sure why this is being thrown seeing that we check the recipeint before sending. Maybe this will give us some insight.
-                                        string errorMessage = string.Format("Argument Exception when sending email to: {0}", mailMessage.To);
-                                        log.Error(errorMessage, ex);
-                                        throw new EmailException(errorMessage, ex);
-                                    }
-
-                                    // Successfully sent
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Sent;
-                                }
-                                catch (EmailException ex)
-                                {
-                                    log.Error("Failed sending mail message", ex);
-
-                                    outboxItem.SendStatus = ex.RetryAllowed ? (int) EmailOutboundStatus.Retry : (int) EmailOutboundStatus.Failed;
-                                    outboxItem.SendAttemptLastError = ex.Message;
-
-                                    // If its a logon or throttle exception we don't keep going
-                                    if (ex is EmailLogonException || ex is EmailThrottleException)
-                                    {
-                                        progress.Failed(ex);
-                                    }
-                                }
-                                catch (SmtpException ex)
-                                {
-                                    log.Error("Failed sending mail message", ex);
-
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
-                                    outboxItem.SendAttemptLastError = ex.Message;
-
-                                    // If we are now disconnected, stop
-                                    if (ex.Status == SmtpExceptionStatus.ConnectionClosed)
-                                    {
-                                        progress.Failed(ex);
-                                    }
-                                }
-                                catch (TlsException ex)
-                                {
-                                    log.Error("Failed sending mail message", ex);
-
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
-                                    outboxItem.SendAttemptLastError = ex.Message;
-
-                                    // Go ahead and stop
-                                    progress.Failed(ex);
-                                }
-                                catch (SocketException ex)
-                                {
-                                    log.Error("Failed sending mail message", ex);
-
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
-                                    outboxItem.SendAttemptLastError = ex.Message;
-
-                                    // Go ahead and stop
-                                    progress.Failed(ex);
-                                }
-                                catch (InvalidOperationException ex)
-                                {
-                                    log.Error("Failed sending mail message", ex);
-
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Failed;
-                                    outboxItem.SendAttemptLastError = ex.Message;
-
-                                    // Go ahead and stop
-                                    progress.Failed(ex);
-                                }
-
-                                // See if we need to the errors flag
-                                if (outboxItem.SendStatus != (int) EmailOutboundStatus.Sent)
-                                {
-                                    errors = true;
-                                }
-
-                                try
-                                {
-                                    // Save the new state of the message
-                                    using (SqlAdapter adapter = new SqlAdapter())
-                                    {
-                                        adapter.SaveEntity(outboxItem);
-                                    }
-                                }
-                                catch (ORMConcurrencyException ex)
-                                {
-                                    log.Error(string.Format("Looks like the email {0} got deleted.", outboxItemID), ex);
-                                }
-                            }
-                        }
+                        errors = TrySendEmail(throttler, progress, errors, outboxItemID);
                     }
                     catch (SqlAppResourceLockException)
                     {
@@ -538,6 +409,189 @@ namespace ShipWorks.Email
             }
 
             return errors;
+        }
+
+        /// <summary>
+        /// Try to send the email
+        /// </summary>
+        private static bool TrySendEmail(EmailOutboundThrottler throttler, ProgressItem progress, bool errors, long? outboxItemID)
+        {
+            using (SqlEntityLock messageLock = new SqlEntityLock(outboxItemID.Value, "Send Email"))
+            {
+                EmailOutboundEntity outboxItem = new EmailOutboundEntity(outboxItemID.Value);
+                SqlAdapter.Default.FetchEntity(outboxItem);
+
+                // If its null, its been deleted.  Or if its already send, just ignore it either way.
+                if (outboxItem.Fields.State != EntityState.Fetched || outboxItem.SendStatus == (int) EmailOutboundStatus.Sent)
+                {
+                    log.InfoFormat("Outbox item {0} has been deleted or already sent.", outboxItemID);
+                    return errors;
+                }
+
+                outboxItem.SendAttemptCount++;
+                outboxItem.SendAttemptLastError = "";
+                outboxItem.SentDate = DateTime.UtcNow;
+
+                try
+                {
+                    PerformSendEmail(throttler, outboxItem);
+                }
+                catch (EmailException ex)
+                {
+                    HandleEmailException(progress, outboxItem, ex);
+                }
+                catch (SmtpException ex)
+                {
+                    HandleSmtpException(progress, outboxItem, ex);
+                }
+                catch (TlsException ex)
+                {
+                    HandleTlsException(progress, outboxItem, ex);
+                }
+                catch (SocketException ex)
+                {
+                    HandleSocketException(progress, outboxItem, ex);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    HandleInvalidOperationException(progress, outboxItem, ex);
+                }
+
+                // See if we need to the errors flag
+                if (outboxItem.SendStatus != (int) EmailOutboundStatus.Sent)
+                {
+                    errors = true;
+                }
+
+                try
+                {
+                    // Save the new state of the message
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        adapter.SaveEntity(outboxItem);
+                    }
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    log.Error(string.Format("Looks like the email {0} got deleted.", outboxItemID), ex);
+                }
+            }
+
+            return errors;
+        }
+
+        /// <summary>
+        /// Perform the send of the email
+        /// </summary>
+        private static void PerformSendEmail(EmailOutboundThrottler throttler, EmailOutboundEntity outboxItem)
+        {
+            if (outboxItem.AccountID != throttler.EmailAccount.EmailAccountID)
+            {
+                throw new EmailException("The email account to be used has changed. The message will be sent during the next of the updated account.", EmailExceptionErrorNumber.EmailAccountChanged);
+            }
+
+            // Somehow this snuck in
+            if (outboxItem.DontSendBefore != null && outboxItem.DontSendBefore > DateTime.UtcNow)
+            {
+                throw new EmailException("The message is configured to not be sent until " + StringUtility.FormatFriendlyDateTime(outboxItem.DontSendBefore.Value) + ".", EmailExceptionErrorNumber.DelaySending);
+            }
+
+            // Need to create a Rebex message from our outbox definition
+            MailMessage mailMessage = CreateMailMessageFromOutbox(outboxItem);
+
+            // Send the message
+            Smtp smtpConnection = throttler.GetSmtpConnection();
+
+            try
+            {
+                smtpConnection.Send(mailMessage);
+            }
+            catch (ArgumentException ex)
+            {
+                // I'm not sure why this is being thrown seeing that we check the recipient before sending. Maybe this will give us some insight.
+                string errorMessage = string.Format("Argument Exception when sending email to: {0}", mailMessage.To);
+                log.Error(errorMessage, ex);
+                throw new EmailException(errorMessage, ex);
+            }
+
+            // Successfully sent
+            outboxItem.SendStatus = (int) EmailOutboundStatus.Sent;
+        }
+
+        /// <summary>
+        /// Handle InvalidOperationException
+        /// </summary>
+        private static void HandleInvalidOperationException(ProgressItem progress, EmailOutboundEntity outboxItem, InvalidOperationException ex)
+        {
+            log.Error("Failed sending mail message", ex);
+
+            outboxItem.SendStatus = (int) EmailOutboundStatus.Failed;
+            outboxItem.SendAttemptLastError = ex.Message;
+
+            // Go ahead and stop
+            progress.Failed(ex);
+        }
+
+        /// <summary>
+        /// Handle SocketException
+        /// </summary>
+        private static void HandleSocketException(ProgressItem progress, EmailOutboundEntity outboxItem, SocketException ex)
+        {
+            log.Error("Failed sending mail message", ex);
+
+            outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
+            outboxItem.SendAttemptLastError = ex.Message;
+
+            // Go ahead and stop
+            progress.Failed(ex);
+        }
+
+        /// <summary>
+        /// Handle TlsException
+        /// </summary>
+        private static void HandleTlsException(ProgressItem progress, EmailOutboundEntity outboxItem, TlsException ex)
+        {
+            log.Error("Failed sending mail message", ex);
+
+            outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
+            outboxItem.SendAttemptLastError = ex.Message;
+
+            // Go ahead and stop
+            progress.Failed(ex);
+        }
+
+        /// <summary>
+        /// Handle an SmtpException
+        /// </summary>
+        private static void HandleSmtpException(ProgressItem progress, EmailOutboundEntity outboxItem, SmtpException ex)
+        {
+            log.Error("Failed sending mail message", ex);
+
+            outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
+            outboxItem.SendAttemptLastError = ex.Message;
+
+            // If we are now disconnected, stop
+            if (ex.Status == SmtpExceptionStatus.ConnectionClosed)
+            {
+                progress.Failed(ex);
+            }
+        }
+
+        /// <summary>
+        /// Handle an email exception
+        /// </summary>
+        private static void HandleEmailException(ProgressItem progress, EmailOutboundEntity outboxItem, EmailException ex)
+        {
+            log.Error("Failed sending mail message", ex);
+
+            outboxItem.SendStatus = ex.RetryAllowed ? (int) EmailOutboundStatus.Retry : (int) EmailOutboundStatus.Failed;
+            outboxItem.SendAttemptLastError = ex.Message;
+
+            // If its a logon or throttle exception we don't keep going
+            if (ex is EmailLogonException || ex is EmailThrottleException)
+            {
+                progress.Failed(ex);
+            }
         }
 
         /// <summary>
