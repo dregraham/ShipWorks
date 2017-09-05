@@ -40,11 +40,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <summary>
         /// This is a string that uniquely identifies the store.  Like the eBay user ID for ebay,  or store URL for Yahoo!
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get { return ((NeweggStoreEntity) Store).SellerID; }
-        }
-
+        protected override string InternalLicenseIdentifier => ((NeweggStoreEntity) Store).SellerID;
 
         /// <summary>
         /// Creates a store-specific instance of a StoreEntity
@@ -160,8 +156,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             return new NeweggAccountSettingsControl();
         }
 
-
-
         /// <summary>
         /// Generate the template XML output for the given order
         /// </summary>
@@ -174,9 +168,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             ElementOutline outline = container.AddElement("Newegg");
             outline.AddElement("InvoiceNumber", () => order.Value.InvoiceNumber);
         }
-
-
-
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the

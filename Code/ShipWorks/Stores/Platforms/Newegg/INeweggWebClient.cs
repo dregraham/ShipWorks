@@ -60,6 +60,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="shipmentEntity">The shipment.</param>
         /// <returns>A ShippingResult containing the results from the request to Newegg.</returns>
-        Task<IEnumerable<string>> UploadShippingDetails(INeweggStoreEntity store, ShipmentEntity shipmentEntity, ShipmentUploadDetails details);
+        Task<string> UploadShippingDetails(INeweggStoreEntity store, ShipmentEntity shipmentEntity, long orderNumber, IEnumerable<ItemDetails> items);
     }
 }

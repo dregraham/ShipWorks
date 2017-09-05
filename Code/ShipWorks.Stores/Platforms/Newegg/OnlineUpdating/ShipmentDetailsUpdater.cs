@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -50,11 +52,35 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             log.InfoFormat("Uploading shipping details to Newegg for order number {0}", shipmentDetails.Order.OrderNumber);
 
-            var results = await webClient.UploadShippingDetails(store, shipment, shipmentDetails).ConfigureAwait(false);
+            var results = await PerformUploadShippingDetails(store, shipment, shipmentDetails);
+            var statuses = results
+                .ThrowIfNotEmpty((msg, ex) => new NeweggException(msg, ex))
+                .GetSuccessfulValues()
+                .ToList();
 
             // An exception was not thrown from the web client, so the upload went through
             // successfully and we can change order status to shipped
-            await UpdateOrderStatusToShipped(results, shipment.OrderID).ConfigureAwait(false);
+            await UpdateOrderStatusToShipped(statuses, shipment.OrderID).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Perform the actual call to the web service to upload shipping details
+        /// </summary>
+        private async Task<IEnumerable<GenericResult<string>>> PerformUploadShippingDetails(INeweggStoreEntity store,
+            ShipmentEntity shipment, ShipmentUploadDetails details)
+        {
+            var results = new List<GenericResult<string>>();
+            var handler = Result.Handle<NeweggException>();
+
+            foreach (var identifier in details.Identifiers)
+            {
+                var result = await handler.ExecuteAsync(() =>
+                        webClient.UploadShippingDetails(store, shipment, identifier.OrderNumber, details.GetItemsFor(identifier)))
+                    .ConfigureAwait(false);
+                results.Add(result);
+            }
+
+            return results;
         }
 
         /// <summary>

@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.OnlineUpdating
         /// Called when [upload shipment details].
         /// </summary>
         /// <param name="context">The context.</param>
-        private async Task OnUploadShipmentDetails(INeweggStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnUploadShipmentDetails(INeweggStoreEntity store, IMenuCommandExecutionContext context)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,

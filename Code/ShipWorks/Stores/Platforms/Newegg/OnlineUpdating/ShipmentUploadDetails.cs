@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.OnlineUpdating
         /// <summary>
         /// Get items for the given identifier
         /// </summary>
-        internal IEnumerable<ItemDetails> GetItemsFor(OrderUploadDetail detail) =>
+        public IEnumerable<ItemDetails> GetItemsFor(OrderUploadDetail detail) =>
             items.ContainsKey(detail.OrderID) ?
                 items[detail.OrderID] :
                 Enumerable.Empty<ItemDetails>();
