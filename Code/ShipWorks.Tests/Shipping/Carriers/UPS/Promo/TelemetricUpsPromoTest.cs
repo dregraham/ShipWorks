@@ -2,15 +2,7 @@
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
@@ -33,17 +25,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         [Fact]
         public void Apply_DelegatesToUpsPromo()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.SetupWizard),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.Apply();
 
             upsPromo.Verify(p => p.Apply());
         }
 
         [Fact]
-        public void Apply_AddsTelemetryData_WhenExistingAccountIsTrue()
+        public void Apply_AddsTelemetryData_WhenSourceIsPromoFootnote()
         {
 
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.PromoFootnote),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.Apply();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Accepted"));
@@ -52,9 +46,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void Apply_AddsTelemetryData_WhenExistingAccountIsFalse()
+        public void Apply_AddsTelemetryData_WhenSourceIsSetupWizard()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), false));
+            TelemetricUpsPromo testObject =
+                mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.SetupWizard),
+                    new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.Apply();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Accepted"));
@@ -65,7 +61,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         [Fact]
         public void Decline_DelegatesToUpsPromo()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.SetupWizard),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.Decline();
 
             upsPromo.Verify(p => p.Decline());
@@ -74,7 +71,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         [Fact]
         public void Decline_AddsTelemetryData()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.PromoFootnote),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.Decline();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Declined"));
@@ -85,7 +83,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         [Fact]
         public void RemindMe_DelegatesToUpsPromo()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.SetupWizard),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.RemindMe();
 
             upsPromo.Verify(p => p.RemindMe());
@@ -94,7 +93,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         [Fact]
         public void RemindMe_AddsTelemetryData()
         {
-            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(bool), true));
+            TelemetricUpsPromo testObject = mock.Create<TelemetricUpsPromo>(new TypedParameter(typeof(UpsPromoSource), UpsPromoSource.PromoFootnote),
+                new TypedParameter(typeof(UpsPromoAccountType), UpsPromoAccountType.NewAccount));
             testObject.RemindMe();
 
             telemetry.Verify(t => t.AddProperty("Ups.Promo.Result", "Remind Later"));

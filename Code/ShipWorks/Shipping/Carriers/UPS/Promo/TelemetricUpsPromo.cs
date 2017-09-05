@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Metrics;
 using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
@@ -11,18 +12,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     {
         private readonly IUpsPromo upsPromo;
         private readonly Func<string, ITrackedEvent> telemetryEventFunc;
-        private readonly bool existingAccount;
-        private readonly bool newAccount;
+        private readonly UpsPromoSource source;
+        private readonly UpsPromoAccountType accountType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricUpsPromo(Func<string, ITrackedEvent> telemetryEventFunc, IUpsPromo upsPromo, bool existingAccount, bool newAccount)
+        public TelemetricUpsPromo(Func<string, ITrackedEvent> telemetryEventFunc, IUpsPromo upsPromo, UpsPromoSource source, UpsPromoAccountType accountType)
         {
             this.telemetryEventFunc = telemetryEventFunc;
-            this.existingAccount = existingAccount;
-            this.newAccount = newAccount;
             this.upsPromo = upsPromo;
+            this.source = source;
+            this.accountType = accountType;
         }
 
         /// <summary>
@@ -133,8 +134,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private void LogResult(string action, ITrackedEvent telemetryEvent)
         {
             telemetryEvent.AddProperty("Ups.Promo.Result", action);
-            telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", existingAccount ? "true" : "false");
-            telemetryEvent.AddProperty("Ups.Promo.AccountType", newAccount ? "New UPS Account" : "Existing UPS Account");
+            telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", source == UpsPromoSource.PromoFootnote ? "true" : "false");
+            telemetryEvent.AddProperty("Ups.Promo.AccountType", EnumHelper.GetDescription(accountType));
             telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
         }
     }
