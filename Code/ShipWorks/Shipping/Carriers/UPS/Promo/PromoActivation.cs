@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private PromoActivation(string errorMessage)
         {
-            IsSuccessful = !string.IsNullOrWhiteSpace(errorMessage);
+            IsSuccessful = string.IsNullOrWhiteSpace(errorMessage);
             Info = errorMessage;
         }
 
