@@ -32,22 +32,13 @@ namespace ShipWorks.Stores.Platforms.Miva
     {
         const string TemporarySessionQueryString = "TemporarySession=1";
         static readonly ILog log = LogManager.GetLogger(typeof(MivaWebClient));
-
         MivaStoreEntity store = null;
-        //private readonly ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider;
-        //readonly ICombineOrderNumberSearchProvider orderNumberSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaWebClient(MivaStoreEntity store
-            //ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider,
-            //ICombineOrderNumberSearchProvider orderNumberSearchProvider
-            )
-            : base(store)
+        public MivaWebClient(MivaStoreEntity store) : base(store)
         {
-            //this.orderNumberSearchProvider = orderNumberSearchProvider;
-            //this.orderNumberCompleteSearchProvider = orderNumberCompleteSearchProvider;
             this.store = store;
         }
 
@@ -196,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                 switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
                 {
                     case MivaOnlineUpdateStrategy.None:
-                        throw new GenericStoreException("The store is not configured for updating online status.");
+                        return Result.FromError("The store is not configured for updating online status.");
                     case MivaOnlineUpdateStrategy.Sebenza:
                         await UpdateOnlineStatusThroughSebenza(order, orderIdentifier, code, comment, null).ConfigureAwait(false);
                         break;
@@ -232,7 +223,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                 switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
                 {
                     case MivaOnlineUpdateStrategy.None:
-                        throw new GenericStoreException("The store is not configured for updating online status.");
+                        return Result.FromError("The store is not configured for updating online status.");
                     case MivaOnlineUpdateStrategy.Sebenza:
                         await UpdateOnlineStatusThroughSebenza(order, orderIdentifier, order.OnlineStatusCode, null, shipment).ConfigureAwait(false);
                         break;
@@ -240,7 +231,6 @@ namespace ShipWorks.Stores.Platforms.Miva
                         await ExecuteNativeOnlineUpdate(order, orderIdentifier, shipment);
                         break;
                 }
-
             }
             catch (GenericStoreException ex)
             {
