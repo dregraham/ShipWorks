@@ -201,6 +201,7 @@
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
