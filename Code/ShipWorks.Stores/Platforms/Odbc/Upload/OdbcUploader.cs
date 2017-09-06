@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     /// <summary>
     /// Uploader for ODBC stores
     /// </summary>
+    [Component]
     public class OdbcUploader : IOdbcUploader
     {
         private readonly IShippingManager shippingManager;

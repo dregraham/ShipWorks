@@ -427,7 +427,6 @@
     <Compile Include="Platforms\Newegg\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
@@ -447,6 +446,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolver.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />

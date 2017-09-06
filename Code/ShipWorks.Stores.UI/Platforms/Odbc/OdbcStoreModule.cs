@@ -7,14 +7,12 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using ShipWorks.Stores.UI.Platforms.Odbc.Controls;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
@@ -37,10 +35,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             RegisterOrderLoadingTypes(builder);
             RegisterFieldMapClasses(builder);
             RegisterFieldValueResolvers(builder);
-
-            builder.RegisterType<OdbcStoreType>()
-                .Keyed<StoreType>(StoreTypeCode.Odbc)
-                .ExternallyOwned();
 
             builder.RegisterType<OdbcShipWorksDbProviderFactory>()
                 .AsImplementedInterfaces()
@@ -93,14 +87,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
 
             builder.RegisterType<OdbcDownloadCommandFactory>()
                 .As<IOdbcDownloadCommandFactory>();
-
-            builder.RegisterType<OdbcUploadCommandFactory>()
-                .As<IOdbcUploadCommandFactory>();
-
-            builder.RegisterType<OdbcUploader>()
-                .As<IOdbcUploader>();
-
-            builder.RegisterType<OdbcUploadMenuCommand>();
 
             builder.RegisterType<ApiLogEntry>()
                 .As<IApiLogEntry>();
