@@ -55,6 +55,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("TotalWeight", () => Item.Weight * Item.Quantity);
             AddElement("Status", () => Item.LocalStatus);
             AddElement("IsManual", () => Item.IsManual);
+            AddElement("HarmonizedCode", () => Item.HarmonizedCode);
 
             // Add an outline entry for each unique store type that could potentially be used
             foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())

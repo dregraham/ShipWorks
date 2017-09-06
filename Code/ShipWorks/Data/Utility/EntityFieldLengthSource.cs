@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Utility
         OrderItemCode,
         OrderItemSku,
         OrderItemLocation,
+        OrderItemHarmonizedCode,
         OrderItemIsbn,
         OrderItemUpc,
         OrderAttributeName,
@@ -165,6 +166,12 @@ namespace ShipWorks.Data.Utility
         AmazonShipmentShippingServiceID,
         AmazonShipmentShippingServiceOfferID,
 
-        OdbcStoreCustomQuery
+        OdbcStoreCustomQuery,
+
+        ReturnItemName,
+        ReturnItemSku,
+        ReturnItemCode,
+        ReturnItemQuantity,
+        ReturnItemNote
     }
 }

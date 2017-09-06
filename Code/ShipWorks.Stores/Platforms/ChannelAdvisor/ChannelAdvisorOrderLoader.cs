@@ -174,6 +174,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     if (channelAdvisorDistributionCenter != null)
                     {
                         itemToSave.DistributionCenter = channelAdvisorDistributionCenter.Code;
+                        itemToSave.DistributionCenterName = channelAdvisorDistributionCenter.Name;
                     }
                 }
             }

@@ -436,13 +436,13 @@
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
           <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
-          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
+          <Field Name="DistributionCenterName" Type="string" MaxLength="100" FieldIndex="10" />
           <Field Name="IsFBA" Type="bool" FieldIndex="7" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
           <Field Name="MarketplaceName" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="MarketplaceSalesID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="MarketplaceStoreName" Type="string" MaxLength="100" FieldIndex="1" />
-          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="8" />
+          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ChannelAdvisorStore" ObjectID="72a2ba72-deb0-4a13-9de6-7595ad6e7bbe" InheritanceType="2">
@@ -600,6 +600,7 @@
           <Field Name="GspStateProvince" Type="string" MaxLength="128" FieldIndex="11" />
           <Field Name="GspStreet1" Type="string" MaxLength="512" FieldIndex="8" />
           <Field Name="GspStreet2" Type="string" MaxLength="512" FieldIndex="9" />
+          <Field Name="GuaranteedDelivery" Type="bool" FieldIndex="23" />
           <Field Name="RollupEbayItemCount" Type="int" FieldIndex="15" />
           <Field Name="RollupEffectiveCheckoutStatus" Type="int" IsOptional="true" FieldIndex="16" />
           <Field Name="RollupEffectivePaymentMethod" Type="int" IsOptional="true" FieldIndex="17" />
@@ -784,6 +785,12 @@
         <Fields>
           <Field Name="WasPaid" Type="bool" FieldIndex="0" />
           <Field Name="WasShipped" Type="bool" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="EtsyOrderItem" ObjectID="63576b1d-238c-42d5-a8b7-c574008fc266" InheritanceType="2">
+        <Fields>
+          <Field Name="ListingID" Type="int" FieldIndex="0" />
+          <Field Name="TransactionID" Type="int" Precision="10" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EtsyStore" ObjectID="b71e1a57-e10a-461d-8ce4-df530fb72b96" InheritanceType="2">
@@ -1407,6 +1414,23 @@
           <Field Name="TrackBySMS" Type="bool" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="JetOrder" ObjectID="8e4ae3c6-7489-4bba-ab73-0848c2e919df" InheritanceType="2">
+        <Fields>
+          <Field Name="MerchantOrderId" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="JetOrderItem" ObjectID="a3cbbf8a-d29a-4038-8098-9b893ddc4d8d" InheritanceType="2">
+        <Fields>
+          <Field Name="JetOrderItemID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="MerchantSku" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="JetStore" ObjectID="09c32316-900c-49e7-a066-c93d454f37bb" InheritanceType="2">
+        <Fields>
+          <Field Name="ApiUser" Type="string" MaxLength="100" FieldIndex="0" />
+          <Field Name="Secret" Type="string" MaxLength="100" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="LabelSheet" ObjectID="56e1997e-27f4-4322-b3af-2747c4eebd37">
         <Fields>
           <Field Name="Columns" Type="int" FieldIndex="12" />
@@ -1729,6 +1753,7 @@
         <Fields>
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="14" FieldIndex="18" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -2120,6 +2145,19 @@
           <Field Name="UnitPriceAmount" Type="decimal" Precision="19" Scale="4" FieldIndex="10" />
           <Field Name="UnitValue" Type="decimal" Precision="19" Scale="4" FieldIndex="6" />
           <Field Name="Weight" Type="double" FieldIndex="5" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ShipmentReturnItem" ObjectID="a9402971-a342-4a37-8752-728c2c59b8e4">
+        <Fields>
+          <Field Name="Code" Type="string" MaxLength="300" FieldIndex="8" />
+          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
+          <Field Name="Notes" Type="string" MaxLength="300" FieldIndex="6" />
+          <Field Name="Quantity" Type="double" Precision="38" FieldIndex="4" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipmentID" Type="long" FieldIndex="2" />
+          <Field Name="ShipmentReturnItemID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="7" />
+          <Field Name="Weight" Type="double" Precision="38" FieldIndex="5" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ShippingDefaultsRule" ObjectID="e945b6c6-be24-451e-8643-7606bad4828c">
@@ -3413,6 +3451,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="ShipmentReturnItem.Shipment-Shipment.ReturnItems" Start=":ShipmentReturnItem" End=":Shipment" StartNavigator="Shipment" EndNavigator="ReturnItems" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="ShippingPrintOutputRule.ShippingPrintOutput-ShippingPrintOutput.Rules" Start=":ShippingPrintOutputRule" End=":ShippingPrintOutput" StartNavigator="ShippingPrintOutput" EndNavigator="Rules" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingPrintOutputID" PkField="ShippingPrintOutputID" />
@@ -3638,6 +3681,7 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":EbayOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EbayStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":EtsyOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":EtsyOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EtsyStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericFileStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericModuleStore" />
@@ -3646,6 +3690,9 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":GrouponStore" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":InfopiaOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":InfopiaStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":JetOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":JetOrderItem" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":JetStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":LemonStandOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":LemonStandOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":LemonStandStore" />
@@ -3722,7 +3769,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-04-03T13:47:52.3897992Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:57:40.4795986Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4121,10 +4168,10 @@
                     <Field Name="MarketplaceSalesID" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="Classification" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="DistributionCenter" Ordinal="7" DbType="12" Length="80" />
-                    <Field Name="HarmonizedCode" Ordinal="8" DbType="12" Length="20" />
-                    <Field Name="IsFBA" Ordinal="9" DbType="2" />
-                    <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
-                    <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
+                    <Field Name="IsFBA" Ordinal="8" DbType="2" />
+                    <Field Name="MPN" Ordinal="9" DbType="12" Length="50" />
+                    <Field Name="DistributionCenterID" Ordinal="10" DbType="0" Precision="19" />
+                    <Field Name="DistributionCenterName" Ordinal="12" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
@@ -4378,6 +4425,7 @@
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -4585,6 +4633,14 @@
                         <CustomProperty Name="AuditFormat" Value="120" />
                       </CustomProperties>
                     </Field>
+                  </Fields>
+                </Table>
+                <Table Name="EtsyOrderItem">
+                  <PkConstraintName Name="PK_EtsyOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="TransactionID" Ordinal="2" DbType="8" Precision="10" />
+                    <Field Name="ListingID" Ordinal="3" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyStore">
@@ -5883,6 +5939,29 @@
                     <Field Name="RequestedLabelFormat" Ordinal="8" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
+                <Table Name="JetOrder">
+                  <PkConstraintName Name="PK_JetOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="MerchantOrderId" Ordinal="2" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="JetOrderItem">
+                  <PkConstraintName Name="PK_JetOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="MerchantSku" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="JetOrderItemID" Ordinal="3" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="JetStore">
+                  <PkConstraintName Name="PK_JetStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ApiUser" Ordinal="2" DbType="12" Length="100" />
+                    <Field Name="Secret" Ordinal="3" DbType="12" Length="100" />
+                  </Fields>
+                </Table>
                 <Table Name="LabelSheet">
                   <PkConstraintName Name="PK_LabelSheet" />
                   <Fields>
@@ -6353,6 +6432,7 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="24" Length="14" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7010,6 +7090,20 @@
                     <Field Name="HarmonizedCode" Ordinal="9" DbType="24" Length="14" />
                     <Field Name="NumberOfPieces" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UnitPriceAmount" Ordinal="11" DbType="9" Precision="19" Scale="4" />
+                  </Fields>
+                </Table>
+                <Table Name="ShipmentReturnItem">
+                  <PkConstraintName Name="PK_ShipmentReturnItem" />
+                  <Fields>
+                    <Field Name="ShipmentReturnItemID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="ShipmentID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="Name" Ordinal="4" DbType="12" Length="300" />
+                    <Field Name="Quantity" Ordinal="5" DbType="6" Precision="38" />
+                    <Field Name="Weight" Ordinal="6" DbType="6" Precision="38" />
+                    <Field Name="Notes" Ordinal="7" DbType="12" Length="300" />
+                    <Field Name="SKU" Ordinal="8" DbType="12" Length="100" />
+                    <Field Name="Code" Ordinal="9" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="ShippingDefaultsRule">
@@ -8436,6 +8530,11 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:EtsyOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:EtsyOrderItem:FK_EtsyOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:EtsyOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:EtsyStore:FK_EtsyStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:EtsyStore:StoreID" />
@@ -8584,6 +8683,21 @@
             <ForeignKeyConstraint Name="dbo:iParcelShipment:FK_iParcelShipment_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:iParcelShipment:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetOrder:FK_JetOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:JetOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetOrderItem:FK_JetOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:JetOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:JetStore:FK_JetStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:JetStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:LemonStandOrder:FK_LemonStandOrder_Order">
@@ -8852,6 +8966,11 @@
             <ForeignKeyConstraint Name="dbo:ShipmentCustomsItem:FK_ShipmentCustomsItem_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:ShipmentCustomsItem:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ShipmentReturnItem:FK_ShipmentReturnItem_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:ShipmentReturnItem:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ShippingPrintOutputRule:FK_ShippingPrintOutputRule_ShippingPrintOutput" DeleteRuleAction="1">
@@ -9404,7 +9523,7 @@
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
             <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
-            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
+            <FieldMapping FieldName="DistributionCenterName" TargetFieldName="DistributionCenterName" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
             <FieldMapping FieldName="MarketplaceName" TargetFieldName="MarketplaceName" />
@@ -9567,6 +9686,7 @@
             <FieldMapping FieldName="GspStateProvince" TargetFieldName="GspStateProvince" />
             <FieldMapping FieldName="GspStreet1" TargetFieldName="GspStreet1" />
             <FieldMapping FieldName="GspStreet2" TargetFieldName="GspStreet2" />
+            <FieldMapping FieldName="GuaranteedDelivery" TargetFieldName="GuaranteedDelivery" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RollupEbayItemCount" TargetFieldName="RollupEbayItemCount" />
             <FieldMapping FieldName="RollupEffectiveCheckoutStatus" TargetFieldName="RollupEffectiveCheckoutStatus" />
@@ -9755,6 +9875,13 @@
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="WasPaid" TargetFieldName="WasPaid" />
             <FieldMapping FieldName="WasShipped" TargetFieldName="WasShipped" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":EtsyOrderItem" TargetName="ShipWorksLocal:dbo:EtsyOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="ListingID" TargetFieldName="ListingID" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+            <FieldMapping FieldName="TransactionID" TargetFieldName="TransactionID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":EtsyStore" TargetName="ShipWorksLocal:dbo:EtsyStore">
@@ -10386,6 +10513,26 @@
             <FieldMapping FieldName="TrackBySMS" TargetFieldName="TrackBySMS" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":JetOrder" TargetName="ShipWorksLocal:dbo:JetOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="MerchantOrderId" TargetFieldName="MerchantOrderId" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetOrderItem" TargetName="ShipWorksLocal:dbo:JetOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="JetOrderItemID" TargetFieldName="JetOrderItemID" />
+            <FieldMapping FieldName="MerchantSku" TargetFieldName="MerchantSku" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":JetStore" TargetName="ShipWorksLocal:dbo:JetStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ApiUser" TargetFieldName="ApiUser" />
+            <FieldMapping FieldName="Secret" TargetFieldName="Secret" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":LabelSheet" TargetName="ShipWorksLocal:dbo:LabelSheet">
           <FieldMappings>
             <FieldMapping FieldName="Columns" TargetFieldName="Columns" />
@@ -10723,6 +10870,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
@@ -11116,6 +11264,19 @@
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="UnitPriceAmount" TargetFieldName="UnitPriceAmount" />
             <FieldMapping FieldName="UnitValue" TargetFieldName="UnitValue" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ShipmentReturnItem" TargetName="ShipWorksLocal:dbo:ShipmentReturnItem">
+          <FieldMappings>
+            <FieldMapping FieldName="Code" TargetFieldName="Code" />
+            <FieldMapping FieldName="Name" TargetFieldName="Name" />
+            <FieldMapping FieldName="Notes" TargetFieldName="Notes" />
+            <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="ShipmentReturnItemID" TargetFieldName="ShipmentReturnItemID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>

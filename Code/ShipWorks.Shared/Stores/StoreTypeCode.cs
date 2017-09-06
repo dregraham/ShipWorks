@@ -394,6 +394,11 @@ namespace ShipWorks.Stores
         [Description("GeekSeller")]
         [StoreTypeIdentity("GEEKSELLER", "GEE")]
         [StoreTypeIcon("geekseller")]
-        GeekSeller = 78
+        GeekSeller = 78,
+
+        [Description("Jet")]
+        [StoreTypeIdentity("JET", "JET")]
+        [StoreTypeIcon("jet")]
+        Jet = 79
     }
 }

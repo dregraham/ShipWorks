@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 {
@@ -10,5 +11,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
         public string MainImageFile { get; set; }
 
         public string ThumbnailFile { get; set; }
+
+        [JsonProperty("SKUInfo")]
+        public ThreeDCartSkuInfo SkuInfo { get; set; }
     }
 }
