@@ -257,7 +257,7 @@
             // 
             this.service.DisplayMember = "Description";
             this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.service.Enabled = false;
+            this.service.Enabled = true;
             this.service.FormattingEnabled = true;
             this.service.Location = new System.Drawing.Point(91, 7);
             this.service.Name = "service";
