@@ -8,6 +8,7 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
 {
@@ -19,8 +20,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
     {
         private readonly INetworkSolutionsCombineOrderSearchProvider orderSearchProvider;
         private readonly IShippingManager shippingManager;
-        private readonly ILog log;
         private readonly INetworkSolutionsWebClient webClient;
+        private readonly IOrderManager orderManager;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -29,12 +31,30 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
             INetworkSolutionsCombineOrderSearchProvider orderSearchProvider,
             INetworkSolutionsWebClient webClient,
             IShippingManager shippingManager,
+            IOrderManager orderManager,
             Func<Type, ILog> createLogger)
         {
+            this.orderManager = orderManager;
             this.webClient = webClient;
             this.orderSearchProvider = orderSearchProvider;
             this.shippingManager = shippingManager;
             log = createLogger(GetType());
+        }
+
+        /// <summary>
+        /// Uploads shipment details for the given shipment Id
+        /// </summary>
+        public async Task UploadShipmentDetailsForOrder(INetworkSolutionsStoreEntity store, long orderID)
+        {
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, includeOrder: true).ConfigureAwait(false);
+
+            if (shipment == null)
+            {
+                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
+                return;
+            }
+
+            await UploadShipmentDetails(store, shipment).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -55,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// <summary>
         /// Uploads shipment details for the given shipment entity
         /// </summary>
-        public async Task UploadShipmentDetails(INetworkSolutionsStoreEntity store, ShipmentEntity shipment)
+        private async Task UploadShipmentDetails(INetworkSolutionsStoreEntity store, ShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Voided)
             {

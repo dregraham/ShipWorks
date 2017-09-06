@@ -417,8 +417,11 @@
     <Compile Include="Platforms\MarketplaceAdvisor\Content\MarketplaceAdvisorCombineOrderAction.cs" />
     <Compile Include="Platforms\NetworkSolutions\Content\NetworkSolutionsCombineOrderAction.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\INetworkSolutionsCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\INetworkSolutionsUserInteraction.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsCommentDetails.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsUserInteraction.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\OrderStatusUpdater.cs" />
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Newegg\OnlineUpdating\DataAccess.cs" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -23,21 +22,21 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         private readonly ILog log;
         readonly IOrderStatusUpdater orderStatusUpdater;
         readonly IShipmentDetailsUpdater shipmentDetailsUpdater;
-        readonly IOrderManager orderManager;
+        readonly INetworkSolutionsUserInteraction userInteraction;
         readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public NetworkSolutionsOnlineUpdateCommandCreator(
-            IOrderManager orderManager,
+            INetworkSolutionsUserInteraction userInteraction,
             IOrderStatusUpdater orderStatusUpdater,
             IShipmentDetailsUpdater shipmentDetailsUpdater,
             IMessageHelper messageHelper,
             Func<Type, ILog> createLogger)
         {
             this.messageHelper = messageHelper;
-            this.orderManager = orderManager;
+            this.userInteraction = userInteraction;
             this.shipmentDetailsUpdater = shipmentDetailsUpdater;
             this.orderStatusUpdater = orderStatusUpdater;
             log = createLogger(GetType());
@@ -84,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadShipmentDetails(NetworkSolutionsStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnUploadShipmentDetails(NetworkSolutionsStoreEntity store, IMenuCommandExecutionContext context)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,
@@ -102,17 +101,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// </summary>
         private async Task<IResult> UploadShipmentDetails(NetworkSolutionsStoreEntity store, long orderID)
         {
-            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, includeOrder: true).ConfigureAwait(false);
-
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-                return Result.FromSuccess();
-            }
-
             try
             {
-                await shipmentDetailsUpdater.UploadShipmentDetails(store, shipment).ConfigureAwait(false);
+                await shipmentDetailsUpdater.UploadShipmentDetailsForOrder(store, orderID).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (NetworkSolutionsException ex)
@@ -125,10 +116,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(NetworkSolutionsStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnSetOnlineStatus(NetworkSolutionsStoreEntity store, IMenuCommandExecutionContext context)
         {
-            NetworkSolutionsStatusCodeProvider codeProvider = new NetworkSolutionsStatusCodeProvider(store);
-
             IMenuCommand command = context.MenuCommand;
             long statusCode = (long) command.Tag;
             string comments = "";
@@ -136,14 +125,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
             // -1 status indicates this is the Set with Comments..
             if (statusCode == -1)
             {
-                // get user input on the status and comments
-                using (NetworkSolutionsOnlineStatusCommentDlg dlg = new NetworkSolutionsOnlineStatusCommentDlg(codeProvider))
+                var details = userInteraction.GetMessagingDetails(context.Owner, store);
+                if (details.Success)
                 {
-                    if (dlg.ShowDialog() == DialogResult.OK)
-                    {
-                        statusCode = dlg.Code;
-                        comments = dlg.Comments;
-                    }
+                    statusCode = details.Value.Code;
+                    comments = details.Value.Comments;
                 }
             }
 

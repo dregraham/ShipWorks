@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
@@ -15,8 +14,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         Task UploadShipmentDetails(INetworkSolutionsStoreEntity store, long shipmentID);
 
         /// <summary>
-        /// Uploads shipment details for the given shipment entity
+        /// Uploads shipment details for the given order Id
         /// </summary>
-        Task UploadShipmentDetails(INetworkSolutionsStoreEntity store, ShipmentEntity shipment);
+        Task UploadShipmentDetailsForOrder(INetworkSolutionsStoreEntity store, long orderID);
     }
 }
