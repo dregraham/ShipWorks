@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             weight.WeightChanged += OnWeightChanged;
             weight.WeightChanged += OnShipSenseFieldChanged;
             shipDate.ValueChanged += OnShipDateChanged;
-
+            
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
@@ -235,7 +235,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonRateTag previousValue = viewModel.ShippingService;
             service.BindDataSourceAndPreserveSelection(viewModel.ServicesAvailable);
             service.SelectedValue = previousValue?.ShippingServiceId ?? string.Empty;
-            service.Enabled = !viewModel.ServiceIsMultiValued && viewModel.ServicesAvailable.Count > 1;
+            service.Enabled = viewModel.ServicesAvailable.Count > 1;
         }
 
         /// <summary>

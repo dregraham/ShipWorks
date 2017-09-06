@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -198,15 +199,38 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void SetupServiceWhenNotOneShipment(List<ShipmentEntity> shipments)
         {
-            // Because of the way Amazon services work, we will always show "multiple" when multiple shipments are loaded,
-            // even if the services are the same
+            ServicesAvailable = CreateDefaultAvailableServiceList();
+
             shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(shipments,
                 nameof(ShippingService),
-                entity => new AmazonRateTag(),
-                (entity, value) => { },
-                entity => true);
+                entity => ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == entity.Amazon.ShippingServiceID),
+                (entity, value) =>
+                {
+                    if (value?.ShippingServiceId != entity.Amazon.ShippingServiceID)
+                    {
+                        entity.Amazon.ShippingServiceName = value?.Description ?? string.Empty;
+                        entity.Amazon.ShippingServiceID = value?.ShippingServiceId ?? string.Empty;
+                        entity.Amazon.CarrierName = value?.CarrierName ?? string.Empty;
+                    }
+                },
+                entity => entity.Processed);
+        }
 
-            ServicesAvailable = new List<AmazonRateTag>();
+        public List<AmazonRateTag> CreateDefaultAvailableServiceList()
+        {
+            List<AmazonRateTag> rates = new List<AmazonRateTag>();
+
+            foreach (EnumEntry<AmazonServiceType> service in EnumHelper.GetEnumList<AmazonServiceType>())
+            {
+                rates.Add(new AmazonRateTag()
+                {
+                    Description = service.Description,
+                    ShippingServiceId = service.ApiValue,
+                    CarrierName = service.Description.Split(' ').FirstOrDefault()
+                });
+            }
+
+            return rates;
         }
 
         /// <summary>
