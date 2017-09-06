@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(IGrouponStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnUploadDetails(IGrouponStoreEntity store, IMenuCommandExecutionContext context)
         {
             var results = await UploadDetails(store, context.SelectedKeys).ConfigureAwait(true);
 
