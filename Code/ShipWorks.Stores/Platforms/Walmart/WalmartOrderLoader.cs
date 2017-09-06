@@ -65,10 +65,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 ClearExistingCharges(orderToSave);
             }
 
-            LoadItems(downloadedOrder.orderLines, orderToSave);
-            LoadOtherCharges(downloadedOrder.orderLines, orderToSave);
-            LoadTax(downloadedOrder.orderLines, orderToSave);
-            LoadRefunds(downloadedOrder.orderLines, orderToSave);
+            var orderLines = downloadedOrder.orderLines ?? Enumerable.Empty<orderLineType>();
+
+            LoadItems(orderLines, orderToSave);
+            LoadOtherCharges(orderLines, orderToSave);
+            LoadTax(orderLines, orderToSave);
+            LoadRefunds(orderLines, orderToSave);
 
             orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
         }
@@ -146,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// a line item will not be deleted and that the price will go to 0 if
         /// the order is canceled.
         /// </remarks>
-        private void LoadItems(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
+        public void LoadItems(IEnumerable<orderLineType> downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
             foreach (orderLineType orderLine in downloadedOrderOrderLines)
             {

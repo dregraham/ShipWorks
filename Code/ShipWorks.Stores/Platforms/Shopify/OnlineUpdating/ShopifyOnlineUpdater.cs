@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 
             orderSearchEntities
                 .Select(x => PerformUpload(webClient, x.ShopifyOrderID, carrier, trackingNumber, carrierTrackingUrl))
-                .ThrowIfNotEmpty((msg, ex) => new ShopifyException(msg, ex));
+                .ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
         }
 
         /// <summary>

@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
                 allResults.AddRange(results);
             }
 
-            allResults.ThrowIfNotEmpty((msg, ex) => new BigCommerceException(msg, ex));
+            allResults.ThrowFailures((msg, ex) => new BigCommerceException(msg, ex));
 
             IBigCommerceStatusCodeProvider statusCodeProvider = createStatusCodeProvider(store);
 

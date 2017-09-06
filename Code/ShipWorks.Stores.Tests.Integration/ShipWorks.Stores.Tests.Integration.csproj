@@ -221,6 +221,8 @@
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartRestOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartSoapOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Volusion\VolusionOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />

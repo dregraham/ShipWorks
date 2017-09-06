@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 var handler = Result.Handle<YahooException>();
                 identifiers.Select(x => handler.Execute(() => webClient.UploadOrderStatus(store, x, status)))
-                    .ThrowIfNotEmpty((msg, ex) => new YahooException(msg, ex));
+                    .ThrowFailures((msg, ex) => new YahooException(msg, ex));
 
                 SaveOrderStatus(orderID, status);
             }
@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 identifiers
                     .Select(x => resultHandler.Execute(() => webClient.UploadShipmentDetails(store, x, shipment.TrackingNumber, GetCarrierCode(shipment))))
                     .ToList()
-                    .ThrowIfNotEmpty((msg, ex) => new YahooException(msg, ex));
+                    .ThrowFailures((msg, ex) => new YahooException(msg, ex));
             }
 
             string status = shipment.TrackingNumber.IsNullOrWhiteSpace() ? "Shipped" : "Tracked";

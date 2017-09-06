@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             var handler = Result.Handle<ChannelAdvisorException>();
             identifiers
                 .Select(x => handler.Execute(() => PerformUpload(store, shipment, x)))
-                .ThrowIfNotEmpty((msg, ex) => new ChannelAdvisorException(msg, ex));
+                .ThrowFailures((msg, ex) => new ChannelAdvisorException(msg, ex));
         }
 
         /// <summary>

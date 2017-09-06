@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             mock.Mock<IWalmartCombineOrderSearchProvider>()
                 .Setup(x => x.GetOrderIdentifiers(It.IsAny<IOrderEntity>()))
-                .ReturnsAsync(new[] { "foo" });
+                .ReturnsAsync(new[] { new WalmartCombinedIdentifier(1006, "1000") });
         }
 
         [Fact]
@@ -134,6 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 Order =
                     new WalmartOrderEntity()
                     {
+                        OrderID = 1006,
                         IsManual = false,
                         PurchaseOrderID = "123",
                         RequestedShippingMethodCode = "VALUE",
@@ -142,7 +143,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                             new WalmartOrderItemEntity()
                             {
                                 LineNumber = "42",
-                                OnlineStatus = orderLineStatusValueType.Acknowledged.ToString()
+                                OnlineStatus = orderLineStatusValueType.Acknowledged.ToString(),
+                                OriginalOrderID = 1006
                             }
                         }
                     }

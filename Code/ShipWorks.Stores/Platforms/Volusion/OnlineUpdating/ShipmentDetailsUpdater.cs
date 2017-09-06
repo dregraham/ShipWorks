@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             orderNumbers
                 .Select(x => PerformUpdate(store, shipment, sendEmail, x))
-                .ThrowIfNotEmpty((msg, ex) => new VolusionException(msg, ex));
+                .ThrowFailures((msg, ex) => new VolusionException(msg, ex));
 
             // clear out the Volusion online status locally, so that it can fall out of any local by-status filters
             order.OnlineStatus = "";

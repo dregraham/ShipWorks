@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -13,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
     /// Get order search identifiers for uploading shipment data
     /// </summary>
     [Component]
-    public class WalmartCombineOrderSearchProvider : CombineOrderSearchBaseProvider<string>, IWalmartCombineOrderSearchProvider
+    public class WalmartCombineOrderSearchProvider : CombineOrderSearchBaseProvider<WalmartCombinedIdentifier>, IWalmartCombineOrderSearchProvider
     {
         readonly ISqlAdapterFactory sqlAdapterFactory;
 
@@ -29,18 +30,28 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         /// Gets the online store's order identifier
         /// </summary>
         /// <param name="order">The order for which to find combined order identifiers</param>
-        protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        protected override async Task<IEnumerable<WalmartCombinedIdentifier>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             return await GetCombinedOnlineOrderIdentifiers<WalmartOrderSearchEntity>(
-                    OrderSearchFields.OrderID == order.OrderID,
-                    WalmartOrderSearchFields.PurchaseOrderID)
+                    WalmartOrderSearchFields.OrderID == order.OrderID,
+                    () => new WalmartCombinedIdentifier(
+                        WalmartOrderSearchFields.OriginalOrderID.ToValue<long>(),
+                        WalmartOrderSearchFields.PurchaseOrderID.ToValue<string>()))
                 .ConfigureAwait(false);
         }
 
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        protected override string GetOnlineOrderIdentifier(IOrderEntity order) =>
-            (order as IWalmartOrderEntity)?.PurchaseOrderID ?? string.Empty;
+        protected override WalmartCombinedIdentifier GetOnlineOrderIdentifier(IOrderEntity order)
+        {
+            var walmartOrder = order as IWalmartOrderEntity;
+            if (order == null)
+            {
+                return null;
+            }
+
+            return new WalmartCombinedIdentifier(walmartOrder.OrderID, walmartOrder.PurchaseOrderID);
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             var results = await PerformUploadShippingDetails(store, shipment, shipmentDetails);
             var statuses = results
-                .ThrowIfNotEmpty((msg, ex) => new NeweggException(msg, ex))
+                .ThrowFailures((msg, ex) => new NeweggException(msg, ex))
                 .GetSuccessfulValues()
                 .ToList();
 

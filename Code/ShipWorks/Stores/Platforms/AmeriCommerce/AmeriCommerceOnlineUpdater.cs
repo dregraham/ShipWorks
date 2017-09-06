@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             IAmeriCommerceWebClient webClient = createWebClient(store as AmeriCommerceStoreEntity);
 
             identifiers.Select(x => webClient.UpdateOrderStatus(x, statusCode))
-                .ThrowIfNotEmpty((msg, ex) => new AmeriCommerceException(msg, ex));
+                .ThrowFailures((msg, ex) => new AmeriCommerceException(msg, ex));
 
             // Update the local database with the new status
             OrderEntity basePrototype = new OrderEntity(orderID)
@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             }
 
             identifiers.Select(x => webClient.UploadShipmentDetails(x, shipment))
-                .ThrowIfNotEmpty((msg, ex) => new AmeriCommerceException(msg, ex));
+                .ThrowFailures((msg, ex) => new AmeriCommerceException(msg, ex));
         }
 
         /// <summary>

@@ -607,6 +607,7 @@
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IWalmartCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\WalmartCombinedIdentifier.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\WalmartOrderSearchProvider.cs" />
     <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />

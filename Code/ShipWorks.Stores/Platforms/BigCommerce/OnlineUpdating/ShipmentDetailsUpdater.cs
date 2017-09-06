@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
                 allResults.Add(result);
             }
 
-            allResults.ThrowIfNotEmpty((msg, ex) => new BigCommerceException(msg, ex));
+            allResults.ThrowFailures((msg, ex) => new BigCommerceException(msg, ex));
         }
     }
 }

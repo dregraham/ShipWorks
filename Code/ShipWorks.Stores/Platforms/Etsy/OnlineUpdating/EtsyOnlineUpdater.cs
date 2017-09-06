@@ -148,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     }
                 }
 
-                exceptions.ThrowIfNotEmpty((msg, ex) => new EtsyException(msg, ex));
+                exceptions.ThrowExceptions((msg, ex) => new EtsyException(msg, ex));
             }
 
             // Then update the status in our local database
@@ -250,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
                     }
                 }
 
-                exceptions.ThrowIfNotEmpty((msg, ex) => new EtsyException(msg, ex));
+                exceptions.ThrowExceptions((msg, ex) => new EtsyException(msg, ex));
             }
         }
 

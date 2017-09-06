@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -66,39 +68,61 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         /// </remarks>
         public async Task UpdateShipmentDetails(IWalmartStoreEntity store, ShipmentEntity shipment)
         {
-            orderRepository.PopulateOrderDetails(shipment.Order);
+            var order = shipment.Order as WalmartOrderEntity;
+            orderRepository.PopulateOrderDetails(order);
 
-            if (shipment.Order.IsManual)
+            if (order.IsManual)
             {
                 return;
             }
 
-            var identifiers = await combineOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+            var identifiers = await combineOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
-            foreach (var identifier in identifiers)
+            identifiers
+                .Where(x => x != null)
+                .Select(x => UploadCombinedShipmentDetails(store, order, shipment, x))
+                .ThrowFailures((msg, ex) => new WalmartException(msg, ex));
+        }
+
+        /// <summary>
+        /// Upload shipment details for orders, including combined orders
+        /// </summary>
+        private IResult UploadCombinedShipmentDetails(IWalmartStoreEntity store, WalmartOrderEntity order, ShipmentEntity shipment, WalmartCombinedIdentifier identifier)
+        {
+            GenericResult<Order> result = InternalUpdateShipmentDetails(store, order, shipment, identifier);
+            if (result.Failure && ShouldRetry(result.Exception))
             {
-                string purchaseOrderID = ((WalmartOrderEntity) shipment.Order).PurchaseOrderID;
+                Order downloadedOrder = webClient.GetOrder(store, identifier.PurchaseOrderID);
 
+                orderLoader.LoadItems(downloadedOrder.orderLines, order);
+                orderRepository.Save(order);
+
+                result = InternalUpdateShipmentDetails(store, order, shipment, identifier);
+            }
+
+            if (result.Success && result.Value != null)
+            {
                 try
                 {
-                    InternalUpdateShipmentDetails(store, shipment, purchaseOrderID);
+                    orderLoader.LoadItems(result.Value.orderLines, order);
+                    orderRepository.Save(order);
                 }
-                catch (WalmartException e)
+                catch (SqlException ex)
                 {
-                    HttpStatusCode? httpStatusCode = ((e.InnerException as WebException)?.Response as HttpWebResponse)?.StatusCode;
-                    if (!httpStatusCode.HasValue || httpStatusCode.Value != HttpStatusCode.BadRequest)
-                    {
-                        throw;
-                    }
-
-                    Order order = webClient.GetOrder(store, purchaseOrderID);
-
-                    orderLoader.LoadOrder(order, (WalmartOrderEntity) shipment.Order);
-                    orderRepository.Save(shipment.Order);
-
-                    InternalUpdateShipmentDetails(store, shipment, purchaseOrderID);
+                    return Result.FromError(ex);
                 }
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Should the upload be retried
+        /// </summary>
+        private bool ShouldRetry(Exception exception)
+        {
+            HttpStatusCode? httpStatusCode = ((exception.GetBaseException() as WebException)?.Response as HttpWebResponse)?.StatusCode;
+            return httpStatusCode.HasValue && httpStatusCode.Value == HttpStatusCode.BadRequest;
         }
 
         /// <summary>
@@ -107,86 +131,87 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         /// <remarks>
         /// If no lines are shippable, does nothing.
         /// </remarks>
-        private void InternalUpdateShipmentDetails(IWalmartStoreEntity store, ShipmentEntity shipment, string purchaseOrderID)
+        private GenericResult<Order> InternalUpdateShipmentDetails(IWalmartStoreEntity store, IWalmartOrderEntity order, ShipmentEntity shipment, WalmartCombinedIdentifier identifier)
         {
+            orderShipment orderShipment = CreateShipment(order, shipment, identifier.OriginalOrderID);
+            if (orderShipment.orderLines.None())
+            {
+                return GenericResult.FromSuccess<Order>(null);
+            }
+
             try
             {
-                orderShipment orderShipment = CreateShipment(shipment);
-                if (orderShipment.orderLines.Length > 0)
-                {
-                    Order updatedOrder = webClient.UpdateShipmentDetails(store, orderShipment, purchaseOrderID);
-                    orderLoader.LoadOrder(updatedOrder, (WalmartOrderEntity) shipment.Order);
-                    orderRepository.Save(shipment.Order);
-                }
+                var downloadedOrder = webClient.UpdateShipmentDetails(store, orderShipment, identifier.PurchaseOrderID);
+                return GenericResult.FromSuccess(downloadedOrder);
             }
             catch (SqlException ex)
             {
-                throw new WalmartException(ex.Message, ex);
+                return GenericResult.FromError<Order>(new WalmartException(ex.Message, ex));
+            }
+            catch (WalmartException ex)
+            {
+                return GenericResult.FromError<Order>(ex);
             }
         }
 
         /// <summary>
         /// Creates the Walmart shipment from the ShipWorks shipment entity
         /// </summary>
-        private orderShipment CreateShipment(ShipmentEntity shipment)
+        private orderShipment CreateShipment(IWalmartOrderEntity order, IShipmentEntity shipment, long originalOrderID)
         {
-            WalmartOrderEntity order = shipment.Order as WalmartOrderEntity;
-
             shippingMethodCodeType methodCode =
                 (shippingMethodCodeType)
                     Enum.Parse(typeof(shippingMethodCodeType), order.RequestedShippingMethodCode, true);
 
-            orderShipment orderShipment = new orderShipment
+            return new orderShipment
             {
-                orderLines = shipment.Order.OrderItems.Cast<WalmartOrderItemEntity>()
+                orderLines = order.OrderItems
+                    .Where(x => x.OriginalOrderID == originalOrderID)
+                    .OfType<IWalmartOrderItemEntity>()
                     .Where(IsLineShippable)
                     .Select(item => CreateShippingLineType(shipment, item, methodCode)).ToArray()
             };
-
-            return orderShipment;
         }
 
         /// <summary>
         /// Determines whether [is line shippable] [the specified item].
         /// </summary>
-        private static bool IsLineShippable(WalmartOrderItemEntity item) =>
+        private static bool IsLineShippable(IWalmartOrderItemEntity item) =>
             item.OnlineStatus == orderLineStatusValueType.Acknowledged.ToString();
 
         /// <summary>
         /// Create a new Shipping Line Type.
         /// </summary>
-        private shippingLineType CreateShippingLineType(ShipmentEntity shipment, WalmartOrderItemEntity item, shippingMethodCodeType methodCode)
+        private shippingLineType CreateShippingLineType(IShipmentEntity shipment, IWalmartOrderItemEntity item, shippingMethodCodeType methodCode)
         {
             return new shippingLineType
             {
                 lineNumber = item.LineNumber,
-                orderLineStatuses = new[]
-                                    {
-                            new shipLineStatusType
-                            {
-                                status = orderLineStatusValueType.Shipped,
-                                statusQuantity = new quantityType()
-                                {
-                                    amount = item.Quantity.ToString(CultureInfo.InvariantCulture)
-                                },
-                                trackingInfo = new trackingInfoType()
-                                {
-                                    methodCode = methodCode,
-                                    shipDateTime = DateTime.UtcNow,
-                                    carrierName = GetCarrierName(shipment),
-                                    trackingNumber = shipment.TrackingNumber
-                                }
-                            }
+                orderLineStatuses = new[] {
+                    new shipLineStatusType
+                    {
+                        status = orderLineStatusValueType.Shipped,
+                        statusQuantity = new quantityType()
+                        {
+                            amount = item.Quantity.ToString(CultureInfo.InvariantCulture)
+                        },
+                        trackingInfo = new trackingInfoType()
+                        {
+                            methodCode = methodCode,
+                            shipDateTime = DateTime.UtcNow,
+                            carrierName = GetCarrierName(shipment.ShipmentTypeCode),
+                            trackingNumber = shipment.TrackingNumber
                         }
+                    }
+                }
             };
         }
 
         /// <summary>
         /// Gets the name of the carrier used for the shipment
         /// </summary>
-        private carrierNameType GetCarrierName(ShipmentEntity shipment)
+        private carrierNameType GetCarrierName(ShipmentTypeCode shipmentTypeCode)
         {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
             carrierNameType carrierName = new carrierNameType();
 
             switch (shipmentTypeCode)

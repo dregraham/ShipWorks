@@ -19,29 +19,24 @@ namespace Interapptive.Shared.Extensions
         /// <summary>
         /// Throw a consolidated exception if the collection isn't empty
         /// </summary>
-        public static void ThrowIfNotEmpty(this IEnumerable<IResult> source, Func<string, Exception, Exception> createException) =>
-            source.Select(x => x.Exception).ThrowIfNotEmpty(createException);
-
-        /// <summary>
-        /// Throw a consolidated exception if the collection isn't empty
-        /// </summary>
-        public static IEnumerable<GenericResult<T>> ThrowIfNotEmpty<T>(this IEnumerable<GenericResult<T>> source, Func<string, Exception, Exception> createException)
+        public static IEnumerable<T> ThrowFailures<T>(this IEnumerable<T> source, Func<string, Exception, Exception> createException) where T : IResult
         {
-            source.OfType<IResult>().ThrowIfNotEmpty(createException);
+            var sourceAsList = source as List<T> ?? source.ToList();
 
-            return source;
+            sourceAsList.Select(x => x.Exception).ThrowExceptions(createException);
+
+            return sourceAsList;
         }
 
         /// <summary>
         /// Throw a consolidated exception if the collection isn't empty
         /// </summary>
-        public static void ThrowIfNotEmpty(this IEnumerable<Exception> source, Func<string, Exception, Exception> createException)
+        public static void ThrowExceptions<T>(this IEnumerable<T> source, Func<string, T, Exception> createException) where T : Exception
         {
-            var exceptions = source
-                .Where(x => x != null)
-                .ToList();
+            var sourceAsList = source as List<T> ?? source.ToList();
+            var exceptions = sourceAsList.Where(x => x != null);
 
-            if (exceptions.Count == 1)
+            if (exceptions.Count() == 1)
             {
                 throw exceptions.Single();
             }
