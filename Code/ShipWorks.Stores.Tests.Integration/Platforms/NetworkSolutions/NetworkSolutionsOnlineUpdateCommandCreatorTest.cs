@@ -15,6 +15,7 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.NetworkSolutions
 {
@@ -54,17 +55,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.NetworkSolutions
                 .Set(x => x.Processed, true)
                 .Save();
         }
-
-        /// <summary>
-        /// Checks a parameter for a shipment with given tracking number
-        /// </summary>
-        private ShipmentEntity AnyShipment => It.IsAny<ShipmentEntity>();
-
-        /// <summary>
-        /// Checks a parameter for a shipment with given tracking number
-        /// </summary>
-        private ShipmentEntity ShipmentWithTrackingNumber(string trackingNumber) =>
-            It.Is<ShipmentEntity>(s => s.TrackingNumber == trackingNumber);
 
         /// <summary>
         /// Create a normal, non-combined order

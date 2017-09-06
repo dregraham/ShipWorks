@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Shared.ExtensionMethods
 {
@@ -37,5 +38,16 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         /// Any object
         /// </summary>
         public static object AnyObject => It.IsAny<object>();
+
+        /// <summary>
+        /// Checks a parameter for a shipment with given tracking number
+        /// </summary>
+        public static ShipmentEntity AnyShipment => It.IsAny<ShipmentEntity>();
+
+        /// <summary>
+        /// Checks a parameter for a shipment with given tracking number
+        /// </summary>
+        public static ShipmentEntity ShipmentWithTrackingNumber(string trackingNumber) =>
+            It.Is<ShipmentEntity>(s => s.TrackingNumber == trackingNumber);
     }
 }

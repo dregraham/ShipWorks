@@ -210,6 +210,8 @@
     <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />

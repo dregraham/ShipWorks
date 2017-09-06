@@ -94,26 +94,19 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create the control for creating online update actions in the add store wizard
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new ProStoresOnlineUpdateActionControl();
-        }
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new ProStoresOnlineUpdateActionControl();
 
         /// <summary>
         /// Create a new store-specific order instance
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new ProStoresOrderEntity();
-        }
+        protected override OrderEntity CreateOrderInstance() => new ProStoresOrderEntity();
 
         /// <summary>
         /// Create the OrderIdentifier instance used to uniquely identify this prostores order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new OrderNumberIdentifier(order.OrderNumber);
-        }
+        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+            new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
         /// Returns the fields that identify the customer for an order
@@ -139,10 +132,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Identifier to uniquely identify the store
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get { return ((ProStoresStoreEntity) Store).ShortName.ToLower(); }
-        }
+        protected override string InternalLicenseIdentifier =>
+            ((ProStoresStoreEntity) Store).ShortName.ToLower();
 
         /// <summary>
         /// Create store specific conditions to use for ProStores for basic search
@@ -201,26 +192,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// ProStores has online update commands, but does not support OnlineStatus column
         /// </summary>
-        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
-        {
-            if (column == OnlineGridColumnSupport.LastModified)
-            {
-                return true;
-            }
-
-            return base.GridOnlineColumnSupported(column);
-        }
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column) =>
+            column == OnlineGridColumnSupport.LastModified || base.GridOnlineColumnSupported(column);
 
         /// <summary>
         /// Policy for how far back to go on an initial download
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
 
         /// <summary>
         /// Generate ProStores specific template XML output

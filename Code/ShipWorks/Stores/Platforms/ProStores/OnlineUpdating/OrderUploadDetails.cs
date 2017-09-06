@@ -22,6 +22,6 @@
         /// <summary>
         /// Order number
         /// </summary>
-        public object OrderNumber { get; }
+        public long OrderNumber { get; }
     }
 }

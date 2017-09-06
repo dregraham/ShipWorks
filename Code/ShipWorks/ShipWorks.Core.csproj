@@ -1862,6 +1862,7 @@
     <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
+    <Compile Include="Stores\Platforms\ProStores\IProStoresWebClient.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\OrderUploadDetails.cs" />

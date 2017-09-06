@@ -14,6 +14,7 @@ using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Stores.Platforms.ProStores
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     public class ProStoresDownloader : StoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
+        private readonly IProStoresWebClient webClient;
 
         // total download count
         int totalCount = 0;
@@ -35,10 +37,10 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProStoresDownloader(StoreEntity store)
+        public ProStoresDownloader(StoreEntity store, IProStoresWebClient webClient)
             : base(store)
         {
-
+            this.webClient = webClient;
         }
 
         /// <summary>
@@ -48,17 +50,19 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            var proStore = (ProStoresStoreEntity) Store;
+
             try
             {
                 Progress.Detail = "Checking for orders...";
 
                 // For legacy login methods, checks the version has been updated and tokens are now supported
-                ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
+                webClient.CheckTokenLoginMethodAvailability(proStore);
 
                 // Downloading based on the last modified time
                 DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
-                totalCount = ProStoresWebClient.GetOrderCount((ProStoresStoreEntity) Store, lastModified);
+                totalCount = webClient.GetOrderCount(proStore, lastModified);
 
                 if (totalCount == 0)
                 {
@@ -103,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             try
             {
                 DateTime? startDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
-                XmlDocument response = ProStoresWebClient.GetNextOrderPage((ProStoresStoreEntity) Store, startDate, isProVersion);
+                XmlDocument response = webClient.GetNextOrderPage((IProStoresStoreEntity) Store, startDate, isProVersion);
                 XPathNavigator xpath = response.CreateNavigator();
 
                 XPathNodeIterator invoiceIterator = xpath.Select("/XTE/Response/Invoice");

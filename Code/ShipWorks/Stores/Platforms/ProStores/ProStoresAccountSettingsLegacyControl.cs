@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.ProStores
@@ -95,7 +97,11 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             try
             {
-                ProStoresWebClient.TestXteConnection(proStore);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                    webClient.TestXteConnection(proStore);
+                }
 
                 return true;
             }

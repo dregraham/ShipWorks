@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context)
         {
             IResult result = null;
             using (var dialog = messageHelper.ShowProgressDialog("Upload Shipment Details", "ShipWorks is uploading shipment information."))

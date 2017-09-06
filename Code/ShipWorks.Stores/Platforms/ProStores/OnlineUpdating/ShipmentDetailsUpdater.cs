@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -18,12 +21,19 @@ namespace ShipWorks.Stores.Platforms.ProStores
     public class ShipmentDetailsUpdater : IShipmentDetailsUpdater
     {
         private readonly ILog log;
+        private readonly IProStoresCombineOrderSearchProvider searchProvider;
+        private readonly IProStoresWebClient webClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDetailsUpdater(Func<Type, ILog> createLogger)
+        public ShipmentDetailsUpdater(
+            IProStoresCombineOrderSearchProvider searchProvider,
+            IProStoresWebClient webClient,
+            Func<Type, ILog> createLogger)
         {
+            this.webClient = webClient;
+            this.searchProvider = searchProvider;
             log = createLogger(GetType());
         }
 
@@ -79,34 +89,51 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// </summary>
         public async Task UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
+            var results = new List<IResult>();
+
             foreach (ShipmentEntity shipment in shipments)
             {
-                if (shipment.Order.IsManual && shipment.Order.CombineSplitStatus != CombineSplitStatusType.Combined)
-                {
-                    log.InfoFormat("Not uploading shipment details for shipment {0} because the order is manual.", shipment.ShipmentID);
-                    continue;
-                }
-
-                if (!shipment.Processed || shipment.Voided)
-                {
-                    log.InfoFormat("Not uploading tracking number for shipment {0}, either not processed or has been voided.", shipment.ShipmentID);
-                    continue;
-                }
-
-                ProStoresStoreEntity store = (ProStoresStoreEntity) StoreManager.GetStore(shipment.Order.StoreID);
-                if (store == null)
-                {
-                    log.WarnFormat("Not uploading shipment details for {0} since the store went away.", shipment.ShipmentID);
-                    continue;
-                }
-
-                if (store.LoginMethod == (int) ProStoresLoginMethod.LegacyUserPass)
-                {
-                    throw new ProStoresException("Online shipment update is only supported for ProStores version 8.2+ and when using token-based authentication.");
-                }
-
-                await ProStoresWebClient.UploadShipmentDetails(store, shipment).ConfigureAwait(false);
+                results.AddRange(await UploadSingleShipmentDetail(shipment).ConfigureAwait(false));
             }
+
+            results.ThrowFailures((msg, ex) => new ProStoresException(msg, ex));
+        }
+
+        public async Task<IEnumerable<IResult>> UploadSingleShipmentDetail(ShipmentEntity shipment)
+        {
+            if (shipment.Order.IsManual && shipment.Order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            {
+                log.InfoFormat("Not uploading shipment details for shipment {0} because the order is manual.", shipment.ShipmentID);
+                return Enumerable.Empty<IResult>();
+            }
+
+            if (!shipment.Processed || shipment.Voided)
+            {
+                log.InfoFormat("Not uploading tracking number for shipment {0}, either not processed or has been voided.", shipment.ShipmentID);
+                return Enumerable.Empty<IResult>();
+            }
+
+            ProStoresStoreEntity store = (ProStoresStoreEntity) StoreManager.GetStore(shipment.Order.StoreID);
+            if (store == null)
+            {
+                log.WarnFormat("Not uploading shipment details for {0} since the store went away.", shipment.ShipmentID);
+                return Enumerable.Empty<IResult>();
+            }
+
+            if (store.LoginMethod == (int) ProStoresLoginMethod.LegacyUserPass)
+            {
+                return new IResult[]
+                {
+                    Result.FromError(
+                        new ProStoresException("Online shipment update is only supported for ProStores version 8.2+ and when using token-based authentication."))
+                };
+            }
+
+            var identifiers = await searchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
+            var handler = Result.Handle<ProStoresException>();
+
+            return identifiers
+                .Select(x => handler.Execute(() => webClient.UploadShipmentDetails(store, shipment, x)));
         }
     }
 }
