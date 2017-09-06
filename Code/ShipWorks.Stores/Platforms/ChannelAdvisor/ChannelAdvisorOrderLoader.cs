@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
-            orderToSave.OnlineLastModified = downloadedOrder.CreatedDateUtc;
+            orderToSave.OnlineLastModified = downloadedOrder.PaymentDateUtc;
             orderToSave.CustomOrderIdentifier = downloadedOrder.SiteOrderID;
 
             LoadOrderStatuses(orderToSave, downloadedOrder);

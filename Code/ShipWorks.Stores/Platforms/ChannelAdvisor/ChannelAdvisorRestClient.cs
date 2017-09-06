@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
 
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
-            submitter.Variables.Add("$filter", $"CreatedDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
+            submitter.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}");
             submitter.Variables.Add("$count", "true");
             submitter.Variables.Add("$orderby", "CreatedDateUtc");
             submitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
@@ -162,21 +162,29 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorProduct GetProduct(int productID, string refreshToken)
         {
-            if (productCache.Contains(productID))
+            try
             {
-                return productCache[productID];
+                if (productCache.Contains(productID))
+                {
+                    return productCache[productID];
+                }
+
+                IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+
+                submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+                submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
+
+                ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
+
+                productCache[productID] = product;
+
+                return product;
             }
-
-            IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
-
-            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
-
-            ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
-
-            productCache[productID] = product;
-
-            return product;
+            catch (ChannelAdvisorException)
+            {
+                // Log should already be written. Return null
+                return null;
+            }
         }
 
 
