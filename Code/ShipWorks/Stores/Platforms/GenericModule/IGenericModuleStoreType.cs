@@ -10,5 +10,10 @@
         /// Initialize a new magento store entity from an online module
         /// </summary>
         void InitializeFromOnlineModule();
+
+        /// <summary>
+        /// Creates an instance of the downloader. To be overridden by derived stores if necessary.
+        /// </summary>
+        IGenericStoreWebClient CreateWebClient();
     }
 }

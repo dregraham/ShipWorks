@@ -7,6 +7,14 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Templates.Tokens;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using System.Collections.Generic;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using Interapptive.Shared.Collections;
+using System.Linq;
+using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -20,6 +28,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
         // the status codes the store supports
         private GenericStoreStatusCodeProvider statusCodeProvider;
+
+        private ICombineOrderSearchProvider<string> combinedOrderSearchProvider;
 
         /// <summary>
         /// The store this instance is executing for
@@ -76,15 +86,30 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             OrderEntity order = shipment.Order ?? (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
 
-            if (!order.IsManual)
-            {
-                // Upload tracking number
-                var webClient = GenericStoreType.CreateWebClient();
-                await webClient.UploadShipmentDetails(order, shipment).ConfigureAwait(false);
-            }
-            else
+            if (order.CombineSplitStatus == CombineSplitStatusType.None && order.IsManual)
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
+                return;
+            }
+
+            // Upload tracking number
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IGenericStoreWebClientFactory webClientFactory = scope.Resolve<IGenericStoreWebClientFactory>();
+                IGenericStoreWebClient webClient = webClientFactory.CreateWebClient(order.StoreID);
+
+                IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
+
+                IResult[] results = null;
+                foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+                {
+                    results = await Task.WhenAll(chunk.Select(x => webClient.UploadShipmentDetails(order, x, shipment))).ConfigureAwait(false);
+                }
+
+                if (results?.Any(r => r.Failure) == true)
+                {
+                    throw new GenericStoreException($"An error occurred uploading shipment information for order { order.OrderNumber }");
+                }
             }
         }
 
@@ -124,8 +149,24 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             string processedComment = (comment == null) ? "" : TemplateTokenProcessor.ProcessTokens(comment, orderID);
 
-            var webClient = GenericStoreType.CreateWebClient();
-            await webClient.UpdateOrderStatus(order, code, processedComment).ConfigureAwait(false);
+            IResult[] results = null;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IGenericStoreWebClientFactory webClientFactory = scope.Resolve<IGenericStoreWebClientFactory>();
+                IGenericStoreWebClient webClient = webClientFactory.CreateWebClient(order.StoreID);
+
+                IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
+
+                foreach (var chunk in identifiers.SplitIntoChunksOf(4))
+                {
+                    results = await Task.WhenAll(chunk.Select(x => webClient.UpdateOrderStatus(order, x, code, processedComment))).ConfigureAwait(false);
+                }
+            }
+
+            if (results?.Any(r => r.Failure) == true)
+            {
+                throw new GenericStoreException($"An error occurred uploading order information for order { order.OrderNumber }");
+            }
 
             // Update the database to match, status code display
             OrderEntity basePrototype = new OrderEntity(orderID) { IsNew = false };
@@ -133,6 +174,29 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             basePrototype.OnlineStatus = StatusCodes.GetCodeName(code);
 
             unitOfWork.AddForSave(basePrototype);
+        }
+
+        /// <summary>
+        /// Get the combined order identifiers for the given order.
+        /// </summary>
+        private async Task<IEnumerable<string>> GetCombinedOrderIdentifiers(OrderEntity order)
+        {
+            IEnumerable<string> identifiers;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                // See if there is a store specific implementation of ICombineOrderSearchProvider, and if so, use it
+                if (scope.IsRegisteredWithKey(Store.StoreTypeCode, typeof(ICombineOrderSearchProvider<string>)))
+                {
+                    combinedOrderSearchProvider = scope.ResolveKeyed<ICombineOrderSearchProvider<string>>(Store.StoreTypeCode);
+                }
+                else
+                {
+                    combinedOrderSearchProvider = scope.Resolve<ICombineOrderNumberCompleteSearchProvider>();
+                }
+
+                identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order);
+            }
+            return identifiers;
         }
     }
 }

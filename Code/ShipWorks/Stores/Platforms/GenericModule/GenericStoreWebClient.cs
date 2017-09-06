@@ -21,12 +21,14 @@ using ShipWorks.Data.Import.Xml.Schema;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
     /// <summary>
-    /// Class for connecting to and working with our Generic php module
+    /// Class for connecting to and working with our Generic PHP module
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class GenericStoreWebClient : IGenericStoreWebClient
     {
         // Logger
@@ -37,8 +39,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
         // Current schema version
         private Version currentSchemaVersion = new Version("1.1.0");
-
-        private ICombineOrderSearchProvider<string> combinedOrderSearchProvider;
 
         /// <summary>
         /// Constructor for using the client to talk to a given store
@@ -146,75 +146,35 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        public virtual async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
-        {
-            IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
-
-            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
-            {
-                await Task.WhenAll(chunk.Select(x => PerformOrderStatusUpdate(x, code, comment))).ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        /// Get the combined order identifiers for the given order.
-        /// </summary>
-        private async Task<IEnumerable<string>> GetCombinedOrderIdentifiers(OrderEntity order)
-        {
-            IEnumerable<string> identifiers;
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                // See if there is a store specific implementation of ICombineOrderSearchProvider, and if so, use it
-                if (scope.IsRegisteredWithKey(Store.StoreTypeCode, typeof(ICombineOrderSearchProvider<string>)))
-                {
-                    combinedOrderSearchProvider = scope.ResolveKeyed<ICombineOrderSearchProvider<string>>(Store.StoreTypeCode);
-                }
-                else
-                {
-                    combinedOrderSearchProvider = scope.Resolve<ICombineOrderNumberCompleteSearchProvider>();
-                }
-
-                identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order);
-            }
-            return identifiers;
-        }
-
-        /// <summary>
-        /// Perform the order status update
-        /// </summary>
-        private async Task PerformOrderStatusUpdate(string identifier, object code, string comment)
+        public virtual async Task<IResult> UpdateOrderStatus(OrderEntity order, string orderIdentifier, object code, string comment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-            request.Variables.Add("order", identifier);
+            request.Variables.Add("order", orderIdentifier);
             request.Variables.Add("status", code.ToString());
             request.Variables.Add("comments", comment);
 
-            await ProcessRequestAsync(request, "updatestatus").ConfigureAwait(false);
+            try
+            {
+                await ProcessRequestAsync(request, "updatestatus").ConfigureAwait(false);
+            }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        public virtual async Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
-        {
-            IEnumerable<string> identifiers = await GetCombinedOrderIdentifiers(order).ConfigureAwait(false);
-
-            foreach (var chunk in identifiers.SplitIntoChunksOf(4))
-            {
-                await Task.WhenAll(chunk.Select(x => PerformUploadShipmentDetails(x, shipment))).ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        /// Posts the tracking number for an order back to Generic
-        /// </summary>
-        private async Task PerformUploadShipmentDetails(string identifier, ShipmentEntity shipment)
+        public virtual async Task<IResult> UploadShipmentDetails(OrderEntity order, string orderIdentifier, ShipmentEntity shipment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
-            request.Variables.Add("order", identifier);
+            request.Variables.Add("order", orderIdentifier);
             request.Variables.Add("tracking", shipment.TrackingNumber);
             request.Variables.Add("carrier", type.GetOnlineCarrierName(shipment));
             request.Variables.Add("shippingcost", shipment.ShipmentCost.ToString());
@@ -222,7 +182,16 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             AppendExtendedShipmentDetails(request, shipment);
 
-            await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+            try
+            {
+                await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+            }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>

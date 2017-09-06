@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.GenericModule;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Platforms.Miva
 {
@@ -33,19 +34,20 @@ namespace ShipWorks.Stores.Platforms.Miva
         static readonly ILog log = LogManager.GetLogger(typeof(MivaWebClient));
 
         MivaStoreEntity store = null;
-        private readonly ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider;
-        readonly ICombineOrderNumberSearchProvider orderNumberSearchProvider;
+        //private readonly ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider;
+        //readonly ICombineOrderNumberSearchProvider orderNumberSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaWebClient(MivaStoreEntity store,
-            ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider,
-            ICombineOrderNumberSearchProvider orderNumberSearchProvider)
+        public MivaWebClient(MivaStoreEntity store
+            //ICombineOrderNumberCompleteSearchProvider orderNumberCompleteSearchProvider,
+            //ICombineOrderNumberSearchProvider orderNumberSearchProvider
+            )
             : base(store)
         {
-            this.orderNumberSearchProvider = orderNumberSearchProvider;
-            this.orderNumberCompleteSearchProvider = orderNumberCompleteSearchProvider;
+            //this.orderNumberSearchProvider = orderNumberSearchProvider;
+            //this.orderNumberCompleteSearchProvider = orderNumberCompleteSearchProvider;
             this.store = store;
         }
 
@@ -181,122 +183,118 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Send the order status update
         /// </summary>
-        public override async Task UpdateOrderStatus(OrderEntity order, object code, string comment)
+        public override async Task<IResult> UpdateOrderStatus(OrderEntity order, string orderIdentifier, object code, string comment)
         {
-            if (order.IsManual)
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not updating order {0} online since its manual.", order.OrderID);
-                return;
+                return Result.FromSuccess();
             }
 
-            switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
+            try
             {
-                case MivaOnlineUpdateStrategy.None:
-                    throw new GenericStoreException("The store is not configured for updating online status.");
-                case MivaOnlineUpdateStrategy.Sebenza:
-                    await UpdateOnlineStatusThroughSebenza(order, code, comment, null).ConfigureAwait(false);
-                    break;
+                switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
+                {
+                    case MivaOnlineUpdateStrategy.None:
+                        throw new GenericStoreException("The store is not configured for updating online status.");
+                    case MivaOnlineUpdateStrategy.Sebenza:
+                        await UpdateOnlineStatusThroughSebenza(order, orderIdentifier, code, comment, null).ConfigureAwait(false);
+                        break;
+                }
             }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
         /// Send shipment details up to miva
         /// </summary>
-        public override async Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
+        public override async Task<IResult> UploadShipmentDetails(OrderEntity order, string orderIdentifier, ShipmentEntity shipment)
         {
-            if (order.IsManual)
+            if (order.IsManual & order.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not updating order {0} online since its manual.", order.OrderID);
-                return;
+                return Result.FromSuccess();
             }
 
             if (!shipment.Processed || shipment.Voided)
             {
                 log.InfoFormat("Not uploading shipment details for shipment {0}, either not processed or has been voided.", shipment.ShipmentID);
-                return;
+                return Result.FromSuccess();
             }
 
-            switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
+            try
             {
-                case MivaOnlineUpdateStrategy.None:
-                    throw new GenericStoreException("The store is not configured for updating online status.");
-                case MivaOnlineUpdateStrategy.Sebenza:
-                    await UpdateOnlineStatusThroughSebenza(order, order.OnlineStatusCode, null, shipment).ConfigureAwait(false);
-                    break;
-                case MivaOnlineUpdateStrategy.MivaNative:
-                    await ExecuteNativeOnlineUpdate(order, shipment);
-                    break;
+                switch ((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy)
+                {
+                    case MivaOnlineUpdateStrategy.None:
+                        throw new GenericStoreException("The store is not configured for updating online status.");
+                    case MivaOnlineUpdateStrategy.Sebenza:
+                        await UpdateOnlineStatusThroughSebenza(order, orderIdentifier, order.OnlineStatusCode, null, shipment).ConfigureAwait(false);
+                        break;
+                    case MivaOnlineUpdateStrategy.MivaNative:
+                        await ExecuteNativeOnlineUpdate(order, orderIdentifier, shipment);
+                        break;
+                }
+
             }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
         /// Update online status using Sebenza
         /// </summary>
-        private async Task UpdateOnlineStatusThroughSebenza(OrderEntity order, object code, string comment, ShipmentEntity shipment)
+        private async Task UpdateOnlineStatusThroughSebenza(OrderEntity order, string orderIdentifier, object code, string comment, ShipmentEntity shipment)
         {
-            var identifiers = await orderNumberSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
-            var results = new List<GenericStoreException>();
-
-            foreach (long identifier in identifiers)
-            {
-                try
-                {
-                    var uploadXml = CreateSebenzaOnlineUpdateXml(identifier, order.OnlineStatusCode, code, comment, shipment);
-                    await ExecuteSebenzaOnlineUpdate(uploadXml).ConfigureAwait(false);
-                }
-                catch (GenericStoreException ex)
-                {
-                    results.Add(ex);
-                }
-            }
-
-            if (results.Any())
-            {
-                throw results.First();
-            }
+            var uploadXml = CreateSebenzaOnlineUpdateXml(orderIdentifier, order.OnlineStatusCode, code, comment, shipment);
+            await ExecuteSebenzaOnlineUpdate(uploadXml).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Execute a Miva native online update
         /// </summary>
-        private async Task ExecuteNativeOnlineUpdate(OrderEntity order, ShipmentEntity shipment)
+        private async Task ExecuteNativeOnlineUpdate(OrderEntity order, string orderIdentifier, ShipmentEntity shipment)
         {
-            var orderIdentifiers = await orderNumberCompleteSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+            IHttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-            foreach (string identifier in orderIdentifiers)
+            request.Variables.Add("order", orderIdentifier);
+            request.Variables.Add("tracking", shipment.TrackingNumber);
+            request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
+            request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
+
+            GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+
+            // extract the new status
+            string newStatus = XPathUtility.Evaluate(response.XPath, "//OrderStatus", "failed_after_update");
+
+            // set status to what was returned
+            order.OnlineStatusCode = newStatus;
+
+            GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
+            order.OnlineStatus = genericStoreType.CreateStatusCodeProvider().GetCodeName(newStatus);
+
+            // save the order
+            using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                IHttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-
-                request.Variables.Add("order", identifier);
-                request.Variables.Add("tracking", shipment.TrackingNumber);
-                request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
-                request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
-
-                GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
-
-                // extract the new status
-                string newStatus = XPathUtility.Evaluate(response.XPath, "//OrderStatus", "failed_after_update");
-
-                // set status to what was returned
-                order.OnlineStatusCode = newStatus;
-
-                GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
-                order.OnlineStatus = genericStoreType.CreateStatusCodeProvider().GetCodeName(newStatus);
-
-                // save the order
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    // update the base order table
-                    await adapter.SaveEntityAsync(order, true).ConfigureAwait(false);
-                    adapter.Commit();
-                }
+                // update the base order table
+                await adapter.SaveEntityAsync(order, true).ConfigureAwait(false);
+                adapter.Commit();
             }
         }
 
         /// <summary>
         /// Create the xml to use to push to the sebenza module
         /// </summary>
-        private string CreateSebenzaOnlineUpdateXml(long orderNumber, object onlineStatusCode, object statusCode, string statusComment, IShipmentEntity shipment)
+        private string CreateSebenzaOnlineUpdateXml(string orderNumber, object onlineStatusCode, object statusCode, string statusComment, IShipmentEntity shipment)
         {
             using (StringWriter stringWriter = new StringWriter())
             {
@@ -307,7 +305,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                     {
                         using (xmlWriter.WriteStartElementDisposable("Order"))
                         {
-                            xmlWriter.WriteElementString("Id", orderNumber.ToString());
+                            xmlWriter.WriteElementString("Id", orderNumber);
                             xmlWriter.WriteElementString("Note", statusComment ?? "");
 
                             // Whether to send an email on this update to the buyer

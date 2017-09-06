@@ -196,6 +196,7 @@
     <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Miva\MivaOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -52,11 +53,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        Task UpdateOrderStatus(OrderEntity order, object code, string comment);
+        Task<IResult> UpdateOrderStatus(OrderEntity order, string orderIdentifier, object code, string comment);
 
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        Task UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment);
+        Task<IResult> UploadShipmentDetails(OrderEntity order, string orderIdentifier, ShipmentEntity shipment);
     }
 }

@@ -181,6 +181,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
                 throw new NotImplementedException();
             }
 
+            public IGenericStoreWebClient CreateWebClient()
+            {
+                throw new NotImplementedException();
+            }
+
             public void InitializeFromOnlineModule()
             {
                 // Do Nothing

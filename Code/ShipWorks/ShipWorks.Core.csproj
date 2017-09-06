@@ -1795,7 +1795,10 @@
     <Compile Include="Stores\Platforms\GenericFile\Formats\Csv\IGenericFileCsvDownloader.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Formats\Excel\IGenericFileExcelDownloader.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\GenericStoreWebClientFactory.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\IGenericModuleWebClientFactory.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericStoreWebClient.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\OnlineUpdating\GenericModuleOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />

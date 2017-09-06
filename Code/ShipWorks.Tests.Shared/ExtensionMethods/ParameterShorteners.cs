@@ -32,5 +32,10 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         /// Any date
         /// </summary>
         public static DateTime AnyDate => It.IsAny<DateTime>();
+
+        /// <summary>
+        /// Any object
+        /// </summary>
+        public static object AnyObject => It.IsAny<object>();
     }
 }
