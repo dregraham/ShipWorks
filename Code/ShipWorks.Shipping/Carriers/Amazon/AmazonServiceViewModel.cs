@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Reflection;
-using System.Threading;
-using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// View model for the AmazonServiceControl
     /// </summary>
-    public class AmazonServiceViewModel : INotifyPropertyChanged, IDisposable
+    public class AmazonServiceViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -27,65 +24,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private IMultiValue<AmazonDeliveryExperienceType?> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonRateTag> shippingServiceBinder;
         private List<AmazonRateTag> servicesAvailable;
-        private readonly IDisposable amazonRatesRetrievedIDisposable;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonServiceViewModel(IObservable<IShipWorksMessage> messenger)
+        public AmazonServiceViewModel()
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
-            amazonRatesRetrievedIDisposable = messenger.OfType<AmazonRatesRetrievedMessage>()
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(OnAmazonRatesRetrieved);
-        }
-
-        /// <summary>
-        /// Called when [amazon rates retrieved].
-        /// </summary>
-        private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
-        {
-            string selectedServiceId = ShippingService?.ShippingServiceId;
-
-            ServicesAvailable = amazonRatesRetrievedMessage.RateGroup.Rates
-                .Select(x => x.Tag)
-                .Cast<AmazonRateTag>()
-                .DefaultIfEmpty(CreateNoRateTag())
-                .ToList();
-
-            ReselectRate(selectedServiceId);
-        }
-
-        /// <summary>
-        /// Create a no-rate tag
-        /// </summary>
-        private AmazonRateTag CreateNoRateTag()
-        {
-            return new AmazonRateTag
-            {
-                Description = "No rates are available for the shipment.",
-                ShippingServiceId = "-1",
-                ShippingServiceOfferId = null,
-                CarrierName = null
-            };
-        }
-
-        /// <summary>
-        /// Reselect the given rate, if possible
-        /// </summary>
-        private void ReselectRate(string selectedServiceId)
-        {
-            if (shippingServiceBinder.IsMultiValued)
-            {
-                return;
-            }
-
-            AmazonRateTag selectedRate = ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == selectedServiceId);
-            if (selectedRate != null)
-            {
-                ShippingService = selectedRate;
-            }
         }
 
         /// <summary>
@@ -120,84 +65,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
             shippingServiceBinder.PropertyChanged += OnPropertyChanged;
         }
-
+        
         /// <summary>
-        /// Setups the servicebinder, available services, and
+        /// Setups the services.
         /// </summary>
         private void SetupServices(List<ShipmentEntity> shipments)
-        {
-            if (shipments.Count != 1)
-            {
-                SetupServiceWhenNotOneShipment(shipments);
-                return;
-            }
-
-            ShipmentEntity shipment = shipments.Single();
-
-            if (shipments.SingleOrDefault()?.Processed ?? false)
-            {
-                SetupServicesForProcessedShipment(shipment);
-            }
-            else
-            {
-                SetupServiceForUnprocessedShipment(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Setups the service for unprocessed shipment.
-        /// </summary>
-        private void SetupServiceForUnprocessedShipment(ShipmentEntity shipment)
-        {
-            ServicesAvailable = new List<AmazonRateTag>
-            {
-                new AmazonRateTag
-                {
-                    Description = "Loading services...",
-                    ShippingServiceId = null,
-                    ShippingServiceOfferId = null,
-                    CarrierName = null
-                }
-            };
-
-            shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(new List<ShipmentEntity> { shipment },
-                nameof(ShippingService),
-                entity => ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == entity.Amazon.ShippingServiceID),
-                (entity, value) =>
-                {
-                    if (value?.ShippingServiceId != entity.Amazon.ShippingServiceID)
-                    {
-                        entity.Amazon.ShippingServiceName = value?.Description ?? string.Empty;
-                        entity.Amazon.ShippingServiceID = value?.ShippingServiceId ?? string.Empty;
-                        entity.Amazon.ShippingServiceOfferID = value?.ShippingServiceOfferId ?? string.Empty;
-                        entity.Amazon.CarrierName = value?.CarrierName ?? string.Empty;
-                    }
-                },
-                entity => entity.Processed);
-
-            ShippingService = CreateTagBasedOnShipment(shipment);
-        }
-
-        /// <summary>
-        /// Setups the services for processed shipment.
-        /// </summary>
-        private void SetupServicesForProcessedShipment(ShipmentEntity shipment)
-        {
-            var tagBasedOnShipment = CreateTagBasedOnShipment(shipment);
-
-            ServicesAvailable = new List<AmazonRateTag> { tagBasedOnShipment };
-
-            shippingServiceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonRateTag>(new List<ShipmentEntity> { shipment },
-                nameof(ShippingService),
-                entity => ServicesAvailable.FirstOrDefault(),
-                (entity, value) => { },
-                entity => true);
-        }
-
-        /// <summary>
-        /// Setups the service multiple.
-        /// </summary>
-        private void SetupServiceWhenNotOneShipment(List<ShipmentEntity> shipments)
         {
             ServicesAvailable = CreateDefaultAvailableServiceList();
 
@@ -359,26 +231,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void SelectRate(AmazonRateTag rateTag)
         {
             ShippingService = ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == rateTag.ShippingServiceId);
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                amazonRatesRetrievedIDisposable?.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
