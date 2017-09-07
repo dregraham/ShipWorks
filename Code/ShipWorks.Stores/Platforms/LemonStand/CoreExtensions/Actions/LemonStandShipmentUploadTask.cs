@@ -8,6 +8,8 @@ using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 {
@@ -85,13 +87,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         {
             try
             {
-                foreach (long shipmentKey in shipmentKeys)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
+                    LemonStandOnlineUpdater updater = scope.Resolve<LemonStandOnlineUpdater>(TypedParameter.From(store));
 
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+                    foreach (long shipmentKey in shipmentKeys)
+                    {
+                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    await updater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                        await updater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                    }
                 }
             }
             catch (LemonStandException ex)

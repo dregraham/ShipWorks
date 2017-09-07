@@ -70,10 +70,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 
             try
             {
-                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
-                foreach (long orderID in inputKeys)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                    LemonStandOnlineUpdater updater = scope.Resolve<LemonStandOnlineUpdater>(TypedParameter.From(store));
+
+                    foreach (long orderID in inputKeys)
+                    {
+                        await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                    }
                 }
             }
             catch (LemonStandException ex)

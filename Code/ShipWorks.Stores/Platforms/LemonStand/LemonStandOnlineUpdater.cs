@@ -12,34 +12,30 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using System;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
     ///     Uploads shipment information to LemonStand
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class LemonStandOnlineUpdater
     {
-        // the store this instance is for
         private readonly ILemonStandWebClient client;
-        // Logger
         private readonly ILog log;
         private readonly LemonStandStoreEntity store;
         private LemonStandStatusCodeProvider statusCodeProvider;
-
+        
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public LemonStandOnlineUpdater(LemonStandStoreEntity store)
-            : this(LogManager.GetLogger(typeof(LemonStandOnlineUpdater)), new LemonStandWebClient(store))
+        public LemonStandOnlineUpdater(LemonStandStoreEntity store, Func<LemonStandStoreEntity, ILemonStandWebClient> webClientFactory)
         {
             this.store = store;
-        }
-
-        public LemonStandOnlineUpdater(ILog log, ILemonStandWebClient client)
-        {
-            this.log = log;
-            this.client = client;
+            this.client = webClientFactory(store);
+            log = LogManager.GetLogger(typeof(LemonStandOnlineUpdater));
         }
 
         /// <summary>
@@ -87,6 +83,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     return;
                 }
 
+                List<LemonStandException> exceptions = new List<LemonStandException>();
+
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -94,8 +92,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                     foreach (string lemonStandOrderID in identifiers)
                     {
-                        client.UpdateOrderStatus(lemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                        try
+                        {
+                            client.UpdateOrderStatus(lemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                        }
+                        catch (LemonStandException ex)
+                        {
+                            exceptions.Add(ex);
+                        }
                     }
+                }
+
+                if (exceptions.Any())
+                {
+                    throw exceptions.First();
                 }
 
                 // Update the local database with the new status
@@ -141,11 +151,25 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
                 IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
+                List<LemonStandException> exceptions = new List<LemonStandException>();
+
                 foreach (string orderNumber in identifiers)
                 {
-                    string shipmentID = GetShipmentID(orderNumber);
+                    try
+                    {
+                        string shipmentID = GetShipmentID(orderNumber);
 
-                    client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
+                        client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
+                    }
+                    catch (LemonStandException ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+
+                if (exceptions.Any())
+                {
+                    throw exceptions.First();
                 }
             }
         }

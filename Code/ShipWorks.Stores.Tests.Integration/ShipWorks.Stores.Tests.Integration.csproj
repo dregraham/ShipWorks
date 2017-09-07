@@ -197,6 +197,7 @@
     <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />

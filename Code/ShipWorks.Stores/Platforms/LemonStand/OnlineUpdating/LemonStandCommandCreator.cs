@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using System;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
 {
@@ -20,13 +21,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
     {
         private readonly ILog log = LogManager.GetLogger(typeof(LemonStandCommandCreator));
         private readonly IMessageHelper messageHelper;
+        private readonly Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LemonStandCommandCreator(IMessageHelper messageHelper)
+        public LemonStandCommandCreator(IMessageHelper messageHelper, Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory)
         {
             this.messageHelper = messageHelper;
+            this.onlineUpdaterFactory = onlineUpdaterFactory;
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, LemonStandStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, LemonStandStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -83,7 +86,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
+                LemonStandOnlineUpdater updater = onlineUpdaterFactory(store);
+
                 await updater.UpdateShipmentDetails(new []{ orderID }).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
@@ -97,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context, LemonStandStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, LemonStandStoreEntity store)
         {
             int statusCode = (int) context.MenuCommand.Tag;
 
@@ -117,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         {
             try
             {
-                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
+                LemonStandOnlineUpdater updater = onlineUpdaterFactory(store);
                 await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
