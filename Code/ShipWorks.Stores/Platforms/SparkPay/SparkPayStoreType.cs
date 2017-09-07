@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.SparkPay.Factories;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
+    /// <summary>
+    /// SparkPay store type
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SparkPay)]
     public class SparkPayStoreType : StoreType
     {
         private readonly StoreEntity store;

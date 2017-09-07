@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -9,25 +11,24 @@ using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
 using ShipWorks.Stores.Platforms.SparkPay.Enums;
-using HttpJsonVariableRequestSubmitter = ShipWorks.Stores.Platforms.SparkPay.Factories.HttpJsonVariableRequestSubmitter;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
-using System.Threading.Tasks;
+using HttpJsonVariableRequestSubmitter = ShipWorks.Stores.Platforms.SparkPay.Factories.HttpJsonVariableRequestSubmitter;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
     /// <summary>
     /// The SparkPay web client
     /// </summary>
-    public class SparkPayWebClient : IDisposable
+    [Component]
+    public class SparkPayWebClient : ISparkPayWebClient
     {
         private readonly int OverApiLimitStatusCode = 429;
-        private readonly SparkPayWebClientRequestThrottle throttler;
-        private readonly ISparkPayCombineOrderSearchProvider combineOrderSearchProvider;
-        private readonly SparkPayShipmentFactory shipmentFactory;
+        private readonly ISparkPayWebClientRequestThrottle throttler;
+        private readonly ISparkPayShipmentFactory shipmentFactory;
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClient));
@@ -35,27 +36,17 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Constructor
         /// </summary>
-        public SparkPayWebClient(ISparkPayCombineOrderSearchProvider combineOrderSearchProvider, SparkPayShipmentFactory shipmentFactory) : 
-            this(new SparkPayWebClientRequestThrottle(), combineOrderSearchProvider, shipmentFactory)
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public SparkPayWebClient(SparkPayWebClientRequestThrottle throttler,
-            ISparkPayCombineOrderSearchProvider combineOrderSearchProvider, 
-            SparkPayShipmentFactory shipmentFactory)
+        public SparkPayWebClient(ISparkPayWebClientRequestThrottle throttler,
+            ISparkPayShipmentFactory shipmentFactory)
         {
             this.throttler = throttler;
-            this.combineOrderSearchProvider = combineOrderSearchProvider;
             this.shipmentFactory = shipmentFactory;
         }
 
         /// <summary>
         /// Gets orders that have an updated_at that is greater than the given start
         /// </summary>
-        public OrdersResponse GetOrders(SparkPayStoreEntity store, DateTime start, IProgressReporter progressReporter)
+        public OrdersResponse GetOrders(ISparkPayStoreEntity store, DateTime start, IProgressReporter progressReporter)
         {
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.GetOrders;
 
@@ -71,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Gets a list of order statuses for the given store
         /// </summary>
-        public OrderStatusResponse GetStatuses(SparkPayStoreEntity store)
+        public OrderStatusResponse GetStatuses(ISparkPayStoreEntity store)
         {
             log.Debug("start getting statuses");
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.GetStatuses;
@@ -86,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Gets the address of the given Id
         /// </summary>
-        public AddressesResponse GetAddress(SparkPayStoreEntity store, int addressId, IProgressReporter progressReporter)
+        public AddressesResponse GetAddress(ISparkPayStoreEntity store, int addressId, IProgressReporter progressReporter)
         {
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.GetAddresses;
 
@@ -101,45 +92,33 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Adds the given shipment to the order
         /// </summary>
-        public async Task AddShipment(SparkPayStoreEntity store, ShipmentEntity shipmentEntity)
+        public Task AddShipment(ISparkPayStoreEntity store, ShipmentEntity shipmentEntity, long orderNumber)
         {
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.AddShipment;
 
-            IEnumerable<long> orderNumbers = await combineOrderSearchProvider.GetOrderIdentifiers(shipmentEntity.Order).ConfigureAwait(false);
+            HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
 
-            foreach (long orderNumber in orderNumbers)
-            {
-                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+            Shipment shipment = shipmentFactory.Create(shipmentEntity, orderNumber);
+            string shipmentJson = JsonConvert.SerializeObject(shipment, GetSerializerSettings());
 
-                Shipment shipment = shipmentFactory.Create(shipmentEntity, orderNumber);
-                string shipmentJson = JsonConvert.SerializeObject(shipment, GetSerializerSettings());
+            ConfigureRequest(submitter, store, call, new[] { new HttpVariable("", shipmentJson) }, HttpVerb.Post);
 
-                ConfigureRequest(submitter, store, call, new[] { new HttpVariable("", shipmentJson) }, HttpVerb.Post);
-
-                ProcessRequest<OrdersResponse>(submitter, call);
-            }
+            return ProcessRequestAsync<OrdersResponse>(submitter, call);
         }
 
         /// <summary>
         /// Updates the orders status
         /// </summary>
-        public async Task<Order> UpdateOrderStatus(SparkPayStoreEntity store, OrderEntity orderEntity, int statusId)
+        public Order UpdateOrderStatus(ISparkPayStoreEntity store, long orderNumber, int statusId)
         {
             SparkPayWebClientApiCall call = SparkPayWebClientApiCall.UpdateOrderStatus;
-            IEnumerable<long> orderNumbers = await combineOrderSearchProvider.GetOrderIdentifiers(orderEntity).ConfigureAwait(false);
-            Order order = null;
 
-            foreach (long orderNumber in orderNumbers)
-            {
-                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
-                string path = string.Format(EnumHelper.GetApiValue(call), orderNumber);
+            HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+            string path = string.Format(EnumHelper.GetApiValue(call), orderNumber);
 
-                ConfigureRequest(submitter, store, path, new[] { new HttpVariable("", $"{{\"order_status_id\":{statusId}}}") }, HttpVerb.Put);
+            ConfigureRequest(submitter, store, path, new[] { new HttpVariable("", $"{{\"order_status_id\":{statusId}}}") }, HttpVerb.Put);
 
-                order = ProcessRequest<Order>(submitter, call);
-            }
-
-            return order;
+            return ProcessRequest<Order>(submitter, call);
         }
 
         /// <summary>
@@ -161,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Configures the request based on the call being made
         /// </summary>
-        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, SparkPayStoreEntity store, SparkPayWebClientApiCall call, IEnumerable<HttpVariable> variables, HttpVerb verb)
+        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, ISparkPayStoreEntity store, SparkPayWebClientApiCall call, IEnumerable<HttpVariable> variables, HttpVerb verb)
         {
             ConfigureRequest(submitter, store, EnumHelper.GetApiValue(call), variables, verb);
         }
@@ -169,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Setup a get request
         /// </summary>
-        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, SparkPayStoreEntity store, string operationName, IEnumerable<HttpVariable> variables, HttpVerb verb)
+        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, ISparkPayStoreEntity store, string operationName, IEnumerable<HttpVariable> variables, HttpVerb verb)
         {
             submitter.Verb = verb;
 
@@ -219,6 +198,32 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 {
                     log.Debug("reading response");
                     string responseData = reader.ReadResult();
+                    log.Debug("logging response");
+                    logEntry.LogResponse(responseData, "txt");
+                    log.Debug($"deserializing response {typeof(T)}");
+                    return DeserializeResponse<T>(responseData);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(SparkPayException));
+            }
+        }
+
+        /// <summary>
+        /// Executes a request
+        /// </summary>
+        private async Task<T> ProcessRequestAsync<T>(HttpRequestSubmitter submitter, SparkPayWebClientApiCall call)
+        {
+            try
+            {
+                log.Debug("Getting log entry");
+                ApiLogEntry logEntry = GetLogEntry(submitter, call);
+                log.Debug("Getting response");
+                using (IHttpResponseReader reader = await submitter.GetResponseAsync().ConfigureAwait(false))
+                {
+                    log.Debug("reading response");
+                    string responseData = await reader.ReadResultAsync().ConfigureAwait(false);
                     log.Debug("logging response");
                     logEntry.LogResponse(responseData, "txt");
                     log.Debug($"deserializing response {typeof(T)}");
@@ -302,14 +307,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             {
                 throw new SparkPayException($"Failed to deserializes {typeof(T)}", ex);
             }
-        }
-
-        /// <summary>
-        /// Disposes resources used by the web client
-        /// </summary>
-        public void Dispose()
-        {
-            throttler.Dispose();
         }
     }
 }

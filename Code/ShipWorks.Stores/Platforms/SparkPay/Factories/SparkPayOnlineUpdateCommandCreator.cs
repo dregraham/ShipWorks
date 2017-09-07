@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using System.Threading.Tasks;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.ComponentRegistration;
-using log4net;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
@@ -23,19 +23,18 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
-        private readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdater> onlineUpdaterFactory;
+        private readonly ISparkPayOnlineUpdater onlineUpdater;
         private StatusCodeProvider<int> statusCodeProvider;
-        private SparkPayOnlineUpdater onlineUpdater;
 
         public SparkPayOnlineUpdateCommandCreator(
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
-            Func<SparkPayStoreEntity, SparkPayOnlineUpdater> onlineUpdaterFactory,
+            ISparkPayOnlineUpdater onlineUpdater,
             IMessageHelper messageHelper,
             Func<Type, ILog> createLogger
             )
         {
             this.statusCodeProviderFactory = statusCodeProviderFactory;
-            this.onlineUpdaterFactory = onlineUpdaterFactory;
+            this.onlineUpdater = onlineUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
@@ -57,10 +56,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 
             List<IMenuCommand> commands = statusCodeProvider.CodeNames
                 .Select(x =>
-                    new AsyncMenuCommand(x, context => OnSetOnlineStatus(context, typedStore))
-                    {
-                        Tag = statusCodeProvider.GetCodeValue(x)
-                    })
+                    new AsyncMenuCommand(x, context => OnSetOnlineStatus(context, typedStore, statusCodeProvider.GetCodeValue(x))))
                 .OfType<IMenuCommand>()
                 .ToList();
 
@@ -74,11 +70,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// <summary>
         /// MenuCommand handler for uploading shipment details
         /// </summary>
-        private async Task OnUploadDetails(MenuCommandExecutionContext context, SparkPayStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, ISparkPayStoreEntity store)
         {
             var results = await context.SelectedKeys
-                .SelectWithProgress(messageHelper, "Upload Shipment Details", 
-                    "ShipWorks is uploading shipment information.", 
+                .SelectWithProgress(messageHelper, "Upload Shipment Details",
+                    "ShipWorks is uploading shipment information.",
                     "Updating order {0} of {1}...",
                     orderID => UploadShipmentDetailsCallback(orderID, store))
                 .ConfigureAwait(true);
@@ -90,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, SparkPayStoreEntity store)
+        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, ISparkPayStoreEntity store)
         {
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
@@ -101,8 +97,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 
             try
             {
-                onlineUpdater = onlineUpdaterFactory(store);
-                await onlineUpdater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (Exception ex)
@@ -115,10 +110,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnSetOnlineStatus(MenuCommandExecutionContext context, SparkPayStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, SparkPayStoreEntity store, int statusCode)
         {
-            int statusCode = (int) context.MenuCommand.Tag;
-
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Set Status", "ShipWorks is setting the online status.", "Updating order {0} of {1}...",
                     orderID => SetOnlineStatusCallback(orderID, statusCode, store))
@@ -135,8 +128,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         {
             try
             {
-                onlineUpdater = onlineUpdaterFactory(store);
-                await onlineUpdater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
+                await onlineUpdater.UpdateOrderStatus(store, orderID, statusCode).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (SparkPayException ex)

@@ -1,26 +1,28 @@
-﻿using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.UI;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.SparkPay;
-using ShipWorks.Stores.Platforms.SparkPay.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.SparkPay;
+using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
 namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
 {
     /// <summary>
     /// View model for the Spark Pay account control
     /// </summary>
+    [Component]
     class SparkPayAccountViewModel : INotifyPropertyChanged, ISparkPayAccountViewModel
     {
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly SparkPayWebClient webClient;
+        private readonly ISparkPayWebClient webClient;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string token;
@@ -29,7 +31,9 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public SparkPayAccountViewModel(Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory, IMessageHelper messageHelper, SparkPayWebClient webClient)
+        public SparkPayAccountViewModel(Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory,
+            IMessageHelper messageHelper,
+            ISparkPayWebClient webClient)
         {
             this.statusCodeProviderFactory = statusCodeProviderFactory;
             this.messageHelper = messageHelper;
@@ -146,7 +150,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
             catch (SparkPayException ex)
             {
                 WebException innerException = ex.InnerException as WebException;
-                if (innerException != null && innerException.Status == WebExceptionStatus.ProtocolError && ((HttpWebResponse)innerException.Response)?.StatusCode == HttpStatusCode.NotFound)
+                if (innerException != null && innerException.Status == WebExceptionStatus.ProtocolError && ((HttpWebResponse) innerException.Response)?.StatusCode == HttpStatusCode.NotFound)
                 {
                     // Path was wrong so we try again using the string that was entered
                     try

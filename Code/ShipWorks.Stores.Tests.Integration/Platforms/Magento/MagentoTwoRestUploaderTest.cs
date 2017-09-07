@@ -76,7 +76,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             progress = context.Mock.Mock<IProgressReporter>().Object;
             StatusPresetManager.CheckForChanges();
-            LogSession.Initialize();
         }
 
         [Fact]

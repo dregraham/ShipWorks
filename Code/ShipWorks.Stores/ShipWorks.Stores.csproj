@@ -569,8 +569,12 @@
     <Compile Include="Platforms\SparkPay\DTO\StoresResponse.cs" />
     <Compile Include="Platforms\SparkPay\Enums\SparkPayWebClientApiCall.cs" />
     <Compile Include="Platforms\SparkPay\Factories\HttpJsonVariableRequestSubmitter.cs" />
+    <Compile Include="Platforms\SparkPay\Factories\ISparkPayShipmentFactory.cs" />
     <Compile Include="Platforms\SparkPay\Factories\SparkPayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\SparkPay\Factories\SparkPayShipmentFactory.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayOnlineUpdater.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayWebClient.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayWebClientRequestThrottle.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\SparkPay\ISparkPayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdater.cs" />

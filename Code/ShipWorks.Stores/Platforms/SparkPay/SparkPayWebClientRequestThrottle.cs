@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Communication.Throttling;
 using log4net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Platforms.Shopify.Enums;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.SparkPay.Enums;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
-    public class SparkPayWebClientRequestThrottle : RequestThrottle<SparkPayWebClientThrottleWaitCancelException>
+    /// <summary>
+    /// Handles the throttling and submitting of requests to a store api per their defined limits.
+    /// </summary>
+    [Component]
+    public class SparkPayWebClientRequestThrottle : RequestThrottle<SparkPayWebClientThrottleWaitCancelException>, ISparkPayWebClientRequestThrottle
     {
         private readonly static List<RequestThrottleQuotaDefinition<SparkPayWebClientApiCall>> quotas = new List<RequestThrottleQuotaDefinition<SparkPayWebClientApiCall>>();
         static readonly ILog log = LogManager.GetLogger(typeof(SparkPayWebClientRequestThrottle));
@@ -42,8 +46,8 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
-        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
-        /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
+        /// desired amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
         /// <typeparam name="TWebClientRequestType">Type of the request</typeparam>
@@ -54,12 +58,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         public override TWebClientReturnType ExecuteRequest<TWebClientRequestType, TWebClientReturnType>(RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, TWebClientReturnType> webClientMethod)
         {
             // Find the quota for the api call, and update the the request throttle params
-            RequestThrottleQuotaDefinition<SparkPayWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((SparkPayWebClientApiCall)requestThrottleParams.ApiCall));
+            RequestThrottleQuotaDefinition<SparkPayWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((SparkPayWebClientApiCall) requestThrottleParams.ApiCall));
             requestThrottleParams.RetryInterval = definition.RetryInterval;
 
             // Get a logger for this request, serialize the JSON request, and log it.
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Shopify, EnumHelper.GetDescription(requestThrottleParams.ApiCall));
-            string requestText = JsonConvert.SerializeObject((TWebClientRequestType)requestThrottleParams.Request);
+            string requestText = JsonConvert.SerializeObject((TWebClientRequestType) requestThrottleParams.Request);
             logger.LogRequest(requestText, "txt");
 
             // Ask the base throttler to start making the call

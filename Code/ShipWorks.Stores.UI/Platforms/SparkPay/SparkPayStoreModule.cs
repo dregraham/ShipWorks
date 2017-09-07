@@ -3,9 +3,7 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.SparkPay;
 using ShipWorks.Stores.Platforms.SparkPay.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.SparkPay.Factories;
 using ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages;
-using ShipWorks.UI.Services;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.SparkPay
@@ -20,42 +18,19 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<SparkPayStoreType>()
-                .Keyed<StoreType>(StoreTypeCode.SparkPay)
-                .ExternallyOwned();
-
             builder.RegisterType<SparkPayAccountHost>()
                 .Keyed<WizardPage>(StoreTypeCode.SparkPay)
                 .ExternallyOwned();
 
-            builder.RegisterType<SparkPayAccountViewModel>()
-                .AsImplementedInterfaces();
-
             builder.RegisterType<SparkPayAccountControl>()
                 .AsSelf();
-
-            builder.RegisterType<SparkPayWebClient>()
-                .AsSelf()
-                .ExternallyOwned();
 
             builder.RegisterType<SparkPayStatusCodeProvider>()
                 .AsSelf()
                 .ExternallyOwned();
 
-            builder.RegisterType<SparkPayShipmentFactory>()
-                .AsSelf()
-                .ExternallyOwned();
-
-            builder.RegisterType<SparkPayWebClientRequestThrottle>()
-                .AsSelf()
-                .ExternallyOwned();
-
             builder.RegisterType<SparkPayOnlineUpdateActionControl>()
                 .Keyed<OnlineUpdateActionControlBase>(StoreTypeCode.SparkPay)
-                .ExternallyOwned();
-
-            builder.RegisterType<SparkPayOnlineUpdater>()
-                .AsSelf()
                 .ExternallyOwned();
 
             builder.RegisterType<SparkPayOrderUpdateTask>()
@@ -65,9 +40,6 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay
             builder.RegisterType<SparkPayShipmentUploadTask>()
                 .AsSelf()
                 .ExternallyOwned();
-
-            builder.RegisterType<MessageHelperWrapper>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<SparkPayOrderUpdateTaskEditor>()
                 .Keyed<ActionTaskEditor>(StoreTypeCode.SparkPay)

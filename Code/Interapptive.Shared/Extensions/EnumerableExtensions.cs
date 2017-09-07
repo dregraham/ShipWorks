@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Extensions
         /// <summary>
         /// Throw a consolidated exception if the collection isn't empty
         /// </summary>
-        public static IEnumerable<T> ThrowFailures<T>(this IEnumerable<T> source, Func<string, Exception, Exception> createException) where T : IResult
+        public static IList<T> ThrowFailures<T>(this IEnumerable<T> source, Func<string, Exception, Exception> createException) where T : IResult
         {
             var sourceAsList = source as List<T> ?? source.ToList();
 
