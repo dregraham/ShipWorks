@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Called when the user clicks the upload shipment details menu command
         ///  </summary>
-        private async Task OnUploadShipmentDetails(IJetStoreEntity store, MenuCommandExecutionContext context)
+        public async Task OnUploadShipmentDetails(IJetStoreEntity store, IMenuCommandExecutionContext context)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,

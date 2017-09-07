@@ -8,6 +8,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -60,9 +62,22 @@ namespace ShipWorks.Stores.Platforms.Jet
                 return;
             }
 
+            List<JetException> exceptions = new List<JetException>();
             foreach (var merchantOrderId in identifiers)
             {
-                webClient.UploadShipmentDetails(merchantOrderId, shipment, store);
+                try
+                {
+                    webClient.UploadShipmentDetails(merchantOrderId, shipment, store);
+                }
+                catch (JetException ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }
+
+            if (exceptions.Any())
+            {
+                throw exceptions.First();
             }
 
             try
