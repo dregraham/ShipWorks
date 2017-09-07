@@ -234,6 +234,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazon.DimsHeight = 0;
             amazon.DimsWeight = 0;
             amazon.DimsAddWeight = true;
+
+            amazon.ShippingServiceID = string.Empty;
         }
 
         /// <summary>
@@ -266,6 +268,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
+
+                ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             }
         }
 
