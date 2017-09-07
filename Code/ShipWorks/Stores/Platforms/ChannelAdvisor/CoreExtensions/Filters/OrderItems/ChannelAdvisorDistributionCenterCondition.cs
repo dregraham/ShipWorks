@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
     /// <summary>
     /// Condition for the ChannelAdvisor distribution center
     /// </summary>
-    [ConditionElement("ChannelAdvisor Distribution Center", "ChannelAdvisorOrderItem.DistributionCenter")]
+    [ConditionElement("ChannelAdvisor Distribution Center Code", "ChannelAdvisorOrderItem.DistributionCenter")]
     [ConditionStoreType(StoreTypeCode.ChannelAdvisor)]
     public class ChannelAdvisorDistributionCenterCondition : StringCondition
     {

@@ -334,8 +334,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Customer
             order.OnlineCustomerID = orderFromEtsy.GetValue("buyer_user_id", 0);
 
-            // Requested shipping - this doesn't come through the API.
-            order.RequestedShipping = "";
+            order.RequestedShipping = GetRequestedShipping(orderFromEtsy);
 
             // Load address info
             LoadOrderAddress(order, orderFromEtsy);
@@ -393,6 +392,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "EtsyDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the requested shipping from the etsy order json
+        /// </summary>
+        private static string GetRequestedShipping(JToken orderFromEtsy)
+        {
+            try
+            {
+                return orderFromEtsy["shipping_details"].GetValue("shipping_method", string.Empty);
+            }
+            catch (JsonException)
+            {
+                // the shipping details dont exist
+                return string.Empty;
+            }
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
             tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 74;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 19;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 20;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 73;

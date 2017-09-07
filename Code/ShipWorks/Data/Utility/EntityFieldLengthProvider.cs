@@ -242,6 +242,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.OrderItemCode: return OrderItemFields.Code;
                 case EntityFieldLengthSource.OrderItemSku: return OrderItemFields.SKU;
                 case EntityFieldLengthSource.OrderItemLocation: return OrderItemFields.Location;
+                case EntityFieldLengthSource.OrderItemHarmonizedCode: return OrderItemFields.HarmonizedCode;
                 case EntityFieldLengthSource.OrderItemIsbn: return OrderItemFields.ISBN;
                 case EntityFieldLengthSource.OrderItemUpc: return OrderItemFields.UPC;
                 case EntityFieldLengthSource.OrderAttributeName: return OrderItemAttributeFields.Name;
