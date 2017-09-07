@@ -1858,6 +1858,7 @@ CREATE TABLE [dbo].[AmazonProfile]
 [DimsAddWeight] [bit] NULL,
 [DeliveryExperience] [int] NULL,
 [Weight] [float] NULL,
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
