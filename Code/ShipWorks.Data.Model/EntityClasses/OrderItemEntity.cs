@@ -440,6 +440,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IsManual", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HarmonizedCode", fieldHashtable);
 		}
 		#endregion
 
@@ -733,6 +735,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)OrderItemFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The HarmonizedCode property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."HarmonizedCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 14<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String HarmonizedCode
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.HarmonizedCode, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.HarmonizedCode, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

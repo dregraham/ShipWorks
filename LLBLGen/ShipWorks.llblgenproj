@@ -444,14 +444,14 @@
         <Fields>
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
-          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="9" />
-          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="6" />
-          <Field Name="IsFBA" Type="bool" FieldIndex="7" />
+          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="8" />
+          <Field Name="DistributionCenterName" Type="string" MaxLength="100" FieldIndex="9" />
+          <Field Name="IsFBA" Type="bool" FieldIndex="6" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
           <Field Name="MarketplaceName" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="MarketplaceSalesID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="MarketplaceStoreName" Type="string" MaxLength="100" FieldIndex="1" />
-          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="8" />
+          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ChannelAdvisorOrderSearch" ObjectID="fff00b34-ee7d-4254-a1f2-7b17c2524003">
@@ -671,7 +671,7 @@
       <EntityDefinition Name="EbayOrderSearch" ObjectID="5071fe5f-0360-4d85-813f-875585fc9f27">
         <Fields>
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="EbayOrderID" Type="long" IsOptional="true" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
@@ -1849,6 +1849,7 @@
         <Fields>
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="14" FieldIndex="19" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -4046,7 +4047,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-28T19:46:16.4283997Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-07T17:23:00.5990149Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4454,10 +4455,10 @@
                     <Field Name="MarketplaceSalesID" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="Classification" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="DistributionCenter" Ordinal="7" DbType="12" Length="80" />
-                    <Field Name="HarmonizedCode" Ordinal="8" DbType="12" Length="20" />
-                    <Field Name="IsFBA" Ordinal="9" DbType="2" />
-                    <Field Name="MPN" Ordinal="10" DbType="12" Length="50" />
-                    <Field Name="DistributionCenterID" Ordinal="11" DbType="0" Precision="19" />
+                    <Field Name="IsFBA" Ordinal="8" DbType="2" />
+                    <Field Name="MPN" Ordinal="9" DbType="12" Length="50" />
+                    <Field Name="DistributionCenterID" Ordinal="10" DbType="0" Precision="19" />
+                    <Field Name="DistributionCenterName" Ordinal="11" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorOrderSearch">
@@ -4770,7 +4771,7 @@
                   <Fields>
                     <Field Name="EbayOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="EbayOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="EbayOrderID" Ordinal="3" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
@@ -6815,7 +6816,8 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="24" Length="14" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -10104,7 +10106,7 @@
             <FieldMapping FieldName="Classification" TargetFieldName="Classification" />
             <FieldMapping FieldName="DistributionCenter" TargetFieldName="DistributionCenter" />
             <FieldMapping FieldName="DistributionCenterID" TargetFieldName="DistributionCenterID" />
-            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
+            <FieldMapping FieldName="DistributionCenterName" TargetFieldName="DistributionCenterName" />
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="MarketplaceBuyerID" TargetFieldName="MarketplaceBuyerID" />
             <FieldMapping FieldName="MarketplaceName" TargetFieldName="MarketplaceName" />
@@ -11538,6 +11540,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />

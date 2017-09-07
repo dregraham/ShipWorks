@@ -479,10 +479,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The EbayOrderID property of the Entity EbayOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayOrderSearch"."EbayOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 EbayOrderID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> EbayOrderID
 		{
-			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, true); }
+			get { return (Nullable<System.Int64>)GetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, false); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, value); }
 		}
 

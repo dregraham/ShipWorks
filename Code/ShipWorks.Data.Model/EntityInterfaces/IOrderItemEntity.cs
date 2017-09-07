@@ -135,6 +135,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 OriginalOrderID { get; }
+        /// <summary> The HarmonizedCode property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."HarmonizedCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 14<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String HarmonizedCode { get; }
         
         
         IOrderEntity Order { get; }
