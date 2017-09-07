@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// </summary>
         public override async Task<IResult> UploadShipmentDetails(OrderEntity order, string orderIdentifier, ShipmentEntity shipment)
         {
-            if (order.IsManual & order.CombineSplitStatus == CombineSplitStatusType.None)
+            if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
             {
                 log.InfoFormat("Not updating order {0} online since its manual.", order.OrderID);
                 return Result.FromSuccess();
