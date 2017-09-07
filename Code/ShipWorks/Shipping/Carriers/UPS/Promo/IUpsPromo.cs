@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Activates the Promo Code
         /// </summary>
-        void Apply();
+        PromoActivation Apply();
 
         /// <summary>
         /// Sets the PromoStatus of the UpsAccount to Declined

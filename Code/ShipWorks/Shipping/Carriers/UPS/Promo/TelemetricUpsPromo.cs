@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Metrics;
 using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
@@ -9,18 +10,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     /// </summary>
     public class TelemetricUpsPromo : IUpsPromo
     {
-        readonly IUpsPromo upsPromo;
+        private readonly IUpsPromo upsPromo;
         private readonly Func<string, ITrackedEvent> telemetryEventFunc;
-        readonly bool existingAccount;
+        private readonly UpsPromoSource source;
+        private readonly UpsPromoAccountType accountType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricUpsPromo(Func<string, ITrackedEvent> telemetryEventFunc, IUpsPromo upsPromo, bool existingAccount)
+        public TelemetricUpsPromo(Func<string, ITrackedEvent> telemetryEventFunc, IUpsPromo upsPromo, UpsPromoSource source, UpsPromoAccountType accountType)
         {
             this.telemetryEventFunc = telemetryEventFunc;
-            this.existingAccount = existingAccount;
             this.upsPromo = upsPromo;
+            this.source = source;
+            this.accountType = accountType;
         }
 
         /// <summary>
@@ -66,10 +69,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Activates the Promo Code
         /// </summary>
-        public void Apply()
+        public PromoActivation Apply()
         {
-            upsPromo.Apply();
-            LogResult("Applied");
+            PromoActivation result = upsPromo.Apply();
+
+            LogResult("Accepted", result);
+
+            return result;
         }
 
         /// <summary>
@@ -99,14 +105,38 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Log the results to telemetry
         /// </summary>
-        private void LogResult(string result)
+        private void LogResult(string action)
         {
             ITrackedEvent telemetryEvent = telemetryEventFunc("Ups.Promo");
-            telemetryEvent.AddProperty("Ups.Promo.Result", result);
-            telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", existingAccount ? "true" : "false");
-            telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
+
+            LogResult(action, telemetryEvent);
 
             telemetryEvent.Dispose();
+        }
+
+        /// <summary>
+        /// Log the results to telemetry
+        /// </summary>
+        private void LogResult(string action, PromoActivation activation)
+        {
+            ITrackedEvent telemetryEvent = telemetryEventFunc("Ups.Promo");
+
+            telemetryEvent.AddProperty("Ups.Promo.Acceptance.Result",
+                activation?.IsSuccessful ?? false ? "Applied" : "Declined by UPS");
+            LogResult(action, telemetryEvent);
+
+            telemetryEvent.Dispose();
+        }
+
+        /// <summary>
+        /// Log the results to the telemetry event
+        /// </summary>
+        private void LogResult(string action, ITrackedEvent telemetryEvent)
+        {
+            telemetryEvent.AddProperty("Ups.Promo.Result", action);
+            telemetryEvent.AddProperty("Ups.Promo.AppliedToExistingAccount", source == UpsPromoSource.PromoFootnote ? "true" : "false");
+            telemetryEvent.AddProperty("Ups.Promo.AccountType", EnumHelper.GetDescription(accountType));
+            telemetryEvent.AddProperty("Ups.Promo.AccountNumber", upsPromo.AccountNumber);
         }
     }
 }

@@ -1079,7 +1079,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount, false);
+                promo = upsPromoFactory.Get(upsAccount, UpsPromoSource.SetupWizard,
+                    newAccount.Checked ? UpsPromoAccountType.NewAccount : UpsPromoAccountType.ExistingAccount);
 
                 promoDescription.Text = promo.Terms.Description;
                 promoControls.Top = promoDescription.Bottom + 5;
