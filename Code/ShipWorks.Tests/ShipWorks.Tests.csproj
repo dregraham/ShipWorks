@@ -291,7 +291,6 @@
     <Compile Include="Core\RegistryTests.cs" />
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
-    <Compile Include="DatabaseManager.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00_Test.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepositoryTest.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01_Test.cs" />
@@ -656,8 +655,6 @@
     <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionWebClientTest.cs" />
     <Compile Include="Stores\Platforms\Yahoo\YahooEmailOnlineUpdaterTest.cs" />
-    <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
-    <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />

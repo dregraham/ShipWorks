@@ -12,6 +12,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -31,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     [SuppressMessage("CSharp.Analyzers",
         "CA5351: Do not use insecure cryptographic algorithm MD5",
         Justification = "This is what ProStores currently uses")]
+    [Component]
     public class ProStoresWebClient : IProStoresWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresWebClient));

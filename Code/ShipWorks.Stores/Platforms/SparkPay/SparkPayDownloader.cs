@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
     public class SparkPayDownloader : StoreDownloader
     {
         private readonly SparkPayStoreEntity store;
-        private readonly SparkPayWebClient webClient;
+        private readonly ISparkPayWebClient webClient;
         private readonly SparkPayStatusCodeProvider statusProvider;
         private readonly ILog log;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// The spark pay downloader
         /// </summary>
         public SparkPayDownloader(StoreEntity store,
-            SparkPayWebClient webClient,
+            ISparkPayWebClient webClient,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory,
             Func<Type, ILog> logFactory)
             : base(store)

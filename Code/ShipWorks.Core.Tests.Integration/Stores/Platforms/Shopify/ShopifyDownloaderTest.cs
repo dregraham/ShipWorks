@@ -109,7 +109,6 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
 
             progress = context.Mock.Mock<IProgressReporter>().Object;
             StatusPresetManager.CheckForChanges();
-            LogSession.Initialize();
         }
 
         [Fact]

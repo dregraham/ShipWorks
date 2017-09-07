@@ -16,10 +16,10 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
-using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 {
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 mock.Override<ILogEntryFactory>();
 
                 Mock<IMagentoTwoRestClient> restClient = new Mock<IMagentoTwoRestClient>();
-                restClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(ordersResponse).Returns(new OrdersResponse() {TotalCount = 0, Orders = new List<Order>()});
+                restClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(ordersResponse).Returns(new OrdersResponse() { TotalCount = 0, Orders = new List<Order>() });
                 restClient.Setup(w => w.GetOrder(It.IsAny<long>())).Returns(order);
 
                 var webClientFactory = mock.CreateMock<Func<MagentoStoreEntity, IMagentoTwoRestClient>>();
@@ -86,7 +86,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             progress = context.Mock.Mock<IProgressReporter>().Object;
             StatusPresetManager.CheckForChanges();
-            LogSession.Initialize();
         }
 
         [Fact]

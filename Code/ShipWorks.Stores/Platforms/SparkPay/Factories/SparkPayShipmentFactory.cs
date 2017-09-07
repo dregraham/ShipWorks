@@ -1,17 +1,18 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.SparkPay.DTO;
-using System;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores.Platforms.SparkPay.DTO;
 
 namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 {
     /// <summary>
     /// SparkPay shipment factory
     /// </summary>
-    public class SparkPayShipmentFactory
+    [Component]
+    public class SparkPayShipmentFactory : ISparkPayShipmentFactory
     {
         readonly IShippingManager shippingManager;
 
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
 
             return new Shipment
             {
-                ShippedAt = (DateTime)shipment.ProcessedDate,
+                ShippedAt = (DateTime) shipment.ProcessedDate,
                 OrderId = orderNumber,
                 TrackingNumbers = shipment.TrackingNumber,
                 ShippingMethod = $"{carrierName} {service}",
@@ -46,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         /// </summary>
         private string GetCarrierName(ShipmentEntity shipment)
         {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
             if (PostalUtility.IsPostalShipmentType(shipmentTypeCode))
             {
