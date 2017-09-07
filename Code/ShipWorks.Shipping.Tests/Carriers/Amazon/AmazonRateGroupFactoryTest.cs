@@ -44,7 +44,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Equal("UPS", rateResult.Description);
             Assert.Equal(2.34M, rateResult.AmountOrDefault);
             Assert.Equal("Foo", ((AmazonRateTag) rateResult.Tag).ShippingServiceId);
-            Assert.Equal("Bar", ((AmazonRateTag) rateResult.Tag).ShippingServiceOfferId);
         }
 
         [Fact]

@@ -14,11 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string ShippingServiceId { get; set; }
 
         /// <summary>
-        /// The shipping service offer id of the rate
-        /// </summary>
-        public string ShippingServiceOfferId { get; set; }
-
-        /// <summary>
         /// The description of the rate
         /// </summary>
         public string Description { get; set; }

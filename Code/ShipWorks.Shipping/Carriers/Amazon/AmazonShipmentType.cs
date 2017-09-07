@@ -124,7 +124,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             outline.AddElement("Service", () => loaded().Amazon.ShippingServiceName);
             outline.AddElement("AmazonUniqueShipmentID", () => loaded().Amazon.AmazonUniqueShipmentID);
             outline.AddElement("ShippingServiceID", () => loaded().Amazon.ShippingServiceID);
-            outline.AddElement("ShippingServiceOfferID", () => loaded().Amazon.ShippingServiceOfferID);
         }
 
         /// <summary>

@@ -113,7 +113,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 Description = shipment.Amazon.ShippingServiceName,
                 ShippingServiceId = shipment.Amazon.ShippingServiceID,
-                ShippingServiceOfferId = shipment.Amazon.ShippingServiceOfferID,
                 CarrierName = shipment.Amazon.CarrierName
             };
 

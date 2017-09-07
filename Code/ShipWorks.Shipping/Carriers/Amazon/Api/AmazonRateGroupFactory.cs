@@ -47,7 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     {
                         Description = shippingService.ShippingServiceName ?? "Unknown",
                         ShippingServiceId = shippingService.ShippingServiceId,
-                        ShippingServiceOfferId = shippingService.ShippingServiceOfferId,
                         CarrierName = shippingService.CarrierName
                     };
 
