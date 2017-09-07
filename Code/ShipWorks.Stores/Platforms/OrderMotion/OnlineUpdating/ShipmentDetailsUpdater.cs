@@ -6,6 +6,8 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using Interapptive.Shared.Utility;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
 {
@@ -79,9 +81,22 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
                 return;
             }
 
+            List<IResult> results = new List<IResult>();
             foreach (var order in orderDetails)
             {
-                await webClient.UploadShipmentDetails(store, shipment, order).ConfigureAwait(false);
+                try
+                {
+                    await webClient.UploadShipmentDetails(store, shipment, order).ConfigureAwait(false);
+                }
+                catch (OrderMotionException ex)
+                {
+                    results.Add(Result.FromError(ex));
+                }
+            }
+
+            if (results.Any())
+            {
+                throw results.First().Exception;
             }
         }
     }

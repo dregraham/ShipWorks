@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        private async Task OnUploadShipmentDetails(MenuCommandExecutionContext context)
+        public async Task OnUploadShipmentDetails(IMenuCommandExecutionContext context)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,
