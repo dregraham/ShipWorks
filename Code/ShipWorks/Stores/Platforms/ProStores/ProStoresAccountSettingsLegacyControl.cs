@@ -81,17 +81,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 return false;
             }
 
-            ProStoresStoreEntity proStore = (ProStoresStoreEntity) store;
-
-            proStore.LoginMethod = (int) ProStoresLoginMethod.LegacyUserPass;
-
-            proStore.Username = username.Text;
-            proStore.LegacyPassword = SecureText.Encrypt(password.Text, username.Text);
-
-            proStore.ShortName = shortName.Text.Trim();
-            proStore.LegacyAdminUrl = urlAdmin;
-            proStore.LegacyXtePath = urlXte;
-            proStore.LegacyPrefix = prefix.Text.Trim();
+            ProStoresStoreEntity proStore = PopulateStore(store, urlAdmin, urlXte);
 
             Cursor.Current = Cursors.WaitCursor;
 
@@ -111,6 +101,26 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Populate the store values
+        /// </summary>
+        private ProStoresStoreEntity PopulateStore(StoreEntity store, string urlAdmin, string urlXte)
+        {
+            ProStoresStoreEntity proStore = (ProStoresStoreEntity) store;
+
+            proStore.LoginMethod = (int) ProStoresLoginMethod.LegacyUserPass;
+
+            proStore.Username = username.Text;
+            proStore.LegacyPassword = SecureText.Encrypt(password.Text, username.Text);
+
+            proStore.ShortName = shortName.Text.Trim();
+            proStore.LegacyAdminUrl = urlAdmin;
+            proStore.LegacyXtePath = urlXte;
+            proStore.LegacyPrefix = prefix.Text.Trim();
+
+            return proStore;
         }
     }
 }
