@@ -383,6 +383,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()
@@ -392,7 +393,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceOfferID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceOfferID, 250, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsLength, 0, 0, 38);

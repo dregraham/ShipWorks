@@ -432,6 +432,8 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>Weight. </summary>
 		Weight,
+		///<summary>ShippingServiceID. </summary>
+		ShippingServiceID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -446,8 +448,6 @@ namespace ShipWorks.Data.Model
 		ShippingServiceName,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
-		///<summary>ShippingServiceOfferID. </summary>
-		ShippingServiceOfferID,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
 		///<summary>DimsProfileID. </summary>
