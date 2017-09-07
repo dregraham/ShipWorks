@@ -70,7 +70,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public string FormatWeight(double weight, WeightDisplayFormat defaultDisplayFormat)
         {
-            WeightDisplayFormat displayFormat = (WeightDisplayFormat?) userSession.User?.Settings.ShippingWeightFormat ??
+            WeightDisplayFormat displayFormat = (WeightDisplayFormat?) userSession?.User?.Settings?.ShippingWeightFormat ??
                 defaultDisplayFormat;
 
             string result;

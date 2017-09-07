@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
                     service.UPSSecurityValue =
                         GetUpsSecurity(upsPromo.AccessLicenseNumber, upsPromo.Username, upsPromo.Password);
                     PromoDiscountResponse response = service.ProcessPromoDiscount(request);
-                    return new PromoActivation(response);
+                    return PromoActivation.FromPromoDiscountResponse(response);
                 }
             }
             catch (Exception ex)

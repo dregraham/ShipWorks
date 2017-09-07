@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             // Get all the non-zero charges where the type is not "PRODUCT" and create an
             // order charge for each charge type.
             downloadedOrderOrderLines.SelectMany(orderLine => orderLine.charges)
-                .Where(charge => charge.chargeType1 != "PRODUCT" && charge.chargeAmount.amount != 0)
+                .Where(charge => (charge?.chargeAmount?.amount ?? 0) != 0 && charge?.chargeType1 != "PRODUCT")
                 .GroupBy(charge => new { charge.chargeType1, charge.chargeName }, charge => charge.chargeAmount.amount)
                 .ForEach(group => InstantiateOrderCharge(orderToSave, group.Key.chargeType1, group.Key.chargeName, group.Sum()));
         }
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             // Get all the charges with tax and create an order charge for the total tax of each taxName.
             orderLines.SelectMany(orderLine => orderLine.charges)
-                .Where(c => c.tax != null && c.tax.taxAmount.amount != 0)
+                .Where(charge => (charge?.tax?.taxAmount?.amount ?? 0) != 0)
                 .GroupBy(c => c.tax.taxName, c => c.tax.taxAmount.amount)
                 .ForEach(taxGroup => InstantiateOrderCharge(orderToSave, "Tax", taxGroup.Key, taxGroup.Sum()));
         }
@@ -169,7 +169,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
             orderLineStatusType orderLineStatus = orderLine.orderLineStatuses.SingleOrDefault();
             item.OnlineStatus = orderLineStatus?.status.ToString() ?? "Unknown";
 
-            item.UnitPrice = orderLine.charges.Where(c => c.chargeType1 == "PRODUCT").Sum(c => c.chargeAmount.amount);
+            item.UnitPrice = orderLine.charges
+                .Where(c => c?.chargeType1 == "PRODUCT")
+                .Sum(c => c.chargeAmount?.amount ?? 0);
+
             // Walmart spelled "Canceled" wrong, so I added the correct spelling in case they fix it...
             item.Quantity = (item.OnlineStatus == orderLineStatusValueType.Cancelled.ToString())
                 ? 0

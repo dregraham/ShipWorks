@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 }
             };
 
-            PromoActivation testObject = new PromoActivation(response);
+            PromoActivation testObject = PromoActivation.FromPromoDiscountResponse(response);
 
             Assert.Equal(desc, testObject.Info);
         }
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 Response = new ResponseType()
             };
 
-            PromoActivation testObject = new PromoActivation(response);
+            PromoActivation testObject = PromoActivation.FromPromoDiscountResponse(response);
 
             Assert.Equal(string.Empty, testObject.Info);
         }
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 }
             };
 
-            PromoActivation testObject = new PromoActivation(response);
+            PromoActivation testObject = PromoActivation.FromPromoDiscountResponse(response);
 
             Assert.True(testObject.IsSuccessful);
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 }
             };
 
-            PromoActivation testObject = new PromoActivation(response);
+            PromoActivation testObject = PromoActivation.FromPromoDiscountResponse(response);
 
             Assert.False(testObject.IsSuccessful);
         }
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 Response = new ResponseType()
             };
 
-            PromoActivation testObject = new PromoActivation(response);
+            PromoActivation testObject = PromoActivation.FromPromoDiscountResponse(response);
 
             Assert.False(testObject.IsSuccessful);
         }

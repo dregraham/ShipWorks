@@ -66,6 +66,7 @@ namespace ShipWorks.Stores.Content
             upc.Text = item.UPC;
             isbn.Text = item.ISBN;
             location.Text = item.Location;
+            harmonizedCode.Text = item.HarmonizedCode;
             weight.Weight = item.Weight;
             cost.Amount = item.UnitCost;
             description.Text = item.Description;
@@ -289,6 +290,7 @@ namespace ShipWorks.Stores.Content
             item.UPC = upc.Text;
 
             item.Location = location.Text;
+            item.HarmonizedCode = harmonizedCode.Text;
             item.Weight = weight.Weight;
             item.UnitCost = cost.Amount;
             item.Description = description.Text;

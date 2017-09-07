@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
@@ -94,6 +93,11 @@ namespace ShipWorks.Shipping
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        ShipmentEntity CreateReturnShipment(ShipmentEntity shipment);
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment);
@@ -132,14 +136,5 @@ namespace ShipWorks.Shipping
         /// Validate that the given store is licensed to ship.
         /// </summary>
         Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache);
-
-        /// <summary>
-        /// Gets shipments based on the RelationPredicateBucket passed in.
-        /// </summary>
-        /// <param name="bucket">The bucket.</param>
-        /// <param name="sortExpression">The sort expression.</param>
-        /// <param name="maxNumberOfShipmentsToReturn">The maximum number of shipments to return.</param>
-        IEnumerable<ShipmentEntity> GetShipments(RelationPredicateBucket bucket, ISortExpression sortExpression,
-            int maxNumberOfShipmentsToReturn);
     }
 }

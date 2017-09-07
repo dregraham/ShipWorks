@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public DateTimeOffset CheckoutDateUtc { get; set; }
 
         [JsonProperty("PaymentDateUtc")]
-        public DateTimeOffset PaymentDateUtc { get; set; }
+        public DateTime PaymentDateUtc { get; set; }
 
         [JsonProperty("ShippingDateUtc")]
         public DateTimeOffset ShippingDateUtc { get; set; }

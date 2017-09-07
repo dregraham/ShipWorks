@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping
                     Weight = item.Weight,
                     UnitValue = priceAndValue,
                     CountryOfOrigin = "US",
-                    HarmonizedCode = "",
+                    HarmonizedCode = item.HarmonizedCode,
                     NumberOfPieces = 0,
                     UnitPriceAmount = priceAndValue
                 };

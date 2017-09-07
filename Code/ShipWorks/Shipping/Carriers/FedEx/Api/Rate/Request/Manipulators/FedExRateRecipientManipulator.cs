@@ -71,6 +71,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 address.StateOrProvinceCode = "PR";
             }
 
+            if (FedExRequestManipulatorUtilities.IsGuam(address.CountryCode) || FedExRequestManipulatorUtilities.IsGuam(address.StateOrProvinceCode))
+            {
+                address.StateOrProvinceCode = string.Empty;
+                address.CountryCode = "GU";
+            }
+
             // Use the address to create the party/recipient
             Party recipient = new Party { Address = address };
 

@@ -415,8 +415,8 @@ namespace ShipWorks.Templates
                     <html>
                     <body style='font: normal 9pt tahoma; color: rgb(50, 50, 50); padding-left: 15px;' >"
                     + HtmlControl.ZoomDivStartTag +
-                    @"This template is contains a snippet.<br/><br/>
-                    Snippets are meant to be used by other tempates and cannot be previewed.
+                    @"This template contains a snippet.<br/><br/>
+                    Snippets are meant to be used by other templates and cannot be previewed.
                     </div>
                     </body>
                     </html>";

@@ -96,20 +96,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Applies the Promo Code
         /// </summary>
-        public void Apply()
+        public PromoActivation Apply()
         {
             // Check to see if the terms have been accepted
             if (Terms.IsAccepted == false)
             {
-                throw new UpsPromoException("You must first accept the Terms and Conditions");
+                return PromoActivation.FromError("You must first accept the Terms and Conditions");
             }
 
-            PromoActivation promoActivation = null;
+            PromoActivation promoActivation;
 
             try
             {
                 IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
                 promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
+
+                // If the activation was successful save it to the UpsAccount Entity
+                // Otherwise throw exception containing the info about the failure
+                if (promoActivation != null && promoActivation.IsSuccessful)
+                {
+                    account.PromoStatus = (int)UpsPromoStatus.Applied;
+                    upsAccountRepository.Save(account);
+                }
             }
             catch (UpsPromoException ex)
             {
@@ -122,33 +130,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                     // Set the promo status on the account as applied because our promo has already been applied
                     account.PromoStatus = (int)UpsPromoStatus.Applied;
                     upsAccountRepository.Save(account);
+                    return PromoActivation.FromError(soapEx.Message);
                 }
-                else if (errCode == "9560010")
+
+                if (errCode == "9560010")
                 {
                     // Account is on a bid that cannot be overridden
                     // Set the promo status to declined because our promo cannot be applied
                     Decline();
-                    throw  new UpsPromoException("Your UPS Account is on a promo that cannot be overridden.");
+                    return PromoActivation.FromError("Your UPS Account is on a promo that cannot be overridden.");
                 }
-                else
-                {
-                    // This is an error we dont know about, could be an outage so remind me later
-                    RemindMe();
-                    throw;
-                }
+
+                // This is an error we dont know about, could be an outage so remind me later
+                RemindMe();
+                return PromoActivation.FromError(ex.Message);
             }
 
-            // If the activation was successful save it to the UpsAccount Entity
-            // Otherwise throw exception containing the info about the failure
-            if (promoActivation != null && promoActivation.IsSuccessful)
-            {
-                account.PromoStatus = (int)UpsPromoStatus.Applied;
-                upsAccountRepository.Save(account);
-            }
-            else
-            {
-                throw new UpsPromoException(promoActivation?.Info);
-            }
+            return promoActivation;
         }
 
         /// <summary>

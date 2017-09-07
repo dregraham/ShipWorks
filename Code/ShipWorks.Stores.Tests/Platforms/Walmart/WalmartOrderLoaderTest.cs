@@ -77,6 +77,42 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
+        public void LoadOrder_LineItemAdded_WhenChargeIsNull()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+            orderDto.orderLines.Single().charges[0] = null;
+            
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_LineItemAdded_WhenChargeHasNullProperties()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+            orderDto.orderLines.Single().charges[0] = new chargeType();
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
+        }
+
+        [Fact]
         public void LoadOrder_LineItemUpdated_WhenMatchingLineItemFound()
         {
             orderEntity.IsNew = false;
@@ -344,6 +380,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderEntity.OrderCharges.Single(c => c.Type == "Random Charge").Amount, 123.121M);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void LoadOrder_DoesNotAddAnyCharges_WhenOrderChargePropertiesAreNull(bool isNew)
+        {
+            orderEntity.IsNew = isNew;
+            orderDto.orderLines[0].charges = new[] { new chargeType() };
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Empty(orderEntity.OrderCharges.Where(c => c.Type != "Refund"));
         }
 
         [Theory]

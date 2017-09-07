@@ -231,6 +231,7 @@
       <Condition identifier="ChannelAdvisorOrderItem.SalesSourceID" />
       <Condition identifier="ChannelAdvisorOrderItem.DistributionCenterID" />
       <Condition identifier="ChannelAdvisorOrderItem.DistributionCenter" />
+      <Condition identifier="ChannelAdvisorOrderItem.DistributionCenterName" />
       <Condition identifier="ChannelAdvisorOrderItem.IsFBA" />
       <Condition identifier="ChannelAdvisorOrderItem.MPN" />
       <Condition identifier="ChannelAdvisorOrderItem.Classification" />

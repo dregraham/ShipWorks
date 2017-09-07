@@ -2,13 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
-using System.Xml.Serialization;
+using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {

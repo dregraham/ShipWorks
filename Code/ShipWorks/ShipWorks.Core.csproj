@@ -1279,7 +1279,9 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoAccountType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoSource.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
@@ -1768,6 +1770,7 @@
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorDistributionCenterIDCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorDistributionCenterNameCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
@@ -1896,8 +1899,10 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartProduct.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartSkuInfo.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestItemAttributeLoader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />

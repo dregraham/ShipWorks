@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
@@ -10,8 +9,8 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Services
@@ -21,26 +20,26 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShippingManagerWrapper : IShippingManager
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
         private readonly IDataProvider dataProvider;
+        private readonly IReturnItemRepository returnItemRepository;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingManagerWrapper(
-            ISqlAdapterFactory sqlAdapterFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
             IValidatedAddressScope validatedAddressScope,
             IDataProvider dataProvider,
+            IReturnItemRepository returnItemRepository,
             Func<Type, ILog> getLogger)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.validatedAddressScope = validatedAddressScope;
             this.dataProvider = dataProvider;
+            this.returnItemRepository = returnItemRepository;
             log = getLogger(GetType());
         }
 
@@ -239,6 +238,18 @@ namespace ShipWorks.Shipping.Services
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        public ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)
+        {
+            return CreateShipmentCopy(shipment, x =>
+            {
+                x.ReturnShipment = true;
+                returnItemRepository.LoadReturnData(x, true);
+            });
+        }
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         public ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment) => CreateShipmentCopy(shipment, null);
@@ -313,41 +324,5 @@ namespace ShipWorks.Shipping.Services
         /// </remarks>
         public Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache) =>
             ShippingManager.ValidateLicense(store, licenseCheckCache);
-
-        /// <summary>
-        /// Gets the recent shipments.
-        /// </summary>
-        /// <param name="bucket">The predicate bucket to filter the shipments returned</param>
-        /// <param name="sortExpression">The sort expression</param>
-        /// <param name="maxNumberOfShipmentsToReturn">The max number of shipments to return</param>
-        /// <returns></returns>
-        /// <exception cref="ShippingException"></exception>
-        public IEnumerable<ShipmentEntity> GetShipments(RelationPredicateBucket bucket, ISortExpression sortExpression, int maxNumberOfShipmentsToReturn)
-        {
-            ShipmentCollection shipmentCollection = new ShipmentCollection();
-
-            try
-            {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.FetchEntityCollection(shipmentCollection, bucket, maxNumberOfShipmentsToReturn, sortExpression);
-                }
-            }
-            catch (Exception ex) when (ex is ORMException || ex is SqlException)
-            {
-                throw new ShippingException($"Error retrieving list of shipments:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
-            }
-
-            IList<ShipmentEntity> shipments = shipmentCollection.Items;
-
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                EnsureShipmentLoaded(shipment);
-            }
-
-            log.Info($"{shipments.Count} shipments found matching criteria.");
-
-            return shipments;
-        }
     }
 }

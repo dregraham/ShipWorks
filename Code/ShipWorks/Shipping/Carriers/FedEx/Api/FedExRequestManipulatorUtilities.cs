@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -23,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="request">The FedEx carrier request</param>
         /// <returns>RequestedShipment from the Ship Service WSDL request if not null.  Otherwise returns a new RequestedShipment.</returns>
         /// <exception cref="CarrierException">If the shipment request is not supported a CarrierException is thrown.</exception>
-        public static WebServices.Ship.RequestedShipment GetShipServiceRequestedShipment(CarrierRequest request)
+        public static RequestedShipment GetShipServiceRequestedShipment(CarrierRequest request)
         {
             object nativeRequest = request.NativeRequest;
 
@@ -32,23 +31,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw new CarrierException("The native request is not allowed to be Null.");
             }
 
-            if (request.NativeRequest is WebServices.Ship.DeleteShipmentRequest)
+            if (request.NativeRequest is DeleteShipmentRequest)
             {
                 throw new CarrierException("DeleteShipmentRequest is not a valid request type.");
             }
 
             if (!(nativeRequest is ProcessShipmentRequest) &&
-                !(nativeRequest is WebServices.Ship.ValidateShipmentRequest))
+                !(nativeRequest is ValidateShipmentRequest))
             {
-                throw new CarrierException(request.NativeRequest.ToString() + " is not a valid request type.");
+                throw new CarrierException(request.NativeRequest + " is not a valid request type.");
             }
 
-            WebServices.Ship.RequestedShipment requestedShipment = (WebServices.Ship.RequestedShipment)DuckGetProperty(request.NativeRequest, "RequestedShipment");
+            RequestedShipment requestedShipment = (RequestedShipment) DuckGetProperty(request.NativeRequest, "RequestedShipment");
 
             // Create a new one if it doesn't already exist.
             if (requestedShipment == null)
             {
-                requestedShipment = new WebServices.Ship.RequestedShipment();
+                requestedShipment = new RequestedShipment();
                 Duck(request.NativeRequest, "RequestedShipment", requestedShipment);
             }
 
@@ -103,12 +102,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<string> streetLines = new List<string>();
             streetLines.Add(person.Street1);
 
-            if (!string.IsNullOrEmpty(person.Street2))
+            if (!String.IsNullOrEmpty(person.Street2))
             {
                 streetLines.Add(person.Street2);
             }
 
-            if (!string.IsNullOrEmpty(person.Street3))
+            if (!String.IsNullOrEmpty(person.Street3))
             {
                 streetLines.Add(person.Street3);
             }
@@ -141,15 +140,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Gets the FedEx Drop off type for the shipment
         /// </summary>
-        public static WebServices.Ship.DropoffType GetShipmentDropoffType(FedExDropoffType dropoffType)
+        public static DropoffType GetShipmentDropoffType(FedExDropoffType dropoffType)
         {
             switch (dropoffType)
             {
-                case FedExDropoffType.BusinessServiceCenter: return WebServices.Ship.DropoffType.BUSINESS_SERVICE_CENTER;
-                case FedExDropoffType.DropBox:return WebServices.Ship.DropoffType.DROP_BOX;
-                case FedExDropoffType.RegularPickup: return WebServices.Ship.DropoffType.REGULAR_PICKUP;
-                case FedExDropoffType.RequestCourier: return WebServices.Ship.DropoffType.REQUEST_COURIER;
-                case FedExDropoffType.Station: return WebServices.Ship.DropoffType.STATION;
+                case FedExDropoffType.BusinessServiceCenter: return DropoffType.BUSINESS_SERVICE_CENTER;
+                case FedExDropoffType.DropBox:return DropoffType.DROP_BOX;
+                case FedExDropoffType.RegularPickup: return DropoffType.REGULAR_PICKUP;
+                case FedExDropoffType.RequestCourier: return DropoffType.REQUEST_COURIER;
+                case FedExDropoffType.Station: return DropoffType.STATION;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + dropoffType);
@@ -159,51 +158,51 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get the API service type based on our internal value
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
-        public static WebServices.Ship.ServiceType GetApiServiceType(FedExServiceType serviceType)
+        [NDependIgnoreComplexMethod]
+        public static ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
             switch (serviceType)
             {
                 case FedExServiceType.PriorityOvernight:
                 case FedExServiceType.OneRatePriorityOvernight:
-                    return WebServices.Ship.ServiceType.PRIORITY_OVERNIGHT;
+                    return ServiceType.PRIORITY_OVERNIGHT;
 
                 case FedExServiceType.StandardOvernight:
                 case FedExServiceType.OneRateStandardOvernight:
-                    return WebServices.Ship.ServiceType.STANDARD_OVERNIGHT;
+                    return ServiceType.STANDARD_OVERNIGHT;
 
                 case FedExServiceType.FirstOvernight:
                 case FedExServiceType.OneRateFirstOvernight:
-                    return WebServices.Ship.ServiceType.FIRST_OVERNIGHT;
+                    return ServiceType.FIRST_OVERNIGHT;
 
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.OneRate2Day:
-                    return WebServices.Ship.ServiceType.FEDEX_2_DAY;
+                    return ServiceType.FEDEX_2_DAY;
 
                 case FedExServiceType.FedEx2DayAM:
                 case FedExServiceType.OneRate2DayAM:
-                    return WebServices.Ship.ServiceType.FEDEX_2_DAY_AM;
+                    return ServiceType.FEDEX_2_DAY_AM;
 
                 case FedExServiceType.FedExExpressSaver:
                 case FedExServiceType.OneRateExpressSaver:
                 case FedExServiceType.FedExEconomyCanada:
-                    return WebServices.Ship.ServiceType.FEDEX_EXPRESS_SAVER;
+                    return ServiceType.FEDEX_EXPRESS_SAVER;
 
-                case FedExServiceType.InternationalPriority: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY;
-                case FedExServiceType.InternationalEconomy: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY;
-                case FedExServiceType.InternationalFirst: return WebServices.Ship.ServiceType.INTERNATIONAL_FIRST;
-                case FedExServiceType.FedEx1DayFreight: return WebServices.Ship.ServiceType.FEDEX_1_DAY_FREIGHT;
-                case FedExServiceType.FedEx2DayFreight: return WebServices.Ship.ServiceType.FEDEX_2_DAY_FREIGHT;
-                case FedExServiceType.FedEx3DayFreight: return WebServices.Ship.ServiceType.FEDEX_3_DAY_FREIGHT;
+                case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
+                case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
+                case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
+                case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
+                case FedExServiceType.FedEx2DayFreight: return ServiceType.FEDEX_2_DAY_FREIGHT;
+                case FedExServiceType.FedEx3DayFreight: return ServiceType.FEDEX_3_DAY_FREIGHT;
 
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.FedExInternationalGround:
-                    return WebServices.Ship.ServiceType.FEDEX_GROUND;
+                    return ServiceType.FEDEX_GROUND;
 
-                case FedExServiceType.GroundHomeDelivery: return WebServices.Ship.ServiceType.GROUND_HOME_DELIVERY;
-                case FedExServiceType.InternationalPriorityFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
-                case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
-                case FedExServiceType.SmartPost: return WebServices.Ship.ServiceType.SMART_POST;
+                case FedExServiceType.GroundHomeDelivery: return ServiceType.GROUND_HOME_DELIVERY;
+                case FedExServiceType.InternationalPriorityFreight: return ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
+                case FedExServiceType.InternationalEconomyFreight: return ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
+                case FedExServiceType.SmartPost: return ServiceType.SMART_POST;
                 case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
                 case FedExServiceType.FedExNextDayAfternoon:
                     return ServiceType.FEDEX_NEXT_DAY_AFTERNOON;
@@ -227,17 +226,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail object for a shipping API request.</returns>
-        public static WebServices.Ship.WebAuthenticationDetail CreateShippingWebAuthenticationDetail(FedExSettings settings)
+        public static WebAuthenticationDetail CreateShippingWebAuthenticationDetail(FedExSettings settings)
         {
-            return new WebServices.Ship.WebAuthenticationDetail
+            return new WebAuthenticationDetail
             {
-                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
                 },
 
-                UserCredential = new WebServices.Ship.WebAuthenticationCredential
+                UserCredential = new WebAuthenticationCredential
                 {
                     Key = settings.UserCredentialsKey,
                     Password = settings.UserCredentialsPassword
@@ -250,9 +249,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
+        public static ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
         {
-            return new WebServices.Ship.ClientDetail
+            return new ClientDetail
             {
                 AccountNumber = account.AccountNumber,
                 MeterNumber = account.MeterNumber
@@ -422,17 +421,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail for a registration API request.</returns>
-        public static WebServices.Ship.WebAuthenticationDetail CreateVoidWebAuthenticationDetail(FedExSettings settings)
+        public static WebAuthenticationDetail CreateVoidWebAuthenticationDetail(FedExSettings settings)
         {
-            return new WebServices.Ship.WebAuthenticationDetail
+            return new WebAuthenticationDetail
             {
-                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
                 },
 
-                UserCredential = new WebServices.Ship.WebAuthenticationCredential
+                UserCredential = new WebAuthenticationCredential
                 {
                     Key = settings.UserCredentialsKey,
                     Password = settings.UserCredentialsPassword
@@ -445,9 +444,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateVoidClientDetail(FedExAccountEntity account)
+        public static ClientDetail CreateVoidClientDetail(FedExAccountEntity account)
         {
-            return new WebServices.Ship.ClientDetail
+            return new ClientDetail
             {
                 AccountNumber = account.AccountNumber,
                 MeterNumber = account.MeterNumber
@@ -490,5 +489,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 MeterNumber = account.MeterNumber
             };
         }
+
+        /// <summary>
+        /// Returns true if code is gu or guam regardless of case.
+        /// </summary>
+        public static bool IsGuam(string code) => code.Equals("GU", StringComparison.OrdinalIgnoreCase) ||
+                                                   code.Equals("Guam", StringComparison.OrdinalIgnoreCase);
     }
 }

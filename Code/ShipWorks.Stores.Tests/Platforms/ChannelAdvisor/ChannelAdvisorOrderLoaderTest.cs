@@ -33,12 +33,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             new ChannelAdvisorDistributionCenter()
             {
                 ID = 0,
-                Code = "DC0"
+                Code = "DC0",
+                Name= "DC 0"
             },
             new ChannelAdvisorDistributionCenter()
             {
                 ID = 1,
-                Code = "DC1"
+                Code = "DC1", 
+                Name = "DC 1"
             }
         };
 
@@ -116,7 +118,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OnlineLastModifiedIsSet()
         {
-            downloadedOrder.CreatedDateUtc = new DateTime(2017, 7, 7);
+            downloadedOrder.PaymentDateUtc = new DateTime(2017, 7, 7);
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -1326,6 +1328,35 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             string distributionCenterID = ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems.Single()).DistributionCenter;
 
             Assert.Equal("DC1", distributionCenterID);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsDistributionCenterName()
+        {
+            var item = new ChannelAdvisorOrderItem()
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+                {
+                    new ChannelAdvisorFulfillmentItem()
+                    {
+                        FulfillmentID = 123
+                    }
+                }
+            };
+
+            downloadedOrder.Fulfillments.Add(new ChannelAdvisorFulfillment()
+            {
+                ID = 123,
+                DistributionCenterID = 1
+            });
+
+            downloadedOrder.Items.Add(item);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            string distributionCenterName = ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).DistributionCenterName;
+
+            Assert.Equal("DC 1", distributionCenterName);
         }
 
         #endregion

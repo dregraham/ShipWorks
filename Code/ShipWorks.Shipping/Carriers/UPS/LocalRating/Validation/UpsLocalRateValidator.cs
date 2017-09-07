@@ -5,12 +5,10 @@ using System.Reflection;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -29,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly ILocalRateValidationResultFactory validationResultFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IShippingManager shippingManager;
+        private readonly IUpsLocalRateRecentShipmentRepository recentShipmentRepository;
         private DateTime wakeTime;
         private List<UpsLocalRateDiscrepancy> rateDiscrepancies;
 
@@ -43,13 +41,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             ILocalRateValidationResultFactory validationResultFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IShippingManager shippingManager)
+            IUpsLocalRateRecentShipmentRepository recentShipmentRepository)
         {
             this.rateClientFactory = rateClientFactory;
             this.upsAccountRepository = upsAccountRepository;
             this.validationResultFactory = validationResultFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            this.shippingManager = shippingManager;
+            this.recentShipmentRepository = recentShipmentRepository;
         }
 
         /// <summary>
@@ -85,7 +83,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             // Reset discrepancy list every validation run
             rateDiscrepancies = new List<UpsLocalRateDiscrepancy>();
 
-            IEnumerable<ShipmentEntity> shipments = GetRecentShipments(account).Where(s => RequiresValidation(s, true)).ToList();
+            IEnumerable<ShipmentEntity> shipments = recentShipmentRepository.GetRecentShipments(account)
+                .Where(s => RequiresValidation(s, true)).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -115,35 +114,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation
             }
 
             return new SuccessfulLocalRateValidationResult(Enumerable.Empty<ShipmentEntity>());
-        }
-
-        /// <summary>
-        /// Gets the 10 most recent shipments that were processed using the given UPS account
-        /// </summary>
-        /// <param name="account">The account.</param>
-        private IEnumerable<ShipmentEntity> GetRecentShipments(IUpsAccountEntity account)
-        {
-            RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.Relations.Add(UpsShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
-            bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
-            bucket.Relations.Add(UpsShipmentEntity.Relations.UpsPackageEntityUsingShipmentID);
-            bucket.Relations.Add(UpsPackageEntity.Relations.UpsShipmentEntityUsingShipmentID);
-            bucket.PredicateExpression.Add(UpsShipmentFields.UpsAccountID == account.UpsAccountID);
-            bucket.PredicateExpression.AddWithAnd(UpsShipmentFields.PayorType != UpsPayorType.ThirdParty);
-            bucket.PredicateExpression.AddWithAnd(new FieldCompareRangePredicate(UpsShipmentFields.Service, null, UpsLocalRateTable.SupportedServiceTypesForLocalRating));
-            bucket.PredicateExpression.AddWithAnd(UpsPackageFields.DryIceEnabled == false);
-            bucket.PredicateExpression.AddWithAnd(ShipmentFields.Processed == true);
-            
-            ISortExpression sortExpression = new SortExpression(ShipmentFields.ProcessedDate | SortOperator.Descending);
-
-            try
-            {
-                 return shippingManager.GetShipments(bucket, sortExpression, 10);
-            }
-            catch (ShippingException ex)
-            {
-                throw new UpsLocalRatingException($"Failed to validate local rates:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
-            }
         }
 
         /// <summary>
