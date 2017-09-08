@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     // Create the client for connecting to the module
-                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(store));
+                    IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(store));
 
                     webClient.TestConnection();
                 }

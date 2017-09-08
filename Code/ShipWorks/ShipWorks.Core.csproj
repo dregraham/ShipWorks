@@ -1744,6 +1744,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\IAmazonOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />

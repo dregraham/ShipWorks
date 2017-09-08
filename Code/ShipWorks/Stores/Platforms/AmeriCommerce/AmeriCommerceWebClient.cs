@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// Constructor
         /// </summary>
         public AmeriCommerceWebClient(AmeriCommerceStoreEntity store,
-            ICombineOrderNumberSearchProvider cominedOrderSearchProvider,
+            AmeriCommerceCombineOrderNumberSearchProvider cominedOrderSearchProvider,
             IShipmentTypeManager shipmentTypeManager)
         {
             this.store = store;

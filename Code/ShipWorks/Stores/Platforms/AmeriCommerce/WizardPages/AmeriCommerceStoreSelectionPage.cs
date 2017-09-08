@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     // Create the client for connecting to the module
-                    AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(Store));
+                    IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(Store));
 
                     foundStores = webClient.GetStores();
                 }
@@ -128,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 // Create the client for connecting to the module
-                AmeriCommerceWebClient webClient = lifetimeScope.Resolve<AmeriCommerceWebClient>(TypedParameter.From(Store));
+                IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(Store));
 
                 StoreTrans storeTrans = webClient.GetStore(Store.StoreCode);
                 Store.StoreName = storeTrans.storeName;
