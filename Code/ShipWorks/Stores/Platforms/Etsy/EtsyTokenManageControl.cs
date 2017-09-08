@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyTokenManageControl));
 
-        //EtsyWebClient webClient;
+        IEtsyWebClient webClient;
         EtsyStoreEntity store;
 
         bool showTokenInfo = true;
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
 
             this.store = etsyStore;
-            //this.webClient = new EtsyWebClient(this.store);
+            this.webClient = IoC.UnsafeGlobalLifetimeScope.Resolve<IEtsyWebClient>(TypedParameter.From(etsyStore));
 
             UpdateStatusDisplay();
         }
@@ -119,15 +119,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 try
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
-                        authenticateDlg.InitialURL = webClient.GetRequestTokenURL(callbackURL);
+                    authenticateDlg.InitialURL = webClient.GetRequestTokenURL(callbackURL);
 
-                        if (authenticateDlg.ShowDialog(this) == DialogResult.OK)
-                        {
-                            ProcessListenerUrl(authenticateDlg.ResultURL);
-                        }
+                    if (authenticateDlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        ProcessListenerUrl(authenticateDlg.ResultURL);
                     }
                 }
                 catch (EtsyException ex)
@@ -151,11 +147,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 string token = queryStringCollection["oauth_token"];
                 string verifier = queryStringCollection["oauth_verifier"];
 
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
-                    webClient.AuthorizeToken(token, verifier);
-                }
+                webClient.AuthorizeToken(token, verifier);
 
                 OnTokenImported();
             }
@@ -173,13 +165,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             EtsyTokenUtility tokenManager = new EtsyTokenUtility(store);
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            if (tokenManager.ImportToken(this, webClient))
             {
-                var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
-                if (tokenManager.ImportToken(this, webClient))
-                {
-                    OnTokenImported();
-                }
+                OnTokenImported();
             }
         }
 
@@ -221,6 +209,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             EtsyTokenUtility tokenManager = new EtsyTokenUtility(store);
             tokenManager.ExportToken(this);
+        }
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            webClient = null;
+
+            base.Dispose(disposing);
         }
     }
 }

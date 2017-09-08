@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.WizardPages
 
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        var webClient = lifetimeScope.Resolve<IEtsyWebClient>();
+                        var webClient = lifetimeScope.Resolve<IEtsyWebClient>(TypedParameter.From(store));
                         webClient.RetrieveShopInformation();
                     }
                 }
