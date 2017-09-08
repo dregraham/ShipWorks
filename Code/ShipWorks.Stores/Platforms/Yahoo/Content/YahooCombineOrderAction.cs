@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombineOrderActions;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.Content
 {
@@ -20,6 +21,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
+            YahooOrderEntity order = (YahooOrderEntity) combinedOrder;
+
+            if (string.IsNullOrWhiteSpace(order.YahooOrderID))
+            {
+                order.YahooOrderID = orders.Where(o => o is YahooOrderEntity).Cast<YahooOrderEntity>().FirstOrDefault()?.YahooOrderID;
+            }
+
             var recordCreator = new SearchRecordMerger<IYahooOrderEntity>(combinedOrder, orders, sqlAdapter);
 
             return recordCreator.Perform(YahooOrderSearchFields.OrderID,
