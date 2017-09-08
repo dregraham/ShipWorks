@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users.Audit;
@@ -49,5 +50,10 @@ namespace ShipWorks.Data
         /// Deletes the given order
         /// </summary>
         public void DeleteOrder(long orderID) => DeletionService.DeleteOrder(orderID);
+
+        /// <summary>
+        /// Deletes the given order
+        /// </summary>
+        public void DeleteOrder(long orderID, ISqlAdapter adapter) => DeletionService.DeleteOrder(orderID, adapter as SqlAdapter);
     }
 }

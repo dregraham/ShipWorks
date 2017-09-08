@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
@@ -10,6 +11,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -93,7 +95,8 @@ namespace ShipWorks.Stores.Content
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    result = await PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter).ConfigureAwait(false);
+                    SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("CombineOrder.Combine for new order number {0}", newOrderNumber));
+                    result = await sqlDeadlockRetry.ExecuteWithRetryAsync(() => PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter)).ConfigureAwait(false);
                 }
             }
 
@@ -140,7 +143,7 @@ namespace ShipWorks.Stores.Content
                 progress.Update();
             }
 
-            DeleteOriginalOrders(orders, progress);
+            DeleteOriginalOrders(orders, sqlAdapter, progress);
 
             await sqlAdapter.SaveEntityAsync(combinedOrder).ConfigureAwait(false);
 
@@ -245,11 +248,11 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Delete the original orders
         /// </summary>
-        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders, IProgressUpdater progress)
+        private void DeleteOriginalOrders(IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter, IProgressUpdater progress)
         {
             foreach (IOrderEntity order in orders)
             {
-                deletionService.DeleteOrder(order.OrderID);
+                deletionService.DeleteOrder(order.OrderID, sqlAdapter);
                 progress.Update();
             }
         }
