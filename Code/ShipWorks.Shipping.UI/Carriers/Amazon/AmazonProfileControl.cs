@@ -52,6 +52,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }
 
+        /// <summary>
+        /// Populate service combo box
+        /// </summary>
         private void LoadServices()
         {
             List<KeyValuePair<string, string>> services = EnumHelper.GetEnumList<AmazonServiceType>().Select(x => new KeyValuePair<string, string>(x.Description, x.ApiValue)).ToList();

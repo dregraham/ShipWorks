@@ -4,6 +4,9 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Enums
 {
+    /// <summary>
+    /// Hardcoded list of AmazonServiceTypes
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AmazonServiceType
     {
