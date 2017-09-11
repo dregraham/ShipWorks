@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// </summary>
         private EmailOutboundEntity GenerateShipmentUpdateEmailForOrder(ShipmentEntity shipment, YahooOrderEntity order, YahooStoreEntity store, string yahooOrderID)
         {
-            string emailXmlContent = GenerateEmailXmlContent(shipment, order.YahooOrderID, store.TrackingUpdatePassword);
+            string emailXmlContent = GenerateEmailXmlContent(shipment, yahooOrderID, store.TrackingUpdatePassword);
             EmailAccountEntity account = EmailAccountManager.GetAccount(store.YahooEmailAccountID);
 
             // This should never happen
