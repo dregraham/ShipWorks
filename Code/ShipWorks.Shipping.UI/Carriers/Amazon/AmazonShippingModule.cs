@@ -41,8 +41,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 
-            builder.RegisterType<AmazonServiceViewModel>();
-
             builder.RegisterType<AmazonRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Amazon);
 
