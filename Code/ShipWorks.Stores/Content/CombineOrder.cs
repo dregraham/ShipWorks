@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.Content
 
             if (orders.Any(o => !o.IsManual))
             {
-                combinedOrder.OrderDate = orders.Where(o => !o.IsManual).Max(x => x.OrderDate);
+                convertedOrder.OrderDate = orders.Where(o => !o.IsManual).Max(x => x.OrderDate);
             }
 
             return convertedOrder;
