@@ -191,12 +191,7 @@ namespace ShipWorks.Stores.Content
 
             if (combinedOrder.IsManual)
             {
-                combinedOrder = CreateCombinedOrderForManualSurvivingOrder(combinedOrder);
-
-                if (orders.Any(o => !o.IsManual))
-                {
-                    combinedOrder.OrderDate = orders.Where(o => !o.IsManual).Max(x => x.OrderDate);
-                }
+                combinedOrder = CreateCombinedOrderForManualSurvivingOrder(combinedOrder, orders);
             }
 
             // Default to now, assuming all orders are manual
@@ -230,7 +225,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// If the order is manual, convert it to an actual store specific order type.
         /// </summary>
-        private OrderEntity CreateCombinedOrderForManualSurvivingOrder(OrderEntity combinedOrder)
+        private OrderEntity CreateCombinedOrderForManualSurvivingOrder(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders)
         {
             if (!combinedOrder.IsManual)
             {
@@ -245,6 +240,11 @@ namespace ShipWorks.Stores.Content
             foreach (IEntityFieldCore field in combinedOrder.Fields.Where(f => !f.IsReadOnly))
             {
                 convertedOrder.Fields[field.FieldIndex].CurrentValue = field.CurrentValue;
+            }
+
+            if (orders.Any(o => !o.IsManual))
+            {
+                combinedOrder.OrderDate = orders.Where(o => !o.IsManual).Max(x => x.OrderDate);
             }
 
             return convertedOrder;
