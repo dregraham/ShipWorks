@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Etsy.Dialog;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
     /// <summary>
     /// User interaction for Etsy online updating
     /// </summary>
+    [Component]
     public class EtsyUserInteraction : IEtsyUserInteraction
     {
         /// <summary>

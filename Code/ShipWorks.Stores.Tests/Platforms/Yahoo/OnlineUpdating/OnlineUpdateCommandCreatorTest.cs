@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo.OnlineUpdating
         [Fact]
         public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser()
         {
-            var testObject = mock.Create<OnlineUpdateCommandCreator>();
+            var testObject = mock.Create<YahooOnlineUpdateCommandCreator>();
             IEnumerable<IMenuCommand> commands = testObject.CreateOnlineUpdateInstanceCommands(new YahooStoreEntity { StoreTypeCode = StoreTypeCode.Yahoo });
 
             Assert.Equal(1, commands.Count());
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo.OnlineUpdating
         [Fact]
         public void CreateOnlineUpdateInstanceCommands_ReturnsUploadShipmentDetailsAndUpdateStatusCommands_WhenApiUser()
         {
-            var testObject = mock.Create<OnlineUpdateCommandCreator>();
+            var testObject = mock.Create<YahooOnlineUpdateCommandCreator>();
             var store = new YahooStoreEntity { StoreTypeCode = StoreTypeCode.Yahoo, YahooStoreID = "ysht-123456789" };
             List<string> commandNames = testObject.CreateOnlineUpdateInstanceCommands(store)
                 .Select(command => command.Text).ToList();

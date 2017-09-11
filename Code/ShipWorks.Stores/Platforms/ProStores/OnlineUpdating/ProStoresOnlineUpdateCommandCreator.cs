@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
     /// Class that creates online update commands
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.ProStores)]
-    public class OnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
+    public class ProStoresOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IShipmentDetailsUpdater shipmentUpdater;
         private readonly IMessageHelper messageHelper;
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineUpdateCommandCreator(IMessageHelper messageHelper, IShipmentDetailsUpdater shipmentUpdater, Func<Type, ILog> createLogger)
+        public ProStoresOnlineUpdateCommandCreator(IMessageHelper messageHelper, IShipmentDetailsUpdater shipmentUpdater, Func<Type, ILog> createLogger)
         {
             this.messageHelper = messageHelper;
             this.shipmentUpdater = shipmentUpdater;

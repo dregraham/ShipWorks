@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Create online update commands for BigCommerce
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.BigCommerce)]
-    public class CommandCreator : IOnlineUpdateCommandCreator
+    public class BigCommerceCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
         private readonly IMessageHelper messageHelper;
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommandCreator(
+        public BigCommerceCommandCreator(
             IMessageHelper messageHelper,
             IOrderStatusUpdater statusUpdater,
             IShipmentDetailsUpdater shipmentDetailsUpdater,

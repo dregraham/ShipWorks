@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
     /// Class that creates online update commands
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Yahoo)]
-    public class OnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
+    public class YahooOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IYahooApiOnlineUpdater apiUpdater;
         private readonly IYahooEmailOnlineUpdater emailUpdater;
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineUpdateCommandCreator(IYahooApiOnlineUpdater apiUpdater,
+        public YahooOnlineUpdateCommandCreator(IYahooApiOnlineUpdater apiUpdater,
             IYahooEmailOnlineUpdater emailUpdater,
             IEmailCommunicatorWrapper emailCommunicator,
             IMessageHelper messageHelper,

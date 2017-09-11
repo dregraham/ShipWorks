@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
         private readonly ProStoresStoreEntity store;
         private Mock<IProStoresWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly OnlineUpdateCommandCreator commandCreator;
+        private readonly ProStoresOnlineUpdateCommandCreator commandCreator;
 
         public ProStoresOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.ProStores) as OnlineUpdateCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.ProStores) as ProStoresOnlineUpdateCommandCreator;
 
             store = Create.Store<ProStoresStoreEntity>(StoreTypeCode.ProStores)
                 .Set(x => x.LoginMethod, (int) ProStoresLoginMethod.ApiToken)

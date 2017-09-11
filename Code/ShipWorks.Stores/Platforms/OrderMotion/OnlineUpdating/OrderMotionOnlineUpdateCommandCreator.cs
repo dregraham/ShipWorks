@@ -11,23 +11,28 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.Platforms.Volusion.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
 {
     /// <summary>
     /// Class that creates online update commands
     /// </summary>
-    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Volusion)]
-    public class OnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.OrderMotion)]
+    public class OrderMotionOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IShipmentDetailsUpdater shipmentUpdater;
         private readonly IMessageHelper messageHelper;
         private readonly ILog log;
+        readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineUpdateCommandCreator(IShipmentDetailsUpdater shipmentUpdater, IMessageHelper messageHelper, Func<Type, ILog> createLogger)
+        public OrderMotionOnlineUpdateCommandCreator(IShipmentDetailsUpdater shipmentUpdater,
+            IOrderManager orderManager,
+            IMessageHelper messageHelper,
+            Func<Type, ILog> createLogger)
         {
+            this.orderManager = orderManager;
             this.shipmentUpdater = shipmentUpdater;
             this.messageHelper = messageHelper;
             log = createLogger(GetType());
@@ -38,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.OnlineUpdating
         /// </summary>
         public IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands()
         {
-            return new[]
+            return new IMenuCommand[]
             {
                 new AsyncMenuCommand("Upload Shipment Details", OnUploadShipmentDetails)
             };
@@ -60,22 +65,18 @@ namespace ShipWorks.Stores.Platforms.Volusion.OnlineUpdating
                     "Upload Shipment",
                     "ShipWorks is uploading shipment information",
                     "Updating order {0} of {1}...",
-                    x => Task.Run(() => ShipmentUploadCallback(x)))
+                    x => UploadShipmentDetails(x))
                 .ConfigureAwait(true);
 
-            var exceptions = results.Select(x => x.Exception).Where(x => x != null);
-            context.Complete(exceptions, MenuCommandResult.Error);
+            context.Complete(results.Select(x => x.Exception).Where(x => x != null), MenuCommandResult.Error);
         }
 
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private async Task<IResult> ShipmentUploadCallback(long orderID)
+        private async Task<IResult> UploadShipmentDetails(long orderID)
         {
-            // get the store from the order
-            VolusionStoreEntity store = (VolusionStoreEntity) StoreManager.GetRelatedStore(orderID);
-
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
@@ -84,10 +85,10 @@ namespace ShipWorks.Stores.Platforms.Volusion.OnlineUpdating
 
             try
             {
-                await shipmentUpdater.UploadShipmentDetails(store, shipment, true).ConfigureAwait(false);
+                await shipmentUpdater.UploadShipmentDetails(shipment).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
-            catch (VolusionException ex)
+            catch (OrderMotionException ex)
             {
                 log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
                 return Result.FromError(ex);

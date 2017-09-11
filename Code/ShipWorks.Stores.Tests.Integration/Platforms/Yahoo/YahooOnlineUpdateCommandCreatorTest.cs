@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Yahoo
         private Mock<IYahooApiWebClient> webClient;
         private Mock<IEmailCommunicatorWrapper> emailCommunicator;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly OnlineUpdateCommandCreator commandCreator;
+        private readonly YahooOnlineUpdateCommandCreator commandCreator;
 
         public YahooOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Yahoo
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Yahoo) as OnlineUpdateCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Yahoo) as YahooOnlineUpdateCommandCreator;
 
             store = Create.Store<YahooStoreEntity>(StoreTypeCode.Yahoo).Save();
 

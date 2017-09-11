@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Jet
         private readonly JetStoreEntity store;
         private Mock<IJetWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly UpdateOnlineCommandCreator commandCreator;
+        private readonly JetUpdateOnlineCommandCreator commandCreator;
 
         public JetOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Jet
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Jet) as UpdateOnlineCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Jet) as JetUpdateOnlineCommandCreator;
 
             store = Create.Store<JetStoreEntity>(StoreTypeCode.Jet)
                 .Set(x => x.ApiUser, "apiuser")

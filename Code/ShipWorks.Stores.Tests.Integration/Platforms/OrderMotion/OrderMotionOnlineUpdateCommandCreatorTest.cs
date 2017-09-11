@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
         private readonly OrderMotionStoreEntity store;
         private Mock<IOrderMotionWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly OnlineUpdateCommandCreator commandCreator;
+        private readonly OrderMotionOnlineUpdateCommandCreator commandCreator;
 
         public OrderMotionOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.OrderMotion) as OnlineUpdateCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.OrderMotion) as OrderMotionOnlineUpdateCommandCreator;
 
             store = Create.Store<OrderMotionStoreEntity>(StoreTypeCode.OrderMotion)
                 .Set(x => x.OrderMotionEmailAccountID, 999999)

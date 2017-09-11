@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Volusion
         private readonly VolusionStoreEntity store;
         private Mock<IVolusionWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly OnlineUpdateCommandCreator commandCreator;
+        private readonly VolusionOnlineUpdateCommandCreator commandCreator;
 
         public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Volusion
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Volusion) as OnlineUpdateCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Volusion) as VolusionOnlineUpdateCommandCreator;
 
             store = Create.Store<VolusionStoreEntity>(StoreTypeCode.Volusion).Save();
 

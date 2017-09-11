@@ -235,6 +235,7 @@
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.UploadDetails.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\OnlineCommandCreatorRegistrationTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
     <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />

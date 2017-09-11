@@ -179,7 +179,7 @@
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
-    <Compile Include="Platforms\BigCommerce\OnlineUpdating\CommandCreator.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceCommandCreator.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineItems.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\ItemLoader.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\OnlineOrderDetails.cs" />
@@ -354,7 +354,7 @@
     <Compile Include="Platforms\Jet\JetException.cs" />
     <Compile Include="Platforms\Jet\OnlineUpdating\IJetOrderSearchProvider.cs" />
     <Compile Include="Platforms\Jet\OnlineUpdating\JetOrderSearchProvider.cs" />
-    <Compile Include="Platforms\Jet\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Jet\OnlineUpdating\JetOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdater.cs" />
     <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
@@ -520,11 +520,11 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\IDataAccess.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\IOrderMotionCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
-    <Compile Include="Platforms\OrderMotion\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
     <Compile Include="Platforms\ProStores\Content\ProStoresCombineOrderAction.cs" />
-    <Compile Include="Platforms\ProStores\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
@@ -598,7 +598,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoader.cs" />
     <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartCombineOrderAction.cs" />
-    <Compile Include="Platforms\Volusion\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Volusion\OnlineUpdating\VolusionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Volusion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\Content\WalmartCombineOrderAction.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
@@ -627,7 +627,7 @@
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
-    <Compile Include="Platforms\Yahoo\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
     <Compile Include="Platforms\Yahoo\Content\YahooCombineOrderAction.cs" />

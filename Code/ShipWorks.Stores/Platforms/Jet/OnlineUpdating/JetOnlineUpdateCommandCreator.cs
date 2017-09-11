@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Jet
     /// Generates and handles OnlineUpdateInstanceCommands
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.Jet)]
-    public class UpdateOnlineCommandCreator : IOnlineUpdateCommandCreator
+    public class JetUpdateOnlineCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly JetOnlineUpdater onlineUpdater;
         private readonly ILog log;
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <param name="store">The store.</param>
         /// <param name="onlineUpdaterFactory">The online updater.</param>
         /// <param name="logFactory">The log factory.</param>
-        public UpdateOnlineCommandCreator(JetOnlineUpdater onlineUpdater,
+        public JetUpdateOnlineCommandCreator(JetOnlineUpdater onlineUpdater,
             IMessageHelper messageHelper,
             Func<Type, ILog> logFactory)
         {
