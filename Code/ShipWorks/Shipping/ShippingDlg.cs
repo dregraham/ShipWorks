@@ -1959,7 +1959,6 @@ namespace ShipWorks.Shipping
             }
         }
 
-
         /// <summary>
         /// Gets rates for each shipment 
         /// </summary>

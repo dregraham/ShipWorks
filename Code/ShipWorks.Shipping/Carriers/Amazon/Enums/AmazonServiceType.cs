@@ -105,5 +105,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Enums
         [ApiValue("USPS_PTP_PRI_SFRB")]
         [Description("USPS Priority Mail® Small Flat Rate Box")]
         USPSPriorityMailSmallFlatRateBox = 23,
+
+        [ApiValue("")]
+        [Description("Best Rate")]
+        BestRate = 24
     }
 }

@@ -58,7 +58,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         private void LoadServices()
         {
             List<KeyValuePair<string, string>> services = EnumHelper.GetEnumList<AmazonServiceType>().Select(x => new KeyValuePair<string, string>(x.Description, x.ApiValue)).ToList();
-            services.Insert(0, new KeyValuePair<string, string>("Best Rate", string.Empty));
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
             service.DataSource = services;
