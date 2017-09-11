@@ -15,8 +15,6 @@
         {
             if (disposing)
             {
-                propertyChangedSubscriptions?.Dispose();
-
                 if (components != null)
                 {
                     components.Dispose();

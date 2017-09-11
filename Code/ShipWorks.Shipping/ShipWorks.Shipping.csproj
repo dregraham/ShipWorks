@@ -384,7 +384,6 @@
     <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
     <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
