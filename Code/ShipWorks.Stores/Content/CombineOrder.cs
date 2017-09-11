@@ -192,6 +192,11 @@ namespace ShipWorks.Stores.Content
             if (combinedOrder.IsManual)
             {
                 combinedOrder = CreateCombinedOrderForManualSurvivingOrder(combinedOrder);
+
+                if (orders.Any(o => !o.IsManual))
+                {
+                    combinedOrder.OrderDate = orders.Where(o => !o.IsManual).Max(x => x.OrderDate);
+                }
             }
 
             // Default to now, assuming all orders are manual
