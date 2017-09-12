@@ -168,6 +168,7 @@
     <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
