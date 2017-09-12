@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             {
                 if (uploadData.Order.IsManual)
                 {
-                    log.InfoFormat("Not uploading tracking number since order {0} is manual.", uploadData.Order.OrderNumber);
+                    log.InfoFormat("Not uploading tracking number since order {0} is manual.", uploadData.Order.OrderNumberComplete);
                     continue;
                 }
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
                 BuyDotComShipConfirmation confirmation =
                     new BuyDotComShipConfirmation()
                     {
-                        ReceiptID = shipment.Order.OrderNumberComplete,
+                        ReceiptID = uploadData.Order.OrderNumberComplete,
                         ShipDate = uploadData.Shipment.ShipDate,
                         TrackingNumber = uploadData.Shipment.TrackingNumber,
                         TrackingType = GetTrackingType(uploadData.Shipment)

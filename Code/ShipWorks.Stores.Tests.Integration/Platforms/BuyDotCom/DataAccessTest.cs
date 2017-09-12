@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
                 .WithItem<BuyDotComOrderItemEntity>(x => x.Set(y => y.ListingID, 5150))
                 .Set(x => x.IsManual, true)
                 .Set(x => x.OrderNumber, 9911)
-                .Set(x => x.OrderNumberComplete, "ABC123")
+                .Set(x => x.OrderNumberComplete, "A-9911")
                 .Save();
 
             shipment = Create.Shipment(order).Save();
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
             Assert.Equal(1, shipmentDetail.Orders.Count());
 
             var orderDetail = shipmentDetail.Orders.Single();
-            Assert.Equal(order.OrderNumber, orderDetail.OrderNumber);
+            Assert.Equal(order.OrderNumberComplete, orderDetail.OrderNumberComplete);
             Assert.Equal(order.IsManual, orderDetail.IsManual);
 
             Assert.Equal(1, orderDetail.Items.Count());
@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
                 .Set(x => x.StoreID, store.StoreID)
                 .Set(x => x.OriginalOrderID, 4006)
                 .Set(x => x.IsManual, true)
-                .Set(x => x.OrderNumber, 456)
+                .Set(x => x.OrderNumberComplete, "456")
                 .Save();
 
             Create.Entity<OrderSearchEntity>()
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
                 .Set(x => x.StoreID, store.StoreID)
                 .Set(x => x.OriginalOrderID, 5006)
                 .Set(x => x.IsManual, false)
-                .Set(x => x.OrderNumber, 789)
+                .Set(x => x.OrderNumberComplete, "789")
                 .Save();
 
             var shipmentDetails = await testObject.GetShipmentDataAsync(new[] { order.OrderID });
@@ -96,12 +96,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             Assert.Equal(2, shipmentDetail.Orders.Count());
 
-            var firstOrder = shipmentDetail.Orders.FirstOrDefault(x => x.OrderNumber == 456);
+            var firstOrder = shipmentDetail.Orders.FirstOrDefault(x => x.OrderNumberComplete == "456");
             Assert.NotNull(firstOrder);
             Assert.True(firstOrder.IsManual);
             Assert.Equal(2, firstOrder.Items.Count());
 
-            var secondOrder = shipmentDetail.Orders.FirstOrDefault(x => x.OrderNumber == 789);
+            var secondOrder = shipmentDetail.Orders.FirstOrDefault(x => x.OrderNumberComplete == "789");
             Assert.NotNull(secondOrder);
             Assert.False(secondOrder.IsManual);
             Assert.Equal(1, secondOrder.Items.Count());

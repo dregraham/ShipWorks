@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         {
             var newOrders = ordersByOriginalOrderID.ContainsKey(order.OrderID) ?
                        ordersByOriginalOrderID[order.OrderID] :
-                       new[] { new CombinedOrder(order.OrderNumber, order.IsManual, order.OrderID) };
+                       new[] { new CombinedOrder(order.OrderNumberComplete, order.IsManual, order.OrderID) };
 
             var shipmentOrders = newOrders.Select(x => CreateShipmentUploadOrders(x, itemsByOrder));
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
                         itemsByOrder[orderDetail.OrderID] :
                         Enumerable.Empty<IBuyDotComOrderItemEntity>();
 
-            return new ShipmentUploadOrder(orderDetail.OrderNumber, orderDetail.IsManual, items);
+            return new ShipmentUploadOrder(orderDetail.OrderNumberComplete, orderDetail.IsManual, items);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             var query = factory.OrderSearch
                 .Select(() => Tuple.Create(
                     OrderSearchFields.OrderID.ToValue<long>(),
-                    OrderSearchFields.OrderNumber.ToValue<long>(),
+                    OrderSearchFields.OrderNumberComplete.ToValue<string>(),
                     OrderSearchFields.IsManual.ToValue<bool>(),
                     OrderSearchFields.OriginalOrderID.ToValue<long>()
                     ))
@@ -194,9 +194,9 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             /// <summary>
             /// Constructor
             /// </summary>
-            public CombinedOrder(long orderNumber, bool isManual, long orderID)
+            public CombinedOrder(string orderNumberComplete, bool isManual, long orderID)
             {
-                OrderNumber = orderNumber;
+                OrderNumberComplete = orderNumberComplete;
                 IsManual = isManual;
                 OrderID = orderID;
             }
@@ -204,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             /// <summary>
             /// Order number
             /// </summary>
-            public long OrderNumber { get; }
+            public string OrderNumberComplete { get; }
 
             /// <summary>
             /// Is the order manual

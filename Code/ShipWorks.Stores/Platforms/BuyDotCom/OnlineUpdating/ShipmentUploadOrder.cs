@@ -9,9 +9,9 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// </summary>
     public class ShipmentUploadOrder
     {
-        public ShipmentUploadOrder(long orderNumber, bool isManual, IEnumerable<IBuyDotComOrderItemEntity> items)
+        public ShipmentUploadOrder(string orderNumberComplete, bool isManual, IEnumerable<IBuyDotComOrderItemEntity> items)
         {
-            OrderNumber = orderNumber;
+            OrderNumberComplete = orderNumberComplete;
             IsManual = isManual;
             Items = items.ToReadOnly();
         }
@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Order number
         /// </summary>
-        public long OrderNumber { get; }
+        public string OrderNumberComplete { get; }
 
         /// <summary>
         /// Is the order manual
