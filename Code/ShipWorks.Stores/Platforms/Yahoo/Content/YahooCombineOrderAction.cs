@@ -21,13 +21,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            YahooOrderEntity order = (YahooOrderEntity) combinedOrder;
-
-            if (string.IsNullOrWhiteSpace(order.YahooOrderID))
-            {
-                order.YahooOrderID = orders.Where(o => o is YahooOrderEntity).Cast<YahooOrderEntity>().FirstOrDefault()?.YahooOrderID;
-            }
-
             var recordCreator = new SearchRecordMerger<IYahooOrderEntity>(combinedOrder, orders, sqlAdapter);
 
             return recordCreator.Perform(YahooOrderSearchFields.OrderID,
