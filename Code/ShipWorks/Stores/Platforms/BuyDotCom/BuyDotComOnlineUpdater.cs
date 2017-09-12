@@ -121,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 BuyDotComShipConfirmation confirmation =
                     new BuyDotComShipConfirmation()
                     {
-                        ReceiptID = shipment.Order.OrderNumber,
+                        ReceiptID = shipment.Order.OrderNumberComplete,
                         ShipDate = shipment.ShipDate,
                         TrackingNumber = shipment.TrackingNumber,
                         TrackingType = GetTrackingType(shipment)

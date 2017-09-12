@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GenericOrderIdentifier(order.OrderNumberComplete);
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         public OrderIdentifier CreateOrderIdentifier(string orderNumber, string prefix, string postfix)
         {
-            return new GenericOrderIdentifier(orderNumber, prefix, postfix);
+            return new AlphaNumericOrderIdentifier(orderNumber, prefix, postfix);
         }
 
         /// <summary>

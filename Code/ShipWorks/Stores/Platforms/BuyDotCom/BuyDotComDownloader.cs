@@ -17,6 +17,7 @@ using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -192,10 +193,10 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         private Task<OrderEntity> InstantiateOrder(GenericCsvReader reader)
         {
             // pull out the order number
-            long orderNumber = reader.ReadField("Order.Number", 0L, false);
+            string orderNumber = reader.ReadField("Order.Number", "0");
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            return InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            return InstantiateOrder(new AlphaNumericOrderIdentifier(orderNumber));
         }
     }
 }

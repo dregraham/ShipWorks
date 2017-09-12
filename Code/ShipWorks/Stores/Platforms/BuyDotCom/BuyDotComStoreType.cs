@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.BuyDotCom.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -69,11 +70,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         }
 
         /// <summary>
-        /// Returns buy.com order identifier
+        /// Create an identifier that uniquely identifies the order
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new OrderNumberIdentifier(order.OrderNumber);
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>

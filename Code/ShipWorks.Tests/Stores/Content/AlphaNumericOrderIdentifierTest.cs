@@ -1,14 +1,15 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using Xunit;
 
-namespace ShipWorks.Tests.Stores.Platforms.GenericModule
+namespace ShipWorks.Tests.Stores.Content
 {
-    public class GenericOrderIdentifierTest
+    public class AlphaNumericOrderIdentifierTest
     {
         private readonly OrderEntity order;
 
-        public GenericOrderIdentifierTest()
+        public AlphaNumericOrderIdentifierTest()
         {
             order = new OrderEntity();
         }
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
         [Fact]
         public void ApplyTo_SetsOrderCorrectly_WhenUsingCtorLongStringString()
         {
-            var testObject = new GenericOrderIdentifier(1, "a", "b");
+            var testObject = new AlphaNumericOrderIdentifier(1, "a", "b");
             testObject.ApplyTo(order);
             Assert.Equal(1, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
@@ -25,7 +26,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
         [Fact]
         public void ApplyTo_SetsOrderCorrectly_WhenUsingCtorStringStringString()
         {
-            var testObject = new GenericOrderIdentifier("1", "a", "b");
+            var testObject = new AlphaNumericOrderIdentifier("1", "a", "b");
             testObject.ApplyTo(order);
             Assert.Equal(1, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
@@ -34,7 +35,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
         [Fact]
         public void ApplyTo_SetsOrderCorrectly_WhenUsingCtorString()
         {
-            var testObject = new GenericOrderIdentifier("a1b");
+            var testObject = new AlphaNumericOrderIdentifier("a1b");
             testObject.ApplyTo(order);
             Assert.Equal(long.MinValue, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
