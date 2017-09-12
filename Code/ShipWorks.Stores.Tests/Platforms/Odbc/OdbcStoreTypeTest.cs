@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
             var order = new OrderEntity() { OrderNumber = 42 };
             OrderIdentifier orderIdentifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<GenericOrderIdentifier>(orderIdentifier);
+            Assert.IsType<AlphaNumericOrderIdentifier>(orderIdentifier);
         }
 
         [Fact]

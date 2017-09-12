@@ -4424,7 +4424,7 @@
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleCapabilities.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleCommunications.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleConfigurationException.cs" />
-    <Compile Include="Stores\Platforms\GenericModule\GenericOrderIdentifier.cs" />
+    <Compile Include="Stores\Content\AlphaNumericOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreException.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreResponseLoadDlg.cs">
       <SubType>Form</SubType>

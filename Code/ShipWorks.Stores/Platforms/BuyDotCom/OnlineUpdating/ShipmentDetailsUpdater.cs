@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
                 BuyDotComShipConfirmation confirmation =
                     new BuyDotComShipConfirmation()
                     {
-                        ReceiptID = uploadData.Order.OrderNumber,
+                        ReceiptID = shipment.Order.OrderNumberComplete,
                         ShipDate = uploadData.Shipment.ShipDate,
                         TrackingNumber = uploadData.Shipment.TrackingNumber,
                         TrackingType = GetTrackingType(uploadData.Shipment)

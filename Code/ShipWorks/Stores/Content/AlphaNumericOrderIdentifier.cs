@@ -4,14 +4,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Stores.Platforms.GenericModule
+namespace ShipWorks.Stores.Content
 {
     /// <summary>
-    /// Class for identifying orders that are from Magento.  When an order is edited
-    /// on the Magento website, the existing order is marked as cancelled and a new one 
-    /// is created with a postfix (-1, -2, -3...).  This identifier handles these.
+    /// Class for identifying orders that can have alpha numeric order numbers.
     /// </summary>
-    public class GenericOrderIdentifier : OrderNumberIdentifier
+    public class AlphaNumericOrderIdentifier : OrderNumberIdentifier
     {
         // the postfix on the order number
         readonly string orderPostfix = "";
@@ -25,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericOrderIdentifier(long orderNumber, string prefix, string postfix)
+        public AlphaNumericOrderIdentifier(long orderNumber, string prefix, string postfix)
             : base(orderNumber)
         {
             orderNumberString = orderNumber.ToString();
@@ -36,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericOrderIdentifier(string orderNumber, string prefix, string postfix)
+        public AlphaNumericOrderIdentifier(string orderNumber, string prefix, string postfix)
             : this(long.MinValue, prefix, postfix)
         {
             orderNumberString = orderNumber;
@@ -45,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericOrderIdentifier(string orderNumbercomplete)
+        public AlphaNumericOrderIdentifier(string orderNumbercomplete)
             : base(long.MinValue)
         {
             orderNumberString = orderNumbercomplete;
