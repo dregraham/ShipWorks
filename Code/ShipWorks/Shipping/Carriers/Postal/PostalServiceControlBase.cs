@@ -507,12 +507,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateConfirmationTypes(rate.ServiceType);
 
             PostalConfirmationType rateConfirmationType = GetConfirmationTypeFromRateSelection(rate);
-
+            confirmation.SelectedIndexChanged -= OnConfirmationChanged;
             confirmation.SelectedValue = rateConfirmationType;
             if (confirmation.SelectedIndex == -1)
             {
                 confirmation.SelectedIndex = 0;
             }
+
+            confirmation.SelectedIndexChanged += OnConfirmationChanged;
         }
 
         /// <summary>
