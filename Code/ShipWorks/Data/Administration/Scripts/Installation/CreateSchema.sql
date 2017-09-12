@@ -1,4 +1,3 @@
-
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -19,6 +18,22 @@ PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrde
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+
+PRINT N'Creating [dbo].[AmazonServiceType]'
+GO
+CREATE TABLE [dbo].[AmazonServiceType]
+(
+[AmazonServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
+[RowVersion] [timestamp] NOT NULL,
+[ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonServiceTypeID] on [dbo].[AmazonServiceType]'
+GO
+ALTER TABLE [dbo].[AmazonServiceType] ADD CONSTRAINT [PK_AmazonServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonServiceTypeID])
+GO
+
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
 CREATE TABLE [dbo].[FedExPackage]
