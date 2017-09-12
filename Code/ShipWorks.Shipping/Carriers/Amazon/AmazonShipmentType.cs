@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -342,6 +343,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             commonDetail.PackageHeight = amazonShipment.DimsHeight;
 
             return commonDetail;
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            IEnumerable<int> allServices = EnumHelper.GetEnumList<AmazonServiceType>().Select(x => x.Value).Cast<int>();
+            return allServices.Except(GetExcludedServiceTypes(repository));
         }
     }
 }
